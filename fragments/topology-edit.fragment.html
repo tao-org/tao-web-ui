@@ -1,0 +1,268 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edit execution node</h4>
+    </div>
+    <form id="frmExecNodeEdit" class="form-horizontal form-newpc" role="form">
+        <input type="hidden" id="inputHostname" name="inputHostname"/>
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error editing execution node!</h4>
+            <p id="modal-error-msg">Please check you data, one or more values for the attributes is not in the acceptable range.</p>
+            <p>
+                <span class="error-memorySize collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Memory size cannot be empty.</span>
+                <span class="error-password collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Password cannot be empty.</span>
+                <span class="error-diskSpace collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Disk space cannot be empty.</span>
+                <span class="error-userName collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> User name cannot be empty.</span>
+            </p>
+        </div>
+        <div class="modal-body">
+            <section>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label class="col-sm-2 col-md-2 control-label">Hostname</label>
+                            <div class="col-sm-10 col-md-10">
+                                <h4 class="modal-title val-hostname"></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputUsername" class="col-sm-2 col-md-2 control-label">User name</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputUsername" name="inputUsername" placeholder="user name" autocomplete="off" value="" data-errorspan="userName"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputPassword" class="col-sm-2 col-md-2 control-label">Password</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="password" autocomplete="off" class="form-control" id="inputPassword" name="inputPassword" placeholder="password" autocomplete="off" value="" data-errorspan="password"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputPasswordAgain" class="col-sm-2 col-md-2 control-label">Repete password</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="password" autocomplete="off" class="form-control" id="inputPasswordAgain" name="inputPasswordAgain" placeholder="password" autocomplete="off" value=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputProcessorcount" class="col-sm-2 col-md-2 control-label">Processor count</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="number" class="form-control" id="inputProcessorcount" name="inputProcessorcount" placeholder="processor count" min="0" autocomplete="off" value="1"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputMemorysize" class="col-sm-2 col-md-2 control-label">Memory size (GB) </label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="number" class="form-control" id="inputMemorysize" name="inputMemorysize" placeholder="memory size GB" min="0" autocomplete="off" value="0" data-errorspan="memorySize"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputDiskspacesize" class="col-sm-2 col-md-2 control-label">Storage space (GB) </label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="number" class="form-control" id="inputDiskspacesize" name="inputDiskspacesize" placeholder="storage size GB" min="0" autocomplete="off" value="0" data-errorspan="diskSpace"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputDescription" class="col-sm-2 col-md-2 control-label">Description </label>
+                            <div class="col-sm-10 col-md-10">
+                                <textarea class="form-control" rows="3" id="inputDescription" name="inputDescription" placeholder="Description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputActive" class="col-sm-2 col-md-2 control-label">Status </label>
+                            <div class="col-sm-10 col-md-10">
+                                <select id="inputActive" name="inputActive" class="form-control">
+                                    <option value="true" selected="">Active</option>
+                                    <option value="false">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                                <button id="saveExecNode" type="submit" class="btn btn-primary btn-submit" name="btnSave">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- /.modal-body -->
+    </form>
+    <div class="modal-note">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                        <h4>Help filling in</h4>
+                        <p>Please fill in all needed information. Hostname must be unique. Hostname can contain letters (a-z), numbers (0-9) and periods (.).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div><!-- /.modal-content -->
+
+<script>
+    function getHostNameData(){
+        var editHostmane = _mLIST.dataOpQueue[0].dna.hostName;
+        $.ajax({
+            type: "get",
+            url: baseRestApiURL + "topology/"+editHostmane+"/?rnd=" + Math.random(),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+            },
+            error : function (jqXHR, textStatus, errorThrown) {
+                if( jqXHR.status === 500 ){
+                    alert('E001, Exec node nolonger found.');
+                } else {
+                    alert('E001, Woops an error has occurred, please try again or contact app admin.');
+                }
+            },
+            success: function(response) {
+                console.log(response);
+                try {
+                    var $el = $('#frmExecNodeEdit');
+                    $('.val-hostname', $el).html(response.hostName);
+                    $('input[name=inputHostname]', $el).val(response.hostName);
+                    $('input[name=inputUsername]', $el).val(response.userName);
+                    $('input[name=inputPassword]', $el).val(response.userPass);
+                    $('input[name=inputPasswordAgain]', $el).val(response.userPass);
+                    $('input[name=inputProcessorcount]', $el).val(response.processorCount);
+                    $('input[name=inputMemorysize]', $el).val(response.memorySizeGB);
+                    $('input[name=inputDiskspacesize]', $el).val(response.diskSpaceSizeGB);
+                    $('textarea[name=inputDescription]', $el).val(response.description);
+                    $('select[name=inputActive] option', $el).removeAttr("selected");
+                    $('select[name=inputActive] option[value="'+response.active+'"]', $el).attr("selected", "selected");
+                }
+                catch(e) {
+                    alert('E001, Woops an error has occurred, please try again or contact app admin.');
+                }
+            }
+        });
+        return true;
+    }
+
+
+    $(document).ready( function(){
+        getHostNameData();
+
+        $("input","form#frmExecNodeEdit")
+        .on("keypress change", function(){
+            if($(this).data("errorspan")) {
+                $(".error-" + $(this).data("errorspan"), ".modal-error").css('display', 'none');
+                if($(".modal-error").find("span:visible").length == 0) {
+                    $(".modal-error").hide();
+                }
+            }
+        })
+        .on("focusout", function(){
+            if($(this).data("errorspan")){
+                if (($(this).val() === "")||($(this).val() === 0)||($(this).val() === "0")){
+                    $(".error-"+$(this).data("errorspan"),".modal-error").css('display', 'inline-block');
+                    $(".modal-error").fadeIn("slow");
+                }
+            }
+        });
+        $("#inputPasswordAgain").focusout(function(e) {
+            if($("#inputPasswordAgain").val() !== $("#inputPassword").val())
+                showMsg("Password does not match the confirmation password.", "ERROR");
+        });
+        $("form#frmExecNodeEdit").submit(function (event) {
+            event.preventDefault();
+            var formData = {
+                "hostName":$('input[name=inputHostname]', this).val(),
+                "userName":$('input[name=inputUsername]', this).val(),
+                "userPass":$('input[name=inputPassword]', this).val(),
+                "processorCount":$('input[name=inputProcessorcount]', this).val(),
+                "memorySizeGB":$('input[name=inputMemorysize]', this).val(),
+                "diskSpaceSizeGB":$('input[name=inputDiskspacesize]', this).val(),
+                "description":$('textarea[name=inputDescription]', this).val(),
+                "active":$('select[name=inputActive]', this).val()
+            };
+            console.log(formData);
+            $.ajax({
+                //url: baseRestApiURL + "topology/update/"+formData.hostName+"/?rnd=" + Math.random(),
+                url: baseRestApiURL + "topology/"+formData.hostName+"/?rnd=" + Math.random(),
+                dataType : 'json',
+                type: 'PUT',
+                data: JSON.stringify(formData),
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader("Accept", "application/json");
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                    xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+                },
+                error : function (jqXHR, textStatus, errorThrown) {
+                    console.log("error");
+                    if(jqXHR.status == 500 ){
+                        showMsg("Unable to update execution name. Please try again.", "ERROR");
+                        return;
+                    }
+                    if(jqXHR.status === 406){
+                        showMsg("Error adding execution node. Please check you data, one or more values for the attributes was not in the acceptable range.", "ERROR");
+                        //handle error messages
+                        var objResponse = JSON.parse(jqXHR.responseText);
+                        if(objResponse[0] !== "Entity has validation errors"){
+                            return;
+                        }
+                        for(i=0;i<objResponse.length;i++) {
+                            var matches = objResponse[i].match(/\[(.*?)\]/);
+                            if (matches) {
+                                $(".error-"+matches[1],".modal-error").css('display', 'inline-block');
+                            }
+                        }
+                        $(".modal-error ").fadeIn("slow");
+                        $('#myModalNodes').animate({scrollTop: 0}, 250);
+                        return;
+                    }
+                    showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
+                },
+                success: function(data) {
+                    showMsg("Execution node successfully updated.", "SUCCESS");
+                    $("#myModalNodes").modal('hide');
+                    _mLIST.refresh();
+                }
+            });
+            return false;
+        });
+    });
+</script>

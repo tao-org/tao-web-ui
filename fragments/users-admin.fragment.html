@@ -1,0 +1,741 @@
+<!-- modal user op -->
+<div id="myModalUser" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- modal user op -->
+<!-- Content Header (Page header) -->
+<section class="content-header tao-async-ph">
+    <!--
+    <div class="row">
+        <div class="col-md-12">
+    -->
+    <h1>Users management <small>Full list of <strong>users</strong>.</small></h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Users</li>
+    </ol>
+    <!-- 	</div>
+    </div>
+    -->
+</section>
+<!-- /Content Header (Page header) -->
+
+<!-- Main content -->
+<section class="content tao-async-mc">
+    <div id="panel-users-wrapper" class="row collapseX">
+
+        <div class="col-md-12">
+            <!-- Custom Tabs -->
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
+                    <li class="role-dropdown active">
+                        <select id="selectUserPanel" name="selectUserPanel" class="form-control form-changepane">
+                            <option class="role role-admin" value="all_users">All users </option>
+                            <option class="role role-admin" value="active_users">Active users</option>
+                            <option class="role role-admin" value="disabled_users">Disabled</option>
+                            <option class="role role-admin" value="pending_users">Pending</option>
+                        </select>
+                    </li>
+                    <li class="pull-right">
+                        <a href="#" class="btn text-muted btn-action" data-action="refresh" data-toggle="tooltip" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
+                    </li>
+                </ul>
+                <ul class="nav nav-tabs hidden-xs">
+                    <li class="role role-admin active"><a href="#panel-users" data-toggle="tab" data-action="all_users" aria-expanded="true">All users</a></li>
+                    <li class="role role-admin"><a href="#panel-users" data-toggle="tab" data-action="active_users" aria-expanded="false">Active users</a></li>
+                    <li class="role role-admin"><a href="#panel-users" data-toggle="tab" data-action="disabled_users" aria-expanded="false">Disabled</a></li>
+                    <li class="role role-admin"><a href="#panel-usersX" data-toggle="tab" data-action="pending_users" aria-expanded="false">Pending</a></li>
+                    <li class="pull-right">
+                        <a href="#" class="btn text-muted btn-action" data-action="refresh" data-toggle="tooltip" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="panel-users">
+                        <div class="row">
+                            <div class="col-md-12 div-loading collapse">
+                                <div class="box box-default box-solid">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Loading ...</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        User list will load soon ...
+                                    </div><!-- /.box-body -->
+                                    <!-- Loading (remove the following to stop the loading)-->
+                                    <div class="overlay">
+                                        <i class="fa fa-refresh fa-spin"></i>
+                                    </div>
+                                    <!-- end loading -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" id="list-master-controls">
+                                <div class="box-tools pull-left">
+                                    <button class="btn btn-master-tool text-black" data-action="op-plus" data-toggle="tooltip" data-original-title="Add a new user"><i class="fa fa-plus"></i></button>
+                                    <!--
+                                                <button class="btn btn-master-tool text-black" data-action="op-m-2" data-toggle="tooltip" data-original-title="Avizeaza documetele selectate"><i class="fa fa-check"></i></button>
+                                                <button class="btn btn-master-tool text-black" data-action="op-m-3" data-toggle="tooltip" data-original-title="Aproba documetele selectate"><i class="fa fa-thumbs-up"></i></button>
+                                                <button class="btn btn-master-tool text-black" data-action="op-m-10" data-toggle="tooltip" data-original-title="Executa documetele selectate"><i class="fa fa-wrench"></i></button>
+                                                <button class="btn btn-master-tool text-black" data-action="op-m-7" data-toggle="tooltip" data-original-title="Arhiveaza documetele selectate"><i class="fa fa-archive"></i></button>
+                                                <button class="btn btn-master-tool text-black" data-action="op-m-20" data-toggle="tooltip" data-original-title="Expediaza documetele selectate"><i class="fa fa-paper-plane"></i></button>
+                                                <button class="btn btn-master-tool text-black" data-action="op-m-40" data-toggle="tooltip" data-original-title="Confirma primirea documetelor selectate"><i class="fa fa-pencil-square-o"></i></button>
+                                    -->
+                                </div>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-master-tool text-black" data-action="view-list" data-toggle="tooltip" data-original-title="List view"><i class="fa fa-list"></i></button>
+                                    <button class="btn btn-master-tool text-black" data-action="view-table" data-toggle="tooltip" data-original-title="Table view"><i class="fa fa-table"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="list-work-users">
+
+
+
+
+
+
+
+
+
+                            <div class="col-sm-12">
+                                <div class="box box-success">
+                                    <div class="box-header">
+                                        <i class="fa fa-users"></i>
+                                        <h3 class="box-title">User list - <span class="val-usersonscreen">10</span> from <span class="val-userscount">10</span></h3>
+                                        <div class="box-tools pull-right" data-toggle="tooltip" title="Status">
+                                            <p>Order by:</p>
+                                        </div>
+                                    </div>
+                                    <!-- user item master template -->
+                                    <div id="user-master-template" class="item sh-eff1 collapse">
+                                        <img src="http://www.gravatar.com/avatar/000000000000000000000000000?d=mm" alt="user image" class="online val-gravatar">
+                                        <p class="message">
+                                            <a href="#" class="name">
+                                                <small class="text-muted pull-right"><i class="fa fa-clock-o"></i>&nbsp;<span class="val-ago">2:15</span></small>
+                                                <span class="val-name">Max Musterman</span>&nbsp;(<span class="val-username">max.musterman</span>)
+                                            </a>
+                                            <span class="u-i-span"><span class="u-label">status: </span><span class="val-status">active</span><i class="fa fa-key fa-fw only-admin collapse" aria-hidden="true"></i></span>
+                                            <span class="u-i-span"><span class="u-label">registration date: </span><span class="val-regdate">Monday 30 Sept. 2015</span></span>
+                                            <span class="u-i-span"><span class="u-label">last login date: </span><span class="val-lastdate">Monday 30 Sept. 2015</span></span>
+                                            <span class="u-i-span"><span class="u-label">number of projects: </span><span class="val-noproj">xxxxx</span></span>
+                                            <span class="u-i-span"><span class="u-label">email address: </span><span class="val-email">gigi@gigigi.com</span></span>
+                                            <span class="u-i-span"><span class="u-label">phone: </span><span class="val-tel">+0039555XXX</span></span>
+                                            <span class="u-i-span"><span class="u-label">Quota: </span><span class="val-quota">100</span></span>
+                                        </p>
+                                        <div class="pull-right">
+                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action" data-action="view"><i class="fa fa-eye fa-fw" aria-hidden="true"></i>&nbsp;View</button>
+                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>&nbsp;Edit</button>
+                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action collapse only-v-1" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i>&nbsp;Disable</button>
+                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action collapse only-v-0" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i>&nbsp;Enable</button>
+                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>&nbsp;Delete</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.item -->
+                                    <div class="box-body chat users-box" id="users-box">
+                                    </div>
+                                    <!-- /.chat -->
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+
+                    </div><!-- /.tab-pane -->
+                    <div class="tab-pane" id="panel-usersX">
+                        <div class="row">
+                            <div class="col-md-12 div-loading collapse" style="display: none;">
+                                <div class="box box-default box-solid">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Loading ...</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        Loading list. Please wait.
+                                    </div><!-- /.box-body -->
+                                    <!-- Loading (remove the following to stop the loading)-->
+                                    <div class="overlay">
+                                        <i class="fa fa-refresh fa-spin"></i>
+                                    </div>
+                                    <!-- end loading -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- accordion -->
+                        <div class="row" id="list-courier-nodes">
+                            <div class="col-md-12">
+                                <div class="box box-solid">
+                                    <div class="box-body">
+                                        <div class="box-group" id="accordion-nodes">
+                                            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+                                        </div>
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.box -->
+                            </div><!-- /.col -->
+                        </div>
+                        <!-- /.accordion -->
+                        <div class="row hidden">
+                            modele
+                        </div>
+                    </div><!-- /.tab-pane -->
+
+                </div><!-- /.tab-content -->
+            </div><!-- nav-tabs-custom -->
+        </div>
+    </div>
+</section><!-- /.content -->
+<script>
+    $('#panel-users-wrapper').on('click', '.info-opt-footer', function (e) {
+        //$("#edtDgModal .only-list").hide("slow");
+        //$("#edtDgModal .only-opt-details").show("slow");
+    });
+    $("#selectUserPanel").on("change", function(event){
+        var current_pane = $(this).val() || 0;
+        alert("cucu:"+current_pane);
+        $("a[data-action='" + current_pane +"']",'#panel-users-wrapper').trigger( "click" );
+    });
+    ///////////////////
+    ////////////////////
+    /////////////////////
+    var _panelUSERS = _panelUSERS ||
+        {
+            dataUsers: "",
+            dataUsersOpQueue: [],
+            dataHighlightedUserId: 0,
+            dataUsersFilter : {
+                type: ""
+            },
+            dataHash: "",
+            dataStatistics : "",
+            refresh: function(){
+                _panelUSERS.dataUsers = "";
+                _panelUSERS.dataHash = "";
+                _panelUSERS.dataUsersOpQueue = [];
+                _panelUSERS.clearUsers();
+                _panelUSERS.showLoading();
+                setTimeout(function(){
+                    _panelUSERS.getData();
+                },200);
+            },
+            getData: function (){ // populate/refresh docs array
+                var	lcl_postdata = {
+                    "from": 0,
+                    "to": 0,
+                    "order": "none"
+                };
+                $.ajax({
+                    type: "GET",
+                    url: baseRestURL+"users/list?rnd=" + Math.random(),
+                    dataType: "json",
+                    //data: JSON.stringify(lcl_postdata),
+                    contentType: "application/json; charset=utf-8",
+                    error: function() {
+                        alert("Communication error. Try again or notify the site admin! Thank you.");
+                    },
+                    success: function(response) {
+                        //try {
+                        showMsg(response.msgdetails.global, response.msgcode);
+                        if(response.code === '200-OK'){
+                            console.log(response);
+                            _panelUSERS.dataUsers = response.payload;
+                            _panelUSERS.dataHash = response.msgdetails.hash;
+                            _panelUSERS.hideLoading();
+                            $(".val-userscount").html(response.msgdetails.count);
+                            //_paneDOCS.dataStatistics = response.stats;
+                            _panelUSERS.repaintUsers();
+                            //_paneDOCS.highlightDoc();
+                        }
+                        //}
+                        //catch(e) {
+//						alert("Malformed server answer. Try again or notify the site admin! Thank you.");
+//					}
+                    }
+                });
+            },
+            showLoading: function () {
+                $("#panel-users-wrapper").find(".div-loading").show();
+                return true;
+            },
+            hideLoading: function () {
+                $("#panel-users-wrapper").find(".div-loading").hide();
+                return true;
+            },
+            repaintUsers: function() {
+                _panelUSERS.clearUsers();
+                $.each(_panelUSERS.dataUsers, function( index, value ) {
+                    _panelUSERS.drawUser(value);
+                });
+                $(".val-usersonscreen").html(_panelUSERS.dataUsers.length);
+                //_paneDOCS.drawStatistics();
+            },
+            clearUsers: function() {
+                $( "#users-box" ).empty();
+            },
+            rmUserFromOpQueue: function (userid){ // removes operation from operations if there.
+                var x = userid;
+                _panelUSERS.dataUsersOpQueue = $.grep(_panelUSERS.dataUsersOpQueue, function(el, idx){return el.id_u !== x;},true);
+            },
+            doOp: function (op, formdata){ // send operations to the server and get result.
+                var	lcl_postdata = {
+                    "operation" : op,
+                    "formdata" : formdata,
+                    "queue": _panelUSERS.dataUsersOpQueue
+                };
+                $.ajax({
+                    type: "post",
+                    url: baseURL+"rm_json/users_do.ajax.php?action=do&rnd=" + Math.random(),
+                    dataType: "json",
+                    data: JSON.stringify(lcl_postdata),
+                    contentType: "application/json; charset=utf-8",
+                    error: function() {
+                        alert("Communication error. Try again or notify the site admin! Thank you.");
+                    },
+                    success: function(response) {
+                        try {
+                            var obj = response;
+                            showMsg(obj.msgdetails.global, obj.msgcode);
+                            if(obj.code === '200-OK'){
+                                var refreshCount = 0;
+                                $.each(obj.payload, function(index, item) {
+                                    if(item.s === 1){
+                                        var el = $("#user-"+item.u);
+                                        el.removeClass("disabled");
+                                        $(".only-v-0", el).hide();
+                                        $(".only-v-1", el).show();
+                                        $(".val-status", el).html("active");
+                                    }
+                                    if(item.s === 0){
+                                        var el = $("#user-"+item.u);
+                                        el.addClass("disabled");
+                                        $(".only-v-1", el).hide();
+                                        $(".only-v-0", el).show();
+                                        $(".val-status", el).html("disabled");
+                                    }
+                                    if(item.s === "del"){
+                                        $("#user-"+item.u).slideUp("normal", function() { $(this).remove(); } );
+                                        _panelUSERS.rmUserFromOpQueue(item.u);
+                                    }
+                                })
+                            }
+                        }
+                        catch(e) {
+                            alert("Malformed server answer. Try again or notify the site admin! Thank you.");
+                        }
+                    }
+                });
+            },
+//
+            saveUser: function (op, formdata){ // send operations to the server and get result.
+                var	lcl_postdata = {
+                    "operation" : op,
+                    "formdata" : formdata,
+                    "queue": _panelUSERS.dataUsersOpQueue
+                };
+                $.ajax({
+                    type: "post",
+                    url: baseURL+"rm_json/users_save.ajax.php?action=do&rnd=" + Math.random(),
+                    dataType: "json",
+                    data: JSON.stringify(lcl_postdata),
+                    contentType: "application/json; charset=utf-8",
+                    error: function() {
+                        alert("Communication error. Try again or notify the site admin! Thank you.");
+                    },
+                    success: function(response) {
+                        try {
+                            var obj = response;
+                            showMsg(obj.msgdetails.global, obj.msgcode);
+                            if(obj.code === '500-Save Error'){
+                            }
+                            if(obj.code === '200-OK'){
+                                $("#myModalUser").modal('hide');
+                                $.each(obj.payload, function(index, item) {
+                                    if(item.s === "add"){
+                                        console.log("add user request");
+                                        //$("#user-"+item.u).slideUp("normal", function() { $(this).remove(); } );
+                                        //_panelUSERS.rmUserFromOpQueue(item.u);
+                                    }
+                                    if(item.s === "edit"){
+                                        console.log("edit user request");
+                                        $("#user-"+item.u).slideUp("normal", function() { $(this).remove(); } );
+                                        //_panelUSERS.rmUserFromOpQueue(item.u);
+                                    }
+                                })
+                            }
+                            if(obj.refresh === "force"){
+                                _panelUSERS.refresh();
+                            }
+                        }
+                        catch(e) {
+                            alert("Malformed server answer. Try again or notify the site admin! Thank you.");
+                        }
+                    }
+                });
+            },
+//
+            drawUser: function(userX) {
+                if (true){
+                    $( "#user-master-template" ).clone()
+                        .prop("id", "user-"+userX.id_u )
+                        .appendTo( "#users-box" );
+                    var $thisEL = $( "#user-"+userX.id_u );
+                    $thisEL.data("dna", userX);
+                    $(".val-name", $thisEL).html(userX.nu);
+                    $(".val-username", $thisEL).html(userX.cu);
+                    $(".val-regdate", $thisEL).html(userX.ld);
+                    $(".val-lastdate", $thisEL).html(userX.ld);
+                    $(".val-email", $thisEL).html(userX.email);
+                    $(".val-tel", $thisEL).html(userX.tel);
+                    $(".val-quota", $thisEL).html(userX.q);
+                    $(".val-gravatar", $thisEL).attr("src", "https://www.gravatar.com/avatar/"+userX.g_hash+"?d=mm");
+                    if(userX.adm == 1){
+                        $(".only-admin", $thisEL).show();
+                    }else{
+                        $(".only-admin", $thisEL).hide();
+                    }
+                    if(userX.rd == userX.ld){
+                        $(".val-ago", $thisEL).html('never');
+                    } else{
+                        if(userX.ago == 0){
+                            $(".val-ago", $thisEL).html('today');
+                        }else{
+                            $(".val-ago", $thisEL).html(userX.ago+' days ago');
+                        }
+                    }
+                    $(".only-v-"+userX.s, $thisEL).show();
+                    if(userX.s == 0){
+                        $thisEL.addClass("disabled");
+                    }
+                    $thisEL.fadeIn('slow');
+                }
+                return true;
+            },
+
+//////////////////////////////////////////////////////////////////
+
+
+
+
+
+            refreshMasterControls: function(){
+                $('.btn-master-tool','#list-master-controls').hide();
+                Object.keys(tpl.master_controls[_paneDOCS.dataDocsFilter.type]).forEach(function (key) {
+                    if(tpl.master_controls[_paneDOCS.dataDocsFilter.type][key]=="1"){
+                        $('#'+key,'#list-master-controls').show();
+                    }
+                });
+            },
+            drawStatistics: function(){
+                $( "#val-docs-primite-01" ).html(_paneDOCS.dataStatistics.primite).parent().fadeOut().fadeIn();
+                $( "#val-docs-noi-01" ).html(_paneDOCS.dataStatistics.noi).parent().fadeOut().fadeIn();
+                $( "#val-docs-depasite-01" ).html(_paneDOCS.dataStatistics.depasite);//.parent().fadeOut().fadeIn();
+                $( "#val-docs-01" ).html(_paneDOCS.dataStatistics.curente).parent().fadeOut().fadeIn();
+                $( "#val-docs-draft-01" ).html(_paneDOCS.dataStatistics.draft).parent().fadeOut().fadeIn();
+                $( "#val-docs-trimise-01" ).html(_paneDOCS.dataStatistics.trimise).parent().fadeOut().fadeIn();
+            },
+            refreshOpBtnDoc: function(id_document,operatie,valoare, observatie) {
+                var $thisEL = $( "#doc-"+id_document );
+                $(".op-"+operatie, $thisEL).find(".value-dependent").hide();
+                $(".op-"+operatie, $thisEL).find(".value-"+valoare).show();
+
+                if (operatie === 5){//put no of copies
+                    if(observatie>0){
+                        $(".op-"+operatie, $thisEL).find(".value-copies").html(observatie).show();
+                    }else{
+                        $(".op-"+operatie, $thisEL).find(".value-copies").html("").hide();
+                    }
+                }
+                if (operatie){//hide UNREAD tag if any; for all operations !!!!!!!!!!! for now
+                    if ($(".value-unread", $thisEL).length>0){
+                        if($(".value-unread", $thisEL).is(":visible")){
+                            $(".value-unread", $thisEL).hide();
+                            if(_paneDOCS.dataStatistics.arrived>0){
+                                _paneDOCS.dataStatistics.arrived--;
+                                _paneDOCS.drawStatistics();
+                            }
+                        }
+                    }
+                }
+            },
+
+            highlightDoc: function () {
+                if(_paneDOCS.dataHighlightDocId === 0){
+                    return;
+                }
+                $('body').animate({ scrollTop: $("#doc-"+_paneDOCS.dataHighlightDocId).offset().top}, 500);
+                $("#doc-"+_paneDOCS.dataHighlightDocId).fadeOut().fadeIn('slow');
+                _paneDOCS.dataHighlightDocId = 0;
+                return true;
+            },
+            dataDocs: "",
+            dataHighlightId: 0,
+            dataDocsFilter : {
+                type: ""
+            },
+            dataDocsHash: "",
+            dataStatistics : "",
+            olddataStatistics : {
+                count: 0,
+                late: 0,
+                arrived: 0,
+                urgent: 0,
+                personal: 0,
+                secret: 0
+            },
+            dataOperations : {
+                "single" : {
+                    "docid" : 0,
+                    "traseuid" : 0,
+                    "operation" : ''
+                },
+                "group" : []
+            },
+            clearAllOperations: function(){
+                _paneDOCS.dataOperations = {
+                    "single" : {
+                        "docid" : 0,
+                        "traseuid" : 0,
+                        "operation" : ''
+                    },
+                    "group" : []
+                };
+                $(".btn-op-select").removeClass("selected");
+            },
+            appendOperation: function (docid, traseuid, operation, destination){ // add operation to the operations if any.
+                var op = {
+                    "docid" : docid,
+                    "traseuid" : traseuid,
+                    "operation" : operation
+                };
+                if (destination === 'group'){
+                    _paneDOCS.dataOperations.group.push(op);
+                }else{
+                    _paneDOCS.dataOperations.single = op;
+                }
+            },
+            removeOperation: function (docid,traseuid, operation){ // removes operation from operations if there.
+                var x = docid;
+                _paneDOCS.dataOperations.group = $.grep(_paneDOCS.dataOperations.group, function(el, idx) {return el.docid == x}, true);
+            },
+            doAddEditDoc: function (id_traseu, formdata){ // send operations to the server and get result.
+                var	lcl_postdata = {
+                    "id_traseu" : id_traseu,
+                    "formdata" : formdata
+                };
+                var is_ok_to_submit = 0;
+                $.ajax({
+                    type: "post",
+                    url: root_path+"rm_ajax/rm_addeditdoc.ajax.php?action=do&rnd=" + Math.random(),
+                    dataType: "json",
+                    data: JSON.stringify(lcl_postdata),
+                    contentType: "application/json; charset=utf-8",
+                    error: function() {
+                        alert("Communication error. Try again or notify the site admin! Thank you.");
+                    },
+                    success: function(response) {
+                        try {
+                            // SILVIU
+                            var obj = response;
+                            if (obj.code === '200-OK') {
+                                if (obj.msgcode === 'SUCCESS') {
+                                    //console.log(obj.data);
+                                    _paneDOCS.dataHighlightDocId = obj.data.id_doc;
+                                    var msgPlus = 'Nr. '+obj.data.nr_inreg+' / '+obj.data.data_inreg+', cod bare: '+obj.data.cod_bare;
+                                    showMsg(obj.msgdetails.global +'</br>'+msgPlus, obj.msgcode);
+                                    _paneDOCS.refreshDocs();
+                                    _paneDOCS.refreshMasterControls();
+                                    //go to document
+                                    is_ok_to_submit = 1;
+                                }
+                                else {
+                                    $("#modal-error-msg").html(obj.msgdetails.error);
+                                }
+                            }
+                        }
+                        catch(e) {
+                            alert("Malformed server answer. Try again or notify the site admin! Thank you.");
+                        }
+                    },
+                    async: false
+                });
+                return is_ok_to_submit;
+            },
+            doOperationQueue: function (op,formdata){ // send operations to the server and get result.
+                var	lcl_postdata = {
+                    "operation" : op,
+                    "formdata" : formdata,
+                    "queue": _paneDOCS.dataOperations
+                };
+                $.ajax({
+                    type: "post",
+                    url: root_path+"rm_ajax/rm_opdocs.ajax.php?action=do&rnd=" + Math.random(),
+                    dataType: "json",
+                    data: JSON.stringify(lcl_postdata),
+                    contentType: "application/json; charset=utf-8",
+                    error: function() {
+                        alert("Communication error. Try again or notify the site admin! Thank you.");
+                    },
+                    success: function(response) {
+                        try {
+                            var obj = response;
+                            showMsg(obj.msgdetails.global, obj.msgcode);
+                            if(obj.code === '200-OK'){
+                                var refreshCount = 0;
+                                $.each(obj.data, function(index, item) {
+                                    if((item.o == 40)||(item.o == 30)||(item.o == 31)||(item.o == 20)||(item.o == 7)||(item.o == 71)){
+                                        refreshCount++;
+                                    }else{
+                                        _paneDOCS.refreshOpBtnDoc(item.docid,item.o,item.v,item.obs);
+                                    }
+                                })
+                                if(refreshCount>0){
+                                    _paneDOCS.refreshDocs();
+                                }
+                            }
+                        }
+                        catch(e) {
+                            alert("Malformed server answer. Try again or notify the site admin! Thank you.");
+                        }
+                    }
+                });
+            },
+            doSaveOneOperation: function (id_op, val, obs){ // save ONE operation and get result.
+                var op = "op-"+id_op;
+                clickedon = "btnOK";
+                obs = "operatie automata";
+                var formdata = [
+                    {
+                        "name":"inputNota",
+                        "value":obs
+                    },
+                    {
+                        "name":"op",
+                        "value":op
+                    },
+                    {
+                        "name":"mode",
+                        "value":"single"
+                    },
+                    {
+                        "name":"clickedon",
+                        "value":clickedon
+                    }
+                ];
+                _paneDOCS.doOperationQueue (op,formdata);
+                return;
+            },
+            dataWorkFiles : [
+                {
+                    filename: "",
+                    path: "",
+                    size: ""
+                }
+            ],
+
+        };
+    ///////////////////
+    ////////////////////
+    //////////////////////
+
+    myModalUserOpShow = function(operationid){
+        $(".modal-dialog","#myModalUser").removeClass("modal-lg");
+        var rm_contentUrl = '/_tao/rm_content/rm_blank.php';
+
+        if(operationid === "view"){
+            $(".modal-dialog","#myModalUser").addClass("modal-lg");
+            //rm_contentUrl='/_tao/rm_content/tao_users_plus.php?operationid=' + operationid;
+        }
+        if(operationid === "op-plus"){
+            rm_contentUrl='/_tao/rm_content/tao_users_plus.php?operationid=' + operationid;
+        }
+        if(operationid === "edit"){
+            rm_contentUrl='/_tao/rm_content/tao_users_plus.php?operationid=' + operationid + '&iduser=' + _panelUSERS.dataUsersOpQueue[0]["iduser"];
+        }
+        if(operationid === "delete"){
+            rm_contentUrl='/_tao/rm_content/tao_dialog_user.php?action=DELETE&mode=single&groupsize=0&operationid=' + operationid; //+ '&traseuid=' + _paneDOCS.dataOperations.single.traseuid;
+        }
+        if(operationid === "enable"){
+            rm_contentUrl='/_tao/rm_content/tao_dialog_user.php?action=ENABLE&mode=single&groupsize=0&operationid=' + operationid; //+ '&traseuid=' + _paneDOCS.dataOperations.single.traseuid;
+        }
+        if(operationid === "disable"){
+            rm_contentUrl='/_tao/rm_content/tao_dialog_user.php?action=DISABLE&mode=single&groupsize=0&operationid=' + operationid; //+ '&traseuid=' + _paneDOCS.dataOperations.single.traseuid;
+        }
+
+        var rmContent = '';
+        $.ajax({
+            url: rm_contentUrl,
+            success: function(result) {
+                rmContent = result;
+            },
+            async:   false
+        });
+        if(rmContent !== ''){
+            $("#myModalUser").find('.modal-dialog').html(rmContent);
+        }else{
+            alert("Must be a crazy error! Could not retrive needed data from server.");
+            return e.preventDefault();
+        }
+        $("#myModalUser").modal('show');
+    };
+
+    ////////////////////
+    ///////////////////
+    ////////////////////
+    $("#myModalUser").on("submit", "#frmUserEdit", function(e) {
+        e.preventDefault();
+        var formdata = $('#frmUserEdit').serializeArray();
+        var op = $('#frmUserEdit .op').val();
+        console.log("call save ajax");
+        _panelUSERS.saveUser(op,formdata); //looks in queue for users edit or add
+    });
+
+
+    $("#myModalUser").on("submit", "#frmOp", function(e) {
+        e.preventDefault();
+        var formdata = $('#frmOp').serializeArray();
+        var op = $('#frmOp .op').val();
+        _panelUSERS.doOp(op,formdata); //looks in queue for users ops
+        $("#myModalUser").modal('hide');
+    });
+    $("#myModalUser").on("click", ".btn-submit", function(e) {
+        var me = $(this)[0];
+        $('#myModalUser input[name="clickedon"]').val(me.name);
+    });
+    $('#users-box').on('click', '.btn-action', function (e) {
+        var action = $(this).data("action");
+        var userDNA = $(this).closest("div.item").data("dna");
+        _panelUSERS.dataUsersOpQueue = [{
+            "iduser":userDNA.id_u,
+            "action":action
+        }];
+        myModalUserOpShow(action);
+    });
+    $('#panel-users-wrapper').on("click", '.btn-action[data-action="refresh"]', function(event){
+        event.preventDefault();
+        _panelUSERS.refresh();
+    }).on("click", '.btn-master-tool[data-action="op-plus"]', function(event){
+        var action = $(this).data("action");
+        myModalUserOpShow(action);
+    });
+
+    ///////////////////
+    $( document ).ready(function() {
+        console.log( "users panel ready!" );
+        _panelUSERS.getData();
+    });
+</script>

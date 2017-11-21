@@ -1,0 +1,893 @@
+<!-- modal projects op -->
+<div id="myModalProject" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- modal projects op -->
+<!-- Content Workflow -->
+<section class="content tao-async-wf collapse">
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-block btn-info btn-flat btn-close-workflow">Close workflow editor and return to the project list</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <iframe id="WorkflowBuilder"
+                    title="WorkflowBuilder"
+                    width="100%"
+                    height="1050"
+                    frameborder="0"
+                    scrolling="no"
+                    marginheight="0"
+                    marginwidth="0"
+                    src="./flow.rc2/1.php">
+            </iframe>
+        </div>
+    </div>
+</section>
+<!-- /Content Workflow -->
+<!-- Content Header (Page header) -->
+<section class="content-header tao-async-ph">
+    <!--
+    <div class="row">
+        <div class="col-md-12">
+    -->
+    <h1>Projects <small>Full list of <strong>projects</strong>.</small></h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Projects</li>
+    </ol>
+    <!-- 	</div>
+    </div>
+    -->
+</section>
+<!-- /Content Header (Page header) -->
+
+<!-- Main content -->
+<section class="content tao-async-mc">
+    <div id="panel-projects-wrapper" class="row collapseX">
+
+        <div class="col-md-12">
+            <!-- Custom Tabs -->
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
+                    <li class="role-dropdown active">
+                        <select id="selectProjectPanel" name="selectProjectPanel" class="form-control form-changepane">
+                            <option class="role role-admin" value="all_projects">All projects </option>
+                            <option class="role role-admin" value="active_projects">Active projects</option>
+                            <option class="role role-admin" value="disabled_projects">Disabled</option>
+                            <option class="role role-admin" value="pending_projects">Pending</option>
+                        </select>
+                    </li>
+                    <li class="pull-right">
+                        <a href="#" class="btn text-muted btn-action" data-action="refresh" data-toggle="tooltip" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
+                    </li>
+                </ul>
+                <ul class="nav nav-tabs hidden-xs">
+                    <li class="role role-admin active"><a href="#panel-projects" data-toggle="tab" data-action="all_projects" aria-expanded="true">All projects</a></li>
+                    <li class="role role-admin"><a href="#panel-projects" data-toggle="tab" data-action="active_projects" aria-expanded="false">Active projects</a></li>
+                    <li class="role role-admin"><a href="#panel-projects" data-toggle="tab" data-action="disabled_projects" aria-expanded="false">Disabled</a></li>
+                    <li class="role role-admin"><a href="#panel-projectsX" data-toggle="tab" data-action="pending_projects" aria-expanded="false">Pending</a></li>
+                    <li class="pull-right">
+                        <a href="#" class="btn text-muted btn-action" data-action="refresh" data-toggle="tooltip" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="panel-projects">
+                        <div class="row">
+                            <div class="col-md-12 div-loading collapse">
+                                <div class="box box-default box-solid">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Loading ...</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        Projects list will load soon ...
+                                    </div><!-- /.box-body -->
+                                    <!-- Loading (remove the following to stop the loading)-->
+                                    <div class="overlay">
+                                        <i class="fa fa-refresh fa-spin"></i>
+                                    </div>
+                                    <!-- end loading -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" id="list-master-controls">
+                                <div class="box-tools pull-left">
+                                    <button class="btn btn-master-tool text-black" data-action="op-plus" data-toggle="tooltip" data-original-title="Add a new project"><i class="fa fa-plus"></i></button>
+                                </div>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-master-tool text-black" data-action="view-list" data-toggle="tooltip" data-original-title="List view"><i class="fa fa-list"></i></button>
+                                    <button class="btn btn-master-tool text-black" data-action="view-table" data-toggle="tooltip" data-original-title="Table view"><i class="fa fa-table"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="list-work-projects">
+
+                            <div class="col-sm-12">
+                                <div class="box box-success">
+                                    <div class="box-header">
+                                        <i class="fa fa-object-group"></i>
+                                        <h3 class="box-title">Projects list - <span class="val-projectsonscreen">10</span> from <span class="val-projectscount">10</span></h3>
+                                        <div class="box-tools pull-right" data-toggle="tooltip" title="Status">
+                                            <p>Order by:</p>
+                                        </div>
+                                    </div>
+                                    <!-- project template -->
+                                    <div class="col-md-12 proj-element collapse" id="proj-master-template">
+                                        <div class="box-tools pull-right">
+                                            <span data-toggle="tooltip" title="" class="badge bg-black" data-original-title="3 notifications">3</span>
+                                            <button class="btn btn-box-tool op-edit text-black btn-action disabled" data-action="op-edit" data-toggle="tooltip" data-original-title="Edit workflow">
+		<span class="value-dependent value-1 collapse">
+			<span class="fa-stack fa-lg">
+				<i class="fa fa-circle fa-stack-2x text-green" style=""></i>
+				<i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+			</span>
+		</span>
+                                                <span class="value-dependent value-0 collapse">
+			<span class="fa-stack fa-lg">
+				<i class="fa fa-pencil fa-stack-1x"></i>
+				<i class="fa fa-ban fa-stack-2x text-danger"></i>
+			</span>
+		</span>
+                                                <span class="value-dependent value-default">
+			<span class="fa-stack fa-lg value-dependent value-default">
+				<i class="fa fa-pencil"></i>
+			</span>
+		</span>
+                                            </button>
+                                            <button class="btn btn-box-tool op-5 text-black btn-action disabled" data-action="op-5" data-toggle="tooltip" data-original-title="Clone workflow">
+		<span class="value-dependent value-1 collapse">
+			<span class="fa-stack fa-lg">
+				<i class="fa fa-circle fa-stack-2x text-green" style=""></i>
+				<i class="fa fa-files-o fa-stack-1x fa-inverse"></i>
+			</span>
+		</span>
+                                                <span class="value-dependent value-0 collapse">
+			<span class="fa-stack fa-lg">
+				<i class="fa-files-o fa-stack-1x"></i>
+				<i class="fa fa-ban fa-stack-2x text-danger"></i>
+			</span>
+		</span>
+                                                <span class="value-dependent value-default">
+			<span class="fa-stack fa-lg value-dependent value-default">
+				<i class="fa fa-files-o"></i>
+			</span>
+		</span>
+                                                <span class="label value-copies collapse bg-black"></span>
+                                            </button>
+                                            <button class="btn btn-box-tool op-2 text-black btn-action disabled " data-action="op-2" data-toggle="tooltip" data-original-title="Validate workflow">
+		<span class="value-dependent value-1 collapse">
+			<span class="fa-stack fa-lg">
+				<i class="fa fa-circle fa-stack-2x text-green" style=""></i>
+				<i class="fa fa-check fa-stack-1x fa-inverse"></i>
+			</span>
+		</span>
+                                                <span class="value-dependent value-0 collapse">
+			<span class="fa-stack fa-lg">
+				<i class="fa fa-check fa-stack-1x"></i>
+				<i class="fa fa-ban fa-stack-2x text-danger"></i>
+			</span>
+		</span>
+                                                <span class="value-dependent value-default">
+			<span class="fa-stack fa-lg value-dependent value-default">
+				<i class="fa fa-check"></i>
+			</span>
+		</span>
+                                            </button>
+                                            <button class="btn btn-box-tool op-20 text-black btn-action disabled" data-action="op-20" data-toggle="tooltip" data-original-title="Deploy and start execution">
+		<span class="value-dependent value-1 collapse">
+			<span class="fa-stack fa-lg">
+				<i class="fa fa-circle fa-stack-2x text-green" style=""></i>
+				<i class="fa fa-paper-plane fa-stack-1x fa-inverse"></i>
+			</span>
+		</span>
+                                                <span class="value-dependent value-0 collapse">
+			<span class="fa-stack fa-lg">
+				<i class="fa fa-paper-plane fa-stack-1x"></i>
+				<i class="fa fa-ban fa-stack-2x text-danger"></i>
+			</span>
+		</span>
+                                                <span class="value-dependent value-default">
+			<span class="fa-stack fa-lg value-dependent value-default">
+				<i class="fa fa-paper-plane"></i>
+			</span>
+		</span>
+                                            </button>
+                                            <button class="btn btn-box-tool op-2 text-black btn-action disabled " data-action="op-pause-resume" data-toggle="tooltip" data-original-title="Pause / resume execution">
+		<span class="value-dependent value-1 collapse">
+			<span class="fa-stack fa-lg">
+				<i class="fa fa-circle fa-stack-2x text-green" style=""></i>
+				<i class="fa fa-pause fa-stack-1x fa-inverse"></i>
+			</span>
+		</span>
+                                                <span class="value-dependent value-0 collapse">
+			<span class="fa-stack fa-lg">
+				<i class="fa fa-play fa-stack-1x"></i>
+				<i class="fa fa-ban fa-stack-2x text-danger"></i>
+			</span>
+		</span>
+                                                <span class="value-dependent value-default">
+			<span class="fa-stack fa-lg value-dependent value-default">
+				<i class="fa fa-pause"></i>
+			</span>
+		</span>
+                                            </button>
+                                            <button class="btn btn-box-tool op-6 text-black btn-action disabled " data-action="op-6" data-toggle="tooltip" data-original-title="Publish current workflow">
+		<span class="value-dependent value-default">
+			<span class="fa-stack fa-lg value-dependent value-default">
+				<i class="fa fa-bullhorn"></i>
+			</span>
+		</span>
+                                            </button>
+                                            <button class="btn btn-box-tool op-6 text-black btn-action disabled " data-action="op-delete" data-toggle="tooltip" data-original-title="Delete current workflow">
+		<span class="value-dependent value-default">
+			<span class="fa-stack fa-lg value-dependent value-default">
+				<i class="fa fa-trash-o"></i>
+			</span>
+		</span>
+                                            </button>
+                                            <button class="btn btn-box-tool text-black btn-action" data-action="view-results" data-toggle="tooltip" data-original-title="Show execution results">
+		<span class="value-dependent value-default">
+			<span class="fa-stack fa-lg value-dependent value-default">
+				<i class="fa fa-picture-o"></i>
+			</span>
+		</span>
+                                            </button>
+                                            <button class="btn btn-box-tool text-black btn-action" data-action="trace-execution" data-toggle="tooltip" data-original-title="Trace execution">
+		<span class="value-dependent value-default">
+			<span class="fa-stack fa-lg value-dependent value-default">
+				<i class="fa fa-road"></i>
+			</span>
+		</span>
+                                            </button>
+                                        </div>
+                                        <div class="tranz01 project-item-core-box">
+                                            <div class="info-box-select">
+		<span class="fa-stack">
+			<i class="fa fa-object-group fa-stack-2x"></i>
+		</span>
+                                            </div>
+                                            <div class="project-box-body">
+                                                <p class="nopadding">
+                                                    <span class="val-project-title">Research project R001</span>
+                                                    <span class="info-box-tags">
+						<small class="label bg-green">running</small>
+						<small class="tag-flag">failed</small>
+					</span>
+                                                </p>
+                                                <span class="info-box-initiator val-owner">fred meyer</span>
+                                                <p class="nopadding">
+                                                    Created on <span class="info-box-date-arrival val-cdatep">01.01.2017</span>, last edited on <span class="info-box-date-end val-edatep">00.00.0000</span>,
+                                                    <span class="info-box-date-days">26 hours ago</span>, completed: <span class="info-box-completed">50%</span>
+                                                </p>
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-primary progress-bar-striped" style="width: 50%"></div>
+                                                </div>
+                                                <span class="val-project-description">Description...</span>
+                                            </div><!-- /.info-box-content -->
+                                        </div><!-- /.info-box -->
+                                    </div>
+                                    <!-- /.project template -->
+
+                                    <div class="box-body chat projects-box" id="projects-box">
+                                    </div>
+                                    <!-- /.chat -->
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+
+                    </div><!-- /.tab-pane -->
+                    <div class="tab-pane" id="panel-projectsX">
+                        <div class="row">
+                            <div class="col-md-12 div-loading collapse" style="display: none;">
+                                <div class="box box-default box-solid">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Loading ...</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        Loading list. Please wait.
+                                    </div><!-- /.box-body -->
+                                    <!-- Loading (remove the following to stop the loading)-->
+                                    <div class="overlay">
+                                        <i class="fa fa-refresh fa-spin"></i>
+                                    </div>
+                                    <!-- end loading -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- accordion -->
+                        <div class="row" id="list-courier-nodes">
+                            <div class="col-md-12">
+                                <div class="box box-solid">
+                                    <div class="box-body">
+                                        <div class="box-group" id="accordion-nodes">
+                                            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+                                        </div>
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.box -->
+                            </div><!-- /.col -->
+                        </div>
+                        <!-- /.accordion -->
+                        <div class="row hidden">
+                            modele
+                        </div>
+                    </div><!-- /.tab-pane -->
+
+                </div><!-- /.tab-content -->
+            </div><!-- nav-tabs-custom -->
+        </div>
+    </div>
+</section><!-- /.content -->
+<script>
+    $('#panel-projects-wrapper').on('click', '.info-opt-footer', function (e) {
+        //$("#edtDgModal .only-list").hide("slow");
+        //$("#edtDgModal .only-opt-details").show("slow");
+    });
+    $("#selectProjectPanel").on("change", function(event){
+        var current_pane = $(this).val() || 0;
+        alert("cucu:"+current_pane);
+        $("a[data-action='" + current_pane +"']",'#panel-projects-wrapper').trigger( "click" );
+    });
+
+
+    var _panelPROJECTS = _panelPROJECTS ||
+        {
+            dataProjects: "",
+            dataProjectsOpQueue: [],
+            dataHighlightedId: 0,
+            dataProjectsFilter : {
+                type: ""
+            },
+            dataHash: "",
+            dataStatistics : "",
+            refresh: function(){
+                _panelPROJECTS.dataProjects = "";
+                _panelPROJECTS.dataHash = "";
+                _panelPROJECTS.dataProjectsOpQueue = [];
+                _panelPROJECTS.clearProjects();
+                _panelPROJECTS.showLoading();
+                setTimeout(function(){
+                    _panelPROJECTS.getData();
+                },200);
+            },
+            getData: function (){ // populate/refresh docs array
+                var	lcl_postdata = {
+                    "from": 0,
+                    "to": 0,
+                    "order": "none"
+                };
+                $.ajax({
+                    type: "GET",
+                    url: baseRestURL+"projects/list/?rnd=" + Math.random(),
+                    dataType: "json",
+                    //data: JSON.stringify(lcl_postdata),
+                    contentType: "application/json; charset=utf-8",
+                    error: function() {
+                        alert("Communication error. Try again or notify the site admin! Thank you.");
+                    },
+                    success: function(response) {
+                        //try {
+                        showMsg(response.msgdetails.global, response.msgcode);
+                        if(response.code === '200-OK'){
+                            _panelPROJECTS.dataProjects = response.payload;
+                            _panelPROJECTS.dataHash = response.msgdetails.hash;
+                            _panelPROJECTS.hideLoading();
+                            $(".val-projectscount").html(response.msgdetails.count);
+                            //_paneDOCS.dataStatistics = response.stats;
+                            _panelPROJECTS.repaintProjects();
+                            //_paneDOCS.highlightDoc();
+                        }
+                        //}
+                        //catch(e) {
+//						alert("Malformed server answer. Try again or notify the site admin! Thank you.");
+//					}
+                    }
+                });
+            },
+            showLoading: function () {
+                $("#panel-projects-wrapper").find(".div-loading").show();
+                return true;
+            },
+            hideLoading: function () {
+                $("#panel-projects-wrapper").find(".div-loading").hide();
+                return true;
+            },
+            repaintProjects: function() {
+                _panelPROJECTS.clearProjects();
+                $.each(_panelPROJECTS.dataProjects, function( index, value ) {
+                    _panelPROJECTS.drawProject(value);
+                });
+                $(".val-projectsonscreen").html(_panelPROJECTS.dataProjects.length);
+                //_paneDOCS.drawStatistics();
+            },
+            clearProjects: function() {
+                $( "#projects-box" ).empty();
+            },
+            rmProjectFromOpQueue: function (tmpId){ // removes operation from operations if there.
+                _panelPROJECTS.dataProjectsOpQueue = $.grep(_panelPROJECTS.dataProjectsOpQueue, function(el, idx){return el.id_p != tmpId;},true);
+            },
+            doOp: function (op, formdata){ // send operations to the server and get result.
+                var	lcl_postdata = {
+                    "operation" : op,
+                    "formdata" : formdata,
+                    "queue": _panelPROJECTS.dataProjectsOpQueue
+                };
+                $.ajax({
+                    type: "post",
+                    url: baseURL+"rm_json/projects_do.ajax.php?action=do&rnd=" + Math.random(),
+                    dataType: "json",
+                    data: JSON.stringify(lcl_postdata),
+                    contentType: "application/json; charset=utf-8",
+                    error: function() {
+                        alert("Communication error. Try again or notify the site admin! Thank you.");
+                    },
+                    success: function(response) {
+                        try {
+                            var obj = response;
+                            showMsg(obj.msgdetails.global, obj.msgcode);
+                            if(obj.code == '200-OK'){
+                                var refreshCount = 0;
+                                $.each(obj.payload, function(index, item) {
+                                    if(item.s == 1){
+                                        var el = $("#proj-"+item.u);
+                                        el.removeClass("disabled");
+                                        $(".only-v-0", el).hide();
+                                        $(".only-v-1", el).show();
+                                        $(".val-status", el).html("active");
+                                    }
+                                    if(item.s == 0){
+                                        var el = $("#proj-"+item.u);
+                                        el.addClass("disabled");
+                                        $(".only-v-1", el).hide();
+                                        $(".only-v-0", el).show();
+                                        $(".val-status", el).html("disabled");
+                                    }
+                                    if(item.s == "del"){
+                                        $("#proj-"+item.u).slideUp("normal", function() { $(this).remove(); } );
+                                        _panelPROJECTS.rmProjectFromOpQueue(item.u);
+                                    }
+                                })
+                            }
+                        }
+                        catch(e) {
+                            alert("Malformed server answer. Try again or notify the site admin! Thank you.");
+                        }
+                    }
+                });
+            },
+//
+            saveProject: function (op, formdata){ // send operations to the server and get result.
+                var	lcl_postdata = {
+                    "operation" : op,
+                    "formdata" : formdata,
+                    "queue": _panelPROJECTS.dataProjectsOpQueue
+                };
+                $.ajax({
+                    type: "post",
+                    url: baseURL+"rm_json/users_save.ajax.php?action=do&rnd=" + Math.random(),
+                    dataType: "json",
+                    data: JSON.stringify(lcl_postdata),
+                    contentType: "application/json; charset=utf-8",
+                    error: function() {
+                        alert("Communication error. Try again or notify the site admin! Thank you.");
+                    },
+                    success: function(response) {
+                        try {
+                            var obj = response;
+                            showMsg(obj.msgdetails.global, obj.msgcode);
+                            if(obj.code == '500-Save Error'){
+                            }
+                            if(obj.code == '200-OK'){
+                                $("#myModalProject").modal('hide');
+                                $.each(obj.payload, function(index, item) {
+                                    if(item.s == "add"){
+                                        console.log("add project request");
+                                        //$("#proj-"+item.u).slideUp("normal", function() { $(this).remove(); } );
+                                        //_panelPROJECTS.rmProjectFromOpQueue(item.u);
+                                    }
+                                    if(item.s == "edit"){
+                                        console.log("edit project request");
+                                        $("#proj-"+item.u).slideUp("normal", function() { $(this).remove(); } );
+                                        //_panelPROJECTS.rmProjectFromOpQueue(item.u);
+                                    }
+                                })
+                            }
+                            if(obj.refresh == "force"){
+                                _panelPROJECTS.refresh();
+                            }
+                        }
+                        catch(e) {
+                            alert("Malformed server answer. Try again or notify the site admin! Thank you.");
+                        }
+                    }
+                });
+            },
+//
+            drawProject: function(projectX) {
+                if (true){
+                    $( "#proj-master-template" ).clone()
+                        .prop("id", "proj-"+projectX.id_p )
+                        .appendTo( "#projects-box" );
+                    var $thisEL = $( "#proj-"+projectX.id_p );
+                    $thisEL.data("dna", projectX);
+                    $(".val-project-title", $thisEL).html(projectX.np);
+                    $(".val-cdatep", $thisEL).html(projectX.cdatep);
+                    $(".val-edatep", $thisEL).html(projectX.edatep);
+                    $(".val-project-description", $thisEL).html(projectX.dp);
+                    $(".val-owner", $thisEL).html(projectX.nu);
+
+                    if(projectX.adm == 1){
+                        $(".only-admin", $thisEL).show();
+                    }else{
+                        $(".only-admin", $thisEL).hide();
+                    }
+                    if(projectX.rd == projectX.ld){
+                        $(".val-ago", $thisEL).html('never');
+                    } else{
+                        if(projectX.ago == 0){
+                            $(".val-ago", $thisEL).html('today');
+                        }else{
+                            $(".val-ago", $thisEL).html(projectX.ago+' days ago');
+                        }
+                    }
+                    $(".only-v-"+projectX.s, $thisEL).show();
+                    if(projectX.s == 0){
+                        $thisEL.addClass("disabled");
+                    }
+                    //enable all buttons
+                    $(".btn-box-tool", $thisEL).removeClass("disabled");
+                    $thisEL.fadeIn('slow');
+                }
+                return true;
+            },
+
+//////////////////////////////////////////////////////////////////
+
+
+
+
+
+            refreshMasterControls: function(){
+                $('.btn-master-tool','#list-master-controls').hide();
+                Object.keys(tpl.master_controls[_paneDOCS.dataDocsFilter.type]).forEach(function (key) {
+                    if(tpl.master_controls[_paneDOCS.dataDocsFilter.type][key]=="1"){
+                        $('#'+key,'#list-master-controls').show();
+                    }
+                });
+            },
+            drawStatistics: function(){
+                $( "#val-docs-primite-01" ).html(_paneDOCS.dataStatistics.primite).parent().fadeOut().fadeIn();
+                $( "#val-docs-noi-01" ).html(_paneDOCS.dataStatistics.noi).parent().fadeOut().fadeIn();
+                $( "#val-docs-depasite-01" ).html(_paneDOCS.dataStatistics.depasite);//.parent().fadeOut().fadeIn();
+                $( "#val-docs-01" ).html(_paneDOCS.dataStatistics.curente).parent().fadeOut().fadeIn();
+                $( "#val-docs-draft-01" ).html(_paneDOCS.dataStatistics.draft).parent().fadeOut().fadeIn();
+                $( "#val-docs-trimise-01" ).html(_paneDOCS.dataStatistics.trimise).parent().fadeOut().fadeIn();
+            },
+            refreshOpBtnDoc: function(id_document,operatie,valoare, observatie) {
+                var $thisEL = $( "#doc-"+id_document );
+                $(".op-"+operatie, $thisEL).find(".value-dependent").hide();
+                $(".op-"+operatie, $thisEL).find(".value-"+valoare).show();
+
+                if (operatie == 5){//put no of copies
+                    if(observatie>0){
+                        $(".op-"+operatie, $thisEL).find(".value-copies").html(observatie).show();
+                    }else{
+                        $(".op-"+operatie, $thisEL).find(".value-copies").html("").hide();
+                    }
+                }
+                if (operatie){//hide UNREAD tag if any; for all operations !!!!!!!!!!! for now
+                    if ($(".value-unread", $thisEL).length>0){
+                        if($(".value-unread", $thisEL).is(":visible")){
+                            $(".value-unread", $thisEL).hide();
+                            if(_paneDOCS.dataStatistics.arrived>0){
+                                _paneDOCS.dataStatistics.arrived--;
+                                _paneDOCS.drawStatistics();
+                            }
+                        }
+                    }
+                }
+            },
+
+            highlightDoc: function () {
+                if(_paneDOCS.dataHighlightDocId == 0){
+                    return;
+                }
+                $('body').animate({ scrollTop: $("#doc-"+_paneDOCS.dataHighlightDocId).offset().top}, 500);
+                $("#doc-"+_paneDOCS.dataHighlightDocId).fadeOut().fadeIn('slow');
+                _paneDOCS.dataHighlightDocId = 0;
+                return true;
+            },
+            dataDocs: "",
+            dataHighlightId: 0,
+            dataDocsFilter : {
+                type: ""
+            },
+            dataDocsHash: "",
+            dataStatistics : "",
+            olddataStatistics : {
+                count: 0,
+                late: 0,
+                arrived: 0,
+                urgent: 0,
+                personal: 0,
+                secret: 0
+            },
+            dataOperations : {
+                "single" : {
+                    "docid" : 0,
+                    "traseuid" : 0,
+                    "operation" : ''
+                },
+                "group" : []
+            },
+            clearAllOperations: function(){
+                _paneDOCS.dataOperations = {
+                    "single" : {
+                        "docid" : 0,
+                        "traseuid" : 0,
+                        "operation" : ''
+                    },
+                    "group" : []
+                };
+            },
+            appendOperation: function (docid, traseuid, operation, destination){ // add operation to the operations if any.
+                var op = {
+                    "docid" : docid,
+                    "traseuid" : traseuid,
+                    "operation" : operation
+                };
+                if (destination == 'group'){
+                    _paneDOCS.dataOperations.group.push(op);
+                }else{
+                    _paneDOCS.dataOperations.single = op;
+                }
+            },
+            removeOperation: function (docid,traseuid, operation){ // removes operation from operations if there.
+                var x = docid;
+                _paneDOCS.dataOperations.group = $.grep(_paneDOCS.dataOperations.group, function(el, idx) {return el.docid == x}, true);
+            },
+            doAddEditDoc: function (id_traseu, formdata){ // send operations to the server and get result.
+                var	lcl_postdata = {
+                    "id_traseu" : id_traseu,
+                    "formdata" : formdata
+                };
+                var is_ok_to_submit = 0;
+                $.ajax({
+                    type: "post",
+                    url: root_path+"rm_ajax/rm_addeditdoc.ajax.php?action=do&rnd=" + Math.random(),
+                    dataType: "json",
+                    data: JSON.stringify(lcl_postdata),
+                    contentType: "application/json; charset=utf-8",
+                    error: function() {
+                        alert("Communication error. Try again or notify the site admin! Thank you.");
+                    },
+                    success: function(response) {
+                        try {
+                            var obj = response;
+                            if (obj.code == '200-OK') {
+                                if (obj.msgcode == 'SUCCESS') {
+                                    _paneDOCS.dataHighlightDocId = obj.data.id_doc;
+                                    var msgPlus = 'Nr. '+obj.data.nr_inreg+' / '+obj.data.data_inreg+', cod bare: '+obj.data.cod_bare;
+                                    showMsg(obj.msgdetails.global +'</br>'+msgPlus, obj.msgcode);
+                                    _paneDOCS.refreshDocs();
+                                    _paneDOCS.refreshMasterControls();
+                                    //go to document
+                                    is_ok_to_submit = 1;
+                                }
+                                else {
+                                    $("#modal-error-msg").html(obj.msgdetails.error);
+                                }
+                            }
+                        }
+                        catch(e) {
+                            alert("Malformed server answer. Try again or notify the site admin! Thank you.");
+                        }
+                    },
+                    async: false
+                });
+                return is_ok_to_submit;
+            },
+            doOperationQueue: function (op,formdata){ // send operations to the server and get result.
+                var	lcl_postdata = {
+                    "operation" : op,
+                    "formdata" : formdata,
+                    "queue": _paneDOCS.dataOperations
+                };
+                $.ajax({
+                    type: "post",
+                    url: root_path+"rm_ajax/rm_opdocs.ajax.php?action=do&rnd=" + Math.random(),
+                    dataType: "json",
+                    data: JSON.stringify(lcl_postdata),
+                    contentType: "application/json; charset=utf-8",
+                    error: function() {
+                        alert("Communication error. Try again or notify the site admin! Thank you.");
+                    },
+                    success: function(response) {
+                        try {
+                            var obj = response;
+                            showMsg(obj.msgdetails.global, obj.msgcode);
+                            if(obj.code == '200-OK'){
+                                var refreshCount = 0;
+                                $.each(obj.data, function(index, item) {
+                                    if((item.o == 40)||(item.o == 30)||(item.o == 31)||(item.o == 20)||(item.o == 7)||(item.o == 71)){
+                                        refreshCount++;
+                                    }else{
+                                        _paneDOCS.refreshOpBtnDoc(item.docid,item.o,item.v,item.obs);
+                                    }
+                                })
+                                if(refreshCount>0){
+                                    _paneDOCS.refreshDocs();
+                                }
+                            }
+                        }
+                        catch(e) {
+                            alert("Malformed server answer. Try again or notify the site admin! Thank you.");
+                        }
+                    }
+                });
+            },
+            doSaveOneOperation: function (id_op, val, obs){ // save ONE operation and get result.
+                var op = "op-"+id_op;
+                clickedon = "btnOK";
+                obs = "operatie automata";
+                var formdata = [
+                    {
+                        "name":"inputNota",
+                        "value":obs
+                    },
+                    {
+                        "name":"op",
+                        "value":op
+                    },
+                    {
+                        "name":"mode",
+                        "value":"single"
+                    },
+                    {
+                        "name":"clickedon",
+                        "value":clickedon
+                    }
+                ];
+                _paneDOCS.doOperationQueue (op,formdata);
+                return;
+            },
+            dataWorkFiles : [
+                {
+                    filename: "",
+                    path: "",
+                    size: ""
+                }
+            ],
+        };
+    ///////////////////
+    ////////////////////
+    //////////////////////
+
+    myModalProjectOpShow = function(operationid){
+        //alert(operationid);
+        $(".modal-dialog","#myModalProject").removeClass("modal-lg");
+        var rm_contentUrl = '/_tao/rm_content/rm_blank.php';
+
+        if(operationid == "trace-execution"){
+            rm_contentUrl='/_tao/rm_content/tao_traceproject.php?operationid=' + operationid;
+        }
+        if(operationid == "view-results"){
+            $(".modal-dialog","#myModalProject").addClass("modal-lg");
+            rm_contentUrl='/_tao/rm_content/tao_viewprojectresults.php?operationid=' + operationid;
+        }
+
+        if(operationid == "op-plus"){
+            rm_contentUrl='/_tao/rm_content/tao_projects_plus.php?operationid=' + operationid;
+        }
+        if(operationid == "edit"){
+            rm_contentUrl='/_tao/rm_content/tao_projects_plus.php?operationid=' + operationid + '&iduser=' + _panelPROJECTS.dataProjectsOpQueue[0]["iduser"];
+        }
+        if(operationid == "delete"){
+            rm_contentUrl='/_tao/rm_content/tao_dialog_project.php?action=DELETE&mode=single&groupsize=0&operationid=' + operationid; //+ '&traseuid=' + _paneDOCS.dataOperations.single.traseuid;
+        }
+        if(operationid == "enable"){
+            rm_contentUrl='/_tao/rm_content/tao_dialog_project.php?action=ENABLE&mode=single&groupsize=0&operationid=' + operationid; //+ '&traseuid=' + _paneDOCS.dataOperations.single.traseuid;
+        }
+        if(operationid == "disable"){
+            rm_contentUrl='/_tao/rm_content/tao_dialog_project.php?action=DISABLE&mode=single&groupsize=0&operationid=' + operationid; //+ '&traseuid=' + _paneDOCS.dataOperations.single.traseuid;
+        }
+
+        var rmContent = '';
+        $.ajax({
+            url: rm_contentUrl,
+            success: function(result) {
+                rmContent = result;
+            },
+            async:   false
+        });
+        if(rmContent != ''){
+            $("#myModalProject").find('.modal-dialog').html(rmContent);
+        }else{
+            alert("Must be a crazy error! Could not retrive needed data from server.");
+            return e.preventDefault();
+        }
+        $("#myModalProject").modal('show');
+    };
+
+    ////////////////////
+    ///////////////////
+    ////////////////////
+    $("#myModalProject").on("submit", "#frmProjectEdit", function(e) {
+        e.preventDefault();
+        var formdata = $('#frmProjectEdit').serializeArray();
+        var op = $('#frmProjectEdit .op').val();
+        console.log("call save ajax");
+        _panelPROJECTS.saveProject(op,formdata); //looks in queue for edit or add
+    });
+
+
+    $("#myModalProject").on("submit", "#frmOp", function(e) {
+        e.preventDefault();
+        var formdata = $('#frmOp').serializeArray();
+        var op = $('#frmOp .op').val();
+        _panelPROJECTS.doOp(op,formdata); //looks in queue for ops
+        $("#myModalProject").modal('hide');
+    });
+    $("#myModalProject").on("click", ".btn-submit", function(e) {
+        var me = $(this)[0];
+        $('#myModalProject input[name="clickedon"]').val(me.name);
+    });
+    $('#projects-box').on('click', '.btn-action', function (e) {
+        var action = $(this).data("action");
+        var projectDNA = $(this).closest("div.proj-element").data("dna");
+        _panelPROJECTS.dataProjectsOpQueue = [{
+            "iduser":projectDNA.id_p,
+            "action":action
+        }];
+        if(action == 'op-edit'){
+            $(".tao-async-wf").fadeIn("slow");
+            document.getElementById('WorkflowBuilder').contentWindow.location.reload();
+            $(".tao-async-ph").fadeOut("slow");
+            $(".tao-async-mc").fadeOut("slow");
+        }else{
+            myModalProjectOpShow(action);
+        }
+    });
+    $('#panel-projects-wrapper').on("click", '.btn-action[data-action="refresh"]', function(event){
+        event.preventDefault();
+        _panelPROJECTS.refresh();
+    });
+    $('#panel-projects-wrapper').on("click", '.btn-master-tool[data-action="op-plus"]', function(event){
+        var action = $(this).data("action");
+        myModalProjectOpShow(action);
+    });
+
+
+    ///////////////////
+    $( document ).ready(function() {
+        console.log( "projects panel ready!" );
+        _panelPROJECTS.getData();
+        $(".btn-close-workflow").on("click", function(e) {
+            e.preventDefault();
+            $(".tao-async-wf").fadeOut("slow");
+            $(".tao-async-ph").fadeIn("slow");
+            $(".tao-async-mc").fadeIn("slow");
+        });
+    });
+</script>

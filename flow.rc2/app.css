@@ -1,0 +1,193 @@
+.demo {
+    /* for IE10+ touch devices */
+    touch-action:none;
+}
+#canvas{
+	height:1050px;
+	max-height: 1050px;
+}
+.noselect {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+.w {
+    padding: 0;
+    position: absolute;
+    z-index: 4;
+    border: 1px solid #2e6f9a;
+    box-shadow: 2px 2px 19px #e0e0e0;
+    -o-box-shadow: 2px 2px 19px #e0e0e0;
+    -webkit-box-shadow: 2px 2px 19px #e0e0e0;
+    -moz-box-shadow: 2px 2px 19px #e0e0e0;
+    -moz-border-radius: 8px;
+    border-radius: 0 16px;
+    opacity: 0.8;
+    cursor: move;
+    background-color: white;
+    font-size: 11px;
+    -webkit-transition: background-color 0.25s ease-in;
+    -moz-transition: background-color 0.25s ease-in;
+    transition: background-color 0.25s ease-in;
+}
+
+.w:hover {
+    /*background-color: #5c96bc;
+    color: white;*/
+	-webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.5);
+	box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.5);
+	border: 2px solid #2e6f9a;
+
+}
+.w.selected {
+    border: 4px solid #2e6f9a;
+}
+.w .module-bottom{
+    color: #aeb8b8;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 12px;
+    font-size: 16px;
+}
+.w .module-info {
+    padding: 10px;
+	cursor: pointer;
+	margin-bottom: 10px;
+}
+.w .module-info .module-animation {
+    position: absolute;
+    top: -17px;
+    left: -17px;
+    height: 32px;
+    width: 32px;
+}
+.w .module-info .module-new {
+    float: right;
+    width: 10px;
+    height: 10px;
+    margin-left: 4px;
+    border-radius: 50%;
+    background-color: #7cc7ff;
+}
+.w .module-info .module-title {
+    font-size: 16px;
+    position: relative;
+    font-weight: bold;
+}
+
+.w .module-info .module-status{
+	margin-top: 1em;
+}
+
+.w .module-middle {
+    height: 3px;
+    background-color: #cbdeea;
+    position: relative;
+    cursor: pointer;
+	-webkit-box-shadow: inset 0px 0px 16px -4px rgba(0,0,0,0.4);
+	-moz-box-shadow: inset 0px 0px 16px -4px rgba(0,0,0,0.4);
+	box-shadow: inset 0px 0px 16px -4px rgba(0,0,0,0.4);
+}
+.w .module-middle .module-icon {
+    background-color: #5c96bc;
+	color: #fff;
+    border-radius: 50%;
+    font-family: Helvetica,Arial Narrow,sans-serif;
+    font-size: 28px;
+	position: absolute;
+    left: 10px;
+    top: -20px;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+.w .module-footer {
+    padding: 0;
+    font-size: 1.2em;
+    border-top: 1px dotted #dadada;
+}
+.w .module-footer .meta {
+float: right;
+}
+
+
+.aLabel {
+    -webkit-transition: background-color 0.25s ease-in;
+    -moz-transition: background-color 0.25s ease-in;
+    transition: background-color 0.25s ease-in;
+}
+
+.aLabel.jtk-hover, .jtk-source-hover, .jtk-target-hover {
+    background-color: #1e8151;
+    color: white;
+}
+
+.aLabel {
+    background-color: white;
+    opacity: 0.8;
+    padding: 0.3em;
+    border-radius: 0.5em;
+    border: 1px solid #346789;
+    cursor: pointer;
+	display:none;
+}
+
+.ep {
+    position: absolute;
+    bottom: 37%;
+    right: 5px;
+    width: 1em;
+    height: 1em;
+    background-color: orange;
+    cursor: pointer;
+    box-shadow: 0 0 2px black;
+    -webkit-transition: -webkit-box-shadow 0.25s ease-in;
+    -moz-transition: -moz-box-shadow 0.25s ease-in;
+    transition: box-shadow 0.25s ease-in;
+}
+
+.ep:hover {
+    box-shadow: 0 0 6px black;
+}
+
+.statemachine-demo .jtk-endpoint {
+    z-index: 3;
+}
+
+#opened {
+    left: 10em;
+    top: 5em;
+}
+
+#phone1 {
+    left: 35em;
+    top: 12em;
+    width: 7em;
+}
+
+#inperson {
+    left: 12em;
+    top: 23em;
+}
+
+#phone2 {
+    left: 28em;
+    top: 24em;
+}
+
+#rejected {
+    left: 10em;
+    top: 35em;
+}
+
+.dragHover {
+    border: 2px solid orange;
+}
+
+path, .jtk-endpoint { cursor:pointer; }

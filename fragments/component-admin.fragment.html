@@ -1,0 +1,615 @@
+<!-- modal nodes op -->
+<div id="myModalNodes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- modal nodes op -->
+<!-- Content Header (Page header) -->
+<section class="content-header tao-async-ph">
+    <h1>Processing components <small>Full list of <strong>processing components</strong> grouped by current state.</small></h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Components</li>
+    </ol>
+</section>
+<!-- /Content Header (Page header) -->
+
+<!-- Main content -->
+<section class="content tao-async-mc">
+    <div id="panel-topo-wrapper" class="row collapseX">
+        <div class="col-md-12">
+            <!-- Custom Tabs -->
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
+                    <li class="role-dropdown active">
+                        <select id="selectUserPanel" name="selectUserPanel" class="form-control form-changepane" title="Select desired node view.">
+                            <option class="role role-admin" value="all_nodes">All components </option>
+                            <option class="role role-admin" value="disabled_nodes">Disabled components</option>
+                        </select>
+                    </li>
+                    <li class="pull-right">
+                        <a href="#" class="btn text-muted btn-action" data-action="refresh" data-toggle="tooltip" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
+                    </li>
+                </ul>
+                <ul class="nav nav-tabs hidden-xs">
+                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_nodes" aria-expanded="true">All components</a></li>
+                    <li class="role role-admin"><a href="#panel-nodesX" data-toggle="tab" data-action="disabled_nodes" aria-expanded="false">Disabled components</a></li>
+                    <li class="pull-right">
+                        <a href="#" class="btn text-muted btn-action" data-action="refresh" data-toggle="tooltip" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="panel-nodes">
+                        <div class="row">
+                            <div class="col-md-12 div-loading collapse">
+                                <div class="box box-default box-solid">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Loading ...</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        Executions nodes list will load soon ...
+                                    </div><!-- /.box-body -->
+                                    <!-- Loading (remove the following to stop the loading)-->
+                                    <div class="overlay">
+                                        <i class="fa fa-refresh fa-spin"></i>
+                                    </div>
+                                    <!-- end loading -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" id="list-master-controls">
+                                <div class="box-tools pull-left">
+                                    <button class="btn btn-master-tool text-black" data-action="op-plus" data-toggle="tooltip" data-original-title="Add a new user"><i class="fa fa-plus"></i></button>
+                                </div>
+                                <div class="box-tools pull-left">
+                                    <button class="btn btn-master-tool text-black" data-action="op-filter" data-toggle="tooltip" data-original-title="Filter by tags"><i class="fa fa-filter"></i><span class="label label-warning val-count-filters" style="display:none;">0</span></button>
+                                </div>
+                                <div class="box-tools pull-left">
+                                    <form class="search-container" action="">
+                                        <input id="search-box" type="text" class="search-box" name="q" placeholder="Search by hostname" />
+                                        <label for="search-box"><i class="fa fa-search search-icon" aria-hidden="true"></i></label>
+                                        <input type="submit" id="search-submit" />
+                                    </form>
+                                </div>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-master-tool text-black" data-action="view-list" data-toggle="tooltip" data-original-title="List view"><i class="fa fa-list"></i></button>
+                                    <button class="btn btn-master-tool text-black" data-action="view-table" data-toggle="tooltip" data-original-title="Table view"><i class="fa fa-table"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 like collapse">
+                                <span data-tag="tag">Host name like: <strong class="val-q"></strong>&nbsp;<i class="fa fa-times fa-fw clear-search" aria-hidden="true"></i></span>
+                            </div>
+                            <div class="col-md-12 tags collapse">
+                                <span class="collapse" data-tag="tag">tag<i class="fa fa-check fa-fw" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                        <div class="row" id="list-work-users">
+                            <div class="col-sm-12">
+                                <div class="box box-success">
+                                    <div class="box-header">
+                                        <i class="fa fa-server"></i>
+                                        <h3 class="box-title">Execution nodes -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
+                                        <div class="box-tools pull-right" data-toggle="tooltip" title="Status">
+                                            <p>Order by:</p>
+                                        </div>
+                                    </div>
+                                    <div class="box-body chat users-box" id="nodes-box">
+                                    </div>
+                                    <div class="box-footer clearfix no-border">
+                                        <div class="box-tools pull-right">
+                                            <ul class="pagination pagination-sm inline">
+                                                <li><a href="#" data-page="prev">«</a></li>
+                                                <li class="active"><a href="#" data-page="0">1</a></li>
+                                                <li><a href="#" data-page="1">2</a></li>
+                                                <li><a href="#" data-page="2">3</a></li>
+                                                <li><a href="#" data-page="next">»</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.tab-pane -->
+
+                    <div class="tab-pane" id="panel-nodesX">
+                        <div class="row">
+                            <div class="col-md-12 div-loading collapse" style="display: none;">
+                                <div class="box box-default box-solid">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Loading ...</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        Loading list. Please wait.
+                                    </div><!-- /.box-body -->
+                                    <!-- Loading (remove the following to stop the loading)-->
+                                    <div class="overlay">
+                                        <i class="fa fa-refresh fa-spin"></i>
+                                    </div>
+                                    <!-- end loading -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row hidden">
+                            <core-node-box id="node-master-template" class="collapse">
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="nodes-item-core-box">
+                                        <div class="box-top-tags">
+                                            <span>Tag1</span><span>Tag2</span><span>Tag3</span>
+                                        </div>
+                                        <div class="box-top">
+                                            <div class="box-title"><span class="val-nnm"> Lynx Node </span></div>
+                                            <div class="box-subtitle"><span class="val-nnet">  Subtitle  </span></div>
+                                            <div class="box-text"><span class="val-version">  No version  </span></div>
+                                            <div class="box-text"><span class="val-author">  No author defined  </span></div>
+                                            <div class="box-text space-after-10"><span class="val-copyright">  No author defined  </span></div>
+                                            <div class="box-icon">
+                                                <i class="fa fa-plug"></i>
+                                            </div>
+                                        </div>
+                                        <div class="box-description">
+                                            <p><span class="val-d"> Sample description text ... Sample description text ... Sample description text ... Sample description text ... Sample description text ... Sample description text ... </span></p>
+                                        </div>
+                                        <div class="box-stats">
+                                            <div class="row">
+                                                <div class="box-stats-modules">
+                                                    <a class="modules-info-btn" href="#">
+                                                        See modules<span></span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="box-bottom">
+                                            <div class="">
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-1" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Disable</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-0" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Enable</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </core-node-box>
+                            <core-node-box id="node-master-template-list" class="collapse">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="nodes-item-core-box">
+                                        <div class="box-top-tags">
+                                            <span>Tag1</span><span>Tag2</span><span>Tag3</span>
+                                        </div>
+                                        <div class="box-top">
+                                            <div class="box-title"><span class="val-nnm"> Lynx Node </span></div>
+                                            <div class="box-subtitle"><span class="val-nnet">  //193.231.40.37  </span></div>
+                                            <div class="box-text"><span class="val-version">  No version  </span></div>
+                                            <div class="box-text"><span class="val-author">  No author defined  </span></div>
+                                            <div class="box-text"><span class="val-copyright">  No author defined  </span></div>
+
+                                            <div class="box-icon">
+                                                <i class="fa fa-plug"></i>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <p><span class="val-d"> Sample description text ... Sample description text ... Sample description text ... Sample description text ... Sample description text ... Sample description text ... </span></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                                <div class="text-right" style="padding-top: 30px;">
+                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
+                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-1" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Disable</span></button>
+                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-0" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Enable</span></button>
+                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
+                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="seemodules"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Modules</span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </core-node-box>
+                        </div>
+
+                        <div class="row">
+                        </div>
+                    </div><!-- /.tab-pane -->
+
+                </div><!-- /.tab-content -->
+            </div><!-- nav-tabs-custom -->
+        </div>
+    </div>
+</section><!-- /.content -->
+<script>
+    if(_mLIST){
+        for (var member in _mLIST) delete _mLIST[member];
+    }
+    var _mLIST =
+        {
+            $el:{
+                wrapp: $("#panel-topo-wrapper"),
+                itemsBox: $("#nodes-box"),
+                tags: $(".tags"),
+                pagination: $(".pagination",$("#nodes-box").next()),
+                valItemFrom: $(".val-itemfrom"),
+                valItemTo: $(".val-itemto"),
+                valItemCount: $(".val-itemscount"),
+                like: $(".like"),
+                searchBox: $(".search-box",$("#panel-topo-wrapper")),
+                valCountFilters: $(".val-count-filters")
+            },
+            dataFull:[],
+            dataAllTags: [],
+            data: [],
+            dataOpQueue: [],
+            dataFilter : {
+                selectedTags: [],
+                searchString: ""
+            },
+            dataPagination : {
+                active: true,
+                directPagesNo:3,
+                itemsOnPage: 8,
+                currentPage: 0
+            },
+            dataStatistics : "",
+            refresh: function(){
+                _mLIST.dataOpQueue = [];
+                _mLIST.clearList();
+                routeLoading('show');
+                //_mLIST.showLoading();
+                setTimeout(function(){
+                    _mLIST.getData();
+                },200);
+            },
+            repaint: function(){
+                _mLIST.filterData();
+                _mLIST.repaintPagination();
+                _mLIST.repaintList();
+            },
+            filterData: function(){
+                _mLIST.data = [];
+                _mLIST.dataFilter.selectedTags = [];
+                $("span.selected",_mLIST.$el.tags).each(function() {
+                    _mLIST.dataFilter.selectedTags.push($( this ).data('tag'));
+                });
+                //filter by tags
+                for (var j = 0; j < _mLIST.dataFull.length; j++){
+                    //
+                    var tagsIntersecttion = arrayIntersection(_mLIST.dataFilter.selectedTags,_mLIST.dataFull[j].tags);
+                    if ((_mLIST.dataFilter.selectedTags.length === 0) || (tagsIntersecttion.length>0)){
+                        _mLIST.data.push(_mLIST.dataFull[j]);
+                    }
+                }
+                //filter by text
+                _mLIST.dataFilter.searchString = _mLIST.$el.searchBox.val();
+                console.log("filter:");
+                console.log(_mLIST.dataFilter.searchString);
+                if (_mLIST.dataFilter.searchString !== ''){
+                    var re = new RegExp(_mLIST.dataFilter.searchString, 'i');
+                    _mLIST.data = $.map(_mLIST.data,function(val,key){
+                        if( val.label.match(re) ) return val;
+                    });
+                }
+            },
+            repaintTags: function(){
+                _mLIST.$el.tags.empty();
+                if(_mLIST.dataAllTags.length === 0 ){
+                    _mLIST.$el.tags.append('<p>No tags to show.</p>');
+                }
+                for (var j = 0; j < _mLIST.dataAllTags.length; j++){
+                    _mLIST.$el.tags.append('<span class="'+ (( $.inArray(_mLIST.dataAllTags[j], _mLIST.dataFilter.selectedTags)>=0) ? "selected" : "") +'" data-tag="'+_mLIST.dataAllTags[j]+'">'+_mLIST.dataAllTags[j]+'<i class="selected-hidden fa fa-square-o fa-fw" aria-hidden="true"></i><i class="selected-shown fa fa-check-square-o fa-fw" aria-hidden="true"></i></span>');
+                }
+            },
+            repaintPagination: function(reqPage){
+                var tP = Math.ceil(parseFloat(_mLIST.data.length/_mLIST.dataPagination.itemsOnPage) || 0);
+                var p = 0;
+                if(isNaN(reqPage)){
+                    p = _mLIST.dataPagination.currentPage;
+                } else{
+                    p = parseInt(reqPage);
+                }
+                if(p > tP){
+                    p = tP;
+                }
+                _mLIST.dataPagination.currentPage = p;
+                var fP = p - _mLIST.dataPagination.directPagesNo;
+                var lP = p + _mLIST.dataPagination.directPagesNo;
+
+                _mLIST.$el.pagination.hide().empty();
+                if (_mLIST.dataPagination.active && (tP>1)){
+                    //append previous
+                    if(p>0){
+                        _mLIST.$el.pagination.append('<li><a href="#" data-page="'+(p-1)+'">«</a></li>');
+                    }
+                    if(fP >= 0){
+                        _mLIST.$el.pagination.append('<li class="disabled"><span>...</span></li>');
+                    }else{
+                        fP = 0;
+                    }
+                    //append pages handlers
+                    for(i = fP; ((i <= lP) && (i < tP)); i++) {
+                        _mLIST.$el.pagination.append('<li class="'+((i === p) ? 'active' : '')+'"><a href="#" data-page="'+i+'">'+(i+1)+'</a></li>');
+                    }
+                    if(lP <= tP){
+                        _mLIST.$el.pagination.append('<li class="disabled"><span>...</span></li>');
+                    }
+                    //append next
+                    if((p+1)<tP) {
+                        _mLIST.$el.pagination.append('<li><a href="#" data-page="'+(p+1)+'">»</a></li>');
+                    }
+                    _mLIST.$el.pagination.show();
+                    $("li a",_mLIST.$el.pagination)
+                        .on('click', function(e){
+                            e.preventDefault();
+                            var reqAction = $(this).data("page");
+                            _mLIST.repaintPagination(reqAction);
+                            _mLIST.repaintList();
+                        });
+                }
+            },
+            getData: function (){ // populate/refresh docs array
+                var	lcl_postdata = {
+                    "from": 0,
+                    "to": 0,
+                    "order": "none"
+                };
+                $.ajax({
+                    type: "get",
+                    url: baseRestApiURL + "component/?rnd=" + Math.random(),
+//                    crossDomain: true,
+                    dataType: "json",
+//                    data: JSON.stringify(lcl_postdata),
+                    contentType: "application/json; charset=utf-8",
+                    beforeSend : function(xhr) {
+                        xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+                    },
+                    error : function (jqXHR, textStatus, errorThrown) {
+                        if(( jqXHR.status === 401 ) || ( jqXHR.status === 403 )){
+                            alert('E001A, Not authenticated.');
+                        } else {
+                            alert('E001, Woops an error has occurred, please try again or contact app admin.');
+                        }
+                    },
+                    success: function(response) {
+                        showMsg("Execution nodes list successfully retrieved.", "SUCCESS");
+                        //inject fake tags
+                        var j = 0;
+                        for (j = 0; j < response.length; j++){
+                            response[j].tags = [];
+                            if(Math.random()<.5){response[j].tags.push("Tag1");}
+                            if(Math.random()<.5){response[j].tags.push("Tag2");}
+                            if(Math.random()<.5){response[j].tags.push("Tag3");}
+                            if(Math.random()<.5){response[j].tags.push("Tag4");}
+                            if(Math.random()<.5){response[j].tags.push("Tag5");}
+                            if(Math.random()<.5){response[j].tags.push("Tag6");}
+                        }
+                        //create tags
+                        _mLIST.dataAllTags = [];
+                        for (j = 0; j < response.length; j++){
+                            _mLIST.dataAllTags = _mLIST.dataAllTags.concat(response[j].tags);
+                        }
+                        _mLIST.dataAllTags.sort();
+                        _mLIST.dataAllTags = arrayDuplicateRemove(_mLIST.dataAllTags);
+
+                        _mLIST.data = response;
+                        _mLIST.dataFull = response;
+//_mLIST.hideLoading();
+                        routeLoading('hide');
+                        //keep this order
+                        _mLIST.repaintTags();
+                        _mLIST.repaint();
+                    }
+                });
+            },
+            repaintList: function() {
+                _mLIST.clearList();
+                var visibleItemsRange = {
+                    first: _mLIST.dataPagination.currentPage*_mLIST.dataPagination.itemsOnPage,
+                    last: _mLIST.dataPagination.currentPage*_mLIST.dataPagination.itemsOnPage+_mLIST.dataPagination.itemsOnPage
+                };
+                //put items no values
+                _mLIST.$el.valItemFrom.html(visibleItemsRange.first+1);
+                _mLIST.$el.valItemTo.html( ((visibleItemsRange.last<_mLIST.data.length))? visibleItemsRange.last : _mLIST.data.length);
+                _mLIST.$el.valItemCount.html(_mLIST.data.length);
+                $.each(_mLIST.data, function( index, value ) {
+                    if(_mLIST.dataPagination.active){
+                        if((index >= visibleItemsRange.first) && (index < visibleItemsRange.last)){
+                            _mLIST.drawNode(value);
+                        }
+                    } else{
+                        _mLIST.drawNode(value);
+                    }
+                });
+            },
+            clearList: function() {
+                _mLIST.$el.itemsBox.empty();
+            },
+            drawNode: function(elX) {
+                var elID = guid();
+                var $elClone;
+                var tags = "";
+                if(prefferences.viewMode ==="grid"){
+                    $elClone = $( "#node-master-template" ).clone();
+                }else{
+                    $elClone = $( "#node-master-template-list" ).clone();
+                }
+                $elClone.prop("id", "node-"+elID ).appendTo( _mLIST.$el.itemsBox ).data("dna", elX);
+                for (var j = 0; j < elX.tags.length; j++){
+                    tags+="<span>"+elX.tags[j]+"</span>";
+                }
+                $(".box-top-tags", $elClone).html(tags);
+                $(".val-nnm", $elClone).html(elX.label);
+                $(".val-nnet", $elClone).html(elX.id);
+                $(".val-version", $elClone).html("Version: "+elX.version);
+                $(".val-author", $elClone).html("Authors: "+elX.authors);
+                $(".val-copyright", $elClone).html("Copyright: "+elX.copyright);
+                $(".val-d", $elClone).html(elX.description);
+                $(".val-p", $elClone).html(elX.processorCount+"X");
+                $(".val-m", $elClone).html(elX.memorySizeGB+'GB');
+                $(".val-s", $elClone).html(elX.diskSpaceSizeGB+'GB');
+                $(".only-v-"+elX.stat, $elClone).show();
+                $(".box-bottom", $elClone).find(".span-muted").addClass("collapse");
+                if(elX.active === false){
+                    $elClone.addClass("disabled");
+                }
+                $elClone.fadeIn('slow');
+                return true;
+            },
+            refreshSearch: function(){
+                var q = _mLIST.$el.searchBox.val();
+                if(q === ""){
+                    _mLIST.$el.like.hide("fast");
+                } else{
+                    _mLIST.$el.like.show("fast");
+                    $(".val-q", _mLIST.$el.like).html(q);
+                }
+            }
+        };
+
+    deleteExecNode = function(hostName){
+        alert("delete call");
+        $.ajax({
+            url: baseRestApiURL + "topology/"+hostName+"/?rnd=" + Math.random(),
+            dataType : 'json',
+            type: 'DELETE',
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+            },
+            error : function (jqXHR, textStatus, errorThrown) {
+                console.log("error");
+                if(jqXHR.status === 500 ){
+                    showMsg("Unable to delete node. Please try again.", "ERROR");
+                } else {
+                    alert('Woops an error has occurred, please try again or contact app admin.');
+                }
+            },
+            success: function(data) {
+                showMsg("Execution node successfully deleted.", "SUCCESS");
+                _mLIST.refresh();
+            }
+        });
+    };
+
+    myModalNodesOpShow = function(operationid){
+        var $modal = $("#myModalNodes");
+        $(".modal-dialog",$modal).removeClass("modal-lg");
+        var rm_contentUrl = '/_tao/rm_content/rm_blank.php';
+        var rmContent = '';
+
+        if(operationid === "view"){
+            $(".modal-dialog",$modal).addClass("modal-lg");
+        }
+        if(operationid === "op-plus"){
+            rm_contentUrl="./fragments/topology-plus.fragment.html?" + Math.random();
+        }
+        if(operationid === "edit"){
+            rm_contentUrl="./fragments/topology-edit.fragment.html?" + Math.random();
+        }
+        if(operationid === "delete"){
+            $('#confirm-dialog').modal('confirm',{
+                msg:"Are you sure you want to delete execution node: "+_mLIST.dataOpQueue[0].dna.hostName+"?",
+                callbackConfirm: function() {
+                    deleteExecNode(_mLIST.dataOpQueue[0].dna.hostName);
+                },
+                callbackCancel:function(){}
+            });
+            return;
+        }
+        if(operationid === "enable"){
+            rm_contentUrl='';
+        }
+        if(operationid === "disable"){
+            rm_contentUrl='';
+        }
+
+        $.ajax({
+            url: rm_contentUrl,
+            success: function(result) {
+                rmContent = result;
+            },
+            async:   false
+        });
+        if(rmContent !== ''){
+            $modal.find('.modal-dialog').html(rmContent);
+        }else{
+            alert("Must be an error! Could not retrive needed data from server.");
+            return e.preventDefault();
+        }
+        $modal.modal('show');
+    };
+    //bind some actions to active elements
+    _mLIST.$el.itemsBox
+        .on('click', '.btn-action', function (e) {
+            var action = $(this).data("action");
+            var nodeDNA = $(this).closest("core-node-box").data("dna");
+            _mLIST.dataOpQueue = [{
+                "dna":nodeDNA,
+                "action":action
+            }];
+            myModalNodesOpShow(action);
+        });
+
+
+    _mLIST.$el.tags
+        .on('click', 'span', function (e) {
+            $(this).toggleClass("selected");
+            var cST = $('span.selected',_mLIST.$el.tags).length;
+            _mLIST.$el.valCountFilters.html(cST);
+            if(cST>0){
+                _mLIST.$el.valCountFilters.show("fast");
+            }else{
+                _mLIST.$el.valCountFilters.hide("fast");
+            }
+            _mLIST.repaint();
+        });
+    _mLIST.$el.searchBox
+        .on('keyup', function(e){
+            _mLIST.repaint();
+            _mLIST.refreshSearch();
+        });
+    $(".clear-search").on("click", function(event){
+        _mLIST.$el.searchBox.val("");
+        _mLIST.repaint();
+        _mLIST.refreshSearch();
+    });
+
+    _mLIST.$el.wrapp
+        .on("click", '.btn-action[data-action="refresh"]', function(event){
+            event.preventDefault();
+            _mLIST.refresh();
+        })
+        .on("click", '.btn-master-tool', function(event){
+            event.preventDefault();
+            var action = $(this).data("action");
+            if(action === "op-plus") myModalNodesOpShow(action);
+            if(action === "op-filter"){
+                if( _mLIST.$el.tags.is(":visible") ){
+                    _mLIST.$el.tags.hide("fast");
+                }else{
+                    _mLIST.$el.tags.show("fast");
+                }
+            }
+            if(action === "view-list"){
+                prefferences.viewMode="list";
+                _settings.createCookie("prefferences_viewMode","list");
+                _mLIST.refresh();
+            }
+            if(action === "view-table"){
+                prefferences.viewMode="grid";
+                _settings.createCookie("prefferences_viewMode","grid");
+                _mLIST.refresh();
+            }
+        });
+
+    ///////////////////
+    $( document ).ready(function() {
+        console.log( "exec nodes panel ready!" );
+        $("form.search-container").on("submit",function(e){
+            e.preventDefault(e);
+        })
+        _mLIST.getData();
+    });
+    //# sourceURL=filename.js
+</script>

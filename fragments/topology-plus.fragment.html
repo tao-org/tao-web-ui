@@ -1,0 +1,296 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add new execution node</h4>
+    </div>
+
+
+    <form id="frmExecNodeEdit" class="form-horizontal form-newpc" role="form">
+        <input type="hidden" id="op" name="op" class="op" value="op-plus" />
+        <input type="hidden" id="id_u" name="id_u" value="0" />
+        <input type="hidden" name="clickedon" value="">
+
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error adding execution node!</h4>
+            <p id="modal-error-msg">Please check you data, one or more values for the attributes is not in the acceptable range.</p>
+            <p>
+                <span class="error-memorySize collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Memory size cannot be empty.</span>
+                <span class="error-password collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Password cannot be empty.</span>
+                <span class="error-diskSpace collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Disk space cannot be empty.</span>
+                <span class="error-userName collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> User name cannot be empty.</span>
+            </p>
+        </div>
+
+        <div class="modal-body">
+            <section>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="inputHostname" class="col-sm-2 col-md-2 control-label">Hostname</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputHostname" name="inputHostname" placeholder="hostname" autocomplete="off" value=""/>
+                                <span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
+                                <span class="ckattr-ok sr-only collapse">(success)</span>
+                                <span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
+                                <span class="ckattr-error sr-only collapse">(error)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputUsername" class="col-sm-2 col-md-2 control-label">User name</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputUsername" name="inputUsername" placeholder="user name" autocomplete="off" value="" data-errorspan="userName"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputPassword" class="col-sm-2 col-md-2 control-label">Password</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="password" autocomplete="off" value="" data-errorspan="password"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputPasswordAgain" class="col-sm-2 col-md-2 control-label">Repete password</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="password" class="form-control" id="inputPasswordAgain" name="inputPasswordAgain" placeholder="password" autocomplete="off" value=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputProcessorcount" class="col-sm-2 col-md-2 control-label">Processor count</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="number" class="form-control" id="inputProcessorcount" name="inputProcessorcount" placeholder="processor count" min="0" autocomplete="off" value="1"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputMemorysize" class="col-sm-2 col-md-2 control-label">Memory size (GB) </label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="number" class="form-control" id="inputMemorysize" name="inputMemorysize" placeholder="memory size GB" min="0" autocomplete="off" value="0" data-errorspan="memorySize"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputDiskspacesize" class="col-sm-2 col-md-2 control-label">Storage space (GB) </label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="number" class="form-control" id="inputDiskspacesize" name="inputDiskspacesize" placeholder="storage size GB" min="0" autocomplete="off" value="0" data-errorspan="diskSpace"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputDescription" class="col-sm-2 col-md-2 control-label">Description </label>
+                            <div class="col-sm-10 col-md-10">
+                                <textarea class="form-control" rows="3" id="inputDescription" name="inputDescription" placeholder="Description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputActive" class="col-sm-2 col-md-2 control-label">Status </label>
+                            <div class="col-sm-10 col-md-10">
+                                <select id="inputActive" name="inputActive" class="form-control">
+                                    <option value="true" selected="">Active</option>
+                                    <option value="false">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                                <button id="saveExecNode" type="submit" class="btn btn-primary btn-submit" name="btnSave">Add new execution node</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- /.modal-body -->
+    </form>
+    <div class="modal-note">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                        <h4>Help filling in</h4>
+                        <p>Please fill in all needed information. Hostname must be unique. Hostname can contain letters (a-z), numbers (0-9) and periods (.).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div><!-- /.modal-content -->
+
+<script>
+    var action = 'op-plus';
+    function validateHostName(attrId){
+        var $eL = $("#"+attrId);
+        var $pEL = $eL.parent();
+        var val = $eL.val();
+        var rgx = /^[0-9A-Za-z.]*$/;
+        if (val.match(rgx) === null){
+            showMsg("The hostname contains invalid characters.", "ERROR");
+            $(".ckattr-ok", $pEL).fadeOut();
+            $(".ckattr-error", $pEL).fadeIn();
+            return;
+        }else{
+            $(".ckattr-error", $pEL).fadeOut();
+            $(".ckattr-ok", $pEL).fadeIn();
+        }
+
+        $.ajax({
+            type: "get",
+            url: baseRestApiURL + "topology/"+val+"/?rnd=" + Math.random(),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+            },
+            error : function (jqXHR, textStatus, errorThrown) {
+                if( jqXHR.status === 500 ){
+                    $(".ckattr-error", $pEL).fadeOut();
+                    $(".ckattr-ok", $pEL).fadeIn();
+                } else {
+                    alert('E001, Woops an error has occurred, please try again or contact app admin.');
+                }
+            },
+            success: function(response) {
+                try {
+                        showMsg("Hostname already in use. Please try a different name.", "ERROR");
+                        $(".ckattr-ok", $pEL).fadeOut();
+                        $(".ckattr-error", $pEL).fadeIn();
+                }
+                catch(e) {
+                    $(".ckattr-ok", $pEL).fadeOut();
+                    $(".ckattr-error", $pEL).fadeIn();
+                }
+            }
+        });
+        return true;
+    }
+
+
+    $(document).ready( function(){
+        //remove error for some input elements
+        $("input","form#frmExecNodeEdit")
+        .on("keypress change", function(){
+            if($(this).data("errorspan")) {
+                $(".error-" + $(this).data("errorspan"), ".modal-error").css('display', 'none');
+                if($(".modal-error").find("span:visible").length == 0) {
+                    $(".modal-error").hide();
+                }
+            }
+        })
+        .on("focusout", function(){
+            if($(this).data("errorspan")){
+                if (($(this).val() === "")||($(this).val() === 0)||($(this).val() === "0")){
+                    $(".error-"+$(this).data("errorspan"),".modal-error").css('display', 'inline-block');
+                    $(".modal-error").fadeIn("slow");
+                }
+            }
+        });
+
+        $("#inputHostname").focusout(function(e) {
+            if($(this).val() === "")
+                return;
+            if($(this).attr("id")) {
+                validateHostName($(this).attr("id"));
+            }
+        });
+        $("#inputPasswordAgain").focusout(function(e) {
+            if($("#inputPasswordAgain").val() !== $("#inputPassword").val())
+                showMsg("Password does not match the confirmation password.", "ERROR");
+        });
+        $("form#frmExecNodeEdit").submit(function (event) {
+            event.preventDefault();
+            var formData = {
+                "hostName":$('input[name=inputHostname]', this).val(),
+                "userName":$('input[name=inputUsername]', this).val(),
+                "userPass":$('input[name=inputPassword]', this).val(),
+                "processorCount":$('input[name=inputProcessorcount]', this).val(),
+                "memorySizeGB":$('input[name=inputMemorysize]', this).val(),
+                "diskSpaceSizeGB":$('input[name=inputDiskspacesize]', this).val(),
+                "description":$('textarea[name=inputDescription]', this).val(),
+                "active":$('select[name=inputActive]', this).val()
+            };
+            console.log(formData);
+            if(formData.hostName === ''){
+                showMsg("Hostname can not be empty. Please choose valid values to continue.", "ERROR");
+                return false;
+            }
+            $.ajax({
+                url: baseRestApiURL + "topology/?rnd=" + Math.random(),
+                dataType : 'json',
+                type: 'POST',
+                data: JSON.stringify(formData),
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader("Accept", "application/json");
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                    xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+                },
+                error : function (jqXHR, textStatus, errorThrown) {
+                    if(jqXHR.status === 500){
+                        showMsg("Error adding execution node. Please check you data and try again.", "ERROR");
+                        return;
+                    }
+                    if(jqXHR.status === 406){
+                        showMsg("Error adding execution node. Please check you data, one or more values for the attributes was not in the acceptable range.", "ERROR");
+                        //handle error messages
+                        var objResponse = JSON.parse(jqXHR.responseText);
+                        if(objResponse[0] !== "Entity has validation errors"){
+                            return;
+                        }
+                        for(i=0;i<objResponse.length;i++) {
+                            var matches = objResponse[i].match(/\[(.*?)\]/);
+                            if (matches) {
+                                //$(".error-"+matches[1],".modal-error").show();
+                                $(".error-"+matches[1],".modal-error").css('display', 'inline-block');
+                            }
+                        }
+                        $(".modal-error ").fadeIn("slow");
+                        $('#myModalNodes').animate({scrollTop: 0}, 250);
+                        return;
+                    }
+                    showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
+                },
+                success: function(data) {
+                    showMsg("Execution node successfully saved.", "SUCCESS");
+                    $("#myModalNodes").modal('hide');
+                    _mLIST.refresh();
+                }
+            });
+            return false;
+        });
+
+    });
+</script>

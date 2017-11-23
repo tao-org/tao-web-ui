@@ -121,7 +121,7 @@
             };
             $.ajax({
                 type: "post",
-                url: "/_tao/rm_json/viewresultbyid.ajax.php?action=PREVIEW&rnd=" + Math.random(),
+                url: baseRestURL+"projects/results/?action=PREVIEW&rnd=" + Math.random(),
                 dataType: "json",
                 data: JSON.stringify(lcl_postdata),
                 contentType: "application/json; charset=utf-8",

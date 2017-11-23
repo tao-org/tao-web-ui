@@ -787,14 +787,14 @@
     myModalProjectOpShow = function(operationid){
         //alert(operationid);
         $(".modal-dialog","#myModalProject").removeClass("modal-lg");
-        var rm_contentUrl = '/_tao/rm_content/rm_blank.php';
+        var rm_contentUrl = './fragments/rm-blank.fragment.html';
 
-        if(operationid == "trace-execution"){
+        if(operationid === "trace-execution"){
             rm_contentUrl='/_tao/rm_content/tao_traceproject.php?operationid=' + operationid;
         }
-        if(operationid == "view-results"){
+        if(operationid === "view-results"){
             $(".modal-dialog","#myModalProject").addClass("modal-lg");
-            rm_contentUrl='/_tao/rm_content/tao_viewprojectresults.php?operationid=' + operationid;
+            rm_contentUrl='./fragments/mock-viewprojectresults.fragment.html';
         }
 
         if(operationid == "op-plus"){
@@ -830,9 +830,6 @@
         $("#myModalProject").modal('show');
     };
 
-    ////////////////////
-    ///////////////////
-    ////////////////////
     $("#myModalProject").on("submit", "#frmProjectEdit", function(e) {
         e.preventDefault();
         var formdata = $('#frmProjectEdit').serializeArray();
@@ -877,7 +874,6 @@
         var action = $(this).data("action");
         myModalProjectOpShow(action);
     });
-
 
     ///////////////////
     $( document ).ready(function() {

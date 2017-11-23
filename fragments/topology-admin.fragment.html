@@ -4,6 +4,49 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <!-- modal nodes op -->
+<!-- modal ssh -->
+<div id="myModalSSH" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog modal-lg modal-xlg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">SSH terminal: </h4>
+            </div>
+            <div class="modal-body">
+                <!-- document timeline content -->
+                <section>
+                    <!-- row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- small box -->
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <h3>SSH Termial</h3>
+                                    <p style="line-height: 1em;">
+                                        Hostname: <span class="val-sshHost"></span>
+                                    </p>
+                                </div>
+                                <div class="icon"><i class="fa fa-exclamation-triangle"></i></div>
+                                <a href="#" class="small-box-footer">Open in new window instead <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div><!-- /.row -->
+                    <!-- row -->
+                    <div class="row">
+                        <div class="col-md-12" id="sshIframeWrapper">
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+                <!-- /.timeline content -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Inchide</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- modal ssh -->
+
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
     <h1>Topology <small>Full list of <strong>execution nodes</strong> grouped by current state.</small></h1>
@@ -189,6 +232,7 @@
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-1" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Disable</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-0" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Enable</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="ssh"><i class="fa fa-terminal fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;SSH Terminal</span></button>
                                             </div>
                                         </div>
                                     </div>
@@ -577,7 +621,30 @@
             "dna":nodeDNA,
             "action":action
         }];
-        myModalNodesOpShow(action);
+        if(action==="ssh"){
+            var $sshModal = $("#myModalSSH")
+            $(".val-sshHost",$sshModal).text(nodeDNA.hostName);
+            var sshURL = 'http://masterslurm.tao.c-s.ro:4200/?node='+nodeDNA.hostName+'&user='+nodeDNA.userName+'&passwd='+nodeDNA.userPass;
+            var parentIframe = document.getElementById("sshIframeWrapper");
+            var iframe = document.createElement('iframe');
+            iframe.id="randomid";
+            iframe.src = sshURL;
+            iframe.style.width = "100%";
+            iframe.style.height = "500px";
+            parentIframe.appendChild(iframe);
+            $sshModal.modal('show');
+            $sshModal
+                .off("click", ".small-box-footer")
+                .on("click", ".small-box-footer", function(e){
+                e.preventDefault();
+                var windowObjectReference;
+                var strWindowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+                windowObjectReference = window.open(sshURL, "SSH terminal to "+nodeDNA.hostName, strWindowFeatures);
+                $sshModal.modal('hide');
+            })
+        } else{
+            myModalNodesOpShow(action);
+        }
     });
 
 
@@ -637,7 +704,11 @@
         console.log( "exec nodes panel ready!" );
         $("form.search-container").on("submit",function(e){
             e.preventDefault(e);
-        })
+        });
+        $('#myModalSSH').on('hidden.bs.modal', function () {
+            $("#sshIframeWrapper").empty();
+            //window.alert('hidden event fired!');
+        });
         _mLIST.getData();
     });
     //# sourceURL=filename.js

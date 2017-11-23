@@ -1,0 +1,162 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Execution results</h4>
+        <p><strong>Execution finished, all achivable results displayed below.</strong></p>
+    </div>
+    <div class="modal-body">
+        <section>
+            <div id="rm-previewfiles" class="row"><!-- row -->
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Results:</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-hover">
+                                <tbody>
+                                <tr><th>Resource</th><th>Location</th><th></th></tr>
+                                <tr id="file-35">
+                                    <td><i class="fa fa-file fa-fw"></i>IMG_20150923_162547.jpg</td>
+                                    <td>uri</td>
+                                    <td><button class="btn bg-green btn-flat btn-xs" data-action="previewfile" data-idfile="35"><i class="fa fa-eye fa-fw"></i>Quick view</button></td>
+                                </tr>
+                                <tr id="file-36">
+                                    <td><i class="fa fa-file fa-fw"></i>IMG_20150923_163058.jpg</td>
+                                    <td>uri</td>
+                                    <td><button class="btn bg-green btn-flat btn-xs" data-action="previewfile" data-idfile="36"><i class="fa fa-eye fa-fw"></i>Quick view</button></td>
+                                </tr>
+                                <tr id="file-37">
+                                    <td><i class="fa fa-file fa-fw"></i>IMG_20150923_1635478.jpg</td>
+                                    <td>uri</td>
+                                    <td><button class="btn bg-green btn-flat btn-xs" data-action="previewfile" data-idfile="37"><i class="fa fa-eye fa-fw"></i>Quick view</button></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div>
+            </div><!-- /.row -->
+        </section>
+
+        <section>
+            <div id="rm-previewmode-close" class="row collapse"><!-- row -->
+                <div class="col-xs-12">
+                    <p class="close close-preview"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div id="rm-previewmode-map" class="row collapse"><!-- row -->
+                <div class="col-xs-12">
+                    <div class="filepreview-holder">
+                    </div>
+                </div>
+            </div><!-- /.row -->
+        </section>
+
+        <section>
+            <div id="rm-previewmode-img" class="row collapse"><!-- row -->
+                <div class="col-xs-12">
+                    <div class="filepreview-holder">
+                    </div>
+                </div>
+            </div><!-- /.row -->
+        </section>
+
+        <section>
+            <div id="rm-previewmode-pdf" class="row collapse"><!-- row -->
+                <div class="col-xs-12">
+                    <div class="filepreview-holder">
+                    </div>
+                </div>
+            </div><!-- /.row -->
+        </section>
+
+        <section>
+            <div id="rm-previewmode-download" class="row collapse"><!-- row -->
+                <div class="col-xs-12">
+                    <div class="callout callout-info lead filedownload-holder">
+                    </div>
+                </div>
+            </div><!-- /.row -->
+        </section>
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div><!-- /.modal-content -->
+    <script>
+
+        htmlFilePreview = function(data){
+            $("[id^=rm-previewmode-]").hide().find(".filepreview-holder").empty();
+            var $thisEL = $( "#rm-previewmode-"+data.previewmode );
+            $("#rm-previewmode-close" ).show();
+            if($thisEL.length==1){
+                //$thisEL.hide();
+                console.log(data);
+                if(data.previewmode == 'map'){
+                    var txtObj='<iframe width="100%" height="550" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="'+data.url+'" style="border: 1px solid black"></iframe>';
+                }
+                if(data.previewmode == 'img'){
+                    var txtObj='<img src="'+data.url+'" width="100%" height="auto" />';
+                }
+                $(".filepreview-holder", $thisEL).html(txtObj);
+                $thisEL.show();
+                $('#myModalPreview').animate({
+                    scrollTop: $thisEL.offset().top
+                }, 500);
+            }
+            var txtDownload = '<h4>Download!</h4><p>Please access <a href="'+data.url+'" target="_blank"><button class="btn bg-green btn-flat"><i class="fa fa-download fa-fw"></i>your result file directly</button></a>.</p>';
+            $(".filedownload-holder", "#rm-previewmode-download" ).html(txtDownload);
+            $("#rm-previewmode-download" ).show();
+        }
+
+        rmPreviewFile = function(idfile){
+            var	lcl_postdata = {
+                "operation" : "preview",
+                "idfile" : idfile
+            };
+            $.ajax({
+                type: "post",
+                url: "/_tao/rm_json/viewresultbyid.ajax.php?action=PREVIEW&rnd=" + Math.random(),
+                dataType: "json",
+                data: JSON.stringify(lcl_postdata),
+                contentType: "application/json; charset=utf-8",
+                error: function() {
+                    alert("01.Communication error. Try again or notify the site admin! Thank you. Cod eroare PREVIEW001.");
+                },
+                success: function(response) {
+                    try {
+                        var obj = response;
+                        if(obj.code == '200-OK'){
+                            htmlFilePreview(obj.payload);
+
+                            console.log(obj.payload);
+                            //_paneDOCS.getUserUploadedFiles("",$('#frmOp .docid').val());
+                        }
+                    }
+                    catch(e) {
+                        alert("Malformed server answer. Try again or notify the site admin! Thank you. Cod eroare PREVIEW001.");
+                    }
+                }
+            });
+        }
+
+        $(document).ready( function(){
+            $("#rm-previewfiles").on("click", ".btn", function(event){
+                event.preventDefault();
+                $("tr", "#rm-previewfiles").removeClass("filepreview-selected");
+                $(this).closest( "tr" ).addClass("filepreview-selected");
+                var operation = $(this).data('action');
+                var idfile = $(this).data('idfile');
+                rmPreviewFile(idfile);
+            });
+            $("#rm-previewmode-close").on("click",function(event){
+                event.preventDefault();
+                $("[id^=rm-previewmode-]").hide();
+            });
+        });
+    </script>

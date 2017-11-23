@@ -157,8 +157,11 @@
         var $eL = $("#"+attrId);
         var $pEL = $eL.parent();
         var val = $eL.val();
-        var rgx = /^[0-9A-Za-z.]*$/;
-        if (val.match(rgx) === null){
+        //var rgx = /^[0-9A-Za-z.-_]*$/;
+        //if (val.match(rgx) === null){
+        var regexp = /^[a-zA-Z0-9-_.]+$/;
+        if (val.search(regexp) == -1)
+        {
             showMsg("The hostname contains invalid characters.", "ERROR");
             $(".ckattr-ok", $pEL).fadeOut();
             $(".ckattr-error", $pEL).fadeIn();

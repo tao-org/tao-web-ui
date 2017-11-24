@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/plugins/jQuery/jQuery-2.1.4.min.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" afterPath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fragments/users-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/users-admin.fragment.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/login.html" afterPath="$PROJECT_DIR$/login.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sap.html" afterPath="$PROJECT_DIR$/sap.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,8 +22,8 @@
       <file leaf-file-name="sap.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sap.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="386">
-              <caret line="315" column="47" lean-forward="false" selection-start-line="315" selection-start-column="47" selection-end-line="315" selection-end-column="47" />
+            <state relative-caret-position="284">
+              <caret line="521" column="26" lean-forward="false" selection-start-line="521" selection-start-column="26" selection-end-line="521" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -41,8 +41,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>DELETE</find>
-      <find>dash-master-monitor</find>
       <find>val-mm-uptime</find>
       <find>widget</find>
       <find>resize</find>
@@ -71,6 +69,8 @@
       <find>med</find>
       <find>lib</find>
       <find>baseRestURL</find>
+      <find>lib/</find>
+      <find>plugins/</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -109,10 +109,10 @@
         <option value="$PROJECT_DIR$/_rest/projects/results/index.php" />
         <option value="$PROJECT_DIR$/fragments/mock-traceprojectexecution.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/projects-all.fragment.html" />
-        <option value="$PROJECT_DIR$/sap.html" />
         <option value="$PROJECT_DIR$/fragments/users-plus.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/users-admin.fragment.html" />
         <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
+        <option value="$PROJECT_DIR$/sap.html" />
         <option value="$PROJECT_DIR$/login.html" />
       </list>
     </option>
@@ -157,17 +157,6 @@
             <path>
               <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
               <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="assets" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="assets" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="libs" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -298,12 +287,12 @@
       <workItem from="1509713745757" duration="38800000" />
       <workItem from="1511267661035" duration="213000" />
       <workItem from="1511442307437" duration="55000" />
-      <workItem from="1511442428063" duration="11947000" />
+      <workItem from="1511442428063" duration="13048000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="203997000" />
+    <option name="totallyTimeSpent" value="205098000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1066" extended-state="7" />
@@ -748,14 +737,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="43" column="106" lean-forward="true" selection-start-line="43" selection-start-column="106" selection-end-line="43" selection-end-column="106" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -764,10 +745,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="293">
+          <caret line="55" column="26" lean-forward="false" selection-start-line="55" selection-start-column="26" selection-end-line="55" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sap.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="386">
-          <caret line="315" column="47" lean-forward="false" selection-start-line="315" selection-start-column="47" selection-end-line="315" selection-end-column="47" />
+        <state relative-caret-position="284">
+          <caret line="521" column="26" lean-forward="false" selection-start-line="521" selection-start-column="26" selection-end-line="521" selection-end-column="26" />
           <folding />
         </state>
       </provider>

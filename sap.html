@@ -595,12 +595,12 @@ Nothing to see!
         return true;
     }
 
-
    ///////////////////////////////////////
     $(document).ready( function(){
         console.log("document ready!!!");
 
         myModalScreen = function(action){
+            var $myMS = $("#myModalScreen");
             var rmContent = '';
             $.ajax({
                 url: '/_tao/rm_content/rm_ux_do.php?action=' + action,
@@ -609,13 +609,13 @@ Nothing to see!
                 },
                 async:   false
             });
-            if(rmContent != ''){
-                $("#myModalScreen").find('.modal-dialog').html(rmContent);
+            if(rmContent !== ''){
+                $myMS.find('.modal-dialog').html(rmContent);
             }else{
                 alert("Must be a crazy error! Could not retrive needed data from server.");
                 return e.preventDefault();
             }
-            $("#myModalScreen").modal('show');
+            $myMS.modal('show');
             history.pushState(null, null, "#"+action);
         };
 
@@ -642,17 +642,13 @@ Nothing to see!
             setTimeout( function() {
                 $(".modal-backdrop").addClass("modal-backdrop-fullscreen");
             }, 0);
-        });
-        $(".modal-fullscreen").on('hidden.bs.modal', function () {
+        }).on('hidden.bs.modal', function () {
             $(".modal-backdrop").addClass("modal-backdrop-fullscreen");
         });
 
-
-
         function settingsApplyChange(attribute, value, save){
             if(attribute === "body_size"){
-                $("body").removeClass(tpl.body_size);
-                $("body").addClass(value);
+                $("body").removeClass(tpl.body_size).addClass(value);
             }
             return true;
         }
@@ -662,9 +658,7 @@ Nothing to see!
             if($(this).attr('id') === "selectSettingsBodySize"){
                 settingsApplyChange("body_size", $(this).val(),0);
             }
-        });
-        //save settings
-        $("#control-sidebar-settings-tab").on("click", ".btn", function(event){
+        }).on("click", ".btn", function(event){
             event.preventDefault();
             if($(this).data('action') === "save-settings"){
                 var body_size = $('#selectSettingsBodySize').val() || '';

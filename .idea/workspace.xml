@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/plugins/jQuery/jQuery-2.1.4.min.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/login.html" afterPath="$PROJECT_DIR$/login.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sap.html" afterPath="$PROJECT_DIR$/sap.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flow.rc2/1.php" afterPath="$PROJECT_DIR$/flow.rc2/1.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,7 +20,7 @@
         <entry file="file://$PROJECT_DIR$/sap.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="284">
-              <caret line="521" column="26" lean-forward="false" selection-start-line="521" selection-start-column="26" selection-end-line="521" selection-end-column="26" />
+              <caret line="521" column="87" lean-forward="true" selection-start-line="521" selection-start-column="87" selection-end-line="521" selection-end-column="87" />
               <folding />
             </state>
           </provider>
@@ -90,7 +87,6 @@
         <option value="$PROJECT_DIR$/fragments/modules-admin.fragment.html" />
         <option value="$PROJECT_DIR$/_rest/topology/list/index.php" />
         <option value="$PROJECT_DIR$/_rest/login/auth/authorize/index.php" />
-        <option value="$PROJECT_DIR$/flow.rc2/1.php" />
         <option value="$PROJECT_DIR$/fragments/tao-documentation.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/tao-faq.fragment.html" />
         <option value="$PROJECT_DIR$/lib/np/jquery.npmodalconfirm.js" />
@@ -114,6 +110,7 @@
         <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
         <option value="$PROJECT_DIR$/sap.html" />
         <option value="$PROJECT_DIR$/login.html" />
+        <option value="$PROJECT_DIR$/flow.rc2/1.php" />
       </list>
     </option>
   </component>
@@ -157,6 +154,11 @@
             <path>
               <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
               <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="flow.rc2" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -287,12 +289,12 @@
       <workItem from="1509713745757" duration="38800000" />
       <workItem from="1511267661035" duration="213000" />
       <workItem from="1511442307437" duration="55000" />
-      <workItem from="1511442428063" duration="13048000" />
+      <workItem from="1511442428063" duration="13326000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="205098000" />
+    <option name="totallyTimeSpent" value="205376000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1066" extended-state="7" />
@@ -471,13 +473,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
           <caret line="196" column="56" lean-forward="true" selection-start-line="196" selection-start-column="56" selection-end-line="196" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/flow.rc2/1.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="36" lean-forward="true" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
         </state>
       </provider>
     </entry>
@@ -753,10 +748,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/flow.rc2/1.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="806">
+          <caret line="334" column="0" lean-forward="true" selection-start-line="334" selection-start-column="0" selection-end-line="334" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sap.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="284">
-          <caret line="521" column="26" lean-forward="false" selection-start-line="521" selection-start-column="26" selection-end-line="521" selection-end-column="26" />
+          <caret line="521" column="87" lean-forward="true" selection-start-line="521" selection-start-column="87" selection-end-line="521" selection-end-column="87" />
           <folding />
         </state>
       </provider>

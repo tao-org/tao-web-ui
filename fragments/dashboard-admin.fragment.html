@@ -40,7 +40,6 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <!-- See dist/js/pages/dashboard.js to activate the todoList plugin -->
                         <ul class="todo-list">
                             <li>
                                 <span class=""><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></span>
@@ -132,7 +131,6 @@
                 <!-- /.box -->
             </section>
             <!-- /.Left col -->
-            <!-- right col (We are only adding the ID to make the widgets sortable)-->
             <section class="col-lg-5">
 
                 <!-- Monitor master -->
@@ -346,7 +344,7 @@
         updateData: function(v1,v2,v3,l0){
             if(this.myNewChart === null || typeof this.myNewChart !== 'object'){
                 this.initChart();
-            };
+            }
             var l = this.data["labels"];
             var ds0 = this.data["datasets"][0]["data"];
             var ds1 = this.data["datasets"][1]["data"];
@@ -361,15 +359,7 @@
             ds2.shift();
             this.myNewChart.Line(_loadChart.data, _loadChart.optionsNoAnimation);
         }
-    }
-
-    $(document).ready(function(){
-//        setInterval(function(){
-//        }, 3000);
-    });
-
-
-
+    };
 
     function updateMasterMonitorWidget(){
         $.ajax({ cache: false,

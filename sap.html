@@ -600,17 +600,6 @@ Nothing to see!
     $(document).ready( function(){
         console.log("document ready!!!");
 
-//general UI
-//$("body").on("click.ui.profil", ".btn", function(event){
-//	console.log("click-on-it");
-//	event.preventDefault();
-//	var action = $(this).data('action');
-//	alert("click"+action);
-
-//	if(action == "ux-editprofile"){
-//		myModalScreen(action);
-//	}
-//});
         myModalScreen = function(action){
             var rmContent = '';
             $.ajax({
@@ -630,34 +619,6 @@ Nothing to see!
             history.pushState(null, null, "#"+action);
         };
 
-
-
-        $("#selectNodeLocation").on("change", function(event){
-            var current_node = $(this).val() || 0;
-            var	lcl_postdata = {"current_node" : current_node};
-            $.ajax({
-                type: "post",
-                url: "http://192.168.61.101/_tao/rm_ajax/rm_changelocation.ajax.php?action=CHANGE&rnd=" + Math.random(),
-                dataType: "json",
-                data: JSON.stringify(lcl_postdata),
-                contentType: "application/json; charset=utf-8",
-                error: function() {
-                    alert("Communication error. Try again or notify the site admin! Thank you.");
-                },
-                success: function(response) {
-                    try {
-                        showMsg(response.msgdetails.global, response.msgcode);
-                        tpl.current_roles = response.data.current_rights;
-                        tpl.current_node_type = response.data.node_type;
-                        tpl.current_node = response.data.current_node;
-                        tpl.refresh();
-                    }
-                    catch(e) {
-                        alert("Malformed server answer. Try again or notify the site admin! Thank you.");
-                    }
-                }
-            });
-        });
 
         $("#selectPane").on("change", function(event){
             var current_pane = $(this).val() || 0;
@@ -686,44 +647,6 @@ Nothing to see!
             $(".modal-backdrop").addClass("modal-backdrop-fullscreen");
         });
 
-
-
-        myModalRouteShow = function(docid){
-            var rmContent = '';
-            $.ajax({
-                url: '/_tao/rm_content/rm_tracedocu.php?action=SELECT&targetdoc=' + docid,
-                success: function(result) {
-                    rmContent = result;
-                },
-                async:   false
-            });
-            if(rmContent != ''){
-                $("#myModalRoute").find('.modal-dialog').html(rmContent);
-            }else{
-                alert("Must be a crazy error! Could not retrive needed data from server.");
-                return e.preventDefault();
-            }
-            $("#myModalRoute").modal('show');
-        };
-
-        myModalPreviewShow = function(docid){
-            //validate etc ...
-            var rmContent = '';
-            $.ajax({
-                url: '/_tao/rm_content/rm_previewdocu.php?action=SELECT&targetdoc=' + docid,
-                success: function(result) {
-                    rmContent = result;
-                },
-                async:   false
-            });
-            if(rmContent != ''){
-                $("#myModalPreview").find('.modal-dialog').html(rmContent);
-            }else{
-                alert("Must be a crazy error! Could not retrive needed data from server.");
-                return e.preventDefault();
-            }
-            $("#myModalPreview").modal('show');
-        };
 
 
         function settingsApplyChange(attribute, value, save){
@@ -779,7 +702,6 @@ Nothing to see!
         var ref_no = 0;
         $(document).idle({
             onIdle: function(){
-                //tpl.refresh();
                 //notifyMe();
                 ref_no ++;
             },
@@ -790,9 +712,8 @@ Nothing to see!
 //					},
             idle: 60000
         });
-
 //autoload documents on load
-        //tpl.refresh();
+
     });
 </script>
 <div class="hidden" id="div-debug"><pre></pre></div>

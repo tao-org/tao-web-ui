@@ -1,35 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/community/app.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/avatar.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/avatar04.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/avatar2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/avatar3.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/avatar5.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/credit/american-express.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/credit/cirrus.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/credit/mastercard.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/credit/mestro.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/credit/paypal.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/credit/paypal2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/credit/visa.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/photo1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/photo2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/user1-128x128.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/user2-160x160.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/user3-128x128.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/user4-128x128.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/user5-128x128.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/user6-128x128.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/user7-128x128.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/img/user8-128x128.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/js/pages/dashboard.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/dist/js/pages/dashboard2.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" />
-    </list>
+    <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -315,12 +287,12 @@
       <workItem from="1509713745757" duration="38800000" />
       <workItem from="1511267661035" duration="213000" />
       <workItem from="1511442307437" duration="55000" />
-      <workItem from="1511442428063" duration="14735000" />
+      <workItem from="1511442428063" duration="14812000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="206785000" />
+    <option name="totallyTimeSpent" value="206862000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1066" extended-state="6" />

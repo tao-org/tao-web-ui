@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fragments/datasources-admin.fragment.html" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fragments/component-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/component-admin.fragment.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sap.html" afterPath="$PROJECT_DIR$/sap.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fragments/topology-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/topology-admin.fragment.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,31 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="sap.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="sap.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sap.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="216">
               <caret line="542" column="0" lean-forward="true" selection-start-line="542" selection-start-column="0" selection-end-line="542" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AdminLTEplus.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="344">
-              <caret line="641" column="22" lean-forward="true" selection-start-line="641" selection-start-column="22" selection-end-line="641" selection-end-column="22" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="component-admin.fragment.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/fragments/component-admin.fragment.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="156">
-              <caret line="155" column="0" lean-forward="false" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -90,8 +66,8 @@
       <find>pages</find>
       <find>community/</find>
       <find>botto</find>
-      <find>plugins/</find>
       <find>box-bottom</find>
+      <find>plugins/</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -121,7 +97,6 @@
         <option value="$PROJECT_DIR$/_rest/notification/index.php" />
         <option value="$PROJECT_DIR$/lib/chartjs/chartjs.min.js" />
         <option value="$PROJECT_DIR$/fragments/rm-blank.fragment.html" />
-        <option value="$PROJECT_DIR$/fragments/topology-admin.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/mock-viewprojectresults.fragment.html" />
         <option value="$PROJECT_DIR$/_rest/projects/results/index.php" />
         <option value="$PROJECT_DIR$/fragments/mock-traceprojectexecution.fragment.html" />
@@ -135,6 +110,7 @@
         <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
         <option value="$PROJECT_DIR$/fragments/component-admin.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
+        <option value="$PROJECT_DIR$/fragments/topology-admin.fragment.html" />
       </list>
     </option>
   </component>
@@ -331,12 +307,12 @@
       <workItem from="1509713745757" duration="38800000" />
       <workItem from="1511267661035" duration="213000" />
       <workItem from="1511442307437" duration="55000" />
-      <workItem from="1511442428063" duration="16162000" />
+      <workItem from="1511442428063" duration="16403000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="208212000" />
+    <option name="totallyTimeSpent" value="208453000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1066" extended-state="7" />
@@ -725,34 +701,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sap.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="542" column="0" lean-forward="true" selection-start-line="542" selection-start-column="0" selection-end-line="542" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/topology-admin.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="228" column="64" lean-forward="true" selection-start-line="228" selection-start-column="64" selection-end-line="228" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fragments/modules-admin.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="293">
           <caret line="144" column="74" lean-forward="true" selection-start-line="144" selection-start-column="74" selection-end-line="144" selection-end-column="74" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="641" column="22" lean-forward="true" selection-start-line="641" selection-start-column="22" selection-end-line="641" selection-end-column="22" />
           <folding />
         </state>
       </provider>
@@ -777,6 +729,30 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="156">
           <caret line="155" column="0" lean-forward="false" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="344">
+          <caret line="641" column="22" lean-forward="true" selection-start-line="641" selection-start-column="22" selection-end-line="641" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/topology-admin.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="262" column="96" lean-forward="true" selection-start-line="262" selection-start-column="96" selection-end-line="262" selection-end-column="96" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sap.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="542" column="0" lean-forward="true" selection-start-line="542" selection-start-column="0" selection-end-line="542" selection-end-column="0" />
           <folding />
         </state>
       </provider>

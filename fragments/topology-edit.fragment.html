@@ -221,7 +221,6 @@
             };
             console.log(formData);
             $.ajax({
-                //url: baseRestApiURL + "topology/update/"+formData.hostName+"/?rnd=" + Math.random(),
                 url: baseRestApiURL + "topology/"+formData.hostName+"/?rnd=" + Math.random(),
                 dataType : 'json',
                 type: 'PUT',

@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/_rest/datasources/list/index.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/_rest/modules/list/index.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/_rest/topology/list/index.php" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fragments/mock-viewprojectresults.fragment.html" afterPath="$PROJECT_DIR$/fragments/mock-viewprojectresults.fragment.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fragments/topology-edit.fragment.html" afterPath="$PROJECT_DIR$/fragments/topology-edit.fragment.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sap.html" afterPath="$PROJECT_DIR$/sap.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/_rest/projects/list/index.php" afterPath="$PROJECT_DIR$/_rest/projects/list/index.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/_rest/users/list/index.php" afterPath="$PROJECT_DIR$/_rest/users/list/index.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,17 +21,7 @@
         <entry file="file://$PROJECT_DIR$/sap.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="267">
-              <caret line="554" column="26" lean-forward="true" selection-start-line="554" selection-start-column="26" selection-end-line="554" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="users-admin.fragment.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fragments/users-admin.fragment.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="309">
-              <caret line="226" column="36" lean-forward="false" selection-start-line="226" selection-start-column="25" selection-end-line="226" selection-end-column="36" />
+              <caret line="554" column="56" lean-forward="true" selection-start-line="554" selection-start-column="56" selection-end-line="554" selection-end-column="56" />
               <folding />
             </state>
           </provider>
@@ -126,8 +109,8 @@
         <option value="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/topology-admin.fragment.html" />
         <option value="$PROJECT_DIR$/assets/dist/js/router.js" />
-        <option value="$PROJECT_DIR$/fragments/mock-viewprojectresults.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/topology-edit.fragment.html" />
+        <option value="$PROJECT_DIR$/fragments/mock-viewprojectresults.fragment.html" />
         <option value="$PROJECT_DIR$/sap.html" />
       </list>
     </option>
@@ -144,7 +127,7 @@
     </servers>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP" />
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="124" />
     <option name="y" value="16" />
     <option name="width" value="1525" />
@@ -345,15 +328,15 @@
       <workItem from="1511442307437" duration="55000" />
       <workItem from="1511442428063" duration="16530000" />
       <workItem from="1511539797839" duration="765000" />
-      <workItem from="1511786051067" duration="3285000" />
+      <workItem from="1511786051067" duration="4033000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="212630000" />
+    <option name="totallyTimeSpent" value="213378000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1696" height="1066" extended-state="6" />
+    <frame x="-8" y="-8" width="1696" height="1066" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23630953" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -649,14 +632,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/mock-viewprojectresults.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1530">
-          <caret line="90" column="2" lean-forward="false" selection-start-line="90" selection-start-column="2" selection-end-line="90" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fragments/topology-edit.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="181">
@@ -729,10 +704,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/mock-viewprojectresults.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="124" column="35" lean-forward="false" selection-start-line="124" selection-start-column="35" selection-end-line="124" selection-end-column="35" />
+          <folding>
+            <marker date="1511789608598" expanded="true" signature="4772:4795" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sap.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="267">
-          <caret line="554" column="26" lean-forward="true" selection-start-line="554" selection-start-column="26" selection-end-line="554" selection-end-column="26" />
+          <caret line="554" column="56" lean-forward="true" selection-start-line="554" selection-start-column="56" selection-end-line="554" selection-end-column="56" />
           <folding />
         </state>
       </provider>

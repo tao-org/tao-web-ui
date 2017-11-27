@@ -155,7 +155,7 @@
                             </dl>
                     </div>
                     <div>
-                        <canvas id="myChart" width="400" height="250"></canvas>
+                        <canvas id="myChart" width="400" height="200"></canvas>
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -398,6 +398,16 @@
         });
     }
     $( document ).ready(function() {
+        $( window )
+            .resize(function() {
+                if($("#widget-master-monitor").length) {
+                    var w = parseInt($("#widget-master-monitor").width());
+                    $("#myChart").attr("width", w);
+                    _loadChart.initChart();
+                }
+            })
+            .trigger( "resize" );
         updateMasterMonitorWidget();
+        //bind resize event
     });
 </script>

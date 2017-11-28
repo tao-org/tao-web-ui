@@ -57,6 +57,7 @@
 <script type="text/javascript" src="./assets/libs/jquery-backstretch/jquery.backstretch.min.js"></script>
 <!-- Bootstrap 3.3.2 JS -->
 <script src="./assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="./assets/dist/js/general-functions.js" type="text/javascript"></script>
 </body>
 </html>
 
@@ -86,7 +87,8 @@
             var form = $('#frmSignIn');
             $.ajax({
                 type: "POST",
-                url: "./_rest/login/auth/authorize/",
+                //url: "./_rest/login/auth/authorize/index.html",
+                url: "http://192.168.61.101/_rest/login/auth/authorize/",
                 data: form.serialize(),
                 error: function() {
                     alert("Communication error. Try again or notify the site admin! Thank you.");
@@ -97,6 +99,11 @@
                         obj = JSON.parse(response);
                         if(obj.code === '200-OK'){
                             $("#frmSignInMsg").html(obj.msgdetails.global).removeClass("hidden");
+                            _settings.createCookie("tokenKey",obj.authdata.tokenKey);
+                            _settings.createCookie("userMatrix",obj.authdata.userMatrix);
+                            _settings.createCookie("userId",obj.authdata.userId);
+                            _settings.createCookie("userName",obj.authdata.userName);
+                            _settings.createCookie("userName",obj.authdata.userName);
                             if(obj.msgdetails.location != ''){
                                 window.location.href = obj.msgdetails.location;
                             }

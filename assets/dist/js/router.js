@@ -16,13 +16,6 @@ var hashRoutesMap = [];
     hashRoutesMap["documentation/intro"] = "./fragments/tao-documentation.fragment.html";
     hashRoutesMap["faq/intro"] = "./fragments/tao-faq.fragment.html";
 
-var tokenKey = _settings.readCookie("tokenKey");
-if ((tokenKey=="") || (tokenKey == null)){
-//  $("body").empty();
-//  window.location = 'login.html';
-}else{
-    window.tokenKey = tokenKey;
-}
 function routeLoading(action){
     if(action === "show"){
         $("#myModalLoading").modal('show');
@@ -36,10 +29,17 @@ function routeLoading(action){
 
 //ROUTER
 $(function () {
-
     // Event handlers for frontend navigation
     // An event handler witch calls the router function on every hashchange.
     $(window).on('hashchange', function(){
+        //check authtoken
+        var tokenKey = _settings.readCookie("tokenKey");
+        if ((tokenKey=="") || (tokenKey == null)){
+            $("body").empty();
+            window.location = 'login.html';
+        }else{
+            window.tokenKey = tokenKey;
+        }
         navRouter(decodeURI(window.location.hash));
     });
 

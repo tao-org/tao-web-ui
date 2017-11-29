@@ -87,8 +87,8 @@
             var form = $('#frmSignIn');
             $.ajax({
                 type: "POST",
-                //url: "./_rest/login/auth/authorize/index.html",
-                url: "http://192.168.61.101/_rest/login/auth/authorize/",
+                url: "./_rest/login/auth/authorize/index.html",
+                //url: "http://192.168.61.101/_rest/login/auth/authorize/",
                 data: form.serialize(),
                 error: function() {
                     alert("Communication error. Try again or notify the site admin! Thank you.");

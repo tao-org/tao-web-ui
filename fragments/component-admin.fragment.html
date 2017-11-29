@@ -48,7 +48,7 @@
                                         <h3 class="box-title">Loading ...</h3>
                                     </div>
                                     <div class="box-body">
-                                        Executions nodes list will load soon ...
+                                        Processing components list will load soon ...
                                     </div><!-- /.box-body -->
                                     <!-- Loading (remove the following to stop the loading)-->
                                     <div class="overlay">
@@ -92,7 +92,7 @@
                                 <div class="box box-success">
                                     <div class="box-header">
                                         <i class="fa fa-server"></i>
-                                        <h3 class="box-title">Execution nodes -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
+                                        <h3 class="box-title">Processing components -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
                                         <div class="box-tools pull-right" data-toggle="tooltip" title="Status">
                                             <p>Order by:</p>
                                         </div>
@@ -363,7 +363,7 @@
                         }
                     },
                     success: function(response) {
-                        showMsg("Execution nodes list successfully retrieved.", "SUCCESS");
+                        showMsg("Processing components list successfully retrieved.", "SUCCESS");
                         //inject fake tags
                         var j = 0;
                         for (j = 0; j < response.length; j++){
@@ -477,7 +477,7 @@
                 }
             },
             success: function(data) {
-                showMsg("Execution node successfully deleted.", "SUCCESS");
+                showMsg("Processing component successfully deleted.", "SUCCESS");
                 _mLIST.refresh();
             }
         });
@@ -493,14 +493,14 @@
             $(".modal-dialog",$modal).addClass("modal-lg");
         }
         if(operationid === "op-plus"){
-            rm_contentUrl="./fragments/topology-plus.fragment.html?" + Math.random();
+            rm_contentUrl="./fragments/component-plus.fragment.html?" + Math.random();
         }
         if(operationid === "edit"){
             rm_contentUrl="./fragments/topology-edit.fragment.html?" + Math.random();
         }
         if(operationid === "delete"){
             $('#confirm-dialog').modal('confirm',{
-                msg:"Are you sure you want to delete execution node: "+_mLIST.dataOpQueue[0].dna.hostName+"?",
+                msg:"Are you sure you want to delete processing component: "+_mLIST.dataOpQueue[0].dna.hostName+"?",
                 callbackConfirm: function() {
                     deleteExecNode(_mLIST.dataOpQueue[0].dna.hostName);
                 },
@@ -599,7 +599,7 @@
         console.log( "exec nodes panel ready!" );
         $("form.search-container").on("submit",function(e){
             e.preventDefault(e);
-        })
+        });
         _mLIST.getData();
     });
     //# sourceURL=filename.js

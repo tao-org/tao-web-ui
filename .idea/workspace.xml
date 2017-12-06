@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/fragments/component-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/component-admin.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/component-plus.fragment.html" afterPath="$PROJECT_DIR$/fragments/component-plus.fragment.html" />
+      <change beforePath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" afterPath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
       <change beforePath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/projects-all.fragment.html" afterPath="$PROJECT_DIR$/fragments/projects-all.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/topology-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/topology-admin.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/topology-edit.fragment.html" afterPath="$PROJECT_DIR$/fragments/topology-edit.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/topology-plus.fragment.html" afterPath="$PROJECT_DIR$/fragments/topology-plus.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/users-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/users-admin.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/sap.html" afterPath="$PROJECT_DIR$/sap.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,11 +17,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="sap.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="sap.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sap.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
+            <state relative-caret-position="606">
               <caret line="378" column="110" lean-forward="false" selection-start-line="378" selection-start-column="110" selection-end-line="378" selection-end-column="110" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="datasource-admin.fragment.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/fragments/datasource-admin.fragment.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="292">
+              <caret line="558" column="0" lean-forward="false" selection-start-line="558" selection-start-column="0" selection-end-line="558" selection-end-column="0" />
+              <folding>
+                <marker date="1512562071499" expanded="true" signature="30148:30155" ph="×" />
+                <marker date="1512562071499" expanded="true" signature="30926:30943" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AdminLTEplus.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="378">
+              <caret line="721" column="16" lean-forward="false" selection-start-line="721" selection-start-column="1" selection-end-line="721" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -95,16 +110,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rm-blank.fragment.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fragments/rm-blank.fragment.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="93" lean-forward="false" selection-start-line="9" selection-start-column="93" selection-end-line="9" selection-end-column="93" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="general-functions.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/dist/js/general-functions.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -127,14 +132,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>inchi</find>
-      <find>plus</find>
-      <find>execu</find>
-      <find>formData</find>
-      <find>inputCompAuthors</find>
-      <find>inputActive</find>
-      <find>projects</find>
-      <find>fa-files-o</find>
       <find>fa-files</find>
       <find>fa-object-group</find>
       <find>all project</find>
@@ -157,6 +154,14 @@
       <find>Woops</find>
       <find>Paun Nar</find>
       <find>inputPasswordAgain</find>
+      <find>modules</find>
+      <find>edit</find>
+      <find>preve</find>
+      <find>build</find>
+      <find>Parameter</find>
+      <find>buildModalParamsList</find>
+      <find>myModalNodesOpShow</find>
+      <find>alert</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -186,8 +191,6 @@
         <option value="$PROJECT_DIR$/fragments/mock-traceprojectexecution.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/users-plus.fragment.html" />
         <option value="$PROJECT_DIR$/flow.rc2/1.php" />
-        <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
-        <option value="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/mock-viewprojectresults.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" />
         <option value="$PROJECT_DIR$/_rest/login/auth/authorize/index.html" />
@@ -204,6 +207,8 @@
         <option value="$PROJECT_DIR$/fragments/topology-edit.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/topology-plus.fragment.html" />
         <option value="$PROJECT_DIR$/sap.html" />
+        <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
+        <option value="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
       </list>
     </option>
   </component>
@@ -219,7 +224,7 @@
     </servers>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP" />
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="124" />
     <option name="y" value="16" />
     <option name="width" value="1525" />
@@ -285,6 +290,19 @@
               <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
               <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="assets" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="assets" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="dist" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="assets" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="dist" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="css" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
@@ -424,15 +442,15 @@
       <workItem from="1511786051067" duration="18540000" />
       <workItem from="1511959499838" duration="5172000" />
       <workItem from="1512480309172" duration="29000" />
-      <workItem from="1512480408819" duration="7026000" />
+      <workItem from="1512480408819" duration="14763000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="240112000" />
+    <option name="totallyTimeSpent" value="247849000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1696" height="1066" extended-state="6" />
+    <frame x="-8" y="-8" width="1696" height="1066" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -576,21 +594,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/datasource-admin.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="152" column="74" lean-forward="true" selection-start-line="152" selection-start-column="74" selection-end-line="152" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fragments/datasources-admin.fragment.html" />
-    <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="641" column="22" lean-forward="true" selection-start-line="641" selection-start-column="22" selection-end-line="641" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fragments/modules-admin.fragment.html" />
     <entry file="file://$PROJECT_DIR$/_rest/topology/list/index.php" />
     <entry file="file://$PROJECT_DIR$/_rest/modules/list/index.php" />
@@ -766,9 +770,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sap.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
+        <state relative-caret-position="606">
           <caret line="378" column="110" lean-forward="false" selection-start-line="378" selection-start-column="110" selection-end-line="378" selection-end-column="110" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="721" column="16" lean-forward="false" selection-start-line="721" selection-start-column="1" selection-end-line="721" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/datasource-admin.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="292">
+          <caret line="558" column="0" lean-forward="false" selection-start-line="558" selection-start-column="0" selection-end-line="558" selection-end-column="0" />
+          <folding>
+            <marker date="1512562071499" expanded="true" signature="30148:30155" ph="×" />
+            <marker date="1512562071499" expanded="true" signature="30926:30943" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

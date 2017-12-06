@@ -4,7 +4,6 @@
         <h4 class="modal-title" id="myModalLabel">Add new processing component</h4>
     </div>
 
-
     <form id="frmExecNodeEdit" class="form-horizontal form-newpc" role="form">
         <input type="hidden" id="op" name="op" class="op" value="op-plus" />
         <input type="hidden" id="id_u" name="id_u" value="0" />
@@ -23,81 +22,234 @@
 
         <div class="modal-body">
             <section>
+
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="form-group has-feedback">
-                            <label for="inputCompID" class="col-sm-2 col-md-2 control-label">ID</label>
-                            <div class="col-sm-10 col-md-10">
-                                <input type="text" class="form-control" id="inputCompID" name="inputCompID" placeholder="component ID" autocomplete="off" value=""/>
-                                <span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
-                                <span class="ckattr-ok sr-only collapse">(success)</span>
-                                <span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
-                                <span class="ckattr-error sr-only collapse">(error)</span>
+                            <p>Please check all the tabs before saving a new component.</p>
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#comp-tab-gd">General desc.</a></li>
+                                <li><a data-toggle="tab" href="#comp-tab-conf">Configuration</a></li>
+                                <li><a data-toggle="tab" href="#comp-tab-param">Parameters</a></li>
+                                <li><a data-toggle="tab" href="#comp-tab-sys">Sys. vars.</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group has-feedback">
+                                                <label for="inputCompID" class="col-sm-2 col-md-2 control-label">ID</label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <input type="text" class="form-control" id="inputCompID" name="inputCompID" placeholder="component ID" autocomplete="off" value=""/>
+                                                    <span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
+                                                    <span class="ckattr-ok sr-only collapse">(success)</span>
+                                                    <span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
+                                                    <span class="ckattr-error sr-only collapse">(error)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputCompLabel" class="col-sm-2 col-md-2 control-label">Label</label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <input type="text" class="form-control" id="inputCompLabel" name="inputCompLabel" placeholder="component label" autocomplete="off" value="" data-errorspan="userName"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputCompVersion" class="col-sm-2 col-md-2 control-label">Version</label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <input type="text" class="form-control" id="inputCompVersion" name="inputCompVersion" placeholder="component version" autocomplete="off" value=""/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputCompDescription" class="col-sm-2 col-md-2 control-label">Description </label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <textarea class="form-control" rows="3" id="inputCompDescription" name="inputCompDescription" placeholder="Description"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputCompAuthors" class="col-sm-2 col-md-2 control-label">Author </label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <input type="text" class="form-control" id="inputCompAuthors" name="inputCompAuthors" placeholder="authors" autocomplete="off" value="" data-errorspan="memorySize"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputCompCopyright" class="col-sm-2 col-md-2 control-label">Copyright </label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <input type="text" class="form-control" id="inputCompCopyright" name="inputCompCopyright" placeholder="copyright" autocomplete="off" value="" data-errorspan="memorySize"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputActive" class="col-sm-2 col-md-2 control-label">Status </label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <select id="inputActive" name="inputActive" class="form-control">
+                                                        <option value="true" selected="">Active</option>
+                                                        <option value="false">Inactive</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputVisibility" class="col-sm-2 col-md-2 control-label">Visibility </label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <select id="inputVisibility" name="inputVisibility" class="form-control">
+                                                        <option value="1" selected="">System build-in component</option>
+                                                        <option value="2">User defined component</option>
+                                                        <option value="3">Contributor defined component</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputTemplateType" class="col-sm-2 col-md-2 control-label">Template Type </label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <select disabled="disabled" id="inputTemplateType" name="inputTemplateType" class="form-control">
+                                                        <option value="VELOCITY" selected="">VELOCITY</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="comp-tab-conf" class="tab-pane fade padding-top--20 padding-left--20 padding-bottom--20">
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Container Id </label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <select id="inputContainerId" name="inputContainerId" class="form-control">
+                                                        <option value="DummyTestDockerContainer" selected="">Test Docker Container</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputFileLocation" class="col-sm-2 col-md-2 control-label">Author </label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <input type="text" class="form-control" id="inputFileLocation" name="inputFileLocation" placeholder="file location" autocomplete="off" value="E:\\OTB\\otbcli_Segmentation.bat"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputWorkingDirectory" class="col-sm-2 col-md-2 control-label">Copyright </label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <input type="text" class="form-control" id="inputWorkingDirectory" name="inputWorkingDirectory" placeholder="working directory" autocomplete="off" value="E:\\OTB"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div id="comp-tab-param" class="tab-pane fade padding-top--20 padding-bottom--20">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p>Parameter list:</p>
+                                            <div class="responsive">
+                                                <table class="table table-bordered box-shadow--6dp">
+                                                    <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Name</th>
+                                                        <th>Type</th>
+                                                        <th>Default value</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <th scope="row"></th>
+                                                        <td>path</td>
+                                                        <td>String</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row"></th>
+                                                        <td>footprint</td>
+                                                        <td>Polygon2D</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row"></th>
+                                                        <td>sensingStart</td>
+                                                        <td>Date</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div id="comp-tab-sys" class="tab-pane fade">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p>Variables:</p>
+                                            <div class="responsive">
+                                                <table class="table table-bordered box-shadow--6dp">
+                                                    <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Key</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="comp-add-new-var">
+                                                                <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    </tfoot>
+                                                    <tbody>
+                                                    <tr>
+                                                        <th scope="row"></th>
+                                                        <td>ITK_AUTOLOAD_PATH</td>
+                                                        <td>E:\OTB\bin</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="inputCompLabel" class="col-sm-2 col-md-2 control-label">Label</label>
-                            <div class="col-sm-10 col-md-10">
-                                <input type="text" class="form-control" id="inputCompLabel" name="inputCompLabel" placeholder="component label" autocomplete="off" value="" data-errorspan="userName"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="inputCompVersion" class="col-sm-2 col-md-2 control-label">Version</label>
-                            <div class="col-sm-10 col-md-10">
-                                <input type="text" class="form-control" id="inputCompVersion" name="inputCompVersion" placeholder="component version" autocomplete="off" value=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="inputCompDescription" class="col-sm-2 col-md-2 control-label">Description </label>
-                            <div class="col-sm-10 col-md-10">
-                                <textarea class="form-control" rows="3" id="inputCompDescription" name="inputCompDescription" placeholder="Description"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="inputCompAuthors" class="col-sm-2 col-md-2 control-label">Author </label>
-                            <div class="col-sm-10 col-md-10">
-                                <input type="text" class="form-control" id="inputCompAuthors" name="inputCompAuthors" placeholder="authors" autocomplete="off" value="" data-errorspan="memorySize"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="inputCompCopyright" class="col-sm-2 col-md-2 control-label">Copyright </label>
-                            <div class="col-sm-10 col-md-10">
-                                <input type="text" class="form-control" id="inputCompCopyright" name="inputCompCopyright" placeholder="copyright" autocomplete="off" value="" data-errorspan="memorySize"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="inputActive" class="col-sm-2 col-md-2 control-label">Status </label>
-                            <div class="col-sm-10 col-md-10">
-                                <select id="inputActive" name="inputActive" class="form-control">
-                                    <option value="true" selected="">Active</option>
-                                    <option value="false">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -138,7 +290,7 @@
         //var rgx = /^[0-9A-Za-z.-_]*$/;
         //if (val.match(rgx) === null){
         var regexp = /^[a-zA-Z0-9-_.]+$/;
-        if (val.search(regexp) == -1)
+        if (val.search(regexp) === -1)
         {
             showMsg("The hostname contains invalid characters.", "ERROR");
             $(".ckattr-ok", $pEL).fadeOut();
@@ -186,7 +338,7 @@
             .on("keypress change", function(){
                 if($(this).data("errorspan")) {
                     $(".error-" + $(this).data("errorspan"), ".modal-error").css('display', 'none');
-                    if($(".modal-error").find("span:visible").length == 0) {
+                    if($(".modal-error").find("span:visible").length === 0) {
                         $(".modal-error").hide();
                     }
                 }
@@ -233,9 +385,9 @@
                         "constraints" : [ ]
                     }
                 ],
-                "fileLocation" : "E:\\OTB\\otbcli_Segmentation.bat",
-                "workingDirectory" : "E:\\OTB",
-                "templateType" : "VELOCITY",
+                "fileLocation" : $('input[name=inputFileLocation]', this).val(),
+                "workingDirectory" : $('input[name=inputWorkingDirectory]', this).val(),
+                "templateType" : $('select[name=inputTemplateType]', this).val(),
                 "templateEngine" : {
                     "type" : "ro.cs.tao.component.template.engine.VelocityTemplateEngine",
                     "templateType" : "VELOCITY"
@@ -253,12 +405,12 @@
                     }
                 ],
                 "multiThread" : false,
-                "visibility" : null,
+                "visibility": $('select[name=inputVisibility]', this).val(),
                 "active": $('select[name=inputActive]', this).val(),
                 "parameterDescriptors" : [
                     {
                         "id" : "outmode_string",
-                        "type" : null,
+                        "type" : 1,
                         "dataType" : "java.lang.String",
                         "defaultValue" : "ulco",
                         "description" : "This allows setting the writing behaviour for the output vector file. Please note that the actual behaviour depends on the file format.",
@@ -271,7 +423,7 @@
                     },
                     {
                         "id" : "neighbor_bool",
-                        "type" : null,
+                        "type" : 1,
                         "dataType" : "java.lang.Boolean",
                         "defaultValue" : "true",
                         "description" : "Activate 8-Neighborhood connectivity (default is 4).",
@@ -283,7 +435,7 @@
                         "validator" : null
                     }
                 ],
-                "containerId": "xxx"
+                "containerId": $('select[name=inputContainerId]', this).val()
             };
             if(formData.id === ''){
                 showMsg("Component ID can not be empty. Please choose valid values to continue.", "ERROR");

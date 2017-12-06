@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" afterPath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
-      <change beforePath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
+      <change beforePath="$PROJECT_DIR$/fragments/component-plus.fragment.html" afterPath="$PROJECT_DIR$/fragments/component-plus.fragment.html" />
+      <change beforePath="$PROJECT_DIR$/fragments/topology-edit.fragment.html" afterPath="$PROJECT_DIR$/fragments/topology-edit.fragment.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,25 +28,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="datasource-admin.fragment.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/fragments/datasource-admin.fragment.html">
+      <file leaf-file-name="AdminLTEplus.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="292">
-              <caret line="558" column="0" lean-forward="false" selection-start-line="558" selection-start-column="0" selection-end-line="558" selection-end-column="0" />
-              <folding>
-                <marker date="1512562071499" expanded="true" signature="30148:30155" ph="×" />
-                <marker date="1512562071499" expanded="true" signature="30926:30943" ph="..." />
-              </folding>
+            <state relative-caret-position="357">
+              <caret line="21" column="1" lean-forward="true" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AdminLTEplus.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
+      <file leaf-file-name="component-plus.fragment.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/fragments/component-plus.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="721" column="16" lean-forward="false" selection-start-line="721" selection-start-column="1" selection-end-line="721" selection-end-column="16" />
-              <folding />
+            <state relative-caret-position="658">
+              <caret line="243" column="70" lean-forward="false" selection-start-line="243" selection-start-column="70" selection-end-line="243" selection-end-column="70" />
+              <folding>
+                <element signature="e#17600#17606#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -65,16 +65,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="275">
               <caret line="449" column="81" lean-forward="true" selection-start-line="449" selection-start-column="81" selection-end-line="449" selection-end-column="81" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="topology-edit.fragment.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fragments/topology-edit.fragment.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="160" column="41" lean-forward="true" selection-start-line="160" selection-start-column="41" selection-end-line="160" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -132,9 +122,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>fa-files</find>
-      <find>fa-object-group</find>
-      <find>all project</find>
       <find>Projects</find>
       <find>Processing components list successfully retrieved</find>
       <find>val-itemfrom</find>
@@ -150,11 +137,8 @@
       <find>box-header</find>
       <find>put</find>
       <find>not-empty</find>
-      <find>box-succ</find>
       <find>Woops</find>
       <find>Paun Nar</find>
-      <find>inputPasswordAgain</find>
-      <find>modules</find>
       <find>edit</find>
       <find>preve</find>
       <find>build</find>
@@ -162,6 +146,12 @@
       <find>buildModalParamsList</find>
       <find>myModalNodesOpShow</find>
       <find>alert</find>
+      <find>inputPasswordAgain</find>
+      <find>box-succ</find>
+      <find>vi</find>
+      <find>containerId</find>
+      <find>modules</find>
+      <find>VELOCITY</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -202,13 +192,13 @@
         <option value="$PROJECT_DIR$/fragments/users-admin.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/projects-all.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/component-admin.fragment.html" />
-        <option value="$PROJECT_DIR$/fragments/component-plus.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/topology-admin.fragment.html" />
-        <option value="$PROJECT_DIR$/fragments/topology-edit.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/topology-plus.fragment.html" />
         <option value="$PROJECT_DIR$/sap.html" />
-        <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
         <option value="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
+        <option value="$PROJECT_DIR$/fragments/topology-edit.fragment.html" />
+        <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
+        <option value="$PROJECT_DIR$/fragments/component-plus.fragment.html" />
       </list>
     </option>
   </component>
@@ -224,7 +214,7 @@
     </servers>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP" />
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="124" />
     <option name="y" value="16" />
     <option name="width" value="1525" />
@@ -442,15 +432,15 @@
       <workItem from="1511786051067" duration="18540000" />
       <workItem from="1511959499838" duration="5172000" />
       <workItem from="1512480309172" duration="29000" />
-      <workItem from="1512480408819" duration="14763000" />
+      <workItem from="1512480408819" duration="22787000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="247849000" />
+    <option name="totallyTimeSpent" value="255873000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1696" height="1066" extended-state="7" />
+    <frame x="-8" y="-8" width="1696" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -720,14 +710,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/component-plus.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="288" column="54" lean-forward="false" selection-start-line="288" selection-start-column="49" selection-end-line="288" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fragments/users-admin.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="241">
@@ -740,22 +722,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="479">
           <caret line="368" column="0" lean-forward="false" selection-start-line="368" selection-start-column="0" selection-end-line="372" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/topology-admin.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="449" column="81" lean-forward="true" selection-start-line="449" selection-start-column="81" selection-end-line="449" selection-end-column="81" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/topology-edit.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="160" column="41" lean-forward="true" selection-start-line="160" selection-start-column="41" selection-end-line="160" selection-end-column="41" />
           <folding />
         </state>
       </provider>
@@ -776,21 +742,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/topology-edit.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="190" column="53" lean-forward="true" selection-start-line="190" selection-start-column="53" selection-end-line="190" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/topology-admin.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="449" column="81" lean-forward="true" selection-start-line="449" selection-start-column="81" selection-end-line="449" selection-end-column="81" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="721" column="16" lean-forward="false" selection-start-line="721" selection-start-column="1" selection-end-line="721" selection-end-column="16" />
+        <state relative-caret-position="357">
+          <caret line="21" column="1" lean-forward="true" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fragments/datasource-admin.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
+        <state relative-caret-position="-320">
           <caret line="558" column="0" lean-forward="false" selection-start-line="558" selection-start-column="0" selection-end-line="558" selection-end-column="0" />
           <folding>
             <marker date="1512562071499" expanded="true" signature="30148:30155" ph="×" />
             <marker date="1512562071499" expanded="true" signature="30926:30943" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/component-plus.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="658">
+          <caret line="243" column="70" lean-forward="false" selection-start-line="243" selection-start-column="70" selection-end-line="243" selection-end-column="70" />
+          <folding>
+            <element signature="e#17600#17606#0" expanded="true" />
           </folding>
         </state>
       </provider>

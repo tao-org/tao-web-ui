@@ -50,16 +50,6 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputPasswordAgain" class="col-sm-2 col-md-2 control-label">Repete password</label>
-                            <div class="col-sm-10 col-md-10">
-                                <input type="password" autocomplete="off" class="form-control" id="inputPasswordAgain" name="inputPasswordAgain" placeholder="password" autocomplete="off" value=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
                             <label for="inputProcessorcount" class="col-sm-2 col-md-2 control-label">Processor count</label>
                             <div class="col-sm-10 col-md-10">
                                 <input type="number" class="form-control" id="inputProcessorcount" name="inputProcessorcount" placeholder="processor count" min="0" autocomplete="off" value="1"/>
@@ -166,7 +156,6 @@
                     $('input[name=inputHostname]', $el).val(response.hostName);
                     $('input[name=inputUsername]', $el).val(response.userName);
                     $('input[name=inputPassword]', $el).val(response.userPass);
-                    $('input[name=inputPasswordAgain]', $el).val(response.userPass);
                     $('input[name=inputProcessorcount]', $el).val(response.processorCount);
                     $('input[name=inputMemorysize]', $el).val(response.memorySizeGB);
                     $('input[name=inputDiskspacesize]', $el).val(response.diskSpaceSizeGB);
@@ -202,10 +191,6 @@
                     $(".modal-error").fadeIn("slow");
                 }
             }
-        });
-        $("#inputPasswordAgain").focusout(function(e) {
-            if($("#inputPasswordAgain").val() !== $("#inputPassword").val())
-                showMsg("Password does not match the confirmation password.", "ERROR");
         });
         $("form#frmExecNodeEdit").submit(function (event) {
             event.preventDefault();

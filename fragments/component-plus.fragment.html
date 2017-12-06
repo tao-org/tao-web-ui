@@ -162,7 +162,7 @@
                     $(".ckattr-error", $pEL).fadeOut();
                     $(".ckattr-ok", $pEL).fadeIn();
                 } else {
-                    alert('E001, Woops an error has occurred, please try again or contact app admin.');
+                    alert('E001, An error has occurred, please try again or contact app admin.');
                 }
             },
             success: function(response) {
@@ -179,7 +179,6 @@
         });
         return true;
     }
-
 
     $(document).ready( function(){
         //remove error for some input elements
@@ -283,7 +282,8 @@
                         "notNull" : false,
                         "validator" : null
                     }
-                ]
+                ],
+                "containerId": "xxx"
             };
             if(formData.id === ''){
                 showMsg("Component ID can not be empty. Please choose valid values to continue.", "ERROR");

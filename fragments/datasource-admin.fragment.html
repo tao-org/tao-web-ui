@@ -351,7 +351,7 @@
                         if(( jqXHR.status === 401 ) || ( jqXHR.status === 403 )){
                             alert('E001A, Not authenticated.');
                         } else {
-                            alert('E001, Woops an error has occurred, please try again or contact app admin.');
+                            alert('E001, An error has occurred, please try again or contact app admin.');
                         }
                     },
                     success: function(response) {
@@ -461,7 +461,7 @@
                 if(jqXHR.status === 500 ){
                     showMsg("Unable to delete node. Please try again.", "ERROR");
                 } else {
-                    alert('Woops an error has occurred, please try again or contact app admin.');
+                    alert('An error has occurred, please try again or contact app admin.');
                 }
             },
             success: function(data) {

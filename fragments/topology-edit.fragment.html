@@ -155,7 +155,7 @@
                 if( jqXHR.status === 500 ){
                     alert('E001, Exec node nolonger found.');
                 } else {
-                    alert('E001, Woops an error has occurred, please try again or contact app admin.');
+                    alert('E001, An error has occurred, please try again or contact app admin.');
                 }
             },
             success: function(response) {
@@ -175,7 +175,7 @@
                     $('select[name=inputActive] option[value="'+response.active+'"]', $el).attr("selected", "selected");
                 }
                 catch(e) {
-                    alert('E001, Woops an error has occurred, please try again or contact app admin.');
+                    alert('E001, An error has occurred, please try again or contact app admin.');
                 }
             }
         });
@@ -223,7 +223,7 @@
             $.ajax({
                 url: baseRestApiURL + "topology/"+formData.hostName+"/?rnd=" + Math.random(),
                 dataType : 'json',
-                type: 'PUT',
+                type: 'POST',
                 data: JSON.stringify(formData),
                 beforeSend : function(xhr) {
                     xhr.setRequestHeader("Accept", "application/json");

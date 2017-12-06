@@ -60,16 +60,6 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputPasswordAgain" class="col-sm-2 col-md-2 control-label">Repete password</label>
-                            <div class="col-sm-10 col-md-10">
-                                <input type="password" class="form-control" id="inputPasswordAgain" name="inputPasswordAgain" placeholder="password" autocomplete="off" value=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
                             <label for="inputProcessorcount" class="col-sm-2 col-md-2 control-label">Processor count</label>
                             <div class="col-sm-10 col-md-10">
                                 <input type="number" class="form-control" id="inputProcessorcount" name="inputProcessorcount" placeholder="processor count" min="0" autocomplete="off" value="1"/>
@@ -184,7 +174,7 @@
                     $(".ckattr-error", $pEL).fadeOut();
                     $(".ckattr-ok", $pEL).fadeIn();
                 } else {
-                    alert('E001, Woops an error has occurred, please try again or contact app admin.');
+                    alert('E001, An error has occurred, please try again or contact app admin.');
                 }
             },
             success: function(response) {
@@ -229,10 +219,6 @@
             if($(this).attr("id")) {
                 validateHostName($(this).attr("id"));
             }
-        });
-        $("#inputPasswordAgain").focusout(function(e) {
-            if($("#inputPasswordAgain").val() !== $("#inputPassword").val())
-                showMsg("Password does not match the confirmation password.", "ERROR");
         });
         $("form#frmExecNodeEdit").submit(function (event) {
             event.preventDefault();

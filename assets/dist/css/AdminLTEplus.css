@@ -839,6 +839,21 @@ ul.timeline.current_route:before{
     font-weight: bold;
 }
 
+
+/* table component */
+.tbl-edt input{
+    width:100%;
+    border: 1px solid #FFF;
+    -webkit-transition: .18s ease-out;
+    -moz-transition: .18s ease-out;
+    -o-transition: .18s ease-out;
+    transition: .18s ease-out;
+}
+.tbl-edt input:focus{
+    border: 1px solid #B8B6B6;
+    box-shadow: inset 1px 2px 4px rgba(0, 0, 0, 0.01), 0px 0px 8px rgba(0, 0, 0, 0.2);
+}
+
 /* search */
 .like span {
     background-color: #367fa9;
@@ -895,6 +910,19 @@ ul.timeline.current_route:before{
 }
 .tags span.selected .selected-shown{
     display: inherit;
+}
+
+
+/* notifications */
+#bot-notice-chat{
+    position: absolute;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 350px;
+}
+#bot-notice-chat .box{
+    margin:0;
 }
 
 /* svg animations */

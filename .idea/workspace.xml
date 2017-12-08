@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" afterPath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
       <change beforePath="$PROJECT_DIR$/fragments/component-plus.fragment.html" afterPath="$PROJECT_DIR$/fragments/component-plus.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/topology-edit.fragment.html" afterPath="$PROJECT_DIR$/fragments/topology-edit.fragment.html" />
+      <change beforePath="$PROJECT_DIR$/sap.html" afterPath="$PROJECT_DIR$/sap.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,30 +22,30 @@
       <file leaf-file-name="sap.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sap.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="606">
-              <caret line="378" column="110" lean-forward="false" selection-start-line="378" selection-start-column="110" selection-end-line="378" selection-end-column="110" />
+            <state relative-caret-position="419">
+              <caret line="647" column="54" lean-forward="true" selection-start-line="647" selection-start-column="54" selection-end-line="647" selection-end-column="54" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AdminLTEplus.css" pinned="false" current-in-tab="false">
+      <file leaf-file-name="AdminLTEplus.css" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="21" column="1" lean-forward="true" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
+            <state relative-caret-position="651">
+              <caret line="918" column="20" lean-forward="false" selection-start-line="918" selection-start-column="20" selection-end-line="918" selection-end-column="20" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="component-plus.fragment.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="component-plus.fragment.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fragments/component-plus.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="658">
-              <caret line="243" column="70" lean-forward="false" selection-start-line="243" selection-start-column="70" selection-end-line="243" selection-end-column="70" />
+            <state relative-caret-position="527">
+              <caret line="378" column="59" lean-forward="true" selection-start-line="378" selection-start-column="59" selection-end-line="378" selection-end-column="59" />
               <folding>
-                <element signature="e#17600#17606#0" expanded="true" />
+                <element signature="e#17877#17883#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -53,7 +54,7 @@
       <file leaf-file-name="projects-all.fragment.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fragments/projects-all.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="659">
+            <state relative-caret-position="1921">
               <caret line="113" column="71" lean-forward="false" selection-start-line="113" selection-start-column="71" selection-end-line="113" selection-end-column="71" />
               <folding />
             </state>
@@ -63,8 +64,8 @@
       <file leaf-file-name="topology-admin.fragment.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fragments/topology-admin.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="449" column="81" lean-forward="true" selection-start-line="449" selection-start-column="81" selection-end-line="449" selection-end-column="81" />
+            <state relative-caret-position="7633">
+              <caret line="449" column="81" lean-forward="false" selection-start-line="449" selection-start-column="81" selection-end-line="449" selection-end-column="81" />
               <folding />
             </state>
           </provider>
@@ -73,7 +74,7 @@
       <file leaf-file-name="topology-plus.fragment.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fragments/topology-plus.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="173">
+            <state relative-caret-position="3655">
               <caret line="215" column="50" lean-forward="true" selection-start-line="215" selection-start-column="50" selection-end-line="215" selection-end-column="50" />
               <folding />
             </state>
@@ -83,7 +84,7 @@
       <file leaf-file-name="component-admin.fragment.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fragments/component-admin.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="479">
+            <state relative-caret-position="6256">
               <caret line="368" column="0" lean-forward="false" selection-start-line="368" selection-start-column="0" selection-end-line="372" selection-end-column="25" />
               <folding />
             </state>
@@ -103,8 +104,8 @@
       <file leaf-file-name="general-functions.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/dist/js/general-functions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="21" lean-forward="false" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
+            <state relative-caret-position="153">
+              <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -122,10 +123,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Projects</find>
-      <find>Processing components list successfully retrieved</find>
-      <find>val-itemfrom</find>
-      <find>valItemFrom</find>
       <find>list-work-users</find>
       <find>panel-nodes</find>
       <find>nodes-box</find>
@@ -152,6 +149,10 @@
       <find>containerId</find>
       <find>modules</find>
       <find>VELOCITY</find>
+      <find>addnewvar</find>
+      <find>showMsg</find>
+      <find>done</find>
+      <find>master</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -174,7 +175,6 @@
         <option value="$PROJECT_DIR$/fragments/tao-documentation.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/tao-faq.fragment.html" />
         <option value="$PROJECT_DIR$/lib/np/jquery.npmodalconfirm.js" />
-        <option value="$PROJECT_DIR$/assets/dist/js/general-functions.js" />
         <option value="$PROJECT_DIR$/_rest/notification/index.php" />
         <option value="$PROJECT_DIR$/lib/chartjs/chartjs.min.js" />
         <option value="$PROJECT_DIR$/_rest/projects/results/index.php" />
@@ -194,11 +194,12 @@
         <option value="$PROJECT_DIR$/fragments/component-admin.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/topology-admin.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/topology-plus.fragment.html" />
-        <option value="$PROJECT_DIR$/sap.html" />
         <option value="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/topology-edit.fragment.html" />
-        <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
         <option value="$PROJECT_DIR$/fragments/component-plus.fragment.html" />
+        <option value="$PROJECT_DIR$/assets/dist/js/general-functions.js" />
+        <option value="$PROJECT_DIR$/sap.html" />
+        <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
       </list>
     </option>
   </component>
@@ -214,7 +215,7 @@
     </servers>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP" />
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="124" />
     <option name="y" value="16" />
     <option name="width" value="1525" />
@@ -235,8 +236,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -297,12 +296,21 @@
             <path>
               <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
               <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="assets" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="dist" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="js" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="fragments" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -432,15 +440,16 @@
       <workItem from="1511786051067" duration="18540000" />
       <workItem from="1511959499838" duration="5172000" />
       <workItem from="1512480309172" duration="29000" />
-      <workItem from="1512480408819" duration="22787000" />
+      <workItem from="1512480408819" duration="27006000" />
+      <workItem from="1512735895343" duration="9398000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="255873000" />
+    <option name="totallyTimeSpent" value="269490000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1696" height="1066" extended-state="6" />
+    <frame x="-8" y="-8" width="1696" height="1066" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -450,7 +459,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32845187" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2952381" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40271968" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -573,7 +582,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" column="2" lean-forward="false" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -644,7 +652,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="6" column="6" lean-forward="false" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -659,7 +666,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1513">
           <caret line="89" column="63" lean-forward="false" selection-start-line="89" selection-start-column="63" selection-end-line="89" selection-end-column="63" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -674,15 +680,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="9" column="93" lean-forward="false" selection-start-line="9" selection-start-column="93" selection-end-line="9" selection-end-column="93" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/dist/js/general-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="21" lean-forward="false" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -698,13 +695,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="309">
           <caret line="3" column="9418" lean-forward="false" selection-start-line="3" selection-start-column="9418" selection-end-line="3" selection-end-column="9418" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fragments/projects-all.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="659">
+        <state relative-caret-position="1921">
           <caret line="113" column="71" lean-forward="false" selection-start-line="113" selection-start-column="71" selection-end-line="113" selection-end-column="71" />
           <folding />
         </state>
@@ -720,7 +716,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fragments/component-admin.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
+        <state relative-caret-position="6256">
           <caret line="368" column="0" lean-forward="false" selection-start-line="368" selection-start-column="0" selection-end-line="372" selection-end-column="25" />
           <folding />
         </state>
@@ -728,16 +724,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fragments/topology-plus.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
+        <state relative-caret-position="3655">
           <caret line="215" column="50" lean-forward="true" selection-start-line="215" selection-start-column="50" selection-end-line="215" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sap.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="606">
-          <caret line="378" column="110" lean-forward="false" selection-start-line="378" selection-start-column="110" selection-end-line="378" selection-end-column="110" />
           <folding />
         </state>
       </provider>
@@ -752,16 +740,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fragments/topology-admin.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="449" column="81" lean-forward="true" selection-start-line="449" selection-start-column="81" selection-end-line="449" selection-end-column="81" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" column="1" lean-forward="true" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
+        <state relative-caret-position="7633">
+          <caret line="449" column="81" lean-forward="false" selection-start-line="449" selection-start-column="81" selection-end-line="449" selection-end-column="81" />
           <folding />
         </state>
       </provider>
@@ -779,11 +759,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fragments/component-plus.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="658">
-          <caret line="243" column="70" lean-forward="false" selection-start-line="243" selection-start-column="70" selection-end-line="243" selection-end-column="70" />
+        <state relative-caret-position="527">
+          <caret line="378" column="59" lean-forward="true" selection-start-line="378" selection-start-column="59" selection-end-line="378" selection-end-column="59" />
           <folding>
-            <element signature="e#17600#17606#0" expanded="true" />
+            <element signature="e#17877#17883#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/dist/js/general-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sap.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="419">
+          <caret line="647" column="54" lean-forward="true" selection-start-line="647" selection-start-column="54" selection-end-line="647" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="651">
+          <caret line="918" column="20" lean-forward="false" selection-start-line="918" selection-start-column="20" selection-end-line="918" selection-end-column="20" />
+          <folding />
         </state>
       </provider>
     </entry>

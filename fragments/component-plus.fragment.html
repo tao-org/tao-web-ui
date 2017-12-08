@@ -131,7 +131,9 @@
                                                 <label for="inputTemplateType" class="col-sm-2 col-md-2 control-label">Template Type </label>
                                                 <div class="col-sm-10 col-md-10">
                                                     <select disabled="disabled" id="inputTemplateType" name="inputTemplateType" class="form-control">
-                                                        <option value="VELOCITY" selected="">VELOCITY</option>
+                                                        <option selected value="VELOCITY" selected="">Apache Velocity template</option>
+                                                        <option value="JAVASCRIPT" selected="">Javascript template</option>
+                                                        <option value="XSLT" selected="">XSLT template</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -220,7 +222,7 @@
                                         <div class="col-md-12">
                                             <p>Variables:</p>
                                             <div class="responsive">
-                                                <table class="table table-bordered box-shadow--6dp">
+                                                <table class="table table-bordered box-shadow--6dp tbl-edt">
                                                     <thead>
                                                     <tr>
                                                         <th></th>
@@ -231,7 +233,7 @@
                                                     <tfoot>
                                                     <tr>
                                                         <td colspan="3">
-                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="comp-add-new-var">
+                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewvar" data-action="comp-add-new-var">
                                                                 <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
                                                             </button>
                                                         </td>
@@ -242,6 +244,11 @@
                                                         <th scope="row"></th>
                                                         <td>ITK_AUTOLOAD_PATH</td>
                                                         <td>E:\OTB\bin</td>
+                                                    </tr>
+                                                    <tr class="sample">
+                                                        <th scope="row"></th>
+                                                        <td><input value="ITK_AUTOLOAD_PATH" placeholder="input key"></td>
+                                                        <td><input value="E:\OTB\bin" placeholder="input value"></td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -333,6 +340,16 @@
     }
 
     $(document).ready( function(){
+        //for var table
+        var $tblCompSysVar = $("#comp-tab-sys table");
+
+
+        $(".btn-comp-addnewvar").on("click", function(){
+            alert("plus");
+            //$('#button').clone().attr('id', 'newbutton').appendTo('#panel');
+        });
+
+
         //remove error for some input elements
         $("input","form#frmExecNodeEdit")
             .on("keypress change", function(){

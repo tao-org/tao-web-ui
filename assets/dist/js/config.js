@@ -6,3 +6,4 @@ var prefferences = {
     "viewMode": "grid",
     "autorefresh": "on"
 };
+var notificationsMaxNumber = 50;

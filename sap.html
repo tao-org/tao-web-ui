@@ -517,15 +517,13 @@ Nothing to see!
 
 <!-- bot-notifications -->
     <div id="bot-notice-chat">
-        <div class="box box-success box-solid direct-chat direct-chat-success collapsed-box">
+        <div class="box box-success box-solid direct-chat direct-chat-success collapse">
             <div class="box-header with-border">
                 <h3 class="box-title">TAO Notifications</h3>
                 <div class="box-tools pull-right">
-                    <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="3 New Messages">3</span>
+                    <span data-toggle="tooltip" title="" class="badge bg-yellow val-msgcount" data-original-title="No of messages">0</span>
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
-                    <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle" data-original-title="Contacts">
-                        <i class="fa fa-comments"></i></button>
                     <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                 </div>
             </div>
@@ -533,24 +531,32 @@ Nothing to see!
             <div class="box-body">
                 <!-- Conversations are loaded here -->
                 <div class="direct-chat-messages">
-                    <!-- Message to the right -->
-                    <div class="direct-chat-msg master hidden">
-                        <div class="direct-chat-info clearfix">
-                            <span class="direct-chat-name pull-left">TAO Bot</span>
-                            <span class="direct-chat-timestamp pull-right val-msg-ts">23 Jan 2:00 pm</span>
-                        </div>
-                        <!-- /.direct-chat-info -->
-                        <img class="direct-chat-img" src="favicon-128.png" alt="Message User Image"><!-- /.direct-chat-img -->
-                        <div class="direct-chat-text val-msg-txt"></div>
-                        <!-- /.direct-chat-text -->
+                    <div class="max-msg-note hidden">
+                        <p> Showing a maximum of <span class="val-notificationsmaxnumber"></span> most recent messages. Same messages have been automatically removed. <br> Please check all your messages <a href="#admin/dashboard">here</a></p>
                     </div>
-                    <!-- /.direct-chat-msg -->
                 </div>
                 <!--/.direct-chat-messages-->
                 <!-- /.direct-chat-pane -->
             </div>
             <!-- /.box-body -->
         </div>
+        <!-- Master message to the right -->
+        <div class="direct-chat-msg master hidden">
+            <div class="direct-chat-info clearfix">
+                <span class="direct-chat-name pull-left">TAO Bot</span>
+                <span class="direct-chat-timestamp pull-right val-msg-ts">23 Jan 2:00 pm</span>
+            </div>
+            <!-- /.direct-chat-info -->
+            <img class="direct-chat-img" src="favicon-128.png" alt="Message User Image"><!-- /.direct-chat-img -->
+            <div class="direct-chat-text">
+                <span class="val-msg-txt"></span>
+                <div class="tools">
+                    <i class="fa fa-trash-o"></i>
+                </div>
+            </div>
+            <!-- /.direct-chat-text -->
+        </div>
+        <!-- /master .direct-chat-msg -->
     </div>
 <!-- bot n -->
 
@@ -642,20 +648,27 @@ Nothing to see!
             }
         }).done(function (getMonitorNotificationResponse) {
             console.log(getMonitorNotificationResponse);
-
             for(k=0;k<getMonitorNotificationResponse.length; k++){
                 if(!$("#bot-notice-chat .box").is(':visible')){
-                    $("#bot-notice-chat .box").show();
+                    $("#bot-notice-chat .box").slideDown();
                 };
-                //getMonitorNotificationResponse[k]
                 var $el = $(".direct-chat-msg.master", "#bot-notice-chat").clone();
                 $el.removeClass("master").removeClass("hidden");
                 $el.find(".val-msg-ts").html(moment.unix(1454521239279/1000).format("DD MMM YYYY hh:mm a"));
-                $el.find(".val-msg-txt").html(getMonitorNotificationResponse[k]['data']);
+                $el.find(".val-msg-txt").html(getMonitorNotificationResponse[k]['data']+mm);
+                mm++;
                 $($el).prependTo(".direct-chat-messages", "#bot-notice-chat");
+                var count = $(".direct-chat-messages > .direct-chat-msg").length;
+                console.log("count:"+count);
+                if(count>notificationsMaxNumber){
+                    $('.direct-chat-messages > .direct-chat-msg:last').remove();
+                    $(".val-msgcount", "#bot-notice-chat").html(notificationsMaxNumber+"+");
+                    $(".max-msg-note").removeClass("hidden");
+                    console.log("msg-plus");
+                } else{
+                    $(".val-msgcount", "#bot-notice-chat").html(count);
+                }
             }
-
-            //$(".val-mm-processors").text(parseInt(getMasterMonitorResponse.runtime.availableProcessors));
         }).fail(function (jqXHR, textStatus) {
             //alert("Retriving notification data failed.");
         }).complete(function(){
@@ -668,11 +681,23 @@ Nothing to see!
     };
 
    ///////////////////////////////////////
+    var mm = 0;
     $(document).ready( function(){
-        retriveNotifications();
-        //setInterval(retriveNotifications, 5000);
-
         console.log("document ready!!!");
+        $(".val-notificationsmaxnumber", "#bot-notice-chat").html(notificationsMaxNumber);
+        retriveNotifications();
+        $("#bot-notice-chat").on("click", ".tools", function(){
+            $(this)
+                .closest(".direct-chat-msg")
+                .slideUp("normal",function(){
+                    $(this).remove();
+                    var count = $(".direct-chat-messages > .direct-chat-msg").length;
+                    $(".val-msgcount", "#bot-notice-chat").html(count);
+                    if(count<1){$("#bot-notice-chat .box").slideUp();}
+                });
+        });
+
+
 
         myModalScreen = function(action){
             var $myMS = $("#myModalScreen");

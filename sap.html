@@ -47,7 +47,7 @@
     </script>
 </head>
 
-<body class="skin-blue sidebar-mini size-normal">
+<body class="skin-blue sidebar-mini size-normal noselect">
 <!-- messages -->
 <div id="messagesBox">
     <div id="messagesBoxItemX" class="messagesBoxItem hidden" style="">Dummy message text.</div>
@@ -647,7 +647,7 @@ Nothing to see!
                 xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
             }
         }).done(function (getMonitorNotificationResponse) {
-            console.log(getMonitorNotificationResponse);
+//            console.log(getMonitorNotificationResponse);
             for(k=0;k<getMonitorNotificationResponse.length; k++){
                 if(!$("#bot-notice-chat .box").is(':visible')){
                     $("#bot-notice-chat .box").slideDown();
@@ -655,16 +655,13 @@ Nothing to see!
                 var $el = $(".direct-chat-msg.master", "#bot-notice-chat").clone();
                 $el.removeClass("master").removeClass("hidden");
                 $el.find(".val-msg-ts").html(moment.unix(1454521239279/1000).format("DD MMM YYYY hh:mm a"));
-                $el.find(".val-msg-txt").html(getMonitorNotificationResponse[k]['data']+mm);
-                mm++;
+                $el.find(".val-msg-txt").html(getMonitorNotificationResponse[k]['data']);
                 $($el).prependTo(".direct-chat-messages", "#bot-notice-chat");
                 var count = $(".direct-chat-messages > .direct-chat-msg").length;
-                console.log("count:"+count);
                 if(count>notificationsMaxNumber){
                     $('.direct-chat-messages > .direct-chat-msg:last').remove();
                     $(".val-msgcount", "#bot-notice-chat").html(notificationsMaxNumber+"+");
                     $(".max-msg-note").removeClass("hidden");
-                    console.log("msg-plus");
                 } else{
                     $(".val-msgcount", "#bot-notice-chat").html(count);
                 }
@@ -675,13 +672,12 @@ Nothing to see!
             //if($("#widget-master-monitor").length){
                 setTimeout(function(){
                     retriveNotifications();
-                },15000);
+                },notificationsCheckInterval);
             //}
         });
     };
 
    ///////////////////////////////////////
-    var mm = 0;
     $(document).ready( function(){
         console.log("document ready!!!");
         $(".val-notificationsmaxnumber", "#bot-notice-chat").html(notificationsMaxNumber);

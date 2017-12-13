@@ -7,3 +7,4 @@ var prefferences = {
     "autorefresh": "on"
 };
 var notificationsMaxNumber = 50;
+var notificationsCheckInterval = 10000; //milliseconds

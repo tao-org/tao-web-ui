@@ -13,10 +13,9 @@
             <h4 class="modal-title">Error adding processing component!</h4>
             <p id="modal-error-msg">Please check you data, one or more values for the attributes is not in the acceptable range.</p>
             <p>
-                <span class="error-memorySize collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Memory size cannot be empty.</span>
-                <span class="error-password collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Password cannot be empty.</span>
-                <span class="error-diskSpace collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Disk space cannot be empty.</span>
-                <span class="error-userName collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> User name cannot be empty.</span>
+                <span class="error-inputCompID collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
+                <span class="error-label collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
+                <span class="error-version collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Version cannot be empty.</span>
             </p>
         </div>
 
@@ -53,7 +52,7 @@
                                             <div class="form-group">
                                                 <label for="inputCompLabel" class="col-sm-2 col-md-2 control-label">Label</label>
                                                 <div class="col-sm-10 col-md-10">
-                                                    <input type="text" class="form-control" id="inputCompLabel" name="inputCompLabel" placeholder="component label" autocomplete="off" value="" data-errorspan="userName"/>
+                                                    <input type="text" class="form-control" id="inputCompLabel" name="inputCompLabel" placeholder="component label" autocomplete="off" value="" data-errorspan="label"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -63,7 +62,7 @@
                                             <div class="form-group">
                                                 <label for="inputCompVersion" class="col-sm-2 col-md-2 control-label">Version</label>
                                                 <div class="col-sm-10 col-md-10">
-                                                    <input type="text" class="form-control" id="inputCompVersion" name="inputCompVersion" placeholder="component version" autocomplete="off" value=""/>
+                                                    <input type="text" class="form-control" id="inputCompVersion" name="inputCompVersion" placeholder="component version" autocomplete="off" value="" data-errorspan="version"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -116,9 +115,9 @@
                                             <div class="form-group">
                                                 <label for="inputVisibility" class="col-sm-2 col-md-2 control-label">Visibility </label>
                                                 <div class="col-sm-10 col-md-10">
-                                                    <select id="inputVisibility" name="inputVisibility" class="form-control">
-                                                        <option value="1" selected="">System build-in component</option>
-                                                        <option value="2">User defined component</option>
+                                                    <select disabled="disabled" id="inputVisibility" name="inputVisibility" class="form-control">
+                                                        <option value="1">System build-in component</option>
+                                                        <option value="2" selected="selected">User defined component</option>
                                                         <option value="3">Contributor defined component</option>
                                                     </select>
                                                 </div>
@@ -130,10 +129,10 @@
                                             <div class="form-group">
                                                 <label for="inputTemplateType" class="col-sm-2 col-md-2 control-label">Template Type </label>
                                                 <div class="col-sm-10 col-md-10">
-                                                    <select disabled="disabled" id="inputTemplateType" name="inputTemplateType" class="form-control">
-                                                        <option selected value="VELOCITY" selected="">Apache Velocity template</option>
-                                                        <option value="JAVASCRIPT" selected="">Javascript template</option>
-                                                        <option value="XSLT" selected="">XSLT template</option>
+                                                    <select id="inputTemplateType" name="inputTemplateType" class="form-control">
+                                                        <option value="VELOCITY" selected="selected">Apache Velocity template</option>
+                                                        <option value="JAVASCRIPT" >Javascript template</option>
+                                                        <option value="XSLT">XSLT template</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -245,10 +244,10 @@
                                                         <td>ITK_AUTOLOAD_PATH</td>
                                                         <td>E:\OTB\bin</td>
                                                     </tr>
-                                                    <tr class="sample">
-                                                        <th scope="row"></th>
-                                                        <td><input value="ITK_AUTOLOAD_PATH" placeholder="input key"></td>
-                                                        <td><input value="E:\OTB\bin" placeholder="input value"></td>
+                                                    <tr class="tpl-sample-row">
+                                                        <th class="del-col" scope="row"><button class="tbl-edt-row-action"><i class="fa fa-trash-o"></i></button></th>
+                                                        <td><input class="var-key" value="" placeholder="input variable's name"></td>
+                                                        <td><input class="var-value" value="" placeholder="input variable's value"></td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -307,7 +306,6 @@
             $(".ckattr-error", $pEL).fadeOut();
             $(".ckattr-ok", $pEL).fadeIn();
         }
-
         $.ajax({
             type: "get",
             url: baseRestApiURL + "topology/"+val+"/?rnd=" + Math.random(),
@@ -340,14 +338,19 @@
     }
 
     $(document).ready( function(){
-        //for var table
-        var $tblCompSysVar = $("#comp-tab-sys table");
-
 
         $(".btn-comp-addnewvar").on("click", function(){
-            alert("plus");
-            //$('#button').clone().attr('id', 'newbutton').appendTo('#panel');
+            var $tbl = $(this).closest(".tbl-edt");
+            var $el = $tbl.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row"); //attr('id', 'newbutton')
+//            $el.find(".val")
+            $tbl.append($el);
         });
+        $(".tbl-edt").on("click", ".tbl-edt-row-action", function(e){
+            e.preventDefault();
+            $(this).closest(".val-row").remove();
+        });
+
+
 
 
         //remove error for some input elements
@@ -355,8 +358,9 @@
             .on("keypress change", function(){
                 if($(this).data("errorspan")) {
                     $(".error-" + $(this).data("errorspan"), ".modal-error").css('display', 'none');
-                    if($(".modal-error").find("span:visible").length === 0) {
+                    if($(".modal-error").find("span:visible").length == 0) {
                         $(".modal-error").hide();
+                        $("#saveExecNode").removeAttr('disabled');
                     }
                 }
             })
@@ -365,95 +369,109 @@
                     if (($(this).val() === "")||($(this).val() === 0)||($(this).val() === "0")){
                         $(".error-"+$(this).data("errorspan"),".modal-error").css('display', 'inline-block');
                         $(".modal-error").fadeIn("slow");
+                        $("#saveExecNode").attr('disabled','disabled');
                     }
                 }
             });
 
-        $("#inputHostname").focusout(function(e) {
+        $("#inputCompname").focusout(function(e) {
             if($(this).val() === "")
                 return;
             if($(this).attr("id")) {
                 validateHostName($(this).attr("id"));
             }
         });
-        $("form#frmExecNodeEdit").submit(function (event) {
-            event.preventDefault();
+        $("form#frmExecNodeEdit").submit(function (e) {
+            e.preventDefault();
+            var $tblCompSysVar = $("#comp-tab-sys table");
             var formData = {
-                "id": $('input[name=inputCompID]', this).val(),
-                "label" : $('input[name=inputCompLabel]', this).val(),
-                "version" : $('input[name=inputCompVersion]', this).val(),
-                "description" : $('textarea[name=inputCompDescription]', this).val(),
-                "authors" : $('input[name=inputCompAuthors]', this).val(),
-                "copyright" : $('input[name=inputCompCopyright]', this).val(),
-                "nodeAffinity" : "Any",
-                "sources" : [
-                    {
-                        "id" : "sourceProductFile",
-                        "data" : null,
-                        "constraints" : [
-                            "ro.cs.tao.component.constraints.RasterConstraint"
-                        ]
-                    }
-                ],
-                "targets" : [
-                    {
-                        "id" : "out_str",
-                        "data" : null,
-                        "constraints" : [ ]
-                    }
-                ],
+                    "@type": "ProcessingComponent",
+                    "id": $('input[name=inputCompID]', this).val(),
+                    "label" : $('input[name=inputCompLabel]', this).val(),
+                    "version" : $('input[name=inputCompVersion]', this).val(),
+                    "description" : $('textarea[name=inputCompDescription]', this).val(),
+                    "authors" : $('input[name=inputCompAuthors]', this).val(),
+                    "copyright" : $('input[name=inputCompCopyright]', this).val(),
+                    "nodeAffinity": "Any",
+                    "sources": [{
+                        "id": "sourceProductFile",
+                        "data": null,
+                        "constraints": ["ro.cs.tao.component.constraints.RasterConstraint"]
+                    }],
+                    "targets": [{
+                        "id": "out_str",
+                        "data": null,
+                        "constraints": []
+                    }],
+                    "containerId": $('select[name=inputContainerId]', this).val(),
                 "fileLocation" : $('input[name=inputFileLocation]', this).val(),
                 "workingDirectory" : $('input[name=inputWorkingDirectory]', this).val(),
                 "templateType" : $('select[name=inputTemplateType]', this).val(),
-                "templateEngine" : {
-                    "type" : "ro.cs.tao.component.template.engine.VelocityTemplateEngine",
-                    "templateType" : "VELOCITY"
-                },
-                "template" : {
-                    "type" : "ro.cs.tao.component.template.BasicTemplate",
-                    "name" : "segmentation-cc-template.vm",
-                    "templateType" : "VELOCITY",
-                    "contents" : "-in\n$sourceProductFile\n-filter.cc.expr\n$expr_string\n-mode.vector.out\n$out_str\n-mode.vector.outmode\n$outmode_string\n-mode.vector.neighbor\n$neighbor_bool\n-mode.vector.stitch\n$stitch_bool\n-mode.vector.minsize\n$minsize_int\n-mode.vector.simplify\n$simplify_float\n-mode.vector.layername\n$layername_string\n-mode.vector.fieldname\n$fieldname_string\n-mode.vector.tilesize\n$tilesize_int\n-mode.vector.startlabel\n$startlabel_int"
-                },
-                "variables" : [
-                    {
-                        "key" : "ITK_AUTOLOAD_PATH",
-                        "value" : "E:\\OTB\\bin"
-                    }
-                ],
-                "multiThread" : false,
-                "visibility": $('select[name=inputVisibility]', this).val(),
-                "active": $('select[name=inputActive]', this).val(),
-                "parameterDescriptors" : [
-                    {
-                        "id" : "outmode_string",
-                        "type" : 1,
-                        "dataType" : "java.lang.String",
-                        "defaultValue" : "ulco",
-                        "description" : "This allows setting the writing behaviour for the output vector file. Please note that the actual behaviour depends on the file format.",
-                        "label" : "outmode_string",
-                        "unit" : null,
-                        "valueSet" : null,
-                        "format" : null,
-                        "notNull" : false,
-                        "validator" : null
+
+//                    "fileLocation": "E:\\OTB\\otbcli_Segmentation.bat",
+//                    "workingDirectory": "E:\\OTB",
+//                    "templateType": "VELOCITY",
+                    "templateEngine": {
+                        "type": "ro.cs.tao.component.template.engine.VelocityTemplateEngine",
+                        "templateType": "VELOCITY"
                     },
-                    {
-                        "id" : "neighbor_bool",
-                        "type" : 1,
-                        "dataType" : "java.lang.Boolean",
-                        "defaultValue" : "true",
-                        "description" : "Activate 8-Neighborhood connectivity (default is 4).",
-                        "label" : "neighbor_bool",
-                        "unit" : null,
-                        "valueSet" : null,
-                        "format" : null,
-                        "notNull" : false,
-                        "validator" : null
-                    }
-                ],
-                "containerId": $('select[name=inputContainerId]', this).val()
-            };
+                    "template": {
+                        "type": "ro.cs.tao.component.template.BasicTemplate",
+                        "name": "segmentation-cc-template.vm",
+                        "templateType": "VELOCITY",
+                        "contents": "-in $sourceProductFile -filter.cc.expr $expr_string -mode.vector.out $out_str -mode.vector.outmode $outmode_string -mode.vector.neighbor $neighbor_bool -mode.vector.stitch $stitch_bool -mode.vector.minsize $minsize_int -mode.vector.simplify $simplify_float -mode.vector.layername $layername_string -mode.vector.fieldname $fieldname_string -mode.vector.tilesize $tilesize_int -mode.vector.startlabel $startlabel_int"
+                    },
+                    "variables": [{
+                        "key": "ITK_AUTOLOAD_PATH",
+                        "value": "E:\\OTB\bin"
+                    }],
+                    "multiThread": false,
+//                    "visibility": 2,
+//                    "active": true,
+                    "visibility": $('select[name=inputVisibility]', this).val(),
+                    "active": $('select[name=inputActive]', this).val(),
+                    "parameterDescriptors": [{
+                        "id": "outmode_string",
+                        "type": 1,
+                        "dataType": "java.lang.String",
+                        "defaultValue": "ulco",
+                        "description": "This allows setting the writing behaviour for the output vector file. Please note that the actual behaviour depends on the file format.",
+                        "label": "outmode_string",
+                        "unit": null,
+                        "valueSet": null,
+                        "format": null,
+                        "notNull": false,
+                        "validator": null
+                    }, {
+                        "id": "neighbor_bool",
+                        "type": 1,
+                        "dataType": "java.lang.Boolean",
+                        "defaultValue": "true",
+                        "description": "Activate 8-Neighborhood connectivity (default is 4).",
+                        "label": "neighbor_bool",
+                        "unit": null,
+                        "valueSet": null,
+                        "format": null,
+                        "notNull": false,
+                        "validator": null
+                    }]
+                };
+
+            formData.variables = [];
+            $(".val-row", $tblCompSysVar).each(function() {
+                var k = $(this).find("input.var-key").val();
+                var v = $(this).find("input.var-value").val();
+                var newSysVar = {};
+                if( ((typeof k != "undefined") && (typeof k.valueOf() == "string") && (k.length > 0)) && ((typeof v != "undefined") && (typeof v.valueOf() == "string"))) {
+                    newSysVar.key = k;
+                    newSysVar.value = v;
+                    formData.variables.push(newSysVar);
+                }else{
+                    showMsg("Invalid system variables. Please choose valid names or values to continue.", "ERROR");
+                    return false;
+                }
+            });
+
             if(formData.id === ''){
                 showMsg("Component ID can not be empty. Please choose valid values to continue.", "ERROR");
                 return false;
@@ -502,6 +520,6 @@
             });
             return false;
         });
-
     });
+    //# sourceURL=comp-plus.js
 </script>

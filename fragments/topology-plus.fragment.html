@@ -14,6 +14,7 @@
             <h4 class="modal-title">Error adding execution node!</h4>
             <p id="modal-error-msg">Please check you data, one or more values for the attributes is not in the acceptable range.</p>
             <p>
+                <span class="error-hostName collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Invalid hostname.</span>
                 <span class="error-memorySize collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Memory size cannot be empty.</span>
                 <span class="error-password collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Password cannot be empty.</span>
                 <span class="error-diskSpace collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Disk space cannot be empty.</span>
@@ -28,7 +29,7 @@
                         <div class="form-group has-feedback">
                             <label for="inputHostname" class="col-sm-2 col-md-2 control-label">Hostname</label>
                             <div class="col-sm-10 col-md-10">
-                                <input type="text" class="form-control" id="inputHostname" name="inputHostname" placeholder="hostname" autocomplete="off" value=""/>
+                                <input type="text" class="form-control" id="inputHostname" name="inputHostname" placeholder="hostname" autocomplete="off" value="" data-errorspan="hostName"/>
                                 <span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
                                 <span class="ckattr-ok sr-only collapse">(success)</span>
                                 <span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
@@ -146,9 +147,7 @@
     function validateHostName(attrId){
         var $eL = $("#"+attrId);
         var $pEL = $eL.parent();
-        var val = $eL.val();
-        //var rgx = /^[0-9A-Za-z.-_]*$/;
-        //if (val.match(rgx) === null){
+        var val = $eL.val().toLowerCase();
         var regexp = /^[a-zA-Z0-9-_.]+$/;
         if (val.search(regexp) == -1)
         {
@@ -179,7 +178,11 @@
             },
             success: function(response) {
                 try {
-                        showMsg("Hostname already in use. Please try a different name.", "ERROR");
+                        if(response.active){
+                            showMsg("Hostname already exist. You will be editing an existing node.", "ERROR");
+                        }else{
+                            showMsg("Hostname already exist, but current state is disabled. Saving your data will activate this execution node.", "ERROR");
+                        }
                         $(".ckattr-ok", $pEL).fadeOut();
                         $(".ckattr-error", $pEL).fadeIn();
                 }
@@ -201,6 +204,7 @@
                 $(".error-" + $(this).data("errorspan"), ".modal-error").css('display', 'none');
                 if($(".modal-error").find("span:visible").length == 0) {
                     $(".modal-error").hide();
+                    $("#saveExecNode").removeAttr('disabled');
                 }
             }
         })
@@ -209,11 +213,12 @@
                 if (($(this).val() === "")||($(this).val() === 0)||($(this).val() === "0")){
                     $(".error-"+$(this).data("errorspan"),".modal-error").css('display', 'inline-block');
                     $(".modal-error").fadeIn("slow");
+                    $("#saveExecNode").attr('disabled','disabled');
                 }
             }
         });
-
-        $("#inputHostname").focusout(function(e) {
+        $("form#frmExecNodeEdit")
+        .on("focusout","#inputHostname",function(e) {
             if($(this).val() === "")
                 return;
             if($(this).attr("id")) {
@@ -223,7 +228,7 @@
         $("form#frmExecNodeEdit").submit(function (event) {
             event.preventDefault();
             var formData = {
-                "hostName":$('input[name=inputHostname]', this).val(),
+                "hostName":$('input[name=inputHostname]', this).val().toLowerCase(),
                 "userName":$('input[name=inputUsername]', this).val(),
                 "userPass":$('input[name=inputPassword]', this).val(),
                 "processorCount":$('input[name=inputProcessorcount]', this).val(),
@@ -262,7 +267,6 @@
                         for(i=0;i<objResponse.length;i++) {
                             var matches = objResponse[i].match(/\[(.*?)\]/);
                             if (matches) {
-                                //$(".error-"+matches[1],".modal-error").show();
                                 $(".error-"+matches[1],".modal-error").css('display', 'inline-block');
                             }
                         }
@@ -280,6 +284,5 @@
             });
             return false;
         });
-
     });
 </script>

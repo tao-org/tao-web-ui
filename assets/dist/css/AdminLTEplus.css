@@ -852,6 +852,16 @@ ul.timeline.current_route:before{
 
 
 /* table component */
+.tbl-edt .tpl-sample-row{
+    display:none;
+}
+.tbl-edt .del-col {
+    width: 1%;
+}
+.tbl-edt .tbl-edt-row-action{
+    background: transparent;
+}
+
 .tbl-edt input{
     width:100%;
     border: 1px solid #FFF;
@@ -864,6 +874,9 @@ ul.timeline.current_route:before{
     border: 1px solid #B8B6B6;
     box-shadow: inset 1px 2px 4px rgba(0, 0, 0, 0.01), 0px 0px 8px rgba(0, 0, 0, 0.2);
 }
+
+
+
 
 /* search */
 .like span {

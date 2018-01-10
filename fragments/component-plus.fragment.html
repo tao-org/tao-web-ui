@@ -16,6 +16,7 @@
                 <span class="error-inputCompID collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
                 <span class="error-label collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
                 <span class="error-version collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Version cannot be empty.</span>
+                <span class="error-template collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Template cannot be empty.</span>
             </p>
         </div>
 
@@ -156,7 +157,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label for="inputFileLocation" class="col-sm-2 col-md-2 control-label">Author </label>
+                                                <label for="inputFileLocation" class="col-sm-2 col-md-2 control-label">File location </label>
                                                 <div class="col-sm-10 col-md-10">
                                                     <input type="text" class="form-control" id="inputFileLocation" name="inputFileLocation" placeholder="file location" autocomplete="off" value="E:\\OTB\\otbcli_Segmentation.bat"/>
                                                 </div>
@@ -166,9 +167,32 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label for="inputWorkingDirectory" class="col-sm-2 col-md-2 control-label">Copyright </label>
+                                                <label for="inputWorkingDirectory" class="col-sm-2 col-md-2 control-label">Working directory </label>
                                                 <div class="col-sm-10 col-md-10">
                                                     <input type="text" class="form-control" id="inputWorkingDirectory" name="inputWorkingDirectory" placeholder="working directory" autocomplete="off" value="E:\\OTB"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- velocity template form-->
+                                    <div class="template-block-frm template-block-frm-velocity collapse">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="inputFileLocation" class="col-sm-2 col-md-2 control-label">Template name </label>
+                                                    <div class="col-sm-10 col-md-10">
+                                                        <input type="text" class="form-control" id="inputTemplateName" name="inputTemplateName" placeholder="template name" autocomplete="off" value="" data-errorspan="template"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="inputWorkingDirectory" class="col-sm-2 col-md-2 control-label">Template contents</label>
+                                                    <div class="col-sm-10 col-md-10">
+                                                        <textarea class="form-control" rows="6" id="inputTemplateContents" name="inputTemplateContents" placeholder="template contents" data-errorspan="template"></textarea>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -180,41 +204,112 @@
                                         <div class="col-md-12">
                                             <p>Parameter list:</p>
                                             <div class="responsive">
-                                                <table class="table table-bordered box-shadow--6dp">
+                                                <table class="table table-bordered box-shadow--6dp tbl-edt">
                                                     <thead>
                                                     <tr>
                                                         <th></th>
-                                                        <th>Name</th>
-                                                        <th>Type</th>
+                                                        <th>Parameter ID</th>
+                                                        <th style="width: 50%;">Description</th>
+                                                        <th>Parameter Label</th>
+                                                        <th>Parameter Type</th>
+                                                        <th>Data Type</th>
                                                         <th>Default value</th>
                                                     </tr>
                                                     </thead>
-                                                    <tbody>
+                                                    <tfoot>
                                                     <tr>
-                                                        <th scope="row"></th>
-                                                        <td>path</td>
-                                                        <td>String</td>
-                                                        <td></td>
+                                                        <td colspan="3">
+                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewparam" data-action="comp-add-new-var">
+                                                                <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+                                                            </button>
+                                                        </td>
                                                     </tr>
-                                                    <tr>
-                                                        <th scope="row"></th>
-                                                        <td>footprint</td>
-                                                        <td>Polygon2D</td>
-                                                        <td></td>
+                                                    </tfoot>
+
+
+                                                    <tbody class="tpl-sample-body">
+                                                    <tr class="tpl-sample-row">
+                                                        <th scope="row">
+                                                            <a href="#" class="text tbl-prop-expand-action"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></a>
+                                                            <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                                                            <a href="#" class="text tbl-prop-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                                                        </th>
+                                                        <td>
+                                                            <input type="text" class="var-id" value="" placeholder="parameter ID">
+                                                        </td>
+                                                        <td><textarea rows="2">This allows setting the writing behaviour for the output vector file. Please note that the actual behaviour depends on the file format.</textarea></td>
+                                                        <td>
+                                                            <input type="text" class="var-label" value="" placeholder="parameter label">
+                                                        </td>
+                                                        <td>
+                                                            <select>
+                                                                <option value="1" selected="selected">Regular</option>
+                                                                <option value="2">Other</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <select>
+                                                                <option value="java.lang.String" selected="selected">String</option>
+                                                                <option value="java.lang.Integer">Integer</option>
+                                                                <option value="java.lang.Boolean">Boolean</option>
+                                                                <option value="file">File</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><input type="text" class="var-default" value="" placeholder="default value"></td>
                                                     </tr>
-                                                    <tr>
-                                                        <th scope="row"></th>
-                                                        <td>sensingStart</td>
-                                                        <td>Date</td>
-                                                        <td></td>
+                                                    <tr style="display: none;" class="val-row-plus">
+                                                        <td colspan="7">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label class="col-sm-2 col-md-2 control-label">Unit</label>
+                                                                        <div class="col-sm-10 col-md-10">
+                                                                            <input type="text" class="form-control" name="inputUnit" placeholder="unit" autocomplete="off" value=""/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label class="col-sm-2 col-md-2 control-label">Value Set</label>
+                                                                        <div class="col-sm-10 col-md-10">
+                                                                            <input type="text" class="form-control" name="inputValueSet" placeholder="value set" autocomplete="off" value=""/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label for="inputFormat" class="col-sm-2 col-md-2 control-label">Format</label>
+                                                                        <div class="col-sm-10 col-md-10">
+                                                                            <input type="text" class="form-control var-format" name="inputFormat" placeholder="format" autocomplete="off" value=""/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Not Null </label>
+                                                                        <div class="col-sm-10 col-md-10">
+                                                                            <div class="checkbox">
+                                                                                <input type="checkbox" name="inputNotNull" class="big">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Validator </label>
+                                                                        <div class="col-sm-10 col-md-10">
+                                                                            <input type="text" class="form-control" name="inputUnit" placeholder="unit" autocomplete="off" value=""/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
                                 <div id="comp-tab-sys" class="tab-pane fade">
                                     <div class="row">
@@ -239,15 +334,12 @@
                                                     </tr>
                                                     </tfoot>
                                                     <tbody>
-                                                    <tr>
-                                                        <th scope="row"></th>
-                                                        <td>ITK_AUTOLOAD_PATH</td>
-                                                        <td>E:\OTB\bin</td>
-                                                    </tr>
                                                     <tr class="tpl-sample-row">
-                                                        <th class="del-col" scope="row"><button class="tbl-edt-row-action"><i class="fa fa-trash-o"></i></button></th>
-                                                        <td><input class="var-key" value="" placeholder="input variable's name"></td>
-                                                        <td><input class="var-value" value="" placeholder="input variable's value"></td>
+                                                        <th class="del-col" scope="row">
+                                                            <a href="#" class="text tbl-sysvar-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                                                        </th>
+                                                        <td><input type="text" class="var-key" value="" placeholder="input variable's name"></td>
+                                                        <td><input type="text" class="var-value" value="" placeholder="input variable's value"></td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -339,22 +431,81 @@
 
     $(document).ready( function(){
 
+        //get all availlable dockers
+        var getAllDocker = $.ajax({ cache: false,
+            //url: appConfig.baseURL+appConfig.restURL+"/docker/",
+            url: baseRestApiURL + "docker/?rnd=" + Math.random(),
+            dataType : 'json',
+            type: 'GET',
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+            }
+        });
+
+        $.when(getAllDocker)
+            .done(function (getAllDockerResponse) {
+                var selectedid = 0;//$('#department').data("selectedid");
+                $('#inputContainerId').empty();
+                $.each(getAllDockerResponse, function(i, value) {
+                    if(value.id === selectedid){
+                        $('#inputContainerId').append($('<option>').text(value.name).attr('value', value.id).prop('selected', true));
+                    } else{
+                        $('#inputContainerId').append($('<option>').text(value.name).attr('value', value.id));
+                    }
+                });
+            })
+            .fail(function () {
+                showMsg("Could not retrive dockers list.", "ERROR");
+            });
+
+        $("#inputTemplateType").on("change", function(){
+            var lclVal = $(this).val();
+            $(".template-block-frm").hide();
+            $(".template-block-frm-"+lclVal.toLowerCase()).show();
+            })
+            .trigger("change");
+
+
         $(".btn-comp-addnewvar").on("click", function(){
             var $tbl = $(this).closest(".tbl-edt");
             var $el = $tbl.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row"); //attr('id', 'newbutton')
 //            $el.find(".val")
             $tbl.append($el);
         });
-        $(".tbl-edt").on("click", ".tbl-edt-row-action", function(e){
+        $(".btn-comp-addnewparam").on("click", function(){
+            var $tbl = $(this).closest(".tbl-edt");
+            var $elBody = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
+            $elBody.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+            $tbl.append($elBody);
+        });
+
+        $(".tbl-edt").on("click", ".tbl-sysvar-delete-action", function(e){
             e.preventDefault();
             $(this).closest(".val-row").remove();
+        });
+        $(".tbl-edt").on("click", ".tbl-prop-expand-action", function(e){
+            e.preventDefault();
+            if($(this).hasClass("active")){
+                $(".val-row-plus").css({"display": "none"});
+                $(this).removeClass("active");
+                return;
+            }
+            $(".val-row-plus").css({"display": "none"});
+            $(".tbl-prop-expand-action").removeClass("active");
+            $(this).addClass("active");
+            $(this).closest("tr").next().css({"display": "table-row"});
+        });
+        $(".tbl-edt").on("click", ".tbl-prop-delete-action", function(e){
+            e.preventDefault();
+            $(this).closest("tbody").remove();
         });
 
 
 
-
         //remove error for some input elements
-        $("input","form#frmExecNodeEdit")
+        $("input, textarea","form#frmExecNodeEdit")
             .on("keypress change", function(){
                 if($(this).data("errorspan")) {
                     $(".error-" + $(this).data("errorspan"), ".modal-error").css('display', 'none');
@@ -384,6 +535,7 @@
         $("form#frmExecNodeEdit").submit(function (e) {
             e.preventDefault();
             var $tblCompSysVar = $("#comp-tab-sys table");
+            var $tblParameterDescriptors = $("#comp-tab-param table");
             var formData = {
                     "@type": "ProcessingComponent",
                     "id": $('input[name=inputCompID]', this).val(),
@@ -416,10 +568,10 @@
                         "templateType": "VELOCITY"
                     },
                     "template": {
-                        "type": "ro.cs.tao.component.template.BasicTemplate",
-                        "name": "segmentation-cc-template.vm",
-                        "templateType": "VELOCITY",
-                        "contents": "-in $sourceProductFile -filter.cc.expr $expr_string -mode.vector.out $out_str -mode.vector.outmode $outmode_string -mode.vector.neighbor $neighbor_bool -mode.vector.stitch $stitch_bool -mode.vector.minsize $minsize_int -mode.vector.simplify $simplify_float -mode.vector.layername $layername_string -mode.vector.fieldname $fieldname_string -mode.vector.tilesize $tilesize_int -mode.vector.startlabel $startlabel_int"
+//                        "type": "ro.cs.tao.component.template.BasicTemplate",
+//                        "name": "segmentation-cc-template.vm",
+//                        "templateType": "VELOCITY",
+//                        "contents": "-in $sourceProductFile -filter.cc.expr $expr_string -mode.vector.out $out_str -mode.vector.outmode $outmode_string -mode.vector.neighbor $neighbor_bool -mode.vector.stitch $stitch_bool -mode.vector.minsize $minsize_int -mode.vector.simplify $simplify_float -mode.vector.layername $layername_string -mode.vector.fieldname $fieldname_string -mode.vector.tilesize $tilesize_int -mode.vector.startlabel $startlabel_int"
                     },
                     "variables": [{
                         "key": "ITK_AUTOLOAD_PATH",
@@ -430,7 +582,8 @@
 //                    "active": true,
                     "visibility": $('select[name=inputVisibility]', this).val(),
                     "active": $('select[name=inputActive]', this).val(),
-                    "parameterDescriptors": [{
+                    "parameterDescriptors": [
+                        {
                         "id": "outmode_string",
                         "type": 1,
                         "dataType": "java.lang.String",
@@ -442,7 +595,7 @@
                         "format": null,
                         "notNull": false,
                         "validator": null
-                    }, {
+                         }, {
                         "id": "neighbor_bool",
                         "type": 1,
                         "dataType": "java.lang.Boolean",
@@ -454,9 +607,19 @@
                         "format": null,
                         "notNull": false,
                         "validator": null
-                    }]
+                        }
+                    ]
                 };
-
+            //add template to payload for template type VELOCITY
+            if(formData.templateType === "VELOCITY"){
+                formData.template={
+                    "type": "ro.cs.tao.component.template.BasicTemplate",
+                    "name" : $('input[name=inputTemplateName]', this).val(),
+                    "templateType": "VELOCITY",
+                    "contents" : $('textarea[name=inputTemplateContents]', this).val()
+                };
+            }
+            //add system variable to payload parsing user defined system vars table
             formData.variables = [];
             $(".val-row", $tblCompSysVar).each(function() {
                 var k = $(this).find("input.var-key").val();
@@ -469,6 +632,28 @@
                 }else{
                     showMsg("Invalid system variables. Please choose valid names or values to continue.", "ERROR");
                     return false;
+                }
+            });
+            //add parameterDescriptors to payload parsing user defined parameterDescriptors table
+            formData.parameterDescriptors = [];
+            $("tbody", $tblParameterDescriptors).each(function(){
+                var id = $(this).find(".val-row input.var-id").val();
+                var format = $(this).find(".val-row-plus input.var-format").val();
+                if( ((typeof id != "undefined") && (typeof id.valueOf() == "string") && (id.length > 0)) ) {
+                    var newParameterDescriptor = {
+                        "id": id,
+                        "type": 1,
+                        "dataType": "java.lang.Boolean",
+                        "defaultValue": "true",
+                        "description": "Activate 8-Neighborhood connectivity (default is 4).",
+                        "label": "neighbor_bool",
+                        "unit": null,
+                        "valueSet": null,
+                        "format": format,
+                        "notNull": false,
+                        "validator": null
+                    };
+                    formData.parameterDescriptors.push(newParameterDescriptor);
                 }
             });
 

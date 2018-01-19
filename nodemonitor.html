@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>TAO Node Monitor</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.4 -->
+    <link href="./assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome Icons -->
+    <link href="./assets/libs/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Theme style -->
+    <link href="./assets/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/dist/css/AdminLTEplus.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css" />
+
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="./apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="./apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="./apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="./apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="./apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="./favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="./favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="./favicon-128.png" sizes="128x128" />
+    <meta name="application-name" content="&nbsp;"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="./mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="./mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="./mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="./mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="./mstile-310x310.png" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="./assets/dist/js/config.js" type="text/javascript"></script>
+</head>
+
+<body class="skin-blue sidebar-mini size-normal noselect bg-navy">
+        <!-- Monitor master -->
+        <div id="widget-master-monitor" class="box box-solid bg-navy">
+            <div class="box-header" style="cursor: move;">
+                <i class="fa fa-area-chart"></i>
+                <h3 class="box-title">Node monitor</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-error collapse">
+                <p class="text-center">There was an error retrieving information about the requested node.</p>
+            </div>
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                    <dt>Runtime (start time):</dt>
+                    <dd><span class="val-mm-starttime" style="text-transform: lowercase;">n/a</span></dd>
+                    <dt>Uptime:</dt>
+                    <dd><span class="val-mm-uptime" style="text-transform: lowercase;">n/a</span></dd>
+                    <dt>Available processors:</dt>
+                    <dd><span class="val-mm-processors">n/a</span></dd>
+                    <dt>Thread count</dt>
+                    <dd><span class="val-mm-threadcount">n/a</span>, peak thread count: <span class="val-mm-peakthreadcount">n/a</span></dd>
+                    <dt>Memory:</dt>
+                    <dd><span class="val-mm-memory" style="text-transform: lowercase;">n/a</span></dd>
+                </dl>
+            </div>
+            <div class="box-canvas">
+                <canvas id="myChart" width="400" height="200"></canvas>
+            </div>
+            <!-- /.box-body -->
+        </div>
+<!-- jQuery 2.1.4 -->
+<script src="./assets/libs/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script>
+<!-- Bootstrap 3.3.2 JS -->
+<script src="./assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+
+</body>
+</html>
+
+<!-- moment.js -->
+<script type="text/javascript" src="./assets/libs/momentjs/moment.min.js"></script>
+<!-- chart.js -->
+<script type="text/javascript" src="./assets/libs/chartjs/chartjs.min.js"></script>
+
+<script>
+    function jsGetUrlQueryValue (sVar) {
+        return decodeURI(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURI(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+    }
+
+    var _loadChart = {
+        myNewChart:null,
+        node: 'master',
+        data:{
+            labels : ["-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-"],
+            datasets : [
+                {
+                    fillColor : "rgba(220,220,220,0.5)",
+                    strokeColor : "rgba(220,220,220,1)",
+                    pointColor : "rgba(220,220,220,1)",
+                    pointStrokeColor : "#fff",
+                    data : [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                },
+                {
+                    fillColor : "rgba(255,187,205,0.5)",
+                    strokeColor : "rgba(255,187,205,1)",
+                    pointColor : "rgba(151,187,205,1)",
+                    pointStrokeColor : "#fff",
+                    data : [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                },
+                {
+                    fillColor : "rgba(151,187,205,0.5)",
+                    strokeColor : "rgba(151,187,205,1)",
+                    pointColor : "rgba(151,187,205,1)",
+                    pointStrokeColor : "#fff",
+                    data : [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                }
+            ]
+        },
+        optionsNoAnimation :{
+            animation : false,
+            scaleOverride : true,
+            scaleSteps : 100,
+            scaleStepWidth : 20,
+            scaleStartValue : 0
+        },
+        initChart: function(){
+            this.optionsNoAnimation = {animation : false};
+            this.myNewChart = new Chart(document.getElementById("myChart").getContext("2d"));
+            this.myNewChart.Line(_loadChart.data, _loadChart.optionsNoAnimation);
+        },
+        updateData: function(v1,v2,v3,l0){
+            if(this.myNewChart === null || typeof this.myNewChart !== 'object'){
+                this.initChart();
+            }
+            var l = this.data["labels"];
+            var ds0 = this.data["datasets"][0]["data"];
+            var ds1 = this.data["datasets"][1]["data"];
+            var ds2 = this.data["datasets"][2]["data"];
+            l.push(l0);
+            l.shift();
+            ds0.push(v1);
+            ds1.push(v2);
+            ds2.push(v3);
+            ds0.shift();
+            ds1.shift();
+            ds2.shift();
+            this.myNewChart.Line(_loadChart.data, _loadChart.optionsNoAnimation);
+        }
+    };
+
+    function updateMasterMonitorWidget(){
+        $.ajax({ cache: false,
+            url: baseRestApiURL + "monitor/"+_loadChart.node+"?rnd=" + Math.random(),
+            dataType : 'json',
+            type: 'GET',
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+            }
+        }).done(function (getMasterMonitorResponse) {
+            //console.log(getMasterMonitorResponse);
+            try {
+                $(".val-mm-processors").text(parseInt(getMasterMonitorResponse.runtime.availableProcessors));
+                $(".val-mm-peakthreadcount").text(parseInt(getMasterMonitorResponse.runtime.peakThreadCount));
+                $(".val-mm-threadcount").text(parseInt(getMasterMonitorResponse.runtime.threadCount));
+                var upTimeS = parseInt(getMasterMonitorResponse.runtime.upTime);
+                var duration = moment.duration(522121, 'seconds');
+                $(".val-mm-uptime").text(upTimeS+" "+getMasterMonitorResponse.runtime.timeUnit+" (about "+(duration.humanize())+")");
+                $(".val-mm-starttime").text(getMasterMonitorResponse.runtime.startTime.year+"-"+getMasterMonitorResponse.runtime.startTime.monthValue+"-"+getMasterMonitorResponse.runtime.startTime.dayOfMonth+" "+getMasterMonitorResponse.runtime.startTime.hour+":"+getMasterMonitorResponse.runtime.startTime.minute+":"+getMasterMonitorResponse.runtime.startTime.second);
+                $(".val-mm-memory").text(getMasterMonitorResponse.memory.heapUsed+"/"+getMasterMonitorResponse.memory.heapMax+" (heap used/heap max, "+getMasterMonitorResponse.memory.memoryUnit+")");
+                _loadChart.updateData(
+                    (100 - Math.floor(Math.random() * (100))),
+                    (100 - Math.floor(Math.random() * (100))),
+                    (100 - Math.floor(Math.random() * (100))),
+                    (upTimeS+'s')
+                );
+            }
+            catch(error) {
+                console.log(error);
+                $(".box-error").show();
+                $(".box-body, .box-canvas").hide();
+
+            }
+        }).fail(function (jqXHR, textStatus) {
+            //alert("Retriving master monitor data failed.");
+        }).complete(function(){
+            if($("#widget-master-monitor").length){
+                setTimeout(function(){
+                    updateMasterMonitorWidget();
+                },3000);
+            }
+        });
+    }
+
+
+
+    $(document).ready( function(){
+        console.log("document ready!!!");
+        var node = jsGetUrlQueryValue("node");
+
+        if( node === undefined || node == null || node.length === 0){
+            alert("no node provided!");
+        }else{
+            _loadChart.node = node;
+        }
+        $( window )
+            .resize(function() {
+                if($("#widget-master-monitor").length) {
+                    var w = parseInt($("#widget-master-monitor").width());
+                    $("#myChart").attr("width", w);
+                    _loadChart.initChart();
+                }
+            })
+            .trigger( "resize" );
+        updateMasterMonitorWidget();
+        //bind resize event
+    });
+</script>

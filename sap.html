@@ -522,8 +522,8 @@ Nothing to see!
                 <h3 class="box-title">TAO Notifications</h3>
                 <div class="box-tools pull-right">
                     <span data-toggle="tooltip" title="" class="badge bg-yellow val-msgcount" data-original-title="No of messages">0</span>
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                    </button>
+                    <button type="button" class="btn btn-box-tool do-clear-all-notice"><i class="fa fa-trash-o"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                 </div>
             </div>
@@ -567,8 +567,22 @@ Nothing to see!
 </div>
 <!-- /.holder for hidden elements -->
 <!-- REQUIRED JS SCRIPTS -->
-<!-- jQuery 2.1.4 -->
+<!-- jQuery 2.1.4
 <script src="./assets/libs/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script>
+ -->
+<script
+        src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+
+<!-- jQuery 3.2.1
+<script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+-->
+
+
 <!-- Bootstrap 3.3.2 JS -->
 <script src="./assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <!-- AdminLTE App -->
@@ -606,95 +620,111 @@ Nothing to see!
         }
     })();
 
-    var my_messages_count = 0;
-    function showMsg(msg, status, closable){
-        if (msg === ""){
-            return false;
+    (function () {
+        var version = '0.2',
+            $elMsgBox = $("#messagesBox"),
+            my_messages_index = 0;
+        function showMessage(msg, status, closable){
+            if (msg === ""){
+                return false;
+            }
+            my_messages_index++;
+            var collor_class = "";
+            if(status === 'SUCCESS'){
+                collor_class = " msg-green";
+            }
+            if(status === 'INFO'){
+                collor_class = " msg-yellow";
+            }
+            if(status === 'WARN'){
+                collor_class = " msg-yellow";
+            }
+            if(status === 'FAIL'){
+                collor_class = " msg-red";
+            }
+            if(status === 'ERROR'){
+                collor_class = " msg-red";
+            }
+            $elMsgBox.prepend('<div id="messagesBoxItem'+my_messages_index+'" class="messagesBoxItem'+collor_class+'">'+msg+'</div>');
+            $('#messagesBoxItem'+my_messages_index).delay(4000).fadeOut(function(){$(this).remove();});
+            return true;
         }
-
-        my_messages_count++;
-        var collor_class = "";
-
-        if(status === 'SUCCESS'){
-            collor_class = " msg-green";
-        }
-        if(status === 'INFO'){
-            collor_class = " msg-yellow";
-        }
-        if(status === 'WARN'){
-            collor_class = " msg-yellow";
-        }
-        if(status === 'FAIL'){
-            collor_class = " msg-red";
-        }
-        if(status === 'ERROR'){
-            collor_class = " msg-red";
-        }
-
-        $("#messagesBox").prepend('<div id="messagesBoxItem'+my_messages_count+'" class="messagesBoxItem'+collor_class+'">'+msg+'</div>');
-        $('#messagesBoxItem'+my_messages_count).delay(4000).fadeOut(function(){$(this).remove();});
+        window.showMsg=showMessage;
         return true;
-    }
+    }(this));
 
-    var retriveNotifications = function(){
-        $.ajax({ cache: false,
-            url: baseRestApiURL + "monitor/notification/?rnd=" + Math.random(),
-            dataType : 'json',
-            type: 'GET',
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
-            }
-        }).done(function (getMonitorNotificationResponse) {
-//            console.log(getMonitorNotificationResponse);
-            for(k=0;k<getMonitorNotificationResponse.length; k++){
-                if(!$("#bot-notice-chat .box").is(':visible')){
-                    $("#bot-notice-chat .box").slideDown();
-                };
-                var $el = $(".direct-chat-msg.master", "#bot-notice-chat").clone();
-                $el.removeClass("master").removeClass("hidden");
-                $el.find(".val-msg-ts").html(moment.unix(1454521239279/1000).format("DD MMM YYYY hh:mm a"));
-                $el.find(".val-msg-txt").html(getMonitorNotificationResponse[k]['data']);
-                $($el).prependTo(".direct-chat-messages", "#bot-notice-chat");
-                var count = $(".direct-chat-messages > .direct-chat-msg").length;
-                if(count>notificationsMaxNumber){
-                    $('.direct-chat-messages > .direct-chat-msg:last').remove();
-                    $(".val-msgcount", "#bot-notice-chat").html(notificationsMaxNumber+"+");
-                    $(".max-msg-note").removeClass("hidden");
-                } else{
-                    $(".val-msgcount", "#bot-notice-chat").html(count);
+    (function () {
+        var version = '0.1',
+            $elChatBox = $("#bot-notice-chat .box"),
+            $elClonable = $(".direct-chat-msg.master", "#bot-notice-chat"),
+            $elMsgCount = $(".val-msgcount", "#bot-notice-chat");
+        function retriveNotifications(){
+            $.ajax({ cache: false,
+                url: baseRestApiURL + "monitor/notification/?rnd=" + Math.random(),
+                dataType : 'json',
+                type: 'GET',
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader("Accept", "application/json");
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                    xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
                 }
-            }
-        }).fail(function (jqXHR, textStatus) {
-            //alert("Retriving notification data failed.");
-        }).complete(function(){
-            //if($("#widget-master-monitor").length){
+            })
+                .done(function (getMonitorNotificationResponse) {
+                for(k=0;k<getMonitorNotificationResponse.length; k++){
+                    if(!$elChatBox.is(':visible')){
+                        $elChatBox.slideDown();
+                    };
+                    var $el = $elClonable.clone();
+                    $el.removeClass("master").removeClass("hidden");
+                    $el.find(".val-msg-ts").html(moment.unix(1454521239279/1000).format("DD MMM YYYY hh:mm a"));
+                    $el.find(".val-msg-txt").html(getMonitorNotificationResponse[k]['data']);
+                    $($el).prependTo(".direct-chat-messages", "#bot-notice-chat");
+                    var count = $(".direct-chat-messages > .direct-chat-msg").length;
+                    if(count>notificationsMaxNumber){
+                        $('.direct-chat-messages > .direct-chat-msg:last').remove();
+                        $(".val-msgcount", "#bot-notice-chat").html(notificationsMaxNumber+"+");
+                        $(".max-msg-note").removeClass("hidden");
+                    } else{
+                        $elMsgCount.html(count);
+                    }
+                }
+            })
+                .fail(function (jqXHR, textStatus) {
+            })
+                .complete(function(){
+                //if($("#widget-master-monitor").length){
                 setTimeout(function(){
                     retriveNotifications();
                 },notificationsCheckInterval);
-            //}
-        });
-    };
+                //}
+            });
+        };
+        $(".val-notificationsmaxnumber", "#bot-notice-chat").html(notificationsMaxNumber);
+        //setup events
+        $("#bot-notice-chat")
+            .on("click", ".tools", function(){
+                $(this)
+                    .closest(".direct-chat-msg")
+                    .slideUp("normal",function(){
+                        $(this).remove();
+                        var count = $(".direct-chat-messages > .direct-chat-msg").length;
+                        $(".val-msgcount", "#bot-notice-chat").html(count);
+                        if(count<1){$("#bot-notice-chat .box").slideUp();}
+                    });
+            })
+            .on("click", ".do-clear-all-notice", function(){
+                $("#bot-notice-chat .direct-chat-messages .tools").trigger("click");
+                $(".max-msg-note").addClass("hidden");
+            });
+        retriveNotifications();
+        return true;
+    }(this));
 
-   ///////////////////////////////////////
+
+
+    ///////////////////////////////////////
     $(document).ready( function(){
         console.log("document ready!!!");
-        $(".val-notificationsmaxnumber", "#bot-notice-chat").html(notificationsMaxNumber);
-        retriveNotifications();
-        $("#bot-notice-chat").on("click", ".tools", function(){
-            $(this)
-                .closest(".direct-chat-msg")
-                .slideUp("normal",function(){
-                    $(this).remove();
-                    var count = $(".direct-chat-messages > .direct-chat-msg").length;
-                    $(".val-msgcount", "#bot-notice-chat").html(count);
-                    if(count<1){$("#bot-notice-chat .box").slideUp();}
-                });
-        });
-
-
-
         myModalScreen = function(action){
             var $myMS = $("#myModalScreen");
             var rmContent = '';
@@ -804,7 +834,5 @@ Nothing to see!
 //					},
             idle: 60000
         });
-//autoload documents on load
     });
 </script>
-<div class="hidden" id="div-debug"><pre></pre></div>

@@ -8,7 +8,8 @@ var routeTags = [];
 var hashRoutesMap = [];
     hashRoutesMap["admin/dashboard"] = "./fragments/dashboard-admin.fragment.html";
     hashRoutesMap["projects"] = '';
-    hashRoutesMap["projects/all"] = "./fragments/projects-all.fragment.html";
+hashRoutesMap["projects/all"] = "./fragments/projects-all.fragment.html";
+    hashRoutesMap["workflow/all"] = "./fragments/workflow-all.fragment.html";
     hashRoutesMap["admin/users"] = "./fragments/users-admin.fragment.html";
     hashRoutesMap["admin/datasources"] = "./fragments/datasource-admin.fragment.html";
     hashRoutesMap["admin/topology"] = "./fragments/topology-admin.fragment.html";
@@ -33,7 +34,8 @@ $(function () {
     // An event handler witch calls the router function on every hashchange.
     $(window).on('hashchange', function(){
         //check authtoken
-        var tokenKey = _settings.readCookie("tokenKey");
+        //var tokenKey = _settings.readCookie("tokenKey");
+        var tokenKey = _settings.readCookie("xauthtoken");
         if ((tokenKey=="") || (tokenKey == null)){
             $("body").empty();
             window.location = 'login.html';

@@ -53,7 +53,7 @@
                         <div class="form-group">
                             <label for="inputPassword" class="col-sm-2 col-md-2 control-label">Password</label>
                             <div class="col-sm-10 col-md-10">
-                                <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="password" autocomplete="off" value="" data-errorspan="password"/>
+                                <input type="password" autocomplete="new-password" class="form-control" id="inputPassword" name="inputPassword" placeholder="password" autocomplete="off" value="" data-errorspan="password"/>
                             </div>
                         </div>
                     </div>
@@ -165,8 +165,10 @@
             url: baseRestApiURL + "topology/"+val+"/?rnd=" + Math.random(),
             dataType: "json",
             contentType: "application/json; charset=utf-8",
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": authHeader
             },
             error : function (jqXHR, textStatus, errorThrown) {
                 if( jqXHR.status === 500 ){
@@ -247,10 +249,10 @@
                 dataType : 'json',
                 type: 'POST',
                 data: JSON.stringify(formData),
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Accept", "application/json");
-                    xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": authHeader
                 },
                 error : function (jqXHR, textStatus, errorThrown) {
                     if(jqXHR.status === 500){

@@ -8,3 +8,15 @@ var prefferences = {
 };
 var notificationsMaxNumber = 50;
 var notificationsCheckInterval = 10000; //milliseconds
+var authHeader = "Basic " + btoa("admin:admin");
+
+//xhr.setRequestHeader ("Authorization", "Basic " + btoa(username + ":" + password));
+/*
+headers: {
+    "Accept": "application/json",
+        "Content-Type": "application/json",
+        "X-Auth-Token": window.tokenKey
+    "Authorization": "Basic " + btoa("admin:admin")
+}
+*/
+

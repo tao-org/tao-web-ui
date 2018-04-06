@@ -360,11 +360,14 @@
                 <li class="routed routed-admin-dashboard active">
                     <a href="#admin/dashboard"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
                 </li>
-                <li class="treeview routed routed-projects-all">
+                <li class="treeview routed routed-workflow-all">
                     <a href="#default"><i class="fa fa-random"></i> <span>WORKFLOWS</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
+                        <li class="routed routed-workflow-all">
+                            <a href="#workflow/all">All workflows<span class="pull-right collapse"><small id="val-projects-all" class="label bg-blue">0</small></span></a>
+                        </li>
                         <li class="routed routed-projects-all">
-                            <a href="#projects/all">All workflows<span class="pull-right collapse"><small id="val-projects-all" class="label bg-blue">0</small></span></a>
+                            <a href="#projects/all">Old workflows<span class="pull-right collapse"><small id="val-projects-all" class="label bg-blue">0</small></span></a>
                         </li>
                         <li><a href="#">Running<span class="pull-right collapse"><small id="val-projects-running" class="label bg-blue">0</small></span></a></li>
                         <li><a href="#">Finished<span class="pull-right collapse"><small id="val-projects-finished" class="label bg-green">0</small></span></a></li>
@@ -593,6 +596,8 @@ Nothing to see!
 <script src="./assets/dist/js/router.js" type="text/javascript"></script>
 <!-- NPs -->
 <script src="./assets/libs/np/jquery.npmodalconfirm.js" type="text/javascript"></script>
+<!-- Base64  -->
+<script src="./assets/libs/base64/base64.min.js" type="text/javascript"></script>
 
 </body>
 </html>
@@ -663,21 +668,29 @@ Nothing to see!
                 url: baseRestApiURL + "monitor/notification/?rnd=" + Math.random(),
                 dataType : 'json',
                 type: 'GET',
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Accept", "application/json");
-                    xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": authHeader
                 }
             })
-                .done(function (getMonitorNotificationResponse) {
+                .done(function (getMonitorNotificationResponse, statusText, xhr) {
+                    //console.log(getMonitorNotificationResponse);
                 for(k=0;k<getMonitorNotificationResponse.length; k++){
                     if(!$elChatBox.is(':visible')){
                         $elChatBox.slideDown();
                     };
                     var $el = $elClonable.clone();
                     $el.removeClass("master").removeClass("hidden");
-                    $el.find(".val-msg-ts").html(moment.unix(1454521239279/1000).format("DD MMM YYYY hh:mm a"));
-                    $el.find(".val-msg-txt").html(getMonitorNotificationResponse[k]['data']);
+                    $el.find(".val-msg-ts").html(moment.unix(getMonitorNotificationResponse[k]['timestamp']/1000).format("DD MMM YYYY hh:mm:ss a"));
+                    try {
+                        var obj = JSON.parse(getMonitorNotificationResponse[k]['data']);
+                        //$el.find(".val-msg-txt").html(getMonitorNotificationResponse[k]['data']);
+                        $el.find(".val-msg-txt").html(obj.Payload);
+                    }
+                    catch(err) {
+                        $el.find(".val-msg-txt").html("unparsable message");
+                    }
                     $($el).prependTo(".direct-chat-messages", "#bot-notice-chat");
                     var count = $(".direct-chat-messages > .direct-chat-msg").length;
                     if(count>notificationsMaxNumber){

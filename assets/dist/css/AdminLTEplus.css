@@ -124,7 +124,9 @@ body.size-larger { font-size: 18px; }
     margin: 5px;
     padding: 5px 0 0 5px;
 }
-
+.info-box-prop{
+    margin: 0 20px 0 20px;
+}
 .info-box-date-days {
     background-color: #CCC;
 	padding: .1em .5em;
@@ -534,7 +536,14 @@ ul.timeline.current_route:before{
 	color: #bdbdbd;
 }
 
+.tao-async-wf{
+    padding: 0;
+}
+
 /* nodes */
+.node-tools{
+    padding: 10px 0;
+}
 .nodes-item-core-box {
     background: #FFFFFF;
     border: 1px solid #D3DEE9;
@@ -555,7 +564,7 @@ ul.timeline.current_route:before{
     top: -11px;
     right: 20px;
 }
-.nodes-item-core-box .box-top-tags span {
+.nodes-item-core-box .box-top-tags span{
     background-color: #f7f7f7;
     color: #000;
     display: inline-block;
@@ -664,6 +673,21 @@ ul.timeline.current_route:before{
 .nodes-item-core-box .box-bottom .btn-nodeop {
 	padding: 5px 5px;
 }
+/* for workflows */
+.nodes-item-core-box .progress{
+    background-color: #e4edf3;
+    height: 10px;
+    margin: 10px 0;
+}
+.nodes-item-core-box .val-project-description{
+    padding: 0 20px;
+}
+.nodes-item-core-box .val-project-title {
+    /* font-weight: bold; */
+    font-size: 24px;
+    color: #3c8dbc;
+}
+
 /* square box for hardware info */
 .square-box{
     position: relative;
@@ -700,33 +724,6 @@ ul.timeline.current_route:before{
 .s--docu{
     border-top: 1px solid #3c8dbc;
     margin-top: 30px;
-}
-
-/* projects */
-.project-item-core-box {
-    background: #FFFFFF;
-    border: 1px solid #D3DEE9;
-    border-top: 2px solid #3c8dbc;
-    box-shadow: 1px 1px 3px 0 rgba(51, 51, 51, 0.12);
-    border-radius: 4px;
-    padding: 10px 0;
-    margin-bottom: 20px;
-}
-.project-item-core-box:hover {
-    box-shadow: 1px 1px 6px 4px rgba(51, 51, 51, 0.12);
-}
-.project-item-core-box .progress{
-	background-color: #e4edf3;	
-    height: 10px;
-    margin: 10px 0;
-}
-.project-item-core-box .val-project-description{
-	padding: 0 20px;
-}
-.project-item-core-box .val-project-title {
-    /* font-weight: bold; */
-    font-size: 24px;
-    color: #3c8dbc;
 }
 
 /* shadows */

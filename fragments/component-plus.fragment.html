@@ -22,7 +22,6 @@
 
         <div class="modal-body">
             <section>
-
                 <div class="row">
                     <div class="col-md-12">
                             <p>Please check all the tabs before saving a new component.</p>
@@ -103,7 +102,7 @@
                                             <div class="form-group">
                                                 <label for="inputActive" class="col-sm-2 col-md-2 control-label">Status </label>
                                                 <div class="col-sm-10 col-md-10">
-                                                    <select id="inputActive" name="inputActive" class="form-control">
+                                                    <select disabled="disabled" id="inputActive" name="inputActive" class="form-control">
                                                         <option value="true" selected="">Active</option>
                                                         <option value="false">Inactive</option>
                                                     </select>
@@ -118,7 +117,7 @@
                                                 <div class="col-sm-10 col-md-10">
                                                     <select disabled="disabled" id="inputVisibility" name="inputVisibility" class="form-control">
                                                         <option value="1">System build-in component</option>
-                                                        <option value="2" selected="selected">User defined component</option>
+                                                        <option value="CONTRIBUTOR" selected="selected">User defined component</option>
                                                         <option value="3">Contributor defined component</option>
                                                     </select>
                                                 </div>
@@ -159,7 +158,7 @@
                                             <div class="form-group">
                                                 <label for="inputFileLocation" class="col-sm-2 col-md-2 control-label">File location </label>
                                                 <div class="col-sm-10 col-md-10">
-                                                    <input type="text" class="form-control" id="inputFileLocation" name="inputFileLocation" placeholder="file location" autocomplete="off" value="E:\\OTB\\otbcli_Segmentation.bat"/>
+                                                    <input type="text" class="form-control" id="inputFileLocation" name="inputFileLocation" placeholder="file location" autocomplete="off" value=".\mypath1"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -169,7 +168,7 @@
                                             <div class="form-group">
                                                 <label for="inputWorkingDirectory" class="col-sm-2 col-md-2 control-label">Working directory </label>
                                                 <div class="col-sm-10 col-md-10">
-                                                    <input type="text" class="form-control" id="inputWorkingDirectory" name="inputWorkingDirectory" placeholder="working directory" autocomplete="off" value="E:\\OTB"/>
+                                                    <input type="text" class="form-control" id="inputWorkingDirectory" name="inputWorkingDirectory" placeholder="working directory" autocomplete="off" value=".\mypath1"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -278,7 +277,7 @@
                                                                 </div>
                                                                 <div class="col-md-12">
                                                                     <div class="form-group">
-                                                                        <label for="inputFormat" class="col-sm-2 col-md-2 control-label">Format</label>
+                                                                        <label class="col-sm-2 col-md-2 control-label">Format</label>
                                                                         <div class="col-sm-10 col-md-10">
                                                                             <input type="text" class="form-control var-format" name="inputFormat" placeholder="format" autocomplete="off" value=""/>
                                                                         </div>
@@ -403,8 +402,10 @@
             url: baseRestApiURL + "topology/"+val+"/?rnd=" + Math.random(),
             dataType: "json",
             contentType: "application/json; charset=utf-8",
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": authHeader
             },
             error : function (jqXHR, textStatus, errorThrown) {
                 if( jqXHR.status === 500 ){
@@ -430,17 +431,16 @@
     }
 
     $(document).ready( function(){
-
         //get all availlable dockers
         var getAllDocker = $.ajax({ cache: false,
             //url: appConfig.baseURL+appConfig.restURL+"/docker/",
             url: baseRestApiURL + "docker/?rnd=" + Math.random(),
             dataType : 'json',
             type: 'GET',
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": authHeader
             }
         });
 
@@ -537,7 +537,6 @@
             var $tblCompSysVar = $("#comp-tab-sys table");
             var $tblParameterDescriptors = $("#comp-tab-param table");
             var formData = {
-                    "@type": "ProcessingComponent",
                     "id": $('input[name=inputCompID]', this).val(),
                     "label" : $('input[name=inputCompLabel]', this).val(),
                     "version" : $('input[name=inputCompVersion]', this).val(),
@@ -545,24 +544,14 @@
                     "authors" : $('input[name=inputCompAuthors]', this).val(),
                     "copyright" : $('input[name=inputCompCopyright]', this).val(),
                     "nodeAffinity": "Any",
-                    "sources": [{
-                        "id": "sourceProductFile",
-                        "data": null,
-                        "constraints": ["ro.cs.tao.component.constraints.RasterConstraint"]
-                    }],
-                    "targets": [{
-                        "id": "out_str",
-                        "data": null,
-                        "constraints": []
-                    }],
+                    "sourceCardinality": 0,
+                    "targetCardinality": 0,
+                    "sources": [],
+                    "targets": [],
                     "containerId": $('select[name=inputContainerId]', this).val(),
-                "fileLocation" : $('input[name=inputFileLocation]', this).val(),
-                "workingDirectory" : $('input[name=inputWorkingDirectory]', this).val(),
-                "templateType" : $('select[name=inputTemplateType]', this).val(),
-
-//                    "fileLocation": "E:\\OTB\\otbcli_Segmentation.bat",
-//                    "workingDirectory": "E:\\OTB",
-//                    "templateType": "VELOCITY",
+                    "fileLocation" : $('input[name=inputFileLocation]', this).val(),
+                    "workingDirectory" : $('input[name=inputWorkingDirectory]', this).val(),
+                    "templateType" : $('select[name=inputTemplateType]', this).val(),
                     "templateEngine": {
                         "type": "ro.cs.tao.component.template.engine.VelocityTemplateEngine",
                         "templateType": "VELOCITY"
@@ -578,8 +567,6 @@
                         "value": "E:\\OTB\bin"
                     }],
                     "multiThread": false,
-//                    "visibility": 2,
-//                    "active": true,
                     "visibility": $('select[name=inputVisibility]', this).val(),
                     "active": $('select[name=inputActive]', this).val(),
                     "parameterDescriptors": [
@@ -661,16 +648,22 @@
                 showMsg("Component ID can not be empty. Please choose valid values to continue.", "ERROR");
                 return false;
             }
-
+            var regexp = /^[a-zA-Z0-9-_]+$/;
+            if (formData.id.search(regexp) == -1)
+            {
+                showMsg("The component id contains invalid characters.", "ERROR");
+                return;
+            }
+console.log(JSON.stringify(formData));
             $.ajax({
                 url: baseRestApiURL + "component/?rnd=" + Math.random(),
                 dataType: 'json',
                 type: 'POST',
                 data: JSON.stringify(formData),
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Accept", "application/json");
-                    xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": authHeader
                 },
                 error : function (jqXHR, textStatus, errorThrown) {
                     if(jqXHR.status === 500){

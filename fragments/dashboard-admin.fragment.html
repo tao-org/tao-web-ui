@@ -302,10 +302,10 @@
             url: baseRestApiURL + "monitor/master/?rnd=" + Math.random(),
             dataType : 'json',
             type: 'GET',
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": authHeader
             }
         }).done(function (getMasterMonitorResponse) {
             //console.log(getMasterMonitorResponse);
@@ -313,9 +313,9 @@
             $(".val-mm-peakthreadcount").text(parseInt(getMasterMonitorResponse.runtime.peakThreadCount));
             $(".val-mm-threadcount").text(parseInt(getMasterMonitorResponse.runtime.threadCount));
             var upTimeS = parseInt(getMasterMonitorResponse.runtime.upTime);
-            var duration = moment.duration(522121, 'seconds');
+            var duration = moment.duration(upTimeS, 'seconds');
             $(".val-mm-uptime").text(upTimeS+" "+getMasterMonitorResponse.runtime.timeUnit+" (about "+(duration.humanize())+")");
-            $(".val-mm-starttime").text(getMasterMonitorResponse.runtime.startTime.year+"-"+getMasterMonitorResponse.runtime.startTime.monthValue+"-"+getMasterMonitorResponse.runtime.startTime.dayOfMonth+" "+getMasterMonitorResponse.runtime.startTime.hour+":"+getMasterMonitorResponse.runtime.startTime.minute+":"+getMasterMonitorResponse.runtime.startTime.second);
+            $(".val-mm-starttime").text(getMasterMonitorResponse.runtime.startTime[0]+"-"+getMasterMonitorResponse.runtime.startTime[1]+"-"+getMasterMonitorResponse.runtime.startTime[2]+" "+getMasterMonitorResponse.runtime.startTime[3]+":"+getMasterMonitorResponse.runtime.startTime[4]+":"+getMasterMonitorResponse.runtime.startTime[5]);
             $(".val-mm-memory").text(getMasterMonitorResponse.memory.heapUsed+"/"+getMasterMonitorResponse.memory.heapMax+" (heap used/heap max, "+getMasterMonitorResponse.memory.memoryUnit+")");
             _loadChart.updateData(
                 (100 - Math.floor(Math.random() * (100))),
@@ -356,11 +356,11 @@
                 url: baseRestApiURL + "monitor/notification/"+pageNo+"?rnd=" + Math.random(),
                 dataType : 'json',
                 type: 'GET',
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Accept", "application/json");
-                    xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
-                    xhr.setRequestHeader("userId", "1");
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "user":"1",//to be done
+                    "Authorization": authHeader
                 }
             }).done(function (getNotificationsResponse) {
                 renderNotificationsPage(getNotificationsResponse);

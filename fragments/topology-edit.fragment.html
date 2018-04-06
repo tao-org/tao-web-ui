@@ -138,8 +138,10 @@
             url: baseRestApiURL + "topology/"+editHostmane+"/?rnd=" + Math.random(),
             dataType: "json",
             contentType: "application/json; charset=utf-8",
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": authHeader
             },
             error : function (jqXHR, textStatus, errorThrown) {
                 if( jqXHR.status === 500 ){
@@ -208,12 +210,12 @@
             $.ajax({
                 url: baseRestApiURL + "topology/"+formData.hostName+"/?rnd=" + Math.random(),
                 dataType : 'json',
-                type: 'POST',
+                type: 'PUT',
                 data: JSON.stringify(formData),
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader("Accept", "application/json");
-                    xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.setRequestHeader("Authorization", "Bearer " + window.tokenKey);
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": authHeader
                 },
                 error : function (jqXHR, textStatus, errorThrown) {
                     console.log("error");

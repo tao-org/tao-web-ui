@@ -195,20 +195,6 @@ small.tag-input{
 	padding: 2px 3px;
 	line-height: .1;
 }
-.draft-doc-box{
-	background: #fff;
-	width: 100%;
-	box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-	border-radius: 2px;
-	margin-bottom: 5px;
-    padding: 5px 0 5px 15px;
-}
-.draft-doc-box .nr-reg{
-    line-height: 2.4em;
-    font-size: 18px;
-    font-weight: bold;
-}
-
 /*Modal*/
 .modal-error {
 	position: relative;
@@ -400,23 +386,6 @@ ul.timeline.current_route:before{
     left: 23px;
     border: 5px solid #FFF;
 }
-
-
-/**/
-
-.ac-ucv-matches{
-	max-height: 164px;
-    overflow: auto;
-    margin: 5px;
-/*    background: #CCC;*/
-    padding: 5px;
-    border: 1px solid #000;
-}
-.ac-ucv-item{
-	background-color:#fff;
-	border: 0;
-}
-
 
 /*bootstrap readonly form fix*/
 .form-control[readonly]{

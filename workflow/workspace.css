@@ -25,7 +25,6 @@
     position: fixed;
 }
 
-
 .timeline-toolbar {
     position: fixed;
     top: 0;
@@ -72,8 +71,8 @@
 
 #infoband {
     position: absolute;
-    right: 0;
-    bottom: 0;
+    top: 0;
+    left: 300px;
     background: #666;
     color: #FFF;
     padding: 1px 20px;
@@ -93,13 +92,127 @@
 #tools-toolbox button{
 	display:block;
 }
+#draggable-toolbox-preview{
+    position: fixed;
+    background-color: #212527;
+    margin: 0;
+    right: 0;
+    top: 35px;
+	width:202px;
+}
+#draggable-toolbox-preview p {
+    cursor: move;
+    background: #383f43;
+    margin: 0;
+    color: #FFF;
+    padding: 1px 6px;
+    border: none;
+    font-size: 10px;
+}
+#img-wf-preview{
+	background: #dbedfd;
+    height: 200px;
+	width: 200px;
+    position: relative;
+	overflow:hidden;
+}
+#img-wf-preview img{
+	width:100%;
+}
+#img-wf-preview .preview-node{
+	position: absolute;
+	background-color: #7dabc9;
+}
+#img-wf-preview .preview-node.selected{
+	background-color: #3b9ad8;
+	border: 2px solid #3b9ad8;
+}
+
+#img-wf-preview .preview-node.viewfinder{
+	background-color: #fff971;
+	background-color: transparent;
+    box-shadow: 0 0 0 40000px grey;
+    opacity: 0.4;
+}
+
+#img-wf-preview .preview-viewfinder{
+	top: 100px;
+    left: 100px;
+    width: 73px;
+    height: 111px;
+    position: absolute;
+    background-color: transparent;
+    box-shadow: 0 0 0 40000px grey;
+    opacity: 0.4;
+}
+#preview-zoom-toolbar {
+    background: #000000;
+    position: absolute;
+    top: 20px;
+    left: 5px;
+    border-radius: 50%;
+    color: white;
+    font-size: 10px;
+    height: 40px;
+    width: 40px;
+}
+#preview-zoom-toolbar .pan-up {
+    position: absolute;
+    top: 0px;
+    left: 13px;
+}
+#preview-zoom-toolbar .pan-down {
+    position: absolute;
+    bottom: 2px;
+    left: 13px;
+}
+#preview-zoom-toolbar .pan-left {
+    position: absolute;
+    top: 13px;
+    left: 0;
+}
+#preview-zoom-toolbar .pan-right {
+    position: absolute;
+    top: 13px;
+    right: 0;
+}
+
+#preview-toolbar {
+    z-index: 202;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    -webkit-box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+    -moz-box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+    color: #bebebe;
+    box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+    padding: 0 5px;
+	background: -webkit-gradient(linear,left top,left bottom,from(#2c3b41),to(#1e282c));
+    background: -o-linear-gradient(#2c3b41,#1e282c);
+    background: linear-gradient(#2c3b41,#1e282c);
+    -webkit-box-shadow: 0 1px 0 0 hsla(0,0%,100%,.035) inset, 0 -1px 2px 0 rgba(0,0,0,.12);
+    box-shadow: inset 0 1px 0 0 hsla(0,0%,100%,.035), 0 -1px 2px 0 rgba(0,0,0,.12);
+}
+#preview-toolbar > div {
+    float: left;
+}
+#preview-toolbar .icon {
+	padding: 4px 4px;
+}
+#preview-toolbar .icon:hover {
+	color: #FFFFFF;
+}
+#preview-toolbar .icon.selected {
+    color: blue;
+}
+
+
 
 #draggable-toolbox-modules-properties {
 	position: absolute;
 	background-color: #212527;
 	margin: 0;
     right: 0;
-    top: 35px;
+    top: 320px;
 	width: 250px;
 }
 #draggable-toolbox-modules-properties p {

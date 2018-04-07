@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width">
-<title>jsPlumb Workflow</title>		
+<title>Workflow</title>
 <link href="//fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -12,70 +12,26 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
 <link href="./css/main.css" rel="stylesheet">
-<link rel="stylesheet" href="./css/jsplumbtoolkit-defaults.css">
-<link rel="stylesheet" href="./css/jsplumbtoolkit-demo.css">
 <link rel="stylesheet" href="./app.css">
 <link rel="stylesheet" href="./workspace.css">
 </head>
 <body class="jtk-bootstrap jtk-bootstrap-wide noselect">
-
+<div id="infoband"></div>
 <div class="timeline-toolbar">
 				<div class="back-home" rel="timeline-tooltip" data-original-title="Return to Title">
 					<div class="icon timeline-toolbar-action" data-action="home"><i class="fa fa-reply-all fa-fw" aria-hidden="true"></i></div>
 				</div>
-				<div class="zoom-in" rel="timeline-tooltip" data-original-title="Zoom In">
-					<div class="icon timeline-toolbar-action" data-action="zoom-plus" data-repeateonhold="on"><i class="fa fa-search-plus fa-fw" aria-hidden="true"></i></div>
-				</div>
-				<div class="zoom-out" rel="timeline-tooltip" data-original-title="Zoom Out">
-					<div class="icon timeline-toolbar-action" data-action="zoom-minus" data-repeateonhold="on"><i class="fa fa-search-minus fa-fw" aria-hidden="true"></i></div>
-				</div>
-				<div class="pann-past" rel="timeline-tooltip" data-original-title="Move Left">
-					<div class="icon timeline-toolbar-action" data-action="intothepast" data-repeateonhold="on"><i class="fa fa-step-backward fa-fw" aria-hidden="true"></i></div>
-				</div>
-				<div class="pann-future" rel="timeline-tooltip" data-original-title="Move Right">
-					<div class="icon timeline-toolbar-action" data-action="intothefuture" data-repeateonhold="on"><i class="fa fa-step-forward fa-fw" aria-hidden="true"></i></div>
-				</div>
 				<div class="free-select" rel="timeline-tooltip" data-original-title="Free select">
 					<div class="icon timeline-toolbar-action" data-action="free-select" data-selectable="on"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></div>
-				</div>
-				<div class="empty-wf" rel="timeline-tooltip" data-original-title="Clear Workflow">
-					<div class="icon timeline-toolbar-action" data-action="empty-wf" data-selectable="on"><i class="fa fa-trash fa-fw" aria-hidden="true"></i></div>
-				</div>
-				<div class="tl-expand" rel="timeline-tooltip" data-original-title="Fullscreen expand or collapse">
-					<div class="icon timeline-toolbar-action" data-action="tl-expand" data-selectable="on"><i class="fa fa-expand fa-fw" aria-hidden="true"></i></div>
 				</div>
 </div>
         <div class="jtk-page-container">
             <div class="jtk-container">
-                
-<div class="jtk-demo-main">
-<!-- demo -->
-            <div class="jtk-demo-canvas canvas-wide statemachine-demo jtk-surface jtk-surface-nopan noselect" id="canvas">
-<?php
-/*
-				<div class="w" id="opened">Node 1
-                    <div class="ep" action="begin"></div>
-                </div>
-                <div class="w" id="phone1">Node 2
-                    <div class="ep" action="phone1"></div>
-                </div>
-                <div class="w" id="phone2">Node 3
-                    <div class="ep" action="phone2"></div>
-                </div>
-                <div class="w" id="inperson">Node 4
-                    <div class="ep" action="inperson"></div>
-                </div>
-                <div class="w" id="rejected">Node 5
-                    <div class="ep" action="rejected"></div>
-                </div>
-*/
-?>				
-            </div>
-			<!-- miniview -->
-            <div class="miniview"></div>
-			<div id="infoband"></div>
-<!-- /demo -->
-</div>
+				<div class="jtk-demo-main">
+				<!-- demo -->
+							<div class="panzoom statemachine-demo noselect" id="canvas"></div>
+				<!-- /demo -->
+				</div>
             </div>
         </div>
 		
@@ -215,6 +171,45 @@
 </div>
 <!-- xxxxxxxxxxxxxxxxxxxxxxxxx -->
 </div>
+<div id="draggable-toolbox-preview" class="ui-widget-content">
+	<p class="ui-widget-header">Workflow preview</p>
+	<div id="img-wf-preview"></div>
+	<div id="preview-zoom-toolbar">
+				<div class="pan-up" rel="timeline-tooltip" data-original-title="Move Up">
+					<div class="icon preview-toolbar-action" data-action="pan-up" data-repeateonhold="on"><i class="fa fa fa-chevron-up fa-fw" aria-hidden="true"></i></div>
+				</div>
+				<div class="pan-left" rel="timeline-tooltip" data-original-title="Move Left">
+					<div class="icon preview-toolbar-action" data-action="pan-left" data-repeateonhold="on"><i class="fa fa fa-chevron-left fa-fw" aria-hidden="true"></i></div>
+				</div>
+				<div class="pan-right" rel="timeline-tooltip" data-original-title="Move Right">
+					<div class="icon preview-toolbar-action" data-action="pan-right" data-repeateonhold="on"><i class="fa fa fa-chevron-right fa-fw" aria-hidden="true"></i></div>
+				</div>
+				<div class="pan-down" rel="timeline-tooltip" data-original-title="Move Down">
+					<div class="icon preview-toolbar-action" data-action="pan-down" data-repeateonhold="on"><i class="fa fa fa-chevron-down fa-fw" aria-hidden="true"></i></div>
+				</div>
+	</div>
+	<div id="preview-toolbar">
+				<div class="zoom-in" rel="timeline-tooltip" data-original-title="Zoom In">
+					<div class="icon preview-toolbar-action" data-action="zoom-plus" data-repeateonhold="on"><i class="fa fa-search-plus fa-fw" aria-hidden="true"></i></div>
+				</div>
+                <div class="zoom-percent" rel="timeline-tooltip" data-original-title="Zoom">
+                    <div class="icon "><span class="">100%</span></div>
+                </div>
+				<div class="zoom-out" rel="timeline-tooltip" data-original-title="Zoom Out">
+					<div class="icon preview-toolbar-action" data-action="zoom-minus" data-repeateonhold="on"><i class="fa fa-search-minus fa-fw" aria-hidden="true"></i></div>
+				</div>
+				<div class="tl-expand" rel="timeline-tooltip" data-original-title="100%">
+					<div class="icon preview-toolbar-action" data-action="zoom-1to1" data-selectable="on"><span class="">1:1</span></div>
+				</div>
+				<div class="zoom-fitall" rel="timeline-tooltip" data-original-title="Fullscreen expand or collapse">
+					<div class="icon preview-toolbar-action" data-action="zoom-fitall" data-selectable="on"><i class="fa fa-expand fa-fw" aria-hidden="true"></i></div>
+				</div>
+				<div class="empty-wf" rel="timeline-tooltip" data-original-title="Clear Workflow">
+					<div class="icon preview-toolbar-action" data-action="empty-wf" data-selectable="on"><i class="fa fa-trash fa-fw" aria-hidden="true"></i></div>
+				</div>
+	</div>
+</div>
+
 
 <div id="draggable-toolbox-modules-properties" class="ui-widget-content">
   <p class="ui-widget-header">Component properties</p>
@@ -321,14 +316,18 @@ POLYGON((-9.9866909768 23.4186029838, -8.9037319257 23.4186029838, -8.9037319257
 
 <div id="rubberband" style="display:none;"></div>
 		
-
-
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="./lib/jsplumb.js"></script>
-
+<script src="./lib/jquery.mousewheel.min.js"></script>
+<script src="http://timmywil.github.io/jquery.panzoom/dist/jquery.panzoom.js"></script>
+<script src="./lib/jsplumb.min.js"></script>
 <script src="./workspace.js"></script>
 <script src="./app.js"></script>
+<script src="./canvas.js"></script>
+<script src="../assets/dist/js/general-functions.js"></script>
 </body>
 </html>
+<?php
+//<script src="./lib/jquery.panzoom.min.js"></script>
+?>

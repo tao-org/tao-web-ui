@@ -2,9 +2,29 @@ var npNewNode;
 var npDelNode;
 var wfZoom = 1;
 
+var minScale = 0.1;
+var maxScale = 10;
+var incScale = 0.1;
+var wfZoom = 1;
+
+//used elements
+var $elCanvas = $("#canvas");
+var $elZoom = $(".zoom-percent span", "#preview-toolbar");
+
 var keyboardShifted = false;
 $(document).on('keyup keydown', function(e){
-										keyboardShifted = e.shiftKey;
+											keyboardShifted = e.shiftKey;
+										});
+										
+$(document).on('keydown', function(e){
+											if (e.ctrlKey) {
+												if (e.keyCode == 65 || e.keyCode == 97) { // 'A' or 'a'
+													e.preventDefault();
+													console.log("CTRL + A");
+													$(".w", $elCanvas).addClass("selected");
+													toolboxModules.rescanSelected();
+												}
+											}
 										});
 										
 var toolboxProperties ={
@@ -57,6 +77,7 @@ var toolboxModules ={
 					$("#mti_" + item).remove();
         });
 		toolboxModules.selected = [];
+		makeWFPreview();
 	},
 	newModule: function(n){
 		$( "#selectable" ).append( '<li id="mti_'+n.blockid+'" class="ui-widget-content" data-dna='+JSON.stringify(n)+'>Item '+n.blockid+'</li>' );
@@ -80,6 +101,7 @@ var toolboxModules ={
 		if(toolboxModules.selected.length == 0){
 			toolboxProperties.showPropertiesNone();
 		}
+		makeWFPreview();
 	},
 	rescanBuild: function(){
 		toolboxModules.selected = [];
@@ -104,33 +126,191 @@ var toolboxModules ={
 
 
 jsPlumb.bind("jsPlumbDemoLoaded", function(instance) {
-$(".timeline-toolbar").on("click", ".timeline-toolbar-action", function(){
+
+});
+
+/************************************************jsplumb******************************************/
+jsPlumb.ready(function () {
+
+    //panZoom
+    // Define Pan / Zoom actions
+    var pz = window.pz = $elCanvas.panzoom({
+//        minScale             : minScale,
+//        maxScale             : maxScale,
+//        increment            : incScale,
+//        cursor               : "",
+        ignoreChildrensEvents: true,
+        disablePan           : true,
+        disableZoom          : false,
+    })
+	.on("panzoomstart",function(e,pzoom,ev){
+      $elCanvas.css("cursor","move");
+    }).on("panzoomend",function(e,pzoom){
+      $elCanvas.css("cursor","");
+    });
+
+
+////////////////////////////////////
+	pz.parent()
+        .on('mousewheel.focal', function(e) {
+            // Zoom canvas when CTRL + MouseWheel
+            if (e.ctrlKey || e.originalEvent.ctrlKey) {
+                e.preventDefault();
+                var delta = e.delta || e.originalEvent.wheelDelta;
+                var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+
+                // enable pan in order to also enable focal zoom
+                pz.panzoom('option', 'disablePan', false);
+                pz.panzoom('zoom', zoomOut, { animate: true, exponential: false, focal: e });
+				pz.panzoom('option', 'disablePan', true);
+                // Set jsPlumb zoom level
+                var matrix = pz.panzoom('getMatrix');
+                wfZoom = parseFloat(matrix[0]);
+                jsp.setZoom(wfZoom);
+                $elZoom.html( parseInt(wfZoom*100) + "%");
+				makeWFPreview();
+            }
+        })
+        .on("mousedown touchstart", function(e) {
+            if (e.which != 1) return;
+            if ($(e.target).closest(".group-container").length > 0 ||
+                $(e.target).hasClass("panzoom-button")) return;
+
+            // Start canvas pan / select
+            if (e.ctrlKey && e.which == 1) {
+                window.selectStart = { x: e.pageX, y: e.pageY };
+            } else if (e.which == 1) {
+                var matrix = pz.panzoom('getMatrix');
+                var offsetX = parseInt(matrix[4]);
+                var offsetY = parseInt(matrix[5]);
+                window.panStart = { x: e.pageX, y: e.pageY, dx: offsetX, dy: offsetY };
+                $(e.target).css("cursor", "move");
+            }
+        })
+        .on("mousemove touchmove", function(e) {
+            // Canvas pan
+            if (window.panStart) {
+                var deltaX = window.panStart.x - e.pageX;
+                var deltaY = window.panStart.y - e.pageY;
+                var matrix = pz.panzoom('getMatrix');
+                matrix[4] = window.panStart.dx - deltaX;
+                matrix[5] = window.panStart.dy - deltaY;
+                pz.panzoom("setMatrix", matrix);
+            } else if (window.selectStart) {
+                drawSelectRectangle(window.selectStart, { x: e.pageX, y: e.pageY });
+            }
+        })
+        .on("mouseup touchend touchcancel", function(e) {
+            // End canvas pan and Clear resource selection
+            if (e.target.id == pz[0].id) {
+                if (window.panStart) {
+                    var deltaX = 0;
+                    var deltaY = 0;
+                    var deltaX = window.panStart.x - e.pageX;
+                    var deltaY = window.panStart.y - e.pageY;
+                    if (deltaX == 0 && deltaY == 0) {
+                        //clearGroupSelection();
+                    }
+                }
+            }
+            if (window.selectStart) {
+                $("#select-rectangle").addClass("hidden");
+            }
+            window.panStart = null;
+            window.selectStart = null;
+            $(e.target).css("cursor","");
+			makeWFPreview();
+        });
+		
+		function zoomPZ(v){
+			var matrix = pz.panzoom('getMatrix');
+			matrix[0] = v;
+			matrix[3] = v;
+			pz.panzoom("setMatrix", matrix);
+		}
+		function panPZ(v){
+			var matrix = pz.panzoom('getMatrix');
+			panStep = 40*wfZoom;
+			matrix[4] = parseInt(matrix[4]) + v.left*panStep;
+			matrix[5] = parseInt(matrix[5]) + v.top*panStep;
+			pz.panzoom('option', 'disablePan', false);
+            pz.panzoom("pan", matrix[4], matrix[5], { animate: true});
+			pz.panzoom('option', 'disablePan', true);
+			//pz.panzoom("setMatrix", matrix);
+		}
+		var tao_PanCanvas = window.doWFPan = function(direction){
+			panDirection = {top:0, left:0}
+			if(direction == "pan-left"){
+				panDirection.left = -1;
+			}
+			if(direction == "pan-right"){
+				panDirection.left = 1;
+			}
+			if(direction == "pan-up"){
+				panDirection.top = -1;
+			}
+			if(direction == "pan-down"){
+				panDirection.top = 1;
+			}
+			panPZ(panDirection);
+			makeWFPreview();
+		};
+		var tao_ZoomCanvas = window.doWFZoom = function(zoom){
+			if(zoom == "zoom-plus"){
+				wfZoom += 0.1;
+				if(wfZoom > maxScale) {wfZoom = maxScale;};
+			}
+			if(zoom == "zoom-1to1"){
+				wfZoom = 1;
+			}
+			if(zoom == "zoom-minus"){
+				wfZoom -= 0.1;
+				if(wfZoom < minScale) {wfZoom = minScale;};
+			}
+			zoomPZ(wfZoom);
+			jsp.setZoom(wfZoom);
+			$elZoom.html( parseInt(wfZoom*100) + "%");
+			makeWFPreview();
+		};
+		
+
+		$("#preview-toolbar").on("click", ".preview-toolbar-action", function(){
 			var action = $(this).data("action");
-			if(action == "zoom-plus") {
-				tao_ZoomCanvas("plus");
-			}
-			if(action == "zoom-minus") {
-				tao_ZoomCanvas("minus");
-			}
 			if(action == "empty-wf") {
 				if(toolboxModules.selected.length==0){
 					//todo: alert for delete all
-					$("#canvas .w").addClass("selected");
+					$(".w", $elCanvas).addClass("selected");
 					toolboxModules.rescanSelected();
 				}
 				toolboxModules.rmSelected();
+			};
+			if( (action == "zoom-plus") || (action == "zoom-minus") || (action == "zoom-1to1") ){
+				tao_ZoomCanvas(action);
+			};
+			if(action == "zoom-fitall"){
+				alert("fit");
+				tao_ZoomFitAllNodes();
 			}
-});
-});
+			
+		});
+		$("#preview-zoom-toolbar").on("click", ".preview-toolbar-action", function(){
+			var action = $(this).data("action");
+			if( (action == "pan-left") || (action == "pan-right") || (action == "pan-up") || (action == "pan-down") ){
+				tao_PanCanvas(action);
+			}
+		});
+////////////////////////////////////
 
 
-jsPlumb.ready(function () {
+
+
+
 
     // setup some defaults for jsPlumb.
-    var instance = jsPlumb.getInstance({
+    var instance = window.jsp = jsPlumb.getInstance({
         Endpoint: ["Dot", {radius: 2}],
         //Connector:"StateMachine",
-		Connector:[ "Flowchart", { stub: [20, 20], gap: 5, cornerRadius: 5, alwaysRespectStubs: true } ],
+		Connector:[ "Flowchart", { stub: [20, 20], gap: 5, cornerRadius: 150, alwaysRespectStubs: true } ],
         HoverPaintStyle: {stroke: "#1e8151", strokeWidth: 2 },
         ConnectionOverlays: [
             [ "Arrow", {
@@ -143,23 +323,39 @@ jsPlumb.ready(function () {
         ],
         Container: "canvas"
     });
+	
+	window.jsp.bind("groupDragStop", function(params) {
+    	makeWFPreview();
+    });
+	$( window )
+	.on( "resize", function() {
+		makeWFPreview();
+	});
+	
 
-    instance.registerConnectionType("basic", { 	anchor:"Continuous",
-											//	connector:"StateMachine"
-												connector:[ "Flowchart", { stub: [20, 20], gap: 5, cornerRadius: 5, alwaysRespectStubs: true } ],
+console.log("create connector style");
+	if (window.prefferences.workFlowConnectors == "S"){
+		instance.registerConnectionType("basic", { 	anchor:"Continuous",
+												connector:[ "StateMachine", { stub: [20, 20], gap: 5, cornerRadius: 5, midpoint: 0.5, alwaysRespectStubs: true } ],
 											}
 									);
+	};
+	if (window.prefferences.workFlowConnectors == "F"){
+		instance.registerConnectionType("basic", { 	anchor:"Continuous",
+												connector:[ "Flowchart", { stub: [20, 20], gap: 5, cornerRadius: 5, midpoint: 0.5, alwaysRespectStubs: true } ],
+											}
+									);
+	};
 
-    window.jsp = instance;
 
     var canvas = document.getElementById("canvas");
-    var windows = jsPlumb.getSelector(".statemachine-demo .w");
+    var windows = jsPlumb.getSelector("#canvas .w");
 
     // bind a click listener to each connection; the connection is deleted. you could of course
     // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
     // happening.
     instance.bind("click", function (c) {
-        instance.detach(c);
+        instance.deleteConnection(c);
     });
 
     // bind a connection listener. note that the parameter passed to this function contains more than
@@ -185,15 +381,14 @@ jsPlumb.ready(function () {
 
     // bind a double click listener to "canvas"; add new node when this occurs.
     jsPlumb.on(canvas, "dblclick", function(e) {
-        newNode(e.offsetX, e.offsetY);
+        console.log("canvas , dblclick");
     });
 	
-	
 	var delNode = function(el){
-		instance.detachAllConnections(el);
-		instance.removeAllEndpoints(el);
-		instance.detach(el); // <--
-		$( "#" + el ).remove();
+        jsp.deleteConnectionsForElement(el);
+        jsp.removeAllEndpoints(el);
+        jsp.remove(el);
+		
 	}
 	window.npDelNode = delNode;
 	
@@ -292,6 +487,7 @@ jsPlumb.ready(function () {
         instance.connect({ source:"phone2", target:"rejected", type:"basic" });
     });
     console.log("jsPlumb ready end");
+
 	jsPlumb.setContainer("canvas");
 	jsPlumb.fire("jsPlumbDemoLoaded", instance);
 	
@@ -323,29 +519,28 @@ updateModuleStatus("", {"state":"completed", "progress":68});
 //updateModuleStatus("5dbb0b93-2a2a-4baf-9780-c9c9510be4e1",{"state":"completed", "progress":5})
 
 
-$( "#canvas" ).on( "click",".btn-action-erasemodule", function(e) { //erase module on trash icon click
-	e.stopPropagation();
-	var id = $(this).closest(".w").attr("id");
-	$(this).closest(".w").addClass("selected");
-	toolboxModules.rescanSelected();
-	toolboxModules.rmSelected();
-	console.log(id);
-});
-
-$( "#canvas" ).on( "click", function(e) {
-	//check if own event is propagated and do nothing
-	if(e.target != this){
-		return;
-	}
-	$("#canvas .w").removeClass("selected");
-	toolboxModules.rescanSelected();
-	console.log("click on canvas > unselect all");
-});
-
-$( "#canvas" ).on( "mousedown",".w", function(e) {
-	var id = $(this).attr("id");
-	console.log("mouse down"+id);
-});
+	$elCanvas
+	.on( "click",".btn-action-erasemodule", function(e) { //erase module on trash icon click
+		e.stopPropagation();
+		var id = $(this).closest(".w").attr("id");
+		$(this).closest(".w").addClass("selected");
+		toolboxModules.rescanSelected();
+		toolboxModules.rmSelected();
+		console.log(id);
+	})
+	.on( "click", function(e) {
+		//check if own event is propagated and do nothing
+		if(e.target != this){
+			return;
+		}
+		$(".w", $elCanvas).removeClass("selected");
+		toolboxModules.rescanSelected();
+		console.log(e);
+		console.log("click on canvas > unselect all");
+	}).on("mousedown",".w", function(e) {
+		var id = $(this).attr("id");
+		console.log("mouse down"+id);
+	});
 
 var tao_adModuleToSelection = function(id){
 	if( $.inArray( id, toolboxModules.selected ) != -1 ){
@@ -353,27 +548,12 @@ var tao_adModuleToSelection = function(id){
 	}
 	
 	if(!keyboardShifted){ //if keyboard is shifted keep current selection else unselect al modules on workspace
-		$("#canvas .w").removeClass("selected");
+		$(".w",$elCanvas).removeClass("selected");
 	} 
 	$("#"+id).addClass("selected");
 	toolboxModules.rescanSelected();
 	console.log("mousedown on "+id);
 }
 
-var tao_ZoomCanvas = function(zoom){
-	if(zoom == "plus"){
-		wfZoom += 0.1;
-	}
-	if(zoom == "minus"){
-		wfZoom -= 0.1;
-	}
-	$( "#canvas" ).css({
-            '-webkit-transform': 'scale(' + wfZoom + ')',
-            '-moz-transform': 'scale(' + wfZoom + ')',
-            '-ms-transform': 'scale(' + wfZoom + ')',
-            '-o-transform': 'scale(' + wfZoom + ')',
-            'transform': 'scale(' + wfZoom + ')'
-    });
-	jsPlumb.setZoom(wfZoom);
-}
+
 

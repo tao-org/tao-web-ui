@@ -2,25 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/fragments/workflow-all.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/_rest/login/auth/authorize/index.html" afterPath="$PROJECT_DIR$/_rest/login/auth/authorize/index.html" />
-      <change beforePath="$PROJECT_DIR$/_rest/projects/results/index.php" afterPath="$PROJECT_DIR$/_rest/projects/results/index.php" />
-      <change beforePath="$PROJECT_DIR$/assets/dist/css/AdminLTE.css" afterPath="$PROJECT_DIR$/assets/dist/css/AdminLTE.css" />
-      <change beforePath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" afterPath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
-      <change beforePath="$PROJECT_DIR$/assets/dist/js/config.js" afterPath="$PROJECT_DIR$/assets/dist/js/config.js" />
-      <change beforePath="$PROJECT_DIR$/assets/dist/js/router.js" afterPath="$PROJECT_DIR$/assets/dist/js/router.js" />
-      <change beforePath="$PROJECT_DIR$/fragments/component-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/component-admin.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/component-plus.fragment.html" afterPath="$PROJECT_DIR$/fragments/component-plus.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/1.php" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/app.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/app.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/css/jsplumbtoolkit-defaults.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/css/jsplumbtoolkit-demo.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/css/main.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/index.php" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/lib/jsplumb.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/lib/jsplumbtoolkit.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/media/2cogs.svg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/media/module-ds.png" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/media/module-otb.png" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/media/module01.png" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/workspace.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/flow.rc2/workspace.js" afterPath="" />
       <change beforePath="$PROJECT_DIR$/fragments/projects-all.fragment.html" afterPath="$PROJECT_DIR$/fragments/projects-all.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/topology-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/topology-admin.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/topology-edit.fragment.html" afterPath="$PROJECT_DIR$/fragments/topology-edit.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/topology-plus.fragment.html" afterPath="$PROJECT_DIR$/fragments/topology-plus.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/login.html" afterPath="$PROJECT_DIR$/login.html" />
-      <change beforePath="$PROJECT_DIR$/nodemonitor.html" afterPath="$PROJECT_DIR$/nodemonitor.html" />
-      <change beforePath="$PROJECT_DIR$/sap.html" afterPath="$PROJECT_DIR$/sap.html" />
+      <change beforePath="$PROJECT_DIR$/fragments/workflow-all.fragment.html" afterPath="$PROJECT_DIR$/fragments/workflow-all.fragment.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -38,7 +36,7 @@
         <entry file="file://$PROJECT_DIR$/sap.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="208">
-              <caret line="357" column="37" lean-forward="true" selection-start-line="357" selection-start-column="37" selection-end-line="357" selection-end-column="37" />
+              <caret line="357" column="37" lean-forward="false" selection-start-line="357" selection-start-column="37" selection-end-line="357" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -57,8 +55,8 @@
       <file leaf-file-name="projects-all.fragment.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fragments/projects-all.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="709">
-              <caret line="886" column="11" lean-forward="true" selection-start-line="881" selection-start-column="8" selection-end-line="886" selection-end-column="11" />
+            <state relative-caret-position="292">
+              <caret line="23" column="31" lean-forward="true" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -78,7 +76,7 @@
         <entry file="file://$PROJECT_DIR$/fragments/datasource-admin.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
-              <caret line="12" column="9" lean-forward="true" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+              <caret line="12" column="9" lean-forward="false" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
               <folding>
                 <marker date="1519745242378" expanded="true" signature="30176:30183" ph="×" />
                 <marker date="1519745242378" expanded="true" signature="30954:30971" ph="..." />
@@ -87,11 +85,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="workflow-all.fragment.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="workflow-all.fragment.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fragments/workflow-all.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="54" lean-forward="false" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="54" />
+            <state relative-caret-position="292">
+              <caret line="24" column="43" lean-forward="true" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="43" />
               <folding>
                 <element signature="e#10842#10848#0" expanded="true" />
                 <element signature="e#10965#10971#0" expanded="true" />
@@ -109,17 +107,17 @@
         <entry file="file://$PROJECT_DIR$/_rest/projects/results/index.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="408">
-              <caret line="24" column="5" lean-forward="true" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
+              <caret line="24" column="5" lean-forward="false" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AdminLTEplus.css" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AdminLTEplus.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="540" column="0" lean-forward="false" selection-start-line="540" selection-start-column="0" selection-end-line="540" selection-end-column="0" />
+            <state relative-caret-position="442">
+              <caret line="539" column="15" lean-forward="false" selection-start-line="539" selection-start-column="15" selection-end-line="539" selection-end-column="15" />
               <folding />
             </state>
           </provider>
@@ -147,7 +145,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>.info-box-se</find>
       <find>val-wactive</find>
       <find>val-wstatus</find>
       <find>val-wnm</find>
@@ -171,12 +168,13 @@
       <find>iframe</find>
       <find>myModalProjectOpShow</find>
       <find>tao-async-wf</find>
-      <find>tao-async-mc</find>
       <find>myModalNodesOpShow</find>
       <find>op-edit</find>
       <find>tao</find>
-      <find>async</find>
       <find>componen</find>
+      <find>async</find>
+      <find>flow.rc</find>
+      <find>tao-async-mc</find>
     </findStrings>
     <dirStrings>
       <dir>D:\_work\tao\tao-web-ui</dir>
@@ -231,11 +229,11 @@
         <option value="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" />
         <option value="$PROJECT_DIR$/assets/dist/js/router.js" />
         <option value="$PROJECT_DIR$/sap.html" />
-        <option value="$PROJECT_DIR$/fragments/projects-all.fragment.html" />
         <option value="$PROJECT_DIR$/_rest/projects/results/index.php" />
         <option value="$PROJECT_DIR$/assets/dist/css/AdminLTE.css" />
-        <option value="$PROJECT_DIR$/fragments/workflow-all.fragment.html" />
         <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
+        <option value="$PROJECT_DIR$/fragments/projects-all.fragment.html" />
+        <option value="$PROJECT_DIR$/fragments/workflow-all.fragment.html" />
       </list>
     </option>
   </component>
@@ -455,12 +453,12 @@
       <workItem from="1518704520672" duration="33017000" />
       <workItem from="1520351261630" duration="1607000" />
       <workItem from="1521466084578" duration="5234000" />
-      <workItem from="1522852022859" duration="19309000" />
+      <workItem from="1522852022859" duration="19972000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="480980000" />
+    <option name="totallyTimeSpent" value="481643000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1066" extended-state="7" />
@@ -780,7 +778,7 @@
     <entry file="file://$PROJECT_DIR$/sap.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="208">
-          <caret line="357" column="37" lean-forward="true" selection-start-line="357" selection-start-column="37" selection-end-line="357" selection-end-column="37" />
+          <caret line="357" column="37" lean-forward="false" selection-start-line="357" selection-start-column="37" selection-end-line="357" selection-end-column="37" />
           <folding />
         </state>
       </provider>
@@ -788,7 +786,7 @@
     <entry file="file://$PROJECT_DIR$/fragments/datasource-admin.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
-          <caret line="12" column="9" lean-forward="true" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+          <caret line="12" column="9" lean-forward="false" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
           <folding>
             <marker date="1519745242378" expanded="true" signature="30176:30183" ph="×" />
             <marker date="1519745242378" expanded="true" signature="30954:30971" ph="..." />
@@ -807,15 +805,7 @@
     <entry file="file://$PROJECT_DIR$/_rest/projects/results/index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
-          <caret line="24" column="5" lean-forward="true" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/projects-all.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="709">
-          <caret line="886" column="11" lean-forward="true" selection-start-line="881" selection-start-column="8" selection-end-line="886" selection-end-column="11" />
+          <caret line="24" column="5" lean-forward="false" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -828,10 +818,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="539" column="15" lean-forward="false" selection-start-line="539" selection-start-column="15" selection-end-line="539" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/projects-all.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="292">
+          <caret line="23" column="31" lean-forward="true" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/fragments/workflow-all.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="54" lean-forward="false" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="54" />
+        <state relative-caret-position="292">
+          <caret line="24" column="43" lean-forward="true" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="43" />
           <folding>
             <element signature="e#10842#10848#0" expanded="true" />
             <element signature="e#10965#10971#0" expanded="true" />
@@ -841,14 +847,6 @@
             <element signature="e#21658#21664#0" expanded="true" />
             <element signature="e#21771#21777#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="540" column="0" lean-forward="false" selection-start-line="540" selection-start-column="0" selection-end-line="540" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>

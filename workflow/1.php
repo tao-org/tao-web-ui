@@ -17,39 +17,35 @@
 </head>
 <body class="jtk-bootstrap jtk-bootstrap-wide noselect">
 <div id="infoband"></div>
-<div class="timeline-toolbar">
-				<div class="back-home" rel="timeline-tooltip" data-original-title="Return to Title">
-					<div class="icon timeline-toolbar-action" data-action="home"><i class="fa fa-reply-all fa-fw" aria-hidden="true"></i></div>
-				</div>
-				<div class="free-select" rel="timeline-tooltip" data-original-title="Free select">
-					<div class="icon timeline-toolbar-action" data-action="free-select" data-selectable="on"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></div>
-				</div>
-</div>
-        <div class="jtk-page-container">
-            <div class="jtk-container">
-				<div class="jtk-demo-main">
-				<!-- demo -->
-							<div class="panzoom statemachine-demo noselect" id="canvas"></div>
-				<!-- /demo -->
-				</div>
+    <div id="control-toolbar" class="control-toolbar">
+                    <div class="back-home" rel="timeline-tooltip" data-original-title="Return to Title">
+                        <div class="icon toolbar-action" data-action="home"><i class="fa fa-reply-all fa-fw" aria-hidden="true"></i></div>
+                    </div>
+                    <div class="free-select" rel="timeline-tooltip" data-original-title="Free select">
+                        <div class="icon toolbar-action" data-action="free-select" data-selectable="on"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></div>
+                    </div>
+    </div>
+    <div class="jtk-page-container">
+        <div class="jtk-container">
+            <div class="jtk-demo-main">
+                <div class="panzoom statemachine-demo noselect" id="canvas"></div>
             </div>
         </div>
+    </div>
 		
-		
-<div id="tools-toolbox" class="ui-widget-content collapse">
-  <p class="ui-widget-header">Toolbox</p>
-	<button id="np-add-block" type="button" class="btn btn-default btn-lg">
-		<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="sr-only">Add module</span>
-	</button>
-	<button id="np-enable-select" type="button" class="btn btn-default btn-lg">
-		<i class="fa fa-magic fa-fw" aria-hidden="true"></i><span class="sr-only">Enable select mode</span>
-	</button>
-</div>
-<div id="draggable-toolbox-modules" class="ui-widget-content collapse">
-  <p class="ui-widget-header">Modules</p>
-  <ol id="selectable">
-  </ol>
-</div>
+    <div id="tools-toolbox" class="ui-widget-content collapse">
+      <p class="ui-widget-header">Toolbox</p>
+        <button id="np-add-block" type="button" class="btn btn-default btn-lg">
+            <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="sr-only">Add module</span>
+        </button>
+        <button id="np-enable-select" type="button" class="btn btn-default btn-lg">
+            <i class="fa fa-magic fa-fw" aria-hidden="true"></i><span class="sr-only">Enable select mode</span>
+        </button>
+    </div>
+    <div id="draggable-toolbox-modules" class="ui-widget-content collapse">
+      <p class="ui-widget-header">Modules</p>
+      <ol id="selectable"></ol>
+    </div>
 
 <div id="draggable-toolbox-modules-source" class="ui-widget-content">
   <p class="ui-widget-header">Components</p>

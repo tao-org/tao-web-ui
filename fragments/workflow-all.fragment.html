@@ -836,6 +836,12 @@
         });
 
     ///////////////////
+    function tao_closeWorkflow() {
+        $(".tao-async-wf").fadeOut("slow");
+        $(".tao-async-ph").fadeIn("slow");
+        $(".tao-async-mc").fadeIn("slow");
+    }
+
     $( document ).ready(function() {
         console.log( "exec nodes panel ready!" );
         $("form.search-container").on("submit",function(e){
@@ -844,9 +850,7 @@
         _mLIST.getData();
         $(".btn-close-workflow").on("click", function(e) {
             e.preventDefault();
-            $(".tao-async-wf").fadeOut("slow");
-            $(".tao-async-ph").fadeIn("slow");
-            $(".tao-async-mc").fadeIn("slow");
+            tao_closeWorkflow();
         });
     });
     //# sourceURL=filename.js

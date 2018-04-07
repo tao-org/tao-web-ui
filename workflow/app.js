@@ -293,6 +293,14 @@ jsPlumb.ready(function () {
 			}
 			
 		});
+		$("#control-toolbar").on("click", ".toolbar-action", function(){
+			var action = $(this).data("action");
+			if(action == "home"){
+				console.log("message");
+				window.parent.tao_closeWorkflow();
+			}
+		});
+
 		$("#preview-zoom-toolbar").on("click", ".preview-toolbar-action", function(){
 			var action = $(this).data("action");
 			if( (action == "pan-left") || (action == "pan-right") || (action == "pan-up") || (action == "pan-down") ){

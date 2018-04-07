@@ -25,7 +25,7 @@
     position: fixed;
 }
 
-.timeline-toolbar {
+.control-toolbar {
     position: fixed;
     top: 0;
     right: 0;
@@ -43,16 +43,16 @@
     -webkit-box-shadow: 0 1px 0 0 hsla(0,0%,100%,.035) inset, 0 -1px 2px 0 rgba(0,0,0,.12);
     box-shadow: inset 0 1px 0 0 hsla(0,0%,100%,.035), 0 -1px 2px 0 rgba(0,0,0,.12);
 }
-.timeline-toolbar > div {
+.control-toolbar > div {
     float: left;
 }
-.timeline-toolbar .icon {
+.control-toolbar .icon {
 	padding: 4px 6px;
 }
-.timeline-toolbar .icon:hover {
+.control-toolbar .icon:hover {
 	color: #FFFFFF;
 }
-.timeline-toolbar .icon.selected {
+.control-toolbar .icon.selected {
     color: blue;
 }
 

@@ -8,7 +8,6 @@ var routeTags = [];
 var hashRoutesMap = [];
     hashRoutesMap["admin/dashboard"] = "./fragments/dashboard-admin.fragment.html";
     hashRoutesMap["projects"] = '';
-hashRoutesMap["projects/all"] = "./fragments/projects-all.fragment.html";
     hashRoutesMap["workflow/all"] = "./fragments/workflow-all.fragment.html";
     hashRoutesMap["admin/users"] = "./fragments/users-admin.fragment.html";
     hashRoutesMap["admin/datasources"] = "./fragments/datasource-admin.fragment.html";

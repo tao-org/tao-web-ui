@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/assets/dist/js/router.js" afterPath="$PROJECT_DIR$/assets/dist/js/router.js" />
-      <change beforePath="$PROJECT_DIR$/fragments/workflow-all.fragment.html" afterPath="$PROJECT_DIR$/fragments/workflow-all.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/sap.html" afterPath="$PROJECT_DIR$/sap.html" />
+      <change beforePath="$PROJECT_DIR$/workflow/app.js" afterPath="$PROJECT_DIR$/workflow/app.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,11 +26,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="router.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="router.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/dist/js/router.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+            <state relative-caret-position="323">
+              <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -41,8 +39,8 @@
       <file leaf-file-name="workspace.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/workflow/workspace.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="47" lean-forward="true" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
+            <state relative-caret-position="238">
+              <caret line="14" column="11" lean-forward="true" selection-start-line="14" selection-start-column="11" selection-end-line="14" selection-end-column="11" />
               <folding>
                 <marker date="1523111440237" expanded="true" signature="4686:4900" ph="..." />
                 <marker date="1523111440237" expanded="true" signature="5007:5221" ph="..." />
@@ -52,21 +50,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/workflow/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="299" column="47" lean-forward="false" selection-start-line="299" selection-start-column="30" selection-end-line="299" selection-end-column="47" />
+            <state relative-caret-position="-1870">
+              <caret line="310" column="16" lean-forward="false" selection-start-line="310" selection-start-column="8" selection-end-line="310" selection-end-column="16" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="canvas.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/workflow/canvas.js">
+      <file leaf-file-name="jquery.panzoom.min.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workflow/lib/jquery.panzoom.min.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="136">
+              <caret line="1" column="1302" lean-forward="false" selection-start-line="1" selection-start-column="1302" selection-end-line="1" selection-end-column="1302" />
               <folding />
             </state>
           </provider>
@@ -142,9 +140,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>myModalProjectOpShow</find>
-      <find>tao-async-wf</find>
-      <find>myModalNodesOpShow</find>
       <find>op-edit</find>
       <find>tao</find>
       <find>async</find>
@@ -169,9 +164,12 @@
       <find>componen</find>
       <find>btn-close-workflow</find>
       <find>tao_closeWorkflow</find>
-      <find>control-toolbar-action</find>
-      <find>home</find>
       <find>projects/all</find>
+      <find>var pz</find>
+      <find>home</find>
+      <find>control-toolbar-action</find>
+      <find>zoomOut</find>
+      <find>pz.</find>
     </findStrings>
     <dirStrings>
       <dir>D:\_work\tao\tao-web-ui</dir>
@@ -230,10 +228,10 @@
         <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
         <option value="$PROJECT_DIR$/workflow/workspace.css" />
         <option value="$PROJECT_DIR$/workflow/1.php" />
-        <option value="$PROJECT_DIR$/workflow/app.js" />
         <option value="$PROJECT_DIR$/fragments/workflow-all.fragment.html" />
         <option value="$PROJECT_DIR$/sap.html" />
         <option value="$PROJECT_DIR$/assets/dist/js/router.js" />
+        <option value="$PROJECT_DIR$/workflow/app.js" />
       </list>
     </option>
   </component>
@@ -454,12 +452,12 @@
       <workItem from="1518704520672" duration="33017000" />
       <workItem from="1520351261630" duration="1607000" />
       <workItem from="1521466084578" duration="5234000" />
-      <workItem from="1522852022859" duration="25322000" />
+      <workItem from="1522852022859" duration="27176000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="486993000" />
+    <option name="totallyTimeSpent" value="488847000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1066" extended-state="7" />
@@ -499,13 +497,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/_rest/projects/list/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fragments/mock-viewprojectresults.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="309">
@@ -836,26 +827,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/workflow/workspace.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="47" lean-forward="true" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
-          <folding>
-            <marker date="1523111440237" expanded="true" signature="4686:4900" ph="..." />
-            <marker date="1523111440237" expanded="true" signature="5007:5221" ph="..." />
-            <marker date="1523111440237" expanded="true" signature="5360:5574" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/workflow/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="299" column="47" lean-forward="false" selection-start-line="299" selection-start-column="30" selection-end-line="299" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fragments/workflow-all.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="369">
@@ -882,8 +853,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/dist/js/router.js">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/workspace.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="11" lean-forward="true" selection-start-line="14" selection-start-column="11" selection-end-line="14" selection-end-column="11" />
+          <folding>
+            <marker date="1523111440237" expanded="true" signature="4686:4900" ph="..." />
+            <marker date="1523111440237" expanded="true" signature="5007:5221" ph="..." />
+            <marker date="1523111440237" expanded="true" signature="5360:5574" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/lib/jquery.panzoom.min.js">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <caret line="1" column="1302" lean-forward="false" selection-start-line="1" selection-start-column="1302" selection-end-line="1" selection-end-column="1302" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1870">
+          <caret line="310" column="16" lean-forward="false" selection-start-line="310" selection-start-column="8" selection-end-line="310" selection-end-column="16" />
           <folding />
         </state>
       </provider>

@@ -1,31 +1,29 @@
 var npNewNode;
 var npDelNode;
 var wfZoom = 1;
-
 var minScale = 0.1;
 var maxScale = 10;
 var incScale = 0.1;
-var wfZoom = 1;
+var keyboardShifted = false;
 
 //used elements
 var $elCanvas = $("#canvas");
 var $elZoom = $(".zoom-percent span", "#preview-toolbar");
 
-var keyboardShifted = false;
-$(document).on('keyup keydown', function(e){
-											keyboardShifted = e.shiftKey;
-										});
-										
-$(document).on('keydown', function(e){
-											if (e.ctrlKey) {
-												if (e.keyCode == 65 || e.keyCode == 97) { // 'A' or 'a'
-													e.preventDefault();
-													console.log("CTRL + A");
-													$(".w", $elCanvas).addClass("selected");
-													toolboxModules.rescanSelected();
-												}
-											}
-										});
+$(document)
+	.on('keyup keydown', function(e){
+			keyboardShifted = e.shiftKey;
+	})
+	.on('keydown', function(e){
+			if (e.ctrlKey) {
+				if (e.keyCode == 65 || e.keyCode == 97) { // 'A' or 'a'
+					e.preventDefault();
+					console.log("CTRL + A");
+					$(".w", $elCanvas).addClass("selected");
+					toolboxModules.rescanSelected();
+				}
+			}
+	});
 										
 var toolboxProperties ={
 	showProperties: function(dna){
@@ -63,7 +61,7 @@ var toolboxProperties ={
 		$("#draggable-toolbox-modules-properties section").hide();
 		$("#draggable-toolbox-modules-properties section.tpl-none").show();
 	}
-}					
+};
 				
 
 var toolboxModules ={
@@ -134,14 +132,14 @@ jsPlumb.ready(function () {
 
     //panZoom
     // Define Pan / Zoom actions
-    var pz = window.pz = $elCanvas.panzoom({
+    window.pz = $elCanvas.panzoom({
 //        minScale             : minScale,
 //        maxScale             : maxScale,
 //        increment            : incScale,
-//        cursor               : "",
         ignoreChildrensEvents: true,
         disablePan           : true,
         disableZoom          : false,
+        startTransform: 'scale(1.0)'
     })
 	.on("panzoomstart",function(e,pzoom,ev){
       $elCanvas.css("cursor","move");
@@ -308,11 +306,6 @@ jsPlumb.ready(function () {
 			}
 		});
 ////////////////////////////////////
-
-
-
-
-
 
     // setup some defaults for jsPlumb.
     var instance = window.jsp = jsPlumb.getInstance({

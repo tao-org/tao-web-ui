@@ -180,10 +180,15 @@
                                         </div>
                                         <div class="box-bottom with-line">
                                             <div class="">
-                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
-                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-1" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Disable</span></button>
-                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-0" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Enable</span></button>
-                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="wf-edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="op-5"><i class="fa fa-random fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Clone</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="op-2"><i class="fa fa-check fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Validate</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="op-2"><i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Start execution</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="op-pause-resume"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted"> Pause / resume execution</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="op-publish"><i class="fa fa-bullhorn fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Publish current workflow</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete workflow</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view-results"><i class="fa fa-picture-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Show execution results</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="trace-execution"><i class="fa fa-road fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Trace execution</span></button>
                                             </div>
                                         </div>
                                     </div>
@@ -194,7 +199,7 @@
                             <div class="col-md-12 proj-element">
                                 <div class="node-tools pull-right">
                                     <span data-toggle="tooltip" title="" class="badge bg-black" data-original-title="3 notifications">3</span>
-                                    <button class="btn btn-box-tool op-edit text-black btn-action" data-action="op-edit" data-toggle="tooltip" data-original-title="Edit workflow">
+                                    <button class="btn btn-box-tool wf-edit text-black btn-action" data-action="wf-edit" data-toggle="tooltip" data-original-title="Edit workflow">
 		<span class="value-dependent value-1 collapse">
 			<span class="fa-stack fa-lg">
 				<i class="fa fa-circle fa-stack-2x text-green" style=""></i>
@@ -768,7 +773,7 @@
                 "dna":nodeDNA,
                 "action":action
             }];
-            if(action == 'op-edit'){
+            if(action == 'wf-edit'){
                 $(".tao-async-wf").fadeIn("slow");
                 document.getElementById('WorkflowBuilder').contentWindow.location.reload();
                 $(".tao-async-ph").fadeOut("slow");

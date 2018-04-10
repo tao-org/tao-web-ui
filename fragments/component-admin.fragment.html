@@ -61,7 +61,7 @@
                         <div class="row">
                             <div class="col-md-12" id="list-master-controls">
                                 <div class="box-tools pull-left">
-                                    <button class="btn btn-master-tool text-black" data-action="op-plus" data-toggle="tooltip" data-original-title="Add a new user"><i class="fa fa-plus"></i></button>
+                                    <button class="btn btn-master-tool text-black" data-action="op-plus" data-toggle="tooltip" data-original-title="Add new processing component"><i class="fa fa-plus"></i></button>
                                 </div>
                                 <div class="box-tools pull-left">
                                     <button class="btn btn-master-tool text-black" data-action="op-filter" data-toggle="tooltip" data-original-title="Filter by tags"><i class="fa fa-filter"></i><span class="label label-warning val-count-filters" style="display:none;">0</span></button>
@@ -191,13 +191,11 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                            <div class="col-sm-12 col-xs-12">
                                                 <div class="text-right" style="padding-top: 30px;">
                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
-                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-1" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Disable</span></button>
-                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-0" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Enable</span></button>
                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
-                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="seemodules"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Modules</span></button>
+                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse" data-action="seemodules"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Modules</span></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -205,7 +203,6 @@
                                 </div>
                             </core-node-box>
                         </div>
-
                         <div class="row">
                         </div>
                     </div><!-- /.tab-pane -->
@@ -514,7 +511,8 @@
             rm_contentUrl="./fragments/component-plus.fragment.html?" + Math.random();
         }
         if(operationid === "edit"){
-            rm_contentUrl="./fragments/topology-edit.fragment.html?" + Math.random();
+            $(".modal-dialog",$modal).addClass("modal-lg");
+            rm_contentUrl="./fragments/component-plus.fragment.html?" + Math.random();
         }
         if(operationid === "delete"){
             $('#confirm-dialog').modal('confirm',{

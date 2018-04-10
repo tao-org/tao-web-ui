@@ -33,8 +33,8 @@ $(function () {
     // An event handler witch calls the router function on every hashchange.
     $(window).on('hashchange', function(){
         //check authtoken
-        //var tokenKey = _settings.readCookie("tokenKey");
-        var tokenKey = _settings.readCookie("xauthtoken");
+        var tokenKey = _settings.readCookie("tokenKey");
+        //var tokenKey = _settings.readCookie("xauthtoken");
         if ((tokenKey=="") || (tokenKey == null)){
             $("body").empty();
             window.location = 'login.html';
@@ -84,7 +84,7 @@ $(function () {
             }
         }
         if(unsolvedRoute){
-            alert("router could not solve route");
+            console.log("router could not solve route");
             renderErrorPage();
         }
         taoDynPageDiv.addClass('visible');

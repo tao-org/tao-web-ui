@@ -641,6 +641,7 @@ ul.timeline.current_route:before{
 
 .nodes-item-core-box .box-bottom .btn-nodeop {
 	padding: 5px 5px;
+    margin-top: 2px;
 }
 /* for workflows */
 .nodes-item-core-box .progress{

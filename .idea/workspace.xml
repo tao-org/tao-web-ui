@@ -3,12 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" afterPath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
-      <change beforePath="$PROJECT_DIR$/assets/dist/js/router.js" afterPath="$PROJECT_DIR$/assets/dist/js/router.js" />
-      <change beforePath="$PROJECT_DIR$/fragments/component-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/component-admin.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/rm-blank.fragment.html" afterPath="$PROJECT_DIR$/fragments/rm-blank.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/workflow-all.fragment.html" afterPath="$PROJECT_DIR$/fragments/workflow-all.fragment.html" />
+      <change beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -108,7 +103,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="component-admin.fragment.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="component-admin.fragment.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fragments/component-admin.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="309">
@@ -116,6 +111,16 @@
               <folding>
                 <element signature="e#15414#15420#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" column="57" lean-forward="true" selection-start-line="9" selection-start-column="57" selection-end-line="9" selection-end-column="57" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -183,7 +188,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/index.php" />
         <option value="$PROJECT_DIR$/fragments/tao_allprojects.html" />
         <option value="$PROJECT_DIR$/_rest/projects/list/index.php" />
         <option value="$PROJECT_DIR$/fragments/dashboard-default.fragment.html" />
@@ -234,6 +238,7 @@
         <option value="$PROJECT_DIR$/fragments/workflow-all.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/rm-blank.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/component-admin.fragment.html" />
+        <option value="$PROJECT_DIR$/index.html" />
       </list>
     </option>
   </component>
@@ -249,7 +254,7 @@
     </servers>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP" />
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="124" />
     <option name="y" value="16" />
     <option name="width" value="1525" />
@@ -358,7 +363,7 @@
   </component>
   <component name="RunManager">
     <configuration default="true" type="PhpBuiltInWebServerConfigurationType" factoryName="PHP Built-in Web Server" document_root="$PROJECT_DIR$" port="8081" />
-    <configuration name="index.php" type="PhpLocalRunConfigurationType" factoryName="PHP Console" temporary="true" path="$PROJECT_DIR$/index.php" />
+    <configuration name="index.html" type="PhpLocalRunConfigurationType" factoryName="PHP Console" temporary="true" path="$PROJECT_DIR$/index.html" />
     <configuration default="true" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" server_name="testserver" />
     <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
       <config-file value="" />
@@ -417,7 +422,7 @@
     </configuration>
     <recent_temporary>
       <list size="1">
-        <item index="0" class="java.lang.String" itemvalue="PHP Script.index.php" />
+        <item index="0" class="java.lang.String" itemvalue="PHP Script.index.html" />
       </list>
     </recent_temporary>
   </component>
@@ -467,15 +472,15 @@
       <workItem from="1518704520672" duration="33017000" />
       <workItem from="1520351261630" duration="1607000" />
       <workItem from="1521466084578" duration="5234000" />
-      <workItem from="1522852022859" duration="33563000" />
+      <workItem from="1522852022859" duration="34291000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="495234000" />
+    <option name="totallyTimeSpent" value="495962000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1696" height="1066" extended-state="6" />
+    <frame x="-8" y="-8" width="1696" height="1066" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -512,13 +517,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/fragments/mock-viewprojectresults.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="124" column="35" lean-forward="false" selection-start-line="124" selection-start-column="35" selection-end-line="124" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/assets/dist/js/demo.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -903,6 +901,14 @@
           <folding>
             <element signature="e#15414#15420#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="57" lean-forward="true" selection-start-line="9" selection-start-column="57" selection-end-line="9" selection-end-column="57" />
+          <folding />
         </state>
       </provider>
     </entry>

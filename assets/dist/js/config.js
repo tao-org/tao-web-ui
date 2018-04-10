@@ -5,7 +5,7 @@ var baseRestURLPHP = 'http://192.168.61.101/_rest/';
 //localhost API
 //var baseRestApiURL = 'http://localhost:8080/';
 //live API
-var baseRestApiURL = 'http://http://master.tao.c-s.ro:8080/';
+var baseRestApiURL = 'http://master.tao.c-s.ro:8080/';
 
 var prefferences = {
     "viewMode": "grid",

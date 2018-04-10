@@ -42,6 +42,8 @@ $(function () {
             window.tokenKey = tokenKey;
         }
         navRouter(decodeURI(window.location.hash));
+        var current = moment().toISOString();
+        $("#page-timestamp").html(current);
     });
 
     // Navigation/router function will call appropriate functions.

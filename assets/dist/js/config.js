@@ -1,7 +1,12 @@
 var baseURL = '/_tao/';
 var baseRestURL = './_rest/'; //mock html files
 var baseRestURLPHP = 'http://192.168.61.101/_rest/';
-var baseRestApiURL = 'http://localhost:8080/';
+
+//localhost API
+//var baseRestApiURL = 'http://localhost:8080/';
+//live API
+var baseRestApiURL = 'http://http://master.tao.c-s.ro:8080/';
+
 var prefferences = {
     "viewMode": "grid",
     "autorefresh": "on"
@@ -13,10 +18,10 @@ var authHeader = "Basic " + btoa("admin:admin");
 //xhr.setRequestHeader ("Authorization", "Basic " + btoa(username + ":" + password));
 /*
 headers: {
-    "Accept": "application/json",
-        "Content-Type": "application/json",
-        "X-Auth-Token": window.tokenKey
-    "Authorization": "Basic " + btoa("admin:admin")
+"Accept": "application/json",
+"Content-Type": "application/json",
+"X-Auth-Token": window.tokenKey
+"Authorization": "Basic " + btoa("admin:admin")
 }
 */
 

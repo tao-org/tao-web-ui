@@ -792,6 +792,7 @@
     ///////////////////
     $( document ).ready(function() {
         console.log( "exec nodes panel ready!" );
+        $(".not-empty").hide();
         $("form.search-container").on("submit",function(e){
             e.preventDefault(e);
         });

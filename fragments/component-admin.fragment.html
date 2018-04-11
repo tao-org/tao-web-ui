@@ -366,7 +366,7 @@
                         }
                     },
                     success: function(response,textStatus, jqXHR) {
-                        if(jqXHR.status === 204){
+                        if((jqXHR.status === 204) || (!response) ){
                             showMsg("No processing components found.", "SUCCESS");
                             response = [];
                         }
@@ -613,6 +613,7 @@
     ///////////////////
     $( document ).ready(function() {
         console.log( "exec nodes panel ready!" );
+        $(".not-empty").hide();
         $("form.search-container").on("submit",function(e){
             e.preventDefault(e);
         });

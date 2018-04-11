@@ -87,7 +87,11 @@
                         <div class="row" id="list-work-users">
                             <div class="col-sm-12">
                                 <div class="box box-success">
-                                    <div class="box-header">
+                                    <div class="box-header empty">
+                                        <i class="fa fa-database"></i>
+                                        <h3 class="box-title">List is empty.</h3>
+                                    </div>
+                                    <div class="box-header not-empty">
                                         <i class="fa fa-database"></i>
                                         <h3 class="box-title">Datasources -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
                                         <div class="box-tools pull-right" data-toggle="tooltip" title="Status">
@@ -346,7 +350,11 @@
                             alert('E001, An error has occurred, please try again or contact app admin.');
                         }
                     },
-                    success: function(response) {
+                    success: function(response,textStatus, jqXHR) {
+                        if(jqXHR.status === 204){
+                            showMsg("No datasources found.", "SUCCESS");
+                            response = [];
+                        }
                         showMsg("Datasources list successfully retrieved.", "SUCCESS");
                         //inject fake tags
                         var j = 0;
@@ -379,6 +387,13 @@
             },
             repaintList: function() {
                 _mLIST.clearList();
+                if(_mLIST.data.length > 1){
+                    $('.box-header.empty').hide();
+                    $('.box-header.not-empty').show();
+                }else{
+                    $('.box-header.empty').show();
+                    $('.box-header.not-empty').hide();
+                }
                 var visibleItemsRange = {
                     first: _mLIST.dataPagination.currentPage*_mLIST.dataPagination.itemsOnPage,
                     last: _mLIST.dataPagination.currentPage*_mLIST.dataPagination.itemsOnPage+_mLIST.dataPagination.itemsOnPage
@@ -666,6 +681,7 @@ html += "      </tbody>\n" +
     ///////////////////
     $( document ).ready(function() {
         console.log( "exec nodes panel ready!" );
+        $(".not-empty").hide();
         $("form.search-container").on("submit",function(e){
             e.preventDefault(e);
         })

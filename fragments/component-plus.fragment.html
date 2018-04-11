@@ -116,9 +116,9 @@
                                                 <label for="inputVisibility" class="col-sm-2 col-md-2 control-label">Visibility </label>
                                                 <div class="col-sm-10 col-md-10">
                                                     <select disabled="disabled" id="inputVisibility" name="inputVisibility" class="form-control">
-                                                        <option value="1">System build-in component</option>
-                                                        <option value="CONTRIBUTOR" selected="selected">User defined component</option>
-                                                        <option value="3">Contributor defined component</option>
+                                                        <option value="SYSTEM">System build-in component</option>
+                                                        <option value="USER">User defined component</option>
+                                                        <option value="CONTRIBUTOR" selected="selected">Contributor defined component</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -230,24 +230,24 @@
                                                     <tr class="tpl-sample-row">
                                                         <th scope="row">
                                                             <a href="#" class="text tbl-prop-expand-action"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></a>
-                                                            <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                                                            <i class="fa fa-plus fa-fw hidden" aria-hidden="true"></i>
                                                             <a href="#" class="text tbl-prop-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
                                                         </th>
                                                         <td>
                                                             <input type="text" class="var-id" value="" placeholder="parameter ID">
                                                         </td>
-                                                        <td><textarea rows="2">This allows setting the writing behaviour for the output vector file. Please note that the actual behaviour depends on the file format.</textarea></td>
+                                                        <td><textarea rows="2" class="var-description"></textarea></td>
                                                         <td>
                                                             <input type="text" class="var-label" value="" placeholder="parameter label">
                                                         </td>
                                                         <td>
-                                                            <select>
+                                                            <select class="var-type">
                                                                 <option value="1" selected="selected">Regular</option>
                                                                 <option value="2">Other</option>
                                                             </select>
                                                         </td>
                                                         <td>
-                                                            <select>
+                                                            <select class="var-datatype">
                                                                 <option value="java.lang.String" selected="selected">String</option>
                                                                 <option value="java.lang.Integer">Integer</option>
                                                                 <option value="java.lang.Boolean">Boolean</option>
@@ -263,7 +263,7 @@
                                                                     <div class="form-group">
                                                                         <label class="col-sm-2 col-md-2 control-label">Unit</label>
                                                                         <div class="col-sm-10 col-md-10">
-                                                                            <input type="text" class="form-control" name="inputUnit" placeholder="unit" autocomplete="off" value=""/>
+                                                                            <input type="text" class="form-control var-unit" name="inputUnit" placeholder="unit" autocomplete="off" value=""/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -271,7 +271,7 @@
                                                                     <div class="form-group">
                                                                         <label class="col-sm-2 col-md-2 control-label">Value Set</label>
                                                                         <div class="col-sm-10 col-md-10">
-                                                                            <input type="text" class="form-control" name="inputValueSet" placeholder="value set" autocomplete="off" value=""/>
+                                                                            <input type="text" class="form-control var-valueset" name="inputValueSet" placeholder="value set" autocomplete="off" value=""/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -288,7 +288,7 @@
                                                                         <label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Not Null </label>
                                                                         <div class="col-sm-10 col-md-10">
                                                                             <div class="checkbox">
-                                                                                <input type="checkbox" name="inputNotNull" class="big">
+                                                                                <input type="checkbox" name="inputNotNull" class="big var-notnull">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -297,7 +297,7 @@
                                                                     <div class="form-group">
                                                                         <label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Validator </label>
                                                                         <div class="col-sm-10 col-md-10">
-                                                                            <input type="text" class="form-control" name="inputUnit" placeholder="unit" autocomplete="off" value=""/>
+                                                                            <input type="text" class="form-control var-validator" name="inputValidator" placeholder="validator" autocomplete="off" value=""/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -625,36 +625,49 @@
             formData.parameterDescriptors = [];
             $("tbody", $tblParameterDescriptors).each(function(){
                 var id = $(this).find(".val-row input.var-id").val();
+                var label = $(this).find(".val-row input.var-label").val();
+                var description = $(this).find(".val-row .var-description").val();
+                var type = $(this).find(".val-row .var-type").val();
+                var datatype = $(this).find(".val-row .var-datatype").val();
+                var defaultval = $(this).find(".val-row .var-default").val();
+
                 var format = $(this).find(".val-row-plus input.var-format").val();
-                if( ((typeof id != "undefined") && (typeof id.valueOf() == "string") && (id.length > 0)) ) {
+                var unit = $(this).find(".val-row-plus input.var-unit").val();
+                var validator = $(this).find(".val-row-plus input.var-validator").val();
+                var notnull = $(this).find(".val-row-plus .var-notnull").is(":checked");
+
+                if( ((typeof id !== "undefined") && (typeof id.valueOf() === "string") && (id.length > 0)) ) {
+                    if (format.trim()=== ''){format = null;}
+                    if (unit.trim()=== ''){unit = null;}
+                    if (validator.trim()=== ''){validator = null;}
+
                     var newParameterDescriptor = {
                         "id": id,
-                        "type": 1,
-                        "dataType": "java.lang.Boolean",
-                        "defaultValue": "true",
-                        "description": "Activate 8-Neighborhood connectivity (default is 4).",
-                        "label": "neighbor_bool",
-                        "unit": null,
+                        "type": type,
+                        "dataType": datatype,
+                        "defaultValue": defaultval,
+                        "description": description,
+                        "label": label,
+                        "unit": unit,
                         "valueSet": null,
                         "format": format,
-                        "notNull": false,
-                        "validator": null
+                        "notNull": notnull,
+                        "validator": validator
                     };
                     formData.parameterDescriptors.push(newParameterDescriptor);
                 }
             });
-
+console.log(JSON.stringify(formData));
             if(formData.id === ''){
                 showMsg("Component ID can not be empty. Please choose valid values to continue.", "ERROR");
                 return false;
             }
             var regexp = /^[a-zA-Z0-9-_]+$/;
-            if (formData.id.search(regexp) == -1)
+            if (formData.id.search(regexp) === -1)
             {
                 showMsg("The component id contains invalid characters.", "ERROR");
                 return;
             }
-console.log(JSON.stringify(formData));
             $.ajax({
                 url: baseRestApiURL + "component/?rnd=" + Math.random(),
                 dataType: 'json',

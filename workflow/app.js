@@ -286,7 +286,6 @@ jsPlumb.ready(function () {
 				tao_ZoomCanvas(action);
 			};
 			if(action == "zoom-fitall"){
-				alert("fit");
 				tao_ZoomFitAllNodes();
 			}
 			

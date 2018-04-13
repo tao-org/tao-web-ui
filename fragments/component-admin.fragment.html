@@ -502,6 +502,7 @@
         $(".modal-dialog",$modal).removeClass("modal-lg");
         var rm_contentUrl = '/_tao/rm_content/rm_blank.php';
         var rmContent = '';
+        window.userOpStack = [];
 
         if(operationid === "view"){
             $(".modal-dialog",$modal).addClass("modal-lg");
@@ -511,6 +512,10 @@
             rm_contentUrl="./fragments/component-plus.fragment.html?" + Math.random();
         }
         if(operationid === "edit"){
+            window.userOpStack = [{
+                "dna":{},
+                "action":"comp_edit"
+            }];
             $(".modal-dialog",$modal).addClass("modal-lg");
             rm_contentUrl="./fragments/component-plus.fragment.html?" + Math.random();
         }

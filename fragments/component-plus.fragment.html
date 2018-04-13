@@ -17,7 +17,9 @@
                 <span class="error-label collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
                 <span class="error-version collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Version cannot be empty.</span>
                 <span class="error-template collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Template cannot be empty.</span>
+                <span class="error-fileLocation collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> File location has an invalid value.</span>
             </p>
+            <p id="modal-error-msg-server"></p>
         </div>
 
         <div class="modal-body">
@@ -158,7 +160,7 @@
                                             <div class="form-group">
                                                 <label for="inputFileLocation" class="col-sm-2 col-md-2 control-label">File location </label>
                                                 <div class="col-sm-10 col-md-10">
-                                                    <input type="text" class="form-control" id="inputFileLocation" name="inputFileLocation" placeholder="file location" autocomplete="off" value=".\mypath1"/>
+                                                    <input type="text" class="form-control" id="inputFileLocation" name="inputFileLocation" placeholder="file location" data-errorspan="fileLocation" autocomplete="off" value=".\mypath1"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -203,7 +205,7 @@
                                         <div class="col-md-12">
                                             <p>Parameter list:</p>
                                             <div class="responsive">
-                                                <table class="table table-bordered box-shadow--6dp tbl-edt">
+                                                <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-paramdesc">
                                                     <thead>
                                                     <tr>
                                                         <th></th>
@@ -242,8 +244,8 @@
                                                         </td>
                                                         <td>
                                                             <select class="var-type">
-                                                                <option value="1" selected="selected">Regular</option>
-                                                                <option value="2">Other</option>
+                                                                <option value="REGULAR" selected="selected">Regular</option>
+                                                                <option value="TEMPLATE">Template</option>
                                                             </select>
                                                         </td>
                                                         <td>
@@ -315,7 +317,7 @@
                                         <div class="col-md-12">
                                             <p>Variables:</p>
                                             <div class="responsive">
-                                                <table class="table table-bordered box-shadow--6dp tbl-edt">
+                                                <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-sysvar">
                                                     <thead>
                                                     <tr>
                                                         <th></th>
@@ -430,6 +432,122 @@
         return true;
     }
 
+////////////
+    function getComponentDataById(compID){
+        $.ajax({
+            type: "get",
+            url: baseRestApiURL + "component/"+compID+"/?rnd=" + Math.random(),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": authHeader
+            },
+            error : function (jqXHR, textStatus, errorThrown) {
+                if( jqXHR.status === 500 ){
+                    alert('E001, Exec node nolonger found.');
+                } else {
+                    alert('E001, An error has occurred, please try again or contact app admin.');
+                }
+            },
+            success: function(response) {
+                console.log(response);
+                try {
+                    //populate form with current values
+                    var $el = $('#frmExecNodeEdit');
+                    $('input[name=inputCompID]', $el).val(response.id);
+                    $('input[name=inputCompLabel]', $el).val(response.label);
+                    $('input[name=inputCompVersion]', $el).val(response.version);
+                    $('textarea[name=inputCompDescription]', $el).val(response.description);
+                    $('input[name=inputCompAuthors]', $el).val(response.authors);
+                    $('input[name=inputCompCopyright]', $el).val(response.copyright);
+
+                    $('input[name=inputCompCopyright]', $el).val(response.copyright);
+                    $('input[name=inputCompLabel]', $el).val(response.label);
+                    $('input[name=inputCompLabel]', $el).val(response.label);
+                    $('input[name=inputCompLabel]', $el).val(response.label);
+                    $('input[name=inputCompLabel]', $el).val(response.label);
+
+                    $('select[name=inputActive] option', $el).removeAttr("selected");
+                    $('select[name=inputActive] option[value="'+response.active+'"]', $el).attr("selected", "selected");
+
+                    $('select[name=inputVisibility] option', $el).removeAttr("selected");
+                    $('select[name=inputVisibility] option[value="'+response.visibility+'"]', $el).attr("selected", "selected");
+
+                    $('select[name=inputTemplateType] option', $el).removeAttr("selected");
+                    $('select[name=inputTemplateType] option[value="'+response.templateType+'"]', $el).attr("selected", "selected");
+
+                    $('select[name=inputContainerId] option', $el).removeAttr("selected");
+                    $('select[name=inputContainerId] option[value="'+response.containerId+'"]', $el).attr("selected", "selected");
+
+                    $('input[name=inputFileLocation]', $el).val(response.fileLocation);
+                    $('input[name=inputWorkingDirectory]', $el).val(response.workingDirectory);
+                    $('input[name=inputTemplateName]', $el).val(response.template.name);
+                    $('textarea[name=inputTemplateContents]', $el).val(response.template.contents);
+
+                    $.each(response.variables, function(i, value) {
+                        helper_addSysVarRow($("#tbl-edt-sysvar"),value);
+                    });
+                }
+                catch(e) {
+                    alert('E001, An error has occurred, please try again or contact app admin.');
+                }
+                $.each(response.parameterDescriptors, function(i, value) {
+                    helper_addParameterDescriptorsRow($("#tbl-edt-paramdesc"),value);
+                });
+
+            }
+        });
+        return true;
+    }
+////////////
+    function helper_addParameterDescriptorsRow($tbl, payload){
+        var obj = {
+            "dataType": "java.lang.String",
+            "defaultValue": "",
+            "description": "",
+            "format": null,
+            "id": "",
+            "label": "",
+            "notNull": false,
+            "type": "REGULAR",
+            "unit":null,
+            "validator":null,
+            "valueSet": []
+        };
+        $.extend( obj, payload );
+
+        var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
+        $el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+        $('input.var-id', $el).val(obj.id);
+        $('textarea.var-description', $el).val(obj.description);
+        $('input.var-label', $el).val(obj.label);
+        $('input.var-default', $el).val(obj.defaultValue);
+
+        $('select.var-type option', $el).removeAttr("selected");
+        $('select.var-type option[value="'+obj.dataType+'"]', $el).attr("selected", "selected");
+
+        $('select.var-datatype option', $el).removeAttr("selected");
+        $('select.var-datatype option[value="'+obj.type+'"]', $el).attr("selected", "selected");
+
+        $('input.var-unit', $el).val(obj.unit);
+        if(obj.format) $('input.var-format', $el).val(obj.format);
+        if(obj.validator) $('input.var-validator', $el).val(obj.validator);
+
+            $tbl.append($el);
+    }
+
+
+    function helper_addSysVarRow($tbl, payload){
+        var obj = {"key":"","value":""};
+        $.extend( obj, payload );
+        var $el = $tbl.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
+        $('input.var-key', $el).val(obj.key);
+        $('input.var-value', $el).val(obj.value);
+        $tbl.append($el);
+    }
+
     $(document).ready( function(){
         //get all availlable dockers
         var getAllDocker = $.ajax({ cache: false,
@@ -455,6 +573,12 @@
                         $('#inputContainerId').append($('<option>').text(value.name).attr('value', value.id));
                     }
                 });
+                if(userOpStack[0] && userOpStack[0].action ==="comp_edit" && _mLIST.dataOpQueue[0] && _mLIST.dataOpQueue[0].dna.id){
+                    $(".modal-title").html("Edit processing component");
+                    $("#saveExecNode").html("Save processing component");
+                    $("#inputCompID").attr('disabled','disabled');
+                    getComponentDataById(_mLIST.dataOpQueue[0].dna.id);
+                }
             })
             .fail(function () {
                 showMsg("Could not retrive dockers list.", "ERROR");
@@ -467,18 +591,13 @@
             })
             .trigger("change");
 
-
         $(".btn-comp-addnewvar").on("click", function(){
             var $tbl = $(this).closest(".tbl-edt");
-            var $el = $tbl.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row"); //attr('id', 'newbutton')
-//            $el.find(".val")
-            $tbl.append($el);
+            helper_addSysVarRow($tbl);
         });
         $(".btn-comp-addnewparam").on("click", function(){
             var $tbl = $(this).closest(".tbl-edt");
-            var $elBody = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
-            $elBody.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
-            $tbl.append($elBody);
+            helper_addParameterDescriptorsRow($tbl);
         });
 
         $(".tbl-edt").on("click", ".tbl-sysvar-delete-action", function(e){

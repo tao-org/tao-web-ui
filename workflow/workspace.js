@@ -64,11 +64,11 @@ wfZoom = 1;
 			};
 			//set it in motion
 
-//var fitLeft = parseInt(parW/2*wfZoom  - parW/2  - minLeft*wfZoom + (parW - spanX*wfZoom)/2);
-//var fitTop = parseInt(parH/2*wfZoom - parH/2 - minTop*wfZoom + (parH - spanY*wfZoom)/2);
-//var fitTop = -(1)*parseInt(minTop*wfZoom + (canvasH - canvasH*wfZoom)) + rezidualSpace.top/wfZoom;
-var fitTop = parseInt(-minTop*wfZoom - (canvasH - canvasH*wfZoom)) - rezidualSpace.top/wfZoom;
-var fitLeft = -(1)*parseInt(minLeft*wfZoom + (canvasW - canvasW*wfZoom)/2) + rezidualSpace.left/wfZoom;
+
+//var fitTop = parseInt(-minTop*wfZoom - (canvasH - canvasH*wfZoom)) - rezidualSpace.top/wfZoom;
+        var fitTop = parseInt(-minTop*wfZoom - (canvasH - canvasH*wfZoom)/2) + rezidualSpace.top/wfZoom;
+        var fitLeft = parseInt(-minLeft*wfZoom - (canvasW - canvasW*wfZoom)/2) + rezidualSpace.left/wfZoom;
+//var fitLeft = -(1)*parseInt(minLeft*wfZoom + (canvasW - canvasW*wfZoom)/2) + rezidualSpace.left/wfZoom;
 			
 			
 			var matrix = [wfZoom, 0, 0, wfZoom, fitLeft, fitTop];

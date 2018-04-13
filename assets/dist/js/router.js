@@ -16,6 +16,8 @@ var hashRoutesMap = [];
     hashRoutesMap["documentation/intro"] = "./fragments/tao-documentation.fragment.html";
     hashRoutesMap["faq/intro"] = "./fragments/tao-faq.fragment.html";
 
+var userOpStack = [];
+
 function routeLoading(action){
     if(action === "show"){
         $("#myModalLoading").modal('show');

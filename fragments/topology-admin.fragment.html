@@ -710,10 +710,11 @@
             var parentIframe = document.getElementById("monitorIframeWrapper");
             //$("#monitorIframeWrapper").hide();
             var iframe = document.createElement('iframe');
-            iframe.id="randomid"+Math.floor(Math.random() * 10000000);
+            var iframeID = "randomid"+Math.floor(Math.random() * 10000000);
+            iframe.id = iframeID;
             iframe.src = sshURL;
             iframe.style.width = "100%";
-            iframe.style.height = "0px";
+            iframe.style.height = "0";
             iframe.style.border = "0";
             parentIframe.appendChild(iframe);
             $sshModal.modal('show');
@@ -724,17 +725,9 @@
                     var newwindow = window.open(sshURL, "_blank", "resizable=yes, scrollbars=yes, titlebar=yes, width=800, height=405, top=10, left=10");
                     $sshModal.modal('hide');
                 });
-            setTimeout(function() {
-                //var modal = document.getElementById("myModalMonitor");
-                //var iframe = modal.getElementsByTagName("iframe")[0];
-                $("#monitorIframeWrapper").hide();
-                iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
-                $("#monitorIframeWrapper").fadeIn();
-            }, 500);
             return 1;
         }
         myModalNodesOpShow(action);
-
     });
 
 

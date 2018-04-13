@@ -57,16 +57,12 @@
             </div>
             <div class="box-body">
                 <dl class="dl-horizontal">
-                    <dt>Runtime (start time):</dt>
-                    <dd><span class="val-mm-starttime" style="text-transform: lowercase;">n/a</span></dd>
-                    <dt>Uptime:</dt>
-                    <dd><span class="val-mm-uptime" style="text-transform: lowercase;">n/a</span></dd>
-                    <dt>Available processors:</dt>
-                    <dd><span class="val-mm-processors">n/a</span></dd>
-                    <dt>Thread count</dt>
-                    <dd><span class="val-mm-threadcount">n/a</span>, peak thread count: <span class="val-mm-peakthreadcount">n/a</span></dd>
+                    <dt>CPU usage:</dt>
+                    <dd><span class="val-mm-processors">n/a</span>%</dd>
                     <dt>Memory:</dt>
                     <dd><span class="val-mm-memory" style="text-transform: lowercase;">n/a</span></dd>
+                    <dt>Storage:</dt>
+                    <dd><span class="val-mm-storage" style="text-transform: lowercase;">n/a</span></dd>
                 </dl>
             </div>
             <div class="box-canvas">
@@ -165,20 +161,23 @@
             }
         }).done(function (getMasterMonitorResponse) {
             //console.log(getMasterMonitorResponse);
+            var percent = {
+                cpu: parseInt(getMasterMonitorResponse.cpuTotal) || 0,
+                memory: parseInt((getMasterMonitorResponse.totalMemory-getMasterMonitorResponse.availableMemory)/getMasterMonitorResponse.totalMemory*100) || 0,
+                storage: parseInt(getMasterMonitorResponse.diskUsed/getMasterMonitorResponse.diskTotal*100) || 0
+            };
             try {
-                $(".val-mm-processors").text(parseInt(getMasterMonitorResponse.runtime.availableProcessors));
-                $(".val-mm-peakthreadcount").text(parseInt(getMasterMonitorResponse.runtime.peakThreadCount));
-                $(".val-mm-threadcount").text(parseInt(getMasterMonitorResponse.runtime.threadCount));
-                var upTimeS = parseInt(getMasterMonitorResponse.runtime.upTime);
-                var duration = moment.duration(upTimeS, 'seconds');
-                $(".val-mm-uptime").text(upTimeS+" "+getMasterMonitorResponse.runtime.timeUnit+" (about "+(duration.humanize())+")");
-                $(".val-mm-starttime").text(getMasterMonitorResponse.runtime.startTime[0]+"-"+getMasterMonitorResponse.runtime.startTime[1]+"-"+getMasterMonitorResponse.runtime.startTime[2]+" "+getMasterMonitorResponse.runtime.startTime[3]+":"+getMasterMonitorResponse.runtime.startTime[4]+":"+getMasterMonitorResponse.runtime.startTime[5]);
-                $(".val-mm-memory").text(getMasterMonitorResponse.memory.heapUsed+"/"+getMasterMonitorResponse.memory.heapMax+" (heap used/heap max, "+getMasterMonitorResponse.memory.memoryUnit+")");
+//                var upTimeS = parseInt(getMasterMonitorResponse.runtime.upTime);
+//                var duration = moment.duration(upTimeS, 'seconds');
+                $(".val-mm-processors").text(parseInt(getMasterMonitorResponse.cpuTotal));
+                $(".val-mm-memory").text(getMasterMonitorResponse.availableMemory+"/"+getMasterMonitorResponse.totalMemory+" (available/total, "+getMasterMonitorResponse.memoryUnit+")");
+                $(".val-mm-storage").text(getMasterMonitorResponse.diskUsed+"/"+getMasterMonitorResponse.diskTotal+" (used/total, "+getMasterMonitorResponse.diskUnit+")");
+                var chartCurrentTime = moment ().format("HH:mm:ss");
                 _loadChart.updateData(
-                    (100 - Math.floor(Math.random() * (100))),
-                    (100 - Math.floor(Math.random() * (100))),
-                    (100 - Math.floor(Math.random() * (100))),
-                    (upTimeS+'s')
+                    (percent.cpu),
+                    (percent.memory),
+                    (percent.storage),
+                    (chartCurrentTime)
                 );
             }
             catch(error) {
@@ -187,18 +186,19 @@
                 $(".box-body, .box-canvas").hide();
 
             }
+            if(window.parent.document.getElementsByTagName("iframe")[0]){
+                window.parent.document.getElementsByTagName("iframe")[0].style.height = document.body.scrollHeight + 'px';
+            }
         }).fail(function (jqXHR, textStatus) {
             //alert("Retriving master monitor data failed.");
         }).complete(function(){
             if($("#widget-master-monitor").length){
                 setTimeout(function(){
                     updateMasterMonitorWidget();
-                },3000);
+                },1000);
             }
         });
     }
-
-
 
     $(document).ready( function(){
         console.log("document ready!!!");

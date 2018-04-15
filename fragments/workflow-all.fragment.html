@@ -767,9 +767,20 @@
             if(action === 'wf-start'){
                 //localhost:8080/orchestration/start/1
                 var currentWfID = _mLIST.dataOpQueue[0].dna.id;
-                var	lcl_postdata = {
-                    "in":"<cale2>"
-                };
+
+//to do
+                var attrName = prompt("Please enter attribute name:", "in or Ssource");
+                var attrPath = prompt("Please enter path:", "");
+                if (attrName == null || attrName == "" || attrPath == null || attrPath == "") {
+                    alert("User cancelled the prompt. Execution aborted");
+                    return;
+                }
+//
+
+                var	lcl_postdata ={};
+                lcl_postdata[attrName] = attrPath;
+                //= {"in":"<cale2>"};
+                
                 var startWfExecution = $.ajax({ cache: false,
                     url: baseRestApiURL + "orchestration/start/"+currentWfID+"?rnd=" + Math.random(),
                     dataType : 'json',

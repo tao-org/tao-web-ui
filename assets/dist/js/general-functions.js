@@ -22,6 +22,19 @@ function arrayIntersection(){ //usage var x = arrayIntersection([1,2,3],[2,3,4])
     });
 };
 
+//get query value from request
+function jsGetUrlQueryValue (sVar) {
+    return decodeURI(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURI(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+}
+
+function datetimeFromArray(arr){
+    if(arr && (arr !== null) && (arr instanceof Array) ){
+        return (arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);
+    }else{
+        return 'unknown';
+    }
+}
+
 var _settings = {
     init: function() {
         var ck = document.cookie

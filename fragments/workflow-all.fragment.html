@@ -8,17 +8,7 @@
 <!-- Content Workflow -->
 <section id="tao-async-wf" class="content tao-async-wf collapse">
     <div class="row">
-        <div class="col-md-12">
-            <iframe id="WorkflowBuilder"
-                    title="WorkflowBuilder"
-                    width="100%"
-                    height="1050"
-                    frameborder="0"
-                    scrolling="no"
-                    marginheight="0"
-                    marginwidth="0"
-                    src="./workflow/">
-            </iframe>
+        <div class="col-md-12" id="wfIframeWrapper">
         </div>
     </div>
 </section>
@@ -257,7 +247,7 @@
 			</span>
 		</span>
                                     </button>
-                                    <button class="btn btn-box-tool op-20 text-black btn-action disabled" data-action="op-20" data-toggle="tooltip" data-original-title="Deploy and start execution">
+                                    <button class="btn btn-box-tool op-20 text-black btn-action" data-action="wf-start" data-toggle="tooltip" data-original-title="Deploy and start execution">
 		<span class="value-dependent value-1 collapse">
 			<span class="fa-stack fa-lg">
 				<i class="fa fa-circle fa-stack-2x text-green" style=""></i>
@@ -773,14 +763,61 @@
                 "dna":nodeDNA,
                 "action":action
             }];
-            if(action == 'wf-edit'){
-                $(".tao-async-wf").fadeIn("slow");
-                document.getElementById('WorkflowBuilder').contentWindow.location.reload();
-                $(".tao-async-ph").fadeOut("slow");
-                $(".tao-async-mc").fadeOut("slow");
-            }else {
-                myModalNodesOpShow(action);
+
+            if(action === 'wf-start'){
+                //localhost:8080/orchestration/start/1
+                var currentWfID = _mLIST.dataOpQueue[0].dna.id;
+                var	lcl_postdata = {
+                    "in":"<cale2>"
+                };
+                var startWfExecution = $.ajax({ cache: false,
+                    url: baseRestApiURL + "orchestration/start/"+currentWfID+"?rnd=" + Math.random(),
+                    dataType : 'json',
+                    type: 'POST',
+                    data: JSON.stringify(lcl_postdata),
+                    //contentType: "application/json; charset=utf-8",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "Authorization": authHeader
+                    }
+                });
+                $.when(startWfExecution)
+                    .done(function (startWfExecutionResponse) {
+                        if(1===1){
+                            showMsg("Workflow execution successfully invoked.", "SUCCESS");
+                        }
+                    })
+                    .fail(function () {
+                        showMsg("Workflow failed to lunch.", "ERROR");
+                    });
+                return 1;
             }
+            if(action === 'wf-edit'){
+                //document.getElementById('WorkflowBuilder').contentWindow.location.reload();
+                var currentWfID = _mLIST.dataOpQueue[0].dna.id;
+
+                $(".tao-async-ph, .tao-async-mc").fadeOut("slow",function() {
+                    var iH = $(".content-wrapper").innerHeight() || 1080;
+                    var parentIframe = document.getElementById("wfIframeWrapper");
+                    var iframe = document.createElement('iframe');
+                    iframe.id = "WorkflowBuilder"+Math.floor(Math.random() * 10000000);
+                    iframe.src = './workflow/?_wf='+currentWfID;
+                    iframe.title="WorkflowBuilder";
+                    iframe.style.margin = "0";
+                    iframe.style.width = "100%";
+                    iframe.style.height = iH+"px";
+                    iframe.style.border = "0";
+                    iframe.scrolling="no"
+                    while (parentIframe.hasChildNodes()) {
+                        parentIframe.removeChild(parentIframe.lastChild);
+                    }
+                    parentIframe.appendChild(iframe);
+                    $(".tao-async-wf").fadeIn("slow");
+                });
+                return 1;
+            }
+            myModalNodesOpShow(action);
         });
 
 

@@ -9,8 +9,74 @@
 		_settings.createCookie("prefferences_workFlowConnectors","F");
 	};
 
-	
-	function tao_ZoomFitAllNodes() {
+
+    function wf_renderComponentsToolBox(){
+        var $elModList = $("#moduleslist");
+        $elModList.empty();
+        $.each(wfTools.components, function(i, wfOneComponent) {
+            var html ='<sortable_item class="item selected" id="'+wfOneComponent.id+'" data-componentid="'+wfOneComponent.id+'">\n' +
+                '\t\t\t\t\t<div class="item-preview">\n' +
+                '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
+                '\t\t\t\t\t\t<img src="media/module-otb.png" style="width: 100%; height: 100%;">\n' +
+                '\t\t\t\t\t  </vectr_img>\n' +
+                '\t\t\t\t\t</div>\n' +
+                '\t\t\t\t\t<div class="item-info">\n' +
+                '\t\t\t\t\t  <div class="item-label text-left">'+wfOneComponent.label+'</div>\n' +
+                '\t\t\t\t\t</div>\n' +
+                '\t\t\t\t</sortable_item>';
+            $elModList.append(html);
+        });
+
+        $("#moduleslist .item").draggable({
+            revert: "invalid",
+            helper: "clone",
+            start: function(e, ui)
+            {
+                $(ui.helper).css('opacity', '0.5');;
+            }
+        });
+        $elCanvas.droppable({
+            accept: "#moduleslist .item",
+            drop: function (event, ui) {
+                if (event.which != 1 || event.originalEvent.isTrigger){
+                    console.log("node creation canceled by user");
+                    return;
+                }
+                var btop   = (this.offsetHeight - this.scrollHeight)/2*wfZoom;
+                var bleft  = (this.offsetWidth  - this.scrollWidth )/2*wfZoom;
+                var top    = (ui.offset.top  - $(this).offset().top  - btop)/wfZoom;
+                var left   = (ui.offset.left - $(this).offset().left - bleft)/wfZoom;
+
+                var dna = {
+                    fullData: {
+                        componentId: $(ui.helper).data("componentid"),
+                        created: [2018, 4, 15, 14, 21, 56, 0],
+                        customValues:[],
+                        id:0,
+                        incomingLinks:[],
+                        level:0,
+                        name:"No Name",
+                        xCoord:0,
+                        yCoord:0
+                    }
+
+                }
+                //npNewNode(ui.offset.left,ui.offset.top, dna);
+                //adjust drop coordinates to conform pan&zoom
+                addNewNode(left,top, dna);
+//				  $(this).append($(ui.helper).clone().draggable({
+//					  containment: "parent"
+//				  }));
+                makeWFPreview();
+            }
+        });
+
+
+    }
+
+
+
+    function tao_ZoomFitAllNodes() {
 pz.panzoom('reset', { animate: false });
 wfZoom = 1;
 			console.log("f:fitCanvasToWindow");
@@ -203,7 +269,6 @@ makeWFPreview();
 			}
 	});
 
-
 $( function() {
 	console.log("pref");
 	if(_settings.readCookie("prefferences_workFlowConnectors")){
@@ -216,7 +281,9 @@ $( function() {
 	}else{
 		setWFConnectorsToStateMachine();
 	};
-	
+
+
+
 		
 	$("#moduleslist .item, #datasourceslist .item").draggable({
           revert: "invalid",

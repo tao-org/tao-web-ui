@@ -6,9 +6,21 @@ var maxScale = 10;
 var incScale = 0.1;
 var keyboardShifted = false;
 
+var wfTools={
+	components:[],
+	datasources:[]
+};
+var wfNodes = [];
+var wfNodesMap = {};
+
 //used elements
 var $elCanvas = $("#canvas");
 var $elZoom = $(".zoom-percent span", "#preview-toolbar");
+
+var currentWfID = jsGetUrlQueryValue("_wf");
+
+
+
 
 $(document)
 	.on('keyup keydown', function(e){
@@ -28,7 +40,7 @@ $(document)
 var toolboxProperties ={
 	showProperties: function(dna){
 		$("#draggable-toolbox-modules-properties section").hide();
-		if(dna.payload.mtype == undefined){
+		if((dna.payload == undefined) || (dna.payload.mtype == undefined)){
 			$("#draggable-toolbox-modules-properties section.tpl-unknown").show();
 		}else{
 				var tpl_notfound = true;
@@ -123,8 +135,42 @@ var toolboxModules ={
 }
 
 
-jsPlumb.bind("jsPlumbDemoLoaded", function(instance) {
+jsPlumb.bind("tao_saveRevertWorkflow", function() {
+    //to do other reset variables to default
+	wf_removeAllNodes();
+	jsPlumb.fire("tao_loadWorkflowById");
+});
 
+jsPlumb.bind("tao_loadWorkflowById", function() {
+    var getAllComponents = $.ajax({ cache: false,
+        url: baseRestApiURL + "component/?rnd=" + Math.random(),
+        dataType : 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": authHeader
+        }
+    });
+
+    $.when(getAllComponents)
+        .done(function (getAllComponentsResponse) {
+            console.log("Workspace components init done start.");
+            $.each(getAllComponentsResponse, function(i, wfOneComponent) {
+				//var tmp_node = addNewNode(wfOneNode.xCoord,wfOneNode.yCoord,{"mtype":"otb-BandMath","mlabel":wfOneNode.name,"fullData":wfOneNode});
+            });
+            wfTools.components = getAllComponentsResponse;
+            wf_renderComponentsToolBox();
+
+            console.log("Workspace components init done.");
+            wf_loadWorkflowById(currentWfID);
+        })
+        .fail(function(){
+            showMsg("Could not retrive workspace data.", "ERROR");
+        });
+});
+
+jsPlumb.bind("jsPlumbDemoLoaded", function(instance) {
 });
 
 /************************************************jsplumb******************************************/
@@ -292,11 +338,15 @@ jsPlumb.ready(function () {
 		});
 		$("#control-toolbar").on("click", ".toolbar-action", function(){
 			var action = $(this).data("action");
-			if(action == "home"){
-				console.log("message");
+			if(action == "back-home"){
+				console.log("back-home");
 				window.parent.tao_closeWorkflow();
 			}
-		});
+            if(action == "save-revert"){
+                console.log("save-revert");
+                jsPlumb.fire("tao_saveRevertWorkflow");
+            }
+        });
 
 		$("#preview-zoom-toolbar").on("click", ".preview-toolbar-action", function(){
 			var action = $(this).data("action");
@@ -490,7 +540,9 @@ console.log("create connector style");
 
 	jsPlumb.setContainer("canvas");
 	jsPlumb.fire("jsPlumbDemoLoaded", instance);
-	
+    //loadWorkflow;
+	jsPlumb.fire("tao_loadWorkflowById");
+/*
 var tmp_d = newNode(584,42,{"mtype":"ds-SciHubSentinel-2","mlabel":"SciHub Sentinel-2"});
 var tmp_m1 = newNode(391,295,{"mtype":"otb-BandMath","mlabel":"Band Math"});
 var tmp_m2 = newNode(780,297,{"mtype":"otb-BandMath","mlabel":"Band Math"});
@@ -500,7 +552,7 @@ instance.connect({ source:$(tmp_d).attr("id"), target:$(tmp_m1).attr("id"), type
 instance.connect({ source:$(tmp_d).attr("id"), target:$(tmp_m2).attr("id"), type:"basic" });
 instance.connect({ source:$(tmp_m1).attr("id"), target:$(tmp_mc).attr("id"), type:"basic" });
 instance.connect({ source:$(tmp_m2).attr("id"), target:$(tmp_mc).attr("id"), type:"basic" });
-
+*/
 });
 
 

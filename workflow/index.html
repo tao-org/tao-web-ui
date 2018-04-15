@@ -18,11 +18,14 @@
 <body class="jtk-bootstrap jtk-bootstrap-wide noselect">
 <div id="infoband"></div>
     <div id="control-toolbar" class="control-toolbar">
-                    <div class="back-home" rel="timeline-tooltip" data-original-title="Return to Title">
-                        <div class="icon toolbar-action" data-action="home"><i class="fa fa-reply-all fa-fw" aria-hidden="true"></i></div>
+                    <div class="back-home" rel="timeline-tooltip" data-original-title="Return to Workflows List">
+                        <div class="icon toolbar-action" data-action="back-home"><i class="fa fa-reply-all fa-fw" aria-hidden="true"></i></div>
                     </div>
-                    <div class="free-select" rel="timeline-tooltip" data-original-title="Free select">
-                        <div class="icon toolbar-action" data-action="free-select" data-selectable="on"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></div>
+					<div class="save-current" rel="timeline-tooltip" data-original-title="Save current now">
+						<div class="icon toolbar-action" data-action="save-current"><i class="fa fa-cloud-upload fa-fw" aria-hidden="true"></i></div>
+					</div>
+					<div class="save-revert" rel="timeline-tooltip" data-original-title="Revert to the last saved version">
+                        <div class="icon toolbar-action" data-action="save-revert"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i></div>
                     </div>
     </div>
     <div class="jtk-page-container">
@@ -311,16 +314,17 @@ POLYGON((-9.9866909768 23.4186029838, -8.9037319257 23.4186029838, -8.9037319257
 </div>
 
 <div id="rubberband" style="display:none;"></div>
-		
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="./lib/jquery.mousewheel.min.js"></script>
 <script src="http://timmywil.github.io/jquery.panzoom/dist/jquery.panzoom.js"></script>
 <script src="./lib/jsplumb.min.js"></script>
+
+<script src="../assets/dist/js/config.js"></script>
+<script src="../assets/dist/js/general-functions.js"></script>
 <script src="./workspace.js"></script>
 <script src="./app.js"></script>
 <script src="./canvas.js"></script>
-<script src="../assets/dist/js/general-functions.js"></script>
 </body>
 </html>

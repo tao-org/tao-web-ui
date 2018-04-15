@@ -52,6 +52,7 @@
 
 	var addNewNode = function (x, y, dna) {
 			dna.nodeID = jsPlumbUtil.uuid();
+			if(dna.fullData.id == 0) {dna.fullData.id = dna.nodeID;}
 
             //find node template from tools->componets
             componentTemplate = $.grep(wfTools.components, function(el, idx){return el.id !== dna.fullData.componentId;},true);
@@ -78,8 +79,12 @@
         innerHTML += "<div class=\"module-ports\">";
         for (i = 0; i < maxPorts; i++) {
             innerHTML += "<div class=\"module-ports-row\">";
-            if(componentTemplate[0].sources[i]) innerHTML += "<div id=\"p-"+dna.fullData.id+"-"+componentTemplate[0].sources[i].id+"\" class=\"n-p-o-wrapp\"><div class=\"n-p-o\"></div></div>";
-            if(componentTemplate[0].targets[i]) innerHTML += "<div id=\"p-"+dna.fullData.id+"-"+componentTemplate[0].targets[i].id+"\" class=\"n-p-i-wrapp\"><div class=\"n-p-i\"></div></div>";
+
+//            if(componentTemplate[0].sources[i]) innerHTML += "<div id=\"p-"+dna.fullData.id+"-"+componentTemplate[0].sources[i].id+"\" class=\"n-p-o-wrapp\"><div class=\"n-p-o\"></div></div>";
+//            if(componentTemplate[0].targets[i]) innerHTML += "<div id=\"p-"+dna.fullData.id+"-"+componentTemplate[0].targets[i].id+"\" class=\"n-p-i-wrapp\"><div class=\"n-p-i\"></div></div>";
+
+            if(componentTemplate[0].targets[i]) innerHTML += "<div id=\"p-"+dna.fullData.id+"-"+componentTemplate[0].targets[i].id+"\" class=\"n-p-o-wrapp\"><div class=\"n-p-o\"></div></div>";
+            if(componentTemplate[0].sources[i]) innerHTML += "<div id=\"p-"+dna.fullData.id+"-"+componentTemplate[0].sources[i].id+"\" class=\"n-p-i-wrapp\"><div class=\"n-p-i\"></div></div>";
             innerHTML += "</div>";
         }
         innerHTML += "<div class=\"module-status\">"+completeness+"% Completed</div>";
@@ -110,12 +115,12 @@
         toolboxModules.newModule(dna);
         //init ports as jsplumb nodes
         for (i = 0; i < maxPorts; i++) {
-            if(componentTemplate[0].sources[i]) {
-                var elPort = document.getElementById("p-"+dna.fullData.id+"-"+componentTemplate[0].sources[i].id);
-                initPort(elPort, "out");
-            }
             if(componentTemplate[0].targets[i]) {
                 var elPort = document.getElementById("p-"+dna.fullData.id+"-"+componentTemplate[0].targets[i].id);
+                initPort(elPort, "out");
+            }
+            if(componentTemplate[0].sources[i]) {
+                var elPort = document.getElementById("p-"+dna.fullData.id+"-"+componentTemplate[0].sources[i].id);
                 initPort(elPort, "in");
             }
         }

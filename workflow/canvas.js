@@ -62,7 +62,7 @@
                 return 0;
             }
 
-        var completeness = 30;
+        var completeness = 0;
         var maxPorts = Math.max(componentTemplate[0].sources.length, componentTemplate[0].targets.length);
         var d = document.createElement("div");
         var innerHTML ="";

@@ -326,14 +326,14 @@
                                     <div class="project-box-body">
                                         <p class="nopadding">
                                             <span class="val-project-title val-wnm">No Name Workflow</span>
-                                            <span class="info-box-tags">
+                                            <span class="info-box-tags collapse">
 						                        <small class="label bg-green">running</small>
 						                        <small class="tag-flag">failed</small>
 					                        </span>
                                         </p>
                                         <span class="info-box-initiator val-owner val-wuser">userName</span>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-primary progress-bar-striped" style="width: 50%"></div>
+                                            <div class="progress-bar progress-bar-primary progress-bar-striped" style="width: 100%"></div>
                                         </div>
                                         <p CLASS="info-box-prop">
                                             Created:&nbsp;<span class="info-box-date-arrival val-wcdate">01.01.2017</span>
@@ -780,9 +780,9 @@
                 var	lcl_postdata ={};
                 lcl_postdata[attrName] = attrPath;
                 //= {"in":"<cale2>"};
-                
+
                 var startWfExecution = $.ajax({ cache: false,
-                    url: baseRestApiURL + "orchestration/start/"+currentWfID+"?rnd=" + Math.random(),
+                    url: baseRestApiURL + "orchestrator/start/"+currentWfID+"?rnd=" + Math.random(),
                     dataType : 'json',
                     type: 'POST',
                     data: JSON.stringify(lcl_postdata),
@@ -795,8 +795,11 @@
                 });
                 $.when(startWfExecution)
                     .done(function (startWfExecutionResponse) {
-                        if(1===1){
+                        //{ "message": "...", "job": <id sau null> }
+                        if(startWfExecutionResponse.job){
                             showMsg("Workflow execution successfully invoked.", "SUCCESS");
+                        }else{
+                            showMsg("Workflow failed to lunch.", "ERROR");
                         }
                     })
                     .fail(function () {
@@ -808,8 +811,9 @@
                 //document.getElementById('WorkflowBuilder').contentWindow.location.reload();
                 var currentWfID = _mLIST.dataOpQueue[0].dna.id;
 
-                $(".tao-async-ph, .tao-async-mc").fadeOut("slow",function() {
+                $(".tao-async-ph, .tao-async-mc").fadeOut("slow").promise().done(function() {
                     var iH = $(".content-wrapper").innerHeight() || 1080;
+                    console.log("builder height:"+iH);
                     var parentIframe = document.getElementById("wfIframeWrapper");
                     var iframe = document.createElement('iframe');
                     iframe.id = "WorkflowBuilder"+Math.floor(Math.random() * 10000000);
@@ -826,6 +830,28 @@
                     parentIframe.appendChild(iframe);
                     $(".tao-async-wf").fadeIn("slow");
                 });
+
+/*
+                $(".tao-async-ph, .tao-async-mc").fadeOut("slow",function() {
+                    var iH = $(".content-wrapper").innerHeight() || 1080;
+                    console.log("builder height:"+iH);
+                    var parentIframe = document.getElementById("wfIframeWrapper");
+                    var iframe = document.createElement('iframe');
+                    iframe.id = "WorkflowBuilder"+Math.floor(Math.random() * 10000000);
+                    iframe.src = './workflow/?_wf='+currentWfID;
+                    iframe.title="WorkflowBuilder";
+                    iframe.style.margin = "0";
+                    iframe.style.width = "100%";
+                    iframe.style.height = iH+"px";
+                    iframe.style.border = "0";
+                    iframe.scrolling="no"
+                    while (parentIframe.hasChildNodes()) {
+                        parentIframe.removeChild(parentIframe.lastChild);
+                    }
+                    parentIframe.appendChild(iframe);
+                    $(".tao-async-wf").fadeIn("slow");
+                });
+*/
                 return 1;
             }
             myModalNodesOpShow(action);

@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" />
       <change beforePath="$PROJECT_DIR$/fragments/workflow-all.fragment.html" afterPath="$PROJECT_DIR$/fragments/workflow-all.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/workflow/canvas.js" afterPath="$PROJECT_DIR$/workflow/canvas.js" />
-      <change beforePath="$PROJECT_DIR$/workflow/workspace.css" afterPath="$PROJECT_DIR$/workflow/workspace.css" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -49,7 +46,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="canvas.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="canvas.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/workflow/canvas.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="260">
@@ -115,12 +112,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="workflow-all.fragment.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="workflow-all.fragment.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fragments/workflow-all.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="260">
-              <caret line="335" column="128" lean-forward="false" selection-start-line="335" selection-start-column="128" selection-end-line="335" selection-end-column="128" />
-              <folding />
+              <caret line="175" column="130" lean-forward="false" selection-start-line="175" selection-start-column="130" selection-end-line="175" selection-end-column="130" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#0;n#core-node-box#1;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#section#2;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -137,8 +136,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>wfComponents</find>
-      <find>grep</find>
       <find>nodeID</find>
       <find>load</find>
       <find>wf_loadWorkflowById</find>
@@ -157,7 +154,6 @@
       <find>fromN</find>
       <find>n-p-o-wrapp</find>
       <find>wf-start</find>
-      <find>addNewNode</find>
       <find>moduleslist</find>
       <find>WorkflowBuilder</find>
       <find>&lt;!-- Load --&gt;</find>
@@ -167,6 +163,9 @@
       <find>$elClone</find>
       <find>completeness</find>
       <find>wfC</find>
+      <find>paper-plane</find>
+      <find>addNewNode</find>
+      <find>fa-paper-plane</find>
     </findStrings>
     <dirStrings>
       <dir>D:\_work\tao\tao-web-ui</dir>
@@ -227,8 +226,8 @@
         <option value="$PROJECT_DIR$/workflow/app.js" />
         <option value="$PROJECT_DIR$/workflow/workspace.css" />
         <option value="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" />
-        <option value="$PROJECT_DIR$/fragments/workflow-all.fragment.html" />
         <option value="$PROJECT_DIR$/workflow/canvas.js" />
+        <option value="$PROJECT_DIR$/fragments/workflow-all.fragment.html" />
       </list>
     </option>
   </component>
@@ -456,12 +455,12 @@
       <workItem from="1520351261630" duration="1607000" />
       <workItem from="1521466084578" duration="5234000" />
       <workItem from="1522852022859" duration="55708000" />
-      <workItem from="1523532395686" duration="61767000" />
+      <workItem from="1523532395686" duration="62453000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="579146000" />
+    <option name="totallyTimeSpent" value="579832000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1066" extended-state="6" />
@@ -773,14 +772,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/workflow-all.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="335" column="128" lean-forward="false" selection-start-line="335" selection-start-column="128" selection-end-line="335" selection-end-column="128" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/workflow/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="81">
@@ -794,6 +785,16 @@
         <state relative-caret-position="260">
           <caret line="64" column="27" lean-forward="false" selection-start-line="64" selection-start-column="27" selection-end-line="64" selection-end-column="27" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/workflow-all.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="175" column="130" lean-forward="false" selection-start-line="175" selection-start-column="130" selection-end-line="175" selection-end-column="130" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#0;n#core-node-box#1;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#section#2;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

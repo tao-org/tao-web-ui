@@ -36,6 +36,14 @@ $(document)
 				}
 			}
 	});
+
+//nothing fancy for the moment
+window.addEventListener("beforeunload", function (e) {
+    var confirmationMessage = "\o/";
+    (e || window.event).returnValue = confirmationMessage;     //Gecko + IE
+    return confirmationMessage;                                //Webkit, Safari, Chrome etc.
+});
+
 										
 var toolboxProperties ={
 	showProperties: function(dna){
@@ -171,6 +179,8 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
 });
 
 jsPlumb.bind("jsPlumbDemoLoaded", function(instance) {
+    //show toolbox
+	toolboxSidebar.init();
 });
 
 /************************************************jsplumb******************************************/

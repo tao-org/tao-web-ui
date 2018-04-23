@@ -1,13 +1,56 @@
 	var prefferences = {};
 
+
+    var toolboxSidebar = {
+    	elTBS: $("#toolboxSidebar"),
+        init: function () {
+            var a = this;
+    	    a.elTBS.on("click", ".toolbox-bar-close", function(e){
+                e.stopPropagation();
+    	        a.close();
+            });
+            a.elTBS.on("click", ".toolbox-sidebar-handler", function(){
+                a.open();
+            });
+            a.elTBS.on("click", function(e){
+                e.stopPropagation();
+                if(a.elTBS.hasClass("outside")){
+                    a.open();
+                }
+            });
+            //init accordion
+            $( ".toolboxAccordion", a.elTBS).accordion({heightStyle: "fill",collapsible: true, active: 1, animate: 500});
+            //add resize handler
+            $( window )
+            .resize(function() {
+                $( ".toolboxAccordion", a.elTBS).accordion( "refresh" );
+            });
+            //intercept and cancell scroll events in order to stop propagate to parents
+            $('.nano-content', a.elTBS).on( 'mousewheel DOMMouseScroll', function (e) {
+                var e0 = e.originalEvent;
+                var delta = e0.wheelDelta || -e0.detail;
+                this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+                e.preventDefault();
+            });
+            a.open();
+        },
+        open: function () {
+            this.elTBS.removeClass("outside");
+        },
+        close: function () {
+            this.elTBS.addClass("outside");
+		}
+    };
+
+
 	function setWFConnectorsToStateMachine(){
 		window.prefferences.workFlowConnectors = "S";
 		_settings.createCookie("prefferences_workFlowConnectors","S");
-	};
+	}
 	function setWFConnectorsToFlowchart(){
 		window.prefferences.workFlowConnectors = "F";
 		_settings.createCookie("prefferences_workFlowConnectors","F");
-	};
+	}
 
 
     function wf_renderComponentsToolBox(){
@@ -462,3 +505,6 @@ function describeArc(x, y, radius, startAngle, endAngle){
                 });
             }
         }
+
+
+

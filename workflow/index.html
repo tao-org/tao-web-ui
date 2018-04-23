@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width">
 <title>Workflow</title>
 <link href="//fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
-
+<link href="./css/nanoscroller.css" rel="stylesheet">
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -16,6 +16,112 @@
 <link rel="stylesheet" href="./workspace.css">
 </head>
 <body class="jtk-bootstrap jtk-bootstrap-wide noselect">
+
+
+
+
+
+<div class="toolbox-sidebar outside" id="toolboxSidebar">
+    <div class="toolbox-sidebar-handler">
+        <svg width="25" height="50" xmlns="http://www.w3.org/2000/svg">
+            <g><path stroke="white" d="m8.59,29.58l4.58,-4.58l-4.58,-4.59l1.41,-1.41l6,6l-6,6l-1.41,-1.42z" id="svg_1"/></g>
+        </svg>
+    </div>
+    <div class="toolbox-bar">
+        <span class="">ToolBox</span>
+        <button class="toolbox-bar-close" title="close Toolbox">×</button>
+    </div>
+
+        <div class="toolboxAccordion">
+            <h3><i class="fa fa-angle-right"></i>&nbsp;Datasources</h3>
+            <div class="nano">
+                <div id="datasourceslist" class="modulesholder nano-content">
+                    <sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-SciHubSentinel-1","mlabel":"SciHub Sentinel-1"}'>
+                        <div class="item-preview">
+                            <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
+                                <img src="media/module-ds.png" style="width: 100%; height: 100%;">
+                            </vectr_img>
+                        </div>
+                        <div class="item-info">
+                            <div class="item-label text-left">SciHub Sentinel-1</div>
+                        </div>
+                    </sortable_item>
+                    <sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-SciHubSentinel-2","mlabel":"SciHub Sentinel-2"}'>
+                        <div class="item-preview">
+                            <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
+                                <img src="media/module-ds.png" style="width: 100%; height: 100%;">
+                            </vectr_img>
+                        </div>
+                        <div class="item-info">
+                            <div class="item-label text-left">SciHub Sentinel-2</div>
+                        </div>
+                    </sortable_item>
+                    <sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-AWSSentinel2","mlabel":"AWS Sentinel-2"}'>
+                        <div class="item-preview">
+                            <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
+                                <img src="media/module-ds.png" style="width: 100%; height: 100%;">
+                            </vectr_img>
+                        </div>
+                        <div class="item-info">
+                            <div class="item-label text-left">AWS Sentinel-2</div>
+                        </div>
+                    </sortable_item>
+                    <sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-AWSLandsat8","mlabel":"AWS Landsat 8"}'>
+                        <div class="item-preview">
+                            <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
+                                <img src="media/module-ds.png" style="width: 100%; height: 100%;">
+                            </vectr_img>
+                        </div>
+                        <div class="item-info">
+                            <div class="item-label text-left">AWS Landsat 8</div>
+                        </div>
+                    </sortable_item>
+                    <sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-Local","mlabel":"Local Data Source"}'>
+                        <div class="item-preview">
+                            <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
+                                <img src="media/module-ds.png" style="width: 100%; height: 100%;">
+                            </vectr_img>
+                        </div>
+                        <div class="item-info">
+                            <div class="item-label text-left">Local Data Source</div>
+                        </div>
+                    </sortable_item>
+                </div>
+            </div>
+            <h3><i class="fa fa-angle-right"></i>&nbsp;Components</h3>
+            <div class="nano">
+                <div id="moduleslist" class="modulesholder nano-content">
+                </div>
+            </div>
+        </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div id="infoband"></div>
     <div id="control-toolbar" class="control-toolbar">
                     <div class="back-home" rel="timeline-tooltip" data-original-title="Return to Workflows List">
@@ -50,7 +156,7 @@
       <ol id="selectable"></ol>
     </div>
 
-<div id="draggable-toolbox-modules-source" class="ui-widget-content">
+<div id="draggable-toolbox-modules-source" class="ui-widget-content collapse">
   <p class="ui-widget-header">Components</p>
 <!-- xxxxxxxxxxxxxxxxxxxxxxxxx -->
 <ul class="nav nav-tabs">
@@ -60,7 +166,7 @@
 
 <div class="tab-content">
   <div id="home" class="tab-pane in active">
-		<div id="datasourceslist" class="modulesholder">
+		<div id="datasourceslistX" class="modulesholder">
 				<sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-SciHubSentinel-1","mlabel":"SciHub Sentinel-1"}'>
 					<div class="item-preview">
 					  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
@@ -114,7 +220,7 @@
 		</div>
   </div>
   <div id="menu1" class="tab-pane">
-		<div id="moduleslist" class="modulesholder">
+		<div id="moduleslistX" class="modulesholder">
 				<sortable_item class="item selected" index="0" data-dna='{"mtype":"otb-BandMath","mlabel":"Band Math"}'>
 					<div class="item-preview">
 					  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
@@ -133,26 +239,6 @@
 					</div>
 					<div class="item-info">
 					  <div class="item-label text-left">OTB Images Concatenation</div>
-					</div>
-				</sortable_item>
-				<sortable_item class="item selected" index="0" data-dna='{"mtype":"otb-Convert","mlabel":"Image Conversion"}'>
-					<div class="item-preview">
-					  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-						<img src="media/module-otb.png" style="width: 100%; height: 100%;">
-					  </vectr_img>
-					</div>
-					<div class="item-info">
-					  <div class="item-label text-left">Image Conversion</div>
-					</div>
-				</sortable_item>
-				<sortable_item class="item selected" index="0" data-dna='{"mtype":"otb-ColorMapping","mlabel":"Color Mapping"}'>
-					<div class="item-preview">
-					  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-						<img src="media/module-otb.png" style="width: 100%; height: 100%;">
-					  </vectr_img>
-					</div>
-					<div class="item-info">
-					  <div class="item-label text-left">Color Mapping</div>
 					</div>
 				</sortable_item>
 				<sortable_item class="item selected" index="0" data-dna='{"mtype":"mod-NewModule","mlabel":"New Module"}'>
@@ -314,12 +400,15 @@ POLYGON((-9.9866909768 23.4186029838, -8.9037319257 23.4186029838, -8.9037319257
 </div>
 
 <div id="rubberband" style="display:none;"></div>
+<script type="text/javascript" src="./lib/overthrow.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+<script src="./lib/jquery.ui.touch-punch.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="./lib/jquery.mousewheel.min.js"></script>
 <script src="http://timmywil.github.io/jquery.panzoom/dist/jquery.panzoom.js"></script>
 <script src="./lib/jsplumb.min.js"></script>
+<script type="text/javascript" src="./lib/jquery.nanoscroller.min.js"></script>
 
 <script src="../assets/dist/js/config.js"></script>
 <script src="../assets/dist/js/general-functions.js"></script>

@@ -160,14 +160,27 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
             "Authorization": authHeader
         }
     });
+    var getAllDatasources = $.ajax({ cache: false,
+        url: baseRestApiURL + "query/?rnd=" + Math.random(),
+        dataType : 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": authHeader
+        }
+    });
 
-    $.when(getAllComponents)
-        .done(function (getAllComponentsResponse) {
+
+
+    $.when(getAllComponents,getAllDatasources)
+        .done(function (getAllComponentsResponse,getAllDatasourcesResponse) {
             console.log("Workspace components init done start.");
             $.each(getAllComponentsResponse, function(i, wfOneComponent) {
 				//var tmp_node = addNewNode(wfOneNode.xCoord,wfOneNode.yCoord,{"mtype":"otb-BandMath","mlabel":wfOneNode.name,"fullData":wfOneNode});
             });
-            wfTools.components = getAllComponentsResponse;
+            wfTools.components = getAllComponentsResponse[0];
+            wfTools.datasources = getAllDatasourcesResponse[0];
             wf_renderComponentsToolBox();
 
             console.log("Workspace components init done.");

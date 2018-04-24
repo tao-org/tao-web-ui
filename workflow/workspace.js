@@ -19,7 +19,12 @@
                 }
             });
             //init accordion
-            $( ".toolboxAccordion", a.elTBS).accordion({heightStyle: "fill",collapsible: true, active: 1, animate: 500});
+            $( ".toolboxAccordion", a.elTBS).accordion({
+                heightStyle: "fill",
+                collapsible: true,
+                active: 1,
+                animate: 500,
+            });
             //add resize handler
             $( window )
             .resize(function() {
@@ -54,8 +59,10 @@
 
 
     function wf_renderComponentsToolBox(){
-        var $elModList = $("#moduleslist");
-        $elModList.empty();
+        var $elComponentsList = $("#moduleslist");
+        var $elDatasurcesList = $("#datasourceslist");
+        $elComponentsList.empty();
+        $elDatasurcesList.empty();
         $.each(wfTools.components, function(i, wfOneComponent) {
             var html ='<sortable_item class="item selected" id="'+wfOneComponent.id+'" data-componentid="'+wfOneComponent.id+'">\n' +
                 '\t\t\t\t\t<div class="item-preview">\n' +
@@ -67,10 +74,26 @@
                 '\t\t\t\t\t  <div class="item-label text-left">'+wfOneComponent.label+'</div>\n' +
                 '\t\t\t\t\t</div>\n' +
                 '\t\t\t\t</sortable_item>';
-            $elModList.append(html);
+            $elComponentsList.append(html);
+        });
+        $.each(wfTools.datasources, function(i, wfOneDatasource) {
+            var hash = jsHashCode(wfOneDatasource.sensor+"::"+wfOneDatasource.dataSourceName);
+            wfTools.datasources[i]['hash'] = hash;
+            var html ='<sortable_item class="item selected" id="ds'+hash+'" data-componentid="ds'+hash+'">\n' +
+                '\t\t\t\t\t<div class="item-preview">\n' +
+                '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
+                '\t\t\t\t\t\t<img src="media/module-ds.png" style="width: 100%; height: 100%;">\n' +
+                '\t\t\t\t\t  </vectr_img>\n' +
+                '\t\t\t\t\t</div>\n' +
+                '\t\t\t\t\t<div class="item-info">\n' +
+                '\t\t\t\t\t  <div class="item-label text-left">'+wfOneDatasource.dataSourceName+'<br>'+wfOneDatasource.sensor+'</div>\n' +
+                '\t\t\t\t\t</div>\n' +
+                '\t\t\t\t</sortable_item>';
+            $elDatasurcesList.append(html);
         });
 
-        $("#moduleslist .item").draggable({
+
+        $("#moduleslist .item, #datasourceslist .item").draggable({
             revert: "invalid",
             helper: "clone",
             start: function(e, ui)
@@ -79,7 +102,7 @@
             }
         });
         $elCanvas.droppable({
-            accept: "#moduleslist .item",
+            accept: "#moduleslist .item, #datasourceslist .item",
             drop: function (event, ui) {
                 if (event.which != 1 || event.originalEvent.isTrigger){
                     console.log("node creation canceled by user");
@@ -113,8 +136,6 @@
                 makeWFPreview();
             }
         });
-
-
     }
 
 

@@ -138,9 +138,60 @@
     transform: rotate(90deg);
 }
 
+.toolbox-header {
+    width:100%;
+    position:fixed;
+    top:0;
+    text-align:center;
+    z-index:9999;
+    height: 0;
+    overflow: visible;
+    opacity:1;
+    visibility: visible;
+    transition: all ease 0.6s;
+}
+.toolbox-header.outside {
+    top: -100px;
+    cursor: pointer;
+    opacity:0;
+    visibility: hidden;
+}
 
+.toolbox-header .toolbox-space{
+    background: #212527;
+    display: inline-block;
+    color: white;
+    padding: 10px 20px;
+    text-shadow: 1px 1px 1px #666;
+}
+.toolbox-header button {
+    float: right;
+    width: auto;
+    border: none;
+    display: block;
+    outline: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: inherit;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    margin-left: 20px;
 
-
+}
+.toolbox-header button:hover{
+    background: #3c8dbc;
+}
+.toolbox-header .toolbox-footer {
+    text-align: left;
+    font-size: 10px;
+    color:#3c8dbc;
+}
 
 .control-toolbar {
     position: fixed;

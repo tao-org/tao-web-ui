@@ -1,5 +1,34 @@
 	var prefferences = {};
 
+    var toolboxHeader = {
+        elTBH: $("#toolboxHeader"),
+        init: function () {
+            var a = this;
+            a.elTBH.on("click", ".toolbox-header-close", function(e){
+                e.stopPropagation();
+                a.close();
+            });
+            //intercept and cancell scroll events in order to stop propagate to parents
+            $(a.elTBH).on( 'mousewheel DOMMouseScroll', function (e) {
+                e.preventDefault();
+            });
+            return this;
+        },
+        populate: function(header){
+            $(".val-title",this.elTBH).html(header.name);
+            $(".val-meta",this.elTBH).html(header.status +", "+ header.visibility);
+            return this;
+        },
+        open: function () {
+            this.elTBH.removeClass("outside");
+            return this;
+        },
+        close: function () {
+            this.elTBH.addClass("outside");
+            return this;
+        }
+    };
+    toolboxHeader.init();
 
     var toolboxSidebar = {
     	elTBS: $("#toolboxSidebar"),
@@ -63,48 +92,46 @@
         var $elDatasurcesList = $("#datasourceslist");
         $elComponentsList.empty();
         $elDatasurcesList.empty();
-        $.each(wfTools.components, function(i, wfOneComponent) {
-            var html ='<sortable_item class="item selected" id="'+wfOneComponent.id+'" data-componentid="'+wfOneComponent.id+'">\n' +
+        $.each(wfTools.toolboxnodes.pc, function(i, item) {
+            var html ='<sortable_item class="item selected" id="'+item.id+'" data-componentid="'+item.id+'" data-componenttype="pc">\n' +
                 '\t\t\t\t\t<div class="item-preview">\n' +
                 '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
-                '\t\t\t\t\t\t<img src="media/module-otb.png" style="width: 100%; height: 100%;">\n' +
+                '\t\t\t\t\t\t<img src="'+item.image+'" style="width: 100%; height: 100%;">\n' +
                 '\t\t\t\t\t  </vectr_img>\n' +
                 '\t\t\t\t\t</div>\n' +
                 '\t\t\t\t\t<div class="item-info">\n' +
-                '\t\t\t\t\t  <div class="item-label text-left">'+wfOneComponent.label+'</div>\n' +
+                '\t\t\t\t\t  <div class="item-label text-left">'+item.label+'</div>\n' +
                 '\t\t\t\t\t</div>\n' +
                 '\t\t\t\t</sortable_item>';
             $elComponentsList.append(html);
         });
-        $.each(wfTools.datasources, function(i, wfOneDatasource) {
-            var hash = jsHashCode(wfOneDatasource.sensor+"::"+wfOneDatasource.dataSourceName);
-            wfTools.datasources[i]['hash'] = hash;
-            var html ='<sortable_item class="item selected" id="ds'+hash+'" data-componentid="ds'+hash+'">\n' +
+        $.each(wfTools.toolboxnodes.ds, function(i, item) {
+            var html ='<sortable_item class="item selected" id = "'+item.id+'" data-componentid="'+item.id+'" data-componenttype="ds">\n' +
                 '\t\t\t\t\t<div class="item-preview">\n' +
                 '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
-                '\t\t\t\t\t\t<img src="media/module-ds.png" style="width: 100%; height: 100%;">\n' +
+                '\t\t\t\t\t\t<img src="'+item.image+'" style="width: 100%; height: 100%;">\n' +
                 '\t\t\t\t\t  </vectr_img>\n' +
                 '\t\t\t\t\t</div>\n' +
                 '\t\t\t\t\t<div class="item-info">\n' +
-                '\t\t\t\t\t  <div class="item-label text-left">'+wfOneDatasource.dataSourceName+'<br>'+wfOneDatasource.sensor+'</div>\n' +
+                '\t\t\t\t\t  <div class="item-label text-left">'+item.label+'</div>\n' +
                 '\t\t\t\t\t</div>\n' +
                 '\t\t\t\t</sortable_item>';
             $elDatasurcesList.append(html);
         });
 
-
+        //make toolbox items draggable & droppable
         $("#moduleslist .item, #datasourceslist .item").draggable({
             revert: "invalid",
             helper: "clone",
             start: function(e, ui)
             {
-                $(ui.helper).css('opacity', '0.5');;
+                $(ui.helper).css('opacity', '0.5');
             }
         });
         $elCanvas.droppable({
             accept: "#moduleslist .item, #datasourceslist .item",
             drop: function (event, ui) {
-                if (event.which != 1 || event.originalEvent.isTrigger){
+                if (event.which !== 1 || event.originalEvent.isTrigger){
                     console.log("node creation canceled by user");
                     return;
                 }
@@ -112,9 +139,12 @@
                 var bleft  = (this.offsetWidth  - this.scrollWidth )/2*wfZoom;
                 var top    = (ui.offset.top  - $(this).offset().top  - btop)/wfZoom;
                 var left   = (ui.offset.left - $(this).offset().left - bleft)/wfZoom;
-
-                var dna = {
-                    fullData: {
+                var nodeData = {
+                    "ntype":$(ui.helper).data("componenttype"),
+                    "ntemplateid": $(ui.helper).data("componentid"),
+                    "mtype":"",
+                    "mlabel":"No Name",
+                    "fullData": {
                         componentId: $(ui.helper).data("componentid"),
                         created: [2018, 4, 15, 14, 21, 56, 0],
                         customValues:[],
@@ -125,11 +155,9 @@
                         xCoord:0,
                         yCoord:0
                     }
-
-                }
-                //npNewNode(ui.offset.left,ui.offset.top, dna);
+                };
                 //adjust drop coordinates to conform pan&zoom
-                addNewNode(left,top, dna);
+                addNewNode(left,top, nodeData);
 //				  $(this).append($(ui.helper).clone().draggable({
 //					  containment: "parent"
 //				  }));
@@ -336,56 +364,21 @@ makeWFPreview();
 $( function() {
 	console.log("pref");
 	if(_settings.readCookie("prefferences_workFlowConnectors")){
-		if(_settings.readCookie("prefferences_workFlowConnectors") == "F"){
+		if(_settings.readCookie("prefferences_workFlowConnectors") === "F"){
 			setWFConnectorsToFlowchart();
 		}
-		if(_settings.readCookie("prefferences_workFlowConnectors") == "S"){
+		if(_settings.readCookie("prefferences_workFlowConnectors") === "S"){
 			setWFConnectorsToStateMachine();
 		}
 	}else{
 		setWFConnectorsToStateMachine();
-	};
+	}
 
-
-
-		
-	$("#moduleslist .item, #datasourceslist .item").draggable({
-          revert: "invalid",
-          helper: "clone",
-		  start: function(e, ui)
-				{
-					$(ui.helper).css('opacity', '0.5');;
-				}
-    });
-	$elCanvas.droppable({
-			  accept: "#moduleslist .item, #datasourceslist .item",
-			  drop: function (event, ui) {
-				  if (event.which != 1 || event.originalEvent.isTrigger){
-					  console.log("node creation canceled by user");
-					  return;
-				  }
-		var btop   = (this.offsetHeight - this.scrollHeight)/2*wfZoom;
-		var bleft  = (this.offsetWidth  - this.scrollWidth )/2*wfZoom;
-		var top    = (ui.offset.top  - $(this).offset().top  - btop)/wfZoom;
-		var left   = (ui.offset.left - $(this).offset().left - bleft)/wfZoom;
-				  
-				  var dna = $(ui.helper).data("dna");
-				  //npNewNode(ui.offset.left,ui.offset.top, dna);
-				  //adjust drop coordinates to conform pan&zoom
-				  addNewNode(left,top, dna);
-//				  $(this).append($(ui.helper).clone().draggable({
-//					  containment: "parent"
-//				  }));
-				makeWFPreview();
-			  }
-	});
-		
 		toolboxModules.rescanBuild();
 		$( "#tools-toolbox" ).draggable({ handle: "p" });
 		$( "#draggable-toolbox-modules-source" ).draggable({ handle: "p" });
 		$( "#draggable-toolbox-modules-properties" ).draggable({ handle: "p" });
 		$( "#draggable-toolbox-preview" ).draggable({ handle: "p" });
-		
 		$( "#draggable-toolbox-modules" ).draggable({ handle: "p" });
 		$( "#selectable" ).selectable({
 											selected: function( event, ui ) {
@@ -405,15 +398,11 @@ $( function() {
 											}
 									});
 		$('html').keyup(function(e){
-											if(e.keyCode == 46) {
+											if(e.keyCode === 46) {
 												toolboxModules.rmSelected();
 											}
 									});
-		$( "body" ).on( "click", "#np-add-block", function() {
-			npNewNode(250,250);
-		});
-		
-		$(document).on('keyup keydown', function(e){shifted = e.shiftKey} );
+		$(document).on('keyup keydown', function(e){shifted = e.shiftKey});
 });
 	
 //geometry function for svg

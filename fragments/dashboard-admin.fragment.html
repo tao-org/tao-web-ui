@@ -356,7 +356,7 @@
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "user":"1",//to be done
+                    "user":"System Account",//to be done
                     "Authorization": authHeader
                 }
             }).done(function (getNotificationsResponse) {
@@ -378,8 +378,16 @@
                 var frag = document.createDocumentFragment();
                 for (var i = 0; i < arrayLength; i++) {
                     var ts = moment.unix(notifications[i]["timestamp"]/1000).format("YYYY-MM-DD HH:mm:ss.SSS");
+                    try {
+                        var lclData = JSON.parse(notifications[i]["data"]);
+                        var lclMsg = lclData.Payload;
+                    } catch(e) {
+                        alert(e); // error in the above string (in this case, yes)!
+                    }
+
+
                     var li = document.createElement("li");
-                    li.innerHTML = "<span class=\"\"><i class=\"fa fa-ellipsis-v\"></i><i class=\"fa fa-ellipsis-v\"></i></span><span class=\"text\">"+notifications[i]["data"]+"</span><small class=\"label label-info\"><i class=\"fa fa-clock-o fa-fw\"></i>"+ts+"</small><div class=\"tools\"><i class=\"fa fa-trash-o\"></i></div>";
+                    li.innerHTML = "<span class=\"\"><i class=\"fa fa-ellipsis-v\"></i><i class=\"fa fa-ellipsis-v\"></i></span><span class=\"text\">"+lclMsg+"</span><small class=\"label label-info\"><i class=\"fa fa-clock-o fa-fw\"></i>"+ts+"</small><div class=\"tools\"><i class=\"fa fa-trash-o\"></i></div>";
                     frag.appendChild(li);
                 }
                 listNode.appendChild(frag);

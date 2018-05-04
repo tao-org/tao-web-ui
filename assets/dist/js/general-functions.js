@@ -21,7 +21,7 @@ function s4() {
 //array helper
 function arrayDuplicateRemove(a) {
     return a.sort().filter(function(item, pos, ary) {
-        return !pos || item != ary[pos - 1];
+        return !pos || item !== ary[pos - 1];
     })
 }
 

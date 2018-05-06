@@ -93,7 +93,7 @@
         $elComponentsList.empty();
         $elDatasurcesList.empty();
         $.each(wfTools.toolboxnodes.pc, function(i, item) {
-            var html ='<sortable_item class="item selected" id="'+item.id+'" data-componentid="'+item.id+'" data-componenttype="pc">\n' +
+            var html ='<sortable_item class="item selected" id="'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="pc">\n' +
                 '\t\t\t\t\t<div class="item-preview">\n' +
                 '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
                 '\t\t\t\t\t\t<img src="'+item.image+'" style="width: 100%; height: 100%;">\n' +
@@ -106,7 +106,7 @@
             $elComponentsList.append(html);
         });
         $.each(wfTools.toolboxnodes.ds, function(i, item) {
-            var html ='<sortable_item class="item selected" id = "'+item.id+'" data-componentid="'+item.id+'" data-componenttype="ds">\n' +
+            var html ='<sortable_item class="item selected" id = "'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="ds">\n' +
                 '\t\t\t\t\t<div class="item-preview">\n' +
                 '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
                 '\t\t\t\t\t\t<img src="'+item.image+'" style="width: 100%; height: 100%;">\n' +
@@ -148,20 +148,20 @@
                         componentId: $(ui.helper).data("componentid"),
                         created: [2018, 4, 15, 14, 21, 56, 0],
                         customValues:[],
-                        id:0,
+                        //id:0, !!! do not send id!!!
                         incomingLinks:[],
                         level:0,
                         name:"No Name",
-                        xCoord:0,
-                        yCoord:0
+                        xCoord:left,
+                        yCoord:top
                     }
                 };
                 //adjust drop coordinates to conform pan&zoom
-                addNewNode(left,top, nodeData);
+                //call tao_dropNewNode, it will save and render new node
+                jsPlumb.fire("tao_dropNewNode", [nodeData, left, top]);
 //				  $(this).append($(ui.helper).clone().draggable({
 //					  containment: "parent"
 //				  }));
-                makeWFPreview();
             }
         });
     }

@@ -1,4 +1,4 @@
-var npDelNode;
+var wf_removeNode;
 var wfZoom = 1;
 var minScale = 0.1;
 var maxScale = 10;
@@ -20,10 +20,6 @@ var tao_resetShadowData = function(){
     };
 };
 tao_resetShadowData();
-
-
-var wfNodes = [];
-var wfNodesMap = {};
 
 //used elements
 var $elCanvas = $("#canvas");
@@ -99,7 +95,7 @@ var toolboxModules ={
 		if(toolboxModules.selected.length == 0) {return;}
 		jsp.clearDragSelection();
 		$.each(toolboxModules.selected, function(index, item) {
-                    npDelNode(item);
+                    wf_removeNode(item);
 					$("#mti_" + item).remove();
         });
 		toolboxModules.selected = [];
@@ -116,7 +112,7 @@ var toolboxModules ={
 					toolboxModules.selected.push(elementid);
 					jsp.addToDragSelection(elementid);
         });
-		if(toolboxModules.selected.length == 1){
+		if(toolboxModules.selected.length === 1){
 			///xxxxxxxxxxx
 			var dna = $("#"+toolboxModules.selected[0]).data("dna");
 			toolboxProperties.showProperties(dna);
@@ -124,7 +120,7 @@ var toolboxModules ={
 		if(toolboxModules.selected.length > 1){
 			toolboxProperties.showPropertiesMultiple();
 		}
-		if(toolboxModules.selected.length == 0){
+		if(toolboxModules.selected.length === 0){
 			toolboxProperties.showPropertiesNone();
 		}
 		makeWFPreview();
@@ -164,8 +160,74 @@ jsPlumb.bind("tao_saveRevertWorkflow", function() {
 	jsp.reset();
 	jsPlumb.fire("tao_loadWorkflowById");
 });
+
+jsPlumb.bind("tao_updateNodePosition", function(params) {
+    if(wfPlumbCanvasData.nodes[params[0]]){
+        wfPlumbCanvasData.nodes[params[0]].xCoord = params[1];
+        wfPlumbCanvasData.nodes[params[0]].yCoord = params[2];
+    }else{
+        alert("an error occured. Please reload your workflow.")
+    }
+    var lcl_postdata = wfPlumbCanvasData.nodes[params[0]];
+    var putOneComponent = $.ajax({ cache: false,
+        url: baseRestApiURL + "workflow/node?workflowId=" + currentWfID,
+        dataType : 'json',
+        type: 'PUT',
+        data: JSON.stringify(lcl_postdata),
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": authHeader
+        }
+    });
+    $.when(putOneComponent)
+        .done(function (putOneComponentResponse) {
+            $(".v-lastaction","#infoband").html("position updated");
+        })
+        .fail(function(){
+            alert("Could not udate position", "ERROR");
+        });
+});
+
+jsPlumb.bind("tao_dropNewNode", function(params) {
+    var lcl_postdata = params[0].fullData;
+    var postOneComponent = $.ajax({ cache: false,
+        url: baseRestApiURL + "workflow/node?workflowId=" + currentWfID,
+        dataType : 'json',
+        type: 'POST',
+        data: JSON.stringify(lcl_postdata),
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": authHeader
+        }
+    });
+    $.when(postOneComponent)
+        .done(function (putOneComponentResponse) {
+            var nodeData = {
+                "ntype":"pc",
+                "ntemplateid": putOneComponentResponse.componentId,
+                "mtype":putOneComponentResponse.componentId,
+                "mlabel":putOneComponentResponse.name,
+                "fullData":putOneComponentResponse
+            };
+            addNewNode(putOneComponentResponse.xCoord,putOneComponentResponse.yCoord,nodeData);
+            //addNewNode(left,top, nodeData);
+            makeWFPreview();
+
+            $(".v-lastaction","#infoband").html("node added");
+        })
+        .fail(function(){
+            alert("Could not add node", "ERROR");
+        });
+});
+
+
+
+
 jsPlumb.bind("tao_loadWorkflowById", function() {
     tao_resetShadowData();
+    tao_resetCanvasData();
     var getAllComponents = $.ajax({ cache: false,
         url: baseRestApiURL + "component/?rnd=" + Math.random(),
         dataType : 'json',
@@ -315,14 +377,14 @@ jsPlumb.ready(function () {
             }
         })
         .on("mousedown touchstart", function(e) {
-            if (e.which != 1) return;
+            if (e.which !== 1) return;
             if ($(e.target).closest(".group-container").length > 0 ||
                 $(e.target).hasClass("panzoom-button")) return;
 
             // Start canvas pan / select
-            if (e.ctrlKey && e.which == 1) {
+            if (e.ctrlKey && e.which === 1) {
                 window.selectStart = { x: e.pageX, y: e.pageY };
-            } else if (e.which == 1) {
+            } else if (e.which === 1) {
                 var matrix = pz.panzoom('getMatrix');
                 var offsetX = parseInt(matrix[4]);
                 var offsetY = parseInt(matrix[5]);
@@ -345,13 +407,11 @@ jsPlumb.ready(function () {
         })
         .on("mouseup touchend touchcancel", function(e) {
             // End canvas pan and Clear resource selection
-            if (e.target.id == pz[0].id) {
+            if (e.target.id === pz[0].id) {
                 if (window.panStart) {
-                    var deltaX = 0;
-                    var deltaY = 0;
                     var deltaX = window.panStart.x - e.pageX;
                     var deltaY = window.panStart.y - e.pageY;
-                    if (deltaX == 0 && deltaY == 0) {
+                    if (deltaX === 0 && deltaY === 0) {
                         //clearGroupSelection();
                     }
                 }
@@ -382,33 +442,33 @@ jsPlumb.ready(function () {
 			//pz.panzoom("setMatrix", matrix);
 		}
 		var tao_PanCanvas = window.doWFPan = function(direction){
-			panDirection = {top:0, left:0}
-			if(direction == "pan-left"){
+			panDirection = {top:0, left:0};
+			if(direction === "pan-left"){
 				panDirection.left = -1;
 			}
-			if(direction == "pan-right"){
+			if(direction === "pan-right"){
 				panDirection.left = 1;
 			}
-			if(direction == "pan-up"){
+			if(direction === "pan-up"){
 				panDirection.top = -1;
 			}
-			if(direction == "pan-down"){
+			if(direction === "pan-down"){
 				panDirection.top = 1;
 			}
 			panPZ(panDirection);
 			makeWFPreview();
 		};
 		var tao_ZoomCanvas = window.doWFZoom = function(zoom){
-			if(zoom == "zoom-plus"){
+			if(zoom === "zoom-plus"){
 				wfZoom += 0.1;
-				if(wfZoom > maxScale) {wfZoom = maxScale;};
+				if(wfZoom > maxScale) {wfZoom = maxScale;}
 			}
-			if(zoom == "zoom-1to1"){
+			if(zoom === "zoom-1to1"){
 				wfZoom = 1;
 			}
-			if(zoom == "zoom-minus"){
+			if(zoom === "zoom-minus"){
 				wfZoom -= 0.1;
-				if(wfZoom < minScale) {wfZoom = minScale;};
+				if(wfZoom < minScale) {wfZoom = minScale;}
 			}
 			zoomPZ(wfZoom);
 			jsp.setZoom(wfZoom);
@@ -419,33 +479,33 @@ jsPlumb.ready(function () {
 
 		$("#preview-toolbar").on("click", ".preview-toolbar-action", function(){
 			var action = $(this).data("action");
-			if(action == "empty-wf") {
-				if(toolboxModules.selected.length==0){
+			if(action === "empty-wf") {
+				if(toolboxModules.selected.length === 0){
 					//todo: alert for delete all
 					$(".w", $elCanvas).addClass("selected");
 					toolboxModules.rescanSelected();
 				}
 				toolboxModules.rmSelected();
-			};
-			if( (action == "zoom-plus") || (action == "zoom-minus") || (action == "zoom-1to1") ){
+			}
+			if( (action === "zoom-plus") || (action === "zoom-minus") || (action === "zoom-1to1") ){
 				tao_ZoomCanvas(action);
-			};
-			if(action == "zoom-fitall"){
+			}
+			if(action === "zoom-fitall"){
 				tao_ZoomFitAllNodes();
 			}
 			
 		});
 		$("#control-toolbar").on("click", ".toolbar-action", function(){
 			var action = $(this).data("action");
-			if(action == "back-home"){
+			if(action === "back-home"){
 				console.log("back-home");
 				window.parent.tao_closeWorkflow();
 			}
-            if(action == "save-revert"){
+            if(action === "save-revert"){
                 console.log("save-revert");
                 jsPlumb.fire("tao_saveRevertWorkflow");
             }
-            if(action == "show-info"){
+            if(action === "show-info"){
                 console.log("show-info");
                 toolboxHeader.open();
             }
@@ -453,7 +513,7 @@ jsPlumb.ready(function () {
 
 		$("#preview-zoom-toolbar").on("click", ".preview-toolbar-action", function(){
 			var action = $(this).data("action");
-			if( (action == "pan-left") || (action == "pan-right") || (action == "pan-up") || (action == "pan-down") ){
+			if( (action === "pan-left") || (action === "pan-right") || (action === "pan-up") || (action === "pan-down") ){
 				tao_PanCanvas(action);
 			}
 		});
@@ -477,9 +537,6 @@ jsPlumb.ready(function () {
         Container: "canvas"
     });
 	
-	window.jsp.bind("groupDragStop", function(params) {
-    	makeWFPreview();
-    });
 	$( window )
 	.on( "resize", function() {
 		makeWFPreview();
@@ -492,24 +549,32 @@ jsPlumb.ready(function () {
 												connector:[ "StateMachine", { stub: [20, 20], gap: 5, cornerRadius: 5, midpoint: 0.5, alwaysRespectStubs: true } ],
 											}
 									);
-	};
+	}
 	if (window.prefferences.workFlowConnectors === "F"){
 		instance.registerConnectionType("basic", { 	anchor:"Continuous",
 												connector:[ "Flowchart", { stub: [20, 20], gap: 5, cornerRadius: 5, midpoint: 0.5, alwaysRespectStubs: true } ],
 											}
 									);
-	};
-
+	}
 
     var canvas = document.getElementById("canvas");
     var windows = jsPlumb.getSelector("#canvas .w");
 
+    instance.bind("groupDragStop", function(params) {
+        jsPlumb.fire("tao_updateNodePosition", [params.el.id, params.finalPos[0], params.finalPos[1]]);
+        makeWFPreview();
+    });
     // bind a click listener to each connection; the connection is deleted. you could of course
     // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
     // happening.
     instance.bind("click", function (c) {
         instance.deleteConnection(c);
+        delete wfPlumbCanvasData.connectors[c.id];
     });
+    instance.bind("connectionDetached", function (info, originalEvent) {
+        delete wfPlumbCanvasData.connectors[info.connection];
+    });
+
 
     // bind a connection listener. note that the parameter passed to this function contains more than
     // just the new connection - see the documentation for a full list of what is included in 'info'.
@@ -517,7 +582,12 @@ jsPlumb.ready(function () {
     // id as the label overlay's text.
     instance.bind("connection", function (info) {
         info.connection.getOverlay("label").setLabel(info.connection.id);
+        //register connection to canvasdata
+        wfPlumbCanvasData.connectors[info.connection.id] = ({"from":info.sourceId, "to":info.targetId});
+        console.log("waw connection binded event, update model ...");
+        return true;
     });
+
 	
 	instance.bind("beforeDrag", function(params) { //before connection drag
 									console.log("before drag binded event");
@@ -527,9 +597,9 @@ jsPlumb.ready(function () {
 									console.log("before drop binded event");
 									return true;
 								});
-	instance.bind("connection", function(info) {
-									console.log("waw connection binded event, update model ...");
-									return true;
+	instance.bind("afterDrag", function(info) {
+        console.log("drag ...");
+        return true;
 								});
 
     // bind a double click listener to "canvas"; add new node when this occurs.
@@ -537,16 +607,20 @@ jsPlumb.ready(function () {
         console.log("canvas , dblclick");
     });
 	
-	var delNode = function(el){
-        jsp.deleteConnectionsForElement(el);
+	var delNode = window.wf_removeNode = function(el){
+        //remove node and ports from canvasdata
+	    $( "#"+el+" .n-p-o-wrapp, #"+el+" .n-p-i-wrapp").each(function(){
+             delete wfPlumbCanvasData.ports[$(this).attr("id")];
+        });
+        delete wfPlumbCanvasData.nodes[el];
+        delete wfPlumbCanvasData.nodesMap[el];
+
+	    jsp.deleteConnectionsForElement(el);
         jsp.removeAllEndpoints(el);
         jsp.remove(el);
-		
 	};
-	window.npDelNode = delNode;
 
     console.log("jsPlumb ready end");
-
 	jsPlumb.setContainer("canvas");
 	jsPlumb.fire("jsPlumbDemoLoaded", instance);
     //loadWorkflow;
@@ -575,7 +649,7 @@ updateModuleStatus = function(id, updateData){
 			$(el).find(".module-status").html(updateData.progress+"% completed");
 	}
 	//$( document ).trigger( "module:updatestatus");
-}
+};
 updateModuleStatus("", {"state":"completed", "progress":68});
 //updateModuleStatus("5dbb0b93-2a2a-4baf-9780-c9c9510be4e1",{"state":"completed", "progress":5})
 
@@ -591,7 +665,7 @@ updateModuleStatus("", {"state":"completed", "progress":68});
 	})
 	.on( "click", function(e) {
 		//check if own event is propagated and do nothing
-		if(e.target != this){
+		if(e.target !== this){
 			return;
 		}
 		$(".w", $elCanvas).removeClass("selected");
@@ -604,7 +678,7 @@ updateModuleStatus("", {"state":"completed", "progress":68});
 	});
 
 var tao_adModuleToSelection = function(id){
-	if( $.inArray( id, toolboxModules.selected ) != -1 ){
+	if( $.inArray( id, toolboxModules.selected ) !== -1 ){
 		return; //check if tao module already in current selection and then do nothing
 	}
 	
@@ -614,7 +688,7 @@ var tao_adModuleToSelection = function(id){
 	$("#"+id).addClass("selected");
 	toolboxModules.rescanSelected();
 	console.log("mousedown on "+id);
-}
+};
 
 
 

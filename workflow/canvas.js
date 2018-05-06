@@ -1,27 +1,33 @@
-    var wfPlumbCanvasData = {
-        _remote:{
-            response:null
+var wfPlumbCanvasData = {};
+
+var tao_resetCanvasData = function() {
+    wfPlumbCanvasData = {
+        _remote: {
+            response: null
         },
-        header:{
-            id:0,
-            name:"No name",
-            status:"",
-            username:"",
-            visibility:""
+        header: {
+            id: 0,
+            name: "No name",
+            status: "",
+            username: "",
+            visibility: ""
         },
-        nodes:[],
-        nodesMap:{},
-        groups:[],
-        connectors:[],
-        position:{
-            x:0,
-            y:0
+        nodes: {},
+        ports: {},
+        nodesMap: {},
+        groups: [],
+        connectors: {},
+        position: {
+            x: 0,
+            y: 0
         },
-        zoom:1,
-        prefs:{
-            conn_style:0
+        zoom: 1,
+        prefs: {
+            conn_style: 0
         }
     };
+};
+tao_resetCanvasData();
 
     var wf_removeAllNodes = function(){
 		//todo: alert for delete all
@@ -54,60 +60,64 @@
             toolboxHeader.populate(wfPlumbCanvasData.header).open();
 
             console.log(getWorkflowByIdResponse);
-                //$('#inputContainerId').empty();
-                wfNodes = [];
-                wfNodesMap = {};
                 //render nodes
                 $.each(getWorkflowByIdResponse.nodes, function(i, wfOneNode) {
                     console.log(wfOneNode);
                     var nodeData = {
                         "ntype":"pc",
-                        "ntemplateid": "tboid"+jsHashCode(wfOneNode.componentId),
+                        "ntemplateid": wfOneNode.componentId,
                         "mtype":wfOneNode.componentId,
                         "mlabel":wfOneNode.name,"fullData":wfOneNode
                     };
                     addNewNode(wfOneNode.xCoord,wfOneNode.yCoord,nodeData);
                 });
                 //render connectors
-
-            // suspend drawing and initialise.
-            jsp.batch(function () {
-                $.each(getWorkflowByIdResponse.nodes, function(i, wfOneNode) {
-                    var destNodeId = wfOneNode.id;
-                    $.each(wfOneNode.incomingLinks, function(i, wfOneLink) {
-                        var sourceNodeId = wfOneLink.sourceNodeId;
-                        var toNode = "p-"+destNodeId+"-"+wfOneLink.output.id;
-                        var fromNode = "p-"+sourceNodeId+"-"+wfOneLink.input.id;
-                        console.log( "link:" + fromNode +" > "+ toNode);
-                        jsp.connect({ source:fromNode, target:toNode, type:"basic" });
+                // suspend drawing and initialise.
+                jsp.batch(function () {
+                    $.each(getWorkflowByIdResponse.nodes, function(i, wfOneNode) {
+                        var destNodeId = wfOneNode.id;
+                        $.each(wfOneNode.incomingLinks, function(i, wfOneLink) {
+                            var sourceNodeId = wfOneLink.sourceNodeId;
+                            var toNode = "p-"+destNodeId+"-"+wfOneLink.output.id;
+                            var fromNode = "p-"+sourceNodeId+"-"+wfOneLink.input.id;
+                            console.log( "link:" + fromNode +" > "+ toNode);
+                            jsp.connect({ source:fromNode, target:toNode, type:"basic" });
+                        });
                     });
                 });
-            });
                 makeWFPreview();
         })
         .fail(function () {
-                showMsg("Could not retrive workflow data.", "ERROR");
+                alert("Could not retrive workflow data.", "ERROR");
         });
 	};
 
 	var addNewNode = function (x, y, dna) {
 		dna.nodeID = jsPlumbUtil.uuid();
+        dna.fullData.xCoord = x;
+        dna.fullData.yCoord = y;
 		if(dna.fullData.id === 0) {dna.fullData.id = dna.nodeID;}
+		//recreate ntemplateid
+
         if(!dna.ntemplateid){
 		    return 0;
+        }else{
+            dna.ntemplateid = "tboid"+jsHashCode(dna.ntemplateid);
         }
-        //find node template from TOOLBOX
+        //find node template from TOOLBOX and determine component type.
         var componentTemplate = null;
-        if(dna.ntype === "pc"){
+        //if(dna.ntype === "pc"){
             if(wfTools.toolboxnodes.pc[dna.ntemplateid]){
                 componentTemplate = wfTools.toolboxnodes.pc[dna.ntemplateid].dna;
+                dna.ntype = "pc";
             }
-        }
-        if(dna.ntype === "ds"){
+        //}
+        //if(dna.ntype === "ds"){
             if(wfTools.toolboxnodes.ds[dna.ntemplateid]){
                 componentTemplate = wfTools.toolboxnodes.ds[dna.ntemplateid].dna;
+                dna.ntype = "ds";
             }
-        }
+        //}
 
         if(componentTemplate === null){
             console.log("comp template not found!!!!!!!!!!!!!!!!!!");
@@ -179,10 +189,12 @@
             if(componentTemplate.targets[i]) {
                 elPort = document.getElementById("p-"+dna.fullData.id+"-"+componentTemplate.targets[i].id);
                 initPort(elPort, "out");
+                wfPlumbCanvasData.ports["p-"+dna.fullData.id+"-"+componentTemplate.targets[i].id] = {"type":"out", "parentID":dna.fullData.id};
             }
             if(componentTemplate.sources[i]) {
                 elPort = document.getElementById("p-"+dna.fullData.id+"-"+componentTemplate.sources[i].id);
                 initPort(elPort, "in");
+                wfPlumbCanvasData.ports["p-"+dna.fullData.id+"-"+componentTemplate.sources[i].id] = {"type":"in", "parentID":dna.fullData.id};
             }
         }
 
@@ -199,15 +211,15 @@
         //var elPort = document.getElementById("p-in-1-"+dna.nodeID);
         //window.jsp.addToGroup("ng_"+dna.nodeID, elPort);
         //add nodes to workflow shadow data
-//        wfNodes.push(d);
-//        wfNodesMap[d.id] = d;
+        wfPlumbCanvasData.nodesMap[dna.nodeID] = dna.fullData.id;
+        wfPlumbCanvasData.nodes[dna.nodeID] = dna.fullData;
         return d;
 	};
 	
 	var initPort = function(el, pType) {
         // initialise draggable elements.
         //window.jsp.draggable(el);
-		
+
 		if(pType === "out")
         window.jsp.makeSource(el, {
             filter: ".n-p-o",

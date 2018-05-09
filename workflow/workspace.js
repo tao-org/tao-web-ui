@@ -139,21 +139,24 @@
                 var bleft  = (this.offsetWidth  - this.scrollWidth )/2*wfZoom;
                 var top    = (ui.offset.top  - $(this).offset().top  - btop)/wfZoom;
                 var left   = (ui.offset.left - $(this).offset().left - bleft)/wfZoom;
+                var compType = $(ui.helper).data("componenttype");
                 var nodeData = {
-                    "ntype":$(ui.helper).data("componenttype"),
+                    "ntype": compType,
                     "ntemplateid": $(ui.helper).data("componentid"),
                     "mtype":"",
                     "mlabel":"No Name",
                     "fullData": {
                         componentId: $(ui.helper).data("componentid"),
-                        created: [2018, 4, 15, 14, 21, 56, 0],
+                        componentType: (function(c){if(c==="ds") return "DATASOURCE"; if(c==="pc") return "PROCESSING"}(compType)),
+                        created: arrayFromDatetime(),
                         customValues:[],
                         //id:0, !!! do not send id!!!
                         incomingLinks:[],
                         level:0,
                         name:"No Name",
                         xCoord:left,
-                        yCoord:top
+                        yCoord:top,
+                        behavior: "FAIL_ON_ERROR"
                     }
                 };
                 //adjust drop coordinates to conform pan&zoom

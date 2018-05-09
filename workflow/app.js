@@ -92,7 +92,7 @@ var toolboxModules ={
 	selected: [],
 	count: 0,
 	rmSelected: function(){
-		if(toolboxModules.selected.length == 0) {return;}
+		if(toolboxModules.selected.length === 0) {return;}
 		jsp.clearDragSelection();
 		$.each(toolboxModules.selected, function(index, item) {
                     wf_removeNode(item);
@@ -190,6 +190,7 @@ jsPlumb.bind("tao_updateNodePosition", function(params) {
 });
 
 jsPlumb.bind("tao_dropNewNode", function(params) {
+    console.log("plumb:tao_dropNewNode");
     var lcl_postdata = params[0].fullData;
     var postOneComponent = $.ajax({ cache: false,
         url: baseRestApiURL + "workflow/node?workflowId=" + currentWfID,

@@ -717,7 +717,7 @@
         }
         if(operationid === "op-plus"){
             $(".modal-dialog",$modal).addClass("modal-lg");
-            rm_contentUrl="./fragments/component-plus.fragment.html?" + Math.random();
+            rm_contentUrl="./fragments/workflow-plus.fragment.html?" + Math.random();
         }
         if(operationid === "edit"){
             rm_contentUrl="./fragments/topology-edit.fragment.html?" + Math.random();
@@ -830,33 +830,11 @@
                     parentIframe.appendChild(iframe);
                     $(".tao-async-wf").fadeIn("slow");
                 });
-
-/*
-                $(".tao-async-ph, .tao-async-mc").fadeOut("slow",function() {
-                    var iH = $(".content-wrapper").innerHeight() || 1080;
-                    console.log("builder height:"+iH);
-                    var parentIframe = document.getElementById("wfIframeWrapper");
-                    var iframe = document.createElement('iframe');
-                    iframe.id = "WorkflowBuilder"+Math.floor(Math.random() * 10000000);
-                    iframe.src = './workflow/?_wf='+currentWfID;
-                    iframe.title="WorkflowBuilder";
-                    iframe.style.margin = "0";
-                    iframe.style.width = "100%";
-                    iframe.style.height = iH+"px";
-                    iframe.style.border = "0";
-                    iframe.scrolling="no"
-                    while (parentIframe.hasChildNodes()) {
-                        parentIframe.removeChild(parentIframe.lastChild);
-                    }
-                    parentIframe.appendChild(iframe);
-                    $(".tao-async-wf").fadeIn("slow");
-                });
-*/
+                history.pushState(null, null, "#workflow/all/edit/"+currentWfID);
                 return 1;
             }
             myModalNodesOpShow(action);
         });
-
 
     _mLIST.$el.tags
         .on('click', 'span', function (e) {

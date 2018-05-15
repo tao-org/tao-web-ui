@@ -26,11 +26,11 @@
                             <p>Please check all the tabs before saving a new component.</p>
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#comp-tab-gd">Description.</a></li>
-                                <li><a data-toggle="tab" href="#comp-tab-sys">Sys. vars.</a></li>
+                                <li class="hidden"><a data-toggle="tab" href="#comp-tab-sys">Custom values</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
-                                    <div class="row">
+                                    <div class="row collapse">
                                         <div class="col-md-12">
                                             <div class="form-group has-feedback">
                                                 <label for="inputCompID" class="col-sm-2 col-md-2 control-label">ID</label>
@@ -90,7 +90,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row collapse">
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="inputPath" class="col-sm-2 col-md-2 control-label">Path </label>
@@ -101,7 +101,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="comp-tab-sys" class="tab-pane fade">
+                                <div id="comp-tab-sys" class="tab-pane fade hidden">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <p>Variables:</p>
@@ -144,7 +144,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
-                                <button id="saveExecNode" type="submit" class="btn btn-primary btn-submit" name="btnSave">Add new processing component</button>
+                                <button id="saveExecNode" type="submit" class="btn btn-primary btn-submit" name="btnSave">Add new workflow</button>
                             </div>
                         </div>
                     </div>
@@ -174,13 +174,23 @@
         var obj = {"key":"","value":""};
         $.extend( obj, payload );
         var $el = $tbl.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
-        $('input.var-key', $el).val(obj.key);
-        $('input.var-value', $el).val(obj.value);
+        $('input.var-key', $el).val(obj.parameterName);
+        $('input.var-value', $el).val(obj.parameterValue);
         $tbl.append($el);
     }
 
     $(document).ready( function(){
         //get all availlable dockers
+        if(userOpStack[0] && userOpStack[0].action ==="wf_edit" && _mLIST.dataOpQueue[0] && _mLIST.dataOpQueue[0].dna.id){
+            $(".modal-title").html("Edit workflow");
+            $("#saveExecNode").html("Save workflow");
+            getWFDataById(_mLIST.dataOpQueue[0].dna.id);
+        }
+
+
+
+
+
         $(".btn-comp-addnewvar").on("click", function(){
             var $tbl = $(this).closest(".tbl-edt");
             helper_addSysVarRow($tbl);
@@ -209,23 +219,36 @@
             });
         $("form#frmExecNodeEdit").submit(function (e) {
             e.preventDefault();
-            var $tblCompSysVar = $("#comp-tab-sys table");
-            var formData = {
-                    //"id": $('input[name=inputCompID]', this).val(),
+            var $tblCompSysVar = $("table","#comp-tab-sys");
+            var formData = {};
+            var ajaxType = "";
+            var ajaxURL = "";
+            if($(this).data("payload")){
+                formData = $(this).data("payload");
+                ajaxType = 'PUT';
+                ajaxURL = formData.id + '/';
+                //overwrite with user input
+                formData.name = $('input[name=inputWorkflowName]', this).val();
+                formData.visibility = $('select[name=inputVisibility]', this).val();
+                formData.status = $('select[name=inputStatus]', this).val();
+                formData.active = $('select[name=inputActive]', this).val();
+            }else{
+                ajaxType = 'POST';
+                ajaxURL = '';
+                formData = {
                     "name" : $('input[name=inputWorkflowName]', this).val(),
                     "created":arrayFromDatetime(),
                     "userName":"admin",
                     "path" : $('input[name=inputPath]', this).val(),
-                    "customValues": [{
-                            "parameterName": "transformTypeIdScaleX",
-                            "parameterValue": "0.5"
-                    }],
                     "visibility": $('select[name=inputVisibility]', this).val(),
                     "status": $('select[name=inputStatus]', this).val(),
                     "active": $('select[name=inputActive]', this).val(),
-                    "nodes":[]
+                    "xCoord":0,
+                    "yCoord":0,
+                    "zoom":1
                 };
-            //add system variable to payload parsing user defined system vars table
+            }
+            //always add system variable to payload parsing user defined system vars table
             formData.customValues = [];
             $(".val-row", $tblCompSysVar).each(function() {
                 var k = $(this).find("input.var-key").val();
@@ -243,9 +266,9 @@
 
 console.log(JSON.stringify(formData));
             $.ajax({
-                url: baseRestApiURL + "workflow/?rnd=" + Math.random(),
+                url: baseRestApiURL + "workflow/"+ajaxURL+"?rnd=" + Math.random(),
                 dataType: 'json',
-                type: 'POST',
+                type: ajaxType,
                 data: JSON.stringify(formData),
                 headers: {
                     "Accept": "application/json",
@@ -286,5 +309,56 @@ console.log(JSON.stringify(formData));
             return false;
         });
     });
+
+    function getWFDataById (wfID){
+        $.ajax({
+            type: "get",
+            url: baseRestApiURL + "workflow/"+wfID+"/?rnd=" + Math.random(),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": authHeader
+            },
+            error : function (jqXHR, textStatus, errorThrown) {
+                if( jqXHR.status === 500 ){
+                    alert('E001, Exec node nolonger found.');
+                } else {
+                    alert('E001, An error has occurred, please try again or contact app admin.');
+                }
+            },
+            success: function(response) {
+                console.log(response);
+                try {
+                    //populate form with current values
+                    var $el = $('#frmExecNodeEdit');
+                    $el.data("payload", response);
+
+                    $('input[name=inputCompID]', $el).val(response.id);
+                    $('input[name=inputWorkflowName]', $el).val(response.name);
+
+                    $('select[name=inputActive] option', $el).removeAttr("selected");
+                    $('select[name=inputActive] option[value="'+response.active+'"]', $el).attr("selected", "selected");
+
+                    $('select[name=inputVisibility] option', $el).removeAttr("selected");
+                    $('select[name=inputVisibility] option[value="'+response.visibility+'"]', $el).attr("selected", "selected");
+
+                    $('select[name=inputStatus] option', $el).removeAttr("selected");
+                    $('select[name=inputStatus] option[value="'+response.status+'"]', $el).attr("selected", "selected");
+
+
+                    $.each(response.customValues, function(i, value) {
+                        helper_addSysVarRow($("#tbl-edt-sysvar"),value);
+                    });
+                }
+                catch(e) {
+                    alert('E001, An error has occurred, please try again or contact app admin.');
+                }
+            }
+        });
+        return true;
+    }
+
     //# sourceURL=workflow-plus.js
 </script>

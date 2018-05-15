@@ -146,6 +146,13 @@ var toolboxModules ={
 	}
 };
 
+jsPlumb.bind("jsPlumbSetZoom", function(z) {
+    console.log("zoom changed"+z);
+    jsp.setZoom(z);
+    $elZoom.html( parseInt(z*100) + "%");
+    wf_updateWorkflowById(null,null,z);
+});
+
 jsPlumb.bind("jsPlumbPortAdded", function() {
     console.log("new port added");
 });
@@ -329,7 +336,6 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
 
             wf_renderComponentsToolBox();
             console.log("Workspace components toolbox init done.");
-
             wf_loadWorkflowById(currentWfID);
         })
         .fail(function(){
@@ -372,8 +378,7 @@ jsPlumb.ready(function () {
                 // Set jsPlumb zoom level
                 var matrix = pz.panzoom('getMatrix');
                 wfZoom = parseFloat(matrix[0]);
-                jsp.setZoom(wfZoom);
-                $elZoom.html( parseInt(wfZoom*100) + "%");
+                jsPlumb.fire("jsPlumbSetZoom", wfZoom);
 				makeWFPreview();
             }
         })
@@ -423,6 +428,8 @@ jsPlumb.ready(function () {
             window.panStart = null;
             window.selectStart = null;
             $(e.target).css("cursor","");
+            var matrix = pz.panzoom('getMatrix');
+            wf_updateWorkflowById(matrix[4],matrix[5],null);
 			makeWFPreview();
         });
 		
@@ -441,6 +448,7 @@ jsPlumb.ready(function () {
             pz.panzoom("pan", matrix[4], matrix[5], { animate: true});
 			pz.panzoom('option', 'disablePan', true);
 			//pz.panzoom("setMatrix", matrix);
+            wf_updateWorkflowById(matrix[4],matrix[5],null);
 		}
 		var tao_PanCanvas = window.doWFPan = function(direction){
 			panDirection = {top:0, left:0};
@@ -472,8 +480,7 @@ jsPlumb.ready(function () {
 				if(wfZoom < minScale) {wfZoom = minScale;}
 			}
 			zoomPZ(wfZoom);
-			jsp.setZoom(wfZoom);
-			$elZoom.html( parseInt(wfZoom*100) + "%");
+            jsPlumb.fire("jsPlumbSetZoom", wfZoom);
 			makeWFPreview();
 		};
 		
@@ -586,6 +593,31 @@ jsPlumb.ready(function () {
         //register connection to canvasdata
         wfPlumbCanvasData.connectors[info.connection.id] = ({"from":info.sourceId, "to":info.targetId});
         console.log("waw connection binded event, update model ...");
+        if(wfPlumbCanvasData.loaded){
+            //put connection on server
+            var s = info.sourceId.split('_');
+            var t = info.targetId.split('_');
+
+            var putOneConnection = $.ajax({ cache: false,
+                url: baseRestApiURL + "workflow/link?sourceNodeId="+s[1]+"&sourceTargetId="+s[2]+"&targetNodeId="+t[1]+"&targetSourceId=" + t[2],
+                dataType : 'json',
+                type: 'POST',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": authHeader
+                }
+            });
+            $.when(putOneConnection)
+                .done(function (putOneConnectionResponse) {
+                    $(".v-lastaction","#infoband").html("connection added");
+                    console.log(putOneConnectionResponse);
+                })
+                .fail(function(){
+                    alert("Could not save connection", "ERROR");
+                });
+///
+        }
         return true;
     });
 

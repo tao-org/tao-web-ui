@@ -24,7 +24,8 @@ var tao_resetCanvasData = function() {
         zoom: 1,
         prefs: {
             conn_style: 0
-        }
+        },
+        loaded: false
     };
 };
 tao_resetCanvasData();
@@ -36,7 +37,45 @@ tao_resetCanvasData();
         toolboxModules.rescanSelected();
         toolboxModules.rmSelected();
     };
-	var wf_loadWorkflowById = function(wfId){
+	////////////////////////////
+    var wf_updateWorkflowById = function(x,y,zoom) {
+        //update shadow model, lazy server update follows
+        var matrix = pz.panzoom('getMatrix');
+
+        if(x) wfPlumbCanvasData.wf.xCoord = x; else wfPlumbCanvasData.wf.xCoord = matrix[4];
+        if(y) wfPlumbCanvasData.wf.yCoord = y; else wfPlumbCanvasData.wf.yCoord = matrix[5];
+        if(zoom) wfPlumbCanvasData.wf.zoom = zoom; else wfPlumbCanvasData.wf.zoom = matrix[0];
+        lazy_updatePosOnServer();
+    };
+
+    //update workflow canvas position on server
+    var updatePosOnServer = function(){
+        console.log("position server updated");
+        var putWorkflowById = $.ajax({
+            cache: false,
+            type: 'PUT',
+            url: baseRestApiURL + "workflow/" + wfPlumbCanvasData.wf.id + "/?rnd=" + Math.random(),
+            dataType: 'json',
+            data: JSON.stringify(wfPlumbCanvasData.wf),
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": authHeader
+            }
+        });
+        $.when(putWorkflowById)
+            .done(function (putWorkflowById) {
+                console.log("wf position updated");
+            })
+            .fail(function () {
+                alert("Could not update  workflow data.");
+            });
+    };
+    //debounced function
+    var lazy_updatePosOnServer = _.debounce(updatePosOnServer, 400);
+
+
+    var wf_loadWorkflowById = function(wfId){
         console.log("f:wf_loadWorkflowById , load workflow"+wfId);
         var getWorkflowById = $.ajax({ cache: false,
             url: baseRestApiURL + "workflow/"+wfId+"/?rnd=" + Math.random(),
@@ -51,6 +90,8 @@ tao_resetCanvasData();
         $.when(getWorkflowById)
         .done(function (getWorkflowByIdResponse) {
             wfPlumbCanvasData._remote = getWorkflowByIdResponse;
+            //clone wf data only, no nodes info
+            wfPlumbCanvasData.wf = $.extend({}, getWorkflowByIdResponse); wfPlumbCanvasData.wf.nodes = [];
             wfPlumbCanvasData.header.id = getWorkflowByIdResponse.id;
             wfPlumbCanvasData.header.name = getWorkflowByIdResponse.name;
             wfPlumbCanvasData.header.status = getWorkflowByIdResponse.status;
@@ -78,14 +119,29 @@ tao_resetCanvasData();
                         var destNodeId = wfOneNode.id;
                         $.each(wfOneNode.incomingLinks, function(i, wfOneLink) {
                             var sourceNodeId = wfOneLink.sourceNodeId;
-                            var toNode = "p-"+destNodeId+"-"+wfOneLink.output.id;
-                            var fromNode = "p-"+sourceNodeId+"-"+wfOneLink.input.id;
+                            var toNode = "p_"+destNodeId+"_"+wfOneLink.output.id;
+                            var fromNode = "p_"+sourceNodeId+"_"+wfOneLink.input.id;
                             console.log( "link:" + fromNode +" > "+ toNode);
                             jsp.connect({ source:fromNode, target:toNode, type:"basic" });
                         });
                     });
                 });
-                makeWFPreview();
+            //set zoom and pan as saved
+
+
+            var matrix = pz.panzoom('getMatrix');
+            wfZoom = wfPlumbCanvasData.wf.zoom;
+            //fix unusable zoom
+            if (wfZoom === 0) wfZoom = 1;
+            matrix[0] = wfZoom;
+            matrix[3] = wfZoom;
+            matrix[4] = wfPlumbCanvasData.wf.xCoord;
+            matrix[5] = wfPlumbCanvasData.wf.yCoord;
+            pz.panzoom("setMatrix", matrix);
+
+            jsPlumb.fire("jsPlumbSetZoom", wfZoom);
+            wfPlumbCanvasData.loaded = true;
+            makeWFPreview();
         })
         .fail(function () {
                 alert("Could not retrive workflow data.", "ERROR");
@@ -153,8 +209,8 @@ tao_resetCanvasData();
         innerHTML += "<div class=\"module-ports\">";
         for (i = 0; i < maxPorts; i++) {
             innerHTML += "<div class=\"module-ports-row\">";
-            if(componentTemplate.targets[i]) innerHTML += "<div id=\"p-"+dna.fullData.id+"-"+componentTemplate.targets[i].id+"\" class=\"n-p-o-wrapp\"><div class=\"n-p-o\"></div></div>";
-            if(componentTemplate.sources[i]) innerHTML += "<div id=\"p-"+dna.fullData.id+"-"+componentTemplate.sources[i].id+"\" class=\"n-p-i-wrapp\"><div class=\"n-p-i\"></div></div>";
+            if(componentTemplate.targets[i]) innerHTML += "<div id=\"p_"+dna.fullData.id+"_"+componentTemplate.targets[i].id+"\" class=\"n-p-o-wrapp\"><div class=\"n-p-o\"></div></div>";
+            if(componentTemplate.sources[i]) innerHTML += "<div id=\"p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id+"\" class=\"n-p-i-wrapp\"><div class=\"n-p-i\"></div></div>";
             innerHTML += "</div>";
         }
         innerHTML += "<div class=\"module-status\">"+completeness+"% Completed</div>";
@@ -187,14 +243,14 @@ tao_resetCanvasData();
         for (i = 0; i < maxPorts; i++) {
             var elPort;
             if(componentTemplate.targets[i]) {
-                elPort = document.getElementById("p-"+dna.fullData.id+"-"+componentTemplate.targets[i].id);
+                elPort = document.getElementById("p_"+dna.fullData.id+"_"+componentTemplate.targets[i].id);
                 initPort(elPort, "out");
-                wfPlumbCanvasData.ports["p-"+dna.fullData.id+"-"+componentTemplate.targets[i].id] = {"type":"out", "parentID":dna.fullData.id};
+                wfPlumbCanvasData.ports["p_"+dna.fullData.id+"_"+componentTemplate.targets[i].id] = {"type":"out", "parentID":dna.fullData.id};
             }
             if(componentTemplate.sources[i]) {
-                elPort = document.getElementById("p-"+dna.fullData.id+"-"+componentTemplate.sources[i].id);
+                elPort = document.getElementById("p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id);
                 initPort(elPort, "in");
-                wfPlumbCanvasData.ports["p-"+dna.fullData.id+"-"+componentTemplate.sources[i].id] = {"type":"in", "parentID":dna.fullData.id};
+                wfPlumbCanvasData.ports["p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id] = {"type":"in", "parentID":dna.fullData.id};
             }
         }
 

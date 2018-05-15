@@ -16,7 +16,7 @@
         },
         populate: function(header){
             $(".val-title",this.elTBH).html(header.name);
-            $(".val-meta",this.elTBH).html(header.status +", "+ header.visibility);
+            $(".val-meta",this.elTBH).html(header.status +",&nbsp;"+ header.visibility);
             return this;
         },
         open: function () {
@@ -93,7 +93,7 @@
         $elComponentsList.empty();
         $elDatasurcesList.empty();
         $.each(wfTools.toolboxnodes.pc, function(i, item) {
-            var html ='<sortable_item class="item selected" id="'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="pc">\n' +
+            var html ='<sortable_item class="item selected" id="'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="pc" data-toolboxid="'+item.id+'">\n' +
                 '\t\t\t\t\t<div class="item-preview">\n' +
                 '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
                 '\t\t\t\t\t\t<img src="'+item.image+'" style="width: 100%; height: 100%;">\n' +
@@ -106,7 +106,7 @@
             $elComponentsList.append(html);
         });
         $.each(wfTools.toolboxnodes.ds, function(i, item) {
-            var html ='<sortable_item class="item selected" id = "'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="ds">\n' +
+            var html ='<sortable_item class="item selected" id = "'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="ds" data-toolboxid="'+item.id+'">\n' +
                 '\t\t\t\t\t<div class="item-preview">\n' +
                 '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
                 '\t\t\t\t\t\t<img src="'+item.image+'" style="width: 100%; height: 100%;">\n' +
@@ -139,7 +139,9 @@
                 var bleft  = (this.offsetWidth  - this.scrollWidth )/2*wfZoom;
                 var top    = (ui.offset.top  - $(this).offset().top  - btop)/wfZoom;
                 var left   = (ui.offset.left - $(this).offset().left - bleft)/wfZoom;
+                var toolboxId = $(ui.helper).data("toolboxid");
                 var compType = $(ui.helper).data("componenttype");
+                var initialName = wfTools.toolboxnodes[compType][toolboxId].label;
                 var nodeData = {
                     "ntype": compType,
                     "ntemplateid": $(ui.helper).data("componentid"),
@@ -153,7 +155,7 @@
                         //id:0, !!! do not send id!!!
                         incomingLinks:[],
                         level:0,
-                        name:"No Name",
+                        name:initialName,
                         xCoord:left,
                         yCoord:top,
                         behavior: "FAIL_ON_ERROR"
@@ -234,9 +236,8 @@ wfZoom = 1;
 			
 			var matrix = [wfZoom, 0, 0, wfZoom, fitLeft, fitTop];
 			pz.panzoom("setMatrix", matrix);
-            jsp.setZoom(wfZoom);
-            $elZoom.html( parseInt(wfZoom*100) + "%");	
-makeWFPreview();			
+        	jsPlumb.fire("jsPlumbSetZoom", wfZoom);
+			makeWFPreview();
     };
 	
 	

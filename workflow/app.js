@@ -49,45 +49,6 @@ window.addEventListener("beforeunload", function (e) {
     return confirmationMessage;                                //Webkit, Safari, Chrome etc.
 });
 
-										
-var toolboxProperties ={
-	showProperties: function(dna){
-		$("#draggable-toolbox-modules-properties section").hide();
-		if((dna.payload === undefined) || (dna.payload.mtype === undefined)){
-			$("#draggable-toolbox-modules-properties section.tpl-unknown").show();
-		}else{
-				var tpl_notfound = true;
-				//if(dna.payload.mtype == "ds-SciHubSentinel-1"){
-//					$("#draggable-toolbox-modules-properties section.tpl-ds").show();
-				//}
-				if(dna.payload.mtype === "ds-SciHubSentinel-2"){
-					tpl_notfound = false;
-					$("#draggable-toolbox-modules-properties section.tpl-ds").show();
-				}
-				if(dna.payload.mtype === "otb-BandMath"){
-					tpl_notfound = false;
-					$("#draggable-toolbox-modules-properties section.tpl-otb-bm").show();
-				}
-				if(dna.payload.mtype === "otb-ConcatenateImages"){
-					tpl_notfound = false;
-					$("#draggable-toolbox-modules-properties section.tpl-otb-concat").show();
-				}
-				//not found
-				if(tpl_notfound){
-					$("#draggable-toolbox-modules-properties section.tpl-unknown").show();
-				}
-		}
-	},
-	showPropertiesMultiple: function(dna){
-		$("#draggable-toolbox-modules-properties section").hide();
-		$("#draggable-toolbox-modules-properties section.tpl-multiple").show();
-	},
-	showPropertiesNone: function(dna){
-		$("#draggable-toolbox-modules-properties section").hide();
-		$("#draggable-toolbox-modules-properties section.tpl-none").show();
-	}
-};
-				
 var toolboxModules ={
 	selected: [],
 	count: 0,
@@ -113,15 +74,13 @@ var toolboxModules ={
 					jsp.addToDragSelection(elementid);
         });
 		if(toolboxModules.selected.length === 1){
-			///xxxxxxxxxxx
-			var dna = $("#"+toolboxModules.selected[0]).data("dna");
-			toolboxProperties.showProperties(dna);
+			//to do
 		}
 		if(toolboxModules.selected.length > 1){
-			toolboxProperties.showPropertiesMultiple();
+            //to do
 		}
 		if(toolboxModules.selected.length === 0){
-			toolboxProperties.showPropertiesNone();
+            //to do
 		}
 		makeWFPreview();
 	},
@@ -576,11 +535,41 @@ jsPlumb.ready(function () {
     // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
     // happening.
     instance.bind("click", function (c) {
-        instance.deleteConnection(c);
-        delete wfPlumbCanvasData.connectors[c.id];
+        console.log("click: delete connection id:" +c.id);
+        instance.deleteConnection(c); //this itself will trigger connectionDetached event
+        //delete wfPlumbCanvasData.connectors[c.id];
     });
     instance.bind("connectionDetached", function (info, originalEvent) {
-        delete wfPlumbCanvasData.connectors[info.connection];
+        console.log("connectionDetached: delete connection id:" + info.connection.id);
+        var lcl_payload = wfPlumbCanvasData.connectors[info.connection.id].linkData;
+        var lcl_to = wfPlumbCanvasData.connectors[info.connection.id].to;
+        var lcl_nodeId = lcl_to.split("_")[1];
+
+        var delOneLink = $.ajax({ cache: false,
+            url: baseRestApiURL + "workflow/link?nodeId="+lcl_nodeId,
+            dataType : 'json',
+            data: JSON.stringify(lcl_payload),
+            type: 'DELETE',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": authHeader
+            }
+        });
+        $.when(delOneLink)
+            .done(function (delOneLinkResponse) {
+                console.log(delOneLinkResponse);
+                if(delOneLinkResponse.id == lcl_nodeId){
+                    delete wfPlumbCanvasData.connectors[info.connection.id];
+                    $(".v-lastaction","#infoband").html("link removed");
+                } else {
+                    alert("Could not delete link");
+                    //to do revert link on canvas
+                }
+            })
+            .fail(function(){
+                alert("Could not delete link");
+            });
     });
 
 
@@ -590,14 +579,22 @@ jsPlumb.ready(function () {
     // id as the label overlay's text.
     instance.bind("connection", function (info) {
         info.connection.getOverlay("label").setLabel(info.connection.id);
+        var s = info.sourceId.split('_');
+        var t = info.targetId.split('_');
+
+        //find connection in workflow based on internal id of the "to" node
+        var toID = _.invert(wfPlumbCanvasData.nodesMap)[t[1]];
+        var linkData = (_.find(wfPlumbCanvasData.nodes[toID].incomingLinks, function(item) {
+            return (item.output.id == t[2] && item.input.id == s[2]);
+        }));
+        //console.log("TO id:"+toID);console.log(linkData);
+
         //register connection to canvasdata
-        wfPlumbCanvasData.connectors[info.connection.id] = ({"from":info.sourceId, "to":info.targetId});
+        wfPlumbCanvasData.connectors[info.connection.id] = ({"from":info.sourceId, "to":info.targetId, "linkData":linkData});
+
         console.log("waw connection binded event, update model ...");
         if(wfPlumbCanvasData.loaded){
             //put connection on server
-            var s = info.sourceId.split('_');
-            var t = info.targetId.split('_');
-
             var putOneConnection = $.ajax({ cache: false,
                 url: baseRestApiURL + "workflow/link?sourceNodeId="+s[1]+"&sourceTargetId="+s[2]+"&targetNodeId="+t[1]+"&targetSourceId=" + t[2],
                 dataType : 'json',
@@ -610,8 +607,20 @@ jsPlumb.ready(function () {
             });
             $.when(putOneConnection)
                 .done(function (putOneConnectionResponse) {
-                    $(".v-lastaction","#infoband").html("connection added");
                     console.log(putOneConnectionResponse);
+                    if(putOneConnectionResponse.id){
+                        $(".v-lastaction","#infoband").html("connection added");
+                        var linkData = (_.find(putOneConnectionResponse.incomingLinks, function(item) {
+                            return (item.output.id == t[2] && item.input.id == s[2]);
+                        }));
+
+
+                        wfPlumbCanvasData.connectors[info.connection.id] = ({"from":info.sourceId, "to":info.targetId, "linkData":linkData});
+                    } else {
+                        alert("Incompatiple source and target. Reverting");
+                        jsp.deleteConnection(info.connection);
+                        delete wfPlumbCanvasData.connectors[info.connection.id];
+                    }
                 })
                 .fail(function(){
                     alert("Could not save connection", "ERROR");
@@ -641,16 +650,50 @@ jsPlumb.ready(function () {
     });
 	
 	var delNode = window.wf_removeNode = function(el){
-        //remove node and ports from canvasdata
-	    $( "#"+el+" .n-p-o-wrapp, #"+el+" .n-p-i-wrapp").each(function(){
-             delete wfPlumbCanvasData.ports[$(this).attr("id")];
-        });
-        delete wfPlumbCanvasData.nodes[el];
-        delete wfPlumbCanvasData.nodesMap[el];
+	    //delete node from server
+        console.log("delete node id:"+el);
 
-	    jsp.deleteConnectionsForElement(el);
-        jsp.removeAllEndpoints(el);
-        jsp.remove(el);
+        var delOneNode = $.ajax({ cache: false,
+            url: baseRestApiURL + "workflow/node?workflowId="+currentWfID,
+            dataType : 'text',
+            data: JSON.stringify(wfPlumbCanvasData.nodes[el]),
+            type: 'DELETE',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": authHeader
+            }
+        });
+        $.when(delOneNode)
+            .done(function (delOneNodeResponse) {
+                console.log(delOneNodeResponse);
+                if(delOneNodeResponse === "OK"){
+                    $(".v-lastaction","#infoband").html("node removed");
+                    removeOneNodeFromCanvas();
+                } else {
+                    alert("Could not delete node", "ERROR");
+                    return 0;
+                }
+            })
+            .fail(function(){
+                alert("Could not delete node", "ERROR");
+                return 0;
+            });
+
+        //remove node and ports from canvasdata
+        var removeOneNodeFromCanvas = function (){
+
+            $( "#"+el+" .n-p-o-wrapp, #"+el+" .n-p-i-wrapp").each(function(){
+                delete wfPlumbCanvasData.ports[$(this).attr("id")];
+            });
+
+            delete wfPlumbCanvasData.nodes[el];
+            delete wfPlumbCanvasData.nodesMap[el];
+
+            jsp.deleteConnectionsForElement(el);
+            jsp.removeAllEndpoints(el);
+            jsp.remove(el);
+        };
 	};
 
     console.log("jsPlumb ready end");
@@ -696,6 +739,12 @@ updateModuleStatus("", {"state":"completed", "progress":68});
 		toolboxModules.rmSelected();
 		console.log(id);
 	})
+    .on( "click",".btn-action-editmodule", function(e) { //erase module on trash icon click
+            e.stopPropagation();
+            var nodeID = $(this).closest(".w").attr("id");
+            $propbar.menu("open", {"nodeid":nodeID});
+            console.log("propbar invocation");
+    })
 	.on( "click", function(e) {
 		//check if own event is propagated and do nothing
 		if(e.target !== this){

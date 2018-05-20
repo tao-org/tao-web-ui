@@ -180,16 +180,6 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label for="inputFileLocation" class="col-sm-2 col-md-2 control-label">Template name </label>
-                                                    <div class="col-sm-10 col-md-10">
-                                                        <input type="text" class="form-control" id="inputTemplateName" name="inputTemplateName" placeholder="template name" autocomplete="off" value="" data-errorspan="template"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
                                                     <label for="inputWorkingDirectory" class="col-sm-2 col-md-2 control-label">Template contents</label>
                                                     <div class="col-sm-10 col-md-10">
                                                         <textarea class="form-control" rows="6" id="inputTemplateContents" name="inputTemplateContents" placeholder="template contents" data-errorspan="template"></textarea>
@@ -414,12 +404,12 @@
                     $(".ckattr-error", $pEL).fadeOut();
                     $(".ckattr-ok", $pEL).fadeIn();
                 } else {
-                    alert('E001, An error has occurred, please try again or contact app admin.');
+                    alert('E001 c+, An error has occurred, please try again or contact app admin.');
                 }
             },
             success: function(response) {
                 try {
-                    showMsg("Hostname already in use. Please try a different name.", "ERROR");
+                    showMsg("Name already in use. Please try a different name.", "ERROR");
                     $(".ckattr-ok", $pEL).fadeOut();
                     $(".ckattr-error", $pEL).fadeIn();
                 }
@@ -448,12 +438,12 @@
                 if( jqXHR.status === 500 ){
                     alert('E001, Exec node nolonger found.');
                 } else {
-                    alert('E001, An error has occurred, please try again or contact app admin.');
+                    alert('E001 gcid, An error has occurred, please try again or contact app admin.');
                 }
             },
             success: function(response) {
                 console.log(response);
-                try {
+                //try {
                     //populate form with current values
                     var $el = $('#frmExecNodeEdit');
                     $('input[name=inputCompID]', $el).val(response.id);
@@ -483,15 +473,16 @@
 
                     $('input[name=inputFileLocation]', $el).val(response.fileLocation);
                     $('input[name=inputWorkingDirectory]', $el).val(response.workingDirectory);
-                    $('input[name=inputTemplateName]', $el).val(response.template.name);
-                    $('textarea[name=inputTemplateContents]', $el).val(response.template.contents);
+                    //!!!!!!$('input[name=inputTemplateName]', $el).val(response.template.name);
+                    $('textarea[name=inputTemplateContents]', $el).val(response.templatecontents);
 
                     $.each(response.variables, function(i, value) {
                         helper_addSysVarRow($("#tbl-edt-sysvar"),value);
                     });
+                try {
                 }
                 catch(e) {
-                    alert('E001, An error has occurred, please try again or contact app admin.');
+                    alert('E001 populate, An error has occurred, please try again or contact app admin.');
                 }
                 $.each(response.parameterDescriptors, function(i, value) {
                     helper_addParameterDescriptorsRow($("#tbl-edt-paramdesc"),value);
@@ -716,15 +707,16 @@
                         }
                     ]
                 };
+            formData.templatecontents = $('textarea[name=inputTemplateContents]', this).val();
             //add template to payload for template type VELOCITY
-            if(formData.templateType === "VELOCITY"){
-                formData.template={
-                    "type": "ro.cs.tao.component.template.BasicTemplate",
-                    "name" : $('input[name=inputTemplateName]', this).val(),
-                    "templateType": "VELOCITY",
-                    "contents" : $('textarea[name=inputTemplateContents]', this).val()
-                };
-            }
+//            if(formData.templateType === "VELOCITY"){
+//                formData.template={
+//                    "type": "ro.cs.tao.component.template.BasicTemplate",
+//                    "name" : $('input[name=inputTemplateName]', this).val(),
+//                    "templateType": "VELOCITY",
+//                    "contents" : $('textarea[name=inputTemplateContents]', this).val()
+//                };
+//            }
             //add system variable to payload parsing user defined system vars table
             formData.variables = [];
             $(".val-row", $tblCompSysVar).each(function() {
@@ -776,12 +768,12 @@
                     formData.parameterDescriptors.push(newParameterDescriptor);
                 }
             });
-console.log(JSON.stringify(formData));
+//console.log(JSON.stringify(formData));
             if(formData.id === ''){
                 showMsg("Component ID can not be empty. Please choose valid values to continue.", "ERROR");
                 return false;
             }
-            var regexp = /^[a-zA-Z0-9-_]+$/;
+            var regexp = /^[a-zA-Z0-9-_.]+$/;
             if (formData.id.search(regexp) === -1)
             {
                 showMsg("The component id contains invalid characters.", "ERROR");

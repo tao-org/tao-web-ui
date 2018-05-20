@@ -1,19 +1,20 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width">
-<title>Workflow</title>
-<link href="//fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
-<link href="./css/nanoscroller.css" rel="stylesheet">
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title>Workflow</title>
+    <link href="//fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+    <link href="./css/nanoscroller.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
-<link href="./css/main.css" rel="stylesheet">
-<link rel="stylesheet" href="./app.css">
-<link rel="stylesheet" href="./workspace.css">
+    <link href="./css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="./app.css">
+    <link rel="stylesheet" href="./workspace.css">
+    <link rel="stylesheet" href="./css/propbar.css">
 </head>
 <body class="jtk-bootstrap jtk-bootstrap-wide noselect">
 
@@ -41,67 +42,27 @@
         <span class="">ToolBox</span>
         <button class="toolbox-bar-close" title="close Toolbox">×</button>
     </div>
-
+<!--
+-->
         <div class="toolboxAccordion">
             <h3><i class="fa fa-angle-right"></i>&nbsp;Datasources</h3>
             <div class="nano">
                 <div id="datasourceslist" class="modulesholder nano-content">
-                    <sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-SciHubSentinel-1","mlabel":"SciHub Sentinel-1"}'>
-                        <div class="item-preview">
-                            <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-                                <img src="media/module-ds.png" style="width: 100%; height: 100%;">
-                            </vectr_img>
-                        </div>
-                        <div class="item-info">
-                            <div class="item-label text-left">SciHub Sentinel-1</div>
-                        </div>
-                    </sortable_item>
-                    <sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-SciHubSentinel-2","mlabel":"SciHub Sentinel-2"}'>
-                        <div class="item-preview">
-                            <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-                                <img src="media/module-ds.png" style="width: 100%; height: 100%;">
-                            </vectr_img>
-                        </div>
-                        <div class="item-info">
-                            <div class="item-label text-left">SciHub Sentinel-2</div>
-                        </div>
-                    </sortable_item>
-                    <sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-AWSSentinel2","mlabel":"AWS Sentinel-2"}'>
-                        <div class="item-preview">
-                            <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-                                <img src="media/module-ds.png" style="width: 100%; height: 100%;">
-                            </vectr_img>
-                        </div>
-                        <div class="item-info">
-                            <div class="item-label text-left">AWS Sentinel-2</div>
-                        </div>
-                    </sortable_item>
-                    <sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-AWSLandsat8","mlabel":"AWS Landsat 8"}'>
-                        <div class="item-preview">
-                            <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-                                <img src="media/module-ds.png" style="width: 100%; height: 100%;">
-                            </vectr_img>
-                        </div>
-                        <div class="item-info">
-                            <div class="item-label text-left">AWS Landsat 8</div>
-                        </div>
-                    </sortable_item>
-                    <sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-Local","mlabel":"Local Data Source"}'>
-                        <div class="item-preview">
-                            <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-                                <img src="media/module-ds.png" style="width: 100%; height: 100%;">
-                            </vectr_img>
-                        </div>
-                        <div class="item-info">
-                            <div class="item-label text-left">Local Data Source</div>
-                        </div>
-                    </sortable_item>
                 </div>
             </div>
             <h3><i class="fa fa-angle-right"></i>&nbsp;Components</h3>
+            <div>
             <div class="nano">
+
+                <div id="modules-search" class="toolbox-search modules-search">
+                    <input type="text" placeholder="search">
+                    <i class="fa fa-search"></i>
+                    <i class="fa fa-times"></i>
+                </div>
+
                 <div id="moduleslist" class="modulesholder nano-content">
                 </div>
+            </div>
             </div>
         </div>
 </div>
@@ -307,110 +268,6 @@
 	</div>
 </div>
 
-
-<div id="draggable-toolbox-modules-properties" class="ui-widget-content">
-  <p class="ui-widget-header">Component properties</p>
-<!-- xxxxxxxxxxxxxxxxxxxxxxxxx -->
-<section class="content tpl-prop tpl-ds collapse">
-	<div class="col-md-12 prop-head">
-		<span>Data Source SciHub</span>
-	</div>
-	<div class="col-md-12 prop-body">
-		<form>
-		  <div class="form-group">
-			<label for="exampleSelect1">Platform name</label>
-			<select class="form-control" id="exampleSelect1" disabled>
-			  <option>Sentinel-1</option>
-			  <option selected>Sentinel-2</option>
-			  <option>Sentinel-3</option>
-			</select>
-		  </div>
-
-		  <div class="form-group">
-			<label for="exampleInputEmail1">Begin position</label>
-			<input type="date" class="form-control" id="exampleInputEmail1" placeholder="" autocomplete="off" value="2017-06-22">
-		  </div>
-		  <div class="form-group">
-			<label for="exampleInputPassword1">Cloud cover</label>
-			<input type="number" step="0.01" class="form-control" id="exampleInputPassword1" placeholder="" autocomplete="off" value="75.00">
-		  </div>
-		  <div class="form-group">
-			<label for="exampleTextarea">Footprint</label>
-			<textarea class="form-control" id="exampleTextarea" rows="4">
-POLYGON((-9.9866909768 23.4186029838, -8.9037319257 23.4186029838, -8.9037319257 24.413397299, -9.9866909768 24.413397299, -9.9866909768 23.4186029838))
-			</textarea>
-		  </div>
-		  <button type="submit" class="btn btn-primary">Submit</button>
-		</form>
-	</div>
-</section>
-<section class="content tpl-prop tpl-otb-bm collapse">
-	<div class="col-md-12 prop-head">
-		<span>OTB Band Math</span>
-	</div>
-	<div class="col-md-12 prop-body">
-		<form>
-		  <div class="form-group">
-			<label for="exampleInputEmail1">Location</label>
-			<input type="text" class="form-control" id="exampleInputEmail1" placeholder="" autocomplete="off" value="/usr/bin/otbcli_BandMath">
-		  </div>
-		  <div class="form-group">
-			<label for="exampleInputPassword1">Input images</label>
-			<textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
-		  </div>
-		  <div class="form-group">
-			<label for="exampleInputEmail1">Output image</label>
-			<input type="text" class="form-control" id="exampleInputEmail1" placeholder="" autocomplete="off" value="">
-		  </div>
-		  <div class="form-group">
-			<label for="exampleTextarea">Expresion</label>
-			<textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
-		  </div>
-		  <button type="submit" class="btn btn-primary">Submit</button>
-		</form>
-	</div>
-</section>
-<section class="content tpl-prop tpl-otb-concat collapse">
-	<div class="col-md-12 prop-head">
-		<span>OTB Concatenate Images</span>
-	</div>
-	<div class="col-md-12 prop-body">
-		<form>
-		  <div class="form-group">
-			<label for="exampleInputEmail1">Location</label>
-			<input type="text" class="form-control" id="exampleInputEmail1" placeholder="" autocomplete="off" value="/usr/bin/otbcli_ConcatenateImages">
-		  </div>
-		  <div class="form-group">
-			<label for="exampleInputPassword1">Input images</label>
-			<textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
-		  </div>
-		  <div class="form-group">
-			<label for="exampleInputEmail1">Output image</label>
-			<input type="text" class="form-control" id="exampleInputEmail1" placeholder="" autocomplete="off" value="">
-		  </div>
-		  <button type="submit" class="btn btn-primary">Submit</button>
-		</form>
-	</div>
-</section>
-
-<section class="content tpl-prop tpl-unknown collapse">
-	<div class="col-md-12 prop-body">
-<p class="please-select" >No properties defined for selected component.</p>
-	</div>
-</section>
-<section class="content tpl-prop tpl-none">
-	<div class="col-md-12 prop-body">
-<p class="please-select" >Please select a component to display its properties.</p>
-	</div>
-</section>
-<section class="content tpl-prop tpl-multiple collapse">
-	<div class="col-md-12 prop-body">
-<p class="please-select" >Multiple components selected. Please select just one component to display its properties.</p>
-	</div>
-</section>
-<!-- xxxxxxxxxxxxxxxxxxxxxxxxx -->
-</div>
-
 <div id="rubberband" style="display:none;"></div>
 <script type="text/javascript" src="./lib/overthrow.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -428,6 +285,7 @@ POLYGON((-9.9866909768 23.4186029838, -8.9037319257 23.4186029838, -8.9037319257
 <script src="../assets/dist/js/config.js"></script>
 <script src="../assets/dist/js/general-functions.js"></script>
 <script src="./workspace.js"></script>
+<script src="./lib/propbar.js"></script>
 <script src="./app.js"></script>
 <script src="./canvas.js"></script>
 </body>

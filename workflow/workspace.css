@@ -110,6 +110,28 @@
     opacity: 0;
     visibility: hidden;
 }
+.toolbox-sidebar .toolbox-search {
+    padding: 5px;
+    text-align: center;
+}
+.toolbox-sidebar .toolbox-search input {
+    border-radius: 3px;
+    border: none;
+    padding: 10px;
+    color: white;
+    background: #6A6C75;
+    width: 93%;
+    font-size: 12px;
+}
+.toolbox-sidebar .toolbox-search input::placeholder {
+    color: #c5c5c5;
+}
+.toolbox-sidebar .toolbox-search .fa-search, .toolbox-sidebar .toolbox-search .fa-times {
+    position: relative;
+    left: -25px;
+    width: 0;
+    cursor:pointer;
+}
 
 .toolboxAccordion{
     background: #212527;
@@ -223,7 +245,6 @@
 .control-toolbar .icon.selected {
     color: blue;
 }
-
 .nav-tabs>li>a, .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
 	padding: 0 5px;
 	font-weight: bold;
@@ -247,6 +268,7 @@
     border-radius: 2em 0 0 0;
     font-size: 0.8em;
     z-index: 1000;
+    text-shadow: 1px 1px 1px #666;
 }
 
 #tools-toolbox {
@@ -374,68 +396,6 @@
     color: blue;
 }
 
-
-
-#draggable-toolbox-modules-properties {
-	position: absolute;
-	background-color: #212527;
-	margin: 0;
-    right: 0;
-    top: 320px;
-	width: 250px;
-}
-#draggable-toolbox-modules-properties p {
-    cursor: move;
-    background: #383f43;
-    margin: 0;
-    color: #FFF;
-    padding: 1px 6px;
-    border: none;
-    font-size: 10px;
-}
-#draggable-toolbox-modules-properties .prop-head {
-	color: #bebebe;
-    padding-top: 10px;
-    font-size: 1.2em;
-    font-weight: bold;
-}
-#draggable-toolbox-modules-properties .prop-head span {
-	border-bottom: 2px solid #bebebe;
-    display: block;
-}
-
-#draggable-toolbox-modules-properties .prop-body {
-	background-color: #212527;
-	color:#bebebe;
-	padding-top: 10px;
-    padding-bottom: 20px;
-}
-
-#draggable-toolbox-modules-properties .form-control{
-	padding: 2px 6px;
-	height:auto;
-	color: #FFF;
-    box-shadow: none;
-    background-color: #374850;
-    border: 1px solid transparent;
-    -webkit-transition: all .3s ease-in-out;
-    -o-transition: all .3s ease-in-out;
-    transition: all .3s ease-in-out;
-	border-radius: 1px;
-	line-height: 1em;
-}
-#draggable-toolbox-modules-properties .form-control:focus{
-	color: #000;
-    background-color: #FFF;
-}
-
-#draggable-toolbox-modules-properties .please-select{
-    color: #bebebe;
-    text-align: center;
-    font-size: 0.8em;
-    text-shadow: 1px 1px 1px #666;
-	background-color: transparent;
-}
 #draggable-toolbox-modules-source {
 	position: absolute;
 	background-color: #212527;
@@ -467,7 +427,6 @@
     max-height: 700px;
     overflow-y: auto;
 */
-    overflow-x: hidden;
     overflow: auto;
     height: 100%;
 }

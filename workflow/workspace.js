@@ -1,4 +1,11 @@
-	var prefferences = {};
+	//create case insensitive search jQuery selector:
+    jQuery.expr[':'].ci_search = function(a, i, m) {
+        return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+    };
+
+
+
+    var prefferences = {};
 
     var toolboxHeader = {
         elTBH: $("#toolboxHeader"),
@@ -32,6 +39,8 @@
 
     var toolboxSidebar = {
     	elTBS: $("#toolboxSidebar"),
+        elModuleSearch: $("#modules-search"),
+        elModuleList: $("#moduleslist"),
         init: function () {
             var a = this;
     	    a.elTBS.on("click", ".toolbox-bar-close", function(e){
@@ -52,7 +61,7 @@
                 heightStyle: "fill",
                 collapsible: true,
                 active: 1,
-                animate: 500,
+                animate: 500
             });
             //add resize handler
             $( window )
@@ -66,6 +75,30 @@
                 this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
                 e.preventDefault();
             });
+//
+            $( ".fa-search", "#modules-search").show();
+            $( ".fa-times", "#modules-search").hide().on("click",function(){
+                $(this).parent().find("input").val("").trigger("keyup");
+            });
+            a.elTBS.on('keyup','input', function(e){
+                    //_mLIST.repaint();
+                    //_mLIST.refreshSearch();
+                var q = $(this).val();
+                console.log(q);
+                if(q && q.length>0){
+                    $( ".fa-search", "#modules-search").hide();
+                    $( ".fa-times", "#modules-search").show();
+                    $( "sortable_item", "#moduleslist").hide();
+                    $( ".item-label:ci_search('"+q+"')", "#moduleslist").closest("sortable_item").show();
+                }else{
+                    $( ".fa-search", "#modules-search").show();
+                    $( ".fa-times", "#modules-search").hide();
+                    $( "sortable_item", "#moduleslist").show();
+                }
+            });
+
+//
+
             a.open();
         },
         open: function () {
@@ -381,7 +414,6 @@ $( function() {
 		toolboxModules.rescanBuild();
 		$( "#tools-toolbox" ).draggable({ handle: "p" });
 		$( "#draggable-toolbox-modules-source" ).draggable({ handle: "p" });
-		$( "#draggable-toolbox-modules-properties" ).draggable({ handle: "p" });
 		$( "#draggable-toolbox-preview" ).draggable({ handle: "p" });
 		$( "#draggable-toolbox-modules" ).draggable({ handle: "p" });
 		$( "#selectable" ).selectable({

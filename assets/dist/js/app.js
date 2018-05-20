@@ -239,9 +239,11 @@ function _init() {
       var _this = this;
       _this.fix();
       _this.fixSidebar();
+      _this.fixWFframe();
       $(window, ".wrapper").resize(function () {
         _this.fix();
         _this.fixSidebar();
+        _this.fixWFframe();
       });
     },
     fix: function () {
@@ -262,7 +264,6 @@ function _init() {
           $(".content-wrapper, .right-side").css('min-height', sidebar_height);
           postSetWidth = sidebar_height;
         }
-
         //Fix for the control sidebar height
         var controlSidebar = $($.AdminLTE.options.controlSidebarOptions.selector);
         if (typeof controlSidebar !== "undefined") {
@@ -295,6 +296,12 @@ function _init() {
           });
         }
       }
+    },
+    fixWFframe: function(){
+        //Fix for the WF Iframe resizecontrol sidebar height
+        var iframeH = $(".content-wrapper").css('min-height');
+        iframeH = parseInt(iframeH)-5;
+        $("#wfIframeWrapper iframe").css('height', iframeH+"px");
     }
   };
 

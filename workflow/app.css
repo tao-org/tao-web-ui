@@ -1,3 +1,50 @@
+*,
+*:before,
+*:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility
+}
+html {
+    padding: 0;
+    margin: 0
+}
+body {
+    background-color: #FFF;
+    color: #434343;
+    font-family: "Lato", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    height: 100%;
+    padding: 0
+}
+@media only screen and (max-width: 320px) {
+    body {
+        margin-top: 51px
+    }
+}
+.error {
+    color: red;
+    font-size: 11px
+}
+.txtInv {
+    width: 450px;
+    height: 300px
+}
+pre {
+    outline: 1px solid #ccc;
+    padding: 5px;
+    margin: 0
+}
+
+
+
+
+
+
 .demo {
     /* for IE10+ touch devices */
     touch-action:none;

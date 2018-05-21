@@ -33,7 +33,7 @@ $(document)
 	})
 	.on('keydown', function(e){
 			if (e.ctrlKey) {
-				if (e.keyCode == 65 || e.keyCode == 97) { // 'A' or 'a'
+				if (e.keyCode === 65 || e.keyCode === 97) { // 'A' or 'a'
 					e.preventDefault();
 					console.log("CTRL + A");
 					$(".w", $elCanvas).addClass("selected");
@@ -90,7 +90,7 @@ var toolboxModules ={
 		$(".w").each(function() {
                     var dna = $(this).attr('dna');
 					var id = $(this).attr('id');
-					if(dna == undefined){ //if wrongly defined corect module dna data
+					if(dna === undefined){ //if wrongly defined corect module dna data
 						dna = {
 								"type":"stdBlock",
 								"blockid":id,
@@ -531,9 +531,7 @@ jsPlumb.ready(function () {
         jsPlumb.fire("tao_updateNodePosition", [params.el.id, params.finalPos[0], params.finalPos[1]]);
         makeWFPreview();
     });
-    // bind a click listener to each connection; the connection is deleted. you could of course
-    // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
-    // happening.
+    // bind a click listener to each connection; the connection is deleted
     instance.bind("click", function (c) {
         console.log("click: delete connection id:" +c.id);
         instance.deleteConnection(c); //this itself will trigger connectionDetached event
@@ -543,40 +541,44 @@ jsPlumb.ready(function () {
         console.log("connectionDetached: delete connection id:" + info.connection.id);
         var lcl_payload = wfPlumbCanvasData.connectors[info.connection.id].linkData;
         var lcl_to = wfPlumbCanvasData.connectors[info.connection.id].to;
-        var lcl_nodeId = lcl_to.split("_")[1];
-
-        var delOneLink = $.ajax({ cache: false,
-            url: baseRestApiURL + "workflow/link?nodeId="+lcl_nodeId,
-            dataType : 'json',
-            data: JSON.stringify(lcl_payload),
-            type: 'DELETE',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "Authorization": authHeader
-            }
-        });
-        $.when(delOneLink)
-            .done(function (delOneLinkResponse) {
-                console.log(delOneLinkResponse);
-                if(delOneLinkResponse.id == lcl_nodeId){
-                    delete wfPlumbCanvasData.connectors[info.connection.id];
-                    $(".v-lastaction","#infoband").html("link removed");
-                } else {
-                    alert("Could not delete link");
-                    //to do revert link on canvas
+        var lcl_nodeId = parseInt(lcl_to.split("_")[1]);
+        //check if link exists or is just a revert connection event.
+        //check if parent node exists before calling delete
+        if(_.invert(wfPlumbCanvasData.nodesMap)[lcl_nodeId]){
+            var delOneLink = $.ajax({ cache: false,
+                url: baseRestApiURL + "workflow/link?nodeId="+lcl_nodeId,
+                dataType : 'json',
+                data: JSON.stringify(lcl_payload),
+                type: 'DELETE',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": authHeader
                 }
-            })
-            .fail(function(){
-                alert("Could not delete link");
             });
+            $.when(delOneLink)
+                .done(function (delOneLinkResponse) {
+                    console.log(delOneLinkResponse);
+                    if(delOneLinkResponse.id === lcl_nodeId){
+                        delete wfPlumbCanvasData.connectors[info.connection.id];
+                        $(".v-lastaction","#infoband").html("link removed");
+                    } else {
+                        alert("Could not delete link");
+                        //to do revert link on canvas
+                    }
+                })
+                .fail(function(){
+                    //to do fix revert
+                    //alert("Delete link failed. Reload product.");
+                });
+        }else{
+            delete wfPlumbCanvasData.connectors[info.connection.id];
+            $(".v-lastaction","#infoband").html("link removed");
+        }
     });
 
 
-    // bind a connection listener. note that the parameter passed to this function contains more than
-    // just the new connection - see the documentation for a full list of what is included in 'info'.
-    // this listener sets the connection's internal
-    // id as the label overlay's text.
+    // bind a connection listener. note that the parameter passed to this function contains more than just the new connection
     instance.bind("connection", function (info) {
         info.connection.getOverlay("label").setLabel(info.connection.id);
         var s = info.sourceId.split('_');
@@ -585,7 +587,7 @@ jsPlumb.ready(function () {
         //find connection in workflow based on internal id of the "to" node
         var toID = _.invert(wfPlumbCanvasData.nodesMap)[t[1]];
         var linkData = (_.find(wfPlumbCanvasData.nodes[toID].incomingLinks, function(item) {
-            return (item.output.id == t[2] && item.input.id == s[2]);
+            return (item.output.id === t[2] && item.input.id === s[2]);
         }));
         //console.log("TO id:"+toID);console.log(linkData);
 
@@ -611,7 +613,7 @@ jsPlumb.ready(function () {
                     if(putOneConnectionResponse.id){
                         $(".v-lastaction","#infoband").html("connection added");
                         var linkData = (_.find(putOneConnectionResponse.incomingLinks, function(item) {
-                            return (item.output.id == t[2] && item.input.id == s[2]);
+                            return (item.output.id === t[2] && item.input.id === s[2]);
                         }));
 
 

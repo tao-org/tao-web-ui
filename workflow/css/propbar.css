@@ -95,7 +95,7 @@ app-modal-header {
 }
 app-modal-header h1 {
     margin: 0;
-    padding: 0;
+    padding: 0 0 10px 0;
     font-size: 20px;
     font-weight: bold;
 }
@@ -104,6 +104,9 @@ app-modal-header h2 {
     padding: 0;
     font-size: 12px;
     font-weight: bold;
+}
+app-modal-header p{
+    font-size: 12px;
 }
 
 app-modal-content {
@@ -168,10 +171,10 @@ app-modal-content {
 	position: relative;
 	padding: 5px 24px;
     color: rgba(0,0,0,.9);
-	font-size: 12px;
     border-top: 1px solid #fff;
     border-bottom: 1px solid #fff;
-	transition: all .4s ease-in-out;
+	transition: padding .4s ease-in-out;
+    font-size: 14px;
 }
 .app-card-note-item:hover {
 	padding: 20px 24px;
@@ -249,20 +252,39 @@ btn-avatar{
     text-align: center;
     font-family: Slack-Averta,appleLogo,sans-serif;
     font-weight: 700;
-    line-height: 1.3;
+    line-height: 1.4;
     letter-spacing: normal;
-    font-size: .9rem;
+    font-size: 1.4rem;
     text-transform: uppercase;
     text-decoration: none;
     padding: 19px 40px 20px;
     display: block;
     width: 100%;
     transition: box-shadow 420ms cubic-bezier(.165,.84,.44,1),color 420ms cubic-bezier(.165,.84,.44,1),background 420ms cubic-bezier(.165,.84,.44,1);
-	background-color: #5b77c4;
+	background-color: #000;
     color: #fff;
     fill: #fff;
     outline: 0;
 }
 .l-form__submit:hover{
-	background-color: #1c299d;
+	background-color: #3c8dbc;
+}
+
+.box-shadow--6dp {
+    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2);
+}
+.table-bordered {
+    border: 1px solid #f4f4f4;
+}
+.tbl-edt .tpl-sample-row {
+    display: none;
+}
+.tbl-edt input[type="text"], .tbl-edt textarea, .tbl-edt select {
+    width: 100%;
+    padding-left: 0.3em;
+    border: 1px solid #FFF;
+    /*transition: .1s ease-out;*/
+}
+.tbl-edt textarea {
+    resize: none;
 }

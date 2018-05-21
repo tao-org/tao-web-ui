@@ -13,10 +13,11 @@
 	<app-modal-header>
 		<h1 class="val-propbar-name">Unknown</h1>
 		<h2 class="val-propbar-componentid">Unknown</h2>
+        <p class="val-propbar-details"></p>
 	</app-modal-header>
 	<app-modal-content>
 		<div>
-			<div class="app-card">
+			<div class="app-card" style="display: none">
 				<div class="app-card-header">
 					Customize value as needed
 				</div>
@@ -33,63 +34,143 @@
 				</form>
 				<div class="app-card-divider"></div>
 			</div>
-			<div class="app-card" style="display: none;">
-				<div class="app-card-header">
-					Notifications
-				</div>
-				<div class="app-card-divider"></div>
 
-				<div class="app-card-note-item">
-					<a target="_blank" href="http://google.com">
-						<span class="app-card-note-item-title">Title first item</span>
-						<p class="">Find, find fast what you need.</p>
-					</a>
-				</div>
-				<div class="app-card-note-item">
-					<a target="_blank" href="http://google.com">
-						<span class="app-card-note-item-title">Title first item</span>
-						<p class="">Find, find fast what you need.</p>
-					</a>
-				</div>
-				<div class="app-card-note-item">
-					<a target="_blank" href="http://google.com">
-						<span class="app-card-note-item-title">Title first item</span>
-						<p class="">Find, find fast what you need.</p>
-					</a>
-				</div>
-				<div class="app-card-note-item">
-					<a target="_blank" href="http://google.com">
-						<span class="app-card-note-item-title">Title first item</span>
-						<p class="">Find, find fast what you need.</p>
-					</a>
-				</div>
-				<div class="app-card-note-item">
-					<a target="_blank" href="http://google.com">
-						<span class="app-card-note-item-title">Title first item</span>
-						<p class="">Find, find fast what you need.</p>
-					</a>
-				</div>
-				<div class="app-card-note-item">
-					<a target="_blank" href="http://google.com">
-						<span class="app-card-note-item-title">Title first item</span>
-						<p class="">Find, find fast what you need.</p>
-					</a>
-				</div>
-				<div class="app-card-note-item">
-					<a target="_blank" href="http://google.com">
-						<span class="app-card-note-item-title">Title first item</span>
-						<p class="">Find, find fast what you need.</p>
-					</a>
-				</div>
-			</div>
+            <div class="app-card" style="display: block">
+                <div class="app-card-header">
+                    Sys. vars.
+                </div>
+                <div class="app-card-divider"></div>
+                <div style="padding: 20px;">
+                    <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-sysvar">
+                        <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="tpl-sample-row">
+                            <td><input readonly="readonly" type="text" class="var-key" value="" placeholder="input variable's name"></td>
+                            <td><input type="text" class="var-value" value="" placeholder="input variable's value"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="app-card" style="display: block">
+                <div class="app-card-header">
+                    Parameters
+                </div>
+                <div class="app-card-divider"></div>
+                <div style="padding: 20px;">
+                        <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-paramdesc">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Parameter ID</th>
+                                <th style="width: 50%;">Description</th>
+                                <th>Parameter Label</th>
+                                <th>Parameter Type</th>
+                                <th>Data Type</th>
+                                <th>Value</th>
+                            </tr>
+                            </thead>
 
-			<div id="app-card-head-lines" class="app-card">
+                            <tbody class="tpl-sample-body">
+                            <tr class="tpl-sample-row">
+                                <th scope="row">
+                                    <a href="#" class="text tbl-prop-expand-action"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></a>
+                                </th>
+                                <td>
+                                    <input readonly="readonly" type="text" class="var-id" value="" placeholder="parameter ID">
+                                </td>
+                                <td><textarea readonly="readonly" rows="2" class="var-description"></textarea></td>
+                                <td>
+                                    <input readonly="readonly" type="text" class="var-label" value="" placeholder="parameter label">
+                                </td>
+                                <td>
+                                    <select disabled="disabled" class="var-type">
+                                        <option value="REGULAR" selected="selected">Regular</option>
+                                        <option value="TEMPLATE">Template</option>
+                                    </select>
+                                </td>
+                                <td style="min-width: 100px;">
+                                    <select class="var-datatype">
+                                        <option value="java.lang.String" selected="selected">String</option>
+                                        <option value="java.lang.Integer">Integer</option>
+                                        <option value="java.lang.Boolean">Boolean</option>
+                                        <option value="file">File</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="var-default" value="" placeholder="default value"></td>
+                            </tr>
+                            <tr style="display: none;" class="val-row-plus">
+                                <td colspan="7">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 col-md-2 control-label">Unit</label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <input readonly="readonly" type="text" class="form-control var-unit" name="inputUnit" placeholder="unit" autocomplete="off" value=""/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 col-md-2 control-label">Value Set</label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <input readonly="readonly" type="text" class="form-control var-valueset" name="inputValueSet" placeholder="value set" autocomplete="off" value=""/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 col-md-2 control-label">Format</label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <input readonly="readonly" type="text" class="form-control var-format" name="inputFormat" placeholder="format" autocomplete="off" value=""/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputNotNull" class="col-sm-2 col-md-2 control-label">Not Null </label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <div class="checkbox">
+                                                        <input readonly="readonly" type="checkbox" name="inputNotNull" class="big var-notnull">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputValidator" class="col-sm-2 col-md-2 control-label">Validator </label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <input readonly="readonly" type="text" class="form-control var-validator" name="inputValidator" placeholder="validator" autocomplete="off" value=""/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+
+            <div id="app-card-head-lines" class="app-card">
+                <input class="l-form__submit" type="submit" value="Apply">
+            </div>
+
+			<div class="app-card">
 				<div class="app-card-header">
 					Help
 				</div>
-				<div class="app-card-divider"></div>
-				<div class="app-debug"></div>
+				<div class="app-card-note-item">
+					<p class="">Please edit values as necessary. After reviewing you changes please click APPLY to save your work. Closing this panel without explicitly saving your work will result in all changes made to this panel to be discarded.</p>
+				</div>
 			</div>
+
+            <div class=".app-debug"></div>
 
 
 	</app-modal-content>

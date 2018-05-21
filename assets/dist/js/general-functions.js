@@ -9,7 +9,7 @@ function  passwordSHA(plaintextPass){
             str += String.fromCharCode(bytes[i]);
         }
         return str;
-    }
+    };
 //Decodes ASCII string to byte array
     ASCII.decode = function(str) {
         var bytes = [];
@@ -17,7 +17,7 @@ function  passwordSHA(plaintextPass){
             bytes.push(str.charCodeAt(i));
         }
         return bytes;
-    }
+    };
     var Hex = {};
     Hex.map = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
 //Encodes byte array to hex string
@@ -27,7 +27,7 @@ function  passwordSHA(plaintextPass){
             str += Hex.map[bytes[i] >> 4] + Hex.map[bytes[i] % 16];
         }
         return str;
-    }
+    };
 //Decodes hex string to byte array
     Hex.decode = function(str) {
         var bytes = [];
@@ -35,7 +35,7 @@ function  passwordSHA(plaintextPass){
             bytes.push((Hex.map.indexOf(str[i * 2]) << 4) + Hex.map.indexOf(str[i * 2 + 1]));
         }
         return bytes;
-    }
+    };
 
     var Sha256 = {};
     Sha256.K = [
@@ -72,7 +72,7 @@ function  passwordSHA(plaintextPass){
             Sha256.H[i] = Utilities.intToBytes(Sha256.H[i], 4);
         }
         return Utilities.join(Sha256.H);
-    }
+    };
     Sha256.preProcessing = function(message) {
         //Get the original length of the message
         var messageLength = message.length;
@@ -243,6 +243,15 @@ function datetimeFromArray(arr){
 function arrayFromDatetime(){
     var arr = moment().toArray();
     return arr.slice(0,6);
+}
+
+//array from date(day to sec), uses moment.js
+function humanJavaDataType(str){
+    var a= str.split(".");
+    if(a.length>0){
+        return a[a.length-1];
+    }
+    return "";
 }
 
 var _settings = {

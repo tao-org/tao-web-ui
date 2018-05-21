@@ -1,4 +1,4 @@
-var $propbar = {notify:{e:10,f:-4},api:5,zindex:500};
+var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,nodeData:null};
 
 (function () {
 	var holdingElement = document.createElement('div');
@@ -16,36 +16,6 @@ var $propbar = {notify:{e:10,f:-4},api:5,zindex:500};
 		if (event.target !== this) return;
 		$propbar.menu("close");
 	})
-	.on("submit", "form.l-form" ,function(e){
-		e.preventDefault();
-		e.stopPropagation();
-		var postdata = "step=pass&input="+$("input[name=username]", ".l-form").val()+"&input2="+$("input[name=new-password]", ".l-form").val();
-		var postUser = $.ajax({
-			cache: false,
-            url: "x/?rnd=" + Math.random(),
-            //dataType : 'json',
-            data: postdata,
-			type: 'POST',
-			xhrFields: { withCredentials: true }
-        });
-		$.when(postUser)
-			.done(function (postUserResponse) {
-					try{
-						var obj = JSON.parse(postUserResponse);
-					}catch(error){
-                        alert("operation failed!");
-						return 0;
-					}
-					if ((obj.code === "200-OK") && (obj.msgcode === "")) {
-						//to to
-					}else{
-                        alert("operation failed!");
-					}
-			})
-			.fail(function () {
-                alert("operation failed!");
-			});
-	})
     .on("click", ".tbl-prop-expand-action", function(e){
         e.preventDefault();
         if($(this).hasClass("active")){
@@ -57,7 +27,50 @@ var $propbar = {notify:{e:10,f:-4},api:5,zindex:500};
         $(".tbl-prop-expand-action").removeClass("active");
         $(this).addClass("active");
         $(this).closest("tr").next().css({"display": "table-row"});
+    })
+    .on("change",".var-value-string",function(e){
+        $(this).siblings(".var-value").val($(this).val());
+    })
+    .on("change",".var-value-list",function(e){
+        $(this).siblings(".var-value").val($(this).val());
+    })
+    .on("click", "#update-custum-values",function(e){
+        e.preventDefault();
+        var cV = [];
+        $tblEdt = $("#tbl-edt-sysvar");
+        $tblEdt.find(".val-row").each(function() {
+            var onePair = {
+                "parameterName":$(".var-id",$(this)).html(),
+                "parameterValue":$(".var-value",$(this)).val()
+            };
+            cV.push(onePair);
+        });
+        $propbar.nodeData.customValues = cV;
+        var putOneComponent = $.ajax({ cache: false,
+            url: baseRestApiURL + "workflow/node?workflowId=" + currentWfID,
+            dataType : 'json',
+            type: 'PUT',
+            data: JSON.stringify($propbar.nodeData),
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": authHeader
+            }
+        });
+        $.when(putOneComponent)
+            .done(function (putOneComponentResponse) {
+                if(putOneComponentResponse.hasOwnProperty('message')){
+                    alert(putOneComponentResponse.message);
+                }else{
+                    $(".v-lastaction","#infoband").html("custom values updated");
+                    wfPlumbCanvasData.nodes[$propbar.nid] = putOneComponentResponse;
+                }
+            })
+            .fail(function(){
+                alert("Could udate custom values", "ERROR");
+            });
     });
+
 
 
 	
@@ -75,8 +88,8 @@ var $propbar = {notify:{e:10,f:-4},api:5,zindex:500};
 	var propbar_remderNodeForm = function(nid){
         widgetRootEl.find(".tbl-edt").closest(".app-card").hide();
 	    widgetRootEl.find(".val-row").remove();
-
-	    var lcl_n = wfPlumbCanvasData.nodes[nid];
+        $propbar.nid = nid;
+	    var lcl_n = $propbar.nodeData = wfPlumbCanvasData.nodes[nid];
         $(".val-propbar-name", widgetRootEl).html(lcl_n.name);
         $(".val-propbar-componentid", widgetRootEl).html(lcl_n.componentId);
         var backgroundURL = '';
@@ -132,26 +145,34 @@ var $propbar = {notify:{e:10,f:-4},api:5,zindex:500};
         $(".val-propbar-details", widgetRootEl).html(html_details);
 
         //load system vars
-        $tbl = $("#tbl-edt-sysvar");
-        $tbl.find(".val-row").remove();
+        $tblEdt = $("#tbl-edt-sysvar");
+        $tblEdt.find(".val-row").remove();
 
-        var helper_addSysVarRow = function($tbl, payload){
-            var obj = {"key":"","value":""};
-            $.extend( obj, payload );
-            var $el = $tbl.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
-            $('input.var-key', $el).val(obj.key);
-            $('input.var-value', $el).val(obj.value);
-            $tbl.append($el);
+        var helper_putValue = function($el, name, value, valueset){
+
+            var currentCustomValueSet = (_.find($propbar.nodeData.customValues, function(item) {
+                return (item.parameterName === name);
+            }));
+            //console.log("value:"+value+"current"+currentCustomValueSet.parameterValue);
+            if(currentCustomValueSet && currentCustomValueSet.hasOwnProperty('parameterValue')){
+                value = currentCustomValueSet.parameterValue;
+            }
+
+            if((valueset.length === 1) && ( valueset[0] === "")){
+                $('input.var-value', $el).val(value);
+                $('input.var-value-string', $el).val(value).show();
+            }else{
+                $('input.var-value', $el).val(value);
+                var html = "";
+                $.each(valueset, function(i, v) {
+                    html +="<option "+(v === value && 'selected ')+"value=\""+v+"\">"+v+"</option>";
+                });
+                $('select.var-value-list', $el).html(html).show();
+            }
+        //<option value="java.lang.String">String</option>
+
         };
-        $.each(componentTemplate.variables, function(i, value) {
-            helper_addSysVarRow($("#tbl-edt-sysvar"),value);
-        });
-        if(componentTemplate.variables.length > 0) $tbl.closest(".app-card").show();
-
-        //load param descriptors
-        $tbl = $("#tbl-edt-paramdesc");
-        $tbl.find(".val-row").remove();
-        var helper_addParameterDescriptorsRow = function($tbl, payload){
+        var helper_addSTblEdtRow = function($tblEdt, payload){
             var obj = {
                 "dataType": "java.lang.String",
                 "defaultValue": "",
@@ -163,59 +184,33 @@ var $propbar = {notify:{e:10,f:-4},api:5,zindex:500};
                 "type": "REGULAR",
                 "unit":null,
                 "validator":null,
-                "valueSet": []
+                "valueSet": [],
+                "value": null
             };
             $.extend( obj, payload );
-
-            var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
-            $el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
-            $('input.var-id', $el).val(obj.id);
-            $('textarea.var-description', $el).val(obj.description);
-            $('input.var-label', $el).val(obj.label);
-            $('input.var-default', $el).val(obj.defaultValue);
-
-            $('select.var-type option', $el).removeAttr("selected");
-            $('select.var-type option[value="'+obj.dataType+'"]', $el).attr("selected", "selected");
-
-            $('select.var-datatype option', $el).removeAttr("selected");
-            $('select.var-datatype option[value="'+obj.type+'"]', $el).attr("selected", "selected");
-
-            $('input.var-unit', $el).val(obj.unit);
-            if(obj.format) $('input.var-format', $el).val(obj.format);
-            if(obj.validator) $('input.var-validator', $el).val(obj.validator);
-            $tbl.append($el);
+            var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
+            $('span.var-id', $el).html(obj.id);
+            $('span.var-label', $el).html(obj.label);
+            $('span.var-description', $el).html(obj.description);
+            $('span.var-dataType', $el).html(humanJavaDataType(obj.dataType));
+            $('span.var-default', $el).html(obj.defaultValue);
+            if((obj.value == null) || (obj.value === '') || (obj.value === undefined)){
+                obj.value = obj.defaultValue;
+            }
+            if(obj.dataType === "java.lang.Boolean"){
+                helper_putValue($el, obj.id, obj.value, ["true","false"]);
+            }else{
+                helper_putValue($el, obj.id, obj.value, obj.valueSet);
+            }
+            $tblEdt.append($el);
         };
-
-
         $.each(componentTemplate.parameterDescriptors, function(i, value) {
-            helper_addParameterDescriptorsRow($("#tbl-edt-paramdesc"),value);
+            console.log(value);
+            helper_addSTblEdtRow($("#tbl-edt-sysvar"),value);
         });
-        if(componentTemplate.parameterDescriptors.length > 0) $tbl.closest(".app-card").show();
+        if(componentTemplate.parameterDescriptors.length > 0) $tblEdt.closest(".app-card").show();
 
 	    return 1;
-
-
-
-        var getTHeadlines = $.ajax({ cache: false,
-            url: "API/",
-            dataType : 'json',
-            type: 'GET',
-			xhrFields: { withCredentials: true }
-        });
-        $.when(getTHeadlines)
-        .done(function (getTHeadlinesResponse) {
-                //render widget content
-				if ((getTHeadlinesResponse.status === "ok") && (getTHeadlinesResponse.totalResults > 0)) {
-						console.log(getTHeadlinesResponse);
-					var html = 'cucu';
-					var $holderACHL = $("#app-card-head-lines");
-					$holderACHL.find('app-card-note-item').remove();
-					$holderACHL.append(html);
-                }
-        })
-        .fail(function () {
-                console.log("Could not retrive t h.");
-        });
 	};
 	
 	var wf_loadPropbarWidget = function(){

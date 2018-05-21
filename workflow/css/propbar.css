@@ -282,7 +282,7 @@ btn-avatar{
 .tbl-edt input[type="text"], .tbl-edt textarea, .tbl-edt select {
     width: 100%;
     padding-left: 0.3em;
-    border: 1px solid #FFF;
+    border: 1px solid #bdbdbd;
     /*transition: .1s ease-out;*/
 }
 .tbl-edt textarea {

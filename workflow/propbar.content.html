@@ -37,7 +37,7 @@
 
             <div class="app-card" style="display: block">
                 <div class="app-card-header">
-                    Sys. vars.
+                    Custom values
                 </div>
                 <div class="app-card-divider"></div>
                 <div style="padding: 20px;">
@@ -50,8 +50,17 @@
                         </thead>
                         <tbody>
                         <tr class="tpl-sample-row">
-                            <td><input readonly="readonly" type="text" class="var-key" value="" placeholder="input variable's name"></td>
-                            <td><input type="text" class="var-value" value="" placeholder="input variable's value"></td>
+                            <td>
+                                <span class="var-id hidden"></span>
+                                Label:&nbsp;<strong><span class="var-label"></span></strong>&nbsp;(<span class="var-dataType"></span>)
+                                <br>description:&nbsp;<span class="var-description"></span>
+                            </td>
+                            <td>
+                                <input type="hidden" class="var-value" value="" placeholder="input variable's value">
+                                <input type="text" class="var-value-string collapse" value="" placeholder="input variable's value">
+                                <select class="var-value-list collapse"></select>
+                                <br>default value:&nbsp;<span class="var-default"></span>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -158,7 +167,7 @@
             </div>
 
             <div id="app-card-head-lines" class="app-card">
-                <input class="l-form__submit" type="submit" value="Apply">
+                <input id="update-custum-values" class="l-form__submit" type="submit" value="Apply">
             </div>
 
 			<div class="app-card">
@@ -170,7 +179,7 @@
 				</div>
 			</div>
 
-            <div class=".app-debug"></div>
+            <div class="app-debug"></div>
 
 
 	</app-modal-content>

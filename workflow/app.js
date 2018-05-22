@@ -120,12 +120,6 @@ jsPlumb.bind("jsPlumbDemoLoaded", function(instance) {
     //show toolbox
     toolboxSidebar.init();
 });
-jsPlumb.bind("tao_saveRevertWorkflow", function() {
-    //to do other reset variables to default
-	wf_removeAllNodes();
-	jsp.reset();
-	jsPlumb.fire("tao_loadWorkflowById");
-});
 
 jsPlumb.bind("tao_updateNodePosition", function(params) {
     if(wfPlumbCanvasData.nodes[params[0]]){
@@ -468,10 +462,6 @@ jsPlumb.ready(function () {
 				console.log("back-home");
 				window.parent.tao_closeWorkflow();
 			}
-            if(action === "save-revert"){
-                console.log("save-revert");
-                jsPlumb.fire("tao_saveRevertWorkflow");
-            }
             if(action === "show-info"){
                 console.log("show-info");
                 toolboxHeader.open();

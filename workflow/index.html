@@ -97,12 +97,9 @@
                     <div class="back-home" rel="timeline-tooltip" data-original-title="Return to Workflows List">
                         <div class="icon toolbar-action" data-action="back-home"><i class="fa fa-reply-all fa-fw" aria-hidden="true"></i></div>
                     </div>
-					<div class="save-current" rel="timeline-tooltip" data-original-title="Save current now">
+					<div class="save-current hidden" rel="timeline-tooltip" data-original-title="Save current now">
 						<div class="icon toolbar-action" data-action="save-current"><i class="fa fa-cloud-upload fa-fw" aria-hidden="true"></i></div>
 					</div>
-					<div class="save-revert" rel="timeline-tooltip" data-original-title="Revert to the last saved version">
-                        <div class="icon toolbar-action" data-action="save-revert"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i></div>
-                    </div>
                     <div class="show-info" rel="timeline-tooltip" data-original-title="Show WF info.">
                         <div class="icon toolbar-action" data-action="show-info"><i class="fa fa-info-circle fa-fw" aria-hidden="true"></i></div>
                     </div>
@@ -114,117 +111,20 @@
             </div>
         </div>
     </div>
-		
+
     <div id="tools-toolbox" class="ui-widget-content collapse">
-      <p class="ui-widget-header">Toolbox</p>
+        <p class="ui-widget-header">Toolbox</p>
         <button id="np-enable-select" type="button" class="btn btn-default btn-lg">
             <i class="fa fa-magic fa-fw" aria-hidden="true"></i><span class="sr-only">Enable select mode</span>
         </button>
     </div>
     <div id="draggable-toolbox-modules" class="ui-widget-content collapse">
-      <p class="ui-widget-header">Modules</p>
-      <ol id="selectable"></ol>
+        <p class="ui-widget-header">Modules</p>
+        <ol id="selectable"></ol>
     </div>
 
-<div id="draggable-toolbox-modules-source" class="ui-widget-content collapse">
-  <p class="ui-widget-header">Components</p>
-<!-- xxxxxxxxxxxxxxxxxxxxxxxxx -->
-<ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#home">Data Sources</a></li>
-  <li><a data-toggle="tab" href="#menu1">Modules</a></li>
-</ul>
+<div id="draggable-toolbox-modules-source" class="ui-widget-content">
 
-<div class="tab-content">
-  <div id="home" class="tab-pane in active">
-		<div id="datasourceslistX" class="modulesholder">
-				<sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-SciHubSentinel-1","mlabel":"SciHub Sentinel-1"}'>
-					<div class="item-preview">
-					  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-						<img src="media/module-ds.png" style="width: 100%; height: 100%;">
-					  </vectr_img>
-					</div>
-					<div class="item-info">
-					  <div class="item-label text-left">SciHub Sentinel-1</div>
-					</div>
-				</sortable_item>
-				<sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-SciHubSentinel-2","mlabel":"SciHub Sentinel-2"}'>
-					<div class="item-preview">
-					  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-						<img src="media/module-ds.png" style="width: 100%; height: 100%;">
-					  </vectr_img>
-					</div>
-					<div class="item-info">
-					  <div class="item-label text-left">SciHub Sentinel-2</div>
-					</div>
-				</sortable_item>
-				<sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-AWSSentinel2","mlabel":"AWS Sentinel-2"}'>
-					<div class="item-preview">
-					  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-						<img src="media/module-ds.png" style="width: 100%; height: 100%;">
-					  </vectr_img>
-					</div>
-					<div class="item-info">
-					  <div class="item-label text-left">AWS Sentinel-2</div>
-					</div>
-				</sortable_item>
-				<sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-AWSLandsat8","mlabel":"AWS Landsat 8"}'>
-					<div class="item-preview">
-					  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-						<img src="media/module-ds.png" style="width: 100%; height: 100%;">
-					  </vectr_img>
-					</div>
-					<div class="item-info">
-					  <div class="item-label text-left">AWS Landsat 8</div>
-					</div>
-				</sortable_item>
-				<sortable_item class="item selected" index="0" data-dna='{"mtype":"ds-Local","mlabel":"Local Data Source"}'>
-					<div class="item-preview">
-					  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-						<img src="media/module-ds.png" style="width: 100%; height: 100%;">
-					  </vectr_img>
-					</div>
-					<div class="item-info">
-					  <div class="item-label text-left">Local Data Source</div>
-					</div>
-				</sortable_item>				
-		</div>
-  </div>
-  <div id="menu1" class="tab-pane">
-		<div id="moduleslistX" class="modulesholder">
-				<sortable_item class="item selected" index="0" data-dna='{"mtype":"otb-BandMath","mlabel":"Band Math"}'>
-					<div class="item-preview">
-					  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-						<img src="media/module-otb.png" style="width: 100%; height: 100%;">
-					  </vectr_img>
-					</div>
-					<div class="item-info">
-					  <div class="item-label text-left">OTB Band Math</div>
-					</div>
-				</sortable_item>
-				<sortable_item class="item selected" index="0" data-dna='{"mtype":"otb-ConcatenateImages","mlabel":"Images Concatenation"}'>
-					<div class="item-preview">
-					  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-						<img src="media/module-otb.png" style="width: 100%; height: 100%;">
-					  </vectr_img>
-					</div>
-					<div class="item-info">
-					  <div class="item-label text-left">OTB Images Concatenation</div>
-					</div>
-				</sortable_item>
-				<sortable_item class="item selected" index="0" data-dna='{"mtype":"mod-NewModule","mlabel":"New Module"}'>
-					<div class="item-preview">
-					  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">
-						<img src="media/module01.png" style="width: 100%; height: 100%;">
-					  </vectr_img>
-					</div>
-					<div class="item-info">
-					  <div class="item-label text-left">New Module</div>
-					</div>
-				</sortable_item>
-		</div>
-  </div>
-</div>
-<!-- xxxxxxxxxxxxxxxxxxxxxxxxx -->
 </div>
 <div id="draggable-toolbox-preview" class="ui-widget-content">
 	<p class="ui-widget-header">Workflow preview</p>

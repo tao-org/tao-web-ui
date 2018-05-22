@@ -17,22 +17,29 @@
 	</app-modal-header>
 	<app-modal-content>
 		<div>
-			<div class="app-card" style="display: none">
+			<div id="qbody" class="app-card" style="display: none">
 				<div class="app-card-header">
 					Customize value as needed
 				</div>
 				<div class="app-card-divider"></div>
 
 				<form class = "l-form">
-					xxxx:<br>
-					<input class="l-form__input" type="text" name="username" autocomplete="username" placeholder="" value="">
+					Username:<br>
+					<input class="l-form__input" type="text" name="qusername" autocomplete="qusername" placeholder="" value="">
 					<br>
-					xxxx:<br>
-					<input class="l-form__input" type="password" name="new-password" autocomplete="new-password" placeholder="" value="">
-					<br><br>
-					<input class="l-form__submit" type="submit" value="Apply">
+					password:<br>
+					<input class="l-form__input" type="password" name="qpassword" autocomplete="qpassword" placeholder="" value="">
+					<br>
+                    page number:<br>
+                    <input class="l-form__input" type="number" name="qpagenumber" placeholder="" value="">
+                    <br>
+                    page zize:<br>
+                    <input class="l-form__input" type="number" name="qpagesize" placeholder="" value="">
+                    <br>
+                    limit:<br>
+                    <input class="l-form__input" type="number" name="qlimit" placeholder="" value="">
+                    <br>
 				</form>
-				<div class="app-card-divider"></div>
 			</div>
 
             <div class="app-card" style="display: block">
@@ -59,7 +66,7 @@
                                 <input type="hidden" class="var-value" value="" placeholder="input variable's value">
                                 <input type="text" class="var-value-string collapse" value="" placeholder="input variable's value">
                                 <select class="var-value-list collapse"></select>
-                                <br>default value:&nbsp;<span class="var-default"></span>
+                                <br>default:&nbsp;<span class="var-default"></span>
                             </td>
                         </tr>
                         </tbody>

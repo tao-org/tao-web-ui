@@ -1,4 +1,4 @@
-var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,nodeData:null};
+var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,qData:null};
 
 (function () {
 	var holdingElement = document.createElement('div');
@@ -36,6 +36,57 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,nodeData:null};
     })
     .on("click", "#update-custum-values",function(e){
         e.preventDefault();
+        if($propbar.ntype === "PROCESSING"){
+            saveProcessing();
+        }
+        if($propbar.ntype === "DATASOURCE"){
+            saveQuery();
+        }
+    });
+
+    var saveQuery = function(){
+        var cV = [];
+        $tblEdt = $("#tbl-edt-sysvar");
+        $tblEdt.find(".val-row").each(function() {
+            var onePair = {
+                "parameterName":$(".var-id",$(this)).html(),
+                "parameterValue":$(".var-value",$(this)).val()
+            };
+            cV.push(onePair);
+        });
+        //$propbar.qData.customValues = cV;
+        $propbar.qData.user = $('input[name=qusername]', widgetRootEl).val();
+        $propbar.qData.password = $('input[name=qpassword]', widgetRootEl).val();
+
+        $propbar.qData.pageNumber = $('input[name=qpagenumber]', widgetRootEl).val();
+        $propbar.qData.pageSize = $('input[name=qpagesize]', widgetRootEl).val();
+        $propbar.qData.limit = $('input[name=qlimit]', widgetRootEl).val();
+
+        var putOneQuery = $.ajax({ cache: false,
+            url: baseRestApiURL + "datasource/query/",
+            dataType : 'json',
+            type: 'PUT',
+            data: JSON.stringify($propbar.qData),
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": authHeader
+            }
+        });
+        $.when(putOneQuery)
+            .done(function (putOneComponentResponse) {
+                if(putOneComponentResponse.hasOwnProperty('message')){
+                    alert(putOneComponentResponse.message);
+                }else{
+                    $(".v-lastaction","#infoband").html("query updated");
+                }
+            })
+            .fail(function(){
+                alert("Could udate query object", "ERROR");
+            });
+    };
+
+    var saveProcessing = function(){
         var cV = [];
         $tblEdt = $("#tbl-edt-sysvar");
         $tblEdt.find(".val-row").each(function() {
@@ -69,8 +120,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,nodeData:null};
             .fail(function(){
                 alert("Could udate custom values", "ERROR");
             });
-    });
-
+    };
 
 
 	
@@ -103,12 +153,14 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,nodeData:null};
         var queryTemplate = null;
 
         if(lcl_n.componentType === "PROCESSING"){
+            $propbar.ntype = "PROCESSING";
 			if(wfTools.toolboxnodes.pc[lclTBOID]){
 				componentTemplate = wfTools.toolboxnodes.pc[lclTBOID].dna;
 			}
             wf_loadModuleProcessing(nid,lcl_n,componentTemplate);
         }
         if(lcl_n.componentType === "DATASOURCE"){
+            $propbar.ntype = "DATASOURCE";
             if(wfTools.toolboxnodes.ds[lclTBOID]){
                 componentTemplate = wfTools.toolboxnodes.ds[lclTBOID].dna;
             }
@@ -126,13 +178,33 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,nodeData:null};
     };
 
 	var wf_loadModuleDatasource = function(nid,lcl_n,componentTemplate,queryTemplate){
-        var html_details = "";
+        //to do user propagation
+	    var user = "admin";
+	    var html_details = "";
         html_details +="<span>version: "+componentTemplate.version+"</span><br>";
         html_details +="<span>description: "+componentTemplate.description+"</span><br>";
         html_details +="<span>authors: "+componentTemplate.authors+"</span><br>";
         html_details +="<span>copyright: "+componentTemplate.copyright+"</span><br>";
         $(".val-propbar-details", widgetRootEl).html(html_details);
-
+        //get current query
+        var dsId = wfPlumbCanvasData.nodesMap[nid];
+        var getQBody = $.ajax({ cache: false,
+            url: baseRestApiURL + "datasource/query/?userId=admin&nodeId=" + dsId,
+            dataType : 'json',
+            type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": authHeader
+            }
+        });
+        $.when(getQBody)
+            .done(function (getQBodyResponse) {
+                renderQForm(getQBodyResponse[0],queryTemplate);
+            })
+            .fail(function () {
+                alert("Could not retrive query for current datasource.");
+            });
     };
 	var wf_loadModuleProcessing = function(nid,lcl_n,componentTemplate){
         var html_details = "";
@@ -212,7 +284,57 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,nodeData:null};
 
 	    return 1;
 	};
-	
+
+
+	var renderQForm = function(qBody,queryTemplate){
+	    $("#qbody").show();
+        $propbar.qData = qBody;
+        $('input[name=qusername]', widgetRootEl).val(qBody.user);
+        $('input[name=qpassword]', widgetRootEl).val(qBody.password);
+
+        $('input[name=qpagenumber]', widgetRootEl).val(qBody.pageNumber);
+        $('input[name=qpagesize]', widgetRootEl).val(qBody.pageSize);
+        $('input[name=qlimit]', widgetRootEl).val(qBody.limit);
+
+        //load system vars
+        $tblEdt = $("#tbl-edt-sysvar");
+        $tblEdt.find(".val-row").remove();
+
+        var helper_addSTblEdtRow = function($tblEdt, payload){
+            console.log(payload);
+            var obj = {
+                "name": null,
+                "type": "java.lang.String",
+                "defaultValue": null,
+                "required": false
+            };
+            $.extend( obj, payload );
+            var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
+            $('span.var-id', $el).html(obj.name);
+            $('span.var-label', $el).html(obj.name);
+            $('span.var-description', $el).html("");
+            $('span.var-dataType', $el).html(humanJavaDataType(obj.type));
+            $('span.var-default', $el).html(obj.defaultValue);
+//            if((obj.value == null) || (obj.value === '') || (obj.value === undefined)){
+//                obj.value = obj.defaultValue;
+//            }
+            if(obj.dataType === "java.lang.Boolean"){
+//                helper_putValue($el, obj.id, obj.value, ["true","false"]);
+            }else{
+//                helper_putValue($el, obj.id, obj.value, obj.valueSet);
+            }
+            $tblEdt.append($el);
+        };
+        $.each(queryTemplate.parameters, function(i, value) {
+            console.log(value);
+            helper_addSTblEdtRow($("#tbl-edt-sysvar"),value);
+        });
+        if(_.size(queryTemplate.parameters) > 0) $tblEdt.closest(".app-card").show();
+
+    };
+
+
+
 	var wf_loadPropbarWidget = function(){
         var getWBody = $.ajax({ cache: false,
             url: "./propbar.content.html",

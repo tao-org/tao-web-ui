@@ -61,10 +61,14 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         $propbar.qData.pageSize = $('input[name=qpagesize]', widgetRootEl).val();
         $propbar.qData.limit = $('input[name=qlimit]', widgetRootEl).val();
 
+        var method = 'PUT';
+        if($propbar.qData.id === null){
+            method = 'POST';
+        }
         var putOneQuery = $.ajax({ cache: false,
             url: baseRestApiURL + "datasource/query/",
             dataType : 'json',
-            type: 'PUT',
+            type: method,
             data: JSON.stringify($propbar.qData),
             headers: {
                 "Accept": "application/json",
@@ -284,6 +288,23 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 
 	var renderQForm = function(qBody,queryTemplate){
 	    $("#qbody").show();
+	    if(!qBody){
+	        qBody = {
+                "id": null,
+                "userId": "admin",
+                "workflowNodeId": $propbar.nodeData.id,
+                "sensor": queryTemplate.sensor,
+                "dataSource": queryTemplate.dataSourceName,
+                "user": null,
+                "password": null,
+                "pageSize": 10,
+                "pageNumber": 1,
+                "limit": 2,
+                "values": {}
+            }
+        }
+
+
         $propbar.qData = qBody;
         $('input[name=qusername]', widgetRootEl).val(qBody.user);
         $('input[name=qpassword]', widgetRootEl).val(qBody.password);

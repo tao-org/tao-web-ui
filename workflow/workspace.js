@@ -126,6 +126,8 @@
         $elComponentsList.empty();
         $elDatasurcesList.empty();
         $.each(wfTools.toolboxnodes.pc, function(i, item) {
+            item.image = "./media/logo-"+jsHashCode(item.dna.containerId)+".png";
+
             var html ='<sortable_item class="item selected" id="'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="pc" data-toolboxid="'+item.id+'">\n' +
                 '\t\t\t\t\t<div class="item-preview">\n' +
                 '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +

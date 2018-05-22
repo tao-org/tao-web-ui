@@ -146,10 +146,8 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         $(".val-propbar-name", widgetRootEl).html(lcl_n.name);
         $(".val-propbar-componentid", widgetRootEl).html(lcl_n.componentId);
         var backgroundURL = '';
-        if(lcl_n.componentType === "DATASOURCE"){backgroundURL = './media/module-ds.png';}
-        if(lcl_n.componentType === "PROCESSING"){backgroundURL = './media/module-otb.png';}
         //$('.app-user-avatar-img',widgetRootEl).css('background-image', 'url('+backgroundURL+')');
-        $('.app-user-avatar-img',widgetRootEl).attr('src', backgroundURL);
+
 
         var lclTBOID = "tboid"+jsHashCode(lcl_n.componentId);
         var componentTemplate = null;
@@ -157,13 +155,16 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 
         if(lcl_n.componentType === "PROCESSING"){
             $propbar.ntype = "PROCESSING";
+            backgroundURL = './media/module-otb.png';
 			if(wfTools.toolboxnodes.pc[lclTBOID]){
 				componentTemplate = wfTools.toolboxnodes.pc[lclTBOID].dna;
+                backgroundURL = "./media/logo-"+jsHashCode(componentTemplate.containerId)+".png";
 			}
             wf_loadModuleProcessing(nid,lcl_n,componentTemplate);
         }
         if(lcl_n.componentType === "DATASOURCE"){
             $propbar.ntype = "DATASOURCE";
+            backgroundURL = './media/module-ds.png';
             if(wfTools.toolboxnodes.ds[lclTBOID]){
                 componentTemplate = wfTools.toolboxnodes.ds[lclTBOID].dna;
             }
@@ -172,6 +173,8 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             }
             wf_loadModuleDatasource(nid,lcl_n,componentTemplate,queryTemplate);
         }
+        $('.app-user-avatar-img',widgetRootEl).attr('src', backgroundURL);
+
         if(componentTemplate === null){
             console.log("comp template not found!!!!!!!!!!!!!!!!!!");
         }

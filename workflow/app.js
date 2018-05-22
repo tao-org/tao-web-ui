@@ -12,10 +12,12 @@ var tao_resetShadowData = function(){
         datasources:[],
         queries:[],
         sensors:[],
+        dockers:[],
         toolboxnodes:{
             ds:{},
             pc:{},
-            q:{}
+            q:{},
+            d:{}
         }
     };
 };
@@ -229,14 +231,26 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
             "Authorization": authHeader
         }
     });
+    var getAllDockers = $.ajax({ cache: false,
+        url: baseRestApiURL + "docker/",
+        dataType : 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": authHeader
+        }
+    });
 
-    $.when(getAllComponents,getAllQueries,getAllDatasources,getAllSensors)
-        .done(function (getAllComponentsResponse,getAllQueriesResponse,getAllDatasourcesResponse,getAllSensorsResponse) {
+
+    $.when(getAllComponents,getAllQueries,getAllDatasources,getAllSensors,getAllDockers)
+        .done(function (getAllComponentsResponse,getAllQueriesResponse,getAllDatasourcesResponse,getAllSensorsResponse,getAllDockersResponse) {
             console.log("Workspace components init start.");
             wfTools.components = getAllComponentsResponse[0];
             wfTools.queries = getAllQueriesResponse[0];
             wfTools.datasources = getAllDatasourcesResponse[0];
             wfTools.sensors = getAllSensorsResponse[0];
+            wfTools.dockers = getAllDockersResponse[0];
 
             //parse components, try to detect orfan and collapsing data, recreate local IDs
             $.each(wfTools.components, function(i, item) {

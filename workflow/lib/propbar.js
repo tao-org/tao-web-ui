@@ -42,19 +42,18 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         if($propbar.ntype === "DATASOURCE"){
             saveQuery();
         }
+        window.$propbar.menu("close");
     });
 
     var saveQuery = function(){
-        var cV = [];
+        var cV = {};
         $tblEdt = $("#tbl-edt-sysvar");
         $tblEdt.find(".val-row").each(function() {
-            var onePair = {
-                "parameterName":$(".var-id",$(this)).html(),
-                "parameterValue":$(".var-value",$(this)).val()
-            };
-            cV.push(onePair);
+            var k = $(".var-id",$(this)).html();
+            var v = $(".var-value",$(this)).val();
+            cV[k] = v;
         });
-        //$propbar.qData.customValues = cV;
+        $propbar.qData.values = cV;
         $propbar.qData.user = $('input[name=qusername]', widgetRootEl).val();
         $propbar.qData.password = $('input[name=qpassword]', widgetRootEl).val();
 
@@ -172,8 +171,8 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         if(componentTemplate === null){
             console.log("comp template not found!!!!!!!!!!!!!!!!!!");
         }
-        console.log("Template:");
-        $(".app-debug", widgetRootEl).html("<pre>"+JSON.stringify(componentTemplate, null, 4)+"</pre><pre>"+JSON.stringify(queryTemplate, null, 4)+"</pre>");
+        //console.log("Template:");
+        //$(".app-debug", widgetRootEl).html("<pre>"+JSON.stringify(componentTemplate, null, 4)+"</pre><pre>"+JSON.stringify(queryTemplate, null, 4)+"</pre>");
 
     };
 
@@ -241,8 +240,6 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 });
                 $('select.var-value-list', $el).html(html).show();
             }
-        //<option value="java.lang.String">String</option>
-
         };
         var helper_addSTblEdtRow = function($tblEdt, payload){
             var obj = {
@@ -277,7 +274,6 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             $tblEdt.append($el);
         };
         $.each(componentTemplate.parameterDescriptors, function(i, value) {
-            console.log(value);
             helper_addSTblEdtRow($("#tbl-edt-sysvar"),value);
         });
         if(componentTemplate.parameterDescriptors.length > 0) $tblEdt.closest(".app-card").show();
@@ -301,7 +297,6 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         $tblEdt.find(".val-row").remove();
 
         var helper_addSTblEdtRow = function($tblEdt, payload){
-            console.log(payload);
             var obj = {
                 "name": null,
                 "type": "java.lang.String",
@@ -312,21 +307,24 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
             $('span.var-id', $el).html(obj.name);
             $('span.var-label', $el).html(obj.name);
-            $('span.var-description', $el).html("");
+            $('span.var-description', $el).html( (obj.required?"required":"not required") );
             $('span.var-dataType', $el).html(humanJavaDataType(obj.type));
             $('span.var-default', $el).html(obj.defaultValue);
 //            if((obj.value == null) || (obj.value === '') || (obj.value === undefined)){
 //                obj.value = obj.defaultValue;
 //            }
             if(obj.dataType === "java.lang.Boolean"){
-//                helper_putValue($el, obj.id, obj.value, ["true","false"]);
             }else{
-//                helper_putValue($el, obj.id, obj.value, obj.valueSet);
+                var value = "";
+                if($propbar.qData.values[obj.name]){
+                    value = $propbar.qData.values[obj.name];
+                }
+                $('input.var-value', $el).val(value);
+                $('input.var-value-string', $el).val(value).show();
             }
             $tblEdt.append($el);
         };
         $.each(queryTemplate.parameters, function(i, value) {
-            console.log(value);
             helper_addSTblEdtRow($("#tbl-edt-sysvar"),value);
         });
         if(_.size(queryTemplate.parameters) > 0) $tblEdt.closest(".app-card").show();

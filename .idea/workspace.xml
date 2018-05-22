@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/workflow/app.js" afterPath="$PROJECT_DIR$/workflow/app.js" />
-      <change beforePath="$PROJECT_DIR$/workflow/css/propbar.css" afterPath="$PROJECT_DIR$/workflow/css/propbar.css" />
-      <change beforePath="$PROJECT_DIR$/workflow/index.html" afterPath="$PROJECT_DIR$/workflow/index.html" />
       <change beforePath="$PROJECT_DIR$/workflow/lib/propbar.js" afterPath="$PROJECT_DIR$/workflow/lib/propbar.js" />
-      <change beforePath="$PROJECT_DIR$/workflow/propbar.content.html" afterPath="$PROJECT_DIR$/workflow/propbar.content.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -82,21 +78,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="propbar.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="propbar.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/workflow/lib/propbar.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="655">
-              <caret line="331" column="85" lean-forward="true" selection-start-line="331" selection-start-column="85" selection-end-line="331" selection-end-column="85" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/assets/dist/js/config.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="46" lean-forward="true" selection-start-line="5" selection-start-column="46" selection-end-line="5" selection-end-column="46" />
+            <state relative-caret-position="377">
+              <caret line="28" column="67" lean-forward="true" selection-start-line="28" selection-start-column="67" selection-end-line="28" selection-end-column="67" />
               <folding />
             </state>
           </provider>
@@ -144,7 +130,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>on</find>
       <find>each</find>
       <find>.app-debug</find>
       <find>position server updated</find>
@@ -157,7 +142,6 @@
       <find>default value</find>
       <find>transition</find>
       <find>l-form__submit</find>
-      <find>helper_putValue</find>
       <find>save-revert</find>
       <find>tao_saveRevertWorkflow</find>
       <find>jsp.reset</find>
@@ -174,6 +158,8 @@
       <find>queryTemplate</find>
       <find>renderQForm</find>
       <find>helper_addSTblEdtRow</find>
+      <find>helper_putValue</find>
+      <find>console.log</find>
     </findStrings>
     <dirStrings>
       <dir>D:\_work\tao\tao-web-ui\workflow</dir>
@@ -492,12 +478,12 @@
       <workItem from="1523969660029" duration="55754000" />
       <workItem from="1525099125670" duration="594000" />
       <workItem from="1525261437398" duration="65919000" />
-      <workItem from="1525954577407" duration="116921000" />
+      <workItem from="1525954577407" duration="118258000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="823501000" />
+    <option name="totallyTimeSpent" value="824838000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1066" extended-state="7" />
@@ -859,18 +845,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/workflow/lib/propbar.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="655">
-          <caret line="331" column="85" lean-forward="true" selection-start-line="331" selection-start-column="85" selection-end-line="331" selection-end-column="85" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/assets/dist/js/config.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="5" column="46" lean-forward="true" selection-start-line="5" selection-start-column="46" selection-end-line="5" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/lib/propbar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="28" column="67" lean-forward="true" selection-start-line="28" selection-start-column="67" selection-end-line="28" selection-end-column="67" />
           <folding />
         </state>
       </provider>

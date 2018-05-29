@@ -223,6 +223,7 @@ tao_resetCanvasData();
         innerHTML += "<footer class=\"module-footer\">";
         innerHTML += "<div class=\"meta\"><button class=\"btn-transparent btn-action-erasemodule\"><i class=\"fa fa-trash\"></i><span class=\"sr-only\">Erase module</span></button></div>";
         innerHTML += "<div class=\"meta\"><button class=\"btn-transparent btn-action-editmodule\"><i class=\"fa fa-pencil\"></i><span class=\"sr-only\">Edit module</span></button></div>";
+        innerHTML += "<div class=\"meta\"><button class=\"btn-transparent btn-action-lockmodule\"><i class=\"fa fa-lock\"></i><span class=\"sr-only\">Lock module</span></button></div>";
         innerHTML += "</footer>";
 //
         d.className = "w";

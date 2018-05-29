@@ -171,11 +171,15 @@
                 "Authorization": authHeader
             },
             error : function (jqXHR, textStatus, errorThrown) {
+                if( jqXHR.status === 404 ){
+                    //all ok, hostname is unknown to the system
+                    return 1;
+                }
                 if( jqXHR.status === 500 ){
                     $(".ckattr-error", $pEL).fadeOut();
                     $(".ckattr-ok", $pEL).fadeIn();
                 } else {
-                    alert('E001, An error has occurred, please try again or contact app admin.');
+                    alert('E001, An error has occurred, please try again or contact app admin. ');
                 }
             },
             success: function(response) {

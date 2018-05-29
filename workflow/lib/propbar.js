@@ -136,6 +136,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 						if ( action === "close") {
 							$('app-modal-overlay').removeClass("on-screen");
 							$('html, body').removeClass("app-noscroll");
+                            widgetRootEl.find(".app-card-clean").hide();
 						}
 	};
 	var propbar_remderNodeForm = function(nid){
@@ -328,6 +329,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 "required": false
             };
             $.extend( obj, payload );
+            console.log(obj);
             var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
             $('span.var-id', $el).html(obj.name);
             $('span.var-label', $el).html(obj.name);
@@ -344,6 +346,12 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                     value = $propbar.qData.values[obj.name];
                 }
                 $('input.var-value', $el).val(value);
+                if(humanJavaDataType(obj.type) === "Date"){
+                    $('input.var-value-string', $el).attr("type", "date");
+                }
+                if((humanJavaDataType(obj.type) === "Double") || (humanJavaDataType(obj.type) === "Short") || (humanJavaDataType(obj.type) === "Float")){
+                    $('input.var-value-string', $el).attr("type", "number");
+                }
                 $('input.var-value-string', $el).val(value).show();
             }
             $tblEdt.append($el);

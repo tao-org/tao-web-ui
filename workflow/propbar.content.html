@@ -17,7 +17,7 @@
 	</app-modal-header>
 	<app-modal-content>
 		<div>
-			<div id="qbody" class="app-card" style="display: none">
+			<div id="qbody" class="app-card app-card-clean">
 				<div class="app-card-header">
 					Customize value as needed
 				</div>
@@ -42,7 +42,7 @@
 				</form>
 			</div>
 
-            <div class="app-card" style="display: block">
+            <div class="app-card app-card-clean">
                 <div class="app-card-header">
                     Custom values
                 </div>
@@ -62,7 +62,7 @@
                                 Label:&nbsp;<strong><span class="var-label"></span></strong>&nbsp;(<span class="var-dataType"></span>)
                                 <br>description:&nbsp;<span class="var-description"></span>
                             </td>
-                            <td>
+                            <td style="width: 70%;">
                                 <input type="hidden" class="var-value" value="" placeholder="input variable's value">
                                 <input type="text" class="var-value-string collapse" value="" placeholder="input variable's value">
                                 <select class="var-value-list collapse"></select>
@@ -73,106 +73,6 @@
                     </table>
                 </div>
             </div>
-            <div class="app-card" style="display: block">
-                <div class="app-card-header">
-                    Parameters
-                </div>
-                <div class="app-card-divider"></div>
-                <div style="padding: 20px;">
-                        <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-paramdesc">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th>Parameter ID</th>
-                                <th style="width: 50%;">Description</th>
-                                <th>Parameter Label</th>
-                                <th>Parameter Type</th>
-                                <th>Data Type</th>
-                                <th>Value</th>
-                            </tr>
-                            </thead>
-
-                            <tbody class="tpl-sample-body">
-                            <tr class="tpl-sample-row">
-                                <th scope="row">
-                                    <a href="#" class="text tbl-prop-expand-action"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></a>
-                                </th>
-                                <td>
-                                    <input readonly="readonly" type="text" class="var-id" value="" placeholder="parameter ID">
-                                </td>
-                                <td><textarea readonly="readonly" rows="2" class="var-description"></textarea></td>
-                                <td>
-                                    <input readonly="readonly" type="text" class="var-label" value="" placeholder="parameter label">
-                                </td>
-                                <td>
-                                    <select disabled="disabled" class="var-type">
-                                        <option value="REGULAR" selected="selected">Regular</option>
-                                        <option value="TEMPLATE">Template</option>
-                                    </select>
-                                </td>
-                                <td style="min-width: 100px;">
-                                    <select class="var-datatype">
-                                        <option value="java.lang.String" selected="selected">String</option>
-                                        <option value="java.lang.Integer">Integer</option>
-                                        <option value="java.lang.Boolean">Boolean</option>
-                                        <option value="file">File</option>
-                                    </select>
-                                </td>
-                                <td><input type="text" class="var-default" value="" placeholder="default value"></td>
-                            </tr>
-                            <tr style="display: none;" class="val-row-plus">
-                                <td colspan="7">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label class="col-sm-2 col-md-2 control-label">Unit</label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <input readonly="readonly" type="text" class="form-control var-unit" name="inputUnit" placeholder="unit" autocomplete="off" value=""/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label class="col-sm-2 col-md-2 control-label">Value Set</label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <input readonly="readonly" type="text" class="form-control var-valueset" name="inputValueSet" placeholder="value set" autocomplete="off" value=""/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label class="col-sm-2 col-md-2 control-label">Format</label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <input readonly="readonly" type="text" class="form-control var-format" name="inputFormat" placeholder="format" autocomplete="off" value=""/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputNotNull" class="col-sm-2 col-md-2 control-label">Not Null </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <div class="checkbox">
-                                                        <input readonly="readonly" type="checkbox" name="inputNotNull" class="big var-notnull">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputValidator" class="col-sm-2 col-md-2 control-label">Validator </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <input readonly="readonly" type="text" class="form-control var-validator" name="inputValidator" placeholder="validator" autocomplete="off" value=""/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                </div>
-            </div>
-
             <div id="app-card-head-lines" class="app-card">
                 <input id="update-custum-values" class="l-form__submit" type="submit" value="Apply">
             </div>

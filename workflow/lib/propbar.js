@@ -227,7 +227,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         $tblEdt = $("#tbl-edt-sysvar");
         $tblEdt.find(".val-row").remove();
 
-        var helper_putValue = function($el, name, value, valueset){
+        var helper_putValue = function($el, name, type, value, valueset){
 
             var currentCustomValueSet = (_.find($propbar.nodeData.customValues, function(item) {
                 return (item.parameterName === name);
@@ -237,8 +237,14 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 value = currentCustomValueSet.parameterValue;
             }
 
-            if((valueset.length === 1) && ( valueset[0] === "")){
+            if((valueset.length === 1) && (( valueset[0] === "") || ( valueset[0] === "null"))){
                 $('input.var-value', $el).val(value);
+                if(humanJavaDataType(type) === "Date"){
+                    $('input.var-value-string', $el).attr("type", "date");
+                }
+                if((humanJavaDataType(type) === "Double") || (humanJavaDataType(type) === "Short") || (humanJavaDataType(type) === "Float") || (humanJavaDataType(type) === "Number")){
+                    $('input.var-value-string', $el).attr("type", "number");
+                }
                 $('input.var-value-string', $el).val(value).show();
             }else{
                 $('input.var-value', $el).val(value);
@@ -275,9 +281,9 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 obj.value = obj.defaultValue;
             }
             if(obj.dataType === "java.lang.Boolean"){
-                helper_putValue($el, obj.id, obj.value, ["true","false"]);
+                helper_putValue($el, obj.id, obj.dataType, obj.value, ["true","false"]);
             }else{
-                helper_putValue($el, obj.id, obj.value, obj.valueSet);
+                helper_putValue($el, obj.id, obj.dataType, obj.value, obj.valueSet);
             }
             $tblEdt.append($el);
         };
@@ -349,7 +355,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 if(humanJavaDataType(obj.type) === "Date"){
                     $('input.var-value-string', $el).attr("type", "date");
                 }
-                if((humanJavaDataType(obj.type) === "Double") || (humanJavaDataType(obj.type) === "Short") || (humanJavaDataType(obj.type) === "Float")){
+                if((humanJavaDataType(obj.type) === "Double") || (humanJavaDataType(obj.type) === "Short") || (humanJavaDataType(obj.type) === "Float")  || (humanJavaDataType(obj.type) === "Number")){
                     $('input.var-value-string', $el).attr("type", "number");
                 }
                 $('input.var-value-string', $el).val(value).show();

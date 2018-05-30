@@ -209,8 +209,8 @@ tao_resetCanvasData();
         innerHTML += "<div class=\"module-ports\">";
         for (i = 0; i < maxPorts; i++) {
             innerHTML += "<div class=\"module-ports-row\">";
-            if(componentTemplate.targets[i]) innerHTML += "<div id=\"p_"+dna.fullData.id+"_"+componentTemplate.targets[i].id+"\" class=\"n-p-o-wrapp\"><div class=\"n-p-o\"></div></div>";
-            if(componentTemplate.sources[i]) innerHTML += "<div id=\"p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id+"\" class=\"n-p-i-wrapp\"><div class=\"n-p-i\"></div></div>";
+            if(componentTemplate.targets[i]) innerHTML += "<div id=\"p_"+dna.fullData.id+"_"+componentTemplate.targets[i].id+"\" class=\"n-p-o-wrapp\"><div class=\"n-p-o\"></div><div class=\"l-n-p-o\"><i class=\"fa fa-sign-out\" aria-hidden=\"true\"></i>&nbsp;"+componentTemplate.targets[i].name+"</div></div>";
+            if(componentTemplate.sources[i]) innerHTML += "<div id=\"p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id+"\" class=\"n-p-i-wrapp\"><div class=\"n-p-i\"></div><div class=\"l-n-p-i\"><i class=\"fa fa-sign-in\" aria-hidden=\"true\"></i>&nbsp;"+componentTemplate.sources[i].name+"</div></div>";
             innerHTML += "</div>";
         }
         innerHTML += "<div class=\"module-status\">"+completeness+"% Completed</div>";

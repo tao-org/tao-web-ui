@@ -769,7 +769,15 @@ updateModuleStatus("", {"state":"completed", "progress":68});
 	}).on("mousedown",".w", function(e) {
 		var id = $(this).attr("id");
 		console.log("mouse down"+id);
-	});
+	})
+    .on("click",".l-n-p-o", function(e){
+        var id = $(this).closest(".n-p-o-wrapp").attr("id");
+        alert(id);
+    })
+    .on("click",".l-n-p-i", function(e){
+        var id = $(this).closest(".n-p-i-wrapp").attr("id");
+        alert(id);
+    });
 
 var tao_adModuleToSelection = function(id){
 	if( $.inArray( id, toolboxModules.selected ) !== -1 ){

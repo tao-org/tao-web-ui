@@ -121,6 +121,9 @@ app-modal-content {
     margin-bottom: 12px;
     background-color: #fff;
 }
+.app-card-clean{
+    display:none;
+}
 .app-card-header{
     padding: 10px 20px;
     line-height: 24px;

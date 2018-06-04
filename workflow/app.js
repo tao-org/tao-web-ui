@@ -779,6 +779,36 @@ updateModuleStatus("", {"state":"completed", "progress":68});
         alert(id);
     });
 
+//tooltip
+$( document ).uitooltip({
+    items: ".l-n-p-i, .l-n-p-o",
+    content: function() {
+        var element = $( this );
+        var id = null;
+        var renderPortTP = function(fd){
+            return "port data descriptor:"
+                +"<p class=\"tooltip-paragraph\">"
+                +"<span>format type: "+ fd.dataDescriptor.formatType +"</span>"
+                +"<br><span>crs: "+ fd.dataDescriptor.crs +"</span>"
+                +"<br><span>dimension: "+ fd.dataDescriptor.dimension +"</span>"
+                +"<br><span>geometry: "+ fd.dataDescriptor.geometry +"</span>"
+                +"<br><span>location: "+ fd.dataDescriptor.location +"</span>"
+                +"<br><span>sensorType: "+ fd.dataDescriptor.sensorType +"</span>"
+                +"</p>";
+
+        }
+        if ( element.is( ".l-n-p-i" ) ) {
+            id = $(this).closest(".n-p-i-wrapp").attr("id");
+            return renderPortTP(wfPlumbCanvasData.ports[id].fullData);
+        }
+        if ( element.is( ".l-n-p-o" ) ) {
+            id = $(this).closest(".n-p-o-wrapp").attr("id");
+            return renderPortTP(wfPlumbCanvasData.ports[id].fullData);
+        }
+    }
+});
+//
+
 var tao_adModuleToSelection = function(id){
 	if( $.inArray( id, toolboxModules.selected ) !== -1 ){
 		return; //check if tao module already in current selection and then do nothing

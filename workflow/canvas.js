@@ -246,12 +246,12 @@ tao_resetCanvasData();
             if(componentTemplate.targets[i]) {
                 elPort = document.getElementById("p_"+dna.fullData.id+"_"+componentTemplate.targets[i].id);
                 initPort(elPort, "out");
-                wfPlumbCanvasData.ports["p_"+dna.fullData.id+"_"+componentTemplate.targets[i].id] = {"type":"out", "parentID":dna.fullData.id};
+                wfPlumbCanvasData.ports["p_"+dna.fullData.id+"_"+componentTemplate.targets[i].id] = {"type":"out", "parentID":dna.fullData.id, "fullData":componentTemplate.targets[i]};
             }
             if(componentTemplate.sources[i]) {
                 elPort = document.getElementById("p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id);
                 initPort(elPort, "in");
-                wfPlumbCanvasData.ports["p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id] = {"type":"in", "parentID":dna.fullData.id};
+                wfPlumbCanvasData.ports["p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id] = {"type":"in", "parentID":dna.fullData.id, "fullData":componentTemplate.sources[i]};
             }
         }
 

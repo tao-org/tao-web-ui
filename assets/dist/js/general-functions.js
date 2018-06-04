@@ -223,7 +223,7 @@ function arrayIntersection(){ //usage var x = arrayIntersection([1,2,3],[2,3,4])
             return current.indexOf(element) > -1;
         });
     });
-};
+}
 
 //get query value from request
 function jsGetUrlQueryValue (sVar) {
@@ -242,6 +242,8 @@ function datetimeFromArray(arr){
 //array from date(day to sec), uses moment.js
 function arrayFromDatetime(){
     var arr = moment().toArray();
+    //corect 0 based month
+    arr[1]++;
     return arr.slice(0,6);
 }
 
@@ -266,7 +268,6 @@ var _settings = {
             var expires = "; expires=" + date.toGMTString();
         }
         else var expires = "";
-
         document.cookie = name + "=" + value + expires + "; path=/";
     },
     readCookie: function(name) {

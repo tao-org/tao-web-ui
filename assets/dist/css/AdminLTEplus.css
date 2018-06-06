@@ -986,29 +986,41 @@ svg .loading{
 }
 
 /*Animate cogs*/
-svg .large-cog,svg .small-cog{
-    -webkit-animation:spin 4s linear infinite;
-    -webkit-transform-origin: 50% 50%;
-    /*-webkit-animation-delay:0.6s;*/
+svg.cog-svg{
+    margin:0;
+    -webkit-animation: pop 0.4s ease-in;
+}
+svg .cog-group{
+    animation:spin 4s linear infinite;
+    transform-origin: 50% 50%;
+    animation-delay:0.4s;
+}
+svg .large-cog{
+    animation:spin 8s linear infinite;
+    transform-origin: 29.3px 40.3px;
+    animation-delay:0.4s;
 }
 svg .small-cog{
-    -webkit-animation:spinback 2s linear infinite;
-    /*-webkit-animation-delay:0.6s;*/
+    animation:spinback 3s linear infinite;
+    transform-origin: 41.8px 20.8px;
+    animation-delay:0.4s;
 }
-.spin-2s{
-    -webkit-animation:spin 2s linear infinite;
-    -webkit-transform-origin: 50% 50%;
-    -webkit-animation-delay:0.6s;
-}
-
-@-webkit-keyframes pop{
+@keyframes pop{
     0%{-webkit-transform: scale(0);}
     90%{-webkit-transform: scale(1.1);}
     100%{-webkit-transform: scale(1);}
 }
-@-webkit-keyframes spin {
-    100% { -webkit-transform: rotate(360deg); }
+@keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
-@-webkit-keyframes spinback {
-    100% { -webkit-transform: rotate(-360deg); }
+@keyframes spinback {
+    100% {
+        -moz-transform: rotate(-360deg);
+        -webkit-transform: rotate(-360deg);
+        transform: rotate(-360deg);
+    }
 }

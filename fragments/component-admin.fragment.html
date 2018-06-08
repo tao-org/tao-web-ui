@@ -6,7 +6,7 @@
 <!-- modal nodes op -->
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-    <h1>Processing components <small>Full list of <strong>processing components</strong> grouped by current state.</small></h1>
+    <h1>Processing components <small>Full list of <strong>processing components</strong>.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Components</li>
@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="box-tools pull-left">
                                     <form class="search-container" action="">
-                                        <input id="search-box" type="text" class="search-box" name="q" placeholder="Search by hostname" />
+                                        <input id="search-box" type="text" class="search-box" name="q" placeholder="Search by label" />
                                         <label for="search-box"><i class="fa fa-search search-icon" aria-hidden="true"></i></label>
                                         <input type="submit" id="search-submit" />
                                     </form>
@@ -81,7 +81,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 like collapse">
-                                <span data-tag="tag">Host name like: <strong class="val-q"></strong>&nbsp;<i class="fa fa-times fa-fw clear-search" aria-hidden="true"></i></span>
+                                <span data-tag="tag">Label like: <strong class="val-q"></strong>&nbsp;<i class="fa fa-times fa-fw clear-search" aria-hidden="true"></i></span>
                             </div>
                             <div class="col-md-12 tags collapse">
                                 <span class="collapse" data-tag="tag">tag<i class="fa fa-check fa-fw" aria-hidden="true"></i></span>
@@ -458,6 +458,10 @@
                 if(elX.active === false){
                     $elClone.addClass("disabled");
                 }
+                if(routeTags[0]==="shared"){
+                    $(".btn-nodeop",$elClone).hide();
+                    $(".btn-nodeop[data-action='edit']",$elClone).show();
+                }
                 $elClone.fadeIn('slow');
                 return true;
             },
@@ -618,6 +622,12 @@
     ///////////////////
     $( document ).ready(function() {
         console.log( "exec nodes panel ready!" );
+        //contextual location based variations
+        if(routeTags[0]==="shared"){
+            $el=$("section.tao-async-ph")
+            $el.find("h1").html("Shared processing components <small>Full list of <strong>shared processing components</strong>.</small>");
+            $el.find("li.active").html("Shared components");
+        }
         $(".not-empty").hide();
         $("form.search-container").on("submit",function(e){
             e.preventDefault(e);

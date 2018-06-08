@@ -172,7 +172,7 @@
                                             <div class="">
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="wf-edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="wf-build"><i class="fa fa-paint-brush fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
-                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="op-5"><i class="fa fa-random fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Clone</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="wf-clone"><i class="fa fa-random fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Clone</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="wf-start"><i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Start execution</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="op-pause-resume"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted"> Pause / resume execution</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="op-publish"><i class="fa fa-bullhorn fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Publish current workflow</span></button>
@@ -227,7 +227,7 @@
 			</span>
 		</span>
                                     </button>
-                                    <button class="btn btn-box-tool op-5 text-black btn-action disabled" data-action="op-5" data-toggle="tooltip" data-original-title="Clone workflow">
+                                    <button class="btn btn-box-tool op-5 text-black btn-action disabled" data-action="wf-clone" data-toggle="tooltip" data-original-title="Clone workflow">
 		<span class="value-dependent value-1 collapse">
 			<span class="fa-stack fa-lg">
 				<i class="fa fa-circle fa-stack-2x text-green" style=""></i>
@@ -352,36 +352,7 @@
                             </div>
                             </core-node-box>
 <!-- /.project template -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         </div>
-
                         <div class="row">
                         </div>
                     </div><!-- /.tab-pane -->
@@ -659,6 +630,10 @@
                 if(elX.active === false){
                     $elClone.addClass("disabled");
                 }
+                if(routeTags[0]==="shared"){
+                    $(".btn-nodeop",$elClone).hide();
+                    $(".btn-nodeop[data-action='wf-build'],.btn-nodeop[data-action='wf-start'],.btn-nodeop[data-action='wf-clone'] ",$elClone).show();
+                }
                 $elClone.fadeIn('slow');
                 return true;
             },
@@ -747,7 +722,6 @@
         if(operationid === "disable"){
             rm_contentUrl='';
         }
-
         $.ajax({
             url: rm_contentUrl,
             success: function(result) {
@@ -804,7 +778,6 @@
                 });
                 $.when(startWfExecution)
                     .done(function (startWfExecutionResponse) {
-                        //{ "message": "...", "job": <id sau null> }
                         if(startWfExecutionResponse.job){
                             showMsg("Workflow execution successfully invoked.", "SUCCESS");
                         }else{
@@ -817,7 +790,6 @@
                 return 1;
             }
             if(action === 'wf-build'){
-                //document.getElementById('WorkflowBuilder').contentWindow.location.reload();
                 var currentWfID = _mLIST.dataOpQueue[0].dna.id;
 
                 $(".tao-async-ph, .tao-async-mc").fadeOut("slow").promise().done(function() {
@@ -905,6 +877,12 @@
 
     $( document ).ready(function() {
         console.log( "exec nodes panel ready!" );
+        //contextual location based variations
+        if(routeTags[0]==="shared"){
+            $el=$("section.tao-async-ph")
+            $el.find("h1").html("Shared workflows <small>Full list of <strong>shared workflows</strong>.</small>");
+            $el.find("li.active").html("Shared workflows");
+        }
         $("form.search-container").on("submit",function(e){
             e.preventDefault(e);
         });

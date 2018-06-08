@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="box-tools pull-left">
                                     <form class="search-container" action="">
-                                        <input id="search-box" type="text" class="search-box" name="q" placeholder="Search by hostname" />
+                                        <input id="search-box" type="text" class="search-box" name="q" placeholder="Search by name" />
                                         <label for="search-box"><i class="fa fa-search search-icon" aria-hidden="true"></i></label>
                                         <input type="submit" id="search-submit" />
                                     </form>
@@ -78,7 +78,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 like collapse">
-                                <span data-tag="tag">Host name like: <strong class="val-q"></strong>&nbsp;<i class="fa fa-times fa-fw clear-search" aria-hidden="true"></i></span>
+                                <span data-tag="tag">Name like: <strong class="val-q"></strong>&nbsp;<i class="fa fa-times fa-fw clear-search" aria-hidden="true"></i></span>
                             </div>
                             <div class="col-md-12 tags collapse">
                                 <span class="collapse" data-tag="tag">tag<i class="fa fa-check fa-fw" aria-hidden="true"></i></span>
@@ -259,8 +259,7 @@
                 }
                 //filter by text
                 _mLIST.dataFilter.searchString = _mLIST.$el.searchBox.val();
-                console.log("filter:");
-                console.log(_mLIST.dataFilter.searchString);
+                console.log("filter:"); console.log(_mLIST.dataFilter.searchString);
                 if (_mLIST.dataFilter.searchString !== ''){
                     var re = new RegExp(_mLIST.dataFilter.searchString, 'i');
                     _mLIST.data = $.map(_mLIST.data,function(val,key){
@@ -377,7 +376,6 @@
 
                         _mLIST.data = response;
                         _mLIST.dataFull = response;
-//_mLIST.hideLoading();
                         routeLoading('hide');
                         //keep this order
                         _mLIST.repaintTags();
@@ -453,32 +451,6 @@
                 }
             }
         };
-
-    deleteExecNode = function(hostName){
-        $.ajax({
-            url: baseRestApiURL + "topology/"+hostName+"/?rnd=" + Math.random(),
-            dataType : 'json',
-            type: 'DELETE',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "Authorization": authHeader
-            },
-            error : function (jqXHR, textStatus, errorThrown) {
-                console.log("error");
-                if(jqXHR.status === 500 ){
-                    showMsg("Unable to delete node. Please try again.", "ERROR");
-                } else {
-                    alert('An error has occurred, please try again or contact app admin.');
-                }
-            },
-            success: function(data) {
-                showMsg("Datasource successfully deleted.", "SUCCESS");
-                _mLIST.refresh();
-            }
-        });
-    };
-
     myModalNodesOpShow = function(operationid){
         var $modal = $("#myModalNodes");
         $(".modal-dialog",$modal).removeClass("modal-lg");
@@ -519,7 +491,7 @@
                 success: function(result) {
                     rmContent = result;
                 },
-                async:   false
+                async: false
             });
         }else{}
         if(rmContent !== ''){
@@ -680,7 +652,6 @@ html += "      </tbody>\n" +
     }
     ///////////////////
     $( document ).ready(function() {
-        console.log( "exec nodes panel ready!" );
         $(".not-empty").hide();
         $("form.search-container").on("submit",function(e){
             e.preventDefault(e);

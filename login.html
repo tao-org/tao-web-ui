@@ -89,7 +89,7 @@
             $('#submit-form').prop('disabled', true); //TO DISABLED
             var form = $('#frmSignIn');
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: "./_rest/login/auth/authorize/index.html",
                 //url: "http://192.168.61.101/_rest/login/auth/authorize/",
                 data: form.serialize(),

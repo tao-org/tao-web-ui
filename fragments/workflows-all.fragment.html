@@ -73,7 +73,7 @@
                         <div class="row">
                             <div class="col-md-12" id="list-master-controls">
                                 <div class="box-tools pull-left">
-                                    <button class="btn btn-master-tool text-black" data-action="op-plus" data-toggle="tooltip" data-original-title="Add a new user"><i class="fa fa-plus"></i></button>
+                                    <button class="btn btn-master-tool text-black" data-action="op-plus" data-toggle="tooltip" data-original-title="Add new workflow"><i class="fa fa-plus"></i></button>
                                 </div>
                                 <div class="box-tools pull-left">
                                     <button class="btn btn-master-tool text-black" data-action="op-filter" data-toggle="tooltip" data-original-title="Filter by tags"><i class="fa fa-filter"></i><span class="label label-warning val-count-filters" style="display:none;">0</span></button>
@@ -614,9 +614,6 @@
                     $(".val-wactive", $elClone).html('no');
                 }
 
-
-
-
                 $(".val-nnet", $elClone).html(elX.id);
                 $(".val-version", $elClone).html("Version: "+elX.version);
 
@@ -647,7 +644,6 @@
                 }
             }
         };
-
     deleteProcessingComponentById = function(id){
         $.ajax({
             url: baseRestApiURL + "component/"+id+"/?rnd=" + Math.random(),
@@ -676,7 +672,7 @@
     myModalNodesOpShow = function(operationid){
         var $modal = $("#myModalNodes");
         $(".modal-dialog",$modal).removeClass("modal-lg");
-        var rm_contentUrl = '/_tao/rm_content/rm_blank.php';
+        var rm_contentUrl = '';
         var rmContent = '';
         window.userOpStack = [];
 
@@ -722,6 +718,9 @@
         if(operationid === "disable"){
             rm_contentUrl='';
         }
+        if(rm_contentUrl === ""){
+            return;
+        }
         $.ajax({
             url: rm_contentUrl,
             success: function(result) {
@@ -732,8 +731,8 @@
         if(rmContent !== ''){
             $modal.find('.modal-dialog').html(rmContent);
         }else{
-            alert("Must be an error! Could not retrive needed data from server.");
-            return e.preventDefault();
+            alert("Must be an error! Could not retrive needed data from server. E001X");
+            //return e.preventDefault();
         }
         $modal.modal('show');
     };
@@ -746,20 +745,17 @@
                 "dna":nodeDNA,
                 "action":action
             }];
-
+            var currentWfID = _mLIST.dataOpQueue[0].dna.id;
             if(action === 'wf-start'){
                 //localhost:8080/orchestration/start/1
-                var currentWfID = _mLIST.dataOpQueue[0].dna.id;
-
 //to do
                 var attrName = prompt("Please enter attribute name:", "in or Ssource");
                 var attrPath = prompt("Please enter path:", "");
-                if (attrName == null || attrName == "" || attrPath == null || attrPath == "") {
+                if (attrName == null || attrName === "" || attrPath == null || attrPath === "") {
                     alert("User cancelled the prompt. Execution aborted");
                     return;
                 }
 //
-
                 var	lcl_postdata ={};
                 lcl_postdata[attrName] = attrPath;
                 //= {"in":"<cale2>"};
@@ -790,28 +786,7 @@
                 return 1;
             }
             if(action === 'wf-build'){
-                var currentWfID = _mLIST.dataOpQueue[0].dna.id;
-
-                $(".tao-async-ph, .tao-async-mc").fadeOut("slow").promise().done(function() {
-                    var iH = $(".content-wrapper").innerHeight() || 1080;
-                    console.log("builder height:"+iH);
-                    var parentIframe = document.getElementById("wfIframeWrapper");
-                    var iframe = document.createElement('iframe');
-                    iframe.id = "WorkflowBuilder"+Math.floor(Math.random() * 10000000);
-                    iframe.src = './workflow/?_wf='+currentWfID;
-                    iframe.title="WorkflowBuilder";
-                    iframe.style.margin = "0";
-                    iframe.style.width = "100%";
-                    iframe.style.height = iH+"px";
-                    iframe.style.border = "0";
-                    iframe.scrolling="no"
-                    while (parentIframe.hasChildNodes()) {
-                        parentIframe.removeChild(parentIframe.lastChild);
-                    }
-                    parentIframe.appendChild(iframe);
-                    $(".tao-async-wf").fadeIn("slow");
-                });
-                history.pushState(null, null, "#my/workflow/edit/"+currentWfID);
+                tao_showWorkflow(currentWfID);
                 return 1;
             }
             myModalNodesOpShow(action);
@@ -869,6 +844,32 @@
         });
 
     ///////////////////
+    function tao_showWorkflow(currentWfID){
+        $(".tao-async-ph, .tao-async-mc").fadeOut("slow").promise().done(function() {
+            var iH = $(".content-wrapper").innerHeight() || 1080;
+            console.log("builder height:"+iH);
+            var parentIframe = document.getElementById("wfIframeWrapper");
+            var iframe = document.createElement('iframe');
+            iframe.id = "WorkflowBuilder"+Math.floor(Math.random() * 10000000);
+            iframe.src = './workflow/?_wf='+currentWfID;
+            iframe.title="WorkflowBuilder";
+            iframe.style.margin = "0";
+            iframe.style.width = "100%";
+            iframe.style.height = iH+"px";
+            iframe.style.border = "0";
+            iframe.scrolling="no";
+            while (parentIframe.hasChildNodes()) {
+                parentIframe.removeChild(parentIframe.lastChild);
+            }
+            parentIframe.appendChild(iframe);
+            $(".tao-async-wf").fadeIn("slow");
+        });
+        history.pushState(null, null, "#my/workflows::edit="+currentWfID+"|page=0");
+        return 1;
+    };
+
+
+
     function tao_closeWorkflow() {
         $(".tao-async-wf").fadeOut("slow");
         $(".tao-async-ph").fadeIn("slow");

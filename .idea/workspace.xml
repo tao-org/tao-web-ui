@@ -2,12 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/assets/dist/js/ui.js" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/fragments/component-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/component-admin.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
+      <change beforePath="$PROJECT_DIR$/assets/dist/js/config.js" afterPath="$PROJECT_DIR$/assets/dist/js/config.js" />
+      <change beforePath="$PROJECT_DIR$/assets/dist/js/router.js" afterPath="$PROJECT_DIR$/assets/dist/js/router.js" />
+      <change beforePath="$PROJECT_DIR$/fragments/component-plus.fragment.html" afterPath="$PROJECT_DIR$/fragments/component-plus.fragment.html" />
       <change beforePath="$PROJECT_DIR$/fragments/workflows-all.fragment.html" afterPath="$PROJECT_DIR$/fragments/workflows-all.fragment.html" />
       <change beforePath="$PROJECT_DIR$/sap.html" afterPath="$PROJECT_DIR$/sap.html" />
+      <change beforePath="$PROJECT_DIR$/workflow/css/propbar.css" afterPath="$PROJECT_DIR$/workflow/css/propbar.css" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,68 +22,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/workflow/index.html">
+      <file leaf-file-name="app.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workflow/app.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="335">
-              <caret line="169" column="28" lean-forward="false" selection-start-line="169" selection-start-column="27" selection-end-line="169" selection-end-column="28" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sap.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sap.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3412">
-              <caret line="715" column="23" lean-forward="true" selection-start-line="715" selection-start-column="23" selection-end-line="715" selection-end-column="23" />
-              <folding>
-                <element signature="n#style#0;n#div#1;n#section#0;n#aside#0;n#div#8;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="e#23972#23978#0" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#a#0;n#li#0;n#ul#0;n#div#1;n#section#0;n#aside#0;n#div#8;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ui.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/dist/js/ui.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="107">
-              <caret line="49" column="38" lean-forward="true" selection-start-line="49" selection-start-column="38" selection-end-line="49" selection-end-column="38" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="datasource-admin.fragment.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fragments/datasource-admin.fragment.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="21" lean-forward="true" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-              <folding>
-                <marker date="1528458916214" expanded="true" signature="29962:29969" ph="×" />
-                <marker date="1528458916214" expanded="true" signature="30740:30757" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/dist/js/config.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="26" lean-forward="false" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/dist/js/app.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-7135">
-              <caret line="270" column="69" lean-forward="true" selection-start-line="270" selection-start-column="62" selection-end-line="270" selection-end-column="69" />
+            <state relative-caret-position="1768">
+              <caret line="104" column="46" lean-forward="false" selection-start-line="104" selection-start-column="46" selection-end-line="104" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -91,8 +35,38 @@
       <file leaf-file-name="router.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/dist/js/router.js">
           <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="680">
+              <caret line="40" column="47" lean-forward="false" selection-start-line="40" selection-start-column="4" selection-end-line="40" selection-end-column="47" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/dist/js/config.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="18" column="122" lean-forward="false" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="122" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sap.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sap.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="334">
+              <caret line="571" column="3" lean-forward="true" selection-start-line="571" selection-start-column="3" selection-end-line="571" selection-end-column="3" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="propbar.css" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/workflow/css/propbar.css">
+          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="442">
-              <caret line="95" column="17" lean-forward="false" selection-start-line="95" selection-start-column="8" selection-end-line="95" selection-end-column="17" />
+              <caret line="35" column="17" lean-forward="true" selection-start-line="35" selection-start-column="17" selection-end-line="35" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -101,18 +75,38 @@
       <file leaf-file-name="component-plus.fragment.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fragments/component-plus.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="895">
-              <caret line="608" column="11" lean-forward="true" selection-start-line="597" selection-start-column="8" selection-end-line="608" selection-end-column="11" />
+            <state relative-caret-position="6375">
+              <caret line="375" column="131" lean-forward="false" selection-start-line="375" selection-start-column="131" selection-end-line="375" selection-end-column="131" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="component-admin.fragment.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/fragments/component-admin.fragment.html">
+      <file leaf-file-name="propbar.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workflow/lib/propbar.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="577">
-              <caret line="475" column="13" lean-forward="true" selection-start-line="475" selection-start-column="13" selection-end-line="475" selection-end-column="13" />
+            <state relative-caret-position="1751">
+              <caret line="103" column="75" lean-forward="false" selection-start-line="103" selection-start-column="64" selection-end-line="103" selection-end-column="75" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workflow/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="493">
+              <caret line="29" column="36" lean-forward="false" selection-start-line="29" selection-start-column="18" selection-end-line="29" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="nodemonitor.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/nodemonitor.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1513">
+              <caret line="89" column="0" lean-forward="false" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -121,8 +115,8 @@
       <file leaf-file-name="workflows-all.fragment.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fragments/workflows-all.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="636" column="0" lean-forward="false" selection-start-line="632" selection-start-column="0" selection-end-line="636" selection-end-column="0" />
+            <state relative-caret-position="717">
+              <caret line="791" column="39" lean-forward="false" selection-start-line="791" selection-start-column="39" selection-end-line="791" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -140,25 +134,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Could not add node</find>
-      <find>tao_dropNewNode</find>
-      <find>arrayFromDatetime</find>
-      <find>jquery</find>
-      <find>mon</find>
-      <find>.tooltip</find>
-      <find>Data.ports</find>
-      <find>wfPlumbCanvasData.ports</find>
-      <find>&lt;span&gt;WORKFLOWS&lt;/span&gt;</find>
-      <find>workflow/all</find>
-      <find>userOpStack</find>
-      <find>control-sidebar-menu</find>
-      <find>sidebar-menu</find>
-      <find>extend</find>
-      <find>cog</find>
-      <find>quota</find>
-      <find>myModalScreen</find>
-      <find>settingsApplyChange</find>
-      <find>.js</find>
       <find>Host</find>
       <find>deleteExecNode</find>
       <find>myModalNodesOpShow</find>
@@ -170,6 +145,25 @@
       <find>op-5</find>
       <find>show()</find>
       <find>fadein</find>
+      <find>my/work</find>
+      <find>workflowID</find>
+      <find>jsGetUrlQueryValue</find>
+      <find>workflows/edit</find>
+      <find>Base64</find>
+      <find>workflows:</find>
+      <find>.js</find>
+      <find>wf-build</find>
+      <find>currentWfID</find>
+      <find>submit</find>
+      <find>ready</find>
+      <find>taoDynPageDiv</find>
+      <find>showWf</find>
+      <find>su</find>
+      <find>Users can not edit shared components. User have edit permission restricted to own workspace.</find>
+      <find>sys.</find>
+      <find>Must be an error! Could not retrive needed data from server.</find>
+      <find>comp-tab-sys</find>
+      <find>rm_blank.php</find>
     </findStrings>
     <dirStrings>
       <dir>D:\_work\tao\tao-web-ui\workflow</dir>
@@ -203,7 +197,6 @@
         <option value="$PROJECT_DIR$/fragments/projects-all.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/rm-blank.fragment.html" />
         <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/assets/dist/js/config.js" />
         <option value="$PROJECT_DIR$/fragments/topology-admin.fragment.html" />
         <option value="$PROJECT_DIR$/nodemonitor.html" />
         <option value="$PROJECT_DIR$/workflow/1.php" />
@@ -211,14 +204,12 @@
         <option value="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/workflow-plus.fragment.html" />
         <option value="$PROJECT_DIR$/workflow/w.content.php" />
-        <option value="$PROJECT_DIR$/fragments/component-plus.fragment.html" />
         <option value="$PROJECT_DIR$/workflow/workspace.css" />
         <option value="$PROJECT_DIR$/assets/dist/js/app.js" />
         <option value="$PROJECT_DIR$/workflow/css/main.css" />
         <option value="$PROJECT_DIR$/workflow/workspace.js" />
         <option value="$PROJECT_DIR$/fragments/topology-plus.fragment.html" />
         <option value="$PROJECT_DIR$/workflow/propbar.content.html" />
-        <option value="$PROJECT_DIR$/workflow/css/propbar.css" />
         <option value="$PROJECT_DIR$/workflow/lib/propbar.js" />
         <option value="$PROJECT_DIR$/workflow/app.css" />
         <option value="$PROJECT_DIR$/assets/dist/js/general-functions.js" />
@@ -226,13 +217,16 @@
         <option value="$PROJECT_DIR$/workflow/canvas.js" />
         <option value="$PROJECT_DIR$/workflow/app.js" />
         <option value="$PROJECT_DIR$/fragments/workflow-all.fragment.html" />
-        <option value="$PROJECT_DIR$/assets/dist/js/router.js" />
         <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
-        <option value="$PROJECT_DIR$/sap.html" />
         <option value="$PROJECT_DIR$/assets/dist/js/ui.js" />
         <option value="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
-        <option value="$PROJECT_DIR$/fragments/workflows-all.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/component-admin.fragment.html" />
+        <option value="$PROJECT_DIR$/sap.html" />
+        <option value="$PROJECT_DIR$/assets/dist/js/router.js" />
+        <option value="$PROJECT_DIR$/assets/dist/js/config.js" />
+        <option value="$PROJECT_DIR$/fragments/component-plus.fragment.html" />
+        <option value="$PROJECT_DIR$/fragments/workflows-all.fragment.html" />
+        <option value="$PROJECT_DIR$/workflow/css/propbar.css" />
       </list>
     </option>
   </component>
@@ -248,7 +242,7 @@
     </servers>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP" />
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="124" />
     <option name="y" value="16" />
     <option name="width" value="1525" />
@@ -269,6 +263,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -300,11 +295,27 @@
               <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="fragments" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
+            <path>
+              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="workflow" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="workflow" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="css" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tao-web-ui" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="workflow" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="lib" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -455,15 +466,16 @@
       <workItem from="1525261437398" duration="65919000" />
       <workItem from="1525954577407" duration="123219000" />
       <workItem from="1527074191618" duration="26045000" />
-      <workItem from="1528123308206" duration="24771000" />
+      <workItem from="1528123308206" duration="35666000" />
+      <workItem from="1528812873426" duration="1478000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="880615000" />
+    <option name="totallyTimeSpent" value="892988000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1696" height="1066" extended-state="7" />
+    <frame x="-8" y="-8" width="1696" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16785714" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -471,7 +483,6 @@
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2246604" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20585161" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -484,6 +495,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2246604" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -586,14 +598,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/nodemonitor.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="362">
-          <caret line="198" column="13" lean-forward="false" selection-start-line="198" selection-start-column="13" selection-end-line="198" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fragments/users-plus.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="309">
@@ -605,7 +609,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="292">
           <caret line="11881" column="89" lean-forward="true" selection-start-line="11881" selection-start-column="89" selection-end-line="11881" selection-end-column="89" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -620,7 +623,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="309">
           <caret line="327" column="27" lean-forward="false" selection-start-line="327" selection-start-column="27" selection-end-line="327" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -628,7 +630,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="404">
           <caret line="264" column="24" lean-forward="true" selection-start-line="264" selection-start-column="24" selection-end-line="264" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -659,7 +660,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3332">
           <caret line="196" column="54" lean-forward="true" selection-start-line="196" selection-start-column="54" selection-end-line="196" selection-end-column="54" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -667,23 +667,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1122">
           <caret line="66" column="58" lean-forward="false" selection-start-line="66" selection-start-column="58" selection-end-line="66" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/workflow/css/propbar.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1717">
-          <caret line="101" column="21" lean-forward="true" selection-start-line="101" selection-start-column="21" selection-end-line="101" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/workflow/app.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4607">
-          <caret line="271" column="48" lean-forward="false" selection-start-line="271" selection-start-column="48" selection-end-line="271" selection-end-column="48" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -711,22 +694,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/workflow/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="13481">
-          <caret line="793" column="78" lean-forward="true" selection-start-line="793" selection-start-column="78" selection-end-line="793" selection-end-column="78" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/workflow/canvas.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="321">
           <caret line="253" column="178" lean-forward="false" selection-start-line="253" selection-start-column="178" selection-end-line="253" selection-end-column="178" />
-          <folding>
-            <marker date="1527780903876" expanded="true" signature="10764:10770" ph=" " />
-            <marker date="1527780903876" expanded="true" signature="11075:11081" ph=" " />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -734,23 +705,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="400">
           <caret line="1004" column="36" lean-forward="true" selection-start-line="1004" selection-start-column="36" selection-end-line="1004" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/workflow/lib/propbar.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="272" column="37" lean-forward="true" selection-start-line="272" selection-start-column="12" selection-end-line="272" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/workflow/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="169" column="28" lean-forward="false" selection-start-line="169" selection-start-column="27" selection-end-line="169" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -766,88 +720,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3077">
           <caret line="29" column="10" lean-forward="true" selection-start-line="29" selection-start-column="6" selection-end-line="29" selection-end-column="14" />
-          <folding>
-            <marker date="1505138063510" expanded="true" signature="3725:3776" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="3855:3928" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="3972:4024" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="4080:4154" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="4176:4250" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="4568:4619" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="4692:4727" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="4759:4832" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="4854:4927" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="4983:5054" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="5076:5150" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="5472:5523" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="5602:5654" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="5719:5771" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="5827:5901" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="5923:5997" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="6319:6370" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="6449:6501" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="6564:6616" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="6672:6746" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="6768:6842" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="7158:7209" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="7288:7340" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="7399:7451" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="7507:7581" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="7603:7677" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="7995:8046" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="8125:8177" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="8242:8294" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="8350:8424" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="8446:8520" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="8877:8928" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="9007:9080" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="9124:9176" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="9232:9306" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="9328:9402" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="9507:9522" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="9768:9819" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="9892:9927" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="9959:10032" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="10054:10127" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="10183:10257" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="10279:10353" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="10458:10473" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="10723:10774" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="10853:10905" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="10970:11022" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="11078:11152" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="11174:11248" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="11353:11368" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="11618:11669" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="11748:11800" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="11863:11915" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="11971:12045" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="12067:12141" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="12246:12261" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="12505:12556" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="12635:12687" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="12746:12798" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="12854:12928" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="12950:13024" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="13129:13144" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="13390:13441" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="13520:13572" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="13637:13689" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="13745:13819" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="13841:13915" ph="..." />
-            <marker date="1505138063510" expanded="true" signature="14020:14036" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sap.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3412">
-          <caret line="715" column="23" lean-forward="true" selection-start-line="715" selection-start-column="23" selection-end-line="715" selection-end-column="23" />
-          <folding>
-            <element signature="n#style#0;n#div#1;n#section#0;n#aside#0;n#div#8;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="e#23972#23978#0" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#a#0;n#li#0;n#ul#0;n#div#1;n#section#0;n#aside#0;n#div#8;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -859,53 +731,105 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/assets/dist/js/config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="26" lean-forward="false" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fragments/datasource-admin.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="16" column="21" lean-forward="true" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-          <folding>
-            <marker date="1528458916214" expanded="true" signature="29962:29969" ph="×" />
-            <marker date="1528458916214" expanded="true" signature="30740:30757" ph="..." />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/component-admin.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="488" column="63" lean-forward="true" selection-start-line="488" selection-start-column="63" selection-end-line="488" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2873">
+          <caret line="169" column="28" lean-forward="false" selection-start-line="169" selection-start-column="27" selection-end-line="169" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/lib/propbar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1751">
+          <caret line="103" column="75" lean-forward="false" selection-start-line="103" selection-start-column="64" selection-end-line="103" selection-end-column="75" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="29" column="36" lean-forward="false" selection-start-line="29" selection-start-column="18" selection-end-line="29" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nodemonitor.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1513">
+          <caret line="89" column="0" lean-forward="false" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/app.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1768">
+          <caret line="104" column="46" lean-forward="false" selection-start-line="104" selection-start-column="46" selection-end-line="104" selection-end-column="46" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/dist/js/router.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="95" column="17" lean-forward="false" selection-start-line="95" selection-start-column="8" selection-end-line="95" selection-end-column="17" />
+        <state relative-caret-position="680">
+          <caret line="40" column="47" lean-forward="false" selection-start-line="40" selection-start-column="4" selection-end-line="40" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/dist/js/config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="122" lean-forward="false" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="122" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fragments/component-plus.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="895">
-          <caret line="608" column="11" lean-forward="true" selection-start-line="597" selection-start-column="8" selection-end-line="608" selection-end-column="11" />
+        <state relative-caret-position="6375">
+          <caret line="375" column="131" lean-forward="false" selection-start-line="375" selection-start-column="131" selection-end-line="375" selection-end-column="131" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fragments/workflows-all.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="636" column="0" lean-forward="false" selection-start-line="632" selection-start-column="0" selection-end-line="636" selection-end-column="0" />
+        <state relative-caret-position="717">
+          <caret line="791" column="39" lean-forward="false" selection-start-line="791" selection-start-column="39" selection-end-line="791" selection-end-column="39" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/component-admin.fragment.html">
+    <entry file="file://$PROJECT_DIR$/sap.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="577">
-          <caret line="475" column="13" lean-forward="true" selection-start-line="475" selection-start-column="13" selection-end-line="475" selection-end-column="13" />
+        <state relative-caret-position="334">
+          <caret line="571" column="3" lean-forward="true" selection-start-line="571" selection-start-column="3" selection-end-line="571" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/css/propbar.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="35" column="17" lean-forward="true" selection-start-line="35" selection-start-column="17" selection-end-line="35" selection-end-column="17" />
           <folding />
         </state>
       </provider>

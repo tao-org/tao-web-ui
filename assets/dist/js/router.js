@@ -18,7 +18,6 @@
  **/
 
 //default page
-var taoDynPageDiv = $(".tao-async-cw");
 var taoLoadingDiv = $("#myModalLoading");
 var routeTags = [];
 var routeFilters = {};
@@ -37,6 +36,7 @@ function routeLoading(action){
 
 //ROUTER
 $(function () {
+    var taoDynPageDiv = $(".tao-async-cw");
     var DEFAULT_PAGE_URL = "#admin/dashboard";
     var UNDEFINED_PAGE_URL = "#undefined/page";
     var hashRoutesMap = [];
@@ -87,7 +87,16 @@ $(function () {
             hash = DEFAULT_PAGE_URL;
         }
         if( hash.charAt(0)==="#"){
+            routeFilters = {};
             hash = hash.substring(1);
+            var hParts = hash.split("::");
+            hash = hParts[0];
+            if(hParts[1]){
+                var hExtra = hParts[1];
+                hExtra = hExtra.split("|");
+                _.map(hExtra, function(s){ var a=s.split("="); routeFilters[a[0]] = a[1];});
+            }
+            console.log(routeFilters);
         }
         if(hashRoutesMap[hash] === undefined){
             hash = UNDEFINED_PAGE_URL;

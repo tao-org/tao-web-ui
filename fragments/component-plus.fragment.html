@@ -32,6 +32,7 @@
                                 <li><a data-toggle="tab" href="#comp-tab-conf">Configuration</a></li>
                                 <li><a data-toggle="tab" href="#comp-tab-param">Parameters</a></li>
                                 <li><a data-toggle="tab" href="#comp-tab-sys">Sys. vars.</a></li>
+                                <li><a data-toggle="tab" href="#comp-tab-ports">Sources & Targets</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
@@ -338,6 +339,71 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div id="comp-tab-ports" class="tab-pane fade">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p>Sources:</p>
+                                            <div class="responsive">
+                                                <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-sources">
+                                                    <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Key</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewvar" data-action="comp-add-new-var">
+                                                                <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    </tfoot>
+                                                    <tbody>
+                                                    <tr class="tpl-sample-row">
+                                                        <th class="del-col" scope="row">
+                                                            <a href="#" class="text tbl-sysvar-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                                                        </th>
+                                                        <td><input type="text" class="var-key" value="" placeholder="input variable's name"></td>
+                                                        <td><input type="text" class="var-value" value="" placeholder="input variable's value"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                                <p>Targets:</p>
+                                                <div class="responsive">
+                                                    <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-targets">
+                                                        <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Key</th>
+                                                            <th>Value</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewvar" data-action="comp-add-new-var">
+                                                                    <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                        <tr class="tpl-sample-row">
+                                                            <th class="del-col" scope="row">
+                                                                <a href="#" class="text tbl-sysvar-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                                                            </th>
+                                                            <td><input type="text" class="var-key" value="" placeholder="input variable's name"></td>
+                                                            <td><input type="text" class="var-value" value="" placeholder="input variable's value"></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                     </div>
                 </div>
@@ -540,6 +606,17 @@
     }
 
     $(document).ready( function(){
+        //no edit in shared workspace
+        //$("#frmExecNodeEdit").on("keypress change","*", function(e){
+            if(routeTags[0] === "shared"){
+                $("#frmExecNodeEdit :input").prop("disabled", true);
+                $("#frmExecNodeEdit button[type=\"submit\"]").hide();
+                $("#myModalNodes .modal-note h4").html("Warrning");
+                $("#myModalNodes .modal-note p").html(SHARED_EDIT_RESTRICTED);
+            }
+        //});
+
+
         //get all availlable dockers
         var getAllDocker = $.ajax({ cache: false,
             //url: appConfig.baseURL+appConfig.restURL+"/docker/",
@@ -591,28 +668,27 @@
             helper_addParameterDescriptorsRow($tbl);
         });
 
-        $(".tbl-edt").on("click", ".tbl-sysvar-delete-action", function(e){
-            e.preventDefault();
-            $(this).closest(".val-row").remove();
-        });
-        $(".tbl-edt").on("click", ".tbl-prop-expand-action", function(e){
-            e.preventDefault();
-            if($(this).hasClass("active")){
+        $(".tbl-edt")
+            .on("click", ".tbl-sysvar-delete-action", function(e){
+                e.preventDefault();
+                $(this).closest(".val-row").remove();
+            })
+            .on("click", ".tbl-prop-expand-action", function(e){
+                e.preventDefault();
+                if($(this).hasClass("active")){
+                    $(".val-row-plus").css({"display": "none"});
+                    $(this).removeClass("active");
+                    return;
+                }
                 $(".val-row-plus").css({"display": "none"});
-                $(this).removeClass("active");
-                return;
-            }
-            $(".val-row-plus").css({"display": "none"});
-            $(".tbl-prop-expand-action").removeClass("active");
-            $(this).addClass("active");
-            $(this).closest("tr").next().css({"display": "table-row"});
-        });
-        $(".tbl-edt").on("click", ".tbl-prop-delete-action", function(e){
-            e.preventDefault();
-            $(this).closest("tbody").remove();
-        });
-
-
+                $(".tbl-prop-expand-action").removeClass("active");
+                $(this).addClass("active");
+                $(this).closest("tr").next().css({"display": "table-row"});
+            })
+            .on("click", ".tbl-prop-delete-action", function(e){
+                e.preventDefault();
+                $(this).closest("tbody").remove();
+            });
 
         //remove error for some input elements
         $("input, textarea","form#frmExecNodeEdit")
@@ -644,6 +720,12 @@
         });
         $("form#frmExecNodeEdit").submit(function (e) {
             e.preventDefault();
+            if(routeTags[0] === "shared"){
+                showMsg(SHARED_EDIT_RESTRICTED, "ERROR");
+                return -1;
+            }
+
+
             var $tblCompSysVar = $("#comp-tab-sys table");
             var $tblParameterDescriptors = $("#comp-tab-param table");
             var formData = {

@@ -199,8 +199,8 @@ app-modal-content {
     background: #65c3e8;
     padding: 5px 10px;
     position: absolute;
-    right: 0px;
-    bottom: 0px;
+    right: 0;
+    bottom: 0;
     opacity: .3;	
 }
 .app-card-note-item:hover a.item-read-more{
@@ -211,7 +211,6 @@ btn-avatar{
     content: "";
     display: block;
     background: url("./media/module-otb.png") no-repeat center;
-    background-size: 20px;
     position: absolute;
     top: 50%;
     left: 15px;

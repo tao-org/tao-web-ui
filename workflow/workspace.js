@@ -39,6 +39,8 @@
 
     var toolboxSidebar = {
     	elTBS: $("#toolboxSidebar"),
+        elDatasourceSearch: $("#datasources-search"),
+        elDatasourceList: $("#datasourceslist"),
         elModuleSearch: $("#modules-search"),
         elModuleList: $("#moduleslist"),
         init: function () {
@@ -76,29 +78,41 @@
                 e.preventDefault();
             });
 //
-            $( ".fa-search", "#modules-search").show();
-            $( ".fa-times", "#modules-search").hide().on("click",function(){
+            $( ".fa-search", a.elDatasourceSearch).show();
+            $( ".fa-times", a.elDatasourceSearch).hide().on("click",function(){
                 $(this).parent().find("input").val("").trigger("keyup");
             });
-            a.elTBS.on('keyup','input', function(e){
-                    //_mLIST.repaint();
-                    //_mLIST.refreshSearch();
+            a.elDatasourceSearch.on('keyup','input', function(e){
                 var q = $(this).val();
-                console.log(q);
                 if(q && q.length>0){
-                    $( ".fa-search", "#modules-search").hide();
-                    $( ".fa-times", "#modules-search").show();
-                    $( "sortable_item", "#moduleslist").hide();
-                    $( ".item-label:ci_search('"+q+"')", "#moduleslist").closest("sortable_item").show();
+                    $( ".fa-search", a.elDatasourceSearch).hide();
+                    $( ".fa-times", a.elDatasourceSearch).show();
+                    $( "sortable_item", a.elDatasourceList).hide();
+                    $( ".item-label:ci_search('"+q+"')", a.elDatasourceList).closest("sortable_item").show();
                 }else{
-                    $( ".fa-search", "#modules-search").show();
-                    $( ".fa-times", "#modules-search").hide();
-                    $( "sortable_item", "#moduleslist").show();
+                    $( ".fa-search", a.elDatasourceSearch).show();
+                    $( ".fa-times", a.elDatasourceSearch).hide();
+                    $( "sortable_item", a.elDatasourceList).show();
                 }
             });
 
-//
-
+            $( ".fa-search", a.elModuleSearch).show();
+            $( ".fa-times", a.elModuleSearch).hide().on("click",function(){
+                $(this).parent().find("input").val("").trigger("keyup");
+            });
+            a.elModuleSearch.on('keyup','input', function(e){
+                var q = $(this).val();
+                if(q && q.length>0){
+                    $( ".fa-search", a.elModuleSearch).hide();
+                    $( ".fa-times", a.elModuleSearch).show();
+                    $( "sortable_item", a.elModuleList).hide();
+                    $( ".item-label:ci_search('"+q+"')", a.elModuleList).closest("sortable_item").show();
+                }else{
+                    $( ".fa-search", a.elModuleSearch).show();
+                    $( ".fa-times", a.elModuleSearch).hide();
+                    $( "sortable_item", a.elModuleList).show();
+                }
+            });
             a.open();
         },
         open: function () {

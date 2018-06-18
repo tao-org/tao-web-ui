@@ -26,9 +26,9 @@
     </div><!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">User Authentication</p>
-        <form id="frmSignIn" name="frmSignIn" action="./nojs.php" method="post" accept-charset="UTF-8">
+        <form id="frmSignIn" name="frmSignIn" method="post" accept-charset="UTF-8">
             <input name="action" type="hidden" value="signin" />
-            <div id="frmSignInMsg" class="callout callout-danger hidden" role="alert" aria-atomic="true">
+            <div id="frmSignInMsg" class="callout callout-danger collapse" role="alert" aria-atomic="true">
                 <p>Sorry... Your username & password do not match. Please check your CAPS lock key and try again. Thank you.</p>
             </div>
             <div class="form-group has-feedback">
@@ -80,44 +80,45 @@
         ], {duration: 5000, fade: 750});
 //hide error msg on form edit
         $('input').keypress(function() {
-            $('#frmSignInMsg:visible').addClass("hidden");
+            $('#frmSignInMsg:visible').hide("fast");
             return true;
         });
 //submit forma login
         $("#frmSignIn").on("submit", function( event ){
             event.preventDefault();
+            $('#frmSignInMsg:visible').hide("fast");
             $('#submit-form').prop('disabled', true); //TO DISABLED
-            var form = $('#frmSignIn');
-            $.ajax({
-                type: "POST",
-                url: "./_rest/login/auth/authorize/index.html",
-                //url: "http://192.168.61.101/_rest/login/auth/authorize/",
-                data: form.serialize(),
-                error: function() {
-                    alert("Communication error. Try again or notify the site admin! Thank you.");
-                    $('#submit-form').prop('disabled', false); //TO DISABLED
-                },
-                success: function(response) {
-                    try{
-                        obj = JSON.parse(response);
-                        if(obj.code === '200-OK'){
-                            $("#frmSignInMsg").html(obj.msgdetails.global).removeClass("hidden");
-                            _settings.createCookie("tokenKey",obj.authdata.tokenKey);
-                            _settings.createCookie("userMatrix",obj.authdata.userMatrix);
-                            _settings.createCookie("userId",obj.authdata.userId);
-                            _settings.createCookie("userName",obj.authdata.userName);
-                            _settings.createCookie("userName",obj.authdata.userName);
-                            if(obj.msgdetails.location != ''){
-                                window.location.href = obj.msgdetails.location;
-                            }
-                        }
-                    }
-                    catch(e){
-                        alert("Malformed server answer. Try again or notify the site admin! Thank you.");
-                    }
-                    $('#submit-form').prop('disabled', false); //TO DISABLED
+            var user = $("#field_email").val();
+            var pass = $("#field_password").val();
+            var authHeader = "Basic " + btoa(user+":"+pass);
+            var settings = {
+                "cache": false,
+                "url": "http://localhost:8080/auth/login",
+                "method": "POST",
+                "headers": {
+                    "Authorization": authHeader
                 }
-            });
+            }
+            $.ajax(settings)
+                .done(function (response) {
+                    if(response.authenticated && response.authToken){
+                        $('#submit-form').prop('disabled', false); //TO DISABLED
+                        _settings.createCookie("tokenKey",response.authToken);
+                        _settings.createCookie("userMatrix",response.profiles);
+                        _settings.createCookie("userId",0);
+                        _settings.createCookie("userName",user);
+                        window.location.href = "./sap.html";
+                    }else{
+                        $("#frmSignInMsg").show("slow");
+                    }
+                })
+                .fail(function (jqXHR, status, textStatus) {
+                    $("#frmSignInMsg").show("slow");
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(status);
+                });
+            return 0;
         });
     });
 </script>

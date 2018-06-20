@@ -23,6 +23,61 @@
  **/
 
 
+//user idetity
+var taoUserProfile = {};
+//create user profile variable
+$(function () {
+    var cookieProfile = _settings.readCookie("userMatrix");
+    taoUserProfile = JSON.parse(cookieProfile);
+    $(".val-user-fullname").html(taoUserProfile.userFullName);
+    $(".val-user-role").html(taoUserProfile.userRole);
+    $(".val-user-email").html(taoUserProfile.userEmail);
+    var gravatarUrl = "https://www.gravatar.com/avatar/"+taoUserProfile.userEmailMD5+"?d=mp&s=160";
+    $(".val-user-avatar").attr("src", gravatarUrl);
+});
+
+
+
+(function(){
+    var $elModalProfile = $("#myModalWorkFlow");
+    function f(){
+        $.ajax({ cache: false,
+            url: "./fragments/profile.fragment.html"
+        })
+            .done(function (data) {
+                $(".modal-dialog",$elModalProfile).html(data);
+                var gravatarUrl = "https://www.gravatar.com/avatar/"+taoUserProfile.userEmailMD5+"?d=mp&s=160";
+                $(".card-profile img",$elModalProfile).attr("src", gravatarUrl);
+                $(".val-user-fullname",$elModalProfile).html(taoUserProfile.userFullName);
+                $(".val-user-role",$elModalProfile).html(taoUserProfile.userRole);
+                $(".val-user-email",$elModalProfile).html(taoUserProfile.userEmail);
+                $(".val-user-email2",$elModalProfile).html(taoUserProfile.userEmail2);
+                $(".val-user-org",$elModalProfile).html(taoUserProfile.userOrg);
+                $(".val-user-name",$elModalProfile).html(taoUserProfile.userName);
+                $(".val-user-phone",$elModalProfile).html(taoUserProfile.userPhone);
+                $(".val-user-quota",$elModalProfile).html(taoUserProfile.userQota);
+                $elModalProfile.modal("show");
+            })
+            .fail(function (jqXHR, textStatus) {
+                alert("Could not load user profile... Try later.");
+            });
+    }
+    $(".do-editprofile").on("click", function(e){
+        e.preventDefault();
+        f();
+    });
+}());
+
+
+(function () {
+    function f(v){
+//      $.extend(q, v);
+        return 1;
+    }
+    window.taoUI_UpdateUserProfile = f;
+}());
+
+
 (function () {
     var $elQuota = $("#wrapper-quota");
     var q = {

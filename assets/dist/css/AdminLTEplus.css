@@ -3,11 +3,9 @@
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */
+    user-select: none; /* Non-prefixed version */
 }
 
 body.size-small { font-size: 10px; }
@@ -32,6 +30,13 @@ body.size-larger { font-size: 18px; }
 
 .space-after-10{
     margin-bottom: 10px !important;
+}
+
+.navbar-nav>.user-menu>.dropdown-menu>li.user-header {
+    height: auto;
+}
+.navbar-nav>.user-menu>.dropdown-menu>li.user-header span.user-role {
+    font-size: 12px;
 }
 
 .nav-tabs-custom>.nav-tabs>li.active>select {
@@ -934,6 +939,51 @@ input[type=checkbox].big{
     display: inherit;
 }
 
+
+/* user profile */
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    margin: auto;
+    margin-top: 50px;
+    text-align: center;
+    background: aliceblue;
+}
+
+.card .card-profile {
+    background: #367fa9;
+    padding: 30px 15px 5px 15px;
+    margin: -30px -15px 45px -15px;
+    position: relative;
+    z-index: 2;
+}
+
+.card .card-profile::after {
+    content: "";
+    position: absolute;
+    background: #367fa9;
+    width: 100%;
+    height: 53px;
+    bottom: -20px;
+    left: 0;
+    transform: skewY(-6deg);
+    z-index: -1;
+}
+.card .card-profile img {
+    width: 100%;
+    border-radius: 50%;
+}
+
+.card .card-title{
+    font-family: 'Source Sans Pro',sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+}
+.card .card-body p{
+    border-bottom: 1px solid #ccc;
+    line-height: 1.64em;
+    text-align: left;
+}
 
 /* notifications */
 #my-slow-load {

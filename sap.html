@@ -41,6 +41,7 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="./assets/dist/js/general-functions.js" type="text/javascript"></script>
     <script src="./assets/dist/js/config.js" type="text/javascript"></script>
     <script>
         var root_path = '/_tao/';
@@ -82,12 +83,7 @@
     <div class="modal-dialog">
     </div><!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
-<!-- modal -->
-<div id="myModalAddDoc" class="modal modal-keep-empty fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-    </div><!-- /.modal-dialog -->
-</div>
+
 <!-- /.modal -->
 <!-- modal route -->
 <div id="myModalRoute" class="modal modal-keep-empty fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -136,37 +132,35 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li class="header">You have new events</li>
-                            <li class="header">Under construction</li>
-                            <!-- to be done
                                               <li>
                                                 <ul class="menu">
                                                   <li>
                                                     <a href="#">
                                                       <div class="pull-left">
-                                                        <img src="http://www.gravatar.com/avatar/d37423cab976ea5c2c657bccf32dfb50?d=http%3A%2F%2Fwww.somewhere.com%2Fhomestar.jpg&s=160" class="img-circle" alt="User Image" />
+                                                        <img src="https://www.gravatar.com/avatar/0000000000?d=mp&s=160" class="img-circle" alt="User Image" />
                                                       </div>
                                                       <h4>
-                                                        Cerere finatare
+                                                        user request
                                                         <small><i class="fa fa-clock-o"></i> 10:42 AM</small>
                                                       </h4>
-                                                      <p>initiator: Ion Popa</p>
+                                                      <p>from: Will Smith</p>
                                                     </a>
                                                   </li>
                                                   <li>
                                                     <a href="#">
                                                       <div class="pull-left">
-                                                        <img src="http://www.gravatar.com/avatar/d37423cab976ea5c2c657bccf32dfb50?d=http%3A%2F%2Fwww.somewhere.com%2Fhomestar.jpg&s=160" class="img-circle" alt="User Image" />
+                                                        <img src="https://www.gravatar.com/avatar/0000000000?d=mp&s=160" class="img-circle" alt="User Image" />
                                                       </div>
                                                       <h4>
-                                                        Cerere finatare
+                                                        New feature
                                                         <small><i class="fa fa-clock-o"></i> 10:42 AM</small>
                                                       </h4>
-                                                      <p>initiator: Ion Popa</p>
+                                                      <p>from: George Maxwell</p>
                                                     </a>
                                                   </li>
                                                 </ul>
                                               </li>
-                            -->
+
                             <li class="footer"><a href="#">See all new notifications</a></li>
                         </ul>
                     </li><!-- /.messages-menu -->
@@ -248,38 +242,19 @@
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!-- The user image in the navbar-->
-                            <img src="http://www.gravatar.com/avatar/d37423cab976ea5c2c657bccf32dfb50?d=http%3A%2F%2Fc-s.ro%2F_docs%2Fmedia%2Fimages%2Fanonimus.jpg&s=160" class="user-image" alt="Max Mustermann" />
+                            <img src="https://www.gravatar.com/avatar/0000000000?d=mp&s=160" class="user-image val-user-avatar"/>
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs">Max Mustermann</span>
+                            <span class="hidden-xs val-user-fullname">Max Mustermann</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
                             <li class="user-header">
-                                <img src="http://www.gravatar.com/avatar/d37423cab976ea5c2c657bccf32dfb50?d=http%3A%2F%2Fc-s.ro%2F_docs%2Fmedia%2Fimages%2Fanonimus.jpg&s=160" class="img-circle" alt="Max Mustermann" />
-                                <p>
-                                    Max Mustermann                      <small>todo: User role</small>
-                                </p>
+                                <img src="https://www.gravatar.com/avatar/0000000000?d=mp&s=160" class="img-circle val-user-avatar"/>
+                                <p><span class="val-user-fullname">Max Mustermann</span><br><span class="user-role">Role:&nbsp;</span><span class="val-user-role user-role">User role</span><small class="val-user-email">user@domain</small></p>
                             </li>
-                            <!-- Menu Body -->
-                            <!-- to be done
-                                              <li class="user-body">
-                                                <div class="">
-                                                <strong>Role</strong>
-                                                </br>address, email
-                                                <a href="#">Detalii</a>
-                                                </div>
-                                                <div class="col-xs-6 text-center">
-                                                  <a href="#">Info</a>
-                                                </div>
-                                                <div class="col-xs-6 text-center">
-                                                  <a href="#">Status</a>
-                                                </div>
-                                              </li>
-                            -->
-                            <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="#" data-action="ux-editprofile" class="btn btn-default btn-flat">Profile</a>
+                                    <a href="#" class="btn btn-default btn-flat do-editprofile">Profile</a>
                                 </div>
                                 <div class="pull-right">
                                     <a href="./logout.php" class="btn btn-default btn-flat">Sign out</a>
@@ -298,16 +273,15 @@
     <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
-
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="http://www.gravatar.com/avatar/d37423cab976ea5c2c657bccf32dfb50?d=http%3A%2F%2Fc-s.ro%2F_docs%2Fmedia%2Fimages%2Fanonimus.jpg&s=160" class="img-circle" alt="User Image" />
+                    <img src="https://www.gravatar.com/avatar/0000000000?d=mp&s=160" class="img-circle val-user-avatar" alt="User Image" />
                 </div>
                 <div class="pull-left info">
-                    <p>Max Mustermann</p>
+                    <p class="val-user-fullname">Max Mustermann</p>
                     <!-- Status -->
-                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                    <a href="#my/profile"><i class="fa fa-circle text-success"></i><span class="val-user-role">user role</span></a>
                 </div>
             </div>
 
@@ -579,24 +553,28 @@ Nothing to see!
 <script src="./assets/dist/js/notification.js" type="text/javascript"></script>
 <!-- TAO App -->
 <script src="./assets/libs/underscore-min.js" type="text/javascript"></script>
-<script src="./assets/dist/js/general-functions.js" type="text/javascript"></script>
 <script src="./assets/dist/js/router.js" type="text/javascript"></script>
 <!-- NPs -->
 <script src="./assets/libs/np/jquery.npmodalconfirm.js" type="text/javascript"></script>
 <!-- Base64  -->
 <script src="./assets/libs/base64/base64.min.js" type="text/javascript"></script>
+<!-- CryptoJS  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js" type="text/javascript"></script>
+
+<!-- moment.js -->
+<script type="text/javascript" src="./assets/libs/momentjs/moment.min.js"></script>
+<!-- chart.js -->
+<script type="text/javascript" src="./assets/libs/chartjs/chartjs.min.js"></script>
 <!-- TAO UI functions  -->
 <script src="./assets/dist/js/ui.js" type="text/javascript"></script>
+
 
 </body>
 </html>
 
 <script type="text/javascript" src="./assets/libs/jquery.idle/jquery.idle.js"></script>
 <script type="text/javascript" src="./assets/libs/modernizr/modernizr.custom.input.js"></script>
-<!-- moment.js -->
-<script type="text/javascript" src="./assets/libs/momentjs/moment.min.js"></script>
-<!-- chart.js -->
-<script type="text/javascript" src="./assets/libs/chartjs/chartjs.min.js"></script>
 
 <script>
     //Modernizr.load({

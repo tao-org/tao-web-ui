@@ -772,11 +772,9 @@ updateModuleStatus("", {"state":"completed", "progress":68});
 	})
     .on("click",".l-n-p-o", function(e){
         var id = $(this).closest(".n-p-o-wrapp").attr("id");
-        alert(id);
     })
     .on("click",".l-n-p-i", function(e){
         var id = $(this).closest(".n-p-i-wrapp").attr("id");
-        alert(id);
     });
 
 //tooltip
@@ -789,14 +787,13 @@ $( document ).uitooltip({
             return "port data descriptor:"
                 +"<p class=\"tooltip-paragraph\">"
                 +"<span>format type: "+ fd.dataDescriptor.formatType +"</span>"
-                +"<br><span>crs: "+ fd.dataDescriptor.crs +"</span>"
-                +"<br><span>dimension: "+ fd.dataDescriptor.dimension +"</span>"
-                +"<br><span>geometry: "+ fd.dataDescriptor.geometry +"</span>"
-                +"<br><span>location: "+ fd.dataDescriptor.location +"</span>"
+                //+"<br><span>crs: "+ fd.dataDescriptor.crs +"</span>"
+                //+"<br><span>dimension: "+ fd.dataDescriptor.dimension +"</span>"
+                //+"<br><span>geometry: "+ fd.dataDescriptor.geometry +"</span>"
+                //+"<br><span>location: "+ fd.dataDescriptor.location +"</span>"
                 +"<br><span>sensorType: "+ fd.dataDescriptor.sensorType +"</span>"
                 +"</p>";
-
-        }
+        };
         if ( element.is( ".l-n-p-i" ) ) {
             id = $(this).closest(".n-p-i-wrapp").attr("id");
             return renderPortTP(wfPlumbCanvasData.ports[id].fullData);

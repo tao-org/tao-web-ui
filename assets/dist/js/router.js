@@ -22,6 +22,7 @@ var taoLoadingDiv = $("#myModalLoading");
 var routeTags = [];
 var routeFilters = {};
 var userOpStack = [];  //holder for aditional user action parameters
+
 //UI loading indicator management
 function routeLoading(action){
     if(action === "show"){
@@ -67,7 +68,6 @@ $(function () {
     $(window).on('hashchange', function(){
         //check authtoken
         var tokenKey = _settings.readCookie("tokenKey");
-        //var tokenKey = _settings.readCookie("xauthtoken");
         if ((tokenKey==="") || (tokenKey == null)){
             $("body").empty();
             window.location = 'login.html';

@@ -66,6 +66,17 @@ $(function () {
         e.preventDefault();
         f();
     });
+
+    $(".do-logout").on("click", function(e){
+        e.preventDefault();
+        taoUserProfile = {};
+        _settings.createCookie("tokenKey",'');
+        _settings.createCookie("userMatrix",'{}');
+        location.reload(true);
+        //alert("logout");
+    });
+
+
 }());
 
 

@@ -751,12 +751,6 @@ updateModuleStatus("", {"state":"completed", "progress":68});
             $propbar.menu("open", {"nodeid":nodeID});
             console.log("propbar invocation");
     })
-    .on( "click",".btn-action-lockmodule", function(e) { //lock module on lock icon click
-            e.stopPropagation();
-            var nodeID = $(this).closest(".w").attr("id");
-            jsp.setDraggable(nodeID, false);
-            console.log("lock node invocation");
-    })
 	.on( "click", function(e) {
 		//check if own event is propagated and do nothing
 		if(e.target !== this){

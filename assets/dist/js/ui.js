@@ -84,12 +84,60 @@ $(function () {
 }());
 
 
+(function(){
+    var getUserFiles = $.ajax({ cache: false,
+        url: baseRestApiURL + "files/user/",
+        dataType : 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": authHeader
+        }
+    });
+    function f(){
+        $.when(getUserFiles)
+            .done(function (getUserFilesResponse) {
+                var sumFiles = 0;
+                var countFolders = 0;
+                var countFiles = 0;
+                $.each( getUserFilesResponse, function( key, value ) {
+                    if(value.relativePath !== ""){
+                        if(value.folder){
+                            countFolders ++;
+                        }else{
+                            countFiles ++;
+                            sumFiles += value.size;
+                        }
+                    }
+                });
+                taoUI_UpdateUserQuota({
+                    "total":parseFloat(taoUserProfile.userQota),
+                    "used":getFileSizeAsGB(sumFiles),
+                    "um":"GB",
+                    "files":countFiles,
+                    "folders":countFolders
+                });
+            })
+            .fail(function (jqXHR, textStatus) {
+                alert("Could not determine user storage usage... Try later.");
+            });
+    }
+    $(document).on( "quota:update", function( event ) {
+        f();
+    });
+}());
+
+
+
 (function () {
     var $elQuota = $("#wrapper-quota");
     var q = {
         "total":100,
         "used":0,
-        "um":"GB"
+        "um":"GB",
+        "files":0,
+        "folders":0
     };
     function f(v){
         $.extend(q, v);
@@ -98,6 +146,7 @@ $(function () {
         $elQuota.find(".val-quota-pct").html(pct+"%");
         if(pct>100){pct = 100;}
         $elQuota.find(".val-quota-pct-ui").width(pct+"%");
+        $elQuota.find(".val-quota-usage-details").html("using: "+q.used+"GB<br>"+q.files+" Files, "+q.folders+" Folders");
         $elQuota.show();
         return true;
     }

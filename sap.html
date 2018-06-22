@@ -361,6 +361,7 @@
                             <div class="progress progress-xxs">
                                 <div class="progress-bar progress-bar-danger val-quota-pct-ui" style="width: 0"></div>
                             </div>
+                            <p style="color: #4b646f;"><small class="val-quota-usage-details">using: 0GB<br>0 Files, 0 Folders</small></p>
                         </a>
                     </li>
                 </ul><!-- /.control-sidebar-menu -->
@@ -705,5 +706,9 @@ Nothing to see!
 //					},
             idle: 60000
         });
+
+
+        //trigger some events
+        $(document).trigger( "quota:update" );
     });
 </script>

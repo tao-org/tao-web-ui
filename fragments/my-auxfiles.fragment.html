@@ -1,0 +1,314 @@
+<!-- Content Header (Page header) -->
+<section class="content-header tao-async-ph">
+    <h1>My Files<small>Full list of user <strong>Files</strong>.</small></h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">My Files</li>
+    </ol>
+</section>
+<!-- /Content Header (Page header) -->
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+			<div class="box">
+				<div class="box-header empty"></div>
+				<div class="box-body">
+					<div class="col-md-12 col-sm-12">
+						<div id="toolbox-browser" class="toolbox">
+							<div id="components" class="treeview"></div>
+							<div id="properties" class="hidden">
+								<div id="rm-previewattributes" class="row">
+									<div class="col-xs-12">
+										<div class="callout box-shadow--6dp">
+											<h4 id="file-name">File name</h4>
+											<table id="attributes-list" class="table table-hover">
+												<thead><tr><th style="width:30%">Name</th><th>Value</th></tr></thead>
+												<tbody></tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="callout callout-info lead filedownload-holder">
+											<h4>Download! (<span id="file-size">size:</span>)</h4>
+											<p>You can access <a id="downloadFile" href="#"><button class="btn bg-green btn-flat"><i class="fa fa-download fa-fw"></i> your file directly</button></a></p>
+										</div>
+									</div>
+								</div>
+								<div class="row hidden">
+									<div class="col-xs-12">
+										<div class="callout callout-info lead filedelete-holder">
+											<h4>Delete!</h4>
+											<p>You can <a id="deleteFile" href="#"><button class="btn bg-green btn-flat"><i class="fa fa-trash fa-fw"></i> delete your file</button></a></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+			   </div>
+				<div class="box-header empty"></div>
+			</div>
+        </div>
+    </div>
+</section>
+
+<style>
+.toolbox {
+	display: table;
+	width:100%;
+}
+.toolbox>div {
+	display: table-cell;
+	vertical-align: top;
+}
+.toolbox>div:last-child {
+	width: 47%;
+	padding: 0 1% 0 2%;
+}
+.toolbox .treeview input[type="checkbox"] {
+	display: none;
+}
+.toolbox .treeview label, .toolbox .treeview a {
+	display: block;
+	position: relative;
+	padding: 5px 0 5px 25px;
+	line-height: 1.1em;
+	cursor: pointer;
+	margin-bottom: 0;
+}
+.toolbox .treeview label {
+	color: #5c5d5e;
+}
+.toolbox .treeview a {
+	width: 100%;
+}
+.toolbox .treeview a:hover, .toolbox .treeview a:focus {
+	background-color: #ecf0f5;
+}
+.toolbox .treeview a span {
+	float: right;
+	padding: 0 20px 0 0;
+	width: 110px;
+	text-align: right;
+	color: #5c5d5e;
+}
+.toolbox .treeview label::before, .toolbox .treeview  a::before {
+	display: block;
+	position: absolute;
+	top: 6px;
+	left: 5px;
+	font-family: 'FontAwesome';
+}
+.toolbox .treeview label::before {
+	content: '\f07b'; /* closed folder */
+}
+.toolbox .treeview input:checked+label::before {
+	content: '\f07c'; /* open folder */
+}
+.toolbox .treeview a::before {
+	content: '\f068'; /* dash */
+}
+.toolbox .treeview .sub {
+	display: none;
+	margin-left: 20px;
+}
+.toolbox .treeview input:checked ~ .sub {
+	display: block;
+}
+#properties .box-header {
+	overflow-x: hidden;
+}
+#properties .callout {
+	padding-right: 20px;
+	border-color: #0097bc;
+}
+#properties #file-name {
+    margin-top: -15px;
+    margin-left: -15px;
+    margin-right: -20px;
+    background-color: #0097bc;
+    color: white;
+    padding: 10px;
+    border-top: 15px solid #00c0ef;
+}
+#properties table {
+	margin-bottom: 0;
+}
+#properties table td {
+	padding: 5px 10px;
+	line-height: 1.5em;
+}
+</style>
+
+<script>
+var compsTree = $("#components.treeview");
+
+$.ajax({
+	url: baseRestApiURL + "files/user/",
+	type: "GET",
+	dataType: 'json',
+	beforeSend: function(xhr) {
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.setRequestHeader("Authorization", authHeader);
+	},
+	error: function (jqXHR, textStatus) {
+		alert("Error while loading files.");
+		compsTree.closest(".box").addClass("box-warning");
+	},
+	success: function(response) {
+		compsTree.closest(".box").addClass("box-success");
+		renderTree(response);
+	}
+});
+
+function renderTree(response) {
+	compsTree.html("");
+	
+	// Render tree folders
+	$.each(response, function (index, file) {
+		if (file.folder && file.relativePath != "") {
+			renderFolder(file.relativePath);
+		}
+	});
+	
+	// Render files
+	$.each(response, function (index, file) {
+		if (!file.folder) {
+			var size = parseInt(file.size);
+			if (size < 1024) {
+				size = size + " B";
+			} else if (size < 1024*1024) {
+				size = parseFloat(size / 1024, 2).toFixed(2) + " KB";
+			} else if (size < 1024*1024*1024) {
+				size = parseFloat(size / 1024 / 1024, 2).toFixed(2) + " MB";
+			} else if (size < 1024*1024*1024*1024) {
+				size = parseFloat(size / 1024 / 1024 / 1024, 2).toFixed(2) + " GB";
+			} else {
+				size = parseFloat(size / 1024 / 1024 / 1024 / 1024, 2).toFixed(2) + " TB";
+			}
+			var name   = file.relativePath.substring(file.relativePath.lastIndexOf("\\") + 1);
+			var href   = baseRestApiURL + 'files/?fileName=' + file.relativePath;
+			var type   = file.relativePath.substring(file.relativePath.lastIndexOf("."));
+			var folder = getParentFolder(file.relativePath);
+			var element = $('<a href="#">' + name + '<span>' + size + '</span>' + '<span>' + type + '</span>' + '</a>');
+			
+			if (!file.attributes) { file.attributes = []; }
+			file.attributes.fileSize = size;
+			file.attributes.fileName = name;
+			file.attributes.uri = href;
+			
+			element.data("attributes", file.attributes);
+			folder.append(element);
+		}
+	});
+}
+
+function getParentFolder(relativePath) {
+	var parentId = relativePath.substring(0, relativePath.lastIndexOf("\\"));
+	var parent = $("input[id='" + parentId.replace("\\", "\\\\") + "']").parent().find(">.sub");
+	if (parent.length == 0) { parent = compsTree; }
+	return parent;
+}
+
+function renderFolder(relativePath) {
+	// get parent, render if null
+	var parent = getParentFolder(relativePath);
+	if (parent == compsTree && relativePath.indexOf("\\") >= 0 ) {
+		renderFolder(relativePath.substring(0, relativePath.lastIndexOf("\\")));
+	}
+	
+	var folder = parent.find("#" + relativePath);
+	// render folder if null
+	if (folder.length == 0) {
+		var id = relativePath;
+		var str = '<div><input type="checkbox" id="' + id + '"><label for="'  + id +  '">' + relativePath.substring(relativePath.lastIndexOf("\\") + 1) + '</label><div class="sub"></div></div>';
+		parent.append($(str));
+	}
+}
+
+function displayPreview(attributes) {
+	$("#properties #file-name").text(attributes.fileName);
+	var tableBody = $("#properties #rm-previewattributes #attributes-list tbody");
+	tableBody.html("");
+	
+	var size = 0;
+	$.each(attributes, function (name, value) {
+		tableBody.append('<tr><td>' + name + '</td><td>' + value + '</td></tr>');
+		size ++;
+	});
+	if (size == 0) {
+		tableBody.append('<tr><td>-</td><td>-</td></tr>');
+	}
+	
+	$("#properties #file-size").text(attributes.fileSize);
+	$("#properties .filedownload-holder a").attr("href", attributes.uri);
+	$("#properties .filedownload-holder a").data("attributes", attributes);
+	
+	$("#properties").removeClass("hidden");
+}
+
+// Download file using current user's credentials
+$("#toolbox-browser").on("click", function (e) {
+	if (e.target.id == "toolbox-browser") {
+		$("#properties").addClass("hidden");
+	}
+});
+
+$("#components").on("click", "a", function (e) {
+	e.preventDefault();
+	displayPreview($(this).data("attributes"));
+});
+
+$("#properties .filedownload-holder").on("click", "a", function (e) {
+	e.preventDefault();
+	
+	var attributes = $(this).data("attributes");
+	var filename   = attributes.fileName;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', this.href, true);
+	xhr.setRequestHeader("Authorization", authHeader);
+	xhr.responseType = 'blob';
+	xhr.onload = function(e) {
+		if (this.status == 200) {
+	        var blob = new Blob([this.response], { type: this.getResponseHeader('Content-Type') });
+			
+	        if (typeof window.navigator.msSaveBlob !== 'undefined') {
+	            // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created.
+				// These URLs will no longer resolve as the data backing the URL has been freed."
+	            window.navigator.msSaveBlob(blob, filename);
+	        } else {
+	            var URL = window.URL || window.webkitURL;
+	            var downloadUrl = URL.createObjectURL(blob);
+				
+				// use HTML5 a[download] attribute to specify filename
+				var a = document.createElement("a");
+				// safari doesn't support this yet
+				if (typeof a.download === 'undefined') {
+					window.location = downloadUrl;
+				} else {
+					a.href = downloadUrl;
+					a.download = filename;
+					document.body.appendChild(a);
+					a.click();
+				}
+	            setTimeout( function () { URL.revokeObjectURL(downloadUrl); $(a).remove(); }, 100 ); // cleanup
+	        }
+		}
+	}
+	xhr.send();
+});
+
+$("#properties .filedelete-holder").on("click", "a", function (e) {
+	e.preventDefault();
+	return false;
+});
+
+//# sourceURL=my-auxfiles.js
+</script>
+
+<!-- /Main content -->

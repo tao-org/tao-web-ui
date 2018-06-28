@@ -456,14 +456,15 @@
             $(".ckattr-ok", $pEL).fadeIn();
         }
         $.ajax({
+            cache: false,
             type: "get",
-            url: baseRestApiURL + "topology/"+val+"/?rnd=" + Math.random(),
+            url: baseRestApiURL + "topology/"+val+"/",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             },
             error : function (jqXHR, textStatus, errorThrown) {
                 if( jqXHR.status === 500 ){
@@ -491,14 +492,15 @@
 ////////////
     function getComponentDataById(compID){
         $.ajax({
+            cache: false,
             type: "get",
-            url: baseRestApiURL + "component/"+compID+"/?rnd=" + Math.random(),
+            url: baseRestApiURL + "component/"+compID+"/",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             },
             error : function (jqXHR, textStatus, errorThrown) {
                 if( jqXHR.status === 500 ){
@@ -618,15 +620,15 @@
 
 
         //get all availlable dockers
-        var getAllDocker = $.ajax({ cache: false,
-            //url: appConfig.baseURL+appConfig.restURL+"/docker/",
-            url: baseRestApiURL + "docker/?rnd=" + Math.random(),
+        var getAllDocker = $.ajax({
+            cache: false,
+            url: baseRestApiURL + "docker/",
             dataType : 'json',
             type: 'GET',
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             }
         });
 
@@ -862,14 +864,15 @@
                 return;
             }
             $.ajax({
-                url: baseRestApiURL + "component/?rnd=" + Math.random(),
+                cache: false,
+                url: baseRestApiURL + "component/",
                 dataType: 'json',
                 type: 'POST',
                 data: JSON.stringify(formData),
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "Authorization": authHeader
+                    "X-Auth-Token": window.tokenKey
                 },
                 error : function (jqXHR, textStatus, errorThrown) {
                     if(jqXHR.status === 500){

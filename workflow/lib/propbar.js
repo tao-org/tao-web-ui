@@ -65,7 +65,8 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         if($propbar.qData.id === null){
             method = 'POST';
         }
-        var putOneQuery = $.ajax({ cache: false,
+        var putOneQuery = $.ajax({
+            cache: false,
             url: baseRestApiURL + "datasource/query/",
             dataType : 'json',
             type: method,
@@ -73,7 +74,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             }
         });
         $.when(putOneQuery)
@@ -100,7 +101,8 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             cV.push(onePair);
         });
         $propbar.nodeData.customValues = cV;
-        var putOneComponent = $.ajax({ cache: false,
+        var putOneComponent = $.ajax({
+            cache: false,
             url: baseRestApiURL + "workflow/node?workflowId=" + currentWfID,
             dataType : 'json',
             type: 'PUT',
@@ -108,7 +110,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             }
         });
         $.when(putOneComponent)
@@ -195,14 +197,15 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         $(".val-propbar-details", widgetRootEl).html(html_details);
         //get current query
         var dsId = wfPlumbCanvasData.nodesMap[nid];
-        var getQBody = $.ajax({ cache: false,
+        var getQBody = $.ajax({
+            cache: false,
             url: baseRestApiURL + "datasource/query/?userId=admin&nodeId=" + dsId,
             dataType : 'json',
             type: 'GET',
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             }
         });
         $.when(getQBody)

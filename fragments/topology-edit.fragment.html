@@ -134,14 +134,15 @@
     function getHostNameData(){
         var editHostmane = _mLIST.dataOpQueue[0].dna.hostName;
         $.ajax({
+            cache: false,
             type: "get",
-            url: baseRestApiURL + "topology/"+editHostmane+"/?rnd=" + Math.random(),
+            url: baseRestApiURL + "topology/"+editHostmane+"/",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             },
             error : function (jqXHR, textStatus, errorThrown) {
                 if( jqXHR.status === 500 ){
@@ -208,14 +209,15 @@
             };
             console.log(formData);
             $.ajax({
-                url: baseRestApiURL + "topology/"+formData.hostName+"/?rnd=" + Math.random(),
+                cache: false,
+                url: baseRestApiURL + "topology/"+formData.hostName+"/",
                 dataType : 'json',
                 type: 'PUT',
                 data: JSON.stringify(formData),
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "Authorization": authHeader
+                    "X-Auth-Token": window.tokenKey
                 },
                 error : function (jqXHR, textStatus, errorThrown) {
                     console.log("error");

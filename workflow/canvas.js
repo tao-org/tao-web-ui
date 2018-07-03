@@ -60,7 +60,7 @@ tao_resetCanvasData();
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             }
         });
         $.when(putWorkflowById)
@@ -77,14 +77,15 @@ tao_resetCanvasData();
 
     var wf_loadWorkflowById = function(wfId){
         console.log("f:wf_loadWorkflowById , load workflow"+wfId);
-        var getWorkflowById = $.ajax({ cache: false,
+        var getWorkflowById = $.ajax({
+            cache: false,
             url: baseRestApiURL + "workflow/"+wfId+"/?rnd=" + Math.random(),
             dataType : 'json',
             type: 'GET',
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             }
         });
         $.when(getWorkflowById)

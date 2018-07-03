@@ -497,16 +497,15 @@
                     "order": "none"
                 };
                 $.ajax({
+                    cache: false,
                     type: "get",
-                    url: baseRestApiURL + "workflow/?rnd=" + Math.random(),
-//                    crossDomain: true,
+                    url: baseRestApiURL + "workflow/",
                     dataType: "json",
-//                    data: JSON.stringify(lcl_postdata),
                     contentType: "application/json; charset=utf-8",
                     headers: {
                         "Accept": "application/json",
                         "Content-Type": "application/json",
-                        "Authorization": authHeader
+                        "X-Auth-Token": window.tokenKey
                     },
                     error : function (jqXHR, textStatus, errorThrown) {
                         if(( jqXHR.status === 401 ) || ( jqXHR.status === 403 )){
@@ -646,13 +645,14 @@
         };
     deleteProcessingComponentById = function(id){
         $.ajax({
-            url: baseRestApiURL + "component/"+id+"/?rnd=" + Math.random(),
+            cache: false,
+            url: baseRestApiURL + "component/"+id+"/",
             dataType : 'json',
             type: 'DELETE',
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             },
             error : function (jqXHR, textStatus, errorThrown) {
                 console.log("error");
@@ -760,16 +760,16 @@
                 lcl_postdata[attrName] = attrPath;
                 //= {"in":"<cale2>"};
 
-                var startWfExecution = $.ajax({ cache: false,
+                var startWfExecution = $.ajax({
+                    cache: false,
                     url: baseRestApiURL + "orchestrator/start/"+currentWfID+"?rnd=" + Math.random(),
                     dataType : 'json',
                     type: 'POST',
                     data: JSON.stringify(lcl_postdata),
-                    //contentType: "application/json; charset=utf-8",
                     headers: {
                         "Accept": "application/json",
                         "Content-Type": "application/json",
-                        "Authorization": authHeader
+                        "X-Auth-Token": window.tokenKey
                     }
                 });
                 $.when(startWfExecution)
@@ -787,14 +787,15 @@
             }
 
             if(action === 'wf-clone'){
-                var cloneWf = $.ajax({ cache: false,
+                var cloneWf = $.ajax({
+                    cache: false,
                     url: baseRestApiURL + "workflow/clone?workflowId="+currentWfID,
                     dataType : 'json',
                     type: 'POST',
                     headers: {
                         "Accept": "application/json",
                         "Content-Type": "application/json",
-                        "Authorization": authHeader
+                        "X-Auth-Token": window.tokenKey
                     }
                 });
                 $.when(cloneWf)

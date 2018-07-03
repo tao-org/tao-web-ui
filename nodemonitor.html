@@ -150,14 +150,15 @@
     };
 
     function updateMasterMonitorWidget(){
-        $.ajax({ cache: false,
+        $.ajax({
+            cache: false,
             url: baseRestApiURL + "monitor/"+_loadChart.node+"?rnd=" + Math.random(),
             dataType : 'json',
             type: 'GET',
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             }
         }).done(function (getMasterMonitorResponse) {
             //console.log(getMasterMonitorResponse);

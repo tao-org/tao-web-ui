@@ -108,8 +108,9 @@ $(function () {
         routeLoading('show');
         fragmentUrl = hashRoutesMap[hash];
         unsolvedRoute = false;
-        $.ajax({ cache: false,
-                url: fragmentUrl
+        $.ajax({
+            cache: false,
+            url: fragmentUrl
         })
         .done(function (data) {
                 taoDynPageDiv.html(data);

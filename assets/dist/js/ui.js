@@ -23,19 +23,43 @@
  **/
 
 
-//user idetity
-var taoUserProfile = {};
+//user idetity scripts
 //create user profile variable
-$(function () {
-    var cookieProfile = _settings.readCookie("userMatrix");
-    taoUserProfile = JSON.parse(cookieProfile);
-    $(".val-user-fullname").html(taoUserProfile.userFullName);
-    $(".val-user-role").html(taoUserProfile.userRole);
-    $(".val-user-email").html(taoUserProfile.userEmail);
-    var gravatarUrl = "https://www.gravatar.com/avatar/"+taoUserProfile.userEmailMD5+"?d=mp&s=160";
-    $(".val-user-avatar").attr("src", gravatarUrl);
-});
+var taoUserProfile = {};
 
+$(function () {
+
+    var username = _settings.readCookie("TaoUserName");
+    var ajax_getProfileSettings = {
+        "cache": false,
+        "url": "http://localhost:8080/user/"+username,
+        "method": "GET",
+        "headers": {
+            "X-Auth-Token": window.tokenKey
+        }
+    };
+    $.ajax(ajax_getProfileSettings)
+        .done(function (r) {
+            console.log(r);
+            //inject fake user matrix
+            if(r.id){
+                taoUserProfile = r;
+                taoUserProfile.userEmailMD5 = CryptoJS.MD5(r.email).toString();
+                taoUserProfile.userRole = r.groups[0]["name"];
+            }
+            $(".val-user-fullname").html(taoUserProfile.lastName+" "+taoUserProfile.firstName);
+            $(".val-user-role").html(taoUserProfile.userRole);
+            $(".val-user-email").html(taoUserProfile.email);
+            var gravatarUrl = "https://www.gravatar.com/avatar/"+taoUserProfile.userEmailMD5+"?d=mp&s=160";
+            $(".val-user-avatar").attr("src", gravatarUrl);
+            $(document).trigger( "quota:update" );
+        })
+        .fail(function (jqXHR, status, textStatus) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(status);
+        });
+});
 
 
 (function(){
@@ -48,14 +72,18 @@ $(function () {
                 $(".modal-dialog",$elModalProfile).html(data);
                 var gravatarUrl = "https://www.gravatar.com/avatar/"+taoUserProfile.userEmailMD5+"?d=mp&s=160";
                 $(".card-profile img",$elModalProfile).attr("src", gravatarUrl);
-                $(".val-user-fullname",$elModalProfile).html(taoUserProfile.userFullName);
+                $(".val-user-fullname",$elModalProfile).html(taoUserProfile.lastName+" "+taoUserProfile.firstName);
+
+                $(".val-user-fname",$elModalProfile).html(taoUserProfile.firstName);
+                $(".val-user-lname",$elModalProfile).html(taoUserProfile.lastName);
+
                 $(".val-user-role",$elModalProfile).html(taoUserProfile.userRole);
-                $(".val-user-email",$elModalProfile).html(taoUserProfile.userEmail);
-                $(".val-user-email2",$elModalProfile).html(taoUserProfile.userEmail2);
-                $(".val-user-org",$elModalProfile).html(taoUserProfile.userOrg);
-                $(".val-user-name",$elModalProfile).html(taoUserProfile.userName);
-                $(".val-user-phone",$elModalProfile).html(taoUserProfile.userPhone);
-                $(".val-user-quota",$elModalProfile).html(taoUserProfile.userQota);
+                $(".val-user-email",$elModalProfile).html(taoUserProfile.email);
+                $(".val-user-email2",$elModalProfile).html(taoUserProfile.alternativeEmail);
+                $(".val-user-org",$elModalProfile).html(taoUserProfile.organization);
+                $(".val-user-name",$elModalProfile).html(taoUserProfile.username);
+                $(".val-user-phone",$elModalProfile).html(taoUserProfile.phone);
+                $(".val-user-quota",$elModalProfile).html(taoUserProfile.quota);
                 $elModalProfile.modal("show");
             })
             .fail(function (jqXHR, textStatus) {
@@ -91,8 +119,8 @@ $(function () {
         type: 'GET',
         headers: {
             "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": authHeader
+            "Content-Type": "application/json"
+            //"Authorization": authHeader
         }
     });
     function f(){
@@ -112,7 +140,7 @@ $(function () {
                     }
                 });
                 taoUI_UpdateUserQuota({
-                    "total":parseFloat(taoUserProfile.userQota),
+                    "total":parseFloat(taoUserProfile.quota),
                     "used":getFileSizeAsGB(sumFiles),
                     "um":"GB",
                     "files":countFiles,
@@ -198,8 +226,8 @@ $(function () {
             type: 'GET',
             headers: {
                 "Accept": "application/json",
-                "Content-Type": "application/json",
-                "Authorization": authHeader
+                "Content-Type": "application/json"
+                //"Authorization": authHeader
             }
         })
             .done(function (getMonitorNotificationResponse, statusText, xhr) {

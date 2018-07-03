@@ -266,14 +266,15 @@
 
 console.log(JSON.stringify(formData));
             $.ajax({
-                url: baseRestApiURL + "workflow/"+ajaxURL+"?rnd=" + Math.random(),
+                cache: false,
+                url: baseRestApiURL + "workflow/"+ajaxURL,
                 dataType: 'json',
                 type: ajaxType,
                 data: JSON.stringify(formData),
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "Authorization": authHeader
+                    "X-Auth-Token": window.tokenKey
                 },
                 error : function (jqXHR, textStatus, errorThrown) {
                     if(jqXHR.status === 500){
@@ -312,14 +313,15 @@ console.log(JSON.stringify(formData));
 
     function getWFDataById (wfID){
         $.ajax({
+            cache: false,
             type: "get",
-            url: baseRestApiURL + "workflow/"+wfID+"/?rnd=" + Math.random(),
+            url: baseRestApiURL + "workflow/"+wfID+"/",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             },
             error : function (jqXHR, textStatus, errorThrown) {
                 if( jqXHR.status === 500 ){
@@ -359,6 +361,5 @@ console.log(JSON.stringify(formData));
         });
         return true;
     }
-
     //# sourceURL=workflow-plus.js
 </script>

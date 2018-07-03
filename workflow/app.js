@@ -131,7 +131,8 @@ jsPlumb.bind("tao_updateNodePosition", function(params) {
         alert("an error occured. Please reload your workflow.")
     }
     var lcl_postdata = wfPlumbCanvasData.nodes[params[0]];
-    var putOneComponent = $.ajax({ cache: false,
+    var putOneComponent = $.ajax({
+        cache: false,
         url: baseRestApiURL + "workflow/node?workflowId=" + currentWfID,
         dataType : 'json',
         type: 'PUT',
@@ -139,7 +140,7 @@ jsPlumb.bind("tao_updateNodePosition", function(params) {
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": authHeader
+            "X-Auth-Token": window.tokenKey
         }
     });
     $.when(putOneComponent)
@@ -154,7 +155,8 @@ jsPlumb.bind("tao_updateNodePosition", function(params) {
 jsPlumb.bind("tao_dropNewNode", function(params) {
     console.log("plumb:tao_dropNewNode");
     var lcl_postdata = params[0].fullData;
-    var postOneComponent = $.ajax({ cache: false,
+    var postOneComponent = $.ajax({
+        cache: false,
         url: baseRestApiURL + "workflow/node?workflowId=" + currentWfID,
         dataType : 'json',
         type: 'POST',
@@ -162,7 +164,7 @@ jsPlumb.bind("tao_dropNewNode", function(params) {
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": authHeader
+            "X-Auth-Token": window.tokenKey
         }
     });
     $.when(postOneComponent)
@@ -191,54 +193,59 @@ jsPlumb.bind("tao_dropNewNode", function(params) {
 jsPlumb.bind("tao_loadWorkflowById", function() {
     tao_resetShadowData();
     tao_resetCanvasData();
-    var getAllComponents = $.ajax({ cache: false,
-        url: baseRestApiURL + "component/?rnd=" + Math.random(),
+    var getAllComponents = $.ajax({
+        cache: false,
+        url: baseRestApiURL + "component/",
         dataType : 'json',
         type: 'GET',
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": authHeader
+            "X-Auth-Token": window.tokenKey
         }
     });
-    var getAllQueries = $.ajax({ cache: false,
-        url: baseRestApiURL + "query/?rnd=" + Math.random(),
+    var getAllQueries = $.ajax({
+        cache: false,
+        url: baseRestApiURL + "query/",
         dataType : 'json',
         type: 'GET',
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": authHeader
+            "X-Auth-Token": window.tokenKey
         }
     });
-	var getAllDatasources = $.ajax({ cache: false,
-        url: baseRestApiURL + "datasource/?rnd=" + Math.random(),
+	var getAllDatasources = $.ajax({
+        cache: false,
+        url: baseRestApiURL + "datasource/",
         dataType : 'json',
         type: 'GET',
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": authHeader
+            "X-Auth-Token": window.tokenKey
         }
     });
-    var getAllSensors = $.ajax({ cache: false,
-        url: baseRestApiURL + "query/sensor/?rnd=" + Math.random(),
+    var getAllSensors = $.ajax({
+        cache: false,
+        url: baseRestApiURL + "query/sensor/",
         dataType : 'json',
         type: 'GET',
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": authHeader
+            "X-Auth-Token": window.tokenKey
         }
     });
-    var getAllDockers = $.ajax({ cache: false,
+    var getAllDockers = $.ajax({
+        cache: false,
         url: baseRestApiURL + "docker/",
         dataType : 'json',
         type: 'GET',
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": authHeader
+            "X-Auth-Token": window.tokenKey
         }
     });
 
@@ -549,7 +556,8 @@ jsPlumb.ready(function () {
         //check if link exists or is just a revert connection event.
         //check if parent node exists before calling delete
         if(_.invert(wfPlumbCanvasData.nodesMap)[lcl_nodeId]){
-            var delOneLink = $.ajax({ cache: false,
+            var delOneLink = $.ajax({
+                cache: false,
                 url: baseRestApiURL + "workflow/link?nodeId="+lcl_nodeId,
                 dataType : 'json',
                 data: JSON.stringify(lcl_payload),
@@ -557,7 +565,7 @@ jsPlumb.ready(function () {
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "Authorization": authHeader
+                    "X-Auth-Token": window.tokenKey
                 }
             });
             $.when(delOneLink)
@@ -601,14 +609,15 @@ jsPlumb.ready(function () {
         console.log("waw connection binded event, update model ...");
         if(wfPlumbCanvasData.loaded){
             //put connection on server
-            var putOneConnection = $.ajax({ cache: false,
+            var putOneConnection = $.ajax({
+                cache: false,
                 url: baseRestApiURL + "workflow/link?sourceNodeId="+s[1]+"&sourceTargetId="+s[2]+"&targetNodeId="+t[1]+"&targetSourceId=" + t[2],
                 dataType : 'json',
                 type: 'POST',
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "Authorization": authHeader
+                    "X-Auth-Token": window.tokenKey
                 }
             });
             $.when(putOneConnection)
@@ -659,7 +668,8 @@ jsPlumb.ready(function () {
 	    //delete node from server
         console.log("delete node id:"+el);
 
-        var delOneNode = $.ajax({ cache: false,
+        var delOneNode = $.ajax({
+            cache: false,
             url: baseRestApiURL + "workflow/node?workflowId="+currentWfID,
             dataType : 'text',
             data: JSON.stringify(wfPlumbCanvasData.nodes[el]),
@@ -667,7 +677,7 @@ jsPlumb.ready(function () {
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             }
         });
         $.when(delOneNode)

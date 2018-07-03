@@ -161,14 +161,15 @@
         }
 
         $.ajax({
+            cache: false,
             type: "get",
-            url: baseRestApiURL + "topology/"+val+"/?rnd=" + Math.random(),
+            url: baseRestApiURL + "topology/"+val+"/",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": authHeader
+                "X-Auth-Token": window.tokenKey
             },
             error : function (jqXHR, textStatus, errorThrown) {
                 if( jqXHR.status === 404 ){
@@ -249,6 +250,7 @@
                 return false;
             }
             $.ajax({
+                cache: false,
                 url: baseRestApiURL + "topology/?rnd=" + Math.random(),
                 dataType : 'json',
                 type: 'POST',
@@ -256,7 +258,7 @@
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "Authorization": authHeader
+                    "X-Auth-Token": window.tokenKey
                 },
                 error : function (jqXHR, textStatus, errorThrown) {
                     if(jqXHR.status === 500){

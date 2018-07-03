@@ -331,16 +331,15 @@
                     "order": "none"
                 };
                 $.ajax({
+                    cache: false,
                     type: "get",
-                    url: baseRestApiURL + "query/?rnd=" + Math.random(),
-//                    crossDomain: true,
+                    url: baseRestApiURL + "query/",
                     dataType: "json",
-//                    data: JSON.stringify(lcl_postdata),
                     contentType: "application/json; charset=utf-8",
                     headers: {
                         "Accept": "application/json",
                         "Content-Type": "application/json",
-                        "Authorization": authHeader
+                        "X-Auth-Token": window.tokenKey
                     },
                     error : function (jqXHR, textStatus, errorThrown) {
                         if(( jqXHR.status === 401 ) || ( jqXHR.status === 403 )){

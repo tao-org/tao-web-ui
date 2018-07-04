@@ -8,7 +8,7 @@
 </section>
 <!-- /Content Header (Page header) -->
 <!-- Main content -->
-<section class="content">
+<section id="tree-content" class="content">
     <div class="row">
         <div class="col-md-12">
 			<div class="box">
@@ -124,12 +124,19 @@
 .toolbox .treeview input:checked ~ .sub {
 	display: block;
 }
+#properties{
+	position: fixed;
+	right: 1%;
+	margin-top: 30px;
+	top: 0;
+}
 #properties .box-header {
 	overflow-x: hidden;
 }
 #properties .callout {
 	padding-right: 20px;
 	border-color: #3c8dbc;
+	background-color: white;
 }
 #properties #file-name {
     margin-top: -15px;
@@ -166,7 +173,7 @@ $.ajax({
 	beforeSend: function(xhr) {
 		xhr.setRequestHeader("Accept", "application/json");
 		xhr.setRequestHeader("Content-Type", "application/json");
-		xhr.setRequestHeader("Authorization", authHeader);
+		xhr.setRequestHeader("X-Auth-Token", tokenKey);
 	},
 	error: function (jqXHR, textStatus) {
 		alert("Error while loading files.");
@@ -267,7 +274,7 @@ function setPreviewImageBase64(attributes) {
 			$.ajax({
 				url: attributes.fileInfo.uri.replace("?fileName=", "preview?fileName="),
 				type: "GET",
-				beforeSend: function(xhr) { xhr.setRequestHeader("Authorization", authHeader); },
+				beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
 				success: function(response) {
 					$("#properties .imagepreview-holder img").attr("src", response == "" ? "" : "data:image/jpeg;base64, " + response);
 					$("#properties .imagepreview-holder").removeClass("hidden");
@@ -316,6 +323,7 @@ $("#toolbox-browser").on("click", function (e) {
 
 $("#components").on("click", "a", function (e) {
 	e.preventDefault();
+	adjustPropertiesPosition();
 	displayPreview($(this).data("attributes"));
 });
 
@@ -367,6 +375,16 @@ $("#properties .filedownload-holder").on("click", "a", function (e) {
 $("#properties .filedelete-holder").on("click", "a", function (e) {
 	e.preventDefault();
 	return false;
+});
+
+function adjustPropertiesPosition() {
+	var scrollTop  = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
+	var treeTop    = $("#tree-content>.row").offset().top;
+	var contentTop = $("#tree-content>.row").offset().top;
+	$("#properties").css({ top: scrollTop >= treeTop ? "" : (contentTop -  scrollTop) + "px" });
+}
+$(document).on("ready scroll resize", function() {
+	adjustPropertiesPosition();
 });
 
 //# sourceURL=my-auxfiles.js

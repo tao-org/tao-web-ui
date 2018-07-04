@@ -292,3 +292,41 @@ btn-avatar{
 .tbl-edt textarea {
     resize: none;
 }
+
+/*pni editable*/
+.pni-editable{
+
+}
+
+.pni-editable .pni-editable-input {
+    display: none;
+    background: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0 0 10px 0;
+}
+.pni-editable .pni-editable-input:focus {
+    outline: none;
+    border-width: 0 0 1px;
+    border-color: black;
+}
+.pni-editable .pni-editable-btn{
+    cursor:pointer;
+}
+.pni-editable .pni-editable-btn:hover{
+    color: #367fa9;
+}
+
+.pni-editable.edit .pni-editable-input {
+    display: inline;
+}
+
+.pni-editable.edit .pni-editable-btn{
+    display:none;
+}
+.pni-editable.edit span{
+    display:none;
+}
+
+
+/**/

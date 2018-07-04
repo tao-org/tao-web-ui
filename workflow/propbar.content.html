@@ -1,4 +1,5 @@
-<app-modal-overlay><app-modal role="dialog" tabindex="-1">
+<app-modal-overlay>
+<app-modal role="dialog" tabindex="-1">
 	<div class="app-title-line">
 		<button class="app-dismiss">
 			<svg viewBox="0 0 24 24" width="24px" height="24px" x="0" y="0" preserveAspectRatio="xMinYMin meet" class="" focusable="false"><path d="M20,5.32L13.32,12,20,18.68,18.66,20,12,13.33,5.34,20,4,18.68,10.68,12,4,5.32,5.32,4,12,10.69,18.68,4Z" class="" style="fill: currentColor"></path></svg>
@@ -6,12 +7,16 @@
 		<span class="app-propbar-details">Node editor</span>
 		<div class="app-user-avatar">
 			<a class="" href="#" role="button" tabindex="0" title="Component logo" aria-expanded="false">
-				<img class="app-user-avatar-img" src="./media/module-otb.png" class="user-image" alt="Logo">
+				<img class="app-user-avatar-img" src="./media/module-otb.png" alt="component logo">
 			</a>
 		</div>
 	</div>
 	<app-modal-header>
-		<h1 class="val-propbar-name">Unknown</h1>
+        <h1 class="pni-editable">
+            <span class="val-propbar-name">Unknown</span>
+            <i class="fa fa-pencil fa-fw pni-editable-btn" aria-hidden="true"></i>
+            <input class="pni-editable-input" type="text" value="Unknown"/>
+        </h1>
 		<h2 class="val-propbar-componentid">Unknown</h2>
         <p class="val-propbar-details"></p>
 	</app-modal-header>
@@ -87,12 +92,41 @@
 			</div>
 
             <div class="app-debug"></div>
-
-
 	</app-modal-content>
 	<app-modal-footer>
 	</app-modal-footer>
-</app-modal></app-modal-overlay>
+</app-modal>
+</app-modal-overlay>
+<script>
+    $( document ).ready(function() {
+        //prevent keyup to bubble outside the propbar and trigger events
+        $("app-modal")
+            .on("keyup",function(e){
+                event.stopPropagation();
+            })
+            .on("click", ".pni-editable-btn", function(){
+                var $parent = $(this).parent();
+                var $input = $('input',$parent);
+                var $span = $('span',$parent);
+                $parent.addClass("edit");
+                $input.focus();
+                $input.val($span.text());
+            })
+            .on("keyup", ".pni-editable-input",function(e){
+                if(e.keyCode && (e.keyCode === 13)){
+                    $(this).trigger("blur");
+                }
+            });
+        $(".pni-editable-input")
+            .on("blur",function(e){
+                var $parent = $(this).parent();
+                var $input = $('input',$parent);
+                var $span = $('span',$parent);
+                $span.text($input.val());
+                $parent.removeClass("edit");
+            });
+    });
+</script>
 <!--
 {
 "code": "200-OK",

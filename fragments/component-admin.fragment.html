@@ -359,7 +359,7 @@
                     },
                     error : function (jqXHR, textStatus, errorThrown) {
                         if(( jqXHR.status === 401 ) || ( jqXHR.status === 403 )){
-                            alert('E001A, Not authenticated.');
+                            alert('Your session has expired. Redirecting to login');
                         } else {
                             alert('E001, An error has occurred, please try again or contact app admin.');
                         }

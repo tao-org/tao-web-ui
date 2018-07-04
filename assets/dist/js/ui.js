@@ -96,6 +96,27 @@ $(function () {
     });
     $(".do-logout").on("click", function(e){
         e.preventDefault();
+        var postLogout = $.ajax({
+            cache: false,
+            url: baseRestApiURL + "auth/logout",
+//            dataType : 'json',
+            type: 'POST',
+//            data: {},
+            data: '',
+            headers: {
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+        $.when(postLogout)
+            .done(function (postLogoutResponse) {
+                console.log(postLogoutResponse)
+                alert("ok.");
+            })
+            .fail(function(jqXHR, textStatus){
+                console.log(jqXHR);
+                console.log(textStatus);
+                alert("Could not logout. It seems you are already logged out.");
+            });
         taoUserProfile = {};
         _settings.createCookie("tokenKey",'');
         _settings.createCookie("userMatrix",'{}');
@@ -119,8 +140,8 @@ $(function () {
         type: 'GET',
         headers: {
             "Accept": "application/json",
-            "Content-Type": "application/json"
-            //"Authorization": authHeader
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
         }
     });
     function f(){
@@ -148,7 +169,7 @@ $(function () {
                 });
             })
             .fail(function (jqXHR, textStatus) {
-                alert("Could not determine user storage usage... Try later.");
+                console.log("Error. Could not determine user storage usage... Try later.");
             });
     }
     $(document).on( "quota:update", function( event ) {

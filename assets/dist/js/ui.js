@@ -111,6 +111,7 @@ $(function () {
             .done(function (postLogoutResponse) {
                 console.log(postLogoutResponse)
                 alert("ok.");
+				location.reload(true);
             })
             .fail(function(jqXHR, textStatus){
                 console.log(jqXHR);
@@ -120,7 +121,6 @@ $(function () {
         taoUserProfile = {};
         _settings.createCookie("tokenKey",'');
         _settings.createCookie("userMatrix",'{}');
-        location.reload(true);
     });
 }());
 

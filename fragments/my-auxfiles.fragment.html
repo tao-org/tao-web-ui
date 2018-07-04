@@ -26,6 +26,7 @@
 												<thead><tr><th style="width:30%">Name</th><th>Value</th></tr></thead>
 												<tbody></tbody>
 											</table>
+											<div class="imagepreview-holder hidden"><img src="" /></div>
 										</div>
 									</div>
 								</div>
@@ -84,6 +85,7 @@
 }
 .toolbox .treeview a {
 	width: 100%;
+	padding-left: 0;
 }
 .toolbox .treeview a:hover, .toolbox .treeview a:focus {
 	background-color: #ecf0f5;
@@ -95,21 +97,25 @@
 	text-align: right;
 	color: #5c5d5e;
 }
+.toolbox .treeview a span.fa {
+	float: none;
+	padding: 0 7px;
+	width: auto;
+	color: #3c8dbc;
+}
 .toolbox .treeview label::before, .toolbox .treeview  a::before {
 	display: block;
 	position: absolute;
 	top: 6px;
 	left: 5px;
 	font-family: 'FontAwesome';
+	color: #3c8dbc;
 }
 .toolbox .treeview label::before {
 	content: '\f07b'; /* closed folder */
 }
 .toolbox .treeview input:checked+label::before {
 	content: '\f07c'; /* open folder */
-}
-.toolbox .treeview a::before {
-	content: '\f068'; /* dash */
 }
 .toolbox .treeview .sub {
 	display: none;
@@ -123,13 +129,13 @@
 }
 #properties .callout {
 	padding-right: 20px;
-	border-color: #0097bc;
+	border-color: #3c8dbc;
 }
 #properties #file-name {
     margin-top: -15px;
     margin-left: -15px;
     margin-right: -20px;
-    background-color: #0097bc;
+    background-color: #3c8dbc;
     color: white;
     padding: 10px;
     border-top: 15px solid #00c0ef;
@@ -141,6 +147,13 @@
 	padding: 5px 10px;
 	line-height: 1.5em;
 }
+.imagepreview-holder {
+	text-align: center;
+}
+.imagepreview-holder img {
+	max-width: 100%;
+}
+
 </style>
 
 <script>
@@ -168,6 +181,8 @@ $.ajax({
 function renderTree(response) {
 	compsTree.html("");
 	
+	//$.ajax({ url: "http://localhost:8080/files/?fileName=good_files.json", type: "GET", dataType: 'json', async: false, success: function(data) { response = data; } });
+	
 	// Render tree folders
 	$.each(response, function (index, file) {
 		if (file.folder && file.relativePath != "") {
@@ -191,15 +206,27 @@ function renderTree(response) {
 				size = parseFloat(size / 1024 / 1024 / 1024 / 1024, 2).toFixed(2) + " TB";
 			}
 			var name   = file.relativePath.substring(file.relativePath.lastIndexOf("\\") + 1);
-			var href   = baseRestApiURL + 'files/?fileName=' + file.relativePath;
+			var href   = baseRestApiURL + 'files/?fileName=' + file.relativePath.replace("\\", "/");
 			var type   = file.relativePath.substring(file.relativePath.lastIndexOf("."));
 			var folder = getParentFolder(file.relativePath);
-			var element = $('<a href="#">' + name + '<span>' + size + '</span>' + '<span>' + type + '</span>' + '</a>');
+			var fafile = "fa-file-o";
+			switch (type) {
+				case ".txt" : fafile = "fa-file-text-o"   ; break;
+				case ".html": fafile = "fa-file-code-o"   ; break;
+				case ".xml" : fafile = "fa-file-code-o"   ; break;
+				case ".tif" : fafile = "fa-file-image-o"  ; break;
+				case ".png" : fafile = "fa-file-image-o"  ; break;
+				case ".pdf" : fafile = "fa-file-pdf-o"    ; break;
+				case ".zip" : fafile = "fa-file-archive-o"; break;
+			}
+			var element = $('<a href="#"><span class="fa ' + fafile + '"></span>' + name + '<span>' + size + '</span>' + '<span>' + type + '</span>' + '</a>');
 			
-			if (!file.attributes) { file.attributes = []; }
-			file.attributes.fileSize = size;
-			file.attributes.fileName = name;
-			file.attributes.uri = href;
+			if (!file.attributes) { file.attributes = {}; }
+			file.attributes.fileInfo = {};
+			file.attributes.fileInfo.fileSize = size;
+			file.attributes.fileInfo.fileName = name;
+			file.attributes.fileInfo.fileType = type;
+			file.attributes.fileInfo.uri = href;
 			
 			element.data("attributes", file.attributes);
 			folder.append(element);
@@ -230,25 +257,54 @@ function renderFolder(relativePath) {
 	}
 }
 
+function setPreviewImageBase64(attributes) {
+	if ($("#properties .imagepreview-holder img").attr("src") != "") {
+		$("#properties .imagepreview-holder").toggleClass("hidden");
+	} else {
+		$("#properties .imagepreview-holder").addClass("hidden");
+		$("#properties .imagepreview-holder img").attr("src", "");
+		if (attributes.formatType == "RASTER") {
+			$.ajax({
+				url: attributes.fileInfo.uri.replace("?fileName=", "preview?fileName="),
+				type: "GET",
+				beforeSend: function(xhr) { xhr.setRequestHeader("Authorization", authHeader); },
+				success: function(response) {
+					$("#properties .imagepreview-holder img").attr("src", response == "" ? "" : "data:image/jpeg;base64, " + response);
+					$("#properties .imagepreview-holder").removeClass("hidden");
+				}
+			});
+		}
+	}
+}
+
 function displayPreview(attributes) {
-	$("#properties #file-name").text(attributes.fileName);
+	$("#properties #file-name").text(attributes.fileInfo.fileName);
 	var tableBody = $("#properties #rm-previewattributes #attributes-list tbody");
 	tableBody.html("");
 	
 	var size = 0;
 	$.each(attributes, function (name, value) {
-		tableBody.append('<tr><td>' + name + '</td><td>' + value + '</td></tr>');
+		if (name == "productType" && value == "GeoTIFF") {
+			tableBody.append('<tr><td>' + name + '</td><td>' + value + '<button class="btn bg-green btn-flat btn-xs image-preview" style="float: right"><i class="fa fa-eye fa-fw"></i>Toggle quick view</button></td></tr>');
+		} else if (name != "fileInfo") {
+			tableBody.append('<tr><td>' + name + '</td><td>' + value + '</td></tr>');
+		} else {
+			size --;
+		}
 		size ++;
 	});
 	if (size == 0) {
 		tableBody.append('<tr><td>-</td><td>-</td></tr>');
 	}
 	
-	$("#properties #file-size").text(attributes.fileSize);
-	$("#properties .filedownload-holder a").attr("href", attributes.uri);
-	$("#properties .filedownload-holder a").data("attributes", attributes);
+	$("#properties .imagepreview-holder").addClass("hidden");
+	$("#properties .imagepreview-holder img").attr("src", "");
+	
+	$("#properties #file-size").text(attributes.fileInfo.fileSize);
+	$("#properties .filedownload-holder a").attr("href", attributes.fileInfo.uri);
 	
 	$("#properties").removeClass("hidden");
+	$("#properties").data("attributes", attributes);
 }
 
 // Download file using current user's credentials
@@ -263,11 +319,16 @@ $("#components").on("click", "a", function (e) {
 	displayPreview($(this).data("attributes"));
 });
 
+$("#properties").on("click", "button.image-preview", function (e) {
+	var attributes = $(this).closest("#properties").data("attributes");
+	setPreviewImageBase64(attributes);
+});
+
 $("#properties .filedownload-holder").on("click", "a", function (e) {
 	e.preventDefault();
 	
-	var attributes = $(this).data("attributes");
-	var filename   = attributes.fileName;
+	var attributes = $(this).closest("#properties").data("attributes");
+	var filename   = attributes.fileInfo.fileName;
 	
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', this.href, true);

@@ -27,7 +27,7 @@
 												<thead><tr><th>Name</th><th>Value</th></tr></thead>
 												<tbody></tbody>
 											</table>
-											<div class="imagepreview-holder hidden"><img src="" /></div></div>
+											<div class="imagepreview-holder hidden"><div><span class="fa fa-expand fa-fw full-preview"></span><img src=""/></div></div></div>
 										</div>
 									</div>
 									<div class="callout actions-holder">
@@ -82,9 +82,11 @@
 .toolbox .treeview a{width:100%;display:block;cursor:pointer;padding:5px 0;line-height:1.1em}
 .toolbox .treeview a:hover,
 .toolbox .treeview a.selected{background-color:#ecf0f5;color:#0f5075}
-.toolbox .treeview a span{float:right;padding:0 7px;width:110px;text-align:right;color:#5c5d5e}
-.toolbox .treeview .fa{float:none;width:auto;color:#3c8dbc}
+.toolbox .treeview a span{float:right;padding:0 10px 0 7px;width:110px;text-align:right;color:#5c5d5e}
+.toolbox .treeview .fa{float:none;width:30px;color:#3c8dbc}
 .toolbox .treeview .fa-folder{color:#ffb85d}
+.toolbox .treeview .fa-public{position:relative}
+.toolbox .treeview .fa-public::after{position:absolute;content:"\f064";font-size:10px;color:#00a65a;right:5px;bottom:-5px;}
 .toolbox .treeview label{position:relative;color:#5c5d5e;display:block;margin-bottom:0}
 .toolbox .treeview label a{margin-left:0}
 .toolbox .treeview label::before{display:block;position:absolute;top:0;left:-17px;font-family:'FontAwesome';font-size:18px;padding:0 7px;color:transparent}
@@ -112,8 +114,41 @@
 #properties table td:first-child{width:25%}
 #properties .actions-holder td:last-child{width:130px;text-align:right;height:50px}
 .action-name{font-size:16px;font-weight:600;color:#3c8dbc}
-.imagepreview-holder{text-align:center;margin:10px 0}
-.imagepreview-holder img{max-width:100%}
+.imagepreview-holder{text-align:center;margin:10px 0;position:relative}
+.imagepreview-holder>div{text-align:center;display:inline-block;position:relative}
+.imagepreview-holder img{width:100%}
+.imagepreview-holder .full-preview {
+	position: absolute;
+    top: 10px;
+    right: 10px;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: 18px;
+    color: white;
+    background-color: #00a65a;
+    border: 2px solid white;
+    border-radius: 5px;
+    width: 28px;
+    height: 28px;
+    margin: 0;
+    padding: 3px;
+    cursor: pointer;
+}
+.imagepreview-holder .full-preview:hover{background-color:#00894b}
+.imagepreview-holder.full-screen {
+	position: fixed;
+    top: 0;
+    z-index: 9999;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    cursor: pointer;
+    overflow: auto;
+}
+.imagepreview-holder.full-screen>div{position:unset}
+.imagepreview-holder.full-screen img{position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:auto}
 .fa-fw{margin-right:5px}
 .attributes-holder .holder{overflow:auto}
 /* ===== SWITCH ===== */
@@ -239,7 +274,8 @@ function renderFolder(relativePath, attributes) {
 	// render folder if null
 	if (chk.length == 0) {
 		var id = relativePath;
-		var element = $('<div><input type="checkbox" id="' + id + '"><label for="' + id +  '"><a href="#"><span class="fa fa-folder"></span>' + relativePath.substring(relativePath.lastIndexOf("\\") + 1) + '</a></label><div class="sub"></div></div>');
+		var faPublic = attributes && attributes.visibility != undefined && attributes.visibility == "PUBLIC";
+		var element = $('<div><input type="checkbox" id="' + id + '"><label for="' + id +  '"><a href="#"><span class="fa fa-folder' + (faPublic ? " fa-public" : "") + '"></span>' + relativePath.substring(relativePath.lastIndexOf("\\") + 1) + '</a></label><div class="sub"></div></div>');
 		element.data("attributes", attributes);
 		parent.append(element);
 		chk = parent.find("input[id='" + relativePath.replace(/\\/g, "\\\\") + "']");
@@ -359,6 +395,7 @@ function closeAttributes() {
 	
 	// Hide all actions
 	$("#properties .actions-holder .actions-set").addClass("hidden");
+	$("#properties .actions-holder .actions-set .action").removeClass("hidden");
 	
 	// Hide properties window and clear data
 	$("#properties").addClass("hidden");
@@ -404,12 +441,13 @@ function displayFileActions(attributes) {
 	$(".for-files .download-holder button").attr('disabled', false);
 	
 	// Delete
-	if (attributes.visibility == undefined || attributes.visibility == "PRIVATE") {
+	if (attributes.fileInfo.relativePath.indexOf("files\\") == -1) {
+		$(".for-files .delete-holder .action-info").text("Product contents can not be deleted.");
+		$(".for-files .delete-holder button").attr('disabled', true);
+		//$(".for-files .delete-holder").addClass("hidden");
+	} else {
 		$(".for-files .delete-holder .action-info").text("Delete selected file.");
 		$(".for-files .delete-holder button").attr('disabled', false);
-	} else {
-		$(".for-files .delete-holder .action-info").text("This file is public and can not be deleted.");
-		$(".for-files .delete-holder button").attr('disabled', true);
 	}
 	
 	$(".for-files").removeClass("hidden");
@@ -462,10 +500,23 @@ $(".toolbox .treeview").on("click", "a", function (e) {
 	adjustPropertiesPosition();
 });
 
+$(".toolbox .treeview").on("dblclick", "label", function (e) {
+	var chk = $(this).parent().find("input[type='checkbox']");
+	chk.prop("checked", !chk.prop("checked"));
+});
+
 // Quick view product
 $("#properties").on("click", "button.image-preview", function (e) {
 	var attributes = $(this).closest("#properties").data("attributes");
 	setPreviewImageBase64(attributes);
+});
+
+$("#properties").on("click", ".full-preview", function (e) {
+	$("#properties .imagepreview-holder").clone().appendTo("body").addClass("full-screen");
+	$("body .full-screen span").remove();
+});
+$("body").on("click", ".full-screen", function (e) {
+	$(this).remove();
 });
 
 // Close properties window
@@ -516,23 +567,63 @@ $("#properties .share-holder").on("click", "input[name='share-folder']", functio
 	});
 });
 
+function deleteProduct(attributes) {
+	$.ajax({
+		url: baseRestApiURL + "files/?fileName=" + attributes.fileInfo.relativePath,
+		type: "DELETE",
+		beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
+		success: function(response) {
+			if (response.message != undefined) {
+				// Failed
+				showMsg(response.message);
+			} else {
+				// Success
+				showMsg(response);
+				$.when(refreshTree()).done(function () { });
+				closeAttributes();
+			}
+		},
+		error: function (jqXHR, textStatus) {
+			var a = 1;
+		}
+	});
+}
+
 // Delete
 $("#properties .delete-holder").on("click", "button", function (e) {
-	alert("Delete not implemented yet!!!");
+	e.preventDefault();
+	
+	var attributes = $("#properties").data("attributes");
+	var action = attributes.visibility != "PUBLIC" ? "share" : "unshare";
+	$('#confirm-dialog').modal('confirm', {
+		msg: "Are you sure you want to delete this product?",
+		callbackConfirm: function () {
+			deleteProduct(attributes);
+		},
+		callbackCancel: function (){ }
+	});
 });
 
 // Download selected file
 $("#properties .download-holder").on("click", "a", function (e) {
 	e.preventDefault();
 	
+	var btn  = $(this).find("button");
+	var info = $(this).closest(".download-holder").find(".action-info");
+	var infoVal = info.text();
+	
 	var attributes = $(this).closest("#properties").data("attributes");
 	var filename   = attributes.fileInfo.fileName;
 	
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', this.href, true);
-	xhr.setRequestHeader("Authorization", authHeader);
+	xhr.setRequestHeader("X-Auth-Token", tokenKey);
 	xhr.responseType = 'blob';
 	xhr.onload = function(e) {
+		info.text(infoVal);
+		btn.find("i").removeClass("fa-refresh fa-spin").addClass("fa-download");
+		btn.prop("disabled", false);
+		
 		if (this.status == 200) {
 	        var blob = new Blob([this.response], { type: this.getResponseHeader('Content-Type') });
 			
@@ -560,6 +651,10 @@ $("#properties .download-holder").on("click", "a", function (e) {
 		}
 	}
 	xhr.send();
+	
+	btn.prop("disabled", true);
+	btn.find("i").removeClass("fa-download").addClass("fa-refresh fa-spin");
+	info.text("Please wait for your download to start!");
 });
 
 function adjustPropertiesPosition() {

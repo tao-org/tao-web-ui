@@ -150,7 +150,7 @@ $(function () {
                 var sumFiles = 0;
                 var countFolders = 0;
                 var countFiles = 0;
-                $.each( getUserFilesResponse, function( key, value ) {
+                $.each( getUserFilesResponse.data, function( key, value ) {
                     if(value.relativePath !== ""){
                         if(value.folder){
                             countFolders ++;

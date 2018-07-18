@@ -1,6 +1,6 @@
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-    <h1>My Files<small>Full list of user <strong>Files</strong>.</small></h1>
+    <h1>User files<small>Full list of <strong>your files</strong>.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">My Files</li>
@@ -98,7 +98,7 @@
 .toolbox .treeview .sub{display:none;margin-left:20px}
 .toolbox .treeview input:checked~.sub{display:block}
 /* ===== PROPERTIES ===== */
-#properties{position:fixed;right:2%;width:37%}
+#properties{position:fixed;right:2%;width:37%;z-index:9998}
 #properties button.close{position:absolute;top:7px;right:12px;opacity:1;color:white}
 #properties button.close:hover,
 #properties button.close:focus{color:#8bccf3}
@@ -227,13 +227,17 @@
 </style>
 
 <script>
+// Check which page to dispay "My Files" or "Shared Files"
+var sharedFiles    = decodeURI(window.location.hash).indexOf("shared") >= 0;
+
 // BSwitch options
 var compsTree = $(".toolbox .treeview");
 
 function refreshTree() {
 	var deferred = $.Deferred();
+	
 	$.ajax({
-		url: baseRestApiURL + "files/user/",
+		url: baseRestApiURL + "files" + (sharedFiles ? "/public/" : "/user/"),
 		type: "GET",
 		dataType: 'json',
 		beforeSend: function(xhr) {
@@ -248,9 +252,14 @@ function refreshTree() {
 			deferred.reject(jqXHR, textStatus, msg);
 		},
 		success: function(response) {
-			compsTree.closest(".box").addClass("box-success");
-			renderTree(response);
-			deferred.resolve(response);
+			if (response.status == responseStatus.success) {
+				renderTree(response.data);
+				compsTree.closest(".box").addClass("box-success");
+				deferred.resolve(response);
+			} else {
+				showMsg(response.message);
+				deferred.reject(null, response.status, response.message);
+			}
 		}
 	});
 	return deferred.promise();
@@ -275,7 +284,7 @@ function renderFolder(relativePath, attributes) {
 	if (chk.length == 0) {
 		var id = relativePath;
 		var faPublic = attributes && attributes.visibility != undefined && attributes.visibility == "PUBLIC";
-		var element = $('<div><input type="checkbox" id="' + id + '"><label for="' + id +  '"><a href="#"><span class="fa fa-folder' + (faPublic ? " fa-public" : "") + '"></span>' + relativePath.substring(relativePath.lastIndexOf("\\") + 1) + '</a></label><div class="sub"></div></div>');
+		var element = $('<div' + (relativePath == 'files' ? ' class="files-folder"' : '') + '><input type="checkbox" id="' + id + '"><label for="' + id +  '"><a href="#"><span class="fa fa-folder' + (faPublic ? " fa-public" : "") + '"></span>' + relativePath.substring(relativePath.lastIndexOf("\\") + 1) + '</a></label><div class="sub"></div></div>');
 		element.data("attributes", attributes);
 		parent.append(element);
 		chk = parent.find("input[id='" + relativePath.replace(/\\/g, "\\\\") + "']");
@@ -303,6 +312,8 @@ function renderTree(response) {
 			renderFolder(file.relativePath, file.attributes);
 		}
 	});
+	// Move "/files" folder at the end
+	$(".toolbox .treeview .files-folder").remove().insertAfter($(".toolbox .treeview>div:last-child"));
 	
 	// Render files
 	$.each(response, function (index, file) {
@@ -331,6 +342,7 @@ function renderTree(response) {
 				case ".json": fafile = "fa-file-code-o"   ; break;
 				case ".tif" : fafile = "fa-file-image-o"  ; break;
 				case ".png" : fafile = "fa-file-image-o"  ; break;
+				case ".jpg" : fafile = "fa-file-image-o"  ; break;
 				case ".pdf" : fafile = "fa-file-pdf-o"    ; break;
 				case ".zip" : fafile = "fa-file-archive-o"; break;
 			}
@@ -363,7 +375,9 @@ function setPreviewImageBase64(attributes) {
 				type: "GET",
 				beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
 				success: function(response) {
-					$("#properties .imagepreview-holder img").attr("src", response == "" ? "" : "data:image/jpeg;base64, " + response);
+					if (response.status == responseStatus.success) {
+						$("#properties .imagepreview-holder img").attr("src", "data:image/jpeg;base64, " + response.data);
+					}
 				}
 			});
 		}
@@ -393,7 +407,8 @@ function closeAttributes() {
 	$("#properties .actions-holder input[type='checkbox']").prop('checked', false);
 	$("#properties .actions-holder input[type='checkbox']").attr('disabled', true);
 	
-	// Hide all actions
+	// Set actions visibility
+	$("#properties .actions-holder").removeClass("hidden");
 	$("#properties .actions-holder .actions-set").addClass("hidden");
 	$("#properties .actions-holder .actions-set .action").removeClass("hidden");
 	
@@ -404,6 +419,11 @@ function closeAttributes() {
 }
 
 function displayFolderActions(attributes) {
+	if ($(".for-folders").length == 0) {
+		$(".actions-holder").addClass("hidden");
+		return;
+	}
+	
 	// Delete
 	if (attributes.id != undefined && attributes.visibility == "PRIVATE") {
 		$(".for-folders .delete-holder .action-info").text("Delete selected product.");
@@ -435,6 +455,11 @@ function displayFolderActions(attributes) {
 }
 
 function displayFileActions(attributes) {
+	if ($(".for-files").length == 0) {
+		$(".actions-holder").addClass("hidden");
+		return;
+	}
+	
 	// Download
 	$(".for-files .download-holder .action-info").text("Download size: " + attributes.fileInfo.fileSize);
 	$(".for-files .download-holder a").attr("href", attributes.fileInfo.uri);
@@ -535,20 +560,20 @@ function toggleProductVisibility(attributes) {
 		data: formData,
 		beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
 		success: function(response) {
-			if (response.message != undefined) {
-				// Failed
-				$("#properties .share-holder input[name='share-folder']").prop("checked", attributes.visibility == "PUBLIC" ? true : false);
-			} else {
-				// Success
+			if (response.status == responseStatus.success) {
 				$.when(refreshTree()).done(function () {
 					var prod = compsTree.find("input[id='" + product.replace(/\\/g, "\\\\") + "']+label>a");
 					prod.addClass("selected");
 					displayAttributes(prod.data("attributes"));
 					adjustPropertiesPosition();
 				});
+			} else {
+				$("#properties .share-holder input[name='share-folder']").prop("checked", attributes.visibility == "PUBLIC" ? true : false);
 			}
 		},
-		error: function (jqXHR, textStatus) {}
+		error: function (jqXHR, textStatus) {
+			$("#properties .share-holder input[name='share-folder']").prop("checked", attributes.visibility == "PUBLIC" ? true : false);
+		}
 	});
 }
 
@@ -573,18 +598,16 @@ function deleteProduct(attributes) {
 		type: "DELETE",
 		beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
 		success: function(response) {
-			if (response.message != undefined) {
-				// Failed
+			if (response.status == responseStatus.success) {
 				showMsg(response.message);
-			} else {
-				// Success
-				showMsg(response);
 				$.when(refreshTree()).done(function () { });
 				closeAttributes();
+			} else {
+				showMsg(response.message);
 			}
 		},
 		error: function (jqXHR, textStatus) {
-			var a = 1;
+			showMsg("Error while deleting the selected element!");
 		}
 	});
 }
@@ -688,6 +711,14 @@ $(window).on("ready scroll resize", function() {
 });
 
 $(document).ready(function() {
+	if (sharedFiles) {
+		// Set page header
+		$(".content-header>h1").html("Shared files<small>Full list of <strong>public files</strong>.</small>");
+		// Remove unnecessary actions
+		$(".for-folders").remove();
+		$(".for-files .delete-holder").remove();
+	}
+	
 	$.when(refreshTree()).done(function () { });
 });
 

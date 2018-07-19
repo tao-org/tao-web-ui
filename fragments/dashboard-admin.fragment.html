@@ -14,33 +14,28 @@
         -->
     </section>
     <!-- /Content Header (Page header) -->
-
     <!-- Main content -->
     <section class="content tao-async-mc">
-
-
         <div class="row">
             <!-- Left col -->
             <section class="col-lg-7">
 
                 <!-- TO DO List -->
-                <div class="box box-primary">
+                <div id="notifications-panel" class="box box-primary">
                     <div class="box-header" style="cursor: move;">
                         <i class="ion ion-clipboard"></i>
                         <h3 class="box-title">Notifications History</h3>
                         <div class="box-tools pull-right">
-                            <ul class="pagination pagination-sm inline">
-                                <li><a href="#">«</a></li>
-                                <li><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">»</a></li>
+                            <ul class="notifications-panel-paqgination pagination pagination-sm inline">
+                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
+                                <li class="prev"><a href="#" title="See newer notifications">«</a></li>
+                                <li class="next"><a href="#" title="See older notifications">»</a></li>
                             </ul>
                         </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <ul id="notifications-panel" class="todo-list">
+                        <ul id="notifications-panel-list" class="todo-list">
                             <li>
                                 <span class=""><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></span>
                                 <span class="text">Sample notification line.</span>
@@ -50,21 +45,64 @@
                                 </div>
                             </li>
                         </ul>
+                        <div id="notifications-panel-empty" class="callout callout-info collapse">
+                            <p>There are no notifications associated with your account.</p>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer clearfix no-border">
                         <div class="box-tools pull-right">
-                            <ul class="pagination pagination-sm inline">
-                                <li><a href="#">«</a></li>
-                                <li><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">»</a></li>
+                            <ul class="notifications-panel-paqgination pagination pagination-sm inline">
+                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
+                                <li class="prev"><a href="#" title="See newer notifications">«</a></li>
+                                <li class="next"><a href="#" title="See older notifications">»</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <!-- /.box -->
+
+
+                <!-- TO DO List -->
+                <div id="exec-history-panel" class="box box-primary">
+                    <div class="box-header" style="cursor: move;">
+                        <i class="ion ion-clipboard"></i>
+                        <h3 class="box-title">Executions History</h3>
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
+                                <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
+                                <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div id="exec-history-panel-list">
+                        </div>
+                        <div id="exec-panel-empty" class="callout callout-info collapse">
+                            <p>Results history is empty. It looks you did not run any workflows yet.</p>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix no-border">
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
+                                <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
+                                <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box -->
+
+
+
+
+
+
+
             </section>
             <!-- /.Left col -->
             <section class="col-lg-5">
@@ -221,8 +259,6 @@
                                     </div>
                                 </td>
                             </tr>
-
-
                             </tbody></table>
                     </div>
                     <!-- /.box-body -->
@@ -331,7 +367,6 @@
         });
     }
 
-
     $( document ).ready(function() {
         $( window )
             .resize(function() {
@@ -343,13 +378,26 @@
             })
             .trigger( "resize" );
         updateMasterMonitorWidget();
+        tao_initExecHistory();
         //bind resize event
     });
 
     (function () {
         var version = '0.1.10',
-            listNode = document.getElementById("notifications-panel");
+            currentPage = 0,
+            listNode = document.getElementById("notifications-panel-list");
+
+        $(".notifications-panel-paqgination .prev a","#notifications-panel").on("click", function(e){
+            e.preventDefault();
+            getNotificationsByPageNo(currentPage-1);
+        });
+        $(".notifications-panel-paqgination .next a","#notifications-panel").on("click", function(e){
+            e.preventDefault();
+            getNotificationsByPageNo(currentPage+1);
+        });
+
         function getNotificationsByPageNo(pageNo){
+            currentPage = pageNo;
             $.ajax({
                 cache: false,
                 url: baseRestApiURL + "monitor/notification/"+pageNo,
@@ -368,14 +416,23 @@
             });
         }
         function renderNotificationsPage(notifications){
-            console.log(notifications);
+            //console.log(notifications);
+            $(".val-current-page", "#notifications-panel").html(currentPage);
             while (listNode.firstChild) {
                 listNode.removeChild(listNode.firstChild);
+            }
+            if(currentPage<2){
+                $("li.prev",".notifications-panel-paqgination").addClass("disabled");
+            }else{
+                $("li.prev",".notifications-panel-paqgination").removeClass("disabled");
             }
             if(notifications){
                 var arrayLength = notifications.length;
                 if(arrayLength === 0){
-                    alert("nothing to show");
+                    $("#notifications-panel-empty").fadeIn("slow");
+                    $("li.next",".notifications-panel-paqgination").addClass("disabled");
+                }else{
+                    $("#notifications-panel-empty").hide();
                 }
                 var frag = document.createDocumentFragment();
                 for (var i = 0; i < arrayLength; i++) {
@@ -386,7 +443,6 @@
                     } catch(e) {
                         alert(e); // error in the above string (in this case, yes)!
                     }
-
 
                     var li = document.createElement("li");
                     li.innerHTML = "<span class=\"\"><i class=\"fa fa-ellipsis-v\"></i><i class=\"fa fa-ellipsis-v\"></i></span><span class=\"text\">"+lclMsg+"</span><small class=\"label label-info\"><i class=\"fa fa-clock-o fa-fw\"></i>"+ts+"</small><div class=\"tools\"><i class=\"fa fa-trash-o\"></i></div>";

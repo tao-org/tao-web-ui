@@ -1,0 +1,285 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Start processing workflow</h4>
+    </div>
+
+    <form id="frmExecNodeEdit" class="form-horizontal form-newpc" role="form">
+        <input type="hidden" id="op" name="op" class="op" value="op-plus" />
+        <input type="hidden" id="id_u" name="id_u" value="0" />
+        <input type="hidden" name="clickedon" value="">
+
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error processing workflow!</h4>
+            <p id="modal-error-msg">Please check you data, one or more values for the attributes is not in the acceptable range.</p>
+            <p>
+                <span class="error-name collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Workflow name cannot be empty.</span>
+                <span class="error-fileLocation collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> File location has an invalid value.</span>
+            </p>
+            <p id="modal-error-msg-server"></p>
+        </div>
+
+        <div class="modal-body">
+            <section>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>Please check all the tabs before saving a new component.</p>
+                        <div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="inputWorkflowName" class="col-sm-2 col-md-2 control-label">Name</label>
+                                        <div class="col-sm-10 col-md-10">
+                                            <input type="text" class="form-control" id="inputWorkflowName" name="inputWorkflowName" placeholder="workflow name" autocomplete="off" value="" data-errorspan="name"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>You can customize workflow parameters before run. Values will only affect current workflow processing call.</p>
+                        <div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
+                            <div class="row">
+                                <div class="col-md-12">
+
+
+
+
+
+                                    <div class="box-group" id="accordion">
+                                        <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+                                        <div id="acc-panel-ID" class="panel box box-primary">
+                                            <div class="box-header with-border">
+                                                <h4 class="box-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse-one-ID" aria-expanded="true" class="">
+                                                        Collapsible Group Item #1
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse-one-ID" class="panel-collapse collapse" aria-expanded="false">
+                                                <div class="box-body">
+                                                    <div style="padding: 20px;">
+                                                        <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-sysvar">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>Key</th>
+                                                                <th>Value</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr class="tpl-sample-row">
+                                                                <td>
+                                                                    <span class="var-id hidden"></span>
+                                                                    Label:&nbsp;<strong><span class="var-label"></span></strong>&nbsp;(<span class="var-dataType"></span>)
+                                                                    <br>description:&nbsp;<span class="var-description"></span>
+                                                                </td>
+                                                                <td style="width: 70%;">
+                                                                    <input type="hidden" class="var-value" value="" placeholder="input variable's value">
+                                                                    <input type="text" class="var-value-string collapse" value="" placeholder="input variable's value">
+                                                                    <select class="var-value-list collapse"></select>
+                                                                    <br>default:&nbsp;<span class="var-default"></span>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel box box-primary">
+                                            <div class="box-header with-border">
+                                                <h4 class="box-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed" aria-expanded="false">
+                                                        Collapsible Group Danger
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false">
+                                                <div class="box-body">
+                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                                <button id="saveExecNode" type="submit" class="btn btn-primary btn-submit" name="btnSave">Process workflow</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- /.modal-body -->
+    </form>
+    <div class="modal-note">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                        <h4>Help filling in</h4>
+                        <p>Please fill in all needed information.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div><!-- /.modal-content -->
+
+<script>
+    $(document).ready( function(){
+        //get all availlable dockers
+        if(_mLIST.dataOpQueue[0] && _mLIST.dataOpQueue[0].dna.id){
+            getWFDataById(_mLIST.dataOpQueue[0].dna.id);
+            getWFParametersById(_mLIST.dataOpQueue[0].dna.id);
+        }
+
+        //remove error for some input elements
+        $("input, textarea","form#frmExecNodeEdit")
+            .on("keypress change", function(){
+                if($(this).data("errorspan")) {
+                    $(".error-" + $(this).data("errorspan"), ".modal-error").css('display', 'none');
+                    if($(".modal-error").find("span:visible").length == 0) {
+                        $(".modal-error").hide();
+                        $("#saveExecNode").removeAttr('disabled');
+                    }
+                }
+            })
+            .on("focusout", function(){
+                if($(this).data("errorspan")){
+                    if (($(this).val() === "")||($(this).val() === 0)||($(this).val() === "0")){
+                        $(".error-"+$(this).data("errorspan"),".modal-error").css('display', 'inline-block');
+                        $(".modal-error").fadeIn("slow");
+                        $("#saveExecNode").attr('disabled','disabled');
+                    }
+                }
+            });
+        $("form#frmExecNodeEdit").submit(function (e) {
+            e.preventDefault();
+            var formData = {};
+            var ajaxType = "";
+            var ajaxURL = "";
+            if($(this).data("payload")){
+                formData = $(this).data("payload");
+                ajaxType = 'PUT';
+                ajaxURL = formData.id + '/';
+                //overwrite with user input
+                formData.name = $('input[name=inputWorkflowName]', this).val();
+                formData.visibility = $('select[name=inputVisibility]', this).val();
+                formData.status = $('select[name=inputStatus]', this).val();
+                formData.active = $('select[name=inputActive]', this).val();
+            }else{
+                ajaxType = 'POST';
+                ajaxURL = '';
+                formData = {
+                    "name" : $('input[name=inputWorkflowName]', this).val(),
+                    "created":arrayFromDatetime(),
+                    "userName":"admin",
+                    "path" : $('input[name=inputPath]', this).val(),
+                    "visibility": $('select[name=inputVisibility]', this).val(),
+                    "status": $('select[name=inputStatus]', this).val(),
+                    "active": $('select[name=inputActive]', this).val(),
+                    "xCoord":0,
+                    "yCoord":0,
+                    "zoom":1
+                };
+            }
+
+            console.log(JSON.stringify(formData));
+            //SUBMIT TO SERVER
+
+            return false;
+        });
+    });
+
+    function getWFParametersById(wfID){
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "http://localhost:8080/orchestrator/start/parameters/"+wfID,
+            "method": "GET",
+            "headers": {
+                "x-auth-token": "84656a7f-827a-429c-a21a-fcf9500e3bce",
+                "Cache-Control": "no-cache",
+                "X-Auth-Token": window.tokenKey
+            }
+        };
+
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+        }).fail(function () {
+            console.log("error retriving workflow parameters");
+        });
+
+    }
+
+    function getWFDataById (wfID){
+        $.ajax({
+            cache: false,
+            type: "get",
+            url: baseRestApiURL + "workflow/"+wfID+"/",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            },
+            error : function (jqXHR, textStatus, errorThrown) {
+                if( jqXHR.status === 500 ){
+                    alert('E001, Exec node nolonger found.');
+                } else {
+                    alert('E001, An error has occurred, please try again or contact app admin.');
+                }
+            },
+            success: function(response) {
+                console.log(response);
+                try {
+                    //populate form with current values
+                    var $el = $('#frmExecNodeEdit');
+                    $el.data("payload", response);
+
+                    $('input[name=inputCompID]', $el).val(response.id);
+                    $('input[name=inputWorkflowName]', $el).val(response.name);
+
+                    $('select[name=inputActive] option', $el).removeAttr("selected");
+                    $('select[name=inputActive] option[value="'+response.active+'"]', $el).attr("selected", "selected");
+
+                    $('select[name=inputVisibility] option', $el).removeAttr("selected");
+                    $('select[name=inputVisibility] option[value="'+response.visibility+'"]', $el).attr("selected", "selected");
+
+                    $('select[name=inputStatus] option', $el).removeAttr("selected");
+                    $('select[name=inputStatus] option[value="'+response.status+'"]', $el).attr("selected", "selected");
+                }
+                catch(e) {
+                    alert('E001, An error has occurred, please try again or contact app admin.');
+                }
+            }
+        });
+        return true;
+    }
+    //# sourceURL=workflow-plus.js
+</script>

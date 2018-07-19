@@ -233,7 +233,7 @@ function jsGetUrlQueryValue (sVar) {
 //datetime, string, from array.
 function datetimeFromArray(arr){
     if(arr && (arr !== null) && (arr instanceof Array) ){
-        return (arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);
+        return arr.join(':');
     }else{
         return 'unknown';
     }
@@ -305,3 +305,23 @@ var _settings = {
         return document.cookie.replace(filter, "$1");
     }
 };
+
+function chkXHR(status){
+    if(status === 401){
+        alert("Your session has expired or is invalid. Please log in again!");
+        window.location = 'login.html';
+        return 0;
+    }
+    if(status === 403){
+        alert("403 - Forbidden: Server responded with access is denied message. You do not have permission to access the page using the credentials that you supplied!");
+        window.location = 'login.html';
+        return 0;
+    }
+    if(status === 0){
+        alert("Your request timed out. Please check your Internet connection and retry the request!");
+        window.location = 'login.html';
+        return 0;
+    }
+    console.log("XHR fail test");
+    console.log(status);
+}

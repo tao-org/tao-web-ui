@@ -176,7 +176,7 @@
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="wf-start"><i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Start execution</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="op-pause-resume"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted"> Pause / resume execution</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="op-publish"><i class="fa fa-bullhorn fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Publish current workflow</span></button>
-                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete workflow</span></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop " data-action="wf-delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete workflow</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view-results"><i class="fa fa-picture-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Show execution results</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="trace-execution"><i class="fa fa-road fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Trace execution</span></button>
                                             </div>
@@ -292,7 +292,7 @@
 			</span>
 		</span>
                                     </button>
-                                    <button class="btn btn-box-tool op-6 text-black btn-action disabled " data-action="op-delete" data-toggle="tooltip" data-original-title="Delete current workflow">
+                                    <button class="btn btn-box-tool op-6 text-black btn-action" data-action="wf-delete" data-toggle="tooltip" data-original-title="Delete current workflow">
 		<span class="value-dependent value-default">
 			<span class="fa-stack fa-lg value-dependent value-default">
 				<i class="fa fa-trash-o"></i>
@@ -496,6 +496,7 @@
                     "to": 0,
                     "order": "none"
                 };
+                console.log("cucu");
                 $.ajax({
                     cache: false,
                     type: "get",
@@ -508,11 +509,7 @@
                         "X-Auth-Token": window.tokenKey
                     },
                     error : function (jqXHR, textStatus, errorThrown) {
-                        if(( jqXHR.status === 401 ) || ( jqXHR.status === 403 )){
-                            alert('E001A, Not authenticated.');
-                        } else {
-                            alert('E001, An error has occurred, please try again or contact app admin.');
-                        }
+                        chkXHR(jqXHR.status);
                     },
                     success: function(response,textStatus, jqXHR) {
                         if(jqXHR.status === 204){
@@ -699,6 +696,16 @@
             $(".modal-dialog",$modal).addClass("modal-lg");
             rm_contentUrl="./fragments/workflow-plus.fragment.html?" + Math.random();
         }
+        if(operationid === "wf-start"){
+            window.userOpStack = [{
+                "dna":{},
+                "action":"wf_edit"
+            }];
+            $(".modal-dialog",$modal).addClass("modal-lg");
+            rm_contentUrl="./fragments/workflow-start.fragment.html?" + Math.random();
+        }
+
+//old???
         if(operationid === "edit"){
             rm_contentUrl="./fragments/topology-edit.fragment.html?" + Math.random();
         }
@@ -746,7 +753,7 @@
                 "action":action
             }];
             var currentWfID = _mLIST.dataOpQueue[0].dna.id;
-            if(action === 'wf-start'){
+            if(action === 'wf-start-old'){
                 //localhost:8080/orchestration/start/1
 //to do
                 var attrName = prompt("Please enter attribute name:", "in or Ssource");
@@ -805,6 +812,33 @@
                             _mLIST.refresh();
                         }else{
                             showMsg("Workflow clone failed.", "ERROR");
+                        }
+                    })
+                    .fail(function () {
+                        showMsg("Workflow clone failed.", "ERROR");
+                    });
+                return 1;
+            }
+
+            if(action === 'wf-delete'){
+                var deleteWf = $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + "workflow/"+currentWfID+"/",
+                    dataType : 'json',
+                    type: 'DELETE',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "X-Auth-Token": window.tokenKey
+                    }
+                });
+                $.when(deleteWf)
+                    .done(function (cloneWfResponse) {
+                        if(cloneWfResponse){
+                            showMsg("Workflow successfully deleted", "SUCCESS");
+                            _mLIST.refresh();
+                        }else{
+                            showMsg("Workflow delete failed.", "ERROR");
                         }
                     })
                     .fail(function () {
@@ -894,9 +928,7 @@
         });
         history.pushState(null, null, "#my/workflows::edit="+currentWfID+"|page=0");
         return 1;
-    };
-
-
+    }
 
     function tao_closeWorkflow() {
         $(".tao-async-wf").fadeOut("slow");
@@ -908,7 +940,7 @@
         console.log( "exec nodes panel ready!" );
         //contextual location based variations
         if(routeTags[0]==="shared"){
-            $el=$("section.tao-async-ph")
+            $el=$("section.tao-async-ph");
             $el.find("h1").html("Shared workflows <small>Full list of <strong>shared workflows</strong>.</small>");
             $el.find("li.active").html("Shared workflows");
         }

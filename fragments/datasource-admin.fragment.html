@@ -342,11 +342,7 @@
                         "X-Auth-Token": window.tokenKey
                     },
                     error : function (jqXHR, textStatus, errorThrown) {
-                        if(( jqXHR.status === 401 ) || ( jqXHR.status === 403 )){
-                            alert('E001A, Not authenticated.');
-                        } else {
-                            alert('E001, An error has occurred, please try again or contact app admin.');
-                        }
+                        chkXHR(jqXHR.status);
                     },
                     success: function(response,textStatus, jqXHR) {
                         if(jqXHR.status === 204){

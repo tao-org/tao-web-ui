@@ -28,7 +28,6 @@
 var taoUserProfile = {};
 
 $(function () {
-
     var username = _settings.readCookie("TaoUserName");
     var ajax_getProfileSettings = {
         "cache": false,
@@ -40,8 +39,7 @@ $(function () {
     };
     $.ajax(ajax_getProfileSettings)
         .done(function (r) {
-            console.log(r);
-            //inject fake user matrix
+            //inject additional elements into user profile data.
             if(r.id){
                 taoUserProfile = r;
                 taoUserProfile.userEmailMD5 = CryptoJS.MD5(r.email).toString();
@@ -53,14 +51,15 @@ $(function () {
             var gravatarUrl = "https://www.gravatar.com/avatar/"+taoUserProfile.userEmailMD5+"?d=mp&s=160";
             $(".val-user-avatar").attr("src", gravatarUrl);
             $(document).trigger( "quota:update" );
+            $(".wrapper").fadeTo( "slow", 1, function() {
+                // Intro animation complete.
+            });
         })
         .fail(function (jqXHR, status, textStatus) {
-            console.log(jqXHR);
-            console.log(textStatus);
-            console.log(status);
+            window.location = 'login.html';
+            console.log(jqXHR);  console.log(textStatus);  console.log(status);
         });
 });
-
 
 (function(){
     var $elModalProfile = $("#myModalWorkFlow");
@@ -99,9 +98,7 @@ $(function () {
         var postLogout = $.ajax({
             cache: false,
             url: baseRestApiURL + "auth/logout",
-//            dataType : 'json',
             type: 'POST',
-//            data: {},
             data: '',
             headers: {
                 "X-Auth-Token": window.tokenKey
@@ -150,7 +147,7 @@ $(function () {
                 var sumFiles = 0;
                 var countFolders = 0;
                 var countFiles = 0;
-                $.each( getUserFilesResponse, function( key, value ) {
+                $.each( getUserFilesResponse.data, function( key, value ) {
                     if(value.relativePath !== ""){
                         if(value.folder){
                             countFolders ++;
@@ -310,3 +307,196 @@ $(function () {
     return true;
 }());
 
+(function () {
+    var currentPage = 0;
+    var pages = 0;
+    var itemsOnPage = 3;
+    $(document)
+        .on("click","#exec-history-panel .pagination a", function(e){
+            e.preventDefault();
+            if($(this).parent().hasClass("disabled")){
+                console.log("return");
+                return;
+            }
+            var action = $(this).data("action");
+            if(action === 'go-next'){
+                currentPage++;
+            }
+            if(action === 'go-prev'){
+                currentPage--;
+            }
+            getExecHistory();
+        });
+    var renderExecHistoryCurrentPage = function(jobs){
+        var $panel = $("#exec-history-panel-list");
+        $panel.empty();
+        if(jobs){
+            var count = jobs.length;
+            pages = Math.ceil(count/itemsOnPage);
+            var itemStop = Math.max(0, count - currentPage*itemsOnPage);
+            var itemStart = Math.max(0, count - (currentPage+1)*itemsOnPage);
+            var showJobs = jobs.slice(itemStart, itemStop);
+            //var showJobs = jobs;
+            for(i = showJobs.length; i>0; i--){
+                var job = showJobs[i-1];
+                var htmlContent = '<h4>'+job.workflowName+'</h4>';
+                htmlContent += 'user: '+job.user+', status: '+job.jobStatus+' <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+datetimeFromArray(job.jobStart)+'</small> - <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+datetimeFromArray(job.jobEnd)+'</small>';
+                htmlContent += '<div class="tasks">Task sumary:';
+                    for(ii = 0; ii<job.taskSummaries.length; ii++) {
+                        var task = job.taskSummaries[ii];
+                        var statusIcon = ((task.taskStatus == "DONE")?'<i class="icon fa fa-check fa-fw"></i>':'<i class="icon fa fa-ban fa-fw"></i>')
+                        htmlContent += '<div class="one-task">';
+                        htmlContent += statusIcon + '<strong>' +task.componentName + '</strong>' +' ['+ datetimeFromArray(task.taskStart) +'-'+ datetimeFromArray(task.taskEnd) +']';
+                        htmlContent += '</div>'
+                    }
+                htmlContent += '</div>';
+                var css = 'job-history-one';
+                if(job.jobStatus === "DONE"){
+                    css += ' success';
+                }else{
+                    css += ' fail';
+                }
+                var $newEl = $('<div>',{
+                    'class' : css,
+                    'html' : htmlContent
+                });
+                $panel.append($newEl);
+            }
+            //show end of records notice
+            if(showJobs.length === 0){
+                $("#exec-panel-empty").show();
+            }else{
+                $("#exec-panel-empty").hide();
+            }
+            //syncronize pagination
+            $(".val-current-page","#exec-history-panel").html(currentPage+1);
+            if(currentPage < pages){
+                $(".next","#exec-history-panel").removeClass("disabled");
+            }else{
+                $(".next","#exec-history-panel").addClass("disabled");
+            }
+            if(currentPage > 0){
+                $(".prev","#exec-history-panel").removeClass("disabled");
+            }else{
+                $(".prev","#exec-history-panel").addClass("disabled");
+            }
+        }
+    };
+    var getExecHistory = function(){
+        $.ajax({
+            cache: false,
+            url: baseRestApiURL + "orchestrator/history/",
+            dataType : 'json',
+            type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        }).done(function (response) {
+            renderExecHistoryCurrentPage(response);
+        }).fail(function (jqXHR, textStatus) {
+            chkXHR(jqXHR.status);
+        });
+    };
+    window.tao_initExecHistory = function(){
+        currentPage = 0;
+        getExecHistory();
+    };
+}());
+
+
+//customize paremeterws for workflow
+(function () {
+
+    var wf_loadModuleProcessing = function(nid,lcl_n,componentTemplate){
+        var html_details = "";
+
+        html_details +="<span>version: "+componentTemplate.version+"</span><br>";
+        html_details +="<span>description: "+componentTemplate.description+"</span><br>";
+        html_details +="<span>authors: "+componentTemplate.authors+"</span><br>";
+        html_details +="<span>copyright: "+componentTemplate.copyright+"</span><br>";
+        $(".val-propbar-details", widgetRootEl).html(html_details);
+
+        //load system vars
+        $tblEdt = $("#tbl-edt-sysvar");
+        $tblEdt.find(".val-row").remove();
+
+        var helper_putValue = function($el, name, type, value, valueset){
+
+            var currentCustomValueSet = (_.find($propbar.nodeData.customValues, function(item) {
+                return (item.parameterName === name);
+            }));
+            //console.log("value:"+value+"current"+currentCustomValueSet.parameterValue);
+            if(currentCustomValueSet && currentCustomValueSet.hasOwnProperty('parameterValue')){
+                value = currentCustomValueSet.parameterValue;
+            }
+
+            if((valueset.length === 1) && (( valueset[0] === "") || ( valueset[0] === "null"))){
+                $('input.var-value', $el).val(value);
+                if(humanJavaDataType(type) === "Date"){
+                    $('input.var-value-string', $el).attr("type", "date");
+                }
+                if((humanJavaDataType(type) === "Double") || (humanJavaDataType(type) === "Short") || (humanJavaDataType(type) === "Float") || (humanJavaDataType(type) === "Number")){
+                    $('input.var-value-string', $el).attr("type", "number");
+                }
+                $('input.var-value-string', $el).val(value).show();
+            }else{
+                $('input.var-value', $el).val(value);
+                var html = "";
+                $.each(valueset, function(i, v) {
+                    html +="<option "+(v === value && 'selected ')+"value=\""+v+"\">"+v+"</option>";
+                });
+                $('select.var-value-list', $el).html(html).show();
+            }
+        };
+        var helper_addSTblEdtRow = function($tblEdt, payload){
+            var obj = {
+                "dataType": "java.lang.String",
+                "defaultValue": "",
+                "description": "",
+                "format": null,
+                "id": "",
+                "label": "",
+                "notNull": false,
+                "type": "REGULAR",
+                "unit":null,
+                "validator":null,
+                "valueSet": [],
+                "value": null
+            };
+            $.extend( obj, payload );
+            var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
+            $('span.var-id', $el).html(obj.id);
+            $('span.var-label', $el).html(obj.label);
+            $('span.var-description', $el).html(obj.description);
+            $('span.var-dataType', $el).html(humanJavaDataType(obj.dataType));
+            $('span.var-default', $el).html(obj.defaultValue);
+            if((obj.value == null) || (obj.value === '') || (obj.value === undefined)){
+                obj.value = obj.defaultValue;
+            }
+            if(obj.dataType === "java.lang.Boolean"){
+                helper_putValue($el, obj.id, obj.dataType, obj.value, ["true","false"]);
+            }else{
+                helper_putValue($el, obj.id, obj.dataType, obj.value, obj.valueSet);
+            }
+            $tblEdt.append($el);
+        };
+        $.each(componentTemplate.parameterDescriptors, function(i, value) {
+            helper_addSTblEdtRow($("#tbl-edt-sysvar"),value);
+        });
+        if(componentTemplate.parameterDescriptors.length > 0) $tblEdt.closest(".app-card").show();
+
+        return 1;
+    };
+
+
+    function f(v){
+//      $.extend(q, v);
+        return 1;
+    }
+    //window.taoUI_UpdateUserProfile = f;
+}());
+
+
+//

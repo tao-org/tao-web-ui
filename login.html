@@ -115,9 +115,7 @@
                 })
                 .fail(function (jqXHR, status, textStatus) {
                     $("#frmSignInMsg").show("slow");
-                    console.log(jqXHR);
-                    console.log(textStatus);
-                    console.log(status);
+                    chkXHR(jqXHR.status);
                 });
             return 0;
         });

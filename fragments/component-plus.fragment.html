@@ -348,58 +348,103 @@
                                                     <thead>
                                                     <tr>
                                                         <th></th>
-                                                        <th>Key</th>
-                                                        <th>Value</th>
+                                                        <th>Source Name</th>
+                                                        <th>Format Type</th>
+                                                        <th>Geometry</th>
+                                                        <th>CRS</th>
+                                                        <th>Sensor Type</th>
+                                                        <th>Dimension</th>
                                                     </tr>
                                                     </thead>
                                                     <tfoot>
                                                     <tr>
-                                                        <td colspan="3">
+                                                        <td colspan="7">
                                                             <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewvar" data-action="comp-add-new-var">
                                                                 <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
                                                             </button>
                                                         </td>
                                                     </tr>
                                                     </tfoot>
-                                                    <tbody>
+                                                    <tbody class="tpl-sample-body">
                                                     <tr class="tpl-sample-row">
-                                                        <th class="del-col" scope="row">
-                                                            <a href="#" class="text tbl-sysvar-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                                                        <th scope="row">
+                                                            <a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
                                                         </th>
-                                                        <td><input type="text" class="var-key" value="" placeholder="input variable's name"></td>
-                                                        <td><input type="text" class="var-value" value="" placeholder="input variable's value"></td>
+                                                        <td><input type="text" class="var-name" value="" placeholder="Source name"></td>
+                                                        <td>
+                                                            <select class="var-formatType">
+                                                                <option value="RASTER"  selected="selected">RASTER</option>
+                                                                <option value="VECTOR">VECTOR</option>
+                                                                <option value="OTHER">OTHER</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><textarea rows="2" class="var-geometry"></textarea></td>
+                                                        <td><input type="text" class="var-crs" value=""></td>
+                                                        <td>
+                                                            <select class="var-sensorType">
+                                                                <option value="OPTICAL"  selected="selected">OPTICAL</option>
+                                                                <option value="RADAR">RADAR</option>
+                                                                <option value="ALTIMETRIC">ALTIMETRIC</option>
+                                                                <option value="ATMOSPHERIC">ATMOSPHERIC</option>
+                                                                <option value="UNKNOWN">UNKNOWN</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><input type="text" class="var-dimension" value=""></td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
                                                 <p>Targets:</p>
-                                                <div class="responsive">
-                                                    <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-targets">
-                                                        <thead>
-                                                        <tr>
-                                                            <th></th>
-                                                            <th>Key</th>
-                                                            <th>Value</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tfoot>
-                                                        <tr>
-                                                            <td colspan="3">
-                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewvar" data-action="comp-add-new-var">
-                                                                    <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        </tfoot>
-                                                        <tbody>
-                                                        <tr class="tpl-sample-row">
-                                                            <th class="del-col" scope="row">
-                                                                <a href="#" class="text tbl-sysvar-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
-                                                            </th>
-                                                            <td><input type="text" class="var-key" value="" placeholder="input variable's name"></td>
-                                                            <td><input type="text" class="var-value" value="" placeholder="input variable's value"></td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
+											</div>
+											<div class="responsive">
+												<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-targets">
+                                                    <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Source Name</th>
+                                                        <th>Format Type</th>
+                                                        <th>Geometry</th>
+                                                        <th>CRS</th>
+                                                        <th>Sensor Type</th>
+                                                        <th>Dimension</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <td colspan="7">
+                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewvar" data-action="comp-add-new-var">
+                                                                <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    </tfoot>
+                                                    <tbody class="tpl-sample-body">
+                                                    <tr class="tpl-sample-row">
+                                                        <th scope="row">
+                                                            <a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                                                        </th>
+                                                        <td><input type="text" class="var-name" value="" placeholder="Source name"></td>
+                                                        <td>
+                                                            <select class="var-formatType">
+                                                                <option value="RASTER"  selected="selected">RASTER</option>
+                                                                <option value="VECTOR">VECTOR</option>
+                                                                <option value="OTHER">OTHER</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><textarea rows="2" class="var-geometry"></textarea></td>
+                                                        <td><input type="text" class="var-crs" value=""></td>
+                                                        <td>
+                                                            <select class="var-sensorType">
+                                                                <option value="OPTICAL"  selected="selected">OPTICAL</option>
+                                                                <option value="RADAR">RADAR</option>
+                                                                <option value="ALTIMETRIC">ALTIMETRIC</option>
+                                                                <option value="ATMOSPHERIC">ATMOSPHERIC</option>
+                                                                <option value="UNKNOWN">UNKNOWN</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><input type="text" class="var-dimension" value=""></td>
+                                                    </tr>
+                                                    </tbody>
+												 </table>
                                             </div>
                                         </div>
                                     </div>
@@ -556,11 +601,49 @@
                     helper_addParameterDescriptorsRow($("#tbl-edt-paramdesc"),value);
                 });
 
+                $.each(response.sources, function(i, value) {
+                    helper_addSourceTargetDescriptorsRow($("#tbl-edt-sources"),value);
+                });
+                $.each(response.targets, function(i, value) {
+                    helper_addSourceTargetDescriptorsRow($("#tbl-edt-targets"),value);
+                });
             }
         });
         return true;
     }
 ////////////
+    function helper_addSourceTargetDescriptorsRow($tbl, payload){
+        var obj = {
+			"id": null,
+			"parentId": null,
+			"name": null,
+			"dataDescriptor": {
+				"formatType": null,
+				"geometry": null,
+				"crs": null,
+				"sensorType": null,
+				"dimension": null,
+				"location": null
+			},
+			"constraints": null
+		};
+        $.extend( obj, payload );
+		
+        var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
+        $el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+        
+		$('input.var-name', $el).val(obj.name);
+        $('select.var-formatType option', $el).removeAttr("selected");
+        $('select.var-formatType option[value="'+obj.dataDescriptor.formatType+'"]', $el).attr("selected", "selected");
+		$('textarea.var-geometry', $el).val(obj.dataDescriptor.geometry);
+        $('input.var-crs', $el).val(obj.dataDescriptor.crs);
+        $('select.var-sensorType option', $el).removeAttr("selected");
+        $('select.var-sensorType option[value="'+obj.dataDescriptor.sensorType+'"]', $el).attr("selected", "selected");
+        $('input.var-dimension', $el).val(obj.dataDescriptor.dimension);
+
+		$tbl.append($el);
+    }
+	
     function helper_addParameterDescriptorsRow($tbl, payload){
         var obj = {
             "dataType": "java.lang.String",
@@ -690,6 +773,10 @@
             .on("click", ".tbl-prop-delete-action", function(e){
                 e.preventDefault();
                 $(this).closest("tbody").remove();
+            })
+            .on("click", ".tbl-port-delete-action", function(e){
+                e.preventDefault();
+                $(this).closest(".val-row").remove();
             });
 
         //remove error for some input elements
@@ -852,6 +939,62 @@
                     formData.parameterDescriptors.push(newParameterDescriptor);
                 }
             });
+			
+            //add sources to payload parsing user defined sources table
+            formData.sources = [];
+			var $tblSourcesDescriptors = $("table#tbl-edt-sources .val-row");
+            $.each($tblSourcesDescriptors, function() {
+                var port_name       = $(this).find(".var-name").val();
+				var port_formatType = $(this).find(".var-formatType").val();
+				var port_geometry   = $(this).find(".var-geometry").val();
+				var port_crs        = $(this).find(".var-crs").val();
+				var port_sensorType = $(this).find(".var-sensorType").val();
+				var port_dimension  = $(this).find(".var-dimension").val();
+				
+                if( ((typeof port_name !== "undefined") && (typeof port_name.valueOf() === "string") && (port_name.length > 0)) ) {
+                    var newSource = {
+						"parentId": formData.id,
+                        "name": port_name,
+						"dataDescriptor": {
+							"formatType": port_formatType,
+							"sensorType": port_sensorType,
+							"geometry"  : port_geometry  == "" ? null : port_geometry,
+							"crs"       : port_crs       == "" ? null : port_crs,
+							"dimension" : port_dimension == "" ? null : port_dimension,
+							"location"  : null
+						}
+                    };
+                    formData.sources.push(newSource);
+                }
+            });
+            //add targets to payload parsing user defined targets table
+            formData.targets = [];
+			var $tblSourcesDescriptors = $("table#tbl-edt-targets .val-row");
+            $.each($tblSourcesDescriptors, function() {
+                var port_name       = $(this).find(".var-name").val();
+				var port_formatType = $(this).find(".var-formatType").val();
+				var port_geometry   = $(this).find(".var-geometry").val();
+				var port_crs        = $(this).find(".var-crs").val();
+				var port_sensorType = $(this).find(".var-sensorType").val();
+				var port_dimension  = $(this).find(".var-dimension").val();
+				
+                if( ((typeof port_name !== "undefined") && (typeof port_name.valueOf() === "string") && (port_name.length > 0)) ) {
+                    var newTarget = {
+						"parentId": formData.id,
+                        "name": port_name,
+						"dataDescriptor": {
+							"formatType": port_formatType,
+							"sensorType": port_sensorType,
+							"geometry"  : port_geometry  == "" ? null : port_geometry,
+							"crs"       : port_crs       == "" ? null : port_crs,
+							"dimension" : port_dimension == "" ? null : port_dimension,
+							"location"  : null
+						}
+                    };
+                    formData.targets.push(newTarget);
+                }
+            });
+			
 //console.log(JSON.stringify(formData));
             if(formData.id === ''){
                 showMsg("Component ID can not be empty. Please choose valid values to continue.", "ERROR");
@@ -863,11 +1006,13 @@
                 showMsg("The component id contains invalid characters.", "ERROR");
                 return;
             }
+			
+			var callType = (userOpStack[0] && userOpStack[0].action ==="comp_edit") ? "PUT" : "POST";
             $.ajax({
                 cache: false,
-                url: baseRestApiURL + "component/",
+                url: baseRestApiURL + "component/" + (callType == "PUT" ? formData.id : ""),
                 dataType: 'json',
-                type: 'POST',
+                type: callType,
                 data: JSON.stringify(formData),
                 headers: {
                     "Accept": "application/json",

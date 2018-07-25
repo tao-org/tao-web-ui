@@ -319,7 +319,7 @@ function chkXHR(status){
     }
     if(status === 0){
         alert("Your request timed out. Please check your Internet connection and retry the request!");
-        window.location = 'login.html';
+        //window.location = 'login.html';
         return 0;
     }
     console.log("XHR fail test");

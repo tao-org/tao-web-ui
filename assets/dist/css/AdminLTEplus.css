@@ -538,6 +538,18 @@ ul.timeline.current_route:before{
 #users-box .disabled{
 	color: #bdbdbd;
 }
+.user-info-row{
+
+}
+.user-info-row img.val-gravatar{
+    float: left;
+    border-bottom: 2px solid #3c8dbc;
+}
+
+.user-info-row p.message{
+    padding-left: 100px;
+}
+
 
 .tao-async-wf{
     padding: 0;

@@ -106,8 +106,6 @@ $(function () {
         });
         $.when(postLogout)
             .done(function (postLogoutResponse) {
-                console.log(postLogoutResponse)
-                alert("ok.");
 				location.reload(true);
             })
             .fail(function(jqXHR, textStatus){

@@ -1,0 +1,357 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Add new user</h4>
+    </div>
+
+    <form id="frmUserEdit" class="form-horizontal form-newpc" role="form">
+        <input type="hidden" id="op" name="op" class="op" value="op-plus" />
+        <input type="hidden" id="id_u" name="id_u" value="0" />
+        <input type="hidden" name="clickedon" value="">
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error!</h4>
+            <p id="modal-error-msg"></p>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <section>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="selectUserType" class="col-sm-2 col-md-2 control-label">User Type</label>
+                            <div class="col-sm-10 col-md-10">
+                                <select id="selectUserType" name="selectUserType" class="form-control" disabled="disabled">
+                                    <option value="0" selected="">TAO local user</option>
+                                    <option value="1">External user (LDAP)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" disabled="disabled" id="inputUsername" name="inputUsername" placeholder="Username" autocomplete="off" value=""/>
+                                <span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
+                                <span class="ckattr-ok sr-only collapse">(success)</span>
+                                <span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
+                                <span class="ckattr-error sr-only collapse">(error)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputFirstName" class="col-sm-2 col-md-2 control-label">First name</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputFirstName" name="inputFirstName" placeholder="First name" autocomplete="off" value=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputLastName" class="col-sm-2 col-md-2 control-label">Last name</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputLastName" name="inputLastName" placeholder="Last name" autocomplete="off" value=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="inputEmail" class="col-sm-2 col-md-2 control-label">Email</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email address" autocomplete="off" value=""/>
+                                <span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
+                                <span class="ckattr-ok sr-only collapse">(success)</span>
+                                <span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
+                                <span class="ckattr-error sr-only collapse">(error)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="inputEmail2" class="col-sm-2 col-md-2 control-label">Alternate email</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputEmail2" name="inputEmail2" placeholder="Alternate email address" autocomplete="off" value=""/>
+                                <span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
+                                <span class="ckattr-ok sr-only collapse">(success)</span>
+                                <span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
+                                <span class="ckattr-error sr-only collapse">(error)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputOrg" class="col-sm-2 col-md-2 control-label">Organization</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputOrg" name="inputOrg" placeholder="Organization" autocomplete="off" value=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputPhone" class="col-sm-2 col-md-2 control-label">Phone</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputPhone" name="inputPhone" placeholder="Phone number" autocomplete="off" value=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputQuota" class="col-sm-2 col-md-2 control-label">Quota (GB)</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="number" class="form-control" id="inputQuota" name="inputQuota" placeholder="quota" min="0" autocomplete="off" value="1000"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Group membership</label>
+                            <div class="col-sm-10">
+                                <div class="checkbox" id="inputGroupHolder">
+                                    <input type="checkbox" id="inputGroup_1" name="group[]" value="1" data-role="ADMIN">ADMIN
+                                    <br /><input type="checkbox" id="inputGroup_2" name="group[]" value="2" data-role="PUBLIC_USER">PUBLIC_USER
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                                <button id="saveUser" type="submit" class="btn btn-primary btn-submit" name="btnSave">Add user</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- /.modal-body -->
+    </form>
+    <div class="modal-note">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                        <h4>Help filling in</h4>
+                        <p>Please fill in all needed information. All data needed to identify a user must be unique, username and email address will be validated on the server against all existing users.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div><!-- /.modal-content -->
+
+<script>
+    function validateUserEmails(attrId, currentUsername){
+        var val = $("#"+attrId).val();
+        var s = {};
+        var msg = "";
+        if(attrId === "inputEmail"){
+            if(val===""){
+                showMsg("Primary email address can not be empty!", "ERROR");
+                return 0;
+            }
+            s = {email:val};
+            msg = "Email address already in use.";
+        }
+        if(attrId === "inputEmail2"){
+            s = {alternativeEmail:val};
+            msg = "Alternate email address already in use.";
+        }
+
+        $.ajax({
+            cache: false,
+            type: "get",
+            url: baseRestApiURL + "admin/users/unicity",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            },
+            error: function() {
+                alert("Communication error. Try again or notify the site admin! Thank you.");
+            },
+            success: function(response) {
+                var $pEL = $("#"+attrId).parent();
+                try {
+                    if(response && Array.isArray(response)){
+                        var matched = _.where(response, s);
+                        if((matched.length === 0)||((matched.length === 1) &&(matched[0].username === currentUsername))){
+                            console.log("wrong!!!");
+                            $(".ckattr-error", $pEL).fadeOut();
+                            $(".ckattr-ok", $pEL).fadeIn();
+                        }else{
+                            $(".ckattr-ok", $pEL).fadeOut();
+                            $(".ckattr-error", $pEL).fadeIn();
+                            showMsg(msg, "ERROR");
+                        }
+                    }else{
+                        $(".ckattr-ok", $pEL).fadeOut();
+                        $(".ckattr-error", $pEL).fadeIn();
+                    }
+                }
+                catch(e) {
+                    alert("Malformed server answer. Try again or notify the site admin! Thank you.");
+                }
+            }
+        });
+        return true;
+    }
+
+
+    $("#inputEmail, #inputEmail2").focusout(function(e) {
+        var attrId = $(this).attr("id");
+        if(attrId) {
+            validateUserEmails(attrId, _mLIST.dataOpQueue[0].dna.username);
+        }
+    });
+
+    $(document).ready( function(){
+        var currentUserName = _mLIST.dataOpQueue[0].dna.username;
+        //populate data with fresh, just in time values
+        function populateCurrentUser(){
+            $.ajax({
+                url: baseRestApiURL + "admin/users/"+currentUserName,
+                "method": "GET",
+                "headers": {
+                    "Cache-Control": "no-cache",
+                    "Accept": "application/json",
+                    "X-Auth-Token": window.tokenKey
+                }
+            }).done(function (response) {
+                var $frm = $("#frmUserEdit");
+                $('input[name=inputUsername]', $frm).val(response.username);
+                $('input[name=inputEmail]', $frm).val(response.email);
+                $('input[name=inputEmail2]', $frm).val(response.alternativeEmail);
+                $('input[name=inputLastName]', $frm).val(response.lastName);
+                $('input[name=inputFirstName]', $frm).val(response.firstName);
+                $('input[name=inputPhone]', $frm).val(response.phone);
+                $('input[name=inputQuota]', $frm).val(response.quota);
+                $('input[name=inputOrg]', $frm).val(response.organization);
+                _.each(response.groups, function(item){
+                    console.log(item);
+                    $("#inputGroup_"+item.id, $frm).prop('checked', true);
+                });
+                if(response.external){
+                    $('select[name=selectUserType]').val(1);
+                } else{
+                    $('select[name=selectUserType]').val(0);
+                }
+            });
+        }
+
+        var settings = {
+            url: baseRestApiURL + "admin/users/groups",
+            "method": "GET",
+            "headers": {
+                "Cache-Control": "no-cache",
+                "Accept": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        };
+        $.ajax(settings)
+            .done(function (response) {
+                var arrHTML = _.map(response, function(item){
+                    return '<input type="checkbox" id="inputGroup_'+item.id+'" name="group[]" value="'+item.id+'" data-role="'+item.name+'">'+item.name;
+                });
+                $("#inputGroupHolder").empty().html(arrHTML.join("<br>"));
+                populateCurrentUser();
+            });
+
+
+
+        $("form#frmUserEdit").submit(function (event) {
+            event.preventDefault();
+
+            var formData = {
+                "id" : _mLIST.dataOpQueue[0].dna.id,
+                "username" : $('input[name=inputUsername]', this).val(),
+                "password" : null,
+                "email" : $('input[name=inputEmail]', this).val(),
+                "alternativeEmail" : $('input[name=inputEmail2]', this).val(),
+                "lastName" : $('input[name=inputLastName]', this).val(),
+                "firstName" : $('input[name=inputFirstName]', this).val(),
+                "phone" : $('input[name=inputPhone]', this).val(),
+                "quota" : $('input[name=inputQuota]', this).val(),
+                "organization" : $('input[name=inputOrg]', this).val(),
+                "external" : false,
+                "groups" : null,
+                "preferences" : null
+            };
+            if($('select[name=selectUserType]').val()===1){
+                formData.external=true
+            }
+            var membership = [];
+            $("input[name='group[]']:checked").each(function ()
+            {
+                membership.push({"id":parseInt($(this).val()), "name":$(this).data("role")});
+            });
+            formData.groups = membership;
+
+            if((formData.username === '')||(formData.email === '')){
+                showMsg("Username and email can not be empty. Please check your entries and try again.", "ERROR");
+                return false;
+            }
+
+            $.ajax({
+                cache: false,
+                url: baseRestApiURL + "admin/users/"+currentUserName,
+                dataType : 'json',
+                type: 'POST',
+                data: JSON.stringify(formData),
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": window.tokenKey
+                },
+                error : function (jqXHR, textStatus, errorThrown) {
+                    if(jqXHR.status === 500){
+                        showMsg("Error adding user. Please check you data and try again.", "ERROR");
+                        return;
+                    }
+                    if(jqXHR.status === 400){
+                        showMsg("Error adding user. Please check you data, one or more values for the attributes was not in the acceptable range.", "ERROR");
+                        //handle error messages
+                        $(".modal-error ").html(jqXHR.responseText).fadeIn("slow");
+                        $('#myModalNodes').animate({scrollTop: 0}, 250);
+                        return;
+                    }
+                    showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
+                },
+                success: function(data) {
+                    showMsg("New user successfully added.", "SUCCESS");
+                    $("#myModalNodes").modal('hide');
+                    _mLIST.refresh();
+                }
+            });
+            return false;
+        });
+    });
+</script>

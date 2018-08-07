@@ -4,11 +4,7 @@
         <h4 class="modal-title" id="myModalLabel">Start processing workflow</h4>
     </div>
 
-    <form id="frmExecNodeEdit" class="form-horizontal form-newpc" role="form">
-        <input type="hidden" id="op" name="op" class="op" value="op-plus" />
-        <input type="hidden" id="id_u" name="id_u" value="0" />
-        <input type="hidden" name="clickedon" value="">
-
+    <form id="frmStartWF" class="form-horizontal form-newpc" role="form">
         <div class="modal-error collapse">
             <h4 class="modal-title">Error processing workflow!</h4>
             <p id="modal-error-msg">Please check you data, one or more values for the attributes is not in the acceptable range.</p>
@@ -23,14 +19,21 @@
             <section>
                 <div class="row">
                     <div class="col-md-12">
-                        <p>Please check all the tabs before saving a new component.</p>
-                        <div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
+                        <div id="wf-header" class="padding-left--20 padding-bottom--20">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="inputWorkflowName" class="col-sm-2 col-md-2 control-label">Name</label>
-                                        <div class="col-sm-10 col-md-10">
-                                            <input type="text" class="form-control" id="inputWorkflowName" name="inputWorkflowName" placeholder="workflow name" autocomplete="off" value="" data-errorspan="name"/>
+                                    <div class="info-box bg-aqua">
+                                        <span class="info-box-icon"><i class="fa fa-rocket"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Selected workflow for processing</span>
+                                            <span class="info-box-number val-start-wf-name"></span>
+                                            <div class="progress">
+                                                <div class="progress-bar" style="width: 100%"></div>
+                                            </div>
+                                            <span class="progress-description">
+                                                user: <small class="label bg-white val-start-wf-username">###</small>
+                                                 ,visibility: <small class="label bg-white val-start-wf-visibility">###</small>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -39,8 +42,6 @@
                     </div>
                 </div>
 
-
-
                 <div class="row">
                     <div class="col-md-12">
                         <p>You can customize workflow parameters before run. Values will only affect current workflow processing call.</p>
@@ -48,24 +49,20 @@
                             <div class="row">
                                 <div class="col-md-12">
 
-
-
-
-
                                     <div class="box-group" id="accordion">
-                                        <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                                        <div id="acc-panel-ID" class="panel box box-primary">
+                                        <!-- node -->
+                                        <div id="acc-panel-tpl" class="panel box box-primary hidden">
                                             <div class="box-header with-border">
                                                 <h4 class="box-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse-one-ID" aria-expanded="true" class="">
-                                                        Collapsible Group Item #1
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse-one-body-tpl" aria-expanded="true" class="">
+                                                        Collapsible Item
                                                     </a>
                                                 </h4>
                                             </div>
-                                            <div id="collapse-one-ID" class="panel-collapse collapse" aria-expanded="false">
+                                            <div id="collapse-one-body-tpl" class="panel-collapse collapse" aria-expanded="false">
                                                 <div class="box-body">
                                                     <div style="padding: 20px;">
-                                                        <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-sysvar">
+                                                        <table class="table table-bordered box-shadow--6dp tbl-edt tbl-edt-sysvar">
                                                             <thead>
                                                             <tr>
                                                                 <th>Key</th>
@@ -77,39 +74,21 @@
                                                                 <td>
                                                                     <span class="var-id hidden"></span>
                                                                     Label:&nbsp;<strong><span class="var-label"></span></strong>&nbsp;(<span class="var-dataType"></span>)
-                                                                    <br>description:&nbsp;<span class="var-description"></span>
                                                                 </td>
                                                                 <td style="width: 70%;">
                                                                     <input type="hidden" class="var-value" value="" placeholder="input variable's value">
                                                                     <input type="text" class="var-value-string collapse" value="" placeholder="input variable's value">
                                                                     <select class="var-value-list collapse"></select>
-                                                                    <br>default:&nbsp;<span class="var-default"></span>
                                                                 </td>
                                                             </tr>
+
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="panel box box-primary">
-                                            <div class="box-header with-border">
-                                                <h4 class="box-title">
-                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed" aria-expanded="false">
-                                                        Collapsible Group Danger
-                                                    </a>
-                                                </h4>
-                                            </div>
-                                            <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false">
-                                                <div class="box-body">
-                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
-
-
-
                                 </div>
                             </div>
                         </div>
@@ -124,7 +103,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
-                                <button id="saveExecNode" type="submit" class="btn btn-primary btn-submit" name="btnSave">Process workflow</button>
+                                <button id="saveExecNode" type="submit" class="btn btn-primary btn-submit">Process workflow</button>
                             </div>
                         </div>
                     </div>
@@ -151,66 +130,51 @@
 
 <script>
     $(document).ready( function(){
-        //get all availlable dockers
         if(_mLIST.dataOpQueue[0] && _mLIST.dataOpQueue[0].dna.id){
             getWFDataById(_mLIST.dataOpQueue[0].dna.id);
-            getWFParametersById(_mLIST.dataOpQueue[0].dna.id);
+        }else{
+            alert("Error determining workflow ID.");
         }
-
         //remove error for some input elements
-        $("input, textarea","form#frmExecNodeEdit")
-            .on("keypress change", function(){
-                if($(this).data("errorspan")) {
-                    $(".error-" + $(this).data("errorspan"), ".modal-error").css('display', 'none');
-                    if($(".modal-error").find("span:visible").length == 0) {
-                        $(".modal-error").hide();
-                        $("#saveExecNode").removeAttr('disabled');
-                    }
-                }
-            })
-            .on("focusout", function(){
-                if($(this).data("errorspan")){
-                    if (($(this).val() === "")||($(this).val() === 0)||($(this).val() === "0")){
-                        $(".error-"+$(this).data("errorspan"),".modal-error").css('display', 'inline-block');
-                        $(".modal-error").fadeIn("slow");
-                        $("#saveExecNode").attr('disabled','disabled');
-                    }
-                }
-            });
-        $("form#frmExecNodeEdit").submit(function (e) {
+        $("#frmStartWF").submit(function (e) {
             e.preventDefault();
-            var formData = {};
-            var ajaxType = "";
-            var ajaxURL = "";
-            if($(this).data("payload")){
-                formData = $(this).data("payload");
-                ajaxType = 'PUT';
-                ajaxURL = formData.id + '/';
-                //overwrite with user input
-                formData.name = $('input[name=inputWorkflowName]', this).val();
-                formData.visibility = $('select[name=inputVisibility]', this).val();
-                formData.status = $('select[name=inputStatus]', this).val();
-                formData.active = $('select[name=inputActive]', this).val();
-            }else{
-                ajaxType = 'POST';
-                ajaxURL = '';
-                formData = {
-                    "name" : $('input[name=inputWorkflowName]', this).val(),
-                    "created":arrayFromDatetime(),
-                    "userName":"admin",
-                    "path" : $('input[name=inputPath]', this).val(),
-                    "visibility": $('select[name=inputVisibility]', this).val(),
-                    "status": $('select[name=inputStatus]', this).val(),
-                    "active": $('select[name=inputActive]', this).val(),
-                    "xCoord":0,
-                    "yCoord":0,
-                    "zoom":1
-                };
+            alert("start WF with dummy data!");
+            var formData = {
+                "AWS Download": {
+                    "pageSize": 20,
+                    "limit": 1,
+                    "pageNumber": 1,
+                    "beginPosition" : "2018-06-10",
+                    "endPosition" : "2018-06-20",
+                    "footprint" : "POLYGON((22.8042573604346 43.8379609098684,24.83885442747927 43.8379609098684,24.83885442747927 44.795645304033826,22.8042573604346 44.795645304033826,22.8042573604346 43.8379609098684))",
+                    "cloudcoverpercentage" : 100.0
+                },
+                "SNAP NDVI": {
+                    "nirFactor": 0.5
+                }
+            };
+            console.log(JSON.stringify(formData));
+
+            var settings = {
+                "async": true,
+                "url": baseRestApiURL + "orchestrator/start/"+_mLIST.dataOpQueue[0].dna.id,
+                "method": "POST",
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Cache-Control": "no-cache",
+                    "X-Auth-Token": window.tokenKey
+                },
+                "data": JSON.stringify(formData)
             }
 
-            console.log(JSON.stringify(formData));
+            $.ajax(settings)
+                .done(function (response) {
+                    console.log(response);
+                })
+                .fail(function (response) {
+                alert("could not start execution");
+                });
             //SUBMIT TO SERVER
-
             return false;
         });
     });
@@ -219,7 +183,7 @@
         var settings = {
             "async": true,
             "crossDomain": true,
-            "url": "http://localhost:8080/orchestrator/start/parameters/"+wfID,
+            "url": baseRestApiURL + "orchestrator/start/parameters/"+wfID,
             "method": "GET",
             "headers": {
                 "x-auth-token": "84656a7f-827a-429c-a21a-fcf9500e3bce",
@@ -230,6 +194,62 @@
 
         $.ajax(settings).done(function (response) {
             console.log(response);
+            var helper_EdtRowPutValue = function($el, name, type, value, valueset){
+                if(valueset === null){
+                    $('input.var-value', $el).val(value);
+                    if(humanJavaDataType(type) === "Date"){
+                        $('input.var-value-string', $el).attr("type", "date");
+                    }
+                    if((humanJavaDataType(type) === "Double") || (humanJavaDataType(type) === "Float") || (humanJavaDataType(type) === "Number")){
+                        $('input.var-value-string', $el).attr("type", "number").attr("step", "any");
+                    }
+                    if((humanJavaDataType(type) === "Integer") || (humanJavaDataType(type) === "Short")){
+                        $('input.var-value-string', $el).attr("type", "number");
+                    }
+                    $('input.var-value-string', $el).val(value).show();
+                }else{
+                    $('input.var-value', $el).val(value);
+                    var html = "";
+                    $.each(valueset, function(i, v) {
+                        html +="<option "+(v === value && 'selected ')+"value=\""+v+"\">"+v+"</option>";
+                    });
+                    $('select.var-value-list', $el).html(html).show();
+                }
+            };
+            var helper_addSTblEdtRow = function($tblEdt, payload){
+                var obj = {
+                    "type": "java.lang.String",
+                    "name": "",
+                    "valueSet": [],
+                    "value": null
+                };
+                $.extend( obj, payload );
+                var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
+                $('span.var-id', $el).html(obj.name);
+                $('span.var-label', $el).html(obj.name);
+//                $('span.var-description', $el).html(obj.description);
+                $('span.var-dataType', $el).html(humanJavaDataType(obj.type));
+//                $('span.var-default', $el).html(obj.defaultValue);
+                if((obj.value == null) || (obj.value === '') || (obj.value === undefined)){
+//                    obj.value = obj.defaultValue;
+                }
+                if(obj.type === "java.lang.Boolean"){
+                    helper_EdtRowPutValue($el, obj.name, obj.type, obj.value, ["true","false"]);
+                }else{
+                    helper_EdtRowPutValue($el, obj.name, obj.type, obj.value, obj.valueSet);
+                }
+                $tblEdt.append($el);
+            };
+            $('#accordion>div.panel').each(function(){
+                var dna = $(this).data("dna");
+                if (dna){
+                    console.log(response[dna.name]);
+                    var $tableEL = $(".tbl-edt-sysvar",$(this));
+                    $.each(response[dna.name], function(i, value) {
+                        helper_addSTblEdtRow($($tableEL[0]), value);
+                    });
+                }
+            });
         }).fail(function () {
             console.log("error retriving workflow parameters");
         });
@@ -257,29 +277,26 @@
             },
             success: function(response) {
                 console.log(response);
-                try {
-                    //populate form with current values
-                    var $el = $('#frmExecNodeEdit');
-                    $el.data("payload", response);
+                //populate wf header
+                var $el = $('#wf-header');
+                $el.data("payload", response);
+                $('.val-start-wf-name', $el).html(response.name);
+                $('.val-start-wf-username', $el).html(response.userName);
+                $('.val-start-wf-visibility', $el).html(response.visibility);
 
-                    $('input[name=inputCompID]', $el).val(response.id);
-                    $('input[name=inputWorkflowName]', $el).val(response.name);
-
-                    $('select[name=inputActive] option', $el).removeAttr("selected");
-                    $('select[name=inputActive] option[value="'+response.active+'"]', $el).attr("selected", "selected");
-
-                    $('select[name=inputVisibility] option', $el).removeAttr("selected");
-                    $('select[name=inputVisibility] option[value="'+response.visibility+'"]', $el).attr("selected", "selected");
-
-                    $('select[name=inputStatus] option', $el).removeAttr("selected");
-                    $('select[name=inputStatus] option[value="'+response.status+'"]', $el).attr("selected", "selected");
-                }
-                catch(e) {
-                    alert('E001, An error has occurred, please try again or contact app admin.');
-                }
+                var $elClone;
+                _.each(response.nodes, function(node){
+                    console.log("node");
+                    console.log(node);
+                    $elClone = $( "#acc-panel-tpl" ).clone();
+                    $elClone.prop("id", "acc-panel-node-"+node.id );
+                    $elClone.find(".box-title a").html(node.name+" <i>(component ID: "+node.componentId+")</i>" ).attr("href", "#collapse-one-body-"+node.id);
+                    $elClone.find(".panel-collapse").prop("id", "collapse-one-body-"+node.id);
+                    $elClone.appendTo( "#accordion" ).data("dna", node).removeClass("hidden");
+                });
+                getWFParametersById(wfID);
             }
         });
         return true;
     }
-    //# sourceURL=workflow-plus.js
 </script>

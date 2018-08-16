@@ -59,6 +59,7 @@ $(function () {
 
     hashRoutesMap["shared/workflows"] = "./fragments/workflows-all.fragment.html";
     hashRoutesMap["shared/components"] = "./fragments/component-admin.fragment.html";
+    hashRoutesMap["shared/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
     hashRoutesMap["shared/datasources"] = "./fragments/datasource-admin.fragment.html";
 
     hashRoutesMap["undefined/page"] = "./fragments/tao-faq.fragment.html";

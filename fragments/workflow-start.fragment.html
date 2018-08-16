@@ -95,10 +95,6 @@
                     </div>
                 </div>
 
-
-
-
-
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -136,10 +132,37 @@
             alert("Error determining workflow ID.");
         }
         //remove error for some input elements
-        $("#frmStartWF").submit(function (e) {
+        $("#frmStartWF")
+            .on("change",".var-value-string",function(e){
+                $(this).siblings(".var-value").val($(this).val());
+            })
+            .on("change",".var-value-list",function(e){
+                $(this).siblings(".var-value").val($(this).val());
+            });
+        $("#frmStartWF")
+            .submit(function (e) {
             e.preventDefault();
-            alert("start WF with dummy data!");
-            var formData = {
+            var formData = {};
+            $('#accordion>div.panel').each(function(){
+                var dna = $(this).data("dna");
+                if (dna){
+                    formData[dna.name] = {};
+                    console.log("p-c");
+                    console.log(dna);
+                    var $tableValRows = $(".tbl-edt-sysvar",$(this)).find(".val-row");
+                    $.each($tableValRows, function(i, $tableValRow) {
+                        var n = $(".var-id",$tableValRow).text();
+                        var v = $(".var-value",$tableValRow).val();
+                        console.log("row");
+                        console.log(dna.name + n + v);
+                        formData[dna.name][n] = v;
+                    });
+                }
+            });
+
+            //console.log("formData 1");  console.log(formData);
+/*
+            formData = {
                 "AWS Download": {
                     "pageSize": 20,
                     "limit": 1,
@@ -153,7 +176,9 @@
                     "nirFactor": 0.5
                 }
             };
-            console.log(JSON.stringify(formData));
+            console.log(formData);
+            //console.log(JSON.stringify(formData));
+*/
 
             var settings = {
                 "async": true,
@@ -165,11 +190,15 @@
                     "X-Auth-Token": window.tokenKey
                 },
                 "data": JSON.stringify(formData)
-            }
+            };
 
             $.ajax(settings)
                 .done(function (response) {
                     console.log(response);
+                    if(response.message === 'Execution started'){
+                        showMsg("Workflow processing successfully started. Orchestrator returned job ID "+response.job, "SUCCESS");
+                        $("#myModalNodes").modal('hide');
+                    }
                 })
                 .fail(function (response) {
                 alert("could not start execution");
@@ -193,6 +222,7 @@
         };
 
         $.ajax(settings).done(function (response) {
+            console.log("response 02");
             console.log(response);
             var helper_EdtRowPutValue = function($el, name, type, value, valueset){
                 if(valueset === null){
@@ -276,6 +306,7 @@
                 }
             },
             success: function(response) {
+                console.log("response 001");
                 console.log(response);
                 //populate wf header
                 var $el = $('#wf-header');

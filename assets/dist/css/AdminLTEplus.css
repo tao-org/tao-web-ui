@@ -1070,6 +1070,12 @@ input[type=checkbox].big{
     font-size: .85em;
 }
 
+/* start wf form*/
+#frmStartWF .tbl-edt input,#frmStartWF .tbl-edt textarea,#frmStartWF .tbl-edt select {
+    border: 1px solid #CCC;
+    line-height: 1em;
+}
+
 /* svg animations */
 svg .loading{
     margin:0;

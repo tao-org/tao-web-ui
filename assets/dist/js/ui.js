@@ -16,9 +16,8 @@
  * file details: core functions and general functionality, request router for single page app.
  *
  * functions:
- * taoUI_UpdateUserQuota()      //update user quota indications in UI
- * showMsg()                    //show UI message in toast like notification
- * taoUI_UpdateUserProfile()    //updates user profile in UI
+ * taoUI_UpdateUserQuota()  //update user quota indications in UI
+ * showMsg()                //show UI message in toast like notification
  *
  *
  **/
@@ -32,7 +31,7 @@ $(function () {
     var username = _settings.readCookie("TaoUserName");
     var ajax_getProfileSettings = {
         "cache": false,
-        "url": baseRestApiURL+username,
+        "url": baseRestApiURL + "user/"+username,
         "method": "GET",
         "headers": {
             "X-Auth-Token": window.tokenKey

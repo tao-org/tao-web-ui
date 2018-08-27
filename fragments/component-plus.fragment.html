@@ -200,8 +200,8 @@
                                                     <thead>
                                                     <tr>
                                                         <th></th>
-                                                        <th>Parameter ID</th>
-                                                        <th style="width: 50%;">Description</th>
+                                                        <th>Name</th>
+                                                        <th>Description</th>
                                                         <th>Parameter Label</th>
                                                         <th>Parameter Type</th>
                                                         <th>Data Type</th>
@@ -227,7 +227,8 @@
                                                             <a href="#" class="text tbl-prop-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
                                                         </th>
                                                         <td>
-                                                            <input type="text" class="var-id" value="" placeholder="parameter ID">
+                                                            <input type="hidden" class="var-id" value="">
+															<input type="text" class="var-name" value="" placeholder="parameter name">
                                                         </td>
                                                         <td><textarea rows="2" class="var-description"></textarea></td>
                                                         <td>
@@ -693,16 +694,17 @@
         var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
         $el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
         $('input.var-id', $el).val(obj.id);
+		$('input.var-name', $el).val(obj.name);
         $('textarea.var-description', $el).val(obj.description);
         $('input.var-label', $el).val(obj.label);
         $('input.var-default', $el).val(obj.defaultValue);
 
         $('select.var-type option', $el).removeAttr("selected");
-        $('select.var-type option[value="'+obj.dataType+'"]', $el).attr("selected", "selected");
-
+        $('select.var-type option[value="'+obj.type+'"]', $el).attr("selected", "selected");
+		
         $('select.var-datatype option', $el).removeAttr("selected");
-        $('select.var-datatype option[value="'+obj.type+'"]', $el).attr("selected", "selected");
-
+        $('select.var-datatype option[value="'+obj.dataType+'"]', $el).attr("selected", "selected");
+		
         $('input.var-unit', $el).val(obj.unit);
         if(obj.format) $('input.var-format', $el).val(obj.format);
         if(obj.validator) $('input.var-validator', $el).val(obj.validator);
@@ -871,6 +873,16 @@
                 validateHostName($(this).attr("id"));
             }
         });
+		
+		function guid() {
+		  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+		}
+		function s4() {
+		  return Math.floor((1 + Math.random()) * 0x10000)
+			.toString(16)
+			.substring(1);
+		}
+		
         $("form#frmExecNodeEdit").submit(function (e) {
             e.preventDefault();
             if(routeTags[0] === "shared"){
@@ -886,8 +898,6 @@
                     "authors" : $('input[name=inputCompAuthors]', this).val(),
                     "copyright" : $('input[name=inputCompCopyright]', this).val(),
                     "nodeAffinity": "Any",
-                    "sourceCardinality": 0,
-                    "targetCardinality": 0,
                     "sources": [],
                     "targets": [],
                     "containerId": $('select[name=inputContainerId]', this).val(),
@@ -914,6 +924,7 @@
                     "parameterDescriptors": [
                         {
                         "id": "outmode_string",
+						"name": "",
                         "type": 1,
                         "dataType": "java.lang.String",
                         "defaultValue": "ulco",
@@ -969,8 +980,9 @@
             //add parameterDescriptors to payload parsing user defined parameterDescriptors table
             formData.parameterDescriptors = [];
             var $tblParameterDescriptors = $("#comp-tab-param table");
-            $("tbody", $tblParameterDescriptors).each(function(){
+            $("tbody:not(.tpl-sample-body)", $tblParameterDescriptors).each(function(){
                 var id = $(this).find(".val-row input.var-id").val();
+                var name = $(this).find(".val-row input.var-name").val();
                 var label = $(this).find(".val-row input.var-label").val();
                 var description = $(this).find(".val-row .var-description").val();
                 var type = $(this).find(".val-row .var-type").val();
@@ -982,26 +994,29 @@
                 var validator = $(this).find(".val-row-plus input.var-validator").val();
                 var notnull = $(this).find(".val-row-plus .var-notnull").is(":checked");
 
-                if( ((typeof id !== "undefined") && (typeof id.valueOf() === "string") && (id.length > 0)) ) {
-                    if (format.trim()=== ''){format = null;}
-                    if (unit.trim()=== ''){unit = null;}
-                    if (validator.trim()=== ''){validator = null;}
-
-                    var newParameterDescriptor = {
-                        "id": id,
-                        "type": type,
-                        "dataType": datatype,
-                        "defaultValue": defaultval,
-                        "description": description,
-                        "label": label,
-                        "unit": unit,
-                        "valueSet": null,
-                        "format": format,
-                        "notNull": notnull,
-                        "validator": validator
-                    };
-                    formData.parameterDescriptors.push(newParameterDescriptor);
-                }
+                if( !((typeof id !== "undefined") && (typeof id.valueOf() === "string") && (id.length > 0)) ) {
+					id = guid();
+				}
+				
+				if (format.trim()=== ''){format = null;}
+				if (unit.trim()=== ''){unit = null;}
+				if (validator.trim()=== ''){validator = null;}
+				
+				var newParameterDescriptor = {
+					"id": id,
+					"name": name,
+					"type": type,
+					"dataType": datatype,
+					"defaultValue": defaultval,
+					"description": description,
+					"label": label,
+					"unit": unit,
+					"valueSet": null,
+					"format": format,
+					"notNull": notnull,
+					"validator": validator
+				};
+				formData.parameterDescriptors.push(newParameterDescriptor);
             });
 			
             //add sources and targets to payload parsing user defined port tables

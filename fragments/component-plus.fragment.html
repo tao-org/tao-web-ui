@@ -245,6 +245,8 @@
                                                                 <option value="java.lang.String" selected="selected">String</option>
                                                                 <option value="java.lang.Integer">Integer</option>
                                                                 <option value="java.lang.Boolean">Boolean</option>
+                                                                <option value="java.lang.Float">Float</option>
+                                                                <option value="java.lang.Double">Double</option>
                                                                 <option value="file">File</option>
                                                             </select>
                                                         </td>
@@ -671,6 +673,7 @@
         $('select.var-sensorType option', $el).removeAttr("selected");
         $('select.var-sensorType option[value="'+obj.dataDescriptor.sensorType+'"]', $el).attr("selected", "selected");
         $('input.var-dimension', $el).val(obj.dataDescriptor.dimension);
+        $('input.var-cardinality', $el).val(obj.cardinality);
 
 		$tbl.append($el);
     }

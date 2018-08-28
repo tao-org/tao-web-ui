@@ -43,7 +43,12 @@ $(function () {
             if(r.id){
                 taoUserProfile = r;
                 taoUserProfile.userEmailMD5 = CryptoJS.MD5(r.email).toString();
-                taoUserProfile.userRole = r.groups[0]["name"];
+                if(r.groups && r.groups[0]){
+                    taoUserProfile.userRole = r.groups[0]["name"];
+                }else{
+                    alert("Your account membership has been revoked.\nYou are not a member of any user groups therefore you are denied access and you will be redirected to the login page.\nContact your TAO administrator to fix the account permissions.");
+                    window.location = 'login.html';
+                }
             }
             $(".val-user-fullname").html(taoUserProfile.lastName+" "+taoUserProfile.firstName);
             $(".val-user-role").html(taoUserProfile.userRole);
@@ -237,6 +242,7 @@ $(function () {
         $elMsgCount = $(".val-msgcount", "#bot-notice-chat");
     function retriveNotifications(){
         $.ajax({ cache: false,
+            //url: baseRestApiURL + "monitor/notification/",
             url: baseRestApiURL + "monitor/notification/?rnd=" + Math.random(),
             dataType : 'json',
             type: 'GET',

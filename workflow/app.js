@@ -671,7 +671,7 @@ jsPlumb.ready(function () {
         var delOneNode = $.ajax({
             cache: false,
             url: baseRestApiURL + "workflow/node?workflowId="+currentWfID,
-            dataType : 'text',
+            //dataType : "text",
             data: JSON.stringify(wfPlumbCanvasData.nodes[el]),
             type: 'DELETE',
             headers: {
@@ -691,7 +691,7 @@ jsPlumb.ready(function () {
                     return 0;
                 }
             })
-            .fail(function(){
+            .fail(function(jqXHR, status, textStatus){
                 alert("Could not delete node", "ERROR");
                 return 0;
             });

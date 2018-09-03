@@ -95,14 +95,15 @@
             $("[id^=rm-previewmode-]").hide().find(".filepreview-holder").empty();
             var $thisEL = $( "#rm-previewmode-"+data.previewmode );
             $("#rm-previewmode-close" ).show();
-            if($thisEL.length==1){
+            if($thisEL.length === 1){
                 //$thisEL.hide();
                 console.log(data);
-                if(data.previewmode == 'map'){
-                    var txtObj='<iframe width="100%" height="550" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="'+data.url+'" style="border: 1px solid black"></iframe>';
+                var txtObj;
+                if(data.previewmode === 'map'){
+                    txtObj = '<iframe width="100%" height="550" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="'+data.url+'" style="border: 1px solid black"></iframe>';
                 }
-                if(data.previewmode == 'img'){
-                    var txtObj='<img src="'+data.url+'" width="100%" height="auto" />';
+                if(data.previewmode === 'img'){
+                    txtObj = '<img src="'+data.url+'" width="100%" height="auto" />';
                 }
                 $(".filepreview-holder", $thisEL).html(txtObj);
                 $thisEL.show();
@@ -113,7 +114,7 @@
             var txtDownload = '<h4>Download!</h4><p>Please access <a href="'+data.url+'" target="_blank"><button class="btn bg-green btn-flat"><i class="fa fa-download fa-fw"></i>your result file directly</button></a>.</p>';
             $(".filedownload-holder", "#rm-previewmode-download" ).html(txtDownload);
             $("#rm-previewmode-download" ).show();
-        }
+        };
 
         rmPreviewFile = function(idfile){
             var	lcl_postdata = {
@@ -122,7 +123,7 @@
             };
             $.ajax({
                 type: "post",
-                url: baseRestURLPHP+"projects/results/?action=PREVIEW&rnd=" + Math.random(),
+                url: baseRestApiURL+"projects/results/?action=PREVIEW&rnd=" + Math.random(),
                 dataType: "json",
                 data: JSON.stringify(lcl_postdata),
                 contentType: "application/json; charset=utf-8",
@@ -132,11 +133,9 @@
                 success: function(response) {
                     try {
                         var obj = response;
-                        if(obj.code == '200-OK'){
+                        if(obj.code === '200-OK'){
                             htmlFilePreview(obj.payload);
-
                             console.log(obj.payload);
-                            //_paneDOCS.getUserUploadedFiles("",$('#frmOp .docid').val());
                         }
                     }
                     catch(e) {
@@ -144,7 +143,7 @@
                     }
                 }
             });
-        }
+        };
 
         $(document).ready( function(){
             $("#rm-previewfiles").on("click", ".btn", function(event){

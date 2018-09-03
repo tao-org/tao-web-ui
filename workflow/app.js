@@ -313,7 +313,7 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
             wf_loadWorkflowById(currentWfID);
         })
         .fail(function(){
-            alert("Could not retrive workspace data. Unable to proceed", "ERROR");
+            alert("Could not retrive workspace data. Unable to proceed");
         });
 });
 

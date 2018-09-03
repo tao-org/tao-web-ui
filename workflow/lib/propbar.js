@@ -95,7 +95,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         $tblEdt = $("#tbl-edt-sysvar");
         $tblEdt.find(".val-row").each(function() {
             var onePair = {
-                "parameterName":$(".var-id",$(this)).html(),
+                "parameterName":$(".var-name",$(this)).html(),
                 "parameterValue":$(".var-value",$(this)).val()
             };
             cV.push(onePair);
@@ -276,6 +276,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             $.extend( obj, payload );
             var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
             $('span.var-id', $el).html(obj.id);
+            $('span.var-name', $el).html(obj.name);
             $('span.var-label', $el).html(obj.label);
             $('span.var-description', $el).html(obj.description);
             $('span.var-dataType', $el).html(humanJavaDataType(obj.dataType));

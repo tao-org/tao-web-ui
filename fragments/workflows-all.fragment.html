@@ -496,7 +496,6 @@
                     "to": 0,
                     "order": "none"
                 };
-                console.log("cucu");
                 $.ajax({
                     cache: false,
                     type: "get",
@@ -511,7 +510,8 @@
                     error : function (jqXHR, textStatus, errorThrown) {
                         chkXHR(jqXHR.status);
                     },
-                    success: function(response,textStatus, jqXHR) {
+                    success: function(r,textStatus, jqXHR) {
+                        var response = chkTSRF(r);
                         if(jqXHR.status === 204){
                             showMsg("No workflows found.", "SUCCESS");
                             response = [];
@@ -528,7 +528,7 @@
                             if(Math.random()<.5){response[j].tags.push("Tag5");}
                             if(Math.random()<.5){response[j].tags.push("Tag6");}
                         }
-                        //create tags
+                        //inject fake tags
                         _mLIST.dataAllTags = [];
                         for (j = 0; j < response.length; j++){
                             _mLIST.dataAllTags = _mLIST.dataAllTags.concat(response[j].tags);
@@ -538,7 +538,6 @@
 
                         _mLIST.data = response;
                         _mLIST.dataFull = response;
-//_mLIST.hideLoading();
                         routeLoading('hide');
                         //keep this order
                         _mLIST.repaintTags();

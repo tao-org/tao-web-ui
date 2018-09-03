@@ -239,6 +239,17 @@ function datetimeFromArray(arr){
     }
 }
 
+function timeAgoFromArray(arr){
+    if(arr && (arr !== null) && (arr instanceof Array) ){
+        arr[1]--;arr[6] = 0; //fix month, ignore miliseconds
+        var dateAgo = moment.utc(arr);
+        return moment(dateAgo).fromNow();
+    }else{
+        return 'unknown';
+    }
+}
+
+
 //array from date(day to sec), uses moment.js
 function arrayFromDatetime(){
     var arr = moment().toArray();
@@ -306,22 +317,31 @@ var _settings = {
     }
 };
 
-function chkXHR(status){
+function chkXHR(status, redirect){
+    b = (typeof redirect !== 'undefined') ? redirect : true;
+    if(status === 0){
+        alert("Your request timed out. Please check your Internet connection and retry the request!");
+        return 0;
+    }
     if(status === 401){
         alert("Your session has expired or is invalid. Please log in again!");
-        window.location = 'login.html';
-        return 0;
     }
     if(status === 403){
         alert("403 - Forbidden: Server responded with access is denied message. You do not have permission to access the page using the credentials that you supplied!");
+    }
+
+    if(redirect){
         window.location = 'login.html';
-        return 0;
     }
-    if(status === 0){
-        alert("Your request timed out. Please check your Internet connection and retry the request!");
-        //window.location = 'login.html';
-        return 0;
+}
+
+function chkTSRF(r){
+    //TSRF = Tao Standard Rest Format
+    //{"data":{},"message":null,"status":"SUCCEEDED"}
+    if( r.status && (r.status === "SUCCEEDED") && r.data ){
+        return r.data;
+    }else{
+        console.log('server said: API call did failed '+ r.message);
+        return {};
     }
-    console.log("XHR fail test");
-    console.log(status);
 }

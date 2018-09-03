@@ -72,12 +72,6 @@
 <!-- modal loading -->
 
 <!-- modal -->
-<div id="myModalScreen" class="modal modal-keep-empty modal-fullscreen fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-    </div><!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
-<!-- modal -->
 <div id="myModalWorkFlow" class="modal modal-fullscreen fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
     </div><!-- /.modal-dialog -->
@@ -602,26 +596,6 @@ Nothing to see!
     ///////////////////////////////////////
     $(document).ready( function(){
         console.log("document ready!!!");
-        myModalScreen = function(action){
-            var $myMS = $("#myModalScreen");
-            var rmContent = '';
-            $.ajax({
-                url: '/_tao/rm_content/rm_ux_do.php?action=' + action,
-                success: function(result) {
-                    rmContent = result;
-                },
-                async:   false
-            });
-            if(rmContent !== ''){
-                $myMS.find('.modal-dialog').html(rmContent);
-            }else{
-                alert("Must be a crazy error! Could not retrive needed data from server.");
-                return e.preventDefault();
-            }
-            $myMS.modal('show');
-            history.pushState(null, null, "#"+action);
-        };
-
 
         $("#selectPane").on("change", function(event){
             var current_pane = $(this).val() || 0;
@@ -706,12 +680,9 @@ Nothing to see!
             },
             startAtIdle: true,
             recurIdleCall: true,
-//					onActive: function(){
-//											alert('Hey, I\'m back!');
-//					},
+//					onActive: function(){alert('Hey, I\'m back!');},
             idle: 60000
         });
-
 
         //trigger some events
         $(document).trigger( "quota:update" );

@@ -198,7 +198,8 @@
             error: function() {
                 alert("Communication error. Try again or notify the site admin! Thank you.");
             },
-            success: function(response) {
+            success: function(r) {
+                var response = chkTSRF(r);
                 var $pEL = $("#"+attrId).parent();
                 try {
                     if(response && Array.isArray(response)){
@@ -245,7 +246,8 @@
                     "Accept": "application/json",
                     "X-Auth-Token": window.tokenKey
                 }
-            }).done(function (response) {
+            }).done(function (r) {
+                var response = chkTSRF(r);
                 var $frm = $("#frmUserEdit");
                 $('input[name=inputUsername]', $frm).val(response.username);
                 $('input[name=inputEmail]', $frm).val(response.email);
@@ -277,7 +279,8 @@
             }
         };
         $.ajax(settings)
-            .done(function (response) {
+            .done(function (r) {
+                var response = chkTSRF(r);
                 var arrHTML = _.map(response, function(item){
                     return '<input type="checkbox" id="inputGroup_'+item.id+'" name="group[]" value="'+item.id+'" data-role="'+item.name+'">'+item.name;
                 });

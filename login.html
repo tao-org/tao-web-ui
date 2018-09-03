@@ -30,11 +30,11 @@
         <form id="frmSignIn" name="frmSignIn" method="post" accept-charset="UTF-8">
             <input name="action" type="hidden" value="signin" />
             <div id="frmSignInMsg" class="callout callout-danger collapse" role="alert" aria-atomic="true">
-                <p>Sorry... Your username & password do not match. Please check your CAPS lock key and try again. Thank you.</p>
+                <p>Sorry... Your username & password do not match. Please correct your entries and try again. Thank you.</p>
             </div>
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="User or email" id="field_email" value="" name="field_email" />
-                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                <input type="text" class="form-control" placeholder="Username" id="field_email" value="" name="field_email" />
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
                 <input type="password" class="form-control" placeholder="Password" id="field_password" value="" name="field_password" />
@@ -100,10 +100,11 @@
                     "Authorization": authHeader
                 }
             })
-                .done(function (response) {
-                    if(response.authenticated && response.authToken){
+                .done(function (r) {
+                    var apiData = chkTSRF(r);
+                    if(apiData.authenticated && apiData.authToken){
                         $('#submit-form').prop('disabled', false); //TO DISABLED
-                        _settings.createCookie("tokenKey",response.authToken);
+                        _settings.createCookie("tokenKey",apiData.authToken);
                         _settings.createCookie("TaoUserName",user);
                         window.location.href = "./sap.html";
                     }else{
@@ -112,9 +113,7 @@
                 })
                 .fail(function (jqXHR, status, textStatus) {
                     $("#frmSignInMsg").show("slow");
-                    chkXHR(jqXHR.status);
                 });
-            return 0;
         });
     });
 </script>

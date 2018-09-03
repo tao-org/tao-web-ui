@@ -116,11 +116,11 @@
                     <!-- /.box-header -->
                     <div class="box-body">
                             <dl class="dl-horizontal">
-                                <dt>CPU usage:</dt>
+                                <dt>CPU usage&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(220,220,220,0.5);"></i></dt>
                                 <dd><span class="val-mm-processors">n/a</span>%</dd>
-                                <dt>Memory:</dt>
+                                <dt>Memory&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(255,187,205,0.5);"></i></dt>
                                 <dd><span class="val-mm-memory" style="text-transform: lowercase;">n/a</span></dd>
-                                <dt>Storage:</dt>
+                                <dt>Storage&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(151,187,205,0.5);"></i></dt>
                                 <dd><span class="val-mm-storage" style="text-transform: lowercase;">n/a</span></dd>
                             </dl>
                     </div>
@@ -283,6 +283,7 @@
                 },
                 {
                     fillColor : "rgba(255,187,205,0.5)",
+//                    fillColor : "rgba(255,255,255,1)",
                     strokeColor : "rgba(255,187,205,1)",
                     pointColor : "rgba(151,187,205,1)",
                     pointStrokeColor : "#fff",
@@ -341,14 +342,15 @@
                 "X-Auth-Token": window.tokenKey
             }
         }).done(function (getMasterMonitorResponse) {
+            var r = chkTSRF(getMasterMonitorResponse);
             var percent = {
-                cpu: parseInt(getMasterMonitorResponse.cpuTotal),
-                memory: parseInt((getMasterMonitorResponse.totalMemory-getMasterMonitorResponse.availableMemory)/getMasterMonitorResponse.totalMemory*100),
-                storage: parseInt(getMasterMonitorResponse.diskUsed/getMasterMonitorResponse.diskTotal*100)
+                cpu: parseInt(r.cpuTotal),
+                memory: parseInt((r.totalMemory-r.availableMemory)/r.totalMemory*100),
+                storage: parseInt(r.diskUsed/r.diskTotal*100)
             };
-            $(".val-mm-processors").text(parseInt(getMasterMonitorResponse.cpuTotal));
-            $(".val-mm-memory").text(getMasterMonitorResponse.availableMemory+"/"+getMasterMonitorResponse.totalMemory+" (available/total, "+getMasterMonitorResponse.memoryUnit+")");
-            $(".val-mm-storage").text(getMasterMonitorResponse.diskUsed+"/"+getMasterMonitorResponse.diskTotal+" (used/total, "+getMasterMonitorResponse.diskUnit+")");
+            $(".val-mm-processors").text(parseInt(r.cpuTotal));
+            $(".val-mm-memory").text(percent.memory+"% ("+(r.totalMemory-r.availableMemory)+"/"+r.totalMemory+", used/total, "+r.memoryUnit+")");
+            $(".val-mm-storage").text(percent.storage+"% ("+r.diskUsed+"/"+r.diskTotal+", used/total, "+r.diskUnit+")");
             var chartCurrentTime = moment ().format("HH:mm:ss");
             //(100 - Math.floor(Math.random() * (100)))
             _loadChart.updateData(

@@ -38,7 +38,8 @@ $(function () {
         }
     };
     $.ajax(ajax_getProfileSettings)
-        .done(function (r) {
+        .done(function (response) {
+            var r = chkTSRF(response);
             //inject additional elements into user profile data.
             if(r.id){
                 taoUserProfile = r;
@@ -62,7 +63,6 @@ $(function () {
         })
         .fail(function (jqXHR, status, textStatus) {
             window.location = 'login.html';
-            console.log(jqXHR);  console.log(textStatus);  console.log(status);
         });
 });
 
@@ -123,15 +123,6 @@ $(function () {
         _settings.createCookie("userMatrix",'{}');
     });
 }());
-
-(function () {
-    function f(v){
-//      $.extend(q, v);
-        return 1;
-    }
-    window.taoUI_UpdateUserProfile = f;
-}());
-
 
 (function(){
     var getUserFiles = $.ajax({ cache: false,
@@ -263,7 +254,6 @@ $(function () {
                     $el.find(".val-msg-ts").html(moment.unix(getMonitorNotificationResponse[k]['timestamp']/1000).format("DD MMM YYYY hh:mm:ss a"));
                     try {
                         var obj = JSON.parse(getMonitorNotificationResponse[k]['data']);
-                        //$el.find(".val-msg-txt").html(getMonitorNotificationResponse[k]['data']);
                         $el.find(".val-msg-txt").html(obj.Payload);
                     }
                     catch(err) {
@@ -398,7 +388,8 @@ $(function () {
                 "X-Auth-Token": window.tokenKey
             }
         }).done(function (response) {
-            renderExecHistoryCurrentPage(response);
+            var r = chkTSRF(response);
+            renderExecHistoryCurrentPage(r);
         }).fail(function (jqXHR, textStatus) {
             chkXHR(jqXHR.status);
         });
@@ -493,14 +484,14 @@ $(function () {
 
         return 1;
     };
+}());
 
-
+/*
+(function () {
     function f(v){
 //      $.extend(q, v);
         return 1;
     }
-    //window.taoUI_UpdateUserProfile = f;
+    window.taoUI_UpdateUserProfile = f;
 }());
-
-
-//
+*/

@@ -210,7 +210,8 @@
             error: function() {
                 alert("Communication error. Try again or notify the site admin! Thank you.");
             },
-            success: function(response) {
+            success: function(r) {
+                var response = chkTSRF(r);
                 var $pEL = $("#"+attrId).parent();
                 try {
 //                    showMsg(response.msgdetails.global, response.msgcode);
@@ -255,13 +256,13 @@
                 "X-Auth-Token": window.tokenKey
             }
         };
-        $.ajax(settings).done(function (response) {
+        $.ajax(settings).done(function (r) {
+            var response = chkTSRF(r);
             var arrHTML = _.map(response, function(item){
                 return '<input type="checkbox" id="inputGroup_'+item.id+'" name="group[]" value="'+item.id+'" data-role="'+item.name+'">'+item.name;
             });
             $("#inputGroupHolder").empty().html(arrHTML.join("<br>"));
         });
-
 
 
         $("form#frmUserEdit").submit(function (event) {

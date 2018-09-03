@@ -344,7 +344,8 @@
                     error : function (jqXHR, textStatus, errorThrown) {
                         chkXHR(jqXHR.status);
                     },
-                    success: function(response,textStatus, jqXHR) {
+                    success: function(r,textStatus, jqXHR) {
+                        var response = chkTSRF(r);
                         if(jqXHR.status === 204){
                             showMsg("No datasources found.", "SUCCESS");
                             response = [];

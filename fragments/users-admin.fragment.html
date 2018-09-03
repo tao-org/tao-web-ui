@@ -135,13 +135,14 @@
 
                                         <img src="https://www.gravatar.com/avatar/87876294a3cb8e341dfb6b4f675c52fe?d=mm" alt="user image" class="online val-gravatar">
                                         <p class="message">
-                                            <span class="u-i-span"><span class="u-label">status: </span><span class="val-status">active</span><i class="fa fa-key fa-fw only-admin collapse" aria-hidden="true" style="display: none;"></i></span>
-                                            <span class="u-i-span"><span class="u-label">registration date: </span><span class="val-regdate">Wednesday 26, 2017 - 14:04:21</span></span>
-                                            <span class="u-i-span"><span class="u-label">last login date: </span><span class="val-lastdate">Wednesday 26, 2017 - 14:04:21</span></span>
-                                            <span class="u-i-span"><span class="u-label">number of workflows: </span><span class="val-noproj">xxxxx</span></span>
-                                            <span class="u-i-span"><span class="u-label">email address: </span><span class="val-email">anton.pan@c-s.ro</span></span>
-                                            <span class="u-i-span"><span class="u-label">phone: </span><span class="val-tel">0744444444446</span></span>
-                                            <span class="u-i-span"><span class="u-label">Quota: </span><span class="val-quota">300</span></span>
+                                            <span class="u-i-span"><span class="u-label">group membership: </span><span class="val-group">###</span></span>
+                                            <span class="u-i-span"><span class="u-label">email address: </span><span class="val-email">###</span></span>
+                                            <span class="u-i-span"><span class="u-label">alternative email: </span><span class="val-email2">###</span></span>
+                                            <span class="u-i-span"><span class="u-label">user type: </span><span class="val-external">###</span></span>
+                                            <span class="u-i-span"><span class="u-label">status: </span><span class="val-status">###</span><i class="fa fa-key fa-fw only-admin collapse" aria-hidden="true" style="display: none;"></i></span>
+                                            <span class="u-i-span"><span class="u-label">phone: </span><span class="val-tel">###</span></span>
+                                            <span class="u-i-span"><span class="u-label">organization: </span><span class="val-org">###</span></span>
+                                            <span class="u-i-span"><span class="u-label">Quota: </span><span class="val-quota">###</span></span>
                                         </p>
                                         <div class="box-bottom">
                                             <div class="">
@@ -175,6 +176,7 @@
                                                     <span class="u-i-span"><span class="u-label">user type: </span><span class="val-external">###</span></span>
                                                     <span class="u-i-span"><span class="u-label">status: </span><span class="val-status">###</span><i class="fa fa-key fa-fw only-admin collapse" aria-hidden="true" style="display: none;"></i></span>
                                                     <span class="u-i-span"><span class="u-label">phone: </span><span class="val-tel">###</span></span>
+                                                    <span class="u-i-span"><span class="u-label">organization: </span><span class="val-org">###</span></span>
                                                     <span class="u-i-span"><span class="u-label">Quota: </span><span class="val-quota">###</span></span>
                                                 </p>
                                             </div>
@@ -352,7 +354,8 @@
                     error : function (jqXHR, textStatus, errorThrown) {
                         chkXHR(jqXHRstatus);
                     },
-                    success: function(response,textStatus, jqXHR) {
+                    success: function(r,textStatus, jqXHR) {
+                        var response = chkTSRF(r);
                         if(jqXHR.status === 204){
                             showMsg("No users found.", "SUCCESS");
                             response = [];
@@ -443,7 +446,11 @@
                 $(".val-quota", $elClone).html(elX.quota+" GB");
                 $(".val-status", $elClone).html(elX.status);
 
-
+                var dateAgo = "never";
+                if(elX.lastLoginDate){
+                    dateAgo = timeAgoFromArray(elX.lastLoginDate);
+                }
+                $(".val-ago", $elClone).html(dateAgo);
 
                 $(".only-v-"+elX.stat, $elClone).show();
                 $(".box-bottom", $elClone).find(".span-muted").addClass("collapse");

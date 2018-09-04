@@ -364,7 +364,8 @@
                             alert('E001, An error has occurred, please try again or contact app admin.');
                         }
                     },
-                    success: function(response,textStatus, jqXHR) {
+                    success: function(r,textStatus, jqXHR) {
+                        var response = chkTSRF(r);
                         if((jqXHR.status === 204) || (!response) ){
                             showMsg("No processing components found.", "SUCCESS");
                             response = [];
@@ -391,7 +392,6 @@
 
                         _mLIST.data = response;
                         _mLIST.dataFull = response;
-//_mLIST.hideLoading();
                         routeLoading('hide');
                         //keep this order
                         _mLIST.repaintTags();

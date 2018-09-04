@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" />
-      <change beforePath="$PROJECT_DIR$/nodemonitor.html" afterPath="$PROJECT_DIR$/nodemonitor.html" />
+      <change beforePath="$PROJECT_DIR$/fragments/component-admin.fragment.html" afterPath="$PROJECT_DIR$/fragments/component-admin.fragment.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,41 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="topology-admin.fragment.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fragments/topology-admin.fragment.html">
+      <file leaf-file-name="component-admin.fragment.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/fragments/component-admin.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="572" column="16" lean-forward="false" selection-start-line="572" selection-start-column="16" selection-end-line="572" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="topology-plus.fragment.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fragments/topology-plus.fragment.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3247">
-              <caret line="191" column="26" lean-forward="false" selection-start-line="191" selection-start-column="26" selection-end-line="191" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="topology-edit.fragment.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/fragments/topology-edit.fragment.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="146" column="63" lean-forward="true" selection-start-line="146" selection-start-column="63" selection-end-line="146" selection-end-column="63" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sap.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sap.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="43" column="88" lean-forward="true" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="88" />
+            <state relative-caret-position="479">
+              <caret line="488" column="17" lean-forward="false" selection-start-line="488" selection-start-column="12" selection-end-line="488" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -70,7 +38,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>cpu</find>
       <find>getExecHistory</find>
       <find>val-group</find>
       <find>val-org</find>
@@ -93,13 +60,14 @@
       <find>if(_mLIST.data.length</find>
       <find>hostname</find>
       <find>hostName</find>
-      <find>ajax</find>
       <find>getMasterMonitorResponse</find>
       <find>confi</find>
-      <find>general-</find>
       <find>dl</find>
       <find>me</find>
       <find>val-mm-processors</find>
+      <find>general-</find>
+      <find>ajax</find>
+      <find>deleteProcessingComponentById</find>
     </findStrings>
     <dirStrings>
       <dir>D:\_work\tao\tao-web-ui\workflow</dir>
@@ -140,7 +108,6 @@
         <option value="$PROJECT_DIR$/fragments/component-plus.fragment.html" />
         <option value="$PROJECT_DIR$/workflow/canvas.js" />
         <option value="$PROJECT_DIR$/fragments/workflow-plus.fragment.html" />
-        <option value="$PROJECT_DIR$/fragments/component-admin.fragment.html" />
         <option value="$PROJECT_DIR$/assets/dist/js/router.js" />
         <option value="$PROJECT_DIR$/password-reset.html" />
         <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
@@ -165,6 +132,7 @@
         <option value="$PROJECT_DIR$/fragments/topology-edit.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" />
         <option value="$PROJECT_DIR$/nodemonitor.html" />
+        <option value="$PROJECT_DIR$/fragments/component-admin.fragment.html" />
       </list>
     </option>
   </component>
@@ -180,7 +148,7 @@
     </servers>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP" />
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="124" />
     <option name="y" value="16" />
     <option name="width" value="1525" />
@@ -229,7 +197,7 @@
     <property name="js.eslint.eslintPackage" value="" />
     <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
-    <property name="SearchEverywhereHistoryKey" value="version&#9;ACTION&#9;ActivateVersionControlToolWindow" />
+    <property name="SearchEverywhereHistoryKey" value="versio&#9;ACTION&#9;ActivateVersionControlToolWindow&#10;version&#9;ACTION&#9;ActivateVersionControlToolWindow" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -396,15 +364,15 @@
       <workItem from="1535978529555" duration="195000" />
       <workItem from="1535981351739" duration="527000" />
       <workItem from="1535983439728" duration="4170000" />
-      <workItem from="1536073301199" duration="5078000" />
+      <workItem from="1536073301199" duration="6175000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1139797000" />
+    <option name="totallyTimeSpent" value="1140894000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1696" height="1066" extended-state="6" />
+    <frame x="-8" y="-8" width="1696" height="1066" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25178573" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -412,7 +380,7 @@
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11598746" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12852664" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20585161" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -590,13 +558,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/component-admin.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6069">
-          <caret line="357" column="55" lean-forward="false" selection-start-line="357" selection-start-column="55" selection-end-line="357" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fragments/workflow-plus.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
@@ -715,6 +676,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="726">
           <caret line="513" column="29" lean-forward="false" selection-start-line="513" selection-start-column="29" selection-end-line="513" selection-end-column="29" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -737,30 +699,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="250">
           <caret line="387" column="40" lean-forward="false" selection-start-line="387" selection-start-column="40" selection-end-line="387" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/topology-admin.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="572" column="16" lean-forward="false" selection-start-line="572" selection-start-column="16" selection-end-line="572" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/topology-plus.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3247">
-          <caret line="191" column="26" lean-forward="false" selection-start-line="191" selection-start-column="26" selection-end-line="191" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sap.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="43" column="88" lean-forward="true" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="88" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -793,8 +731,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fragments/topology-edit.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
+        <state relative-caret-position="493">
           <caret line="146" column="63" lean-forward="true" selection-start-line="146" selection-start-column="63" selection-end-line="146" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/topology-plus.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="191" column="26" lean-forward="false" selection-start-line="191" selection-start-column="26" selection-end-line="191" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/topology-admin.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="572" column="16" lean-forward="false" selection-start-line="572" selection-start-column="16" selection-end-line="572" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sap.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="43" column="88" lean-forward="true" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="88" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/component-admin.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="479">
+          <caret line="488" column="17" lean-forward="false" selection-start-line="488" selection-start-column="12" selection-end-line="488" selection-end-column="17" />
           <folding />
         </state>
       </provider>

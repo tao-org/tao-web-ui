@@ -185,13 +185,19 @@
             },
             success: function(response) {
                 try {
-                        if(response.active){
+                    if(response.data === null){
+                        $(".ckattr-error", $pEL).fadeOut();
+                        $(".ckattr-ok", $pEL).fadeIn();
+                        return 1;
+                    }else{
+                        if(response.data.active){
                             showMsg("Hostname already exist. You will be editing an existing node.", "ERROR");
                         }else{
                             showMsg("Hostname already exist, but current state is disabled. Saving your data will activate this execution node.", "ERROR");
                         }
                         $(".ckattr-ok", $pEL).fadeOut();
                         $(".ckattr-error", $pEL).fadeIn();
+                    }
                 }
                 catch(e) {
                     $(".ckattr-ok", $pEL).fadeOut();
@@ -235,7 +241,7 @@
         $("form#frmExecNodeEdit").submit(function (event) {
             event.preventDefault();
             var formData = {
-                "hostName":$('input[name=inputHostname]', this).val().toLowerCase(),
+                "id":$('input[name=inputHostname]', this).val().toLowerCase(),
                 "userName":$('input[name=inputUsername]', this).val(),
                 "userPass":$('input[name=inputPassword]', this).val(),
                 "processorCount":$('input[name=inputProcessorcount]', this).val(),
@@ -245,7 +251,7 @@
                 "active":$('select[name=inputActive]', this).val()
             };
             console.log(formData);
-            if(formData.hostName === ''){
+            if(formData.id === ''){
                 showMsg("Hostname can not be empty. Please choose valid values to continue.", "ERROR");
                 return false;
             }

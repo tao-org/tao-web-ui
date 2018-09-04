@@ -105,10 +105,7 @@
                 <ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
                     <li class="role-dropdown active">
                         <select id="selectUserPanel" name="selectUserPanel" class="form-control form-changepane" title="Select desired node view.">
-                            <option class="role role-admin" value="all_users">All nodes </option>
-                            <option class="role role-admin" value="active_users">Online nodes</option>
-                            <option class="role role-admin" value="disabled_users">Offline nodes</option>
-                            <option class="role role-admin" value="pending_users">Disabled nodes</option>
+                            <option class="role role-admin" value="all_nodes">All nodes </option>
                         </select>
                     </li>
                     <li class="pull-right">
@@ -117,9 +114,6 @@
                 </ul>
                 <ul class="nav nav-tabs hidden-xs">
                     <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_nodes" aria-expanded="true">All nodes</a></li>
-                    <li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="online_nodes" aria-expanded="false">Online nodes</a></li>
-                    <li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="offline_users" aria-expanded="false">Offline nodes</a></li>
-                    <li class="role role-admin"><a href="#panel-nodesX" data-toggle="tab" data-action="disabled_nodes" aria-expanded="false">Disabled nodes</a></li>
                     <li class="pull-right">
                         <a href="#" class="btn text-muted btn-action" data-action="refresh" data-toggle="tooltip" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
                     </li>
@@ -205,24 +199,7 @@
                         </div>
                     </div><!-- /.tab-pane -->
 
-                    <div class="tab-pane" id="panel-nodesX">
-                        <div class="row">
-                            <div class="col-md-12 div-loading collapse" style="display: none;">
-                                <div class="box box-default box-solid">
-                                    <div class="box-header">
-                                        <h3 class="box-title">Loading ...</h3>
-                                    </div>
-                                    <div class="box-body">
-                                        Loading list. Please wait.
-                                    </div><!-- /.box-body -->
-                                    <!-- Loading (remove the following to stop the loading)-->
-                                    <div class="overlay">
-                                        <i class="fa fa-refresh fa-spin"></i>
-                                    </div>
-                                    <!-- end loading -->
-                                </div>
-                            </div>
-                        </div>
+                    <div class="tab-pane" class="hidden">
                         <div class="row hidden">
                             <core-node-box id="node-master-template" class="collapse">
                                 <div class="col-md-3 col-sm-6">
@@ -324,7 +301,6 @@
                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-1" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Disable</span></button>
                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-0" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Enable</span></button>
                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
-                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="seemodules"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Modules</span></button>
                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="ssh"><i class="fa fa-terminal fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;SSH Terminal</span></button>
                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="monitor"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Monitor</span></button>
                                                 </div>
@@ -334,9 +310,7 @@
                                 </div>
                             </core-node-box>
                         </div>
-                        <div class="row">
-                        </div>
-                    </div><!-- /.tab-pane -->
+                    </div><!-- /.tab-pane hidden -->
                 </div><!-- /.tab-content -->
             </div><!-- nav-tabs-custom -->
         </div>
@@ -411,7 +385,7 @@
                     var re = new RegExp(_mLIST.dataFilter.searchString, 'i');
                     _mLIST.data = $.map(_mLIST.data,function(val,key){
                         //if( (val.name.str.match(/test/i)) && Number(val.price) <= 1000 && Number(val.sqft) >= 500 && Number(val.num_of_beds) >=2  && Number(val.num_of_baths )>= 2.5 ) return val;
-                        if( val.hostName.match(re) ) return val;
+                        if( val.id.match(re) ) return val;
                     });
                 }
             },
@@ -491,7 +465,8 @@
                     error : function (jqXHR, textStatus, errorThrown) {
                         chkXHR(jqXHRstatus);
                     },
-                    success: function(response,textStatus, jqXHR) {
+                    success: function(r,textStatus, jqXHR) {
+                        var response = chkTSRF(r);
                         if(jqXHR.status === 204){
                             showMsg("No processing components found.", "SUCCESS");
                             response = [];
@@ -518,9 +493,8 @@
 
                         _mLIST.data = response;
                         _mLIST.dataFull = response;
-//_mLIST.hideLoading();
                         routeLoading('hide');
-                        //keep this order
+                        //keep in this order
                         _mLIST.repaintTags();
                         _mLIST.repaint();
                     }
@@ -528,7 +502,7 @@
             },
             repaintList: function() {
                 _mLIST.clearList();
-                if(_mLIST.data.length > 1){
+                if(_mLIST.data.length >= 1){
                     $('.box-header.empty').hide();
                     $('.box-header.not-empty').show();
                 }else{
@@ -570,8 +544,8 @@
                     tags+="<span>"+elX.tags[j]+"</span>";
                 }
                 $(".box-top-tags", $elClone).html(tags);
-                $(".val-nnm", $elClone).html(elX.hostName);
-                $(".val-nnet", $elClone).html(elX.hostName);
+                $(".val-nnm", $elClone).html(elX.id);
+                $(".val-nnet", $elClone).html(elX.userName+"@"+elX.id);
                 $(".val-d", $elClone).html(elX.description);
                 $(".val-p", $elClone).html(elX.processorCount+"X");
                 $(".val-m", $elClone).html(elX.memorySizeGB+'GB');
@@ -595,10 +569,10 @@
             }
         };
 
-    deleteExecNode = function(hostName){
+    deleteExecNode = function(id){
         $.ajax({
             cache: false,
-            url: baseRestApiURL + "topology/"+hostName+"/",
+            url: baseRestApiURL + "topology/"+id+"/",
             dataType : 'json',
             type: 'DELETE',
             headers: {
@@ -639,9 +613,9 @@
         }
         if(operationid === "delete"){
             $('#confirm-dialog').modal('confirm',{
-                msg:"Are you sure you want to delete execution node: "+_mLIST.dataOpQueue[0].dna.hostName+"?",
+                msg:"Are you sure you want to delete execution node: "+_mLIST.dataOpQueue[0].dna.id+"?",
                 callbackConfirm: function() {
-                    deleteExecNode(_mLIST.dataOpQueue[0].dna.hostName);
+                    deleteExecNode(_mLIST.dataOpQueue[0].dna.id);
                 },
                 callbackCancel:function(){}
             });
@@ -680,8 +654,8 @@
         }];
         if(action==="ssh"){
             var $sshModal = $("#myModalSSH")
-            $(".val-sshHost",$sshModal).text(nodeDNA.hostName);
-            var sshURL = 'http://masterslurm.tao.c-s.ro:4200/?node='+nodeDNA.hostName+'&user='+nodeDNA.userName+'&passwd='+nodeDNA.userPass;
+            $(".val-sshHost",$sshModal).text(nodeDNA.id);
+            var sshURL = 'http://masterslurm.tao.c-s.ro:4200/?node='+nodeDNA.id+'&user='+nodeDNA.userName+'&passwd='+nodeDNA.userPass;
             var parentIframe = document.getElementById("sshIframeWrapper");
             var iframe = document.createElement('iframe');
             iframe.id="randomid"+Math.floor(Math.random() * 10000000);
@@ -696,15 +670,15 @@
                 e.preventDefault();
                 var windowObjectReference;
                 var strWindowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
-                windowObjectReference = window.open(sshURL, "SSH terminal to "+nodeDNA.hostName, strWindowFeatures);
+                windowObjectReference = window.open(sshURL, "SSH terminal to "+nodeDNA.id, strWindowFeatures);
                 $sshModal.modal('hide');
             });
             return 1;
         }
         if(action==="monitor"){
             var $sshModal = $("#myModalMonitor");
-            $(".val-sshHost",$sshModal).text(nodeDNA.hostName);
-            var sshURL = './nodemonitor.html?node='+nodeDNA.hostName;
+            $(".val-sshHost",$sshModal).text(nodeDNA.id);
+            var sshURL = './nodemonitor.html?node='+nodeDNA.id;
             var parentIframe = document.getElementById("monitorIframeWrapper");
             //$("#monitorIframeWrapper").hide();
             var iframe = document.createElement('iframe');

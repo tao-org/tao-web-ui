@@ -41,6 +41,7 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="./assets/dist/js/general-functions.js" type="text/javascript"></script>
     <script src="./assets/dist/js/config.js" type="text/javascript"></script>
 </head>
 
@@ -57,12 +58,12 @@
             </div>
             <div class="box-body">
                 <dl class="dl-horizontal">
-                    <dt>CPU usage:</dt>
-                    <dd><span class="val-mm-processors">n/a</span>%</dd>
-                    <dt>Memory:</dt>
-                    <dd><span class="val-mm-memory" style="text-transform: lowercase;">n/a</span></dd>
-                    <dt>Storage:</dt>
-                    <dd><span class="val-mm-storage" style="text-transform: lowercase;">n/a</span></dd>
+                    <dt>CPU usage&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(220,220,220,0.5);"></i></dt>
+                    <dd><span class="val-mm-processors">-</span></dd>
+                    <dt>Memory&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(255,187,205,0.5);"></i></dt>
+                    <dd><span class="val-mm-memory" style="text-transform: lowercase;">-</span></dd>
+                    <dt>Storage&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(151,187,205,0.5);"></i></dt>
+                    <dd><span class="val-mm-storage" style="text-transform: lowercase;">-</span></dd>
                 </dl>
             </div>
             <div class="box-canvas">
@@ -70,11 +71,33 @@
             </div>
             <!-- /.box-body -->
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="msgModal" role="dialog" style="color:black;">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Error retrieving host information</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>More than 5 distinct consecutive failures to retrive host information registered.
+                        <br>We'll stop checking this host.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Check again</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
 <!-- jQuery 2.1.4 -->
 <script src="./assets/libs/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script>
 <!-- Bootstrap 3.3.2 JS -->
 <script src="./assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-
 </body>
 </html>
 
@@ -88,6 +111,7 @@
         return decodeURI(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURI(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
     }
 
+    var misfireCounter = 0;
     var _loadChart = {
         myNewChart:null,
         node: 'master',
@@ -161,18 +185,35 @@
                 "X-Auth-Token": window.tokenKey
             }
         }).done(function (getMasterMonitorResponse) {
-            //console.log(getMasterMonitorResponse);
+            var r = chkTSRF(getMasterMonitorResponse);
+            //force failure in case no resources are reported to fix API 0 glitch for unreachable host
+            if( (r.cpuTotal === 0) && (r.totalMemory === 0) && (r.diskTotal === 0) ){
+                getMasterMonitorResponse.status = "FAILED";
+            }
+
+            if(misfireCounter >= 5){
+                $("#msgModal").modal("show");
+            }
+            if(getMasterMonitorResponse.status === "FAILED"){
+                misfireCounter++;
+            }else{
+                misfireCounter = 0;
+            }
             var percent = {
-                cpu: parseInt(getMasterMonitorResponse.cpuTotal) || 0,
-                memory: parseInt((getMasterMonitorResponse.totalMemory-getMasterMonitorResponse.availableMemory)/getMasterMonitorResponse.totalMemory*100) || 0,
-                storage: parseInt(getMasterMonitorResponse.diskUsed/getMasterMonitorResponse.diskTotal*100) || 0
+                cpu: parseInt(r.cpuTotal) || 0,
+                memory: parseInt((r.totalMemory-r.availableMemory)/r.totalMemory*100) || 0,
+                storage: parseInt(r.diskUsed/r.diskTotal*100) || 0
             };
             try {
-//                var upTimeS = parseInt(getMasterMonitorResponse.runtime.upTime);
-//                var duration = moment.duration(upTimeS, 'seconds');
-                $(".val-mm-processors").text(parseInt(getMasterMonitorResponse.cpuTotal));
-                $(".val-mm-memory").text(getMasterMonitorResponse.availableMemory+"/"+getMasterMonitorResponse.totalMemory+" (available/total, "+getMasterMonitorResponse.memoryUnit+")");
-                $(".val-mm-storage").text(getMasterMonitorResponse.diskUsed+"/"+getMasterMonitorResponse.diskTotal+" (used/total, "+getMasterMonitorResponse.diskUnit+")");
+                if(getMasterMonitorResponse.status === "FAILED"){
+                    $(".val-mm-processors").text("n/a");
+                    $(".val-mm-memory").text("n/a");
+                    $(".val-mm-storage").text("n/a");
+                }else{
+                    $(".val-mm-processors").text(percent.cpu+"%");
+                    $(".val-mm-memory").text(percent.memory+"% ("+(r.totalMemory-r.availableMemory)+"/"+r.totalMemory+", used/total, "+r.memoryUnit+")");
+                    $(".val-mm-storage").text(percent.storage+"% ("+r.diskUsed+"/"+r.diskTotal+", used/total, "+r.diskUnit+")");
+                }
                 var chartCurrentTime = moment ().format("HH:mm:ss");
                 _loadChart.updateData(
                     (percent.cpu),
@@ -185,7 +226,6 @@
                 console.log(error);
                 $(".box-error").show();
                 $(".box-body, .box-canvas").hide();
-
             }
             if(window.parent.document.getElementsByTagName("iframe")[0]){
                 window.parent.document.getElementsByTagName("iframe")[0].style.height = document.body.scrollHeight + 'px';
@@ -193,7 +233,7 @@
         }).fail(function (jqXHR, textStatus) {
             //alert("Retriving master monitor data failed.");
         }).complete(function(){
-            if($("#widget-master-monitor").length){
+            if($("#widget-master-monitor").length && (misfireCounter < 10)){
                 setTimeout(function(){
                     updateMasterMonitorWidget();
                 },1000);
@@ -220,6 +260,9 @@
             })
             .trigger( "resize" );
         updateMasterMonitorWidget();
-        //bind resize event
+        $('#msgModal').on('hidden.bs.modal', function () {
+            updateMasterMonitorWidget();
+            misfireCounter = 0;
+        })
     });
 </script>

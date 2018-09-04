@@ -117,7 +117,7 @@
                     <div class="box-body">
                             <dl class="dl-horizontal">
                                 <dt>CPU usage&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(220,220,220,0.5);"></i></dt>
-                                <dd><span class="val-mm-processors">n/a</span>%</dd>
+                                <dd><span class="val-mm-processors">n/a</span></dd>
                                 <dt>Memory&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(255,187,205,0.5);"></i></dt>
                                 <dd><span class="val-mm-memory" style="text-transform: lowercase;">n/a</span></dd>
                                 <dt>Storage&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(151,187,205,0.5);"></i></dt>
@@ -348,11 +348,10 @@
                 memory: parseInt((r.totalMemory-r.availableMemory)/r.totalMemory*100),
                 storage: parseInt(r.diskUsed/r.diskTotal*100)
             };
-            $(".val-mm-processors").text(parseInt(r.cpuTotal));
+            $(".val-mm-processors").text(percent.cpu+"%");
             $(".val-mm-memory").text(percent.memory+"% ("+(r.totalMemory-r.availableMemory)+"/"+r.totalMemory+", used/total, "+r.memoryUnit+")");
             $(".val-mm-storage").text(percent.storage+"% ("+r.diskUsed+"/"+r.diskTotal+", used/total, "+r.diskUnit+")");
             var chartCurrentTime = moment ().format("HH:mm:ss");
-            //(100 - Math.floor(Math.random() * (100)))
             _loadChart.updateData(
                 (percent.cpu),
                 (percent.memory),
@@ -364,7 +363,7 @@
             if($("#widget-master-monitor").length){
                 setTimeout(function(){
                     updateMasterMonitorWidget();
-                },2000);
+                },1000);
             }
         });
     }

@@ -586,7 +586,8 @@
                     alert('E001 gcid, An error has occurred, please try again or contact app admin.');
                 }
             },
-            success: function(response) {
+            success: function(r) {
+                var response = chkTSRF(r);
                 console.log(response);
                 //try {
                     //populate form with current values
@@ -783,12 +784,12 @@
                 "X-Auth-Token": window.tokenKey
             }
         });
-
         $.when(getAllDocker)
             .done(function (getAllDockerResponse) {
+                var r = chkTSRF(getAllDockerResponse);
                 var selectedid = 0;//$('#department').data("selectedid");
                 $('#inputContainerId').empty();
-                $.each(getAllDockerResponse, function(i, value) {
+                $.each(r, function(i, value) {
                     if(value.id === selectedid){
                         $('#inputContainerId').append($('<option>').text(value.name).attr('value', value.id).prop('selected', true));
                     } else{

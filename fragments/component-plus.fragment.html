@@ -586,7 +586,8 @@
                     alert('E001 gcid, An error has occurred, please try again or contact app admin.');
                 }
             },
-            success: function(response) {
+            success: function(r) {
+                var response = chkTSRF(r);
                 console.log(response);
                 //try {
                     //populate form with current values
@@ -783,12 +784,12 @@
                 "X-Auth-Token": window.tokenKey
             }
         });
-
         $.when(getAllDocker)
             .done(function (getAllDockerResponse) {
+                var r = chkTSRF(getAllDockerResponse);
                 var selectedid = 0;//$('#department').data("selectedid");
                 $('#inputContainerId').empty();
-                $.each(getAllDockerResponse, function(i, value) {
+                $.each(r, function(i, value) {
                     if(value.id === selectedid){
                         $('#inputContainerId').append($('<option>').text(value.name).attr('value', value.id).prop('selected', true));
                     } else{
@@ -1055,27 +1056,33 @@
                         showMsg("Error adding execution node. Please check you data and try again.", "ERROR");
                         return;
                     }
-                    if(jqXHR.status === 406){
-                        showMsg("Error adding execution node. Please check you data, one or more values for the attributes was not in the acceptable range.", "ERROR");
-                        //handle error messages
-                        var objResponse = JSON.parse(jqXHR.responseText);
-                        if(objResponse[0] !== "Entity has validation errors"){
-                            return;
-                        }
-                        for(i=0;i<objResponse.length;i++) {
-                            var matches = objResponse[i].match(/\[(.*?)\]/);
-                            if (matches) {
-                                //$(".error-"+matches[1],".modal-error").show();
-                                $(".error-"+matches[1],".modal-error").css('display', 'inline-block');
-                            }
-                        }
-                        $(".modal-error ").fadeIn("slow");
-                        $('#myModalNodes').animate({scrollTop: 0}, 250);
-                        return;
-                    }
                     showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
                 },
-                success: function(data) {
+                success: function(response) {
+                    var r = chkTSRF(response);
+                    if(response.status === "FAILED"){
+                        if(response.message){
+                            showMsg("Error adding execution node. Please check you data, one or more values for the attributes was not in the acceptable range.", "ERROR");
+                            //handle error messages
+
+
+                            var objResponse = JSON.parse(jqXHR.responseText);
+                            if(objResponse[0] !== "Entity has validation errors"){
+                                return;
+                            }
+                            for(i=0;i<objResponse.length;i++) {
+                                var matches = objResponse[i].match(/\[(.*?)\]/);
+                                if (matches) {
+                                    //$(".error-"+matches[1],".modal-error").show();
+                                    $(".error-"+matches[1],".modal-error").css('display', 'inline-block');
+                                }
+                            }
+                            $(".modal-error ").fadeIn("slow");
+                            $('#myModalNodes').animate({scrollTop: 0}, 250);
+                            return;
+                        }
+                        showMsg("Error adding execution node. Please check you data and try again.", "ERROR");
+                    }
                     showMsg("Execution node successfully saved.", "SUCCESS");
                     $("#myModalNodes").modal('hide');
                     _mLIST.refresh();

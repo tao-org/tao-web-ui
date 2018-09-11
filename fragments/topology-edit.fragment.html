@@ -132,7 +132,7 @@
 
 <script>
     function getHostNameData(){
-        var editHostmane = _mLIST.dataOpQueue[0].dna.hostName;
+        var editHostmane = _mLIST.dataOpQueue[0].dna.id;
         $.ajax({
             cache: false,
             type: "get",
@@ -151,12 +151,13 @@
                     alert('E001, An error has occurred, please try again or contact app admin.');
                 }
             },
-            success: function(response) {
+            success: function(r) {
                 console.log(response);
+                var response = chkTSRF(r);
                 try {
                     var $el = $('#frmExecNodeEdit');
-                    $('.val-hostname', $el).html(response.hostName);
-                    $('input[name=inputHostname]', $el).val(response.hostName);
+                    $('.val-hostname', $el).html(response.id);
+                    $('input[name=inputHostname]', $el).val(response.id);
                     $('input[name=inputUsername]', $el).val(response.userName);
                     $('input[name=inputPassword]', $el).val(response.userPass);
                     $('input[name=inputProcessorcount]', $el).val(response.processorCount);
@@ -198,7 +199,7 @@
         $("form#frmExecNodeEdit").submit(function (event) {
             event.preventDefault();
             var formData = {
-                "hostName":$('input[name=inputHostname]', this).val(),
+                "id":$('input[name=inputHostname]', this).val(),
                 "userName":$('input[name=inputUsername]', this).val(),
                 "userPass":$('input[name=inputPassword]', this).val(),
                 "processorCount":$('input[name=inputProcessorcount]', this).val(),
@@ -210,7 +211,7 @@
             console.log(formData);
             $.ajax({
                 cache: false,
-                url: baseRestApiURL + "topology/"+formData.hostName+"/",
+                url: baseRestApiURL + "topology/"+formData.id+"/",
                 dataType : 'json',
                 type: 'PUT',
                 data: JSON.stringify(formData),

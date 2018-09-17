@@ -174,7 +174,6 @@
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="wf-build"><i class="fa fa-paint-brush fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="wf-clone"><i class="fa fa-random fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Clone</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="wf-start"><i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Start execution</span></button>
-                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="op-pause-resume"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted"> Pause / resume execution</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="op-publish"><i class="fa fa-bullhorn fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Publish current workflow</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop " data-action="wf-delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete workflow</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view-results"><i class="fa fa-picture-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Show execution results</span></button>
@@ -263,25 +262,6 @@
                                         <span class="value-dependent value-default">
 			<span class="fa-stack fa-lg value-dependent value-default">
 				<i class="fa fa-paper-plane"></i>
-			</span>
-		</span>
-                                    </button>
-                                    <button class="btn btn-box-tool op-2 text-black btn-action disabled " data-action="op-pause-resume" data-toggle="tooltip" data-original-title="Pause / resume execution">
-		<span class="value-dependent value-1 collapse">
-			<span class="fa-stack fa-lg">
-				<i class="fa fa-circle fa-stack-2x text-green" style=""></i>
-				<i class="fa fa-pause fa-stack-1x fa-inverse"></i>
-			</span>
-		</span>
-                                        <span class="value-dependent value-0 collapse">
-			<span class="fa-stack fa-lg">
-				<i class="fa fa-play fa-stack-1x"></i>
-				<i class="fa fa-ban fa-stack-2x text-danger"></i>
-			</span>
-		</span>
-                                        <span class="value-dependent value-default">
-			<span class="fa-stack fa-lg value-dependent value-default">
-				<i class="fa fa-pause"></i>
 			</span>
 		</span>
                                     </button>
@@ -806,8 +786,9 @@
                 });
                 $.when(cloneWf)
                     .done(function (cloneWfResponse) {
-                        if(cloneWfResponse.id){
-                            showMsg("Workflow successfully cloned. Workflow "+cloneWfResponse.name+" created in your workspace.", "SUCCESS");
+                        var r = chkTSRF(cloneWfResponse);
+                        if(r.id){
+                            showMsg("Workflow successfully cloned. Workflow <i>"+r.name+"</i> created in your workspace.", "SUCCESS");
                             _mLIST.refresh();
                         }else{
                             showMsg("Workflow clone failed.", "ERROR");
@@ -833,7 +814,7 @@
                 });
                 $.when(deleteWf)
                     .done(function (cloneWfResponse) {
-                        if(cloneWfResponse){
+                        if(cloneWfResponse && (cloneWfResponse.status ==="SUCCEEDED")){
                             showMsg("Workflow successfully deleted", "SUCCESS");
                             _mLIST.refresh();
                         }else{

@@ -169,18 +169,23 @@ jsPlumb.bind("tao_dropNewNode", function(params) {
     });
     $.when(postOneComponent)
         .done(function (putOneComponentResponse) {
-            var nodeData = {
-                "ntype":"pc",
-                "ntemplateid": putOneComponentResponse.componentId,
-                "mtype":putOneComponentResponse.componentId,
-                "mlabel":putOneComponentResponse.name,
-                "fullData":putOneComponentResponse
-            };
-            addNewNode(putOneComponentResponse.xCoord,putOneComponentResponse.yCoord,nodeData);
-            //addNewNode(left,top, nodeData);
-            makeWFPreview();
+            if(putOneComponentResponse.status == "SUCCEEDED"){
+                var r = chkTSRF(putOneComponentResponse);
+                var nodeData = {
+                    "ntype":"pc",
+                    "ntemplateid": r.componentId,
+                    "mtype": r.componentId,
+                    "mlabel": r.name,
+                    "fullData": r
+                };
+                addNewNode(r.xCoord,r.yCoord,nodeData);
+                //addNewNode(left,top, nodeData);
+                makeWFPreview();
 
-            $(".v-lastaction","#infoband").html("node added");
+                $(".v-lastaction","#infoband").html("node "+r.name+" added");
+            }else{
+                alert("Could not add node", "ERROR");
+            }
         })
         .fail(function(){
             alert("Could not add node", "ERROR");
@@ -253,11 +258,11 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
     $.when(getAllComponents,getAllQueries,getAllDatasources,getAllSensors,getAllDockers)
         .done(function (getAllComponentsResponse,getAllQueriesResponse,getAllDatasourcesResponse,getAllSensorsResponse,getAllDockersResponse) {
             console.log("Workspace components init start.");
-            wfTools.components = getAllComponentsResponse[0];
-            wfTools.queries = getAllQueriesResponse[0];
-            wfTools.datasources = getAllDatasourcesResponse[0];
-            wfTools.sensors = getAllSensorsResponse[0];
-            wfTools.dockers = getAllDockersResponse[0];
+            wfTools.components = getAllComponentsResponse[0]['data'];
+            wfTools.queries = getAllQueriesResponse[0]['data'];
+            wfTools.datasources = getAllDatasourcesResponse[0]['data'];
+            wfTools.sensors = getAllSensorsResponse[0]['data'];
+            wfTools.dockers = getAllDockersResponse[0]['data'];
 
             //parse components, try to detect orfan and collapsing data, recreate local IDs
             $.each(wfTools.components, function(i, item) {
@@ -570,8 +575,8 @@ jsPlumb.ready(function () {
             });
             $.when(delOneLink)
                 .done(function (delOneLinkResponse) {
-                    console.log(delOneLinkResponse);
-                    if(delOneLinkResponse.id === lcl_nodeId){
+                    var r = chkTSRF(delOneLinkResponse);
+                    if((delOneLinkResponse.status === "SUCCEEDED") && (r.id === lcl_nodeId)){
                         delete wfPlumbCanvasData.connectors[info.connection.id];
                         $(".v-lastaction","#infoband").html("link removed");
                     } else {
@@ -622,13 +627,12 @@ jsPlumb.ready(function () {
             });
             $.when(putOneConnection)
                 .done(function (putOneConnectionResponse) {
-                    console.log(putOneConnectionResponse);
-                    if(putOneConnectionResponse.id){
+                    var r = chkTSRF(putOneConnectionResponse);
+                    if((putOneConnectionResponse.status == "SUCCEEDED") && r.id){
                         $(".v-lastaction","#infoband").html("connection added");
-                        var linkData = (_.find(putOneConnectionResponse.incomingLinks, function(item) {
+                        var linkData = (_.find(r.incomingLinks, function(item) {
                             return (item.output.id === t[2] && item.input.id === s[2]);
                         }));
-
 
                         wfPlumbCanvasData.connectors[info.connection.id] = ({"from":info.sourceId, "to":info.targetId, "linkData":linkData});
                     } else {
@@ -683,7 +687,7 @@ jsPlumb.ready(function () {
         $.when(delOneNode)
             .done(function (delOneNodeResponse) {
                 console.log(delOneNodeResponse);
-                if(delOneNodeResponse === "OK"){
+                if(delOneNodeResponse.status === "SUCCEEDED"){
                     $(".v-lastaction","#infoband").html("node removed");
                     removeOneNodeFromCanvas();
                 } else {

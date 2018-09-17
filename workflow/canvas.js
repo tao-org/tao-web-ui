@@ -12,6 +12,10 @@ var tao_resetCanvasData = function() {
             username: "",
             visibility: ""
         },
+        nodeTemplates:{
+            pc:{},
+            ds:{}
+        },
         nodes: {},
         ports: {},
         nodesMap: {},
@@ -29,6 +33,23 @@ var tao_resetCanvasData = function() {
     };
 };
 tao_resetCanvasData();
+
+var tao_setWF2CanvasData = function(currentWfData){
+    wfPlumbCanvasData._remote = currentWfData;
+    //clone wf data only, no nodes info
+    wfPlumbCanvasData.wf = $.extend({}, currentWfData); wfPlumbCanvasData.wf.nodes = [];
+    wfPlumbCanvasData.header.id = currentWfData.id;
+    wfPlumbCanvasData.header.name = currentWfData.name;
+    wfPlumbCanvasData.header.status = currentWfData.status;
+    wfPlumbCanvasData.header.username = currentWfData.userName;
+    wfPlumbCanvasData.header.visibility = currentWfData.visibility;
+    wfPlumbCanvasData.usedComponents = [];
+    var nodesNo = wfPlumbCanvasData._remote.nodes.length;
+    for (var i = 0; i < nodesNo; i++) {
+        wfPlumbCanvasData.usedComponents.push(wfPlumbCanvasData._remote.nodes[i].componentId);
+    }
+};
+
 
     var wf_removeAllNodes = function(){
 		//todo: alert for delete all
@@ -76,7 +97,7 @@ tao_resetCanvasData();
 
 
     var wf_loadWorkflowById = function(wfId){
-        console.log("f:wf_loadWorkflowById , load workflow"+wfId);
+        console.log("f:wf_loadWorkflowById , load workflow: "+wfId);
         var getWorkflowById = $.ajax({
             cache: false,
             url: baseRestApiURL + "workflow/"+wfId+"/?rnd=" + Math.random(),
@@ -90,59 +111,111 @@ tao_resetCanvasData();
         });
         $.when(getWorkflowById)
         .done(function (getWorkflowByIdResponse) {
-            wfPlumbCanvasData._remote = getWorkflowByIdResponse;
-            //clone wf data only, no nodes info
-            wfPlumbCanvasData.wf = $.extend({}, getWorkflowByIdResponse); wfPlumbCanvasData.wf.nodes = [];
-            wfPlumbCanvasData.header.id = getWorkflowByIdResponse.id;
-            wfPlumbCanvasData.header.name = getWorkflowByIdResponse.name;
-            wfPlumbCanvasData.header.status = getWorkflowByIdResponse.status;
-            wfPlumbCanvasData.header.username = getWorkflowByIdResponse.userName;
-            wfPlumbCanvasData.header.visibility = getWorkflowByIdResponse.visibility;
+            var currentWfData = chkTSRF(getWorkflowByIdResponse);
+            console.log("workflow data:"); console.log(currentWfData);
+            tao_setWF2CanvasData(currentWfData);
             //render workflow header
             toolboxHeader.populate(wfPlumbCanvasData.header).open();
 
-            console.log(getWorkflowByIdResponse);
-                //render nodes
-                $.each(getWorkflowByIdResponse.nodes, function(i, wfOneNode) {
-                    console.log(wfOneNode);
-                    var nodeData = {
-                        "ntype":"pc",
-                        "ntemplateid": wfOneNode.componentId,
-                        "mtype":wfOneNode.componentId,
-                        "mlabel":wfOneNode.name,"fullData":wfOneNode
-                    };
-                    addNewNode(wfOneNode.xCoord,wfOneNode.yCoord,nodeData);
-                });
-                //render connectors
-                // suspend drawing and initialise.
-                jsp.batch(function () {
-                    $.each(getWorkflowByIdResponse.nodes, function(i, wfOneNode) {
-                        var destNodeId = wfOneNode.id;
-                        $.each(wfOneNode.incomingLinks, function(i, wfOneLink) {
-                            var sourceNodeId = wfOneLink.sourceNodeId;
-                            var toNode = "p_"+destNodeId+"_"+wfOneLink.output.id;
-                            var fromNode = "p_"+sourceNodeId+"_"+wfOneLink.input.id;
-                            console.log( "link:" + fromNode +" > "+ toNode);
-                            jsp.connect({ source:fromNode, target:toNode, type:"basic" });
+            //get component templates for all components in workflow
+            var componentsListQueryString = wfPlumbCanvasData.usedComponents.join(',');
+            var getComponentsList = $.ajax({
+                cache: false,
+                url: baseRestApiURL + "component/list?id="+componentsListQueryString,
+                dataType : 'json',
+                type: 'GET',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": window.tokenKey
+                }
+            });
+            var getDatasourcesList = $.ajax({
+                cache: false,
+                url: baseRestApiURL + "datasource/list?id="+componentsListQueryString,
+                dataType : 'json',
+                type: 'GET',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": window.tokenKey
+                }
+            });
+            $.when(getComponentsList, getDatasourcesList)
+                .done(function (getComponentsListResponse, getDatasourcesListResponse) {
+                    var currentWfComponentsList = chkTSRF(getComponentsListResponse[0]);
+                    var currentWfDatasourcesList = chkTSRF(getDatasourcesListResponse[0]);
+                    console.log("workflow components:"); console.log(currentWfComponentsList);
+                    console.log("workflow datasopurces:"); console.log(currentWfDatasourcesList);
+                    $.each(currentWfComponentsList, function(i, item) {
+                        var hash = "tboid"+jsHashCode(item.id);
+                        if(wfPlumbCanvasData.nodeTemplates.pc[hash]){
+                            alert("Processing components collision. duplicate id detected");
+                        }else{
+                            wfPlumbCanvasData.nodeTemplates.pc[hash] = {
+                                id: hash,
+                                type: "component",
+                                image: "./media/module-otb.png",
+                                label: item.label,
+                                dna: item
+                            };
+                        }
+                    });
+                    $.each(currentWfDatasourcesList, function(i, item) {
+                        var hash = "tboid"+jsHashCode(item.id);
+                        if(wfPlumbCanvasData.nodeTemplates.pc[hash]){
+                            alert("Datasource components collision. duplicate id detected");
+                        }else{
+                            wfPlumbCanvasData.nodeTemplates.ds[hash] = {
+                                id: hash,
+                                type: "datasource",
+                                image: "./media/module-ds.png",
+                                label: item.label,
+                                dna: item
+                            };
+                        }
+                    });
+                    //render nodes
+                    $.each(currentWfData.nodes, function(i, wfOneNode) {
+                        console.log("addNewNode call");
+                        console.log(wfOneNode);
+                        var nodeData = {
+                            "ntype":"pc",
+                            "ntemplateid": wfOneNode.componentId,
+                            "mtype":wfOneNode.componentId,
+                            "mlabel":wfOneNode.name,"fullData":wfOneNode
+                        };
+                        addNewNode(wfOneNode.xCoord,wfOneNode.yCoord,nodeData);
+                    });
+                    //render connectors
+                    // suspend drawing and initialise.
+                    jsp.batch(function () {
+                        $.each(currentWfData.nodes, function(i, wfOneNode) {
+                            var destNodeId = wfOneNode.id;
+                            $.each(wfOneNode.incomingLinks, function(i, wfOneLink) {
+                                var sourceNodeId = wfOneLink.sourceNodeId;
+                                var toNode = "p_"+destNodeId+"_"+wfOneLink.output.id;
+                                var fromNode = "p_"+sourceNodeId+"_"+wfOneLink.input.id;
+                                console.log( "link:" + fromNode +" > "+ toNode);
+                                jsp.connect({ source:fromNode, target:toNode, type:"basic" });
+                            });
                         });
                     });
+                    //set zoom and pan as saved
+                    var matrix = pz.panzoom('getMatrix');
+                    wfZoom = wfPlumbCanvasData.wf.zoom;
+                    //fix unusable zoom
+                    if (wfZoom === 0) wfZoom = 1;
+                    matrix[0] = wfZoom;
+                    matrix[3] = wfZoom;
+                    matrix[4] = wfPlumbCanvasData.wf.xCoord;
+                    matrix[5] = wfPlumbCanvasData.wf.yCoord;
+                    pz.panzoom("setMatrix", matrix);
+
+                    jsPlumb.fire("jsPlumbSetZoom", wfZoom);
+                    wfPlumbCanvasData.loaded = true;
+                    makeWFPreview();
                 });
-            //set zoom and pan as saved
-
-
-            var matrix = pz.panzoom('getMatrix');
-            wfZoom = wfPlumbCanvasData.wf.zoom;
-            //fix unusable zoom
-            if (wfZoom === 0) wfZoom = 1;
-            matrix[0] = wfZoom;
-            matrix[3] = wfZoom;
-            matrix[4] = wfPlumbCanvasData.wf.xCoord;
-            matrix[5] = wfPlumbCanvasData.wf.yCoord;
-            pz.panzoom("setMatrix", matrix);
-
-            jsPlumb.fire("jsPlumbSetZoom", wfZoom);
-            wfPlumbCanvasData.loaded = true;
-            makeWFPreview();
         })
         .fail(function () {
                 alert("Could not retrive workflow data.", "ERROR");
@@ -164,14 +237,14 @@ tao_resetCanvasData();
         //find node template from TOOLBOX and determine component type.
         var componentTemplate = null;
         //if(dna.ntype === "pc"){
-            if(wfTools.toolboxnodes.pc[dna.ntemplateid]){
-                componentTemplate = wfTools.toolboxnodes.pc[dna.ntemplateid].dna;
+            if(wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid]){
+                componentTemplate = wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid].dna;
                 dna.ntype = "pc";
             }
         //}
         //if(dna.ntype === "ds"){
             if(wfTools.toolboxnodes.ds[dna.ntemplateid]){
-                componentTemplate = wfTools.toolboxnodes.ds[dna.ntemplateid].dna;
+                componentTemplate = wfPlumbCanvasData.nodeTemplates.ds[dna.ntemplateid].dna;
                 dna.ntype = "ds";
             }
         //}

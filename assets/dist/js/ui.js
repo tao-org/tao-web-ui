@@ -27,19 +27,71 @@
 //create user profile variable
 var taoUserProfile = {};
 
+var taoEnums = {
+    data: {},
+    getEntity: function(e){
+        if (this.data[e]) {
+            return this.data[e];
+        }
+        return undefined;
+    },
+    getValueForKey: function(e,k){
+        if (this.data[e]) {
+            r = _.where(this.data[e], {key: k});
+            if(r[0] && r[0]["value"]){
+                return r[0]["value"];
+            }else return undefined;
+        }
+        return undefined;
+    }
+};
+var enums = {
+    data: {},
+    populate: function(v) {
+        this.data = v;
+    },
+    getEntity: function(e){
+        if (data[e]) {
+            return this.data[e];
+        }
+        return undefined;
+    }
+};
+
+
+
 $(function () {
     var username = _settings.readCookie("TaoUserName");
-    var ajax_getProfileSettings = {
-        "cache": false,
-        "url": baseRestApiURL + "user/"+username,
-        "method": "GET",
-        "headers": {
+    var ajax_getProfileSettings = $.ajax({
+        cache: false,
+        url: baseRestApiURL + "user/"+username,
+        dataType : 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
             "X-Auth-Token": window.tokenKey
         }
-    };
-    $.ajax(ajax_getProfileSettings)
-        .done(function (response) {
-            var r = chkTSRF(response);
+    });
+    var ajax_getConfigEnums = $.ajax({
+        cache: false,
+        url: baseRestApiURL + "config/enums",
+        dataType : 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+
+    $.when(ajax_getProfileSettings, ajax_getConfigEnums)
+        .done(function (response, enumsResponse) {
+            var r = chkTSRF(response[0]);
+            var enums = chkTSRF(enumsResponse[0]);
+            taoEnums.data = enums;
+            console.log("enums:"); console.log(enums);
+
             //inject additional elements into user profile data.
             if(r.id){
                 taoUserProfile = r;
@@ -57,9 +109,7 @@ $(function () {
             var gravatarUrl = "https://www.gravatar.com/avatar/"+taoUserProfile.userEmailMD5+"?d=mp&s=160";
             $(".val-user-avatar").attr("src", gravatarUrl);
             $(document).trigger( "quota:update" );
-            $(".wrapper").fadeTo( "slow", 1, function() {
-                // Intro animation complete.
-            });
+            $(".wrapper").fadeTo( "slow", 1, function() {});
         })
         .fail(function (jqXHR, status, textStatus) {
             window.location = 'login.html';

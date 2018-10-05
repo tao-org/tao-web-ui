@@ -50,19 +50,20 @@ $(function () {
     hashRoutesMap["admin/modules"] = "./fragments/component-admin.fragment.html";
 
     hashRoutesMap["documentation/intro"] = "./fragments/tao-documentation.fragment.html";
-    hashRoutesMap["faq/intro"] = "./fragments/tao-faq.fragment.html";
+    hashRoutesMap["howto/intro"] = "./fragments/tao-howto.fragment.html";
 
     hashRoutesMap["my/workflows"] = "./fragments/workflows-all.fragment.html";
     hashRoutesMap["my/components"] = "./fragments/component-admin.fragment.html";
     hashRoutesMap["my/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
     hashRoutesMap["my/scripts"] = "./fragments/my-scripts.fragment.html";
+    hashRoutesMap["my/queries"] = "./fragments/datasources-queries.fragment.html";
 
     hashRoutesMap["shared/workflows"] = "./fragments/workflows-all.fragment.html";
     hashRoutesMap["shared/components"] = "./fragments/component-admin.fragment.html";
     hashRoutesMap["shared/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
     hashRoutesMap["shared/datasources"] = "./fragments/datasource-admin.fragment.html";
 
-    hashRoutesMap["undefined/page"] = "./fragments/tao-faq.fragment.html";
+    hashRoutesMap["undefined/page"] = "./fragments/tao-howto.fragment.html";
 
     // Event handlers for frontend navigation
     // An event handler witch calls the router function on every hashchange.

@@ -1,5 +1,4 @@
 var wfPlumbCanvasData = {};
-
 var tao_resetCanvasData = function() {
     wfPlumbCanvasData = {
         _remote: {
@@ -223,42 +222,145 @@ var tao_setWF2CanvasData = function(currentWfData){
 	};
 
 	var addNewNode = function (x, y, dna) {
-		dna.nodeID = jsPlumbUtil.uuid();
+	    console.log("canvas: adding node: " + dna.mtype);
+        if(!dna.ntemplateid) return 0;
+
+        //creates canvas specific data and checks componente template before rendering node
+	    dna.nodeID = jsPlumbUtil.uuid();
         dna.fullData.xCoord = x;
         dna.fullData.yCoord = y;
 		if(dna.fullData.id === 0) {dna.fullData.id = dna.nodeID;}
-		//recreate ntemplateid
+		//recreate ntemplateid as tboid
+        dna.ntemplateid = "tboid"+jsHashCode(dna.ntemplateid);
 
-        if(!dna.ntemplateid){
-		    return 0;
-        }else{
-            dna.ntemplateid = "tboid"+jsHashCode(dna.ntemplateid);
-        }
         //find node template from TOOLBOX and determine component type.
         var componentTemplate = null;
-        //if(dna.ntype === "pc"){
+        if(dna.ntype === "pc"){
             if(wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid]){
-                componentTemplate = wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid].dna;
-                dna.ntype = "pc";
+                if(wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid]){
+                    componentTemplate = wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid].dna;
+                }
             }
-        //}
-        //if(dna.ntype === "ds"){
+        }
+        if(dna.ntype === "ds"){
             if(wfTools.toolboxnodes.ds[dna.ntemplateid]){
-                componentTemplate = wfPlumbCanvasData.nodeTemplates.ds[dna.ntemplateid].dna;
-                dna.ntype = "ds";
+                if(wfPlumbCanvasData.nodeTemplates.ds[dna.ntemplateid]){
+                    componentTemplate = wfPlumbCanvasData.nodeTemplates.ds[dna.ntemplateid].dna;
+                }
             }
-        //}
+        }
 
         if(componentTemplate === null){
             console.log("comp template not found!!!!!!!!!!!!!!!!!!");
-            return 0;
+            alert("comp template not found!!!!!!!!!!!!!!!!!!");
+            //try to get component template from server,  usedComponents
+            //xxxxxxxxxxxxxxxxx
+            if(dna.ntype === "pc"){
+                console.log("get "+ dna.mtype);
+
+                var getProcessingComponentById = $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + "component/list?id="+dna.mtype,
+                    dataType : 'json',
+                    type: 'GET',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "X-Auth-Token": window.tokenKey
+                    }
+                });
+                $.when(getProcessingComponentById)
+                .done(function (getProcessingComponentByIdResponse) {
+                    var pcData = chkTSRF(getProcessingComponentByIdResponse);
+                    console.log("pc data:"); console.log(pcData);
+                    if(pcData[0] && pcData[0].id && (pcData[0].id === dna.mtype)) {
+                        //template returned, add to used pc, add template too
+                        var hash = "tboid" + jsHashCode(dna.mtype);
+                        componentTemplate = pcData[0];
+                        wfPlumbCanvasData.usedComponents.push(dna.mtype);
+                        wfPlumbCanvasData.nodeTemplates.pc[hash] = {
+                            "dna": componentTemplate,
+                            "id": hash,
+                            "image": "./media/module-otb.png",
+                            "label": "xxxxx",
+                            "type": "component"
+                        };
+                    }
+                    canvasRenderer.createNode(componentTemplate, dna);
+                })
+                .fail(function () {
+                    alert("Could not retrive pc data.", "ERROR");
+                    canvasRenderer.createNode(componentTemplate, dna);
+                });
+            }
+        }else{
+            canvasRenderer.createNode(componentTemplate, dna);
         }
+	};
+
+
+
+var canvasRenderer = {
+    initPort: function(el, pType) {
+        // initialise draggable elements.
+        //window.jsp.draggable(el);
+        if(pType === "out")
+            window.jsp.makeSource(el, {
+                filter: ".n-p-o",
+                anchor: "Continuous",
+                connectorStyle: { stroke: "#5c96bc", strokeWidth: 2, outlineStroke: "transparent", outlineWidth: 4 },
+                connectionType:"basic",
+                extract:{
+                    "action":"the-action"
+                },
+                maxConnections: 20,
+                onMaxConnections: function (info, e) {
+                    alert("Maximum connections (" + info.maxConnections + ") reached");
+                }
+            });
+        if(pType === "in")
+            window.jsp.makeTarget(el, {
+                dropOptions: { hoverClass: "dragHover" },
+                anchor: "Continuous",
+                allowLoopback: true
+            });
+        jsPlumb.fire("jsPlumbPortAdded", el);
+    },
+    createNode: function(componentTemplate, dna){
+        if(componentTemplate === null){
+            //set component template for unknown
+            componentTemplate = {
+                "id": "component-unavilable",
+                "label": "Unknown",
+                "version": "1.0",
+                "description": "Component has been removed from toolbox",
+                "authors": "SNAP Team",
+                "copyright": "(C) SNAP Team",
+                "nodeAffinity": "Any",
+                "sources": [],
+                "targets": [],
+                "containerId": "3513b060dab3",
+                "fileLocation": "",
+                "workingDirectory": "",
+                "templateType": "VELOCITY",
+                "variables": [],
+                "multiThread": true,
+                "visibility": "SYSTEM",
+                "active": true,
+                "componentType": "EXECUTABLE",
+                "owner": "SystemAccount",
+                "parameterDescriptors": [],
+                "templatecontents": ""
+            };
+            dna.ntype = "unknown";
+        }
+
+
 
         var completeness = 0;
         var maxPorts = Math.max(componentTemplate.sources.length, componentTemplate.targets.length);
         var d = document.createElement("div");
         var innerHTML ="";
-
         innerHTML += "<div class=\"module-info\">";
         innerHTML += "<div class=\"module-animation\">";
         if(dna.ntype === "ds") {
@@ -275,8 +377,13 @@ var tao_setWF2CanvasData = function(currentWfData){
             innerHTML += "<svg id=\"development_icon\" x=\"0px\" y=\"0px\" width=\"32px\" height=\"32px\"><path id=\"large-cog\" d=\"m13.331,1c-1.152,0.296 -2.248,0.712 -3.285,1.126c0.865,4.027 -2.535,5.329 -4.955,3.612c-0.922,0.652 -1.614,1.541 -1.902,2.785c2.535,1.716 1.268,6.275 -2.189,5.861c0,1.303 0,2.604 0,3.91c3.688,-0.357 4.494,4.204 2.189,6.157c0.635,0.947 0.922,2.252 2.189,2.547c2.189,-1.835 5.531,-0.178 4.667,3.613c1.038,0.414 2.132,0.83 3.284,1.124c0.463,-3.198 5.244,-3.198 5.763,0c1.153,-0.294 2.247,-0.71 3.286,-1.124c-0.864,-4.027 2.533,-5.332 4.955,-3.613c0.922,-0.65 1.61,-1.541 1.9,-2.784c-2.535,-1.716 -1.267,-6.275 2.19,-5.862c0,-1.302 0,-2.605 0,-3.908c-3.687,0.298 -4.495,-4.203 -2.19,-6.159c-0.635,-0.948 -0.865,-2.251 -2.189,-2.487c-2.191,1.836 -5.53,0.178 -4.666,-3.614c-1.039,-0.413 -2.133,-0.829 -3.286,-1.124c-0.806,3.256 -4.954,3.256 -5.761,-0.06zm8.586,15.398c0,3.196 -2.536,5.804 -5.705,5.804c-3.17,0 -5.705,-2.607 -5.705,-5.804c0,-3.197 2.535,-5.805 5.705,-5.805c3.17,-0.057 5.705,2.548 5.705,5.805z\" fill=\"#5c96bc\"/></svg>";
         }
         innerHTML += "</div>";
+
         innerHTML += "<div class=\"module-new\"></div>";
-        innerHTML += "<div class=\"module-title\">"+dna.mlabel+"</div>";
+        if(dna.ntype === "unknown"){
+            innerHTML += "<div class=\"module-title\">Component&nbsp;unavailable:<br>"+dna.mlabel+"</div>";
+        }else{
+            innerHTML += "<div class=\"module-title\">"+dna.mlabel+"</div>";
+        }
         innerHTML += "<div class=\"module-subtitle\">"+dna.fullData.componentId+"</div>";
         innerHTML += "<div class=\"module-subtitle\">"+datetimeFromArray(dna.fullData.created)+"</div>";
         innerHTML += "</div>";
@@ -296,14 +403,20 @@ var tao_setWF2CanvasData = function(currentWfData){
         innerHTML += "</div></div>";
         innerHTML += "<footer class=\"module-footer\">";
         innerHTML += "<div class=\"meta\"><button class=\"btn-transparent btn-action-erasemodule\"><i class=\"fa fa-trash\"></i><span class=\"sr-only\">Erase module</span></button></div>";
-        innerHTML += "<div class=\"meta\"><button class=\"btn-transparent btn-action-editmodule\"><i class=\"fa fa-pencil\"></i><span class=\"sr-only\">Edit module</span></button></div>";
+        if(dna.ntype !== "unknown") {
+            innerHTML += "<div class=\"meta\"><button class=\"btn-transparent btn-action-editmodule\"><i class=\"fa fa-pencil\"></i><span class=\"sr-only\">Edit module</span></button></div>";
+        }
         innerHTML += "</footer>";
 //
-        d.className = "w";
+        if(dna.ntype === "unknown"){
+            d.className = "w unknown-w";
+        }else{
+            d.className = "w";
+        }
         d.id = dna.nodeID;
         d.innerHTML = innerHTML;
-        d.style.left = x + "px";
-        d.style.top = y + "px";
+        d.style.left = dna.fullData.xCoord + "px";
+        d.style.top = dna.fullData.yCoord + "px";
         d.dataset.dna = JSON.stringify(dna); //Having to access dataset
         d.style.opacity = 0;
         d.onmousedown = function(){
@@ -318,12 +431,12 @@ var tao_setWF2CanvasData = function(currentWfData){
             var elPort;
             if(componentTemplate.targets[i]) {
                 elPort = document.getElementById("p_"+dna.fullData.id+"_"+componentTemplate.targets[i].id);
-                initPort(elPort, "out");
+                this.initPort(elPort, "out");
                 wfPlumbCanvasData.ports["p_"+dna.fullData.id+"_"+componentTemplate.targets[i].id] = {"type":"out", "parentID":dna.fullData.id, "fullData":componentTemplate.targets[i]};
             }
             if(componentTemplate.sources[i]) {
                 elPort = document.getElementById("p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id);
-                initPort(elPort, "in");
+                this.initPort(elPort, "in");
                 wfPlumbCanvasData.ports["p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id] = {"type":"in", "parentID":dna.fullData.id, "fullData":componentTemplate.sources[i]};
             }
         }
@@ -338,38 +451,12 @@ var tao_setWF2CanvasData = function(currentWfData){
             droppable:false
         });
 
-        //var elPort = document.getElementById("p-in-1-"+dna.nodeID);
-        //window.jsp.addToGroup("ng_"+dna.nodeID, elPort);
+        //var elPort = document.getElementById("p-in-1-"+dna.nodeID); window.jsp.addToGroup("ng_"+dna.nodeID, elPort);
+
         //add nodes to workflow shadow data
         wfPlumbCanvasData.nodesMap[dna.nodeID] = dna.fullData.id;
         wfPlumbCanvasData.nodes[dna.nodeID] = dna.fullData;
+        jsPlumb.fire("jsPlumbNodeAdded", d);
         return d;
-	};
-	
-	var initPort = function(el, pType) {
-        // initialise draggable elements.
-        //window.jsp.draggable(el);
-
-		if(pType === "out")
-        window.jsp.makeSource(el, {
-            filter: ".n-p-o",
-            anchor: "Continuous",
-            connectorStyle: { stroke: "#5c96bc", strokeWidth: 2, outlineStroke: "transparent", outlineWidth: 4 },
-            connectionType:"basic",
-            extract:{
-                "action":"the-action"
-            },
-            maxConnections: 20,
-            onMaxConnections: function (info, e) {
-                alert("Maximum connections (" + info.maxConnections + ") reached");
-            }
-        });
-
-		if(pType === "in")
-        window.jsp.makeTarget(el, {
-            dropOptions: { hoverClass: "dragHover" },
-            anchor: "Continuous",
-            allowLoopback: true
-        });
-        jsPlumb.fire("jsPlumbPortAdded", el);
-    };
+    }
+};

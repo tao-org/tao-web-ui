@@ -100,8 +100,7 @@
 /* ===== PROPERTIES ===== */
 #properties{position:fixed;right:2%;width:37%;z-index:9998}
 #properties button.close{position:absolute;top:7px;right:12px;opacity:1;color:white}
-#properties button.close:hover,
-#properties button.close:focus{color:#8bccf3}
+#properties button.close:hover{color:#8bccf3}
 #properties .box-shadow--6dp{margin-bottom:15px}
 #properties .box-header{overflow-x:hidden}
 #properties .callout{padding:0;border:0;background-color:white;margin:0;border-radius:0}
@@ -313,7 +312,9 @@ function renderTree(response) {
 		}
 	});
 	// Move "/files" folder at the end
+	var attributes = $(".toolbox .treeview .files-folder>label a").data("attributes");
 	$(".toolbox .treeview .files-folder").remove().insertAfter($(".toolbox .treeview>div:last-child"));
+	$(".toolbox .treeview .files-folder>label a").data("attributes", attributes);
 	
 	// Render files
 	$.each(response, function (index, file) {
@@ -331,12 +332,17 @@ function renderTree(response) {
 				size = parseFloat(size / 1024 / 1024 / 1024 / 1024, 2).toFixed(2) + " TB";
 			}
 			var name   = file.relativePath.substring(file.relativePath.lastIndexOf("\\") + 1);
-			var href   = baseRestApiURL + 'files/?fileName=' + file.relativePath.replace(/\\/g, "/");
 			var type   = file.relativePath.substring(file.relativePath.lastIndexOf("."));
 			var folder = getParentFolder(file.relativePath);
+			
+			// add "public/" prefix to filePath for all shared files in /public/files/
+			var addPublicPrefix = (sharedFiles && file.relativePath.startsWith("files")) ? "public/" : "";
+			var href   = baseRestApiURL + 'files/download?fileName=' + addPublicPrefix + file.relativePath.replace(/\\/g, "/");
+			
 			var fafile = "fa-file-o";
 			switch (type) {
 				case ".txt" : fafile = "fa-file-text-o"   ; break;
+				case ".log" : fafile = "fa-file-text-o"   ; break;
 				case ".html": fafile = "fa-file-code-o"   ; break;
 				case ".xml" : fafile = "fa-file-code-o"   ; break;
 				case ".json": fafile = "fa-file-code-o"   ; break;
@@ -371,7 +377,7 @@ function setPreviewImageBase64(attributes) {
 		$("#properties .imagepreview-holder img").attr("src", "");
 		if (attributes.formatType == "RASTER") {
 			$.ajax({
-				url: attributes.fileInfo.uri.replace("?fileName=", "preview?fileName="),
+				url: attributes.fileInfo.uri.replace("download?fileName=", "preview?fileName="),
 				type: "GET",
 				beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
 				success: function(response) {
@@ -593,8 +599,10 @@ $("#properties .share-holder").on("click", "input[name='share-folder']", functio
 });
 
 function deleteProduct(attributes) {
+	var deleteUrl = baseRestApiURL + "files/?fileName=" + attributes.fileInfo.relativePath.replace(/\\/g, "/");
+	console.log({ action: "DELETE", url: deleteUrl });
 	$.ajax({
-		url: baseRestApiURL + "files/?fileName=" + attributes.fileInfo.relativePath,
+		url: deleteUrl,
 		type: "DELETE",
 		beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
 		success: function(response) {
@@ -671,6 +679,8 @@ $("#properties .download-holder").on("click", "a", function (e) {
 				}
 	            setTimeout(function () { URL.revokeObjectURL(downloadUrl); $(a).remove(); }, 100); // cleanup
 	        }
+		} else {
+			showMsg("An error occured while processing your request!");
 		}
 	}
 	xhr.send();

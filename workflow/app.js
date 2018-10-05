@@ -21,35 +21,14 @@ var tao_resetShadowData = function(){
         }
     };
 };
+//start with clean data
 tao_resetShadowData();
+
 
 //used elements
 var $elCanvas = $("#canvas");
 var $elZoom = $(".zoom-percent span", "#preview-toolbar");
-
 var currentWfID = jsGetUrlQueryValue("_wf");
-
-$(document)
-	.on('keyup keydown', function(e){
-			keyboardShifted = e.shiftKey;
-	})
-	.on('keydown', function(e){
-			if (e.ctrlKey) {
-				if (e.keyCode === 65 || e.keyCode === 97) { // 'A' or 'a'
-					e.preventDefault();
-					console.log("CTRL + A");
-					$(".w", $elCanvas).addClass("selected");
-					toolboxModules.rescanSelected();
-				}
-			}
-	});
-
-//nothing fancy for the moment
-window.addEventListener("beforeunload", function (e) {
-    var confirmationMessage = "\o/";
-    (e || window.event).returnValue = confirmationMessage;     //Gecko + IE
-    return confirmationMessage;                                //Webkit, Safari, Chrome etc.
-});
 
 var toolboxModules ={
 	selected: [],
@@ -112,6 +91,10 @@ jsPlumb.bind("jsPlumbSetZoom", function(z) {
     jsp.setZoom(z);
     $elZoom.html( parseInt(z*100) + "%");
     wf_updateWorkflowById(null,null,z);
+});
+
+jsPlumb.bind("jsPlumbNodeAdded", function() {
+    console.log("new node added");
 });
 
 jsPlumb.bind("jsPlumbPortAdded", function() {
@@ -179,7 +162,6 @@ jsPlumb.bind("tao_dropNewNode", function(params) {
                     "fullData": r
                 };
                 addNewNode(r.xCoord,r.yCoord,nodeData);
-                //addNewNode(left,top, nodeData);
                 makeWFPreview();
 
                 $(".v-lastaction","#infoband").html("node "+r.name+" added");
@@ -294,7 +276,6 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
                 }
             });
             $.each(wfTools.datasources, function(i, item) {
-                //var hash = jsHashCode(wfOneDatasource.sensor+"-"+wfOneDatasource.dataSourceName);
                 var hash = "tboid"+jsHashCode(item.id);
                 if(wfTools.toolboxnodes.q[hash]){
                     if(wfTools.toolboxnodes.pc[hash]){
@@ -309,6 +290,7 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
                         };
                     }
                 }else{
+                    console.log("Unknown query for datasource");
                     alert("Unknown query for datasource id: "+item.id+"\nIgnoring datasource.");
 				}
             });

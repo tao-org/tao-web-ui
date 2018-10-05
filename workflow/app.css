@@ -99,12 +99,22 @@ pre {
 	border: 2px solid #2e6f9a;
 
 }
+
+.w.unknown-w{
+    background: #ffcaca;
+}
+.w.unknown-w:hover{
+    background: #fd6868;
+}
 .w.selected {
     /*border: 4px solid #2e6f9a;*/
 	z-index: 4;
 	background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHhtbG5zOnhsaW5rPSdodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rJyB3aWR0aD0nNicgaGVpZ2h0PSc2Jz4KICA8cmVjdCB3aWR0aD0nNicgaGVpZ2h0PSc2JyBmaWxsPScjZWVlZWVlJy8+CiAgPGcgaWQ9J2MnPgogICAgPHJlY3Qgd2lkdGg9JzMnIGhlaWdodD0nMycgZmlsbD0nI2U2ZTZlNicvPgogICAgPHJlY3QgeT0nMScgd2lkdGg9JzMnIGhlaWdodD0nMicgZmlsbD0nI2Q4ZDhkOCcvPgogIDwvZz4KICA8dXNlIHhsaW5rOmhyZWY9JyNjJyB4PSczJyB5PSczJy8+Cjwvc3ZnPg==");
 	background-repeat: repeat;
     opacity: 1 !important;
+}
+.w.unknown-w.selected{
+    background: #fd6868;
 }
 .w .module-bottom{
     color: #aeb8b8;
@@ -135,12 +145,13 @@ pre {
     width: 32px;
 }
 .w .module-info .module-new {
-    float: right;
     width: 10px;
     height: 10px;
-    margin-left: 4px;
     border-radius: 50%;
     background-color: #7cc7ff;
+    position: absolute;
+    right: 5px;
+    top: 5px;
 }
 .w .module-info .module-title {
     font-size: 16px;

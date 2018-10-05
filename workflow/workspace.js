@@ -1,7 +1,26 @@
-	//create case insensitive search jQuery selector:
-    jQuery.expr[':'].ci_search = function(a, i, m) {
-        return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+//create case insensitive search jQuery selector:
+jQuery.expr[':'].ci_search = function(a, i, m) {
+    return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+};
+
+//geometry function for svg
+function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+    var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+    return {
+        x: centerX + (radius * Math.cos(angleInRadians)),
+        y: centerY + (radius * Math.sin(angleInRadians))
     };
+}
+function describeArc(x, y, radius, startAngle, endAngle){
+    var start = polarToCartesian(x, y, radius, endAngle);
+    var end = polarToCartesian(x, y, radius, startAngle);
+    var arcSweep = endAngle - startAngle <= 180 ? "0" : "1";
+    return d = [
+        "M", start.x, start.y,
+        "A", radius, radius, 0, arcSweep, 0, end.x, end.y,
+        //"L", x, y, "Z"
+    ].join(" ");
+}
 
 
 
@@ -134,6 +153,7 @@
 	}
 
 
+
     function wf_renderComponentsToolBox(){
         var $elComponentsList = $("#moduleslist");
         var $elDatasurcesList = $("#datasourceslist");
@@ -223,8 +243,8 @@
 
 
     function tao_ZoomFitAllNodes() {
-pz.panzoom('reset', { animate: false });
-wfZoom = 1;
+        pz.panzoom('reset', { animate: false });
+        wfZoom = 1;
 			console.log("f:fitCanvasToWindow");
 			var minLeft			= 0;
 			var minTop			= 0;
@@ -251,7 +271,7 @@ wfZoom = 1;
 				itemOffset.bottom = $(this).offset().top + itemOffset.h;
 //				if($(this).hasClass("selected")){		}
 				
-				if(index == 0){
+				if(index === 0){
 					minLeft = itemOffset.left;
 					minTop = itemOffset.top;
 					maxBottom = itemOffset.bottom;
@@ -287,9 +307,9 @@ wfZoom = 1;
 			pz.panzoom("setMatrix", matrix);
         	jsPlumb.fire("jsPlumbSetZoom", wfZoom);
 			makeWFPreview();
-    };
+    }
 	
-	
+	//preview window
 	function makeWFPreview() {
 			console.log("f:makeWFPreview");
             var $wfPreview		= $("#img-wf-preview");
@@ -357,58 +377,57 @@ wfZoom = 1;
 
 			$wfPreview.empty();
 			$.each( nodes, function( key, itemMatrix ) {
-				if(itemMatrix.selected == 1){
-					var pHtml = "<div class=\"preview-node selected\" style=\"top:"+(rezidualSpace.top+(itemMatrix.top-minTop)*previewScale)+"px;left:"+(rezidualSpace.left+(itemMatrix.left-minLeft)*previewScale)+"px;width:"+itemMatrix.w*previewScale+"px;height:"+itemMatrix.h*previewScale+"px\"></div>";
-				};
-				if(itemMatrix.selected == 0){
-					var pHtml = "<div class=\"preview-node\" style=\"top:"+(rezidualSpace.top+(itemMatrix.top-minTop)*previewScale)+"px;left:"+(rezidualSpace.left+(itemMatrix.left-minLeft)*previewScale)+"px;width:"+itemMatrix.w*previewScale+"px;height:"+itemMatrix.h*previewScale+"px\"></div>";
+                var pHtml;
+				if(itemMatrix.selected === 1){
+					pHtml = "<div class=\"preview-node selected\" style=\"top:"+(rezidualSpace.top+(itemMatrix.top-minTop)*previewScale)+"px;left:"+(rezidualSpace.left+(itemMatrix.left-minLeft)*previewScale)+"px;width:"+itemMatrix.w*previewScale+"px;height:"+itemMatrix.h*previewScale+"px\"></div>";
+				}
+				if(itemMatrix.selected === 0){
+					pHtml = "<div class=\"preview-node\" style=\"top:"+(rezidualSpace.top+(itemMatrix.top-minTop)*previewScale)+"px;left:"+(rezidualSpace.left+(itemMatrix.left-minLeft)*previewScale)+"px;width:"+itemMatrix.w*previewScale+"px;height:"+itemMatrix.h*previewScale+"px\"></div>";
 				}
 				//add Viewfinder
-				if(itemMatrix.selected == -1){
-					var pHtml = "<div class=\"preview-node viewfinder\" style=\"top:"+(rezidualSpace.top+(itemMatrix.top-minTop)*previewScale)+"px;left:"+(rezidualSpace.left+(itemMatrix.left-minLeft)*previewScale)+"px;width:"+itemMatrix.w*previewScale+"px;height:"+itemMatrix.h*previewScale+"px\"></div>";
+				if(itemMatrix.selected === -1){
+					pHtml = "<div class=\"preview-node viewfinder\" style=\"top:"+(rezidualSpace.top+(itemMatrix.top-minTop)*previewScale)+"px;left:"+(rezidualSpace.left+(itemMatrix.left-minLeft)*previewScale)+"px;width:"+itemMatrix.w*previewScale+"px;height:"+itemMatrix.h*previewScale+"px\"></div>";
 				}
 				$wfPreview.append(pHtml);
 			});
-    };
-
-
+    }
 
 	//prevent browser zooming on mouse scroll only.
 	$(window).bind('mousewheel DOMMouseScroll', function (event) {
-			if (event.ctrlKey == true) {
-			event.preventDefault();
+			if (event.ctrlKey === true) {
+    			event.preventDefault();
 			}
 	});
 	//prevent browser zooming on keyboard shortcuts.
 	$(document).keydown(function(event) {
 			//Ctrl + +
-	   	    if (event.ctrlKey==true && (event.which == '61' || event.which == '107' || event.which == '187') ) {
+	   	    if (event.ctrlKey === true && (event.which === '61' || event.which === '107' || event.which === '187') ) {
 				event.preventDefault();
 				doWFZoom("zoom-plus");
 			}
 	   	    //Ctrl + -
-			if (event.ctrlKey==true && (event.which == '173' || event.which == '109' || event.which == '189') ) {
+			if (event.ctrlKey === true && (event.which === '173' || event.which === '109' || event.which === '189') ) {
 				event.preventDefault();
 				doWFZoom("zoom-minus");
 			}
 			//Ctrl + 1
-			if (event.ctrlKey==true && (event.which == '49' || event.which == '35' || event.which == '97') ){
+			if (event.ctrlKey === true && (event.which === '49' || event.which === '35' || event.which === '97') ){
 				event.preventDefault();
 				doWFZoom("zoom-1to1");
 			}
-			if (event.ctrlKey==true && (event.which == '37' || event.which == '100') ){
+			if (event.ctrlKey === true && (event.which === '37' || event.which === '100') ){
 				event.preventDefault();
 				doWFPan("pan-right");
 			}
-			if (event.ctrlKey==true && (event.which == '39' || event.which == '102') ){
+			if (event.ctrlKey === true && (event.which === '39' || event.which === '102') ){
 				event.preventDefault();
 				doWFPan("pan-left");
 			}
-			if (event.ctrlKey==true && (event.which == '40' || event.which == '98') ){
+			if (event.ctrlKey === true && (event.which === '40' || event.which === '98') ){
 				event.preventDefault();
 				doWFPan("pan-up");
 			}
-			if (event.ctrlKey==true && (event.which == '38' || event.which == '104') ){
+			if (event.ctrlKey === true && (event.which === '38' || event.which === '104') ){
 				event.preventDefault();
 				doWFPan("pan-down");
 			}
@@ -450,34 +469,34 @@ $( function() {
 											}
 									});
 		$('html').keyup(function(e){
-											if(e.keyCode === 46) {
-												toolboxModules.rmSelected();
-											}
-									});
-		$(document).on('keyup keydown', function(e){shifted = e.shiftKey});
+							    		if(e.which === 46) {
+								    		toolboxModules.rmSelected();
+										}
+						    		});
+        $(document)
+        .on('keyup keydown', function(e){
+            keyboardShifted = e.shiftKey;
+            shifted = e.shiftKey; ////???? xxx
+        })
+        .on('keydown', function(e){
+            if (e.ctrlKey) {
+                if (e.which === 65 || e.which === 97) { // 'A' or 'a'
+                    e.preventDefault();
+                    console.log("CTRL + A");
+                    $(".w", $elCanvas).addClass("selected");
+                    toolboxModules.rescanSelected();
+                }
+            }
+        });
+
+    //warn user before leaving page, nothing fancy for the moment, consider dirty flag for unsaved work
+    window.addEventListener("beforeunload", function (e) {
+        var confirmationMessage = "\o/";
+        (e || window.event).returnValue = confirmationMessage;     //Gecko + IE
+        return confirmationMessage;                                //Webkit, Safari, Chrome etc.
+    });
 });
 	
-//geometry function for svg
-function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
-  var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
-  return {
-    x: centerX + (radius * Math.cos(angleInRadians)),
-    y: centerY + (radius * Math.sin(angleInRadians))
-  };
-}
-
-function describeArc(x, y, radius, startAngle, endAngle){
-  var start = polarToCartesian(x, y, radius, endAngle);
-  var end = polarToCartesian(x, y, radius, startAngle);
-  var arcSweep = endAngle - startAngle <= 180 ? "0" : "1";
-  return d = [
-    "M", start.x, start.y, 
-    "A", radius, radius, 0, arcSweep, 0, end.x, end.y,
-    //"L", x, y, "Z"
-  ].join(" ");
-}
-
-
 ////////////// FOR RUBER BAND ////////////
         var startPoint = {};
 		var rubberBand = {
@@ -528,7 +547,7 @@ function describeArc(x, y, radius, startAngle, endAngle){
 				rubberBand.paint({top:t, left:l, h:h,w:w});
 				$("#infoband").html("top:"+t+", left:"+l+", height:"+h+", width:"+w);
 			}
-		}
+		};
         
 		function diagramContainer_FindSelectedItem() {
             if($("#rubberband").is(":visible") !== true) { return; }
@@ -547,8 +566,8 @@ function describeArc(x, y, radius, startAngle, endAngle){
 					toolboxModules.rescanSelected();
                 }
             });
-			return;
         }
+
 		function getTopLeftOffset(element) {
             var elementDimension = {};
             elementDimension.left = element.offset().left;
@@ -567,6 +586,3 @@ function describeArc(x, y, radius, startAngle, endAngle){
                 });
             }
         }
-
-
-

@@ -153,6 +153,7 @@
                                         </div>
                                         <div class="box-bottom with-line">
                                             <div class="">
+                                             	<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view"><i class="fa fa-eye fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;View parameters</span></button>
                                             </div>
                                         </div>
@@ -196,7 +197,50 @@
         </div>
     </div>
 </section><!-- /.content -->
+
+   
+<div class="modal-content modal-edit-tags">
+	<div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	    <h4 class="modal-title" id="myModalLabel">Edit tags</h4>
+	</div>
+	<form id="frmEditDatasourceTags" class="form-horizontal" role="form">	
+	    <div class="modal-body">
+	        <section>
+	         <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="formTags" class="col-sm-2 col-md-2 control-label">Tags </label>
+                        <div class="col-sm-10 col-md-10">
+                            <input id="formTags" name="formTags" class="form-control" value="">                                                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                            <button id="saveDatasourcesTags" type="submit" class="btn btn-primary btn-action" name="btnSave">Save tags</button>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+	        </section>
+	    </div>
+	</form>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	</div> 
+</div><!-- /.modal-content -->
+<link rel="stylesheet" href="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.css" type="text/css" />
+<script src="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.js" type="text/javascript"></script>
+<!-- 1.12.1/jquery-ui.min.js for autocomplete -->
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.css" type="text/css" />
+<script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
+                
 <script>
+	var modalEdit = '';
     if(_mLIST){
         for (var member in _mLIST) delete _mLIST[member];
     }
@@ -214,6 +258,7 @@
                 searchBox: $(".search-box",$("#panel-topo-wrapper")),
                 valCountFilters: $(".val-count-filters")
             },
+            dataSourceList:[],
             dataFull:[],
             dataAllTags: [],
             data: [],
@@ -251,8 +296,10 @@
                 });
                 //filter by tags
                 for (var j = 0; j < _mLIST.dataFull.length; j++){
-                    //
+                	var tagsIntersecttion  = -1;
+                    if(_mLIST.dataFull[j].tags != null){
                     var tagsIntersecttion = arrayIntersection(_mLIST.dataFilter.selectedTags,_mLIST.dataFull[j].tags);
+                    }
                     if ((_mLIST.dataFilter.selectedTags.length === 0) || (tagsIntersecttion.length>0)){
                         _mLIST.data.push(_mLIST.dataFull[j]);
                     }
@@ -330,7 +377,7 @@
                     "to": 0,
                     "order": "none"
                 };
-                $.ajax({
+                var queryAjax = $.ajax({
                     cache: false,
                     type: "get",
                     url: baseRestApiURL + "query/",
@@ -345,38 +392,69 @@
                         chkXHR(jqXHR.status);
                     },
                     success: function(r,textStatus, jqXHR) {
-                        var response = chkTSRF(r);
-                        if(jqXHR.status === 204){
+                    }
+                });
+                
+                var datasourceAjax = $.ajax({
+                	 cache: false,
+                     type: "get",
+                     url: baseRestApiURL + "datasource/",
+                     dataType: "json",
+                     contentType: "application/json; charset=utf-8",
+                     headers: {
+                         "Accept": "application/json",
+                         "Content-Type": "application/json",
+                         "X-Auth-Token": window.tokenKey
+                     },
+                     error : function (jqXHR, textStatus, errorThrown) {
+                         chkXHR(jqXHR.status);
+                     },
+                     success: function(r,textStatus, jqXHR) {
+                     }
+                });
+                
+
+        		$.when( queryAjax, datasourceAjax).done( function(data1, data2){
+					var datasourcesObj = chkTSRF(data1[0]);
+					if(datasourcesObj[2].status === 204){
                             showMsg("No datasources found.", "SUCCESS");
-                            response = [];
+					    datasourcesObj = [];
                         }
                         showMsg("Datasources list successfully retrieved.", "SUCCESS");
-                        //inject fake tags
-                        var j = 0;
-                        for (j = 0; j < response.length; j++){
-                            response[j].tags = [];
-                            if(Math.random()<.5){response[j].tags.push("Tag1");}
-                            if(Math.random()<.5){response[j].tags.push("Tag2");}
-                            if(Math.random()<.5){response[j].tags.push("Tag3");}
-                            if(Math.random()<.5){response[j].tags.push("Tag4");}
-                            if(Math.random()<.5){response[j].tags.push("Tag5");}
-                            if(Math.random()<.5){response[j].tags.push("Tag6");}
+					console.log(datasourcesObj);
+					
+					var datasourcesList = chkTSRF(data2[0]);
+					if(datasourcesList[2].status === 204){
+					    datasourcesList = [];
                         }
-                        //create tags
+					console.log(datasourcesList);
+					var j = 0;
                         _mLIST.dataAllTags = [];
-                        for (j = 0; j < response.length; j++){
-                            _mLIST.dataAllTags = _mLIST.dataAllTags.concat(response[j].tags);
+                    for (j = 0; j < datasourcesList.length; j++){
+                    	if(datasourcesList[j].tags!=null){
+                    		 _mLIST.dataAllTags = _mLIST.dataAllTags.concat(datasourcesList[j].tags);
+                    	}                          
                         }
                         _mLIST.dataAllTags.sort();
                         _mLIST.dataAllTags = arrayDuplicateRemove(_mLIST.dataAllTags);
 
-                        _mLIST.data = response;
-                        _mLIST.dataFull = response;
+                  // add tags to datasources list object
+                    $.each(datasourcesObj, function(index, res){
+                    	datasourcesObj[index].tags = [];
+                    	findDatasource = datasourcesList.find(x => x.id === res.sensor+'-'+res.dataSourceName);
+                    	if(findDatasource != []){
+                    		datasourcesObj[index].tags = findDatasource.tags;
+                    	}
+                    
+                    });
+                    
+                    _mLIST.dataSourceList = datasourcesList;
+					_mLIST.data = datasourcesObj;
+					_mLIST.dataFull = datasourcesObj;
                         routeLoading('hide');
                         //keep this order
                         _mLIST.repaintTags();
                         _mLIST.repaint();
-                    }
                 });
             },
             repaintList: function() {
@@ -419,8 +497,10 @@
                     $elClone = $( "#node-master-template-list" ).clone();
                 }
                 $elClone.prop("id", "node-"+elID ).appendTo( _mLIST.$el.itemsBox ).data("dna", elX);
+                if(elX.tags != null){
                 for (var j = 0; j < elX.tags.length; j++){
                     tags+="<span>"+elX.tags[j]+"</span>";
+	                }
                 }
                 $(".box-top-tags", $elClone).html(tags);
                 $(".val-nnm", $elClone).html(elX.sensor);
@@ -449,47 +529,23 @@
         };
     myModalNodesOpShow = function(operationid){
         var $modal = $("#myModalNodes");
-        $(".modal-dialog",$modal).removeClass("modal-lg");
-        var rm_contentUrl = '/_tao/rm_content/rm_blank.php';
+      //  $(".modal-dialog",$modal).removeClass("modal-lg");
+       // var rm_contentUrl = '/_tao/rm_content/rm_blank.php';
         var rmContent = '';
-        var rm = true;
 
         if(operationid === "view"){
             //$(".modal-dialog",$modal).addClass("modal-lg");
-            rm = false;
+            $(".modal-dialog",$modal).removeClass("modal-lg");
             rmContent = buildModalParamsList();
         }
-        if(operationid === "op-plus"){
-            rm_contentUrl="./fragments/topology-plus.fragment.html?" + Math.random();
-        }
+        
         if(operationid === "edit"){
-            rm_contentUrl="./fragments/topology-edit.fragment.html?" + Math.random();
+			rmContent = modalEdit;
+			if(_mLIST.dataOpQueue[0]['dna'].hasOwnProperty('tags') && _mLIST.dataOpQueue[0]['dna']['tags']!= null){
+				$('#formTags').importTags( _mLIST.dataOpQueue[0]['dna']['tags'].join());
+			}
+			modalEdit.css('display','');
         }
-        if(operationid === "delete"){
-            $('#confirm-dialog').modal('confirm',{
-                msg:"Are you sure you want to delete datasource: "+_mLIST.dataOpQueue[0].dna.hostName+"?",
-                callbackConfirm: function() {
-                    deleteExecNode(_mLIST.dataOpQueue[0].dna.hostName);
-                },
-                callbackCancel:function(){}
-            });
-            return;
-        }
-        if(operationid === "enable"){
-            rm_contentUrl='';
-        }
-        if(operationid === "disable"){
-            rm_contentUrl='';
-        }
-        if(rm){
-            $.ajax({
-                url: rm_contentUrl,
-                success: function(result) {
-                    rmContent = result;
-                },
-                async: false
-            });
-        }else{}
         if(rmContent !== ''){
             $modal.find('.modal-dialog').html(rmContent);
         }else{
@@ -542,7 +598,6 @@
         .on("click", '.btn-master-tool', function(event){
             event.preventDefault();
             var action = $(this).data("action");
-            if(action === "op-plus") myModalNodesOpShow(action);
             if(action === "op-filter"){
                 if( _mLIST.$el.tags.is(":visible") ){
                     _mLIST.$el.tags.hide("fast");
@@ -651,8 +706,55 @@ html += "      </tbody>\n" +
         $(".not-empty").hide();
         $("form.search-container").on("submit",function(e){
             e.preventDefault(e);
-        })
+        });
         _mLIST.getData();
+                
+        $("#frmEditDatasourceTags").on("submit", function(e){
+        	 e.preventDefault(e);
+        	var id = _mLIST.dataOpQueue[0]['dna']['sensor']+'-'+_mLIST.dataOpQueue[0]['dna']['dataSourceName'];
+        	var tags = $('input[name=formTags]', this).val();
+            tags = tags.split(",");
+        	
+        	// add tags to datasources list object
+        	findDatasource = _mLIST.dataSourceList.find(x => x.id === _mLIST.dataOpQueue[0]['dna']['sensor']+'-'+_mLIST.dataOpQueue[0]['dna']['dataSourceName']);
+        	findDatasource.tags = tags;
+          
+        	console.log(findDatasource);
+        	$.ajax({
+        		cache: false,
+                type: "PUT",
+                url: baseRestApiURL + "datasource/"+id,
+              //  dataType: "json",
+                data: JSON.stringify(findDatasource),
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": window.tokenKey
+                },
+                error : function (jqXHR, textStatus, errorThrown) {
+                    showMsg("Unknown error. Unable to update tags name. Please try again.", "ERROR");
+                },             
+                success: function(r) {
+                    var response = chkTSRF(r);
+                    console.log(response);
+                    if(response.status!=undefined){
+                    	showMsg("Tags successfully saved.", "SUCCESS");	
+                    }else{
+                    	showMsg("Tags were not saved.", "SUCCESS");	
+                    }
+                   	
+                    $("#myModalNodes").modal('hide');
+                    _mLIST.refresh();
+                }
+        	});
+        	return false;
+        });
+        
+        modalEdit =  $('.modal-edit-tags');
+        modalEdit.css('display','none');
+        
+        initializeTagsInputAutocomplete("#formTags", "datasource");
     });
     //# sourceURL=filename.js
 </script>

@@ -187,7 +187,6 @@
                             <core-node-box id="node-master-template-list" class="collapse">
                             <div class="col-md-12 proj-element">
                                 <div class="node-tools pull-right">
-                                    <span data-toggle="tooltip" title="" class="badge bg-black" data-original-title="3 notifications">3</span>
                                     <button class="btn btn-box-tool wf-edit text-black btn-action" data-action="wf-edit" data-toggle="tooltip" data-original-title="Edit workflow">
 		<span class="value-dependent value-1 collapse">
 			<span class="fa-stack fa-lg">
@@ -397,8 +396,10 @@
                 });
                 //filter by tags
                 for (var j = 0; j < _mLIST.dataFull.length; j++){
-                    //
+                	var tagsIntersecttion  = -1;
+                    if(_mLIST.dataFull[j].tags != null){
                     var tagsIntersecttion = arrayIntersection(_mLIST.dataFilter.selectedTags,_mLIST.dataFull[j].tags);
+                    }
                     if ((_mLIST.dataFilter.selectedTags.length === 0) || (tagsIntersecttion.length>0)){
                         _mLIST.data.push(_mLIST.dataFull[j]);
                     }
@@ -497,21 +498,11 @@
                             response = [];
                         }
                         showMsg("Workflows list successfully retrieved.", "SUCCESS");
-                        //inject fake tags
-                        var j = 0;
-                        for (j = 0; j < response.length; j++){
-                            response[j].tags = [];
-                            if(Math.random()<.5){response[j].tags.push("Tag1");}
-                            if(Math.random()<.5){response[j].tags.push("Tag2");}
-                            if(Math.random()<.5){response[j].tags.push("Tag3");}
-                            if(Math.random()<.5){response[j].tags.push("Tag4");}
-                            if(Math.random()<.5){response[j].tags.push("Tag5");}
-                            if(Math.random()<.5){response[j].tags.push("Tag6");}
-                        }
-                        //inject fake tags
                         _mLIST.dataAllTags = [];
                         for (j = 0; j < response.length; j++){
+                            if(response[j].tags!=null){
                             _mLIST.dataAllTags = _mLIST.dataAllTags.concat(response[j].tags);
+                            }
                         }
                         _mLIST.dataAllTags.sort();
                         _mLIST.dataAllTags = arrayDuplicateRemove(_mLIST.dataAllTags);
@@ -565,11 +556,13 @@
                     $elClone = $( "#node-master-template-list" ).clone();
                 }
                 $elClone.prop("id", "node-"+elID ).appendTo( _mLIST.$el.itemsBox ).data("dna", elX);
-                for (var j = 0; j < elX.tags.length; j++){
-                    tags+="<span>"+elX.tags[j]+"</span>";
+                if(elX.tags != null){
+                    for (var j = 0; j < elX.tags.length; j++){
+                        tags+="<span>"+elX.tags[j]+"</span>";
+                        }
                 }
                 $(".box-top-tags", $elClone).html(tags);
-                $(".val-wnm", $elClone).html(elX.name);
+                $(".val-wnm", $elClone).html(elX.name).attr("title", elX.name);
                 $(".val-wuser", $elClone).html(elX.userName);
                 if(elX.created && (elX.created !== null) && (elX.created instanceof Array) ){
                     $(".val-wcdate", $elClone).text(elX.created[0]+"-"+elX.created[1]+"-"+elX.created[2]+" "+elX.created[3]+":"+elX.created[4]+":"+elX.created[5]);
@@ -619,30 +612,58 @@
                 }
             }
         };
-    deleteProcessingComponentById = function(id){
-        $.ajax({
+    deleteWorkflowById = function(id){
+        var deleteWf = $.ajax({
             cache: false,
-            url: baseRestApiURL + "component/"+id+"/",
+            url: baseRestApiURL + "workflow/"+id+"/",
             dataType : 'json',
             type: 'DELETE',
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
                 "X-Auth-Token": window.tokenKey
-            },
-            error : function (jqXHR, textStatus, errorThrown) {
-                console.log("error");
-                if(jqXHR.status === 500 ){
-                    showMsg("Unable to delete node. Please try again.", "ERROR");
-                } else {
-                    alert('An error has occurred, please try again or contact app admin.');
-                }
-            },
-            success: function(data) {
-                showMsg("Workflow successfully deleted.", "SUCCESS");
-                _mLIST.refresh();
             }
         });
+        $.when(deleteWf)
+            .done(function (cloneWfResponse) {
+                if(cloneWfResponse && (cloneWfResponse.status ==="SUCCEEDED")){
+                    showMsg("Workflow successfully deleted", "SUCCESS");
+                    _mLIST.refresh();
+                }else{
+                    showMsg("Workflow delete failed.", "ERROR");
+                }
+            })
+            .fail(function () {
+                showMsg("Workflow clone failed.", "ERROR");
+            });
+        return 1;
+    };
+    cloneWorkflowById = function(id){
+        var cloneWf = $.ajax({
+            cache: false,
+            url: baseRestApiURL + "workflow/clone?workflowId="+id,
+            dataType : 'json',
+            type: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+        $.when(cloneWf)
+            .done(function (cloneWfResponse) {
+                var r = chkTSRF(cloneWfResponse);
+                if(r.id){
+                    showMsg("Workflow successfully cloned. Workflow <i>"+r.name+"</i> created in your workspace.", "SUCCESS");
+                    _mLIST.refresh();
+                }else{
+                    showMsg("Workflow clone failed.", "ERROR");
+                }
+            })
+            .fail(function () {
+                showMsg("Workflow clone failed.", "ERROR");
+            });
+
     };
 
     myModalNodesOpShow = function(operationid){
@@ -657,7 +678,7 @@
         }
         if(operationid === "view-results"){
             $(".modal-dialog","#myModalProject").addClass("modal-lg");
-            rm_contentUrl='./fragments/mock-viewprojectresults.fragment.html';
+            rm_contentUrl='./fragments/workflow-show-results.fragment.html';
         }
 
         if(operationid === "view"){
@@ -683,26 +704,24 @@
             $(".modal-dialog",$modal).addClass("modal-lg");
             rm_contentUrl="./fragments/workflow-start.fragment.html?" + Math.random();
         }
-
-//old???
-        if(operationid === "edit"){
-            rm_contentUrl="./fragments/topology-edit.fragment.html?" + Math.random();
-        }
-        if(operationid === "delete"){
+        if(operationid === "wf-delete"){
+            console.log("delete");
             $('#confirm-dialog').modal('confirm',{
-                msg:"Are you sure you want to delete workflow: "+_mLIST.dataOpQueue[0].dna.label+"?",
+                msg:"Are you sure you want to delete workflow: "+_mLIST.dataOpQueue[0].dna.name+"?",
                 callbackConfirm: function() {
-                    deleteProcessingComponentById(_mLIST.dataOpQueue[0].dna.id);
+                    deleteWorkflowById(_mLIST.dataOpQueue[0].dna.id);
                 },
                 callbackCancel:function(){}
             });
             return;
         }
-        if(operationid === "enable"){
-            rm_contentUrl='';
+        if(operationid === 'wf-clone'){
+            cloneWorkflowById(_mLIST.dataOpQueue[0].dna.id);
+            return 1;
         }
-        if(operationid === "disable"){
-            rm_contentUrl='';
+        if(operationid === 'wf-build'){
+            tao_showWorkflow(_mLIST.dataOpQueue[0].dna.id);
+            return 1;
         }
         if(rm_contentUrl === ""){
             return;
@@ -731,106 +750,6 @@
                 "dna":nodeDNA,
                 "action":action
             }];
-            var currentWfID = _mLIST.dataOpQueue[0].dna.id;
-            if(action === 'wf-start-old'){
-                //localhost:8080/orchestration/start/1
-//to do
-                var attrName = prompt("Please enter attribute name:", "in or Ssource");
-                var attrPath = prompt("Please enter path:", "");
-                if (attrName == null || attrName === "" || attrPath == null || attrPath === "") {
-                    alert("User cancelled the prompt. Execution aborted");
-                    return;
-                }
-//
-                var	lcl_postdata ={};
-                lcl_postdata[attrName] = attrPath;
-                //= {"in":"<cale2>"};
-
-                var startWfExecution = $.ajax({
-                    cache: false,
-                    url: baseRestApiURL + "orchestrator/start/"+currentWfID+"?rnd=" + Math.random(),
-                    dataType : 'json',
-                    type: 'POST',
-                    data: JSON.stringify(lcl_postdata),
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json",
-                        "X-Auth-Token": window.tokenKey
-                    }
-                });
-                $.when(startWfExecution)
-                    .done(function (startWfExecutionResponse) {
-                        if(startWfExecutionResponse.job){
-                            showMsg("Workflow execution successfully invoked.", "SUCCESS");
-                        }else{
-                            showMsg("Workflow failed to lunch.", "ERROR");
-                        }
-                    })
-                    .fail(function () {
-                        showMsg("Workflow failed to lunch.", "ERROR");
-                    });
-                return 1;
-            }
-
-            if(action === 'wf-clone'){
-                var cloneWf = $.ajax({
-                    cache: false,
-                    url: baseRestApiURL + "workflow/clone?workflowId="+currentWfID,
-                    dataType : 'json',
-                    type: 'POST',
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json",
-                        "X-Auth-Token": window.tokenKey
-                    }
-                });
-                $.when(cloneWf)
-                    .done(function (cloneWfResponse) {
-                        var r = chkTSRF(cloneWfResponse);
-                        if(r.id){
-                            showMsg("Workflow successfully cloned. Workflow <i>"+r.name+"</i> created in your workspace.", "SUCCESS");
-                            _mLIST.refresh();
-                        }else{
-                            showMsg("Workflow clone failed.", "ERROR");
-                        }
-                    })
-                    .fail(function () {
-                        showMsg("Workflow clone failed.", "ERROR");
-                    });
-                return 1;
-            }
-
-            if(action === 'wf-delete'){
-                var deleteWf = $.ajax({
-                    cache: false,
-                    url: baseRestApiURL + "workflow/"+currentWfID+"/",
-                    dataType : 'json',
-                    type: 'DELETE',
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json",
-                        "X-Auth-Token": window.tokenKey
-                    }
-                });
-                $.when(deleteWf)
-                    .done(function (cloneWfResponse) {
-                        if(cloneWfResponse && (cloneWfResponse.status ==="SUCCEEDED")){
-                            showMsg("Workflow successfully deleted", "SUCCESS");
-                            _mLIST.refresh();
-                        }else{
-                            showMsg("Workflow delete failed.", "ERROR");
-                        }
-                    })
-                    .fail(function () {
-                        showMsg("Workflow clone failed.", "ERROR");
-                    });
-                return 1;
-            }
-
-            if(action === 'wf-build'){
-                tao_showWorkflow(currentWfID);
-                return 1;
-            }
             myModalNodesOpShow(action);
         });
 
@@ -929,5 +848,5 @@
         });
         _mLIST.getData();
     });
-    //# sourceURL=filename.js
+    //# sourceURL=filename-wf.js
 </script>

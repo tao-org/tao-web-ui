@@ -1,0 +1,313 @@
+<div class="modal-content">
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		<h4 class="modal-title">Execution results<small>Full list of <strong>achivable results</strong>.</small></h1>
+    </div>
+    <div class="modal-body">
+        <section>
+            <div id="rm-previewfiles">
+				<div class="box">
+					<div class="box-body table-responsive no-padding box-shadow--6dp">
+						<table class="table table-hover">
+							<thead><tr><th>Name</th><th>Type</th><th>Size</th><th colspan="2">Actions</th></tr></thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+            </div>
+        </section>
+        <section>
+            <div id="rm-previewattributes" class="collapse">
+				<div class="box">
+					<div class="box-body table-responsive no-padding box-shadow--6dp">
+						<h4 class="title">File name</h4>
+						<button type="button" class="close close-preview">&times;</button>
+						<table class="table table-hover">
+							<thead><tr><th>Name</th><th>Value</th></tr></thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+            </div>
+        </section>
+        <section>
+            <div id="rm-preview-img" class="collapse">
+				<div class="imagepreview-holder"><img src=""/></div>
+            </div>
+        </section>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div><!-- /.modal-content -->
+<style>
+/* ===== Modal dialog adjustments ===== */
+.modal-dialog{width:auto;max-width:800px}
+.modal-dialog .modal-content{background-color:#ecf0f5;border:0}
+.modal-header>h4{font-size:24px}
+.modal-header>h4>small{font-size:15px;display:inline-block;padding-left:4px;font-weight:300}
+.modal-footer{padding:5px 0}
+
+/* ===== Execution results list ===== */
+#rm-previewfiles .fa{margin-right:5px}
+#rm-previewfiles table{margin-bottom:20px}
+#rm-previewfiles table thead th:first-child{width:100%}
+#rm-previewfiles table tbody td{white-space:nowrap}
+#rm-previewfiles table tbody tr{cursor:pointer}
+#rm-previewfiles table tbody tr.filepreview-selected:hover{background-color:#f7e3c8}
+#rm-previewfiles .box-warning table tbody td{font-weight:600;color:#777777;text-align:center}
+
+/* ===== Full screen image preview ===== */
+.full-screen{position:fixed;top:0;left:0;width:100%;height:100%;margin:0;padding:0;background-color:rgba(0, 0, 0, 0.5);cursor:pointer;overflow:auto;z-index:9999}
+.full-screen img{position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:auto;border:5px solid rgba(255, 255, 255, 0.3);border-radius:5px}
+
+/* ===== Attributes Holder ===== */
+#rm-previewattributes{position:relative}
+#rm-previewattributes .box{border:0}
+#rm-previewattributes button.close{position:absolute;top:7px;right:12px;opacity:1;color:white}
+#rm-previewattributes button.close:hover{color:#8bccf3}
+#rm-previewattributes h4{margin:0;background-color:#3c8dbc;color:white;padding:10px;font-weight:600;border-bottom:5px solid rgb(125,193,232);}
+#rm-previewattributes table{margin-bottom:20px}
+#rm-previewattributes table thead th:first-child{width:25%}
+#rm-previewattributes table tbody td{padding:5px 10px;line-height:1.2em}
+</style>
+
+<script>
+
+var exesTable = $("#rm-previewfiles tbody");
+
+function setPreviewImageBase64(attributes) {
+	if ($("#rm-preview-img .imagepreview-holder img").data("id") != attributes.id) {
+		$("#rm-preview-img .imagepreview-holder img").data("id", attributes.id);
+		$("#rm-preview-img .imagepreview-holder img").attr("src", "");
+	}
+	if ($("#rm-preview-img .imagepreview-holder img").attr("src") == "") {
+		if (attributes.formatType == "RASTER") {
+			var previewUrl = attributes.fileInfo.uri.replace("download?fileName=", "preview?fileName=")
+			$.ajax({
+				url: previewUrl,
+				type: "GET",
+				beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
+				success: function(response) {
+					if (response.status == responseStatus.success) {
+						$(".imagepreview-holder img").attr("src", "data:image/jpeg;base64, " + response.data);
+					}
+				}
+			});
+		}
+	}
+	$("body>.full-screen").remove();
+	$("body").append("<div class='full-screen'></div>");
+	$("#rm-preview-img .imagepreview-holder").clone().appendTo("body>.full-screen");
+}
+
+function displayAttributes(attributes) {
+	if ($("#rm-previewattributes .title").text() != attributes.fileInfo.fileName) {
+		$("#rm-previewattributes .title").text(attributes.fileInfo.fileName);
+		
+		var tableBody = $("#rm-previewattributes tbody").html("");
+		$.each(attributes, function (name, value) {
+			if (name != "fileInfo") {
+				tableBody.append('<tr><td>' + name + '</td><td>' + value + '</td></tr>');
+			}
+		});
+		tableBody.append('<tr><td>size</td><td>' + attributes.fileInfo.fileSize  + '</td></tr>');
+		tableBody.append('<tr><td>uri</td><td>' + attributes.fileInfo.uri  + '</td></tr>');
+	}
+	$("#rm-previewattributes").show();
+}
+
+// Download selected file
+function downloadResult(attributes) {
+	var btn = $("#rm-previewfiles tr.filepreview-selected button[data-action='downloadfile']");
+	var filename = attributes.fileInfo.fileName;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', attributes.fileInfo.uri, true);
+	xhr.setRequestHeader("X-Auth-Token", tokenKey);
+	xhr.responseType = 'blob';
+	xhr.onload = function(e) {
+		btn.find("i").removeClass("fa-refresh fa-spin").addClass("fa-download");
+		btn.prop("disabled", false);
+		
+		if (this.status == 200) {
+	        var blob = new Blob([this.response], { type: this.getResponseHeader('Content-Type') });
+			
+	        if (typeof window.navigator.msSaveBlob !== 'undefined') {
+	            // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created.
+				// These URLs will no longer resolve as the data backing the URL has been freed."
+	            window.navigator.msSaveBlob(blob, filename);
+	        } else {
+	            var URL = window.URL || window.webkitURL;
+	            var downloadUrl = URL.createObjectURL(blob);
+				
+				// use HTML5 a[download] attribute to specify filename
+				var a = document.createElement("a");
+				// safari doesn't support this yet
+				if (typeof a.download === 'undefined') {
+					window.location = downloadUrl;
+				} else {
+					a.href = downloadUrl;
+					a.download = filename;
+					document.body.appendChild(a);
+					a.click();
+				}
+	            setTimeout(function () { URL.revokeObjectURL(downloadUrl); $(a).remove(); }, 200); // cleanup
+	        }
+		} else {
+			setTimeout(function () { showMsg("An error occured while processing your request!"); }, 500);
+		}
+	}
+	setTimeout(function () { xhr.send(); }, 300);
+	
+	showMsg("Your request has been sent. Please wait for  download to start!");
+	
+	btn.prop("disabled", true);
+	btn.find("i").removeClass("fa-download").addClass("fa-refresh fa-spin");
+}
+
+function renderResults(response) {
+	exesTable.html("");
+	if (response) {
+		// Render files
+		$.each(response, function (index, file) {
+			if (!file.folder) {
+				var size = parseInt(file.size);
+				if (size < 1024) {
+					size = size + " B";
+				} else if (size < 1024*1024) {
+					size = parseFloat(size / 1024, 2).toFixed(2) + " KB";
+				} else if (size < 1024*1024*1024) {
+					size = parseFloat(size / 1024 / 1024, 2).toFixed(2) + " MB";
+				} else if (size < 1024*1024*1024*1024) {
+					size = parseFloat(size / 1024 / 1024 / 1024, 2).toFixed(2) + " GB";
+				} else {
+					size = parseFloat(size / 1024 / 1024 / 1024 / 1024, 2).toFixed(2) + " TB";
+				}
+				var name   = file.relativePath.substring(file.relativePath.lastIndexOf("\\") + 1);
+				var href   = baseRestApiURL + 'files/download?fileName=' + file.relativePath.replace(/\\/g, "/");
+				var type   = file.relativePath.substring(file.relativePath.lastIndexOf("."));
+				var fafile = "fa-file-o";
+				switch (type) {
+					case ".txt" : fafile = "fa-file-text-o"   ; break;
+					case ".log" : fafile = "fa-file-text-o"   ; break;
+					case ".html": fafile = "fa-file-code-o"   ; break;
+					case ".xml" : fafile = "fa-file-code-o"   ; break;
+					case ".json": fafile = "fa-file-code-o"   ; break;
+					case ".tif" : fafile = "fa-file-image-o"  ; break;
+					case ".png" : fafile = "fa-file-image-o"  ; break;
+					case ".jpg" : fafile = "fa-file-image-o"  ; break;
+					case ".pdf" : fafile = "fa-file-pdf-o"    ; break;
+					case ".zip" : fafile = "fa-file-archive-o"; break;
+				}
+				
+				if (!file.attributes) { file.attributes = {}; file.attributes.id = "-"; }
+				file.attributes.fileInfo = {};
+				file.attributes.fileInfo.relativePath = file.relativePath;
+				file.attributes.fileInfo.fileSize = size;
+				file.attributes.fileInfo.fileName = name;
+				file.attributes.fileInfo.fileType = type;
+				file.attributes.fileInfo.uri = href;
+				
+				var element = $('<tr id="' + file.attributes.id + '">' +
+									'<td><span class="fa ' + fafile + ' fa-fw"></span>' + name + '</td><td>' + type + '</td>' +
+									'<td>' + size + '</td>' +
+									'<td>' + '<button class="btn bg-green btn-flat btn-xs" data-action="previewfile"' + (file.attributes.id == "-" ? ' disabled' : '') + '><i class="fa fa-eye fa-fw"></i>Quick view</button>' + '</td>' +
+									'<td>' + '<a href="' + href + '"><button class="btn bg-green btn-flat btn-xs" data-action="downloadfile"><i class="fa fa-download fa-fw"></i>Download</button></a>' + '</td>' +
+								'</tr>');
+				element.data("attributes", file.attributes);
+				
+				exesTable.append(element);
+			}
+		});
+		if (exesTable.find("tr").length == 0) {
+			var element = $('<tr><td colspan="5">There are no execution results for this workflow</td></tr>');
+			exesTable.append(element);
+			exesTable.closest(".box").addClass("box-warning");
+		}
+	} else {
+		var element = $('<tr><td colspan="5">There was an error while retrieving workflow executions results</td></tr>');
+		exesTable.append(element);
+	}
+}
+
+function getWorkflowResults(workflowId) {
+	var deferred = $.Deferred();
+	$.ajax({
+		url: baseRestApiURL + "files/user/output?workflowId=" + workflowId,
+		type: "GET",
+		dataType: 'json',
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("Accept", "application/json");
+			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.setRequestHeader("X-Auth-Token", tokenKey);
+		},
+		error: function (jqXHR, textStatus) {
+			var msg = "Error while loading files.";
+			exesTable.closest(".box").addClass("box-warning");
+			renderResults(null);
+			showMsg(msg);
+			deferred.reject(jqXHR, textStatus, msg);
+		},
+		success: function(response) {
+			if (response.status == responseStatus.success) {
+				exesTable.closest(".box").addClass("box-success");
+				renderResults(response.data);
+				deferred.resolve(response);
+			} else {
+				showMsg(response.message);
+				exesTable.closest(".box").addClass("box-warning");
+				deferred.reject(null, response.status, response.message);
+			}
+		}
+	});
+	return deferred.promise();
+}
+
+$(document).ready( function() {
+	// Get executions results for selected workflow
+	var currentWfID = _mLIST.dataOpQueue[0].dna.id;
+	getWorkflowResults(currentWfID);
+	
+	// Full screen preview events
+	$("body").on("click", ".full-screen", function (event) {
+		event.stopPropagation();
+		$(this).remove();
+	});
+	
+	// Show execution result attributes
+	$("#rm-previewfiles").on("click", "tbody tr", function (event) {
+		event.preventDefault();
+		event.stopPropagation();
+		$("#rm-previewfiles tr").removeClass("filepreview-selected");
+		$(this).addClass("filepreview-selected");
+		var attributes = $(this).data("attributes");
+		displayAttributes(attributes);
+	});
+	// Quick view execution result
+	$("#rm-previewfiles").on("click", ".btn", function (event) {
+		event.preventDefault();
+		event.stopPropagation();
+		$("#rm-previewfiles tr").removeClass("filepreview-selected");
+		var attributes = $(this).closest("tr").addClass("filepreview-selected").data("attributes");
+		displayAttributes(attributes);
+		
+		var operation = $(this).data("action");
+		if (operation == "previewfile") {
+			setPreviewImageBase64(attributes);
+		} else if (operation == "downloadfile") {
+			downloadResult(attributes);
+		}
+	});
+	
+	$(".modal-body").on("click", ".close-preview", function (event) {
+		event.preventDefault();
+		$("#rm-previewattributes").hide();
+		$("#rm-previewfiles tr").removeClass("filepreview-selected");
+		$("body>.full-screen").remove();
+	});
+});
+
+//# sourceURL=workflow-show-results.js
+</script>

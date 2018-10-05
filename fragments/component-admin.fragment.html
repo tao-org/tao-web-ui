@@ -267,8 +267,10 @@
                 });
                 //filter by tags
                 for (var j = 0; j < _mLIST.dataFull.length; j++){
-                    //
-                    var tagsIntersecttion = arrayIntersection(_mLIST.dataFilter.selectedTags,_mLIST.dataFull[j].tags);
+                	var tagsIntersecttion  = -1;
+                    if(_mLIST.dataFull[j].tags != null){
+                     tagsIntersecttion = arrayIntersection(_mLIST.dataFilter.selectedTags,_mLIST.dataFull[j].tags);
+                    }
                     if ((_mLIST.dataFilter.selectedTags.length === 0) || (tagsIntersecttion.length>0)){
                         _mLIST.data.push(_mLIST.dataFull[j]);
                     }
@@ -371,21 +373,13 @@
                             response = [];
                         }
                         showMsg("Processing components list successfully retrieved.", "SUCCESS");
-                        //inject fake tags
                         var j = 0;
-                        for (j = 0; j < response.length; j++){
-                            response[j].tags = [];
-                            if(Math.random()<.5){response[j].tags.push("Tag1");}
-                            if(Math.random()<.5){response[j].tags.push("Tag2");}
-                            if(Math.random()<.5){response[j].tags.push("Tag3");}
-                            if(Math.random()<.5){response[j].tags.push("Tag4");}
-                            if(Math.random()<.5){response[j].tags.push("Tag5");}
-                            if(Math.random()<.5){response[j].tags.push("Tag6");}
-                        }
-                        //create tags
                         _mLIST.dataAllTags = [];
                         for (j = 0; j < response.length; j++){
+                            if(response[j].tags!=null){
                             _mLIST.dataAllTags = _mLIST.dataAllTags.concat(response[j].tags);
+                            }
+                           
                         }
                         _mLIST.dataAllTags.sort();
                         _mLIST.dataAllTags = arrayDuplicateRemove(_mLIST.dataAllTags);
@@ -439,8 +433,10 @@
                     $elClone = $( "#node-master-template-list" ).clone();
                 }
                 $elClone.prop("id", "node-"+elID ).appendTo( _mLIST.$el.itemsBox ).data("dna", elX);
-                for (var j = 0; j < elX.tags.length; j++){
-                    tags+="<span>"+elX.tags[j]+"</span>";
+                if(elX.tags != null){
+                    for (var j = 0; j < elX.tags.length; j++){
+                        tags+="<span>"+elX.tags[j]+"</span>";
+                    }
                 }
                 $(".box-top-tags", $elClone).html(tags);
                 $(".val-nnm", $elClone).html(elX.label);

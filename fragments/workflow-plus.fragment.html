@@ -90,6 +90,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="formTags" class="col-sm-2 col-md-2 control-label">Tags </label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <input id="formTags" name="formTags" class="form-control" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row collapse">
                                         <div class="col-md-12">
                                             <div class="form-group">
@@ -168,6 +178,11 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
 </div><!-- /.modal-content -->
+   <link rel="stylesheet" href="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.css" type="text/css" />
+   <script src="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.js" type="text/javascript"></script>
+   <!-- 1.12.1/jquery-ui.min.js for autocomplete -->
+   <link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.css" type="text/css" />
+   <script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
 
 <script>
     function helper_addSysVarRow($tbl, payload){
@@ -232,6 +247,8 @@
                 formData.visibility = $('select[name=inputVisibility]', this).val();
                 formData.status = $('select[name=inputStatus]', this).val();
                 formData.active = $('select[name=inputActive]', this).val();
+                var tags = $('input[name=formTags]', this).val();
+                formData.tags = tags.split(",");
             }else{
                 ajaxType = 'POST';
                 ajaxURL = '';
@@ -309,6 +326,9 @@ console.log(JSON.stringify(formData));
             });
             return false;
         });
+        
+        initializeTagsInputAutocomplete("#formTags", "workflow");
+        
     });
 
     function getWFDataById (wfID){
@@ -351,6 +371,9 @@ console.log(JSON.stringify(formData));
                     $('select[name=inputStatus] option', $el).removeAttr("selected");
                     $('select[name=inputStatus] option[value="'+response.status+'"]', $el).attr("selected", "selected");
 
+					if(response.tags != null && response.tags !=""){
+						$('#formTags').importTags( response.tags.join());
+					}
 
                     $.each(response.customValues, function(i, value) {
                         helper_addSysVarRow($("#tbl-edt-sysvar"),value);

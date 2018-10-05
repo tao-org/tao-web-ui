@@ -491,22 +491,62 @@ ul.timeline.current_route:before{
 }
 
 /* job exec */
+.box-notification{
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    margin-top: 10px;
+    opacity:0;
+    -webkit-transition: all 1s ease-out;
+    -moz-transition: all 1s ease-out;
+    -o-transition: all 1s ease-out;
+    transition: all 1s ease-out;
+    pointer-events:none;
+}
+.box-notification.show{
+    visibility: visible;
+    opacity:1;
+}
+.box-notification p{
+    text-align: center;
+}
+.box-notification p span{
+    background: #222d32;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+}
+
 .job-history-one {
-    background-color: #00a65a;
-    color: #fff;
-    border-color: #00733e;
     border-radius: 3px;
-    margin: 0 0 5px 0;
+    margin: 0 0 10px 0;
     padding: 10px;
     border-left: 5px solid #eee;
+    background-color: #ffffff;
+    color: black;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2), 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 .job-history-one.success {
     border-left: 5px solid #00733e;
 }
 .job-history-one.fail {
     border-left: 5px solid #c23321;
-    background-color: #dd4b39;
 }
+.job-history-one.suspended {
+    border-left: 5px solid #f39c12;
+}
+.job-history-one.cancelled {
+    border-left: 5px solid #dd4b39;
+}
+.job-history-one.queued-active {
+    border-left: 5px solid #001f3f;
+}
+.job-history-one.running {
+    border-left: 5px solid #00733e;
+}
+
+
 .job-history-one h4 {
     margin-top:0;
 }
@@ -1014,7 +1054,6 @@ input[type=checkbox].big{
     width: 100%;
     border-radius: 50%;
 }
-
 .card .card-title{
     font-family: 'Source Sans Pro',sans-serif;
     font-size: 32px;
@@ -1027,6 +1066,41 @@ input[type=checkbox].big{
 }
 
 /* notifications */
+#notifications-panel-list li{
+    position: relative;
+    padding: 5px;
+    -webkit-transition: all .5s ease-out;
+    -moz-transition: all .5s ease-out;
+    -o-transition: all .5s ease-out;
+    transition: all .5s ease-out;
+}
+#notifications-panel-list li:hover{
+    position: relative;
+    padding: 15px 10px 10px 10px;
+}
+#notifications-panel-list li .text{
+    display: block;
+    margin-left: 5px;
+    font-weight: 600;
+    margin-right: 126px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#notifications-panel-list li:hover .text{
+    margin-right: 5px;
+    white-space: initial;
+    overflow: visible;
+    text-overflow: initial;
+}
+
+
+
+#notifications-panel-list .label{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
 #my-slow-load {
     top: 50%;
     left: 50%;

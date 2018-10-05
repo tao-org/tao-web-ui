@@ -290,12 +290,12 @@ $(function () {
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
-                //"Authorization": authHeader
             }
         })
-            .done(function (getMonitorNotificationResponse, statusText, xhr) {
-                //console.log(getMonitorNotificationResponse);
-                for(k=0;k<getMonitorNotificationResponse.length; k++){
+        .done(function (r, statusText, xhr) {
+            var getMonitorNotificationResponse = chkTSRF(r);
+            //console.log(getMonitorNotificationResponse);
+            for(k=0;k<getMonitorNotificationResponse.length; k++){
                     if(!$elChatBox.is(':visible')){
                         $elChatBox.slideDown();
                     }
@@ -318,17 +318,17 @@ $(function () {
                     } else{
                         $elMsgCount.html(count);
                     }
-                }
-            })
-            .fail(function (jqXHR, textStatus) {
-            })
-            .complete(function(){
+            }
+        })
+        .fail(function (jqXHR, textStatus) {
+        })
+        .complete(function(){
                 //if($("#widget-master-monitor").length){
                 setTimeout(function(){
                     retriveNotifications();
                 },notificationsCheckInterval);
                 //}
-            });
+        });
     }
     $(".val-notificationsmaxnumber", "#bot-notice-chat").html(notificationsMaxNumber);
     //setup events
@@ -349,105 +349,6 @@ $(function () {
         });
     retriveNotifications();
     return true;
-}());
-
-(function () {
-    var currentPage = 0;
-    var pages = 0;
-    var itemsOnPage = 3;
-    $(document)
-        .on("click","#exec-history-panel .pagination a", function(e){
-            e.preventDefault();
-            if($(this).parent().hasClass("disabled")){
-                console.log("return");
-                return;
-            }
-            var action = $(this).data("action");
-            if(action === 'go-next'){
-                currentPage++;
-            }
-            if(action === 'go-prev'){
-                currentPage--;
-            }
-            getExecHistory();
-        });
-    var renderExecHistoryCurrentPage = function(jobs){
-        var $panel = $("#exec-history-panel-list");
-        $panel.empty();
-        if(jobs){
-            var count = jobs.length;
-            pages = Math.ceil(count/itemsOnPage);
-            var itemStop = Math.max(0, count - currentPage*itemsOnPage);
-            var itemStart = Math.max(0, count - (currentPage+1)*itemsOnPage);
-            var showJobs = jobs.slice(itemStart, itemStop);
-            //var showJobs = jobs;
-            for(i = showJobs.length; i>0; i--){
-                var job = showJobs[i-1];
-                var htmlContent = '<h4>'+job.workflowName+'</h4>';
-                htmlContent += 'user: '+job.user+', status: '+job.jobStatus+' <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+datetimeFromArray(job.jobStart)+'</small> - <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+datetimeFromArray(job.jobEnd)+'</small>';
-                htmlContent += '<div class="tasks">Task sumary:';
-                    for(ii = 0; ii<job.taskSummaries.length; ii++) {
-                        var task = job.taskSummaries[ii];
-                        var statusIcon = ((task.taskStatus == "DONE")?'<i class="icon fa fa-check fa-fw"></i>':'<i class="icon fa fa-ban fa-fw"></i>')
-                        htmlContent += '<div class="one-task">';
-                        htmlContent += statusIcon + '<strong>' +task.componentName + '</strong>' +' ['+ datetimeFromArray(task.taskStart) +'-'+ datetimeFromArray(task.taskEnd) +']';
-                        htmlContent += '</div>'
-                    }
-                htmlContent += '</div>';
-                var css = 'job-history-one';
-                if(job.jobStatus === "DONE"){
-                    css += ' success';
-                }else{
-                    css += ' fail';
-                }
-                var $newEl = $('<div>',{
-                    'class' : css,
-                    'html' : htmlContent
-                });
-                $panel.append($newEl);
-            }
-            //show end of records notice
-            if(showJobs.length === 0){
-                $("#exec-panel-empty").show();
-            }else{
-                $("#exec-panel-empty").hide();
-            }
-            //syncronize pagination
-            $(".val-current-page","#exec-history-panel").html(currentPage+1);
-            if(currentPage < pages){
-                $(".next","#exec-history-panel").removeClass("disabled");
-            }else{
-                $(".next","#exec-history-panel").addClass("disabled");
-            }
-            if(currentPage > 0){
-                $(".prev","#exec-history-panel").removeClass("disabled");
-            }else{
-                $(".prev","#exec-history-panel").addClass("disabled");
-            }
-        }
-    };
-    var getExecHistory = function(){
-        $.ajax({
-            cache: false,
-            url: baseRestApiURL + "orchestrator/history/",
-            dataType : 'json',
-            type: 'GET',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
-            }
-        }).done(function (response) {
-            var r = chkTSRF(response);
-            renderExecHistoryCurrentPage(r);
-        }).fail(function (jqXHR, textStatus) {
-            chkXHR(jqXHR.status);
-        });
-    };
-    window.tao_initExecHistory = function(){
-        currentPage = 0;
-        getExecHistory();
-    };
 }());
 
 

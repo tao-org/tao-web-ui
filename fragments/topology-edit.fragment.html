@@ -100,6 +100,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+	                <div class="col-md-12">
+	                    <div class="form-group">
+	                        <label for="formTags" class="col-sm-2 col-md-2 control-label">Tags </label>
+	                        <div class="col-sm-10 col-md-10">
+	                            <input id="formTags" name="formTags" class="form-control" value="">                                                        
+	                        </div>
+	                    </div>
+	                </div>
+                </div>
 
                 <div class="row">
                     <div class="col-md-12">
@@ -129,7 +139,11 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
 </div><!-- /.modal-content -->
-
+<link rel="stylesheet" href="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.css" type="text/css" />
+<script src="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.js" type="text/javascript"></script>
+<!-- 1.12.1/jquery-ui.min.js for autocomplete -->
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.css" type="text/css" />
+<script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
 <script>
     function getHostNameData(){
         var editHostmane = _mLIST.dataOpQueue[0].dna.id;
@@ -166,6 +180,10 @@
                     $('textarea[name=inputDescription]', $el).val(response.description);
                     $('select[name=inputActive] option', $el).removeAttr("selected");
                     $('select[name=inputActive] option[value="'+response.active+'"]', $el).attr("selected", "selected");
+                    if(response.tags != null && response.tags !=""){
+						$('#formTags').importTags( response.tags.join());
+					}
+                    
                 }
                 catch(e) {
                     alert('E001, An error has occurred, please try again or contact app admin.');
@@ -198,6 +216,8 @@
         });
         $("form#frmExecNodeEdit").submit(function (event) {
             event.preventDefault();
+            var tags = $('input[name=formTags]', this).val();
+
             var formData = {
                 "id":$('input[name=inputHostname]', this).val(),
                 "userName":$('input[name=inputUsername]', this).val(),
@@ -206,7 +226,8 @@
                 "memorySizeGB":$('input[name=inputMemorysize]', this).val(),
                 "diskSpaceSizeGB":$('input[name=inputDiskspacesize]', this).val(),
                 "description":$('textarea[name=inputDescription]', this).val(),
-                "active":$('select[name=inputActive]', this).val()
+                "active":$('select[name=inputActive]', this).val(),
+                "tags": tags.split(",") 
             };
             console.log(formData);
             $.ajax({
@@ -253,5 +274,7 @@
             });
             return false;
         });
+        
+        initializeTagsInputAutocomplete("#formTags", "topology");
     });
 </script>

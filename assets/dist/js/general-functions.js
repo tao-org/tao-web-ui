@@ -233,9 +233,10 @@ function jsGetUrlQueryValue (sVar) {
 //datetime, string, from array.
 function datetimeFromArray(arr){
     if(arr && (arr !== null) && (arr instanceof Array) ){
+        //arr[6] = 0; //ignore miliseconds
         return arr.join(':');
     }else{
-        return 'unknown';
+        return 'n/a';
     }
 }
 
@@ -344,4 +345,47 @@ function chkTSRF(r){
         console.log('server said: API call did failed '+ r.message);
         return {};
     }
+}
+
+function initializeTagsInputAutocomplete(id, url){
+	 $(id).tagsInput({
+ 		minChars:0,  // min number of characters
+ 		maxChars:null, // max number of characters
+ 		limit:null,// max number of tags
+ 		interactive: true, // allows new tags
+ 		placeholder: 'Add a tag', // custom placeholder
+		   	autocomplete:{	   	
+		   	    minLength: 2,
+				source: function( request, response ) {
+			        $.ajax({
+			        	url: baseRestApiURL + url + "/tags",
+			            dataType: "json",
+			            contentType: "application/json; charset=utf-8",
+					    headers: {
+					         "Accept": "application/json",
+					         "Content-Type": "application/json",
+					         "X-Auth-Token": window.tokenKey
+					    },
+					    error : function (jqXHR, textStatus, errorThrown) {
+	                        chkXHR(jqXHR.status);
+	                    },
+			            success: function( data ) {		
+			            	var results = $.ui.autocomplete.filter(chkTSRF(data), request.term);
+			    			response(results);
+			            }
+			          });
+			        },
+				focus: function(event, ui) {
+					return false; // Prevent the widget from inserting the value.
+				},
+	            select: function( event, ui ) {
+	                console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+	              }
+				
+			},
+			unique: true,
+			delimiter: ','
+		});
+ 	
+ 	$(".ui-autocomplete").css({ "max-height": "400px", "overflow-y": "scroll", "overflow-x": "hidden","z-index":"1100"});
 }

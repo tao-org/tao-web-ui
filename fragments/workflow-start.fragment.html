@@ -191,17 +191,19 @@
                 },
                 "data": JSON.stringify(formData)
             };
-
             $.ajax(settings)
                 .done(function (response) {
+                    console.log("START POST");
                     console.log(response);
-                    if(response.message === 'Execution started'){
-                        showMsg("Workflow processing successfully started. Orchestrator returned job ID "+response.job, "SUCCESS");
+                    if(response.status === "SUCCEEDED"){
+                        showMsg("Workflow processing successfully started. Orchestrator returned job ID "+response.data, "SUCCESS");
                         $("#myModalNodes").modal('hide');
+                    }else{
+                        showMsg("Workflow processing could not be started. Orchestrator returned message: "+response.message, "SUCCESS");
                     }
                 })
                 .fail(function (response) {
-                alert("could not start execution");
+                alert("could not start execution. endpoint failure.");
                 });
             //SUBMIT TO SERVER
             return false;
@@ -212,7 +214,7 @@
         var settings = {
             "async": true,
             "crossDomain": true,
-            "url": baseRestApiURL + "orchestrator/start/parameters/"+wfID,
+            "url": baseRestApiURL + "orchestrator/parameters/"+wfID,
             "method": "GET",
             "headers": {
                 "x-auth-token": "84656a7f-827a-429c-a21a-fcf9500e3bce",
@@ -221,8 +223,9 @@
             }
         };
 
-        $.ajax(settings).done(function (response) {
-            console.log("response 02");
+        $.ajax(settings).done(function (r) {
+            var response = chkTSRF(r);
+            console.log("response parameters for WF: "+wfID);
             console.log(response);
             var helper_EdtRowPutValue = function($el, name, type, value, valueset){
                 if(valueset === null){
@@ -305,8 +308,9 @@
                     alert('E001, An error has occurred, please try again or contact app admin.');
                 }
             },
-            success: function(response) {
+            success: function(r) {
                 console.log("response 001");
+                var response = chkTSRF(r);
                 console.log(response);
                 //populate wf header
                 var $el = $('#wf-header');

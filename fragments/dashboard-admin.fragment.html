@@ -41,7 +41,7 @@
                                 <span class="text">Sample notification line.</span>
                                 <small class="label label-danger"><i class="fa fa-clock-o"></i> 2017.05.02</small>
                                 <div class="tools">
-                                    <i class="fa fa-trash-o"></i>
+                                    cucuc<i class="fa fa-trash-o"></i>
                                 </div>
                             </li>
                         </ul>
@@ -61,8 +61,6 @@
                     </div>
                 </div>
                 <!-- /.box -->
-
-
                 <!-- TO DO List -->
                 <div id="exec-history-panel" class="box box-primary">
                     <div class="box-header" style="cursor: move;">
@@ -73,14 +71,15 @@
                                 <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
                                 <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
                                 <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
+                                <li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
                             </ul>
                         </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <div id="exec-history-panel-list">
+                        <div class="panel-list">
                         </div>
-                        <div id="exec-panel-empty" class="callout callout-info collapse">
+                        <div class="panel-list-empty callout callout-info collapse">
                             <p>Results history is empty. It looks you did not run any workflows yet.</p>
                         </div>
                     </div>
@@ -94,15 +93,9 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="box-notification"><p><span>List updated</span></p></div>
                 </div>
                 <!-- /.box -->
-
-
-
-
-
-
-
             </section>
             <!-- /.Left col -->
             <section class="col-lg-5">
@@ -184,6 +177,43 @@
                 </div>
                 <!-- /.box -->
 
+                <!-- TO DO List -->
+                <div id="exec-list-panel" class="box box-warning">
+                    <div class="box-header" style="cursor: move;">
+                        <i class="ion ion-clipboard"></i>
+                        <h3 class="box-title">Running jobs</h3>
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
+                                <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
+                                <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
+                                <li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="panel-list">
+                        </div>
+                        <div class="panel-list-empty callout callout-info collapse">
+                            <p>Results history is empty. It looks you did not run any workflows yet.</p>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix no-border">
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
+                                <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
+                                <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-notification"><p><span>List updated</span></p></div>
+                </div>
+                <!-- /.box -->
+
+
                 <div class="box">
                     <div class="box-header">
                         <h3 class="box-title">Running Workflows</h3>
@@ -216,42 +246,6 @@
                             </tr>
                             <tr>
                                 <td>3.</td>
-                                <td>Workflow name, by User Name</td>
-                                <td>
-                                    <div class="progress progress-xs progress-striped active">
-                                        <div class="progress-bar progress-bar-success" style="width: 90%"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4.</td>
-                                <td>Workflow name, by User Name</td>
-                                <td>
-                                    <div class="progress progress-xs progress-striped active">
-                                        <div class="progress-bar progress-bar-success" style="width: 10%"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>5.</td>
-                                <td>Workflow name, by User Name</td>
-                                <td>
-                                    <div class="progress progress-xs progress-striped active">
-                                        <div class="progress-bar progress-bar-success" style="width: 90%"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>6.</td>
-                                <td>Workflow name, by User Name</td>
-                                <td>
-                                    <div class="progress progress-xs progress-striped active">
-                                        <div class="progress-bar progress-bar-success" style="width: 30%"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>7.</td>
                                 <td>Workflow name, by User Name</td>
                                 <td>
                                     <div class="progress progress-xs progress-striped active">
@@ -379,8 +373,21 @@
             })
             .trigger( "resize" );
         updateMasterMonitorWidget();
-        tao_initExecHistory();
         //bind resize event
+
+        $("#exec-list-panel").npExecPanels({
+            msgEnd: "No more job to show.",
+            msgEmpty: "Job pool is empty. No workflow is currently running.",
+            theme: '',
+            url: baseRestApiURL + "orchestrator/running/jobs/"
+        });
+        $("#exec-history-panel").npExecPanels({
+            msgEnd: "You reached the end of execution list. Nothing more to show",
+            msgEmpty: "Results history is empty. It looks you did not run any workflows yet.",
+            theme: '',
+            url: baseRestApiURL + "orchestrator/history/"
+        });
+
     });
 
     (function () {
@@ -399,6 +406,10 @@
 
         function getNotificationsByPageNo(pageNo){
             currentPage = pageNo;
+
+            console.log("UUUUUUUUUUUUUUUUUUUUU");
+            console.log(taoUserProfile.username);
+
             $.ajax({
                 cache: false,
                 url: baseRestApiURL + "monitor/notification/"+pageNo,
@@ -407,11 +418,11 @@
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "user":"admin",//to be done
-//                    "X-Auth-Token": window.tokenKey
+                    "user": "admin"//taoUserProfile.username //"admin"to be done
                 }
             }).done(function (getNotificationsResponse) {
-                renderNotificationsPage(getNotificationsResponse);
+                var r = chkTSRF(getNotificationsResponse);
+                renderNotificationsPage(r);
             }).fail(function (jqXHR, textStatus) {
             }).complete(function(){
             });
@@ -446,7 +457,7 @@
                     }
 
                     var li = document.createElement("li");
-                    li.innerHTML = "<span class=\"\"><i class=\"fa fa-ellipsis-v\"></i><i class=\"fa fa-ellipsis-v\"></i></span><span class=\"text\">"+lclMsg+"</span><small class=\"label label-info\"><i class=\"fa fa-clock-o fa-fw\"></i>"+ts+"</small><div class=\"tools\"><i class=\"fa fa-trash-o\"></i></div>";
+                    li.innerHTML = "<span class=\"text\">"+lclMsg+"</span><small class=\"label label-info\"><i class=\"fa fa-clock-o fa-fw\"></i>"+ts+"</small>";
                     frag.appendChild(li);
                 }
                 listNode.appendChild(frag);

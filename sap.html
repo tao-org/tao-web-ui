@@ -303,19 +303,21 @@
                 <li class="treeview routed routed-my-workflows routed-my-components routed-my-auxfiles routed-my-scripts">
                     <a href="#default"><i class="fa fa-briefcase"></i><span>My WORKSPACE</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                        <li class="routed routed-my-workflows"><a href="#my/workflows">Workflows</a></li>
-                        <li class="routed routed-my-components"><a href="#my/components">Components</a></li>
-                        <li class="routed routed-my-auxfiles"><a href="#my/auxfiles">Aux. Files</a></li>
+                    	<li class="routed routed-my-queries"><a href="#my/queries">Queries</a></li>                        
+                        <li class="routed routed-my-components"><a href="#my/components">Components</a></li>                        
                         <li class="routed routed-my-scripts"><a href="#my/scripts">Scripts</a></li>
+                        <li class="routed routed-my-workflows"><a href="#my/workflows">Workflows</a></li>
+                        <li class="routed routed-my-auxfiles"><a href="#my/auxfiles">My Files</a></li>
+                        
                     </ul>
                 </li>
                 <li class="treeview routed routed-shared-workflows routed-shared-components routed-shared-datasources">
                     <a href="#default"><i class="fa fa-share-alt"></i><span>SHARED WORKSPACE</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                        <li class="routed routed-shared-workflows"><a href="#shared/workflows">Workflows</a></li>
-                        <li class="routed routed-shared-components"><a href="#shared/components">Components</a></li>
-                        <li class="routed routed-shared-auxfiles"><a href="#shared/auxfiles">Aux. Files</a></li>
-                        <li class="routed routed-shared-datasources"><a href="#shared/datasources">Datasources</a></li>
+                     	<li class="routed routed-shared-datasources"><a href="#shared/datasources">Data sources</a></li>
+                     	<li class="routed routed-shared-components"><a href="#shared/components">Components</a></li>
+                        <li class="routed routed-shared-workflows"><a href="#shared/workflows">Workflows</a></li>                        
+                        <li class="routed routed-shared-auxfiles"><a href="#shared/auxfiles">Common Files</a></li>
                     </ul>
                 </li>
 
@@ -329,14 +331,14 @@
                     </ul>
                 </li>
                 <li class="header">DOCUMENTATION</li>
-                <li class="routed routed-documentation">
+                <li class="routed routed-documentation routed-documentation-intro">
                     <a href="#documentation/intro">
-                        <i class="fa fa-book"></i> <span>TAO Documentation</span>
+                        <i class="fa fa-book"></i><span>TAO Documentation</span>
                     </a>
                 </li>
-                <li class="routed routed-faq">
-                    <a href="#faq/intro">
-                        <i class="fa fa-info-circle"></i> <span>Q&A</span>
+                <li class="routed routed-howto routed-howto-intro">
+                    <a href="#howto/intro">
+                        <i class="fa fa-info-circle"></i><span>How To</span>
                     </a>
                 </li>
                 <!--  to be done
@@ -533,10 +535,7 @@ Nothing to see!
 <!-- jQuery 2.1.4
 <script src="./assets/libs/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script>
  -->
-<script
-        src="https://code.jquery.com/jquery-2.2.4.min.js"
-        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-        crossorigin="anonymous"></script>
+<script src="./assets/libs/jQuery/jQuery-2.2.4.min.js"></script>
 
 <!-- jQuery 3.2.1
 <script
@@ -556,6 +555,7 @@ Nothing to see!
 <script src="./assets/dist/js/router.js" type="text/javascript"></script>
 <!-- NPs -->
 <script src="./assets/libs/np/jquery.npmodalconfirm.js" type="text/javascript"></script>
+<script src="./assets/libs/np/jquery.npexecpanel.js" type="text/javascript"></script>
 <!-- Base64  -->
 <script src="./assets/libs/base64/base64.min.js" type="text/javascript"></script>
 <!-- CryptoJS  -->
@@ -587,8 +587,10 @@ Nothing to see!
     //check prefferences
     (function(){
         var prefferences_viewMode = _settings.readCookie("prefferences_viewMode");
-        if ((prefferences_viewMode !== "") || (prefferences_viewMode !== null)) {
+        if ((prefferences_viewMode !== "") && (prefferences_viewMode !== null)) {
             prefferences.viewMode = prefferences_viewMode;
+        }else{
+        	prefferences.viewMode = "grid";
         }
     })();
 

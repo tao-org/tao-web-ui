@@ -1,6 +1,6 @@
 /*!
  * npExecPanels jQuery plugin
- * Released under the MIT license
+ * it only applies to a single DOM element and options must include end-point url
  */
 
 jQuery.fn.npExecPanels = function(options){
@@ -52,14 +52,15 @@ jQuery.fn.npExecPanels = function(options){
             var showJobs = jobs.slice(itemStart, itemStop);
             for(i = showJobs.length; i>0; i--){
                 var job = showJobs[i-1];
-                var htmlContent = '<h4>'+job.workflowName+'</h4>';
-                htmlContent += 'user: '+job.user+', status: '+job.jobStatus+' <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+datetimeFromArray(job.jobStart)+'</small> - <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+datetimeFromArray(job.jobEnd)+'</small>';
+                var htmlContent = '<h4>Job name: <strong>'+job.jobName+'</strong></h4>';
+                htmlContent += '<p>Workflow: <b>'+job.workflowName+'</b></p>';
+                htmlContent += 'user: '+job.user+', status: '+job.jobStatus+' <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+niceIsoTime(job.jobStart)+'</small> - <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+niceIsoTime(job.jobEnd)+'</small>';
                 htmlContent += '<div class="tasks">Task sumary:';
                 for(ii = 0; ii<job.taskSummaries.length; ii++) {
                     var task = job.taskSummaries[ii];
                     var statusIcon = ui_getTaskStatusIcon(task.taskStatus);
                     htmlContent += '<div class="one-task">';
-                    htmlContent += statusIcon + '<strong>' +task.componentName + '</strong>' +' ['+ datetimeFromArray(task.taskStart) +'-'+ datetimeFromArray(task.taskEnd) +']';
+                    htmlContent += statusIcon + '<strong>' +task.componentName + '</strong>' +' ['+ niceIsoTime(task.taskStart) +'-'+ niceIsoTime(task.taskEnd) +']' + ui_getTaskHost(task.host);
                     htmlContent += '</div>'
                 }
                 htmlContent += '</div>';
@@ -100,6 +101,14 @@ jQuery.fn.npExecPanels = function(options){
         if(jobStatus === "CANCELLED") className = ' cancelled';
         if(jobStatus === "RUNNING") className = ' running';
         return className;
+    };
+
+    var ui_getTaskHost = function(host){
+        var html = '';
+        if(host && host !== null){
+            html = ', on host <strong>' + host + "</strong>";
+        }
+        return html;
     };
     var ui_getTaskStatusIcon = function(taskStatus){
         var html = '<i class="icon fa fa-ban fa-fw" aria-hidden="true"></i>';

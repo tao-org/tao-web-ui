@@ -147,7 +147,7 @@
     overflow: auto;
 }
 .imagepreview-holder.full-screen>div{position:unset}
-.imagepreview-holder.full-screen img{position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:auto}
+.imagepreview-holder.full-screen img{position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:auto;border:5px solid rgba(255, 255, 255, 0.3);border-radius:5px;max-width:100%;max-height:100%}
 .fa-fw{margin-right:5px}
 .attributes-holder .holder{overflow:auto}
 /* ===== SWITCH ===== */
@@ -264,14 +264,17 @@ function refreshTree() {
 	return deferred.promise();
 }
 
-function getParentFolder(relativePath) {
+function getParentFolder(relPath) {
+	var relativePath = relPath.replace(/\//g, "\\");
 	var parentId = relativePath.substring(0, relativePath.lastIndexOf("\\"));
 	var parent = $("input[id='" + parentId.replace(/\\/g, "\\\\") + "']").parent().find(">.sub");
 	if (parent.length == 0) { parent = compsTree; }
 	return parent;
 }
 
-function renderFolder(relativePath, attributes) {
+function renderFolder(relPath, attributes) {
+	var relativePath = relPath.replace(/\//g, "\\");
+	
 	// get parent, render if null
 	var parent = getParentFolder(relativePath);
 	if (parent == compsTree && relativePath.indexOf("\\") >= 0 ) {
@@ -331,9 +334,10 @@ function renderTree(response) {
 			} else {
 				size = parseFloat(size / 1024 / 1024 / 1024 / 1024, 2).toFixed(2) + " TB";
 			}
-			var name   = file.relativePath.substring(file.relativePath.lastIndexOf("\\") + 1);
-			var type   = file.relativePath.substring(file.relativePath.lastIndexOf("."));
-			var folder = getParentFolder(file.relativePath);
+			var relPath = file.relativePath.replace(/\//g, "\\");
+			var name    = relPath.substring(relPath.lastIndexOf("\\") + 1);
+			var type    = file.relativePath.substring(file.relativePath.lastIndexOf("."));
+			var folder  = getParentFolder(file.relativePath);
 			
 			// add "public/" prefix to filePath for all shared files in /public/files/
 			var addPublicPrefix = (sharedFiles && file.relativePath.startsWith("files")) ? "public/" : "";
@@ -472,7 +476,8 @@ function displayFileActions(attributes) {
 	$(".for-files .download-holder button").attr('disabled', false);
 	
 	// Delete
-	if (attributes.fileInfo.relativePath.indexOf("files\\") == -1) {
+	if (attributes.fileInfo.relativePath.indexOf("files\\") == -1 &&
+		attributes.fileInfo.relativePath.indexOf("files/")  == -1) {
 		$(".for-files .delete-holder .action-info").text("Product contents can not be deleted.");
 		$(".for-files .delete-holder button").attr('disabled', true);
 		//$(".for-files .delete-holder").addClass("hidden");
@@ -543,11 +548,8 @@ $("#properties").on("click", "button.image-preview", function (e) {
 });
 
 $("#properties").on("click", ".full-preview", function (e) {
-	$("#properties .imagepreview-holder").clone().appendTo("body").addClass("full-screen");
-	$("body .full-screen span").remove();
-});
-$("body").on("click", ".full-screen", function (e) {
-	$(this).remove();
+	$("#properties .imagepreview-holder").clone().appendTo("#tree-content").addClass("full-screen");
+	$("#tree-content .full-screen span").remove();
 });
 
 // Close properties window
@@ -689,6 +691,9 @@ $("#properties .download-holder").on("click", "a", function (e) {
 	btn.find("i").removeClass("fa-download").addClass("fa-refresh fa-spin");
 	info.text("Please wait for your download to start!");
 });
+
+// Full screen preview events
+$("#tree-content").on("click", ".full-screen", function (event) { event.stopPropagation(); $(this).remove(); });
 
 function adjustPropertiesPosition() {
 	var scrollTop  = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;

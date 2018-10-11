@@ -152,10 +152,20 @@ jsPlumb.bind("tao_dropNewNode", function(params) {
     });
     $.when(postOneComponent)
         .done(function (putOneComponentResponse) {
-            if(putOneComponentResponse.status == "SUCCEEDED"){
+            if(putOneComponentResponse.status === "SUCCEEDED"){
                 var r = chkTSRF(putOneComponentResponse);
+                var ntype = "unknown";
+                if(r.componentType === "DATASOURCE"){
+                    ntype = "ds";
+                }
+                if(r.componentType === "PROCESSING"){
+                    ntype = "pc";
+                }
+                if(r.componentType === "SCRIPT"){
+                    ntype = "sc";
+                }
                 var nodeData = {
-                    "ntype":"pc",
+                    "ntype":ntype,
                     "ntemplateid": r.componentId,
                     "mtype": r.componentId,
                     "mlabel": r.name,

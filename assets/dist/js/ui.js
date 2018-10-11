@@ -301,7 +301,7 @@ $(function () {
                     }
                     var $el = $elClonable.clone();
                     $el.removeClass("master").removeClass("hidden");
-                    $el.find(".val-msg-ts").html(moment.unix(getMonitorNotificationResponse[k]['timestamp']/1000).format("DD MMM YYYY hh:mm:ss a"));
+                    $el.find(".val-msg-ts").html(niceIsoTime(getMonitorNotificationResponse[k]['timestamp']));
                     try {
                         var obj = JSON.parse(getMonitorNotificationResponse[k]['data']);
                         $el.find(".val-msg-txt").html(obj.Payload);

@@ -1,5 +1,4 @@
-<div class="modal-content">
-<div class="modal-content">
+<div class="modal-content" id="showResults">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 		<h4 class="modal-title">Execution results<small>Full list of <strong>achivable results</strong>.</small></h1>
@@ -32,22 +31,25 @@
             </div>
         </section>
         <section>
-            <div id="rm-preview-img" class="collapse">
-				<div class="imagepreview-holder"><img src=""/></div>
-            </div>
+            <div id="rm-preview-img" class="collapse"><img src=""/></div>
         </section>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
     </div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	</div>
 </div><!-- /.modal-content -->
 <style>
 /* ===== Modal dialog adjustments ===== */
-.modal-dialog{width:auto;max-width:800px}
-.modal-dialog .modal-content{background-color:#ecf0f5;border:0}
-.modal-header>h4{font-size:24px}
-.modal-header>h4>small{font-size:15px;display:inline-block;padding-left:4px;font-weight:300}
-.modal-footer{padding:5px 0}
+#myModalNodes .modal-dialog{width:auto;max-width:800px}
+#showResults{background-color:#ecf0f5;border:0}
+#showResults .modal-header{border:0}
+#showResults .modal-header>h4.modal-title{font-size:24px}
+#showResults .modal-header>h4.modal-title>small{font-size:15px;display:inline-block;padding-left:4px;font-weight:300}
+#showResults .modal-footer{border:0;padding:0 15px 15px 15px}
+
+/* ===== Full screen image preview ===== */
+#myModalNodes .full-screen{position:fixed;top:0;left:0;width:100%;height:100%;margin:0;padding:0;background-color:rgba(0, 0, 0, 0.5);cursor:pointer;overflow:auto;z-index:9999}
+#myModalNodes .full-screen img{position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:auto;border:5px solid rgba(255, 255, 255, 0.3);border-radius:5px;max-width:100%;max-height:100%}
 
 /* ===== Execution results list ===== */
 #rm-previewfiles .fa{margin-right:5px}
@@ -56,11 +58,7 @@
 #rm-previewfiles table tbody td{white-space:nowrap}
 #rm-previewfiles table tbody tr{cursor:pointer}
 #rm-previewfiles table tbody tr.filepreview-selected:hover{background-color:#f7e3c8}
-#rm-previewfiles .box-warning table tbody td{font-weight:600;color:#777777;text-align:center}
-
-/* ===== Full screen image preview ===== */
-.full-screen{position:fixed;top:0;left:0;width:100%;height:100%;margin:0;padding:0;background-color:rgba(0, 0, 0, 0.5);cursor:pointer;overflow:auto;z-index:9999}
-.full-screen img{position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:auto;border:5px solid rgba(255, 255, 255, 0.3);border-radius:5px}
+#rm-previewfiles .box-warning table thead th.warning{color:#777777;text-align:center}
 
 /* ===== Attributes Holder ===== */
 #rm-previewattributes{position:relative}
@@ -77,12 +75,19 @@
 
 var exesTable = $("#rm-previewfiles tbody");
 
+function fullScreenPreview() {
+	$("#myModalNodes .full-screen").remove();
+	$("#myModalNodes").append("<div class='full-screen'></div>");
+	$("#myModalNodes .full-screen").on("click", function (event) { event.stopPropagation(); $(this).remove(); });
+	$("#rm-preview-img img").clone().appendTo("#myModalNodes>.full-screen");
+}
+
 function setPreviewImageBase64(attributes) {
-	if ($("#rm-preview-img .imagepreview-holder img").data("id") != attributes.id) {
-		$("#rm-preview-img .imagepreview-holder img").data("id", attributes.id);
-		$("#rm-preview-img .imagepreview-holder img").attr("src", "");
+	if ($("#rm-preview-img img").data("id") != attributes.id) {
+		$("#rm-preview-img img").data("id", attributes.id);
+		$("#rm-preview-img img").attr("src", "");
 	}
-	if ($("#rm-preview-img .imagepreview-holder img").attr("src") == "") {
+	if ($("#rm-preview-img img").attr("src") == "") {
 		if (attributes.formatType == "RASTER") {
 			var previewUrl = attributes.fileInfo.uri.replace("download?fileName=", "preview?fileName=")
 			$.ajax({
@@ -91,15 +96,15 @@ function setPreviewImageBase64(attributes) {
 				beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
 				success: function(response) {
 					if (response.status == responseStatus.success) {
-						$(".imagepreview-holder img").attr("src", "data:image/jpeg;base64, " + response.data);
+						$("#rm-preview-img img").attr("src", "data:image/jpeg;base64, " + response.data);
+						fullScreenPreview();
 					}
 				}
 			});
 		}
+	} else {
+		fullScreenPreview();
 	}
-	$("body>.full-screen").remove();
-	$("body").append("<div class='full-screen'></div>");
-	$("#rm-preview-img .imagepreview-holder").clone().appendTo("body>.full-screen");
 }
 
 function displayAttributes(attributes) {
@@ -185,10 +190,11 @@ function renderResults(response) {
 				} else {
 					size = parseFloat(size / 1024 / 1024 / 1024 / 1024, 2).toFixed(2) + " TB";
 				}
-				var name   = file.relativePath.substring(file.relativePath.lastIndexOf("\\") + 1);
-				var href   = baseRestApiURL + 'files/download?fileName=' + file.relativePath.replace(/\\/g, "/");
-				var type   = file.relativePath.substring(file.relativePath.lastIndexOf("."));
-				var fafile = "fa-file-o";
+				var relPath = file.relativePath.replace(/\//g, "\\");
+				var name    = relPath.substring(relPath.lastIndexOf("\\") + 1);
+				var href    = baseRestApiURL + 'files/download?fileName=' + file.relativePath.replace(/\\/g, "/");
+				var type    = file.relativePath.substring(file.relativePath.lastIndexOf("."));
+				var fafile  = "fa-file-o";
 				switch (type) {
 					case ".txt" : fafile = "fa-file-text-o"   ; break;
 					case ".log" : fafile = "fa-file-text-o"   ; break;
@@ -222,13 +228,12 @@ function renderResults(response) {
 			}
 		});
 		if (exesTable.find("tr").length == 0) {
-			var element = $('<tr><td colspan="5">There are no execution results for this workflow</td></tr>');
-			exesTable.append(element);
-			exesTable.closest(".box").addClass("box-warning");
+			var element = $('<tr><th colspan="5" class="warning">No execution results to display</th></tr>');
+			exesTable.parent().find("thead").append(element);
 		}
 	} else {
-		var element = $('<tr><td colspan="5">There was an error while retrieving workflow executions results</td></tr>');
-		exesTable.append(element);
+		var element = $('<tr><th colspan="5" class="warning">An error ocuured while retrieving workflow executions results</th></tr>');
+		exesTable.parent().find("thead").append(element);
 	}
 }
 
@@ -252,7 +257,7 @@ function getWorkflowResults(workflowId) {
 		},
 		success: function(response) {
 			if (response.status == responseStatus.success) {
-				exesTable.closest(".box").addClass("box-success");
+				exesTable.closest(".box").addClass(response.data.length > 0 ? "box-success" : "box-warning");
 				renderResults(response.data);
 				deferred.resolve(response);
 			} else {
@@ -269,12 +274,6 @@ $(document).ready( function() {
 	// Get executions results for selected workflow
 	var currentWfID = _mLIST.dataOpQueue[0].dna.id;
 	getWorkflowResults(currentWfID);
-	
-	// Full screen preview events
-	$("body").on("click", ".full-screen", function (event) {
-		event.stopPropagation();
-		$(this).remove();
-	});
 	
 	// Show execution result attributes
 	$("#rm-previewfiles").on("click", "tbody tr", function (event) {
@@ -301,11 +300,12 @@ $(document).ready( function() {
 		}
 	});
 	
+	// Remove full screen preview
+	$("#myModalNodes>.full-screen").remove();
 	$(".modal-body").on("click", ".close-preview", function (event) {
 		event.preventDefault();
 		$("#rm-previewattributes").hide();
 		$("#rm-previewfiles tr").removeClass("filepreview-selected");
-		$("body>.full-screen").remove();
 	});
 });
 

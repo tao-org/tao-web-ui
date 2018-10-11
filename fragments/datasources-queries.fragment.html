@@ -553,7 +553,6 @@ $( document ).ready(function() {
 		 
 		var param = datasourcesList[$("#selectedDatasource").val().replace('d_','')].parameters;
 		var values = {};
-		var error = false;
 		var msg = "";
 		//get all elements that have a class starting with 'var_' and which are not necessarily the first class
 		$("[class^='var_'],[class*=' var_']").each(function () {
@@ -571,12 +570,12 @@ $( document ).ready(function() {
 							date1 = $("input[name='"+paramName+"_d1']").val();
 						}
 						
-						if(date1 == "" || date2 == ""){
-							msg = "Incorrect interval specified for "+param[paramName].name;
-							error = true;
-							
-						}else{
+						if(date1 != "" && date2 != ""){
 							values[paramName] = "["+date1+","+date2+"]";
+						}else if(date1 != ""){
+							values[paramName] = date1;
+						}else if(date2 != ""){
+							values[paramName] = date2;
 						}
 							
 					}
@@ -603,7 +602,7 @@ $( document ).ready(function() {
 		           };
 
 	 	console.log(myQuery);
-	 	if(error == false){
+
 			$.when( ajaxCallFnc("query/exec", JSON.stringify(myQuery), "POST") ).done( function(data){
 		             if($.type(data) == 'object' && data.status == "SUCCEEDED" && data.data.length>0){
 		            	 listOfProducts = data.data;
@@ -616,9 +615,6 @@ $( document ).ready(function() {
 						showMsg("No products were found for selected datasource.", "SUCCESS");
 					}
 				});
-		}else{
-			showMsg(msg, "FAIL");
-			}
 
 	});//end submit form editQueryParams
 	

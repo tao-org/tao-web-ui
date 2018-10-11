@@ -240,6 +240,18 @@ function datetimeFromArray(arr){
     }
 }
 
+function niceIsoTime(t){
+    if(t && (t !== null)){
+        return t;
+    }else{
+        return 'n/a';
+    }
+}
+
+
+
+
+
 function timeAgoFromArray(arr){
     if(arr && (arr !== null) && (arr instanceof Array) ){
         arr[1]--;arr[6] = 0; //fix month, ignore miliseconds

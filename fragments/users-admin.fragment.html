@@ -445,12 +445,7 @@
                 $(".val-tel", $elClone).html(elX.phone);
                 $(".val-quota", $elClone).html(elX.quota+" GB");
                 $(".val-status", $elClone).html(elX.status);
-
-                var dateAgo = "never";
-                if(elX.lastLoginDate){
-                    dateAgo = timeAgoFromArray(elX.lastLoginDate);
-                }
-                $(".val-ago", $elClone).html(dateAgo);
+                $(".val-ago", $elClone).html(niceIsoTime(elX.lastLoginDate));
 
                 $(".only-v-"+elX.stat, $elClone).show();
                 $(".box-bottom", $elClone).find(".span-muted").addClass("collapse");

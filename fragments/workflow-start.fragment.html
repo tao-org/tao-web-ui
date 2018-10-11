@@ -42,9 +42,23 @@
                     </div>
                 </div>
 
+
                 <div class="row">
                     <div class="col-md-12">
-                        <p>You can customize workflow parameters before run. Values will only affect current workflow processing call.</p>
+                        <div class="form-group">
+                            <label for="inputWorkflowInstanceName" class="col-sm-2 col-md-2 control-label">Execution name</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputWorkflowInstanceName" name="inputWorkflowInstanceName" placeholder="workflow execution name" autocomplete="off" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12">
+                            <p>You can customize workflow parameters before run. Values will only affect current workflow processing call.</p>
+                        </div>
                         <div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
                             <div class="row">
                                 <div class="col-md-12">
@@ -78,10 +92,10 @@
                                                                 <td style="width: 70%;">
                                                                     <input type="hidden" class="var-value" value="" placeholder="input variable's value">
                                                                     <input type="text" class="var-value-string collapse" value="" placeholder="input variable's value">
+                                                                    <input type="text" class="var-value-string2 collapse" value="" placeholder="input variable's value">
                                                                     <select class="var-value-list collapse"></select>
                                                                 </td>
                                                             </tr>
-
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -133,56 +147,45 @@
         }
         //remove error for some input elements
         $("#frmStartWF")
-            .on("change",".var-value-string",function(e){
+            .on("change",".var-value-string, .var-value-string2, .var-value-list",function(e){
+                var n = $(this).closest( '.val-row' ).find(".var-id").text();
+                if(n === "acquisition_date"){
+                    var dstart = $(this).parent().children(".var-value-string").val();
+                    var dstop = $(this).parent().children(".var-value-string2").val();
+                    $(this).siblings(".var-value").val("["+dstart+","+dstop+"]");
+                    return;
+                }
                 $(this).siblings(".var-value").val($(this).val());
             })
-            .on("change",".var-value-list",function(e){
-                $(this).siblings(".var-value").val($(this).val());
-            });
-        $("#frmStartWF")
             .submit(function (e) {
             e.preventDefault();
             var formData = {};
+                formData['name'] = $("#inputWorkflowInstanceName",$(this)).val();
+                formData['workflowId'] = _mLIST.dataOpQueue[0].dna.id;
+                formData['parameters'] = {};
+
             $('#accordion>div.panel').each(function(){
                 var dna = $(this).data("dna");
                 if (dna){
-                    formData[dna.name] = {};
+                    formData['parameters'][dna.name] = {};
                     console.log("p-c");
                     console.log(dna);
                     var $tableValRows = $(".tbl-edt-sysvar",$(this)).find(".val-row");
                     $.each($tableValRows, function(i, $tableValRow) {
                         var n = $(".var-id",$tableValRow).text();
                         var v = $(".var-value",$tableValRow).val();
-                        console.log("row");
-                        console.log(dna.name + n + v);
-                        formData[dna.name][n] = v;
+                        if(v !== ''){
+                            console.log("row");
+                            console.log(dna.name + n + v);
+                            formData['parameters'][dna.name][n] = v;
+                        }
                     });
                 }
             });
 
-            //console.log("formData 1");  console.log(formData);
-/*
-            formData = {
-                "AWS Download": {
-                    "pageSize": 20,
-                    "limit": 1,
-                    "pageNumber": 1,
-                    "beginPosition" : "2018-06-10",
-                    "endPosition" : "2018-06-20",
-                    "footprint" : "POLYGON((22.8042573604346 43.8379609098684,24.83885442747927 43.8379609098684,24.83885442747927 44.795645304033826,22.8042573604346 44.795645304033826,22.8042573604346 43.8379609098684))",
-                    "cloudcoverpercentage" : 100.0
-                },
-                "SNAP NDVI": {
-                    "nirFactor": 0.5
-                }
-            };
-            console.log(formData);
-            //console.log(JSON.stringify(formData));
-*/
-
             var settings = {
                 "async": true,
-                "url": baseRestApiURL + "orchestrator/start/"+_mLIST.dataOpQueue[0].dna.id,
+                "url": baseRestApiURL + "orchestrator/start",
                 "method": "POST",
                 "headers": {
                     "Content-Type": "application/json",
@@ -232,6 +235,26 @@
                     $('input.var-value', $el).val(value);
                     if(humanJavaDataType(type) === "Date"){
                         $('input.var-value-string', $el).attr("type", "date");
+                        if( name==="acquisition_date" ){
+                            if(value === null){
+                                dstart = '';
+                                dstop = '';
+                            }else{
+                                var re = /([^=\[]+),([^=\]]+)/;
+                                var match = re.exec(value);
+                                if(match !== null){
+                                    dstart = match[1];
+                                    dstop = match[2];
+                                }else{
+                                    dstart = value;
+                                    dstop = "";
+                                }
+                            }
+                            $('input.var-value-string2', $el).attr("type", "date");
+                            $('input.var-value-string', $el).val(dstart).show();
+                            $('input.var-value-string2', $el).val(dstop).show();
+                            return;
+                        }
                     }
                     if((humanJavaDataType(type) === "Double") || (humanJavaDataType(type) === "Float") || (humanJavaDataType(type) === "Number")){
                         $('input.var-value-string', $el).attr("type", "number").attr("step", "any");
@@ -286,7 +309,6 @@
         }).fail(function () {
             console.log("error retriving workflow parameters");
         });
-
     }
 
     function getWFDataById (wfID){
@@ -318,6 +340,9 @@
                 $('.val-start-wf-name', $el).html(response.name);
                 $('.val-start-wf-username', $el).html(response.userName);
                 $('.val-start-wf-visibility', $el).html(response.visibility);
+                //init exec name with name + timestamp
+                $('#inputWorkflowInstanceName').val(response.name+", "+moment().format('DD/MM/YYYY HH:mm:ss'));
+
 
                 var $elClone;
                 _.each(response.nodes, function(node){
@@ -334,4 +359,5 @@
         });
         return true;
     }
+    //# sourceURL=start-wf.js
 </script>

@@ -178,11 +178,23 @@ var tao_setWF2CanvasData = function(currentWfData){
                     $.each(currentWfData.nodes, function(i, wfOneNode) {
                         console.log("addNewNode call");
                         console.log(wfOneNode);
+                        var ntype = "unknown";
+                        if(wfOneNode.componentType === "DATASOURCE"){
+                            ntype = "ds";
+                        }
+                        if(wfOneNode.componentType === "PROCESSING"){
+                            ntype = "pc";
+                        }
+                        if(wfOneNode.componentType === "SCRIPT"){
+                            ntype = "sc";
+                        }
+
                         var nodeData = {
-                            "ntype":"pc",
+                            "ntype":ntype,
                             "ntemplateid": wfOneNode.componentId,
                             "mtype":wfOneNode.componentId,
-                            "mlabel":wfOneNode.name,"fullData":wfOneNode
+                            "mlabel":wfOneNode.name,
+                            "fullData":wfOneNode
                         };
                         addNewNode(wfOneNode.xCoord,wfOneNode.yCoord,nodeData);
                     });
@@ -252,9 +264,7 @@ var tao_setWF2CanvasData = function(currentWfData){
 
         if(componentTemplate === null){
             console.log("comp template not found!!!!!!!!!!!!!!!!!!");
-            alert("comp template not found!!!!!!!!!!!!!!!!!!");
             //try to get component template from server,  usedComponents
-            //xxxxxxxxxxxxxxxxx
             if(dna.ntype === "pc"){
                 console.log("get "+ dna.mtype);
 
@@ -292,6 +302,44 @@ var tao_setWF2CanvasData = function(currentWfData){
                     alert("Could not retrive pc data.", "ERROR");
                     canvasRenderer.createNode(componentTemplate, dna);
                 });
+            }
+            if(dna.ntype === "ds"){
+                console.log("get "+ dna.mtype);
+
+                var getDatasourceById = $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + "datasource/list?id="+dna.mtype,
+                    dataType : 'json',
+                    type: 'GET',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "X-Auth-Token": window.tokenKey
+                    }
+                });
+                $.when(getDatasourceById)
+                    .done(function (getDatasourceByIdResponse) {
+                        var dsData = chkTSRF(getDatasourceByIdResponse);
+                        console.log("ds data:"); console.log(dsData);
+                        if(dsData[0] && dsData[0].id && (dsData[0].id === dna.mtype)) {
+                            //template returned, add to used ds, add template too
+                            var hash = "tboid" + jsHashCode(dna.mtype);
+                            componentTemplate = dsData[0];
+                            wfPlumbCanvasData.usedComponents.push(dna.mtype);
+                            wfPlumbCanvasData.nodeTemplates.ds[hash] = {
+                                "dna": componentTemplate,
+                                "id": hash,
+                                "image": "./media/module-otb.png",
+                                "label": "xxxxx",
+                                "type": "datasource"
+                            };
+                        }
+                        canvasRenderer.createNode(componentTemplate, dna);
+                    })
+                    .fail(function () {
+                        alert("Could not retrive pc data.", "ERROR");
+                        canvasRenderer.createNode(componentTemplate, dna);
+                    });
             }
         }else{
             canvasRenderer.createNode(componentTemplate, dna);

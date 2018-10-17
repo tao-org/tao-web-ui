@@ -359,9 +359,7 @@
 
         function getNotificationsByPageNo(pageNo){
             currentPage = pageNo;
-
-            console.log("UUUUUUUUUUUUUUUUUUUUU");
-            console.log(taoUserProfile.username);
+            console.log( "current username: "+ taoUserProfile.username);
 
             $.ajax({
                 cache: false,
@@ -371,7 +369,7 @@
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "user": "admin"//taoUserProfile.username //"admin"to be done
+                    "user": taoUserProfile.username //sample: "admin"
                 }
             }).done(function (getNotificationsResponse) {
                 var r = chkTSRF(getNotificationsResponse);

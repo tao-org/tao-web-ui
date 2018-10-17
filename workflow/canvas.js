@@ -245,19 +245,12 @@ var tao_setWF2CanvasData = function(currentWfData){
 
         //find node template from TOOLBOX and determine component type.
         var componentTemplate = null;
-        if(dna.ntype === "pc"){
-            if(wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid]){
-                if(wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid]){
-                    componentTemplate = wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid].dna;
-                }
-            }
+        if( dna.ntype === "pc" && wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid] ){
+            componentTemplate = wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid].dna;
         }
-        if(dna.ntype === "ds"){
-            if(wfTools.toolboxnodes.ds[dna.ntemplateid]){
-                if(wfPlumbCanvasData.nodeTemplates.ds[dna.ntemplateid]){
-                    componentTemplate = wfPlumbCanvasData.nodeTemplates.ds[dna.ntemplateid].dna;
-                }
-            }
+        //ds components can be system or user datasources, but it's all the same
+        if( dna.ntype === "ds" && wfPlumbCanvasData.nodeTemplates.ds[dna.ntemplateid] ){
+            componentTemplate = wfPlumbCanvasData.nodeTemplates.ds[dna.ntemplateid].dna;
         }
 
         if(componentTemplate === null){

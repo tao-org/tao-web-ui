@@ -775,11 +775,18 @@ updateModuleStatus("", {"state":"completed", "progress":68});
 	$elCanvas
 	.on( "click",".btn-action-erasemodule", function(e) { //erase module on trash icon click
 		e.stopPropagation();
-		var id = $(this).closest(".w").attr("id");
-		$(this).closest(".w").addClass("selected");
-		toolboxModules.rescanSelected();
-		toolboxModules.rmSelected();
-		console.log(id);
+        var id = $(this).closest(".w").attr("id");
+        $(this).closest(".w").addClass("selected");
+
+        $('#confirm-dialog').modal('confirm',{
+            msg:"Are you sure you want to delete selected node?",
+            callbackConfirm: function() {
+                toolboxModules.rescanSelected();
+                toolboxModules.rmSelected();
+                console.log(id);
+            },
+            callbackCancel:function(){}
+        });
 	})
     .on( "click",".btn-action-editmodule", function(e) { //erase module on trash icon click
             e.stopPropagation();

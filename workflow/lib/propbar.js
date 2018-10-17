@@ -115,11 +115,11 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         });
         $.when(putOneComponent)
             .done(function (putOneComponentResponse) {
-                if(putOneComponentResponse.hasOwnProperty('message')){
-                    alert(putOneComponentResponse.message);
-                }else{
+                if(putOneComponentResponse.status === "SUCCEEDED"){
                     $(".v-lastaction","#infoband").html("custom values updated");
-                    wfPlumbCanvasData.nodes[$propbar.nid] = putOneComponentResponse;
+                    wfPlumbCanvasData.nodes[$propbar.nid] = putOneComponentResponse.data;
+                }else{
+                    alert(putOneComponentResponse.message);
                 }
             })
             .fail(function(){
@@ -127,8 +127,6 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             });
     };
 
-
-	
 	window.$propbar.menu = function(action, params){
 						if ( action === "open") {
 							$('html, body').addClass("app-noscroll");
@@ -160,7 +158,8 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             $propbar.ntype = "PROCESSING";
             backgroundURL = './media/module01.png';
 			if(wfTools.toolboxnodes.pc[lclTBOID]){
-				componentTemplate = wfTools.toolboxnodes.pc[lclTBOID].dna;
+				//componentTemplate = wfTools.toolboxnodes.pc[lclTBOID].dna;
+                componentTemplate = wfPlumbCanvasData.nodeTemplates.pc[lclTBOID].dna;
                 backgroundURL = "./media/"+componentTemplate.containerId+".png";
 			}
             wf_loadModuleProcessing(nid,lcl_n,componentTemplate);

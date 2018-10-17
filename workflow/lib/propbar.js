@@ -158,10 +158,10 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 
         if(lcl_n.componentType === "PROCESSING"){
             $propbar.ntype = "PROCESSING";
-            backgroundURL = './media/module-otb.png';
+            backgroundURL = './media/module01.png';
 			if(wfTools.toolboxnodes.pc[lclTBOID]){
 				componentTemplate = wfTools.toolboxnodes.pc[lclTBOID].dna;
-                backgroundURL = "./media/logo-"+jsHashCode(componentTemplate.containerId)+".png";
+                backgroundURL = "./media/"+componentTemplate.containerId+".png";
 			}
             wf_loadModuleProcessing(nid,lcl_n,componentTemplate);
         }

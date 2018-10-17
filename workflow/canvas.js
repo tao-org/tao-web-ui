@@ -154,7 +154,6 @@ var tao_setWF2CanvasData = function(currentWfData){
                             wfPlumbCanvasData.nodeTemplates.pc[hash] = {
                                 id: hash,
                                 type: "component",
-                                image: "./media/module-otb.png",
                                 label: item.label,
                                 dna: item
                             };
@@ -168,7 +167,6 @@ var tao_setWF2CanvasData = function(currentWfData){
                             wfPlumbCanvasData.nodeTemplates.ds[hash] = {
                                 id: hash,
                                 type: "datasource",
-                                image: "./media/module-ds.png",
                                 label: item.label,
                                 dna: item
                             };
@@ -291,7 +289,6 @@ var tao_setWF2CanvasData = function(currentWfData){
                         wfPlumbCanvasData.nodeTemplates.pc[hash] = {
                             "dna": componentTemplate,
                             "id": hash,
-                            "image": "./media/module-otb.png",
                             "label": "xxxxx",
                             "type": "component"
                         };
@@ -329,7 +326,6 @@ var tao_setWF2CanvasData = function(currentWfData){
                             wfPlumbCanvasData.nodeTemplates.ds[hash] = {
                                 "dna": componentTemplate,
                                 "id": hash,
-                                "image": "./media/module-otb.png",
                                 "label": "xxxxx",
                                 "type": "datasource"
                             };
@@ -433,7 +429,7 @@ var canvasRenderer = {
             innerHTML += "<div class=\"module-title\">"+dna.mlabel+"</div>";
         }
         innerHTML += "<div class=\"module-subtitle\">"+dna.fullData.componentId+"</div>";
-        innerHTML += "<div class=\"module-subtitle\">"+datetimeFromArray(dna.fullData.created)+"</div>";
+        innerHTML += "<div class=\"module-subtitle\">"+niceIsoTime(dna.fullData.created)+"</div>";
         innerHTML += "</div>";
         innerHTML += "<div class=\"module-ports\">";
         for (i = 0; i < maxPorts; i++) {

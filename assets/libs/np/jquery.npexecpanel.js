@@ -1,6 +1,22 @@
 /*!
  * npExecPanels jQuery plugin
+ *
  * it only applies to a single DOM element and options must include end-point url
+ * creates job execution lists and maintain pagination and data refresh
+ *
+ * Copyright  CS ROMANIA, http://c-s.ro
+ *
+ * Licensed under the ....;
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 jQuery.fn.npExecPanels = function(options){
@@ -47,11 +63,13 @@ jQuery.fn.npExecPanels = function(options){
         if(jobs){
             var count = jobs.length;
             pages = Math.ceil(count/settings.itemsOnPage);
-            var itemStop = Math.max(0, count - currentPage*settings.itemsOnPage);
-            var itemStart = Math.max(0, count - (currentPage+1)*settings.itemsOnPage);
-            var showJobs = jobs.slice(itemStart, itemStop);
-            for(i = showJobs.length; i>0; i--){
-                var job = showJobs[i-1];
+            //var itemStop = Math.max(0, count - currentPage*settings.itemsOnPage);
+            //var itemStart = Math.max(0, count - (currentPage+1)*settings.itemsOnPage);
+            var itemStart = Math.max(0, currentPage*settings.itemsOnPage);
+            var itemStop = Math.min(count, itemStart+settings.itemsOnPage);
+
+            for(i = itemStart; i < itemStop; i++){
+                var job = jobs[i];
                 var htmlContent = '<h4>Job name: <strong>'+job.jobName+'</strong></h4>';
                 htmlContent += '<p>Workflow: <b>'+job.workflowName+'</b></p>';
                 htmlContent += 'user: '+job.user+', status: '+job.jobStatus+' <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+niceIsoTime(job.jobStart)+'</small> - <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+niceIsoTime(job.jobEnd)+'</small>';
@@ -64,19 +82,19 @@ jQuery.fn.npExecPanels = function(options){
                     htmlContent += '</div>'
                 }
                 htmlContent += '</div>';
-                var css = 'job-history-one'+ui_getJobStatusClass(job.jobStatus);
+                var css = 'job-history-one'+ui_getJobStatusClass(job.jobStatus)+' collapse';
                 var $newEl = $('<div>',{
                     'class' : css,
                     'html' : htmlContent
                 });
-                $panel.append($newEl);
+                $newEl.appendTo($panel).fadeIn('slow');
             }
             //show end of records notice
-            if(showJobs.length === 0){
+            if((itemStart - itemStop) <= 0){
+                $panelEmpty.hide();
+            }else{
                 $("p",$panelEmpty).html(settings.msgEmpty);
                 $panelEmpty.show();
-            }else{
-                $panelEmpty.hide();
             }
             //syncronize pagination
             $(".val-current-page",$panelWrapper).html(currentPage+1);
@@ -123,7 +141,7 @@ jQuery.fn.npExecPanels = function(options){
             $notification.removeClass("show");
         }, 3000);
     };
-//add pagination handlers
+    //add pagination handlers
     $($panelWrapper)
         .on("click"," .pagination a", function(e){
             e.preventDefault();
@@ -141,14 +159,17 @@ jQuery.fn.npExecPanels = function(options){
             if(action === 'go-refresh'){
                 currentPage = 0;
                 ui_showExecNotification();
-                //go-refresh
             }
+            getData();
+        })
+        .on("panel:refresh", function(e) {
+            currentPage = 0;
+            ui_showExecNotification();
             getData();
         });
 
     // Initializing
     currentPage = 0;
     getData();
-
     return this;
 };

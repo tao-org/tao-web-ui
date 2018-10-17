@@ -1,197 +1,181 @@
-<div class="modal-content">
+<div class="modal-content" id="traceExecutions">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-		<h4 class="modal-title">Execution history<small>Full list of <strong>project executions</strong>.</small></h1>
+		<h4 class="modal-title">Executions history<small>Full list of <strong>project executions</strong>.</small></h4>
     </div>
 	<div class="modal-body">
-		<section>
-			<h4>Project details</h4>
-			<p class="workflow-details">
-				<label>Name:</label>Project XXX
-				<label>Initiator:</label>Alec Berger
-				<label>Status:</label>DRAFT
-				<label>Visibility:</label>PRIVATE
-				<label>Active:</label>yes
-			</p>
-		</section>
-		<!-- document timeline content -->
+		<section class="details"></section>
 		<section class="content">
-			<h4>Execution trace</h4>
-			
-			<!-- The time line -->
-			<ul class="timeline current_route">
-				<!-- timeline time label -->
-				<li class="time-label">
-				<span class="bg-red">
-					09-09-2017							</span>
-				</li>
-				<!-- /.timeline-label -->
-				<li>
-					<i class="fa bg-red"></i>
-					<div class="timeline-item">
-						<span class="time"><i class="fa fa-clock-o"></i> 15-11-2017 15:16</span><br />
-						<div class="timeline-body">
-							Execution node: <strong>node name</strong>
-							<br />Module: <strong>module name</strong>
-							<br />State: <strong>succesfully executed</strong><br />
-							Result link: <strong>link</strong>
-						</div>
-					</div>
-				</li>
-				<li>
-					<i class="fa bg-red"></i>
-					<div class="timeline-item">
-						<span class="time"><i class="fa fa-clock-o"></i> 15-11-2017 15:16</span><br />
-						<div class="timeline-body">
-							Execution node: <strong>node name</strong>
-							<br />Module: <strong>module name</strong>
-							<br />State: <strong>succesfully executed</strong><br />
-							Result link: <strong>link</strong>
-						</div>
-					</div>
-				</li>
-				<li>
-					<i class="fa bg-red"></i>
-					<div class="timeline-item">
-						<span class="time"><i class="fa fa-clock-o"></i> 15-11-2017 15:16</span><br />
-						<div class="timeline-body">
-							Execution node: <strong>node name</strong>
-							<br />Module: <strong>module name</strong>
-							<br />State: <strong>succesfully executed</strong><br />
-							Result link: <strong>link</strong>
-						</div>
-					</div>
-				</li>
-				<!-- timeline time label -->
-				<li class="time-label">
-				<span class="bg-red">
-					16-12-2017							</span>
-				</li>
-				<!-- /.timeline-label -->
-
-				<li>
-					<i class="fa bg-red"></i>
-					<div class="timeline-item">
-						<span class="time"><i class="fa fa-clock-o"></i> 15-11-2017 15:16</span><br />
-						<div class="timeline-body">
-							Execution node: <strong>node name</strong>
-							<br />Module: <strong>module name</strong>
-							<br />State: <strong>succesfully executed</strong><br />
-							Result link: <strong>link</strong>
-						</div>
-					</div>
-				</li>
-				<li>
-					<i class="fa bg-red"></i>
-					<div class="timeline-item">
-						<span class="time"><i class="fa fa-clock-o"></i> 15-11-2017 15:16</span><br />
-						<div class="timeline-body">
-							Execution node: <strong>node name</strong>
-							<br />Module: <strong>module name</strong>
-							<br />State: <strong>succesfully executed</strong><br />
-							Result link: <strong>link</strong>
-						</div>
-					</div>
-				</li>
-				<!-- timeline time label -->
-				<li class="time-label">
-				<span class="bg-red">
-					01-03-2016							</span>
-				</li>
-				<!-- /.timeline-label -->
-
-				<li>
-					<i class="fa bg-red"></i>
-					<div class="timeline-item">
-						<span class="time"><i class="fa fa-clock-o"></i> 15-11-2017 15:16</span><br />
-						<div class="timeline-body">
-							Execution node: <strong>node name</strong>
-							<br />Module: <strong>module name</strong>
-							<br />State: <strong>succesfully executed</strong><br />
-							Result link: <strong>link</strong>
-						</div>
-					</div>
-				</li>
-				<li class="time-label">
-			  <span class="bg-red">
-				15-06-2017		                  </span>
-				</li>
-			</ul>
-
-			<ul class="timeline future_route">
-				<!-- timeline item -->
-				<li>
-					<i class="fa bg-gray"></i>
-					<div class="timeline-item">
-						<div class="timeline-body">
-							Execution node: <strong>node name</strong>
-							<br />Module: <strong>module name</strong>
-							<br />State: <strong>to be executed</strong><br />
-						</div>
-					</div>
-				</li>
-				<li>
-					<i class="fa bg-gray"></i>
-					<div class="timeline-item">
-						<div class="timeline-body">
-							Execution node: <strong>node name</strong>
-							<br />Module: <strong>module name</strong>
-							<br />State: <strong>to be executed</strong><br />
-						</div>
-					</div>
-				</li>
-				<li>
-					<i class="fa bg-gray"></i>
-					<div class="timeline-item">
-						<div class="timeline-body">
-							Execution node: <strong>node name</strong>
-							<br />Module: <strong>module name</strong>
-							<br />State: <strong>to be executed</strong><br />
-						</div>
-					</div>
-				</li>
-				<li>
-					<i class="fa bg-gray"></i>
-					<div class="timeline-item">
-						<div class="timeline-body">
-							Execution node: <strong>node name</strong>
-							<br />Module: <strong>module name</strong>
-							<br />State: <strong>to be executed</strong><br />
-						</div>
-					</div>
-				</li>
-				<li>
-					<i class="fa bg-gray"></i>
-					<div class="timeline-item">
-						<div class="timeline-body">
-							Execution node: <strong>node name</strong>
-							<br />Module: <strong>module name</strong>
-							<br />State: <strong>to be executed</strong><br />
-						</div>
-					</div>
-				</li>
-				<li>
-					<i class="fa fa-stop-circle bg-gray"></i>
-				</li>
-			</ul>
+			<h4>Pending executions</h4><ul class="timeline future_route"></ul>
+			<h4>Executions history</h4><ul class="timeline current_route"></ul>			
 		</section>
-		<!-- /.timeline content -->
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	</div>
-</div><!-- /.modal-content -->
+</div>
 <style>
 /* ===== Modal dialog adjustments ===== */
-#myModalNodes .modal-header>h4.modal-title{font-size:24px}
-#myModalNodes .modal-header>h4.modal-title>small{font-size:15px;display:inline-block;padding-left:4px;font-weight:300}
-#myModalNodes .modal-body section>h4{margin:0 0 10px 0}
-#myModalNodes .modal-body section.content{padding:10px 0px}
+#traceExecutions .modal-header{color:white;background-color:#00c0ef;border:0}
+#traceExecutions .modal-header>h4.modal-title{font-size:24px}
+#traceExecutions .modal-header>h4.modal-title>small{font-size:15px;display:inline-block;padding-left:4px;font-weight:300;color:white}
+#traceExecutions .modal-body section.content{padding:10px 0px}
 
-.workflow-details{color:#555;background-color:white;padding:0 15px;font-style:italic}
-.workflow-details>label{width:70px;color:#dd4b39;font-style:normal;margin:0}
+#traceExecutions .details{color:white;background-color:#00c0ef;margin:-20px -15px -10px -15px;padding-bottom:10px}
+#traceExecutions .details .row{padding:0 15px 0 45px;font-style:italic;line-height:1.7em}
+#traceExecutions .details .row>label{margin:0;font-size:1.1em}
+
+.timeline-item .fa{margin-right:5px}
+.timeline-item .item-user{margin-left:54px;font-weight:700;color:#555}
+.timeline-item .item-timestamp{float:right;color:#999;margin-right:15px}
+.timeline-item .item-body{margin-left:60px;padding-bottom:10px;}
+.timeline-item .item-components{margin-left:20px}
+
+.timeline-item .status-running   {color:#00acd6}
+.timeline-item .status-success   {color:#008000}
+.timeline-item .status-error     {color:#d01717}
+.timeline-item .status-warning   {color:#ff6b19}
+.timeline-item .status-undefined {color:#808080}
+
+.timeline-item .status-running   .label-info{background:#00c0ef !important}
+.timeline-item .status-success   .label-info{background:#1f921f !important}
+.timeline-item .status-error     .label-info{background:#d01717 !important}
+.timeline-item .status-warning   .label-info{background:#ff6b19 !important}
+.timeline-item .status-undefined .label-info{background:#808080 !important}
+
+.timeline .bg-end{border-radius:0}
 </style>
 <script>
+var ui_getTimeInterval = function (startISO, endISO) {
+	var html = '';
+	var startTime = moment(startISO).format("HH:mm:ss");
+	var endTime   = moment(endISO).format("HH:mm:ss");
+	startTime = (startTime == "Invalid date" ? "n/a" : startTime);
+	endTime   = (endTime   == "Invalid date" ? "n/a" : endTime);
+	html = '[' + startTime + ' - ' + endTime + ']';
+	return html;
+}
+var ui_getTaskStatusIcon = function (taskStatus){
+	var statusColor = "fa-question";
+	switch (taskStatus) {
+		case "QUEUED_ACTIVE": statusColor = "fa-clock-o";  break;
+		case "RUNNING"      : statusColor = "fa-bolt";     break;
+		case "DONE"         : statusColor = "fa-check";    break;
+		case "FAILED"       : statusColor = "fa-times";    break;
+		case "SUSPENDED"    : statusColor = "fa-ban";      break;
+		case "CANCELLED"    : statusColor = "fa-ban";      break;
+		case "UNDETERMINED" : statusColor = "fa-question"; break;
+		default             : statusColor = "fa-question"; break;
+	}
+	html = '<i aria-hidden="true" class="fa fa-fw ' + statusColor + '"></i>';
+	return html;
+};
+var ui_getTaskHost = function (host){
+	var html = '';
+	if(host && host !== null){
+		html = ', on host <strong>' + host + "</strong>";
+	}
+	return html;
+};
+
+var executionsList = {};
+var pendingItemsList = $("#traceExecutions .future_route");
+var currentItemsList = $("#traceExecutions .current_route");
+function renderExecutions(workflowId) {
+	// Order executions list by start time
+	executionsList.sort(function(exec1, exec2) { return exec1.startTime < exec2.startTime })
+	pendingItemsList.html("");
+	currentItemsList.html("");
+	var prevPendingItemDate = "";
+	var prevCurrentItemDate = "";
+	$.each(executionsList, function (index, exec) {
+		var pendingItem = (exec.executionStatus == "UNDETERMINED" || exec.executionStatus == "QUEUED_ACTIVE");
+		var statusColor = "status-undefined";
+		switch (exec.executionStatus) {
+			case "QUEUED_ACTIVE": statusColor = "status-undefined"; break;
+			case "RUNNING"      : statusColor = "status-running";   break;
+			case "DONE"         : statusColor = "status-success";   break;
+			case "FAILED"       : statusColor = "status-error";     break;
+			case "SUSPENDED"    : statusColor = "status-warning";   break;
+			case "CANCELLED"    : statusColor = "status-undefined"; break;
+			case "UNDETERMINED" : statusColor = "status-undefined"; break;
+			default             : statusColor = "status-undefined"; break;
+		}
+		
+		var itemDate    = moment(exec.startTime).format("YYYY-MM-DD");
+		var startTime   = moment(exec.startTime).format("YYYY-MM-DD HH:mm:ss");
+		var endTime     = moment(exec.endTime).format("YYYY-MM-DD HH:mm:ss");
+		startTime       = (startTime == "Invalid date" ? "n/a" : startTime);
+		endTime         = (endTime   == "Invalid date" ? "n/a" : endTime);
+		
+		var timelineItemCurrent = $('<li class="timeline-item"></li>');
+		var timelineItemPending = $('<li class="timeline-item"></li>');
+		var htmlContent = 	'<i class="fa ' + (pendingItem ? 'bg-gray' : 'bg-red') + '"></i>' +
+							'<span class="item-user"><i class="fa fa-user"></i>' + exec.userName + '</span>' +
+							'<span class="item-timestamp"><i class="fa fa-clock-o"></i><small>' + startTime + '</small></span>' +
+							'<div class="item-body">' +
+								'Job name: <strong>' + exec.name + '</strong><br>' +
+								'<span class="' + statusColor + '">' +
+									'Status: <strong>' + exec.executionStatus + '</strong>&nbsp;' +
+									'<small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>' + startTime + '</small> - <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>' + endTime + '</small>' +
+								'</span>'
+							'</div>';
+		
+		// Get execution's tasks
+		var tasks = '';
+		$.ajax({
+			url: baseRestApiURL + "workflow/" + workflowId + "/executions/" + exec.id,
+			type: "GET",
+			dataType: 'json',
+			async: false,
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("Accept", "application/json");
+				xhr.setRequestHeader("Content-Type", "application/json");
+				xhr.setRequestHeader("X-Auth-Token", tokenKey);
+			},
+			error: function (jqXHR, textStatus) { },
+			success: function(response) {
+				if (response.status == responseStatus.success) {
+					tasks = '<div class="item-components">Task summary:<br>';
+					$.each(response.data, function (index, task) {
+						var statusIcon = ui_getTaskStatusIcon(task.executionStatus);
+						tasks += statusIcon + ui_getTimeInterval(task.startTime, task.endTime) + ' <strong>' + task.componentId + ' [' + task.workflowNodeId + ']' + '</strong>' + ui_getTaskHost(task.executionNodeHostName) + '<br>';
+					});
+					tasks += '</div>';
+				}
+			}
+		});
+		
+		if (pendingItem) {
+			if (itemDate != prevPendingItemDate) {
+				pendingItemsList.append('<li class="time-label"><span class="bg-gray">' + itemDate + '</span></li>');
+				prevPendingItemDate = itemDate;
+			}
+			timelineItemPending.append(htmlContent);
+			timelineItemPending.find('.item-body').append(tasks);
+			pendingItemsList.append(timelineItemPending);
+		} else {
+			if (itemDate != prevCurrentItemDate) {
+				currentItemsList.append('<li class="time-label"><span class="bg-red">' + itemDate + '</span></li>');
+				prevCurrentItemDate = itemDate;
+			}
+			timelineItemCurrent.append(htmlContent);
+			timelineItemCurrent.find('.item-body').append(tasks);
+			currentItemsList.append(timelineItemCurrent);
+		}
+	});
+	if (pendingItemsList.find(".timeline-item").length == 0) {
+		pendingItemsList.prev().remove();
+		pendingItemsList.remove();
+	} else {
+		pendingItemsList.append('<li class="timeline-item"><i class="fa bg-gray bg-end"></i></li>')
+	}
+	if (currentItemsList.find(".timeline-item").length == 0) {
+		currentItemsList.append('<li class="timeline-item"><span class="item-user">No executions for this workflow</span></li>');
+	}
+	
+	currentItemsList.append('<li class="timeline-item"><i class="fa bg-red bg-end"></i></li>')
+}
 
 function getWorkflowExecutions(workflowId) {
 	var deferred = $.Deferred();
@@ -207,16 +191,15 @@ function getWorkflowExecutions(workflowId) {
 		error: function (jqXHR, textStatus) {
 			var msg = "Error while loading workflow executions.";
 			showMsg(msg);
+			executionsList = {};
 			deferred.reject(jqXHR, textStatus, msg);
 		},
 		success: function(response) {
 			if (response.status == responseStatus.success) {
-				exesTable.closest(".box").addClass(response.data.length > 0 ? "box-success" : "box-warning");
-				renderResults(response.data);
+				executionsList = response.data;
 				deferred.resolve(response);
 			} else {
 				showMsg(response.message);
-				exesTable.closest(".box").addClass("box-warning");
 				deferred.reject(null, response.status, response.message);
 			}
 		}
@@ -227,14 +210,20 @@ function getWorkflowExecutions(workflowId) {
 $(document).ready( function() {
 	// Get project details
 	var currentWf = _mLIST.dataOpQueue[0].dna;
-	var wfDetails = "<label>Name:</label>"       + currentWf.name       + "<br/>" +
-					"<label>Initiator:</label>"  + currentWf.userName   + "<br/>" +
-					"<label>Status:</label>"     + currentWf.status     + "<br/>" +
-					"<label>Visibility:</label>" + currentWf.visibility + "<br/>" +
-					"<label>Active:</label>"     + (currentWf.active ? "yes" : "no");
-	$("#myModalNodes p.workflow-details").html(wfDetails);
+	var wfDetails = '<div class="row"><label class="col-sm-3 col-md-3">Workflow name:</label><div class="col-sm-9 col-md-9">' + currentWf.name       + '</div></div>' +
+					'<div class="row"><label class="col-sm-3 col-md-3">Initiator:</label>    <div class="col-sm-9 col-md-9">' + currentWf.userName   + '</div></div>' +
+					'<div class="row"><label class="col-sm-3 col-md-3">Status:</label>       <div class="col-sm-9 col-md-9">' + currentWf.status     + '</div></div>' +
+					'<div class="row"><label class="col-sm-3 col-md-3">Visibility:</label>   <div class="col-sm-9 col-md-9">' + currentWf.visibility + '</div></div>' +
+					'<div class="row"><label class="col-sm-3 col-md-3">Active:</label>       <div class="col-sm-9 col-md-9">' +  (currentWf.active ? "yes" : "no")  + '</div></div>';
+	$("#traceExecutions .details").html(wfDetails);
 	
-	getWorkflowExecutions(currentWf.id);
+	pendingItemsList.html("");
+	currentItemsList.html("");
+	
+	$.when(getWorkflowExecutions(currentWf.id))
+	.done(function () {
+		renderExecutions(currentWf.id);
+	});
 });
 //# sourceURL=workflow-trace-executions.js
 </script>

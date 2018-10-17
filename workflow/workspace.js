@@ -58,10 +58,6 @@ function describeArc(x, y, radius, startAngle, endAngle){
 
     var toolboxSidebar = {
     	elTBS: $("#toolboxSidebar"),
-        elDatasourceSearch: $("#datasources-search"),
-        elDatasourceList: $("#datasourceslist"),
-        elModuleSearch: $("#modules-search"),
-        elModuleList: $("#moduleslist"),
         init: function () {
             var a = this;
     	    a.elTBS.on("click", ".toolbox-bar-close", function(e){
@@ -81,7 +77,7 @@ function describeArc(x, y, radius, startAngle, endAngle){
             $( ".toolboxAccordion", a.elTBS).accordion({
                 heightStyle: "fill",
                 collapsible: true,
-                active: 1,
+                active: 2,
                 animate: 500
             });
             //add resize handler
@@ -96,42 +92,28 @@ function describeArc(x, y, radius, startAngle, endAngle){
                 this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
                 e.preventDefault();
             });
-//
-            $( ".fa-search", a.elDatasourceSearch).show();
-            $( ".fa-times", a.elDatasourceSearch).hide().on("click",function(){
+
+            $( ".fa-search", a.elTBS).show();
+            $( ".fa-times", a.elTBS).hide().on("click",function(){
                 $(this).parent().find("input").val("").trigger("keyup");
-            });
-            a.elDatasourceSearch.on('keyup','input', function(e){
-                var q = $(this).val();
-                if(q && q.length>0){
-                    $( ".fa-search", a.elDatasourceSearch).hide();
-                    $( ".fa-times", a.elDatasourceSearch).show();
-                    $( "sortable_item", a.elDatasourceList).hide();
-                    $( ".item-label:ci_search('"+q+"')", a.elDatasourceList).closest("sortable_item").show();
-                }else{
-                    $( ".fa-search", a.elDatasourceSearch).show();
-                    $( ".fa-times", a.elDatasourceSearch).hide();
-                    $( "sortable_item", a.elDatasourceList).show();
-                }
             });
 
-            $( ".fa-search", a.elModuleSearch).show();
-            $( ".fa-times", a.elModuleSearch).hide().on("click",function(){
-                $(this).parent().find("input").val("").trigger("keyup");
-            });
-            a.elModuleSearch.on('keyup','input', function(e){
+            a.elTBS.on('keyup','.toolbox-search>input', function(e){
                 var q = $(this).val();
+                var $s = $(this).parent();
+                var $l = $s.next();
                 if(q && q.length>0){
-                    $( ".fa-search", a.elModuleSearch).hide();
-                    $( ".fa-times", a.elModuleSearch).show();
-                    $( "sortable_item", a.elModuleList).hide();
-                    $( ".item-label:ci_search('"+q+"')", a.elModuleList).closest("sortable_item").show();
+                    $( ".fa-search", $s).hide();
+                    $( ".fa-times", $s).show();
+                    $( "sortable_item", $l).hide();
+                    $( ".item-label:ci_search('"+q+"')", $l).closest("sortable_item").show();
                 }else{
-                    $( ".fa-search", a.elModuleSearch).show();
-                    $( ".fa-times", a.elModuleSearch).hide();
-                    $( "sortable_item", a.elModuleList).show();
+                    $( ".fa-search", $s).show();
+                    $( ".fa-times", $s).hide();
+                    $( "sortable_item", $l).show();
                 }
             });
+			//opens drawable by default
             a.open();
         },
         open: function () {
@@ -157,11 +139,12 @@ function describeArc(x, y, radius, startAngle, endAngle){
     function wf_renderComponentsToolBox(){
         var $elComponentsList = $("#moduleslist");
         var $elDatasurcesList = $("#datasourceslist");
+        var $elUDatasurcesList = $("#udatasourceslist");
         $elComponentsList.empty();
         $elDatasurcesList.empty();
+        $elUDatasurcesList.empty();
         $.each(wfTools.toolboxnodes.pc, function(i, item) {
-            item.image = "./media/logo-"+jsHashCode(item.dna.containerId)+".png";
-
+            item.image = "./media/"+item.dna.containerId+".png";
             var html ='<sortable_item class="item selected" id="'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="pc" data-toolboxid="'+item.id+'">\n' +
                 '\t\t\t\t\t<div class="item-preview">\n' +
                 '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
@@ -175,7 +158,8 @@ function describeArc(x, y, radius, startAngle, endAngle){
             $elComponentsList.append(html);
         });
         $.each(wfTools.toolboxnodes.ds, function(i, item) {
-            var html ='<sortable_item class="item selected" id = "'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="ds" data-toolboxid="'+item.id+'">\n' +
+            item.image = "./media/module-ds.png";
+        	var html ='<sortable_item class="item selected" id = "'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="ds" data-toolboxid="'+item.id+'">\n' +
                 '\t\t\t\t\t<div class="item-preview">\n' +
                 '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
                 '\t\t\t\t\t\t<img src="'+item.image+'" style="width: 100%; height: 100%;">\n' +
@@ -187,9 +171,23 @@ function describeArc(x, y, radius, startAngle, endAngle){
                 '\t\t\t\t</sortable_item>';
             $elDatasurcesList.append(html);
         });
+        $.each(wfTools.toolboxnodes.uds, function(i, item) {
+            item.image = "./media/module-ds.png";
+            var html ='<sortable_item class="item selected" id = "'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="uds" data-toolboxid="'+item.id+'">\n' +
+                '\t\t\t\t\t<div class="item-preview">\n' +
+                '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
+                '\t\t\t\t\t\t<img src="'+item.image+'" style="width: 100%; height: 100%;">\n' +
+                '\t\t\t\t\t  </vectr_img>\n' +
+                '\t\t\t\t\t</div>\n' +
+                '\t\t\t\t\t<div class="item-info">\n' +
+                '\t\t\t\t\t  <div class="item-label text-left">'+item.label+'</div>\n' +
+                '\t\t\t\t\t</div>\n' +
+                '\t\t\t\t</sortable_item>';
+            $elUDatasurcesList.append(html);
+        });
 
         //make toolbox items draggable & droppable
-        $("#moduleslist .item, #datasourceslist .item").draggable({
+        $("#moduleslist .item, #datasourceslist .item, #udatasourceslist .item").draggable({
             revert: "invalid",
             helper: "clone",
             start: function(e, ui)
@@ -198,7 +196,7 @@ function describeArc(x, y, radius, startAngle, endAngle){
             }
         });
         $elCanvas.droppable({
-            accept: "#moduleslist .item, #datasourceslist .item",
+            accept: "#moduleslist .item, #datasourceslist .item, #udatasourceslist .item",
             drop: function (event, ui) {
                 if (event.which !== 1 || event.originalEvent.isTrigger){
                     console.log("node creation canceled by user");
@@ -218,7 +216,7 @@ function describeArc(x, y, radius, startAngle, endAngle){
                     "mlabel":"No Name",
                     "fullData": {
                         componentId: $(ui.helper).data("componentid"),
-                        componentType: (function(c){if(c==="ds") return "DATASOURCE"; if(c==="pc") return "PROCESSING"}(compType)),
+                        componentType: (function(c){if(c==="ds") return "DATASOURCE"; if(c==="uds") return "DATASOURCE"; if(c==="pc") return "PROCESSING"}(compType)),
                         created: arrayFromDatetime(),
                         customValues:[],
                         //id:0, !!! do not send id!!!

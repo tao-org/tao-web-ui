@@ -1,242 +1,257 @@
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-    <h1>User files<small>Full list of <strong>your files</strong>.</small></h1>
+    <h1>Files<small>Full list of <strong>files</strong>.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">My Files</li>
     </ol>
 </section>
-<!-- /Content Header (Page header) -->
 <!-- Main content -->
 <section id="tree-content" class="content">
     <div class="row">
         <div class="col-md-12">
 			<div class="box">
-				<div class="box-header empty"></div>
+				<div class="box-header">
+					<div class="treeview-header">
+						<h4>Your files:</h4>
+						<button id="uploadFiles" class="btn bg-green btn-flat"><i class="fa fa-upload fa-fw"></i>Upload files</button>
+						<button id="groupFiles" class="btn bg-green btn-flat" disabled><i class="fa fa-square-o fa-fw"></i>Send selected</button>
+						<div class="col-md-12 loading hidden">
+							<img src="./assets/dist/img/loading.gif" />
+						</div>
+					</div>
+				</div>
 				<div class="box-body">
-					<div class="col-md-12 col-sm-12">
-						<div id="toolbox-browser" class="toolbox">
-							<div class="treeview"></div>
-							<div id="properties" class="hidden">
-								<div id="rm-previewattributes" class="box-shadow--6dp">
-									<div class="callout attributes-holder">
-										<h4 class="title">File name</h4>
-										<button type="button" class="close">×</button>
-										<div class="holder"><div>
-											<table class="table table-hover">
-												<thead><tr><th>Name</th><th>Value</th></tr></thead>
-												<tbody></tbody>
-											</table>
-											<div class="imagepreview-holder hidden"><div><span class="fa fa-expand fa-fw full-preview"></span><img src=""/></div></div></div>
-										</div>
-									</div>
-									<div class="callout actions-holder">
-										<h4>Actions</h4>
-										<table class="actions-set for-folders">
-											<tr class="action share-holder">
-												<td><span class="action-name">Share</span></td>
-												<td><span class="action-info"></span></td>
-												<td>
-													<div class="TSwitch">
-														<input id="TSPrimary" name="share-folder" type="checkbox" disabled/>
-														<label for="TSPrimary" class="label-success"></label>
-													</div>
-												</td>
-											</tr>
-											<tr class="action delete-holder">
-												<td><span class="action-name">Delete</span></td>
-												<td><span class="action-info"></span></td>
-												<td><button class="btn bg-green btn-flat" disabled><i class="fa fa-trash fa-fw"></i>Delete product</button></td>
-											</tr>
-										</table>
-										<table class="actions-set for-files">
-											<tr class="action download-holder">
-												<td><span class="action-name">Download</span></td>
-												<td><span class="action-info"></span></td>
-												<td><a href="#"><button class="btn bg-green btn-flat" disabled><i class="fa fa-download fa-fw"></i>Download file</button></a></td>
-											</tr>
-											<tr class="action delete-holder">
-												<td><span class="action-name">Delete</span></td>
-												<td><span class="action-info"></span></td>
-												<td><button class="btn bg-green btn-flat" disabled><i class="fa fa-trash fa-fw"></i>Delete file</button></td>
-											</tr>
-										</table>
-									</div>
+					<div class="treeview sub"></div>
+					<div id="properties" class="folder hidden">
+						<div class="box-shadow--6dp properties-content">
+							<div class="callout properties-holder">
+								<div class="callout-title"><h4 class="title">File name</h4></div>
+								<button type="button" class="close">&times;</button>
+								<div class="holder"><div>
+									<table class="table table-hover">
+										<thead><tr><th>Name</th><th>Value</th></tr></thead>
+										<tbody></tbody>
+									</table>
+									<div class="imagepreview-holder hidden"><div><span class="fa fa-expand fa-fw full-preview"></span><img src=""/></div></div></div>
 								</div>
+							</div>
+							<div class="callout actions-holder">
+								<div class="callout-title"><h4>Actions</h4></div>
+								<table class="actions-set for-folders">
+									<tr class="action share-holder">
+										<td><span class="action-name">Share</span></td>
+										<td><span class="action-info"></span></td>
+										<td>
+											<div class="TSwitch">
+												<input id="TSPrimary" name="share-folder" type="checkbox" disabled/>
+												<label for="TSPrimary" class="label-success"></label>
+											</div>
+										</td>
+									</tr>
+									<tr class="action delete-holder">
+										<td><span class="action-name">Delete</span></td>
+										<td><span class="action-info"></span></td>
+										<td><button class="btn bg-green btn-flat" disabled><i class="fa fa-trash fa-fw"></i>Delete product</button></td>
+									</tr>
+								</table>
+								<table class="actions-set for-files">
+									<tr class="action download-holder">
+										<td><span class="action-name">Download</span></td>
+										<td><span class="action-info"></span></td>
+										<td><a href="#"><button class="btn bg-green btn-flat"><i class="fa fa-download fa-fw"></i>Download file</button></a></td>
+									</tr>
+									<tr class="action delete-holder">
+										<td><span class="action-name">Delete</span></td>
+										<td><span class="action-info"></span></td>
+										<td><button class="btn bg-green btn-flat" disabled><i class="fa fa-trash fa-fw"></i>Delete file</button></td>
+									</tr>
+								</table>
 							</div>
 						</div>
 					</div>
-			   </div>
-				<div class="box-header empty"></div>
+				</div>
 			</div>
         </div>
     </div>
 </section>
+<!-- modal dialog for uploading files -->
+<div id="myModalUpload" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title">Upload</h1>
+			</div>
+			<form id="frmUploadFile" class="form-horizontal" enctype="multipart/form-data" role="form">
+				<div class="modal-body">
+					<section class="upload-message collapse">
+						<h4>File successfully uploaded.</h4>
+					</section>
+					<section class="upload-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label class="col-sm-12 col-md-12">File:</label>
+									<div class="col-sm-12 col-md-12">
+										<input type="file" class="form-control" name="file" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-12 col-md-12">Description:</label>
+									<div class="col-sm-12 col-md-12">
+										<textarea class="form-control" name="desc" placeholder="File description"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<div class="col-md-12 col-sm-12">
+										<button type="submit" class="btn btn-primary btn-submit">Upload selected file</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button class="btn btn-default back-button collapse" style="float:left">Back</button>
+				<button class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <style>
-.toolbox{width:100%}
-.toolbox>div{width:100%}
+/* ===== HEADER ===== */
+#tree-content .box-header{padding:0}
+#tree-content .treeview-header{display:inline-block;padding:10px;width:100%}
+#tree-content .treeview-header>*{display:inline-block}
+#tree-content .treeview-header h4{float:left;margin:7px 0 7px 10px}
+#tree-content .treeview-header button{float:right;margin-left:10px}
+#tree-content .loading{height:60px;overflow:hidden;text-align:center;width:100%}
+#tree-content .loading img{margin-top:-122px}
+#tree-content .box-body{padding:0 25px 20px 25px}
 /* ===== TREEVIEW ===== */
-.toolbox .treeview{margin-left:10px}
-.toolbox .treeview input[type="checkbox"]{display:none}
-.toolbox .treeview a{width:100%;display:block;cursor:pointer;padding:5px 0;line-height:1.1em}
-.toolbox .treeview a:hover,
-.toolbox .treeview a.selected{background-color:#ecf0f5;color:#0f5075}
-.toolbox .treeview a span{float:right;padding:0 10px 0 7px;width:110px;text-align:right;color:#5c5d5e}
-.toolbox .treeview .fa{float:none;width:30px;color:#3c8dbc}
-.toolbox .treeview .fa-folder{color:#ffb85d}
-.toolbox .treeview .fa-public{position:relative}
-.toolbox .treeview .fa-public::after{position:absolute;content:"\f064";font-size:10px;color:#00a65a;right:5px;bottom:-5px;}
-.toolbox .treeview label{position:relative;color:#5c5d5e;display:block;margin-bottom:0}
-.toolbox .treeview label a{margin-left:0}
-.toolbox .treeview label::before{display:block;position:absolute;top:0;left:-17px;font-family:'FontAwesome';font-size:18px;padding:0 7px;color:transparent}
-.toolbox .treeview label::before{content:'\f105';margin-left:0}
-.toolbox .treeview input:checked+label::before{content:'\f107';margin-left:-3px}
-.toolbox .treeview input:checked+label .fa-folder::before{content:'\f07c'}
-.toolbox .treeview:hover label::before{color:#b9b9b9}
-.toolbox .treeview:hover input:checked+label::before{color:#5c5d5e}
-.toolbox .treeview .sub{display:none;margin-left:20px}
-.toolbox .treeview input:checked~.sub{display:block}
+#tree-content .treeview{margin-left:10px}
+#tree-content .treeview input[type="checkbox"]{display:none}
+#tree-content .treeview a{width:100%;display:block;cursor:pointer;padding:0;line-height:1.8em;max-height:1.8em;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#tree-content .treeview a:hover,
+#tree-content .treeview a.selected{background-color:#ecf0f5;color:#0f5075}
+#tree-content .treeview a span{float:right;padding:0 10px 0 7px;width:110px;text-align:right;color:#5c5d5e}
+#tree-content .treeview .fa{float:none;width:30px;color:#3c8dbc}
+#tree-content .treeview .fa-folder{color:#ffb85d}
+#tree-content .treeview .fa-public{position:relative}
+#tree-content .treeview .fa-public::after{position:absolute;content:"\f064";font-size:10px;color:#00a65a;right:5px;bottom:-5px;}
+#tree-content .treeview label{position:relative;color:#5c5d5e;display:block;margin-bottom:0}
+#tree-content .treeview label::before{display:block;position:absolute;top:0;left:-17px;font-family:'FontAwesome';font-size:18px;padding:0 7px;color:transparent}
+#tree-content .treeview label::before{content:'\f105';margin-left:0}
+#tree-content .treeview input:checked+label::before{content:'\f107';margin-left:-3px}
+#tree-content .treeview input:checked+label .fa-folder::before{content:'\f07c'}
+#tree-content .treeview:hover label::before{color:#b9b9b9}
+#tree-content .treeview:hover input:checked+label::before{color:#5c5d5e}
+#tree-content .treeview .sub{display:none;margin-left:22px}
+#tree-content .treeview input:checked~.sub{display:block}
+#tree-content .treeview .select-for{display:inline !important;position:absolute;left:6px;margin:0;top:5px;width:15px !important;height:15px !important;-webkit-appearance:none;-moz-appearance:none;-o-appearance:none;appearance:none;outline:1px solid rgba(89, 161, 185, 0.25);box-shadow:none;font-size:2em;outline-offset:-2px;cursor:pointer;color:transparent}
+#tree-content .treeview .select-for::before{position:absolute;left:4px;top:4px;content:"\002713";font-size:18px;line-height:0}
+#tree-content .treeview .select-for:checked{display:inline;outline:1px solid #59a1b9 !important;color:#ff7000}
+#tree-content .treeview a:hover .select-for{outline:1px solid #59a1b9}
+#tree-content .has-selectable-for>div>label>a>span.fa-folder{margin-left:20px}
+#tree-content .has-selectable-for>div>.sub{margin-left:43px}
 /* ===== PROPERTIES ===== */
-#properties{position:fixed;right:2%;width:37%;z-index:9998}
-#properties button.close{position:absolute;top:7px;right:12px;opacity:1;color:white}
+#properties.folder .for-files{display:none}
+#properties.file .for-folders{display:none}
+#tree-content.shared-files #properties.folder .actions-holder{display:none}
+#tree-content.shared-files #properties.file   .delete-holder {display:none}
+#properties{position:fixed;right:25px;width:30%;z-index:998}
+#properties button.close{position:absolute;top:10px;right:12px;opacity:1;color:#3c8dbc;outline:0}
 #properties button.close:hover{color:#8bccf3}
-#properties .box-shadow--6dp{margin-bottom:15px}
+#properties .properties-content{background-color:white;border-radius:5px;overflow:hidden}
 #properties .box-header{overflow-x:hidden}
 #properties .callout{padding:0;border:0;background-color:white;margin:0;border-radius:0}
-#properties h4{margin:0;background-color:#3c8dbc;color:white;padding:10px}
+#properties        .callout-title{border-top:5px solid rgb(121, 189, 228);background-color:rgba(60, 141, 188, 0.1);width:100%}
+#properties.folder .callout-title{border-top:5px solid rgb(255, 184,  93);background-color:rgba(255, 184, 93, 0.1)}
+#properties h4{margin:0;color:#3c8dbc;font-weight:400;padding:0 10px;width:90%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:2.2em;max-height:2.2em}
 #properties .btn.bg-green{float:right;width:130px;margin:5px 0}
 #properties .btn.bg-green.btn-xs{margin:0}
 #properties .btn.bg-green:disabled{border:1px solid #dadada;color:#9a9a9a !important;background-color:white !important;opacity:0.6}
 #properties table{width:100%;margin-bottom:0}
 #properties table td{padding:5px 10px;line-height:1.2em}
 #properties table td:first-child{width:25%}
+#properties .properties-holder .holder{overflow:auto}
 #properties .actions-holder td:last-child{width:130px;text-align:right;height:50px}
-.action-name{font-size:16px;font-weight:600;color:#3c8dbc}
-.imagepreview-holder{text-align:center;margin:10px 0;position:relative}
-.imagepreview-holder>div{text-align:center;display:inline-block;position:relative}
-.imagepreview-holder img{width:100%}
-.imagepreview-holder .full-preview {
-	position: absolute;
-    top: 10px;
-    right: 10px;
-    font: normal normal normal 14px/1 FontAwesome;
-    font-size: 18px;
-    color: white;
-    background-color: #00a65a;
-    border: 2px solid white;
-    border-radius: 5px;
-    width: 28px;
-    height: 28px;
-    margin: 0;
-    padding: 3px;
-    cursor: pointer;
-}
-.imagepreview-holder .full-preview:hover{background-color:#00894b}
-.imagepreview-holder.full-screen {
-	position: fixed;
-    top: 0;
-    z-index: 9999;
-    left: 0;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    height: 100%;
-    cursor: pointer;
-    overflow: auto;
-}
-.imagepreview-holder.full-screen>div{position:unset}
-.imagepreview-holder.full-screen img{position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:auto;border:5px solid rgba(255, 255, 255, 0.3);border-radius:5px;max-width:100%;max-height:100%}
-.fa-fw{margin-right:5px}
-.attributes-holder .holder{overflow:auto}
+#properties .action-name{font-size:16px;font-weight:600;color:#3c8dbc}
+#properties .imagepreview-holder{text-align:center;margin:10px 0;position:relative}
+#properties .imagepreview-holder>div{text-align:center;display:inline-block;position:relative}
+#properties .imagepreview-holder img{width:100%}
+#properties .imagepreview-holder .full-preview{position:absolute;top:10px;right:10px;font:normal normal normal 14px/1 FontAwesome;font-size:18px;color:white;background-color:#00a65a;border:2px solid white;border-radius:5px;width:28px;height:28px;margin:0;padding:3px;cursor:pointer}
+#properties .imagepreview-holder .full-preview:hover{background-color:#00894b}
+#tree-content .full-screen{position:fixed;top:0;z-index:9999;left:0;width:100%;margin:0;padding:0;background-color:rgba(0, 0, 0, 0.5);height:100%;cursor:pointer;overflow:auto}
+#tree-content .full-screen>div{position:unset}
+#tree-content .full-screen img{position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:auto;border:5px solid rgba(255, 255, 255, 0.3);border-radius:5px;max-width:100%;max-height:100%}
+#tree-content .fa-fw{margin-right:5px}
+/* ===== Upload dialog box ===== */
+.upload-message.error{color:red}
+.upload-message h4{background-color:transparent;margin:-15px;padding:15px}
+.upload-message.error h4{margin-bottom:0;background-color:#ff00001c}
+.form-control~label.error{font-weight:400;color:red}
 /* ===== SWITCH ===== */
-.TSwitch {
-	text-align: center;
-    position: relative;
-    width: 130px;
-    height: 34px;
-    margin: 5px 0;
-}
+.TSwitch{text-align:center;position:relative;width:130px;height:34px;margin:5px 0}
 .TSwitch>input[type="checkbox"]{display:none}
-.TSwitch>label{
-	cursor:pointer;
-	height: 0px;
-	width: 130px;
-	font-weight: 400;
-	font-family: 'FontAwesome','Source Sans Pro','Helvetica Neue';
-	font-size: 14px;
-}
-.TSwitch>label::before {
-    background: #dadada;
-	border: 1px solid #dadada;
-    border-radius: 9px;
-    content: '';
-    height: 18px;
-    position: absolute;
-    top: 8px;
-    left: 0;
-    width: 130px;
-    transition: all 0.4s ease-in-out;
-}
-.TSwitch>label::after {
-    background: rgb(255, 255, 255);
-    border: 1px solid #bce6d3;
-    content: 'Share \00A0\00A0\f054';
-    height: auto;
-    position: absolute;
-    width: auto;
-    padding: 8px 12px;
-    top: 0;
-    left: 10px;
-    right: 30px;
-    text-align: left;
-    color: #00a65a;
-    transition: all 0.3s ease-in-out;
-}
-.TSwitch>input[type="checkbox"]:checked+label::before {
-	background-color: #bce6d3;
-	border-color: #9ed4bc;
-    content: '';
-}
-.TSwitch>input[type="checkbox"]:disabled+label::before {
-    content: '';
-    background-color: transparent;
-    border-color: #ececec;
-	cursor: default;
-}
-.TSwitch>input[type="checkbox"]:checked+label::after {
-    background: inherit;
-    content: '\f053\00A0\00A0 Unshare';
-    left: 30px;
-	right: 10px;
-    text-align: right;
-	color: white;
-	border-color: #00a65a;
-}
-.TSwitch>input[type="checkbox"]:disabled+label::after {
-    content: '\f057\00A0\00A0 Disabled';
-    text-align: center;
-    color: rgba(154, 154, 154, 0.65);
-    left: 15px;
-    right: 15px;
-    cursor: default;
-    border-color: #ececec;
-}
+.TSwitch>label{cursor:pointer;height:0px;width:130px;font-weight:400;font-family:'FontAwesome','Source Sans Pro','Helvetica Neue';font-size:14px}
+.TSwitch>label::before{background:#dadada;border:1px solid #dadada;border-radius:9px;content:'';height:18px;position:absolute;top:8px;left:0;width:130px;transition:all 0.4s ease-in-out}
+.TSwitch>label::after{background:rgb(255, 255, 255);border:1px solid #bce6d3;content:'Share \00A0\00A0\f054';height:auto;position:absolute;width:auto;padding:8px 12px;top:0;left:10px;right:30px;text-align:left;color:#00a65a;transition:all 0.3s ease-in-out}
+.TSwitch>input[type="checkbox"]:checked+label::before{background-color:#bce6d3;border-color:#9ed4bc;content:''}
+.TSwitch>input[type="checkbox"]:disabled+label::before{content:'';background-color:transparent;border-color:#ececec;cursor:default}
+.TSwitch>input[type="checkbox"]:checked+label::after{background:inherit;content:'\f053\00A0\00A0 Unshare';left:30px;right:10px;text-align:right;color:white;border-color:#00a65a}
+.TSwitch>input[type="checkbox"]:disabled+label::after{content:'\f057\00A0\00A0 Disabled';text-align:center;color:rgba(154, 154, 154, 0.65);left:15px;right:15px;cursor:default;border-color:#ececec}
+
+#tree-content .treeview.compact{width:55%}
+
 </style>
 
 <script>
 // Check which page to dispay "My Files" or "Shared Files"
-var sharedFiles    = decodeURI(window.location.hash).indexOf("shared") >= 0;
+var sharedFiles = decodeURI(window.location.hash).indexOf("shared") >= 0;
 
 // BSwitch options
-var compsTree = $(".toolbox .treeview");
+var compsTree = $("#tree-content .treeview");
+
+function detectIE() {
+	var ua = window.navigator.userAgent;
+	
+	// IE 10 or older => return version number
+	var msie = ua.indexOf('MSIE ');
+	if (msie > 0) {
+		return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+	}
+	
+	// IE 11 => return version number
+	var trident = ua.indexOf('Trident/');
+	if (trident > 0) {
+		var rv = ua.indexOf('rv:');
+		return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+	}
+	
+	// Edge (IE 12+) => return version number
+	var edge = ua.indexOf('Edge/');
+	if (edge > 0) {
+	   return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+	}
+	
+	// other browser
+	return false;
+}
 
 function refreshTree() {
 	var deferred = $.Deferred();
 	
+	$("#tree-content .loading").removeClass("hidden");
 	$.ajax({
-		url: baseRestApiURL + "files" + (sharedFiles ? "/public/" : "/user/"),
+		url: baseRestApiURL + "files/" + (sharedFiles ? "public" : "user") + "/",
 		type: "GET",
 		dataType: 'json',
 		beforeSend: function(xhr) {
@@ -245,12 +260,15 @@ function refreshTree() {
 			xhr.setRequestHeader("X-Auth-Token", tokenKey);
 		},
 		error: function (jqXHR, textStatus) {
+			$("#tree-content .loading").addClass("hidden");
+			
 			var msg = "Error while loading files.";
-			alert(msg);
 			compsTree.closest(".box").addClass("box-warning");
 			deferred.reject(jqXHR, textStatus, msg);
 		},
 		success: function(response) {
+			$("#tree-content .loading").addClass("hidden");
+			
 			if (response.status == responseStatus.success) {
 				renderTree(response.data);
 				compsTree.closest(".box").addClass("box-success");
@@ -264,44 +282,60 @@ function refreshTree() {
 	return deferred.promise();
 }
 
-function getParentFolder(relPath) {
-	var relativePath = relPath.replace(/\//g, "\\");
-	var parentId = relativePath.substring(0, relativePath.lastIndexOf("\\"));
-	var parent = $("input[id='" + parentId.replace(/\\/g, "\\\\") + "']").parent().find(">.sub");
+function getParentFolder(relativePath) {
+	var parentId = relativePath.substring(0, relativePath.lastIndexOf("/"));
+	var parent = $("input[id='" + parentId + "']").parent().find(">.sub");
 	if (parent.length == 0) { parent = compsTree; }
 	return parent;
 }
 
-function renderFolder(relPath, attributes) {
-	var relativePath = relPath.replace(/\//g, "\\");
+function renderFolder(relPath, file) {
+	var attributes = (file != null ? file.attributes : null);
+	var relativePath = relPath.replace(/\\/g, "/");
 	
 	// get parent, render if null
 	var parent = getParentFolder(relativePath);
-	if (parent == compsTree && relativePath.indexOf("\\") >= 0 ) {
-		parent = renderFolder(relativePath.substring(0, relativePath.lastIndexOf("\\")), null);
-	}
-	
-	var chk = parent.find("input[id='" + relativePath.replace(/\\/g, "\\\\") + "']");
-	// render folder if null
-	if (chk.length == 0) {
-		var id = relativePath;
-		var faPublic = attributes && attributes.visibility != undefined && attributes.visibility == "PUBLIC";
-		var element = $('<div' + (relativePath == 'files' ? ' class="files-folder"' : '') + '><input type="checkbox" id="' + id + '"><label for="' + id +  '"><a href="#"><span class="fa fa-folder' + (faPublic ? " fa-public" : "") + '"></span>' + relativePath.substring(relativePath.lastIndexOf("\\") + 1) + '</a></label><div class="sub"></div></div>');
-		element.data("attributes", attributes);
-		parent.append(element);
-		chk = parent.find("input[id='" + relativePath.replace(/\\/g, "\\\\") + "']");
+	if (parent == compsTree && relativePath.indexOf("/") >= 0 ) {
+		parent = renderFolder(relativePath.substring(0, relativePath.lastIndexOf("/")), null);
 	}
 	
 	if (!attributes) { attributes = {}; }
-	attributes.fileInfo = {};
+	attributes.fileInfo              = {};
 	attributes.fileInfo.relativePath = relativePath;
-	attributes.fileInfo.fileSize = 0;
-	attributes.fileInfo.fileName = relativePath.substring(relativePath.lastIndexOf("\\") + 1);
-	attributes.fileInfo.fileType = "folder";
-	attributes.fileInfo.uri = "";
-	chk.parent().find(">label a").data("attributes", attributes);
+	attributes.fileInfo.fileSize     = 0;
+	attributes.fileInfo.fileName     = relativePath.substring(relativePath.lastIndexOf("/") + 1);
+	attributes.fileInfo.fileType     = "folder";
+	attributes.fileInfo.uri          = "";
 	
-	return chk.parent().find(">.sub");
+	// render folder if not found
+	var chk = parent.find("input[id='" + relativePath + "']");
+	if (chk.length == 0) {
+		var faPublic = attributes.visibility === "PUBLIC";
+		var selectable = sharedFiles && file != null && file.productName != undefined;
+		var element = $('<div' + (relativePath == 'files' ? ' class="files-folder"' : '') + ">" +
+							'<input type="checkbox" id="' + relativePath + '">' +
+							'<label for="' + relativePath + '">' +
+								'<a href="#" title="' + attributes.fileInfo.fileName + '">' +
+									(selectable ? '<input type="checkbox" class="select-for" />' : '') +
+									'<span class="fa fa-folder' + (faPublic ? " fa-public" : "") + '"></span>' +
+									attributes.fileInfo.fileName +
+								'</a>' +
+							'</label>' +
+							'<div class="sub"></div>' +
+						'</div>');
+		
+		// Make sure "/files" folder is always last in list
+		var filesFolder = $("#tree-content .treeview .files-folder");
+		if (filesFolder.length > 0 && parent.hasClass("treeview")) {
+			filesFolder.prepend(element);
+		} else {
+			parent.append(element);
+		}
+		chk = parent.find("input[id='" + relativePath + "']");
+	}
+	chk.find("~label>a").data("attributes", attributes);
+	
+	return chk.find("~.sub");
 }
 
 // Render tree: folders and files
@@ -311,13 +345,9 @@ function renderTree(response) {
 	// Render tree folders first
 	$.each(response, function (index, file) {
 		if (file.folder && file.relativePath != "") {
-			renderFolder(file.relativePath, file.attributes);
+			renderFolder(file.relativePath, file);
 		}
 	});
-	// Move "/files" folder at the end
-	var attributes = $(".toolbox .treeview .files-folder>label a").data("attributes");
-	$(".toolbox .treeview .files-folder").remove().insertAfter($(".toolbox .treeview>div:last-child"));
-	$(".toolbox .treeview .files-folder>label a").data("attributes", attributes);
 	
 	// Render files
 	$.each(response, function (index, file) {
@@ -334,14 +364,14 @@ function renderTree(response) {
 			} else {
 				size = parseFloat(size / 1024 / 1024 / 1024 / 1024, 2).toFixed(2) + " TB";
 			}
-			var relPath = file.relativePath.replace(/\//g, "\\");
-			var name    = relPath.substring(relPath.lastIndexOf("\\") + 1);
-			var type    = file.relativePath.substring(file.relativePath.lastIndexOf("."));
-			var folder  = getParentFolder(file.relativePath);
+			var relPath = file.relativePath.replace(/\\/g, "/");
+			var name    = relPath.substring(relPath.lastIndexOf("/") + 1);
+			var type    = relPath.substring(relPath.lastIndexOf("."));
+			var folder  = getParentFolder(relPath);
 			
 			// add "public/" prefix to filePath for all shared files in /public/files/
-			var addPublicPrefix = (sharedFiles && file.relativePath.startsWith("files")) ? "public/" : "";
-			var href   = baseRestApiURL + 'files/download?fileName=' + addPublicPrefix + file.relativePath.replace(/\\/g, "/");
+			var addPublicPrefix = (sharedFiles && relPath.substr(0, 6) == "files/") ? "public/" : "";
+			var href = baseRestApiURL + 'files/download?fileName=' + addPublicPrefix + relPath;
 			
 			var fafile = "fa-file-o";
 			switch (type) {
@@ -353,14 +383,15 @@ function renderTree(response) {
 				case ".tif" : fafile = "fa-file-image-o"  ; break;
 				case ".png" : fafile = "fa-file-image-o"  ; break;
 				case ".jpg" : fafile = "fa-file-image-o"  ; break;
+				case ".jpeg": fafile = "fa-file-image-o"  ; break;
 				case ".pdf" : fafile = "fa-file-pdf-o"    ; break;
 				case ".zip" : fafile = "fa-file-archive-o"; break;
 			}
-			var element = $('<a href="#"><span class="fa ' + fafile + '"></span>' + name + '<span>' + size + '</span>' + '<span>' + type + '</span>' + '</a>');
+			var element = $('<a href="#" title="' + name + '"><span class="fa ' + fafile + '"></span>' + name + '<span>' + size + '</span>' + '<span>' + type + '</span>' + '</a>');
 			
 			if (!file.attributes) { file.attributes = {}; }
 			file.attributes.fileInfo = {};
-			file.attributes.fileInfo.relativePath = file.relativePath;
+			file.attributes.fileInfo.relativePath = relPath;
 			file.attributes.fileInfo.fileSize = size;
 			file.attributes.fileInfo.fileName = name;
 			file.attributes.fileInfo.fileType = type;
@@ -370,9 +401,206 @@ function renderTree(response) {
 			folder.append(element);
 		}
 	});
+	
+	// Adjust folder indentation
+	$("#tree-content .treeview .select-for").closest(".sub").addClass("has-selectable-for");
 }
 
-function setPreviewImageBase64(attributes) {
+// ==== PROPERTIES WINDOW SECTION =====================================================================
+
+// Adjust properties windows size and position to properly fit inside browser's window
+var resizeTimer;
+$(window).on("ready resize", function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(function() { adjustPropertiesPosition(); }, 250); });
+$(window).on("scroll", function() { adjustPropertiesPosition(); });
+function adjustPropertiesPosition() {
+	var scrollTop  = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
+	var treeTop    = $("#tree-content .treeview").offset().top;
+	var contentTop = $("#tree-content .treeview-header").offset().top + $("#tree-content .treeview-header").outerHeight();
+	
+	var sumHeight = 15;
+	$.each($("#properties .callout"), function () {
+		sumHeight += $(this).hasClass("properties-holder") ? $(this).find(".title").outerHeight() : $(this).outerHeight();
+	});
+	
+	var newTop = treeTop - scrollTop;
+	if (contentTop - scrollTop < 0) {
+		newTop = treeTop - contentTop;
+	}
+	var newWidth = $("#tree-content .box-body").width() - $("#tree-content .treeview").width();
+	$("#properties").css({ "width": newWidth + "px", "top": newTop + "px" });
+	
+	var newHeight = $(window).height() - newTop - sumHeight - (treeTop - contentTop);
+	$("#properties .properties-holder .holder").css({ "max-height": newHeight + "px" });
+	
+	if ($("#properties .properties-holder .holder").outerHeight() >= $("#properties .properties-holder .holder>div").outerHeight()) {
+		$("#properties .properties-holder .holder").css({ "overflow-y": "unset" });
+	} else {
+		$("#properties .properties-holder .holder").css({ "overflow-y": "" });
+	}
+}
+
+// Select which actions to be displayed for the selected element (folder/file)
+function displayActions(attributes) {
+	// Display actions for folders
+	if ($("#properties.folder").length > 0) {
+		// Delete
+		if (attributes.id != undefined && attributes.visibility == "PRIVATE") {
+			$(".for-folders .delete-holder .action-info").text("Delete selected product.");
+			$(".for-folders .delete-holder button").attr('disabled', false);
+		} else {
+			$(".for-folders .delete-holder .action-info").text(attributes.id == undefined ? "This folder can not be deleted" : "This product is public and can not be deleted.");
+			$(".for-folders .delete-holder button").attr('disabled', true);
+		}
+		
+		// Sharing
+		if (attributes.visibility == "PUBLIC") {
+			// Folder is PUBLIC
+			$(".for-folders .share-holder .action-info").text("This product is public");
+			$(".for-folders .TSwitch>input[type='checkbox']").prop('checked', true);
+			$(".for-folders .TSwitch>input[type='checkbox']").attr('disabled', false);
+		} else if (attributes.visibility == "PRIVATE") {
+			// Folder is PRIVATE
+			$(".for-folders .share-holder .action-info").text("This product is not public");
+			$(".for-folders .TSwitch>input[type='checkbox']").prop('checked', false);
+			$(".for-folders .TSwitch>input[type='checkbox']").attr('disabled', false);
+		} else {
+			// Folder sharing status in unknown
+			$(".for-folders .share-holder .action-info").text("Sharing is disabled for this folder.");
+			$(".for-folders .TSwitch>input[type='checkbox']").prop('checked', false);
+			$(".for-folders .TSwitch>input[type='checkbox']").attr('disabled', true);
+		}
+	// Display actions for files
+	} else {
+		// Download
+		$(".for-files .download-holder .action-info").text("Download size: " + attributes.fileInfo.fileSize);
+		$(".for-files .download-holder a").attr("href", attributes.fileInfo.uri);
+		
+		// Delete
+		if (attributes.fileInfo.relativePath.indexOf("files/") == -1) {
+			$(".for-files .delete-holder .action-info").text("Product contents can not be deleted.");
+			$(".for-files .delete-holder button").attr('disabled', true);
+		} else {
+			$(".for-files .delete-holder .action-info").text("Delete selected file.");
+			$(".for-files .delete-holder button").attr('disabled', false);
+		}
+	}
+}
+
+// Show properties window
+function showPorperties(attributes) {
+	closePorperties();
+	
+	$("#properties .properties-holder .title").text(attributes.fileInfo.fileName);
+	if (attributes.fileInfo.fileType == "folder") {
+		$("#properties").addClass("folder");
+		$("#properties").removeClass("file");
+	} else {
+		$("#properties").removeClass("folder");
+		$("#properties").addClass("file");
+	}
+	
+	var tableBody = $("#properties .properties-holder tbody");
+	var size = 0;
+	$.each(attributes, function (name, value) {
+		if (name == "productType" && value == "GeoTIFF" && attributes.fileInfo.fileType != "folder") {
+			tableBody.append('<tr><td>' + name + '</td><td>' + value + '<button class="btn bg-green btn-flat btn-xs image-preview"><i class="fa fa-eye fa-fw"></i>Toggle quick view</button></td></tr>');
+		} else if (name != "fileInfo") {
+			tableBody.append('<tr><td>' + name + '</td><td>' + value.replace(/[\r\n\x0B\x0C\u0085\u2028\u2029]+/g, "<br/>") + '</td></tr>');
+		} else {
+			size --;
+		}
+		size ++;
+	});
+	if (size == 0) {
+		tableBody.append('<tr><td>-</td><td>-</td></tr>');
+	}
+	
+	// Draw Actions
+	displayActions(attributes);
+	
+	$("#properties").data("attributes", attributes);
+	
+	// Unhide properties window
+	$("#properties").removeClass("hidden");
+	compsTree.addClass("compact");
+}
+
+// Close properties window
+function closePorperties() {
+	// Set attributes default values
+	$("#properties .properties-holder .title").text("File name");
+	var tableBody = $("#properties .properties-holder tbody");
+	tableBody.html("");
+	
+	// Empty image preview
+	$("#properties .imagepreview-holder").addClass("hidden");
+	$("#properties .imagepreview-holder img").attr("src", "");
+	
+	// Set actions default values and availability
+	$("#properties .actions-holder a").attr("href", "");
+	$("#properties .actions-holder .action-info").text("");
+	$("#properties .actions-holder button").attr('disabled', false);
+	$("#properties .actions-holder input[type='checkbox']").prop('checked', true);
+	
+	// Hide properties window and clear data
+	$("#properties").removeClass("file folder").addClass("hidden").removeData("attributes");
+	compsTree.removeClass("compact");
+}
+
+// Update properties window contents when folder or file is selected
+$("#tree-content .treeview").on("click", "a", function (e) {
+	e.preventDefault();
+	
+	$("#tree-content .treeview a.selected").removeClass("selected");
+	$(this).addClass("selected");
+	
+	showPorperties($(this).data("attributes"));
+	adjustPropertiesPosition();
+});
+
+// Toggle folder contents visibility
+$("#tree-content .treeview").on("dblclick", "label", function (e) {
+	if (!$(e.target).hasClass("select-for")) {
+		var chk = $(this).siblings("input[type='checkbox']");
+		chk.prop("checked", !chk.prop("checked"));
+	}
+});
+
+// Actions to perform when selecting at least one product
+$("#tree-content .treeview").on("click", "input.select-for", function (e) {
+	e.stopPropagation();
+	if ($("#tree-content .treeview .select-for:checked").length > 0) {
+		$("#groupFiles i").removeClass("fa-square-o").addClass("fa-check-square-o");
+		$("#groupFiles").prop("disabled", false);
+	} else {
+		$("#groupFiles i").removeClass("fa-check-square-o").addClass("fa-square-o");
+		$("#groupFiles").prop("disabled", true);
+	}
+});
+
+$("#groupFiles").on("click", function (e) {
+	var txt = "<p style='font-size:15px'>The following products have been selected:<br>";
+	$.each($("#tree-content .treeview .select-for:checked"), function (index, prod) {
+		txt += "- " + $(this).parent().data("attributes").fileInfo.fileName + "<br>";
+	});
+	txt += "</p>";
+	showMsg(txt);
+	
+	$("#tree-content .treeview .select-for").prop("checked", false);
+	$("#groupFiles i").removeClass("fa-check-square-o").addClass("fa-square-o");
+	$(this).prop("disabled", true);
+});
+
+// Adjust properties window size and position when image preview is loaded
+$("#properties .imagepreview-holder img").load(function () {
+	$("#properties .imagepreview-holder").removeClass("hidden");
+	$("#properties .properties-holder .holder").css({ "max-height": "" });
+	adjustPropertiesPosition();
+});
+
+// Toggle quick view product
+$("#properties").on("click", "button.image-preview", function (e) {
+	var attributes = $(this).closest("#properties").data("attributes");
 	if ($("#properties .imagepreview-holder img").attr("src") != "") {
 		$("#properties .imagepreview-holder").toggleClass("hidden");
 		adjustPropertiesPosition();
@@ -392,161 +620,10 @@ function setPreviewImageBase64(attributes) {
 			});
 		}
 	}
-}
-
-$("#properties .imagepreview-holder img").load(function(){
-	$("#properties .imagepreview-holder").removeClass("hidden");
-	$("#properties .attributes-holder .holder").css({ "max-height": "" });
-	adjustPropertiesPosition();
+	
 });
 
-function closeAttributes() {
-	// Set attributes default values
-	$("#properties .attributes-holder .title").text("File name");
-	var tableBody = $("#properties #rm-previewattributes .attributes-holder tbody");
-	tableBody.html("");
-	
-	// Empty image preview
-	$("#properties .imagepreview-holder").addClass("hidden");
-	$("#properties .imagepreview-holder img").attr("src", "");
-	
-	// Set actions default values
-	$("#properties .actions-holder a").attr("href", "");
-	$("#properties .actions-holder .action-info").text("");
-	$("#properties .actions-holder button").attr('disabled', true);
-	$("#properties .actions-holder input[type='checkbox']").prop('checked', false);
-	$("#properties .actions-holder input[type='checkbox']").attr('disabled', true);
-	
-	// Set actions visibility
-	$("#properties .actions-holder").removeClass("hidden");
-	$("#properties .actions-holder .actions-set").addClass("hidden");
-	$("#properties .actions-holder .actions-set .action").removeClass("hidden");
-	
-	// Hide properties window and clear data
-	$("#properties").addClass("hidden");
-	$("#properties").removeData("attributes");
-	compsTree.css({ width: "" });
-}
-
-function displayFolderActions(attributes) {
-	if ($(".for-folders").length == 0) {
-		$(".actions-holder").addClass("hidden");
-		return;
-	}
-	
-	// Delete
-	if (attributes.id != undefined && attributes.visibility == "PRIVATE") {
-		$(".for-folders .delete-holder .action-info").text("Delete selected product.");
-		$(".for-folders .delete-holder button").attr('disabled', false);
-	} else {
-		$(".for-folders .delete-holder .action-info").text(attributes.id == undefined ? "This folder can not be deleted" : "This product is public and can not be deleted.");
-		$(".for-folders .delete-holder button").attr('disabled', true);
-	}
-	
-	// Sharing
-	if (attributes.visibility == "PUBLIC") {
-		// Folder is PUBLIC
-		$(".for-folders .share-holder .action-info").text("This product is public");
-		$(".for-folders .TSwitch>input[type='checkbox']").prop('checked', true);
-		$(".for-folders .TSwitch>input[type='checkbox']").attr('disabled', false);
-	} else if (attributes.visibility == "PRIVATE") {
-		// Folder is PRIVATE
-		$(".for-folders .share-holder .action-info").text("This product is not public");
-		$(".for-folders .TSwitch>input[type='checkbox']").prop('checked', false);
-		$(".for-folders .TSwitch>input[type='checkbox']").attr('disabled', false);
-	} else {
-		// Folder sharing status in unknown
-		$(".for-folders .share-holder .action-info").text("Sharing is disabled for this folder.");
-		$(".for-folders .TSwitch>input[type='checkbox']").prop('checked', false);
-		$(".for-folders .TSwitch>input[type='checkbox']").attr('disabled', true);
-	}
-	
-	$(".for-folders").removeClass("hidden");
-}
-
-function displayFileActions(attributes) {
-	if ($(".for-files").length == 0) {
-		$(".actions-holder").addClass("hidden");
-		return;
-	}
-	
-	// Download
-	$(".for-files .download-holder .action-info").text("Download size: " + attributes.fileInfo.fileSize);
-	$(".for-files .download-holder a").attr("href", attributes.fileInfo.uri);
-	$(".for-files .download-holder button").attr('disabled', false);
-	
-	// Delete
-	if (attributes.fileInfo.relativePath.indexOf("files\\") == -1 &&
-		attributes.fileInfo.relativePath.indexOf("files/")  == -1) {
-		$(".for-files .delete-holder .action-info").text("Product contents can not be deleted.");
-		$(".for-files .delete-holder button").attr('disabled', true);
-		//$(".for-files .delete-holder").addClass("hidden");
-	} else {
-		$(".for-files .delete-holder .action-info").text("Delete selected file.");
-		$(".for-files .delete-holder button").attr('disabled', false);
-	}
-	
-	$(".for-files").removeClass("hidden");
-}
-
-function displayAttributes(attributes) {
-	closeAttributes();
-	
-	$("#properties .attributes-holder .title").text(attributes.fileInfo.fileName);
-	$("#properties .attributes-holder .title").css({ "border-bottom": "5px solid " + (attributes.fileInfo.fileType == "folder" ? "#ffb85d" : "#7dc1e8") });
-	
-	var tableBody = $("#properties .attributes-holder tbody");
-	var size = 0;
-	$.each(attributes, function (name, value) {
-		if (name == "productType" && value == "GeoTIFF" && attributes.fileInfo.fileType != "folder") {
-			tableBody.append('<tr><td>' + name + '</td><td>' + value + '<button class="btn bg-green btn-flat btn-xs image-preview"><i class="fa fa-eye fa-fw"></i>Toggle quick view</button></td></tr>');
-		} else if (name != "fileInfo") {
-			tableBody.append('<tr><td>' + name + '</td><td>' + value + '</td></tr>');
-		} else {
-			size --;
-		}
-		size ++;
-	});
-	if (size == 0) {
-		tableBody.append('<tr><td>-</td><td>-</td></tr>');
-	}
-	
-	// Draw Actions
-	if (attributes.fileInfo.fileType == "folder") {
-		displayFolderActions(attributes);
-	} else {
-		displayFileActions(attributes);
-	}
-	
-	$("#properties").data("attributes", attributes);
-	compsTree.css({ width: "54%" });
-	
-	// Unhide properties window
-	$("#properties").removeClass("hidden");
-}
-
-// Actions to perform when folder or file is selected
-$(".toolbox .treeview").on("click", "a", function (e) {
-	e.preventDefault();
-	
-	$(".toolbox .treeview a.selected").removeClass("selected");
-	$(this).addClass("selected");
-	
-	displayAttributes($(this).data("attributes"));
-	adjustPropertiesPosition();
-});
-
-$(".toolbox .treeview").on("dblclick", "label", function (e) {
-	var chk = $(this).parent().find("input[type='checkbox']");
-	chk.prop("checked", !chk.prop("checked"));
-});
-
-// Quick view product
-$("#properties").on("click", "button.image-preview", function (e) {
-	var attributes = $(this).closest("#properties").data("attributes");
-	setPreviewImageBase64(attributes);
-});
-
+// Show fullscreen preview
 $("#properties").on("click", ".full-preview", function (e) {
 	$("#properties .imagepreview-holder").clone().appendTo("#tree-content").addClass("full-screen");
 	$("#tree-content .full-screen span").remove();
@@ -554,9 +631,11 @@ $("#properties").on("click", ".full-preview", function (e) {
 
 // Close properties window
 $("#properties").on("click", "button.close", function (e) {
-	closeAttributes();
-	$(".toolbox .treeview a.selected").removeClass("selected");
+	closePorperties();
+	$("#tree-content .treeview a.selected").removeClass("selected");
 });
+
+// === ACTIONS SECTION =====================================================================
 
 function toggleProductVisibility(attributes) {
 	var product    = attributes.fileInfo.relativePath;
@@ -570,9 +649,9 @@ function toggleProductVisibility(attributes) {
 		success: function(response) {
 			if (response.status == responseStatus.success) {
 				$.when(refreshTree()).done(function () {
-					var prod = compsTree.find("input[id='" + product.replace(/\\/g, "\\\\") + "']+label>a");
+					var prod = compsTree.find("input[id='" + product + "']+label>a");
 					prod.addClass("selected");
-					displayAttributes(prod.data("attributes"));
+					showPorperties(prod.data("attributes"));
 					adjustPropertiesPosition();
 				});
 			} else {
@@ -581,6 +660,27 @@ function toggleProductVisibility(attributes) {
 		},
 		error: function (jqXHR, textStatus) {
 			$("#properties .share-holder input[name='share-folder']").prop("checked", attributes.visibility == "PUBLIC" ? true : false);
+		}
+	});
+}
+
+function deleteProduct(attributes) {
+	var deleteUrl = baseRestApiURL + "files/?fileName=" + attributes.fileInfo.relativePath;
+	$.ajax({
+		url: deleteUrl,
+		type: "DELETE",
+		beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
+		success: function(response) {
+			if (response.status == responseStatus.success) {
+				showMsg(response.message);
+				$.when(refreshTree()).done(function () {});
+				closePorperties();
+			} else {
+				showMsg(response.message);
+			}
+		},
+		error: function (jqXHR, textStatus) {
+			showMsg("Error while deleting the selected element!");
 		}
 	});
 }
@@ -596,38 +696,15 @@ $("#properties .share-holder").on("click", "input[name='share-folder']", functio
 		callbackConfirm: function () {
 			toggleProductVisibility(attributes);
 		},
-		callbackCancel: function (){ }
+		callbackCancel: function () {}
 	});
 });
 
-function deleteProduct(attributes) {
-	var deleteUrl = baseRestApiURL + "files/?fileName=" + attributes.fileInfo.relativePath.replace(/\\/g, "/");
-	console.log({ action: "DELETE", url: deleteUrl });
-	$.ajax({
-		url: deleteUrl,
-		type: "DELETE",
-		beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
-		success: function(response) {
-			if (response.status == responseStatus.success) {
-				showMsg(response.message);
-				$.when(refreshTree()).done(function () { });
-				closeAttributes();
-			} else {
-				showMsg(response.message);
-			}
-		},
-		error: function (jqXHR, textStatus) {
-			showMsg("Error while deleting the selected element!");
-		}
-	});
-}
-
-// Delete
+// Delete selected file
 $("#properties .delete-holder").on("click", "button", function (e) {
 	e.preventDefault();
 	
 	var attributes = $("#properties").data("attributes");
-	var action = attributes.visibility != "PUBLIC" ? "share" : "unshare";
 	$('#confirm-dialog').modal('confirm', {
 		msg: "Are you sure you want to delete this product?",
 		callbackConfirm: function () {
@@ -695,46 +772,180 @@ $("#properties .download-holder").on("click", "a", function (e) {
 // Full screen preview events
 $("#tree-content").on("click", ".full-screen", function (event) { event.stopPropagation(); $(this).remove(); });
 
-function adjustPropertiesPosition() {
-	var scrollTop  = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
-	var contentTop = $("#tree-content>.row").offset().top;
-	var treeTop    = $(".toolbox .treeview").offset().top;
-	
-	var sumHeight = 0;
-	$.each($("#properties .callout"), function () {
-		sumHeight += $(this).hasClass("attributes-holder") ? $(this).find(".title").outerHeight() : $(this).outerHeight();
-	});
-	
-	var newTop = treeTop - scrollTop;
-	if (contentTop - scrollTop < 0) {
-		newTop = treeTop - contentTop;
+// === UPLOAD SECTION =====================================================================
+
+// Maximum upload size
+var maxFileSizeUnits = "100 MB";
+
+// Get size in bytes from sizeUnits. Ex: 100 MB -> 104857600
+function bytesFromSizeUnits(sizeUnits) {
+	var size = parseFloat(sizeUnits.substr(0, sizeUnits.length - 2));
+	var unit = sizeUnits.substr(sizeUnits.length - 2).toUpperCase();
+	switch (unit) {
+		case "KB": size *= 1024; break;
+		case "MB": size *= 1024*1024; break;
+		case "GB": size *= 1024*1024*1024; break;
+		case "TB": size *= 1024*1024*1024*1024; break;
+		default  : size = 0; break;
 	}
-	$("#properties").css({ "top": newTop + "px" });
-	
-	var hgh = $(window).height() - newTop - sumHeight - (treeTop - contentTop) - 10;
-	$("#properties .attributes-holder .holder").css({ "max-height": hgh + "px" });
-	
-	if ($("#properties .attributes-holder .holder").outerHeight() >= $("#properties .attributes-holder .holder>div").outerHeight()) {
-		$("#properties .attributes-holder .holder").css({ "overflow-y": "unset" });
-	} else {
-		$("#properties .attributes-holder .holder").css({ "overflow-y": "" });
-	}
+	return size;
+}
+// Format size in sizeUnits. Ex: 131334144 -> 125.25 MB
+function formatSizeUnits(bytes) {
+   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+   if (bytes == 0) return '0 Bytes';
+   var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+   var size = bytes / Math.pow(1024, i)
+   return size.toFixed(2) + ' ' + sizes[i];
 }
 
-$(window).on("ready scroll resize", function() {
-	adjustPropertiesPosition();
+// Open file upload dialog window
+$("#uploadFiles, #myModalUpload .back-button").on("click", function (e) {
+	// close file attributes window
+	closePorperties();
+	
+	// reset upload dialog contents
+	$("#myModalUpload .upload-content").show();
+	$("#myModalUpload .upload-message").hide();
+	$("#myModalUpload .back-button").hide();
+	
+	// reset form (fields & validator)
+	$('#frmUploadFile')[0].reset();
+	$("#frmUploadFile").validate().resetForm();
+	$("#frmUploadFile .form-control").parent().removeClass("has-error");
+	
+	// show upload dialog
+	$("#myModalUpload").modal('show');
 });
 
+// Check validation each time a new file is selected
+$("#frmUploadFile input[name='file']").on("change", function() { $(this).valid(); });
+$("#frmUploadFile").validate({
+	rules: {
+		file: { required: true },
+		desc: { required: true }
+	},
+	highlight: function(element, errorClass) {
+		$(element).parent().addClass("has-error");
+	},
+	unhighlight: function(element, errorClass) {
+		$(element).parent().removeClass("has-error");
+	},
+	errorPlacement: function(error, element) {
+		error.appendTo(element.parent());
+	},
+	success: function(label) {
+		label.remove();
+	}
+});
+
+// Display the upload message result (success / fail)
+function showUploadMessage(message, error) {
+	showMsg(message);
+	
+	$(".upload-message").html("<h4>" + message + "</h4>");
+	if (!error) {
+		$(".upload-message").removeClass("error");
+		$("#frmUploadFile .upload-content").hide("slow");
+		$("#myModalUpload .back-button").show();
+	} else {
+		$(".upload-message").addClass("error");
+	}
+	$("#frmUploadFile .upload-message").show("slow");
+}
+
+// Start file upload
+$("#frmUploadFile").submit(function (event) {
+	event.preventDefault();
+	if ($(this).valid()) {
+		var formData = new FormData(this);
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", baseRestApiURL + "files/" + (sharedFiles ? "public" : "user") + "/upload", true);
+		xhr.responseType = "json";
+		xhr.setRequestHeader("X-Auth-Token", tokenKey);
+		
+		xhr.upload.onprogress = function (e) {
+			if (e.lengthComputable) {
+				var percentComplete = (e.loaded / e.total) * 100;
+				console.log(percentComplete + '% uploaded');
+			}
+		};
+		xhr.onload = function (e) {
+			if (this.status == 200) {
+				var data = this.response;
+				
+				// Fix for IE not honoring responseType 'json' when the requested data is not of 'json' type
+				if (detectIE()) {
+					if (data.status == undefined && typeof(data) === "string") {
+						// Force JSON parse in IE
+						data = JSON.parse(data);
+					}
+				}
+				if (data.status == undefined) {
+					// Inconclusive response from server
+					showUploadMessage("Operation failed. Please try again or contact app admin.", true);
+				} else if (data.status == responseStatus.success) {
+					showUploadMessage("File successfully uploaded.");
+					$.when(refreshTree()).done(function () {});
+				} else {
+					showUploadMessage(data.message, true);
+				}
+			} else {
+				// Failed to connect to server
+				showUploadMessage("Operation failed. Please try again or contact app admin.", true);
+			}
+		}
+		xhr.onerror = function (e, x, y) {
+			// Failed to connect to server
+			showUploadMessage("Operation failed. Please try again or contact app admin.", true);
+		}
+		xhr.send(formData);
+	}
+	return false; // To avoid actual submission of the form
+});
+
+// ==== START ====
 $(document).ready(function() {
+	// Set content class
+	$("#tree-content").removeClass("user-files shared-files");
 	if (sharedFiles) {
-		// Set page header
+		$("#tree-content").addClass("shared-files");
 		$(".content-header>h1").html("Shared files<small>Full list of <strong>public files</strong>.</small>");
-		// Remove unnecessary actions
-		$(".for-folders").remove();
-		$(".for-files .delete-holder").remove();
+		
+		if (taoUserProfile.userRole != "ADMIN") {
+			$("#myModalUpload").remove();
+			$("#uploadFiles").remove();
+		}
+	} else {
+		$("#tree-content").addClass("user-files");
+		$(".content-header>h1").html("User files<small>Full list of <strong>your files</strong>.</small>");
 	}
 	
-	$.when(refreshTree()).done(function () { });
+	// Get files
+	$.when(refreshTree()).done(function () {});
+	
+	// Set upload validation (max file size)
+	$.ajax({
+		url: baseRestApiURL + "files/config",
+		type: "GET",
+		dataType: 'json',
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("X-Auth-Token", tokenKey);
+			xhr.setRequestHeader("Content-Type", "application/json");
+		},
+		success: function(response) {
+			if (response.status == responseStatus.success) {
+				maxFileSizeUnits = response.data["spring.http.multipart.max-file-size"];
+				maxFileSizeUnits = formatSizeUnits(bytesFromSizeUnits(maxFileSizeUnits));
+			}
+			// Define file size validation method
+			$.validator.addMethod('filesize', function (value, element, param) {
+				return this.optional(element) || (element.files[0].size <= param);
+			}, 'File size must be less than ' + maxFileSizeUnits);
+			// Apply file size validation rule
+			$("#frmUploadFile input[name='file']").rules("add", { filesize: bytesFromSizeUnits(maxFileSizeUnits) });
+		}
+	});
 });
 
 //# sourceURL=my-auxfiles.js

@@ -14,6 +14,7 @@ var tao_resetShadowData = function(){
         sensors:[],
         dockers:[],
         toolboxnodes:{
+            uds:{},
             ds:{},
             pc:{},
             q:{},
@@ -223,6 +224,17 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
             "X-Auth-Token": window.tokenKey
         }
     });
+    var getAllUserDatasources = $.ajax({
+        cache: false,
+        url: baseRestApiURL + "datasource/user",
+        dataType : 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
     var getAllSensors = $.ajax({
         cache: false,
         url: baseRestApiURL + "query/sensor/",
@@ -247,18 +259,18 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
     });
 
 
-    $.when(getAllComponents,getAllQueries,getAllDatasources,getAllSensors,getAllDockers)
-        .done(function (getAllComponentsResponse,getAllQueriesResponse,getAllDatasourcesResponse,getAllSensorsResponse,getAllDockersResponse) {
+    $.when(getAllComponents,getAllQueries,getAllDatasources,getAllUserDatasources,getAllSensors,getAllDockers)
+        .done(function (getAllComponentsResponse,getAllQueriesResponse,getAllDatasourcesResponse,getAllUserDatasourcesResponse,getAllSensorsResponse,getAllDockersResponse) {
             console.log("Workspace components init start.");
             wfTools.components = getAllComponentsResponse[0]['data'];
             wfTools.queries = getAllQueriesResponse[0]['data'];
             wfTools.datasources = getAllDatasourcesResponse[0]['data'];
+            wfTools.udatasources = getAllUserDatasourcesResponse[0]['data'];
             wfTools.sensors = getAllSensorsResponse[0]['data'];
             wfTools.dockers = getAllDockersResponse[0]['data'];
 
             //parse components, try to detect orfan and collapsing data, recreate local IDs
             $.each(wfTools.components, function(i, item) {
-                //var hash = jsHashCode(wfOneDatasource.sensor+"-"+wfOneDatasource.dataSourceName);
                 var hash = "tboid"+jsHashCode(item.id);
             	if(wfTools.toolboxnodes.pc[hash]){
             		alert("Processing components collision. duplicate id detected");
@@ -266,7 +278,6 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
                     wfTools.toolboxnodes.pc[hash] = {
                     	id: hash,
 						type: "component",
-						image: "./media/module-otb.png",
 						label: item.label,
 						dna: item
                     };
@@ -294,7 +305,6 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
                         wfTools.toolboxnodes.ds[hash] = {
                             id: hash,
                             type: "datasource",
-                            image: "./media/module-ds.png",
                             label: item.label,
                             dna: item
                         };
@@ -304,6 +314,26 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
                     alert("Unknown query for datasource id: "+item.id+"\nIgnoring datasource.");
 				}
             });
+//user datasources
+            $.each(wfTools.udatasources, function(i, item) {
+                var hash = "tboid"+jsHashCode(item.id);
+                //if(wfTools.toolboxnodes.q[hash]){
+                    if(wfTools.toolboxnodes.pc[hash]){
+                        alert("Datasource collision. duplicate id detected");
+                    }else{
+                        wfTools.toolboxnodes.uds[hash] = {
+                            id: hash,
+                            type: "udatasource",
+                            label: item.label,
+                            dna: item
+                        };
+                    }
+                //}else{
+//                    console.log("Unknown query for datasource");
+//                    alert("Unknown query for datasource id: "+item.id+"\nIgnoring datasource.");
+//                }
+            });
+
 
             wf_renderComponentsToolBox();
             console.log("Workspace components toolbox init done.");

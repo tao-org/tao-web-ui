@@ -67,6 +67,7 @@ $(function () {
         url: baseRestApiURL + "user/"+username,
         dataType : 'json',
         type: 'GET',
+		async: false,
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -78,6 +79,7 @@ $(function () {
         url: baseRestApiURL + "config/enums",
         dataType : 'json',
         type: 'GET',
+		async: false,
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -295,6 +297,7 @@ $(function () {
         .done(function (r, statusText, xhr) {
             var getMonitorNotificationResponse = chkTSRF(r);
             //console.log(getMonitorNotificationResponse);
+            var flagExecRefresh = false;
             for(k=0;k<getMonitorNotificationResponse.length; k++){
                     if(!$elChatBox.is(':visible')){
                         $elChatBox.slideDown();
@@ -303,6 +306,10 @@ $(function () {
                     $el.removeClass("master").removeClass("hidden");
                     $el.find(".val-msg-ts").html(niceIsoTime(getMonitorNotificationResponse[k]['timestamp']));
                     try {
+                        var n = getMonitorNotificationResponse[k]['data'].indexOf("Job");
+                        if(n !== -1){
+                            flagExecRefresh = true;
+                        }
                         var obj = JSON.parse(getMonitorNotificationResponse[k]['data']);
                         $el.find(".val-msg-txt").html(obj.Payload);
                     }
@@ -318,6 +325,9 @@ $(function () {
                     } else{
                         $elMsgCount.html(count);
                     }
+            }
+            if(flagExecRefresh){
+                $("#exec-list-panel, #exec-history-panel").trigger("panel:refresh");
             }
         })
         .fail(function (jqXHR, textStatus) {

@@ -75,7 +75,7 @@
                                             </div>
                                             <div id="collapse-one-body-tpl" class="panel-collapse collapse" aria-expanded="false">
                                                 <div class="box-body">
-                                                    <div style="padding: 20px;">
+                                                    <div>
                                                         <table class="table table-bordered box-shadow--6dp tbl-edt tbl-edt-sysvar">
                                                             <thead>
                                                             <tr>
@@ -135,12 +135,40 @@
         }
         //remove error for some input elements
         $("#frmStartWF")
+
+
+//
+            // Load map poly
+            .on("click", ".ol", function (e) {
+                var inputField = $(this).parent().find("input");
+                if ($("#myModalMap").length == 0) {
+                    $.ajax({ url: "./fragments/map.poly.fragment.html", async: false })
+                        .done(function (data) {
+                            $("#panel-topo-wrapper").closest(".content-wrapper").append(data);
+                            $("#myModalMap").find("#polygon2D").val(inputField.val());
+                            $("#myModalMap").on('hide.bs.modal', function () {
+                                inputField.val($("#polygon2D").val());
+                            });
+                            $("#myModalMap").modal("show");
+                        })
+                        .fail(function (jqXHR, textStatus) { showMsg("Could not load map content.", "ERROR"); });
+                } else {
+                    $("#myModalMap").find("#polygon2D").val(inputField.val());
+                    $("#myModalMap").modal("show");
+                }
+            })
+//
             .on("change",".var-value-string, .var-value-string2, .var-value-list",function(e){
                 var n = $(this).closest( '.val-row' ).find(".var-id").text();
                 if(n === "acquisition_date"){
                     var dstart = $(this).parent().children(".var-value-string").val();
                     var dstop = $(this).parent().children(".var-value-string2").val();
-                    $(this).siblings(".var-value").val("["+dstart+","+dstop+"]");
+                    if( (dstart!=='') && (dstop!=='') ){
+                        $(this).siblings(".var-value").val("["+dstart+","+dstop+"]");
+                    } else{
+                        $(this).siblings(".var-value").val(dstart+dstop);
+                    }
+
                     return;
                 }
                 $(this).siblings(".var-value").val($(this).val());
@@ -250,6 +278,9 @@
                     if((humanJavaDataType(type) === "Integer") || (humanJavaDataType(type) === "Short")){
                         $('input.var-value-string', $el).attr("type", "number");
                     }
+                    if((humanJavaDataType(type) === "Polygon2D")){
+                        $('input.var-value-string', $el).attr("geotype", "Polygon2D");
+                    }
                     $('input.var-value-string', $el).val(value).show();
                 }else{
                     $('input.var-value', $el).val(value);
@@ -287,13 +318,21 @@
             $('#accordion>div.panel').each(function(){
                 var dna = $(this).data("dna");
                 if (dna){
-                    console.log(response[dna.name]);
+                    console.log("ho:"); console.log(response[dna.name]);
                     var $tableEL = $(".tbl-edt-sysvar",$(this));
-                    $.each(response[dna.name], function(i, value) {
-                        helper_addSTblEdtRow($($tableEL[0]), value);
-                    });
+                    //check for empty paremeter set or undefined???
+                    if( (response[dna.name] === undefined) || ($.isArray(response[dna.name]) !== true) || (response[dna.name].length === 0) ){
+                        $tableEL.hide();
+                        $("<p>No configurable parameters for this node.</p>").insertAfter($tableEL);
+                    }else{
+                        $.each(response[dna.name], function(i, value) {
+                            helper_addSTblEdtRow($($tableEL[0]), value);
+                        });
+                    }
                 }
             });
+            //append globe after Polygon2D
+            $( "<i class=\"fa fa-fw fa-globe ol\" style=\"font-size:1.5em;vertical-align:bottom;color:#2677a7;cursor:pointer;margin-left: -27px;\"></i>" ).insertAfter( "input.var-value-string[geotype='Polygon2D']");
         }).fail(function () {
             console.log("error retriving workflow parameters");
         });
@@ -334,11 +373,14 @@
 
                 var $elClone;
                 _.each(response.nodes, function(node){
-                    console.log("node");
-                    console.log(node);
+                    console.log("node");console.log(node);
+                    var faIcon ="fa-cog";
+                    if(node.componentType === "DATASOURCE"){
+                        faIcon ="fa-database";
+                    }
                     $elClone = $( "#acc-panel-tpl" ).clone();
                     $elClone.prop("id", "acc-panel-node-"+node.id );
-                    $elClone.find(".box-title a").html(node.name+" <i>(component ID: "+node.componentId+")</i>" ).attr("href", "#collapse-one-body-"+node.id);
+                    $elClone.find(".box-title a").html('<span class="fa-stack fa-lg start-component-logo"><i class="fa fa-circle fa-stack-2x"></i><i class="fa '+faIcon+' fa-stack-1x fa-inverse"></i></span>&nbsp;'+node.name+" <i>(component ID: "+node.componentId+")</i>" ).attr("href", "#collapse-one-body-"+node.id);
                     $elClone.find(".panel-collapse").prop("id", "collapse-one-body-"+node.id);
                     $elClone.appendTo( "#accordion" ).data("dna", node).removeClass("hidden");
                 });

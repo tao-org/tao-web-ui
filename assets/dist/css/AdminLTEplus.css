@@ -193,6 +193,10 @@ small.tag-input{
 	max-width: 150px;
 }
 
+/*start WF*/
+.start-component-logo{
+    font-size: 1em;
+}
 
 /*Draft*/
 .box .box-title .label{
@@ -831,7 +835,6 @@ ul.timeline.current_route:before{
   }
 }
 
-
 /* modal loading */
 #myModalLoading div{
     background: transparent;
@@ -934,7 +937,9 @@ input[type=checkbox].big{
     -webkit-transform: scale(1.5); /* Safari and Chrome */
     -o-transform: scale(1.5); /* Opera */
 }
-
+.tbl-edt input[geotype="Polygon2D"]{
+    padding-right: 27px;
+}
 
 .tbl-edt textarea{
     resize: none;

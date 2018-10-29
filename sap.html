@@ -616,9 +616,16 @@ Nothing to see!
         $('.modal.modal-keep-empty').on('hidden.bs.modal', function () {
             $(this).find('.modal-dialog').html("");
         });
-        $(document).on('shown.bs.modal', ".modal.modal-form-focus", function () {
+        $(document)
+            .on('shown.bs.modal', ".modal.modal-form-focus", function () {
             $("form#frmExecNodeEdit input:enabled:visible:first").focus();
-        });
+            })
+            .on('hidden.bs.modal', function (event) {
+            if ($('.modal:visible').length) {
+                $('body').addClass('modal-open');
+            }
+            });
+
 
 // .modal-backdrop classes
         $(".modal-fullscreen").on('show.bs.modal', function () {

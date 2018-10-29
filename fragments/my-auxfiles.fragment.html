@@ -15,7 +15,7 @@
 					<div class="treeview-header">
 						<h4>Your files:</h4>
 						<button id="uploadFiles" class="btn bg-green btn-flat"><i class="fa fa-upload fa-fw"></i>Upload files</button>
-						<button id="groupFiles" class="btn bg-green btn-flat" disabled><i class="fa fa-square-o fa-fw"></i>Send selected</button>
+						<button id="createQuery" class="btn bg-green btn-flat" disabled><i class="fa fa-square-o fa-fw"></i>Create query</button>
 						<div class="col-md-12 loading hidden">
 							<img src="./assets/dist/img/loading.gif" />
 						</div>
@@ -118,7 +118,56 @@
 				</div>
 			</form>
 			<div class="modal-footer">
-				<button class="btn btn-default back-button collapse" style="float:left">Back</button>
+				<button class="btn btn-default upload-back collapse" style="float:left">Back</button>
+				<button class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- modal dialog for creting custom user data source -->
+<div id="myModalQuery" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title">Create custom query</h1>
+			</div>
+			<form id="frmCreateQuery" class="form-horizontal" role="form">
+				<div class="modal-body">
+					<section class="query-message collapse">
+						<h4>Custom query successfully created.</h4>
+						<div class="form-group result-content">
+							<label class="col-sm-3 col-md-3">Label</label><p class="col-sm-9 col-md-9">Value</p>
+						</div>
+					</section>
+					<section class="query-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label class="col-sm-12 col-md-12">Query name:</label>
+									<div class="col-sm-12 col-md-12">
+										<input type="text" class="form-control" name="queryLabel" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-12 col-md-12">Selected products:</label>
+									<div class="products"></div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<div class="col-md-12 col-sm-12">
+										<button type="submit" class="btn btn-primary btn-submit">Create custom query</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</form>
+			<div class="modal-footer">
 				<button class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
@@ -138,28 +187,33 @@
 /* ===== TREEVIEW ===== */
 #tree-content .treeview{margin-left:10px}
 #tree-content .treeview input[type="checkbox"]{display:none}
-#tree-content .treeview a{width:100%;display:block;cursor:pointer;padding:0;line-height:1.8em;max-height:1.8em;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#tree-content .treeview a{display:block;cursor:pointer;padding:0;line-height:1.8em;max-height:1.8em;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 #tree-content .treeview a:hover,
 #tree-content .treeview a.selected{background-color:#ecf0f5;color:#0f5075}
 #tree-content .treeview a span{float:right;padding:0 10px 0 7px;width:110px;text-align:right;color:#5c5d5e}
+#tree-content .treeview label>a{font-weight:600}
 #tree-content .treeview .fa{float:none;width:30px;color:#3c8dbc}
 #tree-content .treeview .fa-folder{color:#ffb85d}
 #tree-content .treeview .fa-public{position:relative}
 #tree-content .treeview .fa-public::after{position:absolute;content:"\f064";font-size:10px;color:#00a65a;right:5px;bottom:-5px;}
 #tree-content .treeview label{position:relative;color:#5c5d5e;display:block;margin-bottom:0}
-#tree-content .treeview label::before{display:block;position:absolute;top:0;left:-17px;font-family:'FontAwesome';font-size:18px;padding:0 7px;color:transparent}
-#tree-content .treeview label::before{content:'\f105';margin-left:0}
+#tree-content .treeview label::before{content:'\f105';margin-left:0;display:block;position:absolute;top:0;left:-17px;font-family:'FontAwesome';font-size:18px;padding:0 7px;color:transparent}
 #tree-content .treeview input:checked+label::before{content:'\f107';margin-left:-3px}
 #tree-content .treeview input:checked+label .fa-folder::before{content:'\f07c'}
-#tree-content .treeview:hover label::before{color:#b9b9b9}
+#tree-content .treeview:hover div>label::before{color:#b9b9b9}
 #tree-content .treeview:hover input:checked+label::before{color:#5c5d5e}
 #tree-content .treeview .sub{display:none;margin-left:22px}
 #tree-content .treeview input:checked~.sub{display:block}
-#tree-content .treeview .select-for{display:inline !important;position:absolute;left:6px;margin:0;top:5px;width:15px !important;height:15px !important;-webkit-appearance:none;-moz-appearance:none;-o-appearance:none;appearance:none;outline:1px solid rgba(89, 161, 185, 0.25);box-shadow:none;font-size:2em;outline-offset:-2px;cursor:pointer;color:transparent}
-#tree-content .treeview .select-for::before{position:absolute;left:4px;top:4px;content:"\002713";font-size:18px;line-height:0}
-#tree-content .treeview .select-for:checked{display:inline;outline:1px solid #59a1b9 !important;color:#ff7000}
-#tree-content .treeview a:hover .select-for{outline:1px solid #59a1b9}
-#tree-content .has-selectable-for>div>label>a>span.fa-folder{margin-left:20px}
+/* ===== PRODUCTS ===== */
+#tree-content .treeview label.select-for{position:absolute;margin:0;top:0;left:0;width:23px;height:25px;cursor:pointer}
+#tree-content .treeview label.select-for::before{position:absolute;left:7px;top:9px;content:"\002713";line-height:0;padding:0}
+#tree-content .treeview label.select-for::after{content:'';position:absolute;width:13px;height:13px;border:1px solid rgba(89, 161, 185, 0.25);left:6px;top:5px}
+#tree-content .treeview label.select-for~a{margin-left:23px}
+#tree-content .treeview label.select-for.checked::after{border:1px solid #59a1b9}
+#tree-content .treeview label.select-for.checked::before{color:#ff7000}
+#tree-content .treeview label.select-for:hover::after{border:1px solid #59a1b9}
+#tree-content .treeview label.select-for.checked:hover::after{border:1px solid #ff7000}
+#tree-content .has-selectable-for>div>label>a>span.fa-folder{margin-left:-2px}
 #tree-content .has-selectable-for>div>.sub{margin-left:43px}
 /* ===== PROPERTIES ===== */
 #properties.folder .for-files{display:none}
@@ -193,11 +247,23 @@
 #tree-content .full-screen>div{position:unset}
 #tree-content .full-screen img{position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:auto;border:5px solid rgba(255, 255, 255, 0.3);border-radius:5px;max-width:100%;max-height:100%}
 #tree-content .fa-fw{margin-right:5px}
-/* ===== Upload dialog box ===== */
+/* ===== UPLOAD ===== */
 .upload-message.error{color:red}
 .upload-message h4{background-color:transparent;margin:-15px;padding:15px}
 .upload-message.error h4{margin-bottom:0;background-color:#ff00001c}
 .form-control~label.error{font-weight:400;color:red}
+/* ===== QUERY ===== */
+.query-message.error{color:red}
+.query-message h4{background-color:transparent;margin:-15px;padding:15px}
+.query-message.error h4{margin-bottom:0;background-color:#ff00001c}
+.query-message .result-content{margin-top:30px}
+.query-message .result-content label{color:#3c8dbc}
+.query-message .result-content p{color:#777;font-weight:600;font-style:italic}
+font-weight:600
+.query-content .products{color:#777}
+.query-content .products label{color:#3c8dbc;text-decoration:underline;padding-left:35px}
+.query-content .products p{padding-left:35px;font-weight:600}
+.query-content .products p i{display:block}
 /* ===== SWITCH ===== */
 .TSwitch{text-align:center;position:relative;width:130px;height:34px;margin:5px 0}
 .TSwitch>input[type="checkbox"]{display:none}
@@ -315,8 +381,8 @@ function renderFolder(relPath, file) {
 		var element = $('<div' + (relativePath == 'files' ? ' class="files-folder"' : '') + ">" +
 							'<input type="checkbox" id="' + relativePath + '">' +
 							'<label for="' + relativePath + '">' +
+								(selectable ? '<label class="select-for"><input type="checkbox" class="select-for"></label>' : '') +
 								'<a href="#" title="' + attributes.fileInfo.fileName + '">' +
-									(selectable ? '<input type="checkbox" class="select-for" />' : '') +
 									'<span class="fa fa-folder' + (faPublic ? " fa-public" : "") + '"></span>' +
 									attributes.fileInfo.fileName +
 								'</a>' +
@@ -413,29 +479,31 @@ var resizeTimer;
 $(window).on("ready resize", function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(function() { adjustPropertiesPosition(); }, 250); });
 $(window).on("scroll", function() { adjustPropertiesPosition(); });
 function adjustPropertiesPosition() {
-	var scrollTop  = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
-	var treeTop    = $("#tree-content .treeview").offset().top;
-	var contentTop = $("#tree-content .treeview-header").offset().top + $("#tree-content .treeview-header").outerHeight();
-	
-	var sumHeight = 15;
-	$.each($("#properties .callout"), function () {
-		sumHeight += $(this).hasClass("properties-holder") ? $(this).find(".title").outerHeight() : $(this).outerHeight();
-	});
-	
-	var newTop = treeTop - scrollTop;
-	if (contentTop - scrollTop < 0) {
-		newTop = treeTop - contentTop;
-	}
-	var newWidth = $("#tree-content .box-body").width() - $("#tree-content .treeview").width();
-	$("#properties").css({ "width": newWidth + "px", "top": newTop + "px" });
-	
-	var newHeight = $(window).height() - newTop - sumHeight - (treeTop - contentTop);
-	$("#properties .properties-holder .holder").css({ "max-height": newHeight + "px" });
-	
-	if ($("#properties .properties-holder .holder").outerHeight() >= $("#properties .properties-holder .holder>div").outerHeight()) {
-		$("#properties .properties-holder .holder").css({ "overflow-y": "unset" });
-	} else {
-		$("#properties .properties-holder .holder").css({ "overflow-y": "" });
+	if ($("#properties").length > 0 && !$("#properties").hasClass("hidden")) {
+		var scrollTop  = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
+		var treeTop    = $("#tree-content .treeview").offset().top;
+		var contentTop = $("#tree-content .treeview-header").offset().top + $("#tree-content .treeview-header").outerHeight();
+		
+		var sumHeight = 15;
+		$.each($("#properties .callout"), function () {
+			sumHeight += $(this).hasClass("properties-holder") ? $(this).find(".title").outerHeight() : $(this).outerHeight();
+		});
+		
+		var newTop = treeTop - scrollTop;
+		if (contentTop - scrollTop < 0) {
+			newTop = treeTop - contentTop;
+		}
+		var newWidth = $("#tree-content .box-body").width() - $("#tree-content .treeview").width();
+		$("#properties").css({ "width": newWidth + "px", "top": newTop + "px" });
+		
+		var newHeight = $(window).height() - newTop - sumHeight - (treeTop - contentTop);
+		$("#properties .properties-holder .holder").css({ "max-height": newHeight + "px" });
+		
+		if ($("#properties .properties-holder .holder").outerHeight() >= $("#properties .properties-holder .holder>div").outerHeight()) {
+			$("#properties .properties-holder .holder").css({ "overflow-y": "unset" });
+		} else {
+			$("#properties .properties-holder .holder").css({ "overflow-y": "" });
+		}
 	}
 }
 
@@ -567,28 +635,20 @@ $("#tree-content .treeview").on("dblclick", "label", function (e) {
 });
 
 // Actions to perform when selecting at least one product
-$("#tree-content .treeview").on("click", "input.select-for", function (e) {
-	e.stopPropagation();
-	if ($("#tree-content .treeview .select-for:checked").length > 0) {
-		$("#groupFiles i").removeClass("fa-square-o").addClass("fa-check-square-o");
-		$("#groupFiles").prop("disabled", false);
-	} else {
-		$("#groupFiles i").removeClass("fa-check-square-o").addClass("fa-square-o");
-		$("#groupFiles").prop("disabled", true);
-	}
-});
-
-$("#groupFiles").on("click", function (e) {
-	var txt = "<p style='font-size:15px'>The following products have been selected:<br>";
-	$.each($("#tree-content .treeview .select-for:checked"), function (index, prod) {
-		txt += "- " + $(this).parent().data("attributes").fileInfo.fileName + "<br>";
-	});
-	txt += "</p>";
-	showMsg(txt);
+$("#tree-content .treeview").on("change", "input.select-for", function (e) {
+	if ($(this).prop("checked"))
+		$(this).parent().addClass("checked");
+	else
+		$(this).parent().removeClass("checked");
 	
-	$("#tree-content .treeview .select-for").prop("checked", false);
-	$("#groupFiles i").removeClass("fa-check-square-o").addClass("fa-square-o");
-	$(this).prop("disabled", true);
+	
+	if ($("#tree-content .treeview .select-for:checked").length > 0) {
+		$("#createQuery i").removeClass("fa-square-o").addClass("fa-check-square-o");
+		$("#createQuery").prop("disabled", false);
+	} else {
+		$("#createQuery i").removeClass("fa-check-square-o").addClass("fa-square-o");
+		$("#createQuery").prop("disabled", true);
+	}
 });
 
 // Adjust properties window size and position when image preview is loaded
@@ -800,14 +860,14 @@ function formatSizeUnits(bytes) {
 }
 
 // Open file upload dialog window
-$("#uploadFiles, #myModalUpload .back-button").on("click", function (e) {
+$("#uploadFiles, #myModalUpload .upload-back").on("click", function (e) {
 	// close file attributes window
 	closePorperties();
 	
 	// reset upload dialog contents
 	$("#myModalUpload .upload-content").show();
 	$("#myModalUpload .upload-message").hide();
-	$("#myModalUpload .back-button").hide();
+	$("#myModalUpload .upload-back").hide();
 	
 	// reset form (fields & validator)
 	$('#frmUploadFile')[0].reset();
@@ -818,7 +878,7 @@ $("#uploadFiles, #myModalUpload .back-button").on("click", function (e) {
 	$("#myModalUpload").modal('show');
 });
 
-// Check validation each time a new file is selected
+// Check upload validation each time a new file is selected
 $("#frmUploadFile input[name='file']").on("change", function() { $(this).valid(); });
 $("#frmUploadFile").validate({
 	rules: {
@@ -841,15 +901,15 @@ $("#frmUploadFile").validate({
 
 // Display the upload message result (success / fail)
 function showUploadMessage(message, error) {
-	showMsg(message);
+	showMsg(message, error ? "ERROR" : "SUCCESS");
 	
-	$(".upload-message").html("<h4>" + message + "</h4>");
+	$("#frmUploadFile .upload-message").html("<h4>" + message + "</h4>");
 	if (!error) {
-		$(".upload-message").removeClass("error");
+		$("#frmUploadFile .upload-message").removeClass("error");
 		$("#frmUploadFile .upload-content").hide("slow");
-		$("#myModalUpload .back-button").show();
+		$("#myModalUpload .upload-back").show();
 	} else {
-		$(".upload-message").addClass("error");
+		$("#frmUploadFile .upload-message").addClass("error");
 	}
 	$("#frmUploadFile .upload-message").show("slow");
 }
@@ -904,7 +964,135 @@ $("#frmUploadFile").submit(function (event) {
 	return false; // To avoid actual submission of the form
 });
 
-// ==== START ====
+// === CUSTOM QUERY SECTION =====================================================================
+
+$("#createQuery").on("click", function (e) {
+	// Close file attributes window
+	closePorperties();
+	
+	// Reset query dialog contents
+	$("#myModalQuery .query-content").show();
+	$("#myModalQuery .query-message").hide();
+	
+	// Reset form (fields & validator)
+	$('#frmCreateQuery')[0].reset();
+	$("#frmCreateQuery").validate().resetForm();
+	$("#frmCreateQuery .form-control").parent().removeClass("has-error");
+	$("#frmCreateQuery .products").html("");
+	
+	// Show upload dialog
+	$("#myModalQuery").modal('show');
+	
+	// Populate products list categorized by product type
+	$.each($("#tree-content .treeview .select-for:checked"), function (index, prod) {
+		var attributes = $(this).parent().next().data("attributes");
+		if ($("#frmCreateQuery .products ." + attributes.productType).length == 0) {
+			var productClass = attributes.productType.replace(/  +/g, "");
+			$("#frmCreateQuery .products").append('<label class="col-sm-12 col-md-12">' + attributes.productType + ':</label><p class="col-sm-12 col-md-12 ' + productClass + '"></p>');
+			$("#frmCreateQuery .products ." + productClass).data({ productType: attributes.productType, productClass: productClass });
+		}
+		$("#frmCreateQuery .products ." + attributes.productType).append("<i>" + attributes.fileInfo.fileName + "</i>");
+	});
+});
+
+// Set query validation rules
+$("#frmCreateQuery").validate({
+	rules: {
+		queryLabel: { required: true }
+	},
+	highlight: function(element, errorClass) {
+		$(element).parent().addClass("has-error");
+	},
+	unhighlight: function(element, errorClass) {
+		$(element).parent().removeClass("has-error");
+	},
+	errorPlacement: function(error, element) {
+		error.appendTo(element.parent());
+	},
+	success: function(label) {
+		label.remove();
+	}
+});
+
+// Display the query creation message result (success / fail)
+function showQuerydMessage(message, error) {
+	showMsg(message, error ? "ERROR" : "SUCCESS");
+	$("#frmCreateQuery .query-message").html("<h4>" + message + "</h4>");
+	if (!error) {
+		$("#frmCreateQuery .query-message").removeClass("error");
+		$("#frmCreateQuery .query-content").hide("slow");
+	} else {
+		$("#frmCreateQuery .query-message").addClass("error");
+	}
+	$("#frmCreateQuery .query-message").show("slow");
+}
+
+// Start custom query creation
+$("#frmCreateQuery").submit(function (event) {
+	event.preventDefault();
+	if ($(this).valid()) {
+		var formData = {};
+		formData.label = $("#frmCreateQuery input[name='queryLabel'").val();
+		formData.productType = null;
+		formData.products = [];
+		$.each($("#frmCreateQuery .products p"), function (index, ptype) {
+			$.each($("#frmCreateQuery .products p." + $(ptype).data("productClass") + ">i"), function (index, prod) {
+				var product = {};
+				product.name = $(prod).html();
+				product.productType = $(ptype).data("productType");
+				formData.products.push(product);
+			});
+		});
+		$.ajax({
+			url: baseRestApiURL + "datasource/create",
+			type: "POST",
+			dataType: 'json',
+			data: JSON.stringify(formData),
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("X-Auth-Token", tokenKey);
+				xhr.setRequestHeader("Content-Type", "application/json");
+			},
+			success: function(response) {
+				if (response.status == undefined) {
+					// Inconclusive response from server
+					showQuerydMessage("Operation failed. Please try again or contact app admin.", true);
+				} else if (response.status == responseStatus.success) {
+					// Show results message
+					if (response.data !== undefined && response.data !== null) {
+						showQuerydMessage("Your custom query has been successfully created:");
+						var html =
+							'<div class="form-group result-content">' +
+								(response.data.id             == undefined ? '' : '<label class="col-sm-3 col-md-3">Id</label><p class="col-sm-9 col-md-9">'             + response.data.id             + '</p>') +
+								(response.data.label          == undefined ? '' : '<label class="col-sm-3 col-md-3">Label</label><p class="col-sm-9 col-md-9">'          + response.data.label          + '</p>') +
+								(response.data.description    == undefined ? '' : '<label class="col-sm-3 col-md-3">Description</label><p class="col-sm-9 col-md-9">'    + response.data.description    + '</p>') +
+								(response.data.sensorName     == undefined ? '' : '<label class="col-sm-3 col-md-3">SensorName</label><p class="col-sm-9 col-md-9">'     + response.data.sensorName     + '</p>') +
+								(response.data.dataSourceName == undefined ? '' : '<label class="col-sm-3 col-md-3">DataSourceName</label><p class="col-sm-9 col-md-9">' + response.data.dataSourceName + '</p>') +
+								(response.data.authors        == undefined ? '' : '<label class="col-sm-3 col-md-3">Authors</label><p class="col-sm-9 col-md-9">'        + response.data.authors        + '</p>') +
+							'</div>';
+						$("#frmCreateQuery .query-message").append(html);
+					} else {
+						showQuerydMessage("Your custom query has been successfully created.");
+					}
+					
+					// Clear product selection in tree
+					$("#tree-content .treeview input.select-for").prop("checked", false);
+					$("#tree-content .treeview label.select-for").removeClass("checked");
+					$("#createQuery i").removeClass("fa-check-square-o").addClass("fa-square-o");
+					$("#createQuery").prop("disabled", true);
+				} else {
+					showQuerydMessage(response.message, true);
+				}
+			},
+			error: function (jqXHR, textStatus) {
+				showQuerydMessage("Operation failed. Please try again or contact app admin.", true);			
+			}
+		});
+	}
+	return false; // To avoid actual submission of the form
+});
+
+// === START =====================================================================
+
 $(document).ready(function() {
 	// Set content class
 	$("#tree-content").removeClass("user-files shared-files");

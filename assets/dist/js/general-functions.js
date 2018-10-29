@@ -401,3 +401,35 @@ function initializeTagsInputAutocomplete(id, url){
  	
  	$(".ui-autocomplete").css({ "max-height": "400px", "overflow-y": "scroll", "overflow-x": "hidden","z-index":"1100"});
 }
+
+function openPolygonMap(mapContainer, polygon2DField) {
+	// Remove map if existing
+	if ($("#myPolygonMap").length > 0) {
+		if ($("#myModalMap").length > 0) {
+			$("#myModalMap").removeData("bs.modal");
+			$("#myModalMap").remove();
+		}
+		$("#myPolygonMap").remove();
+	}
+	mapContainer.append("<div id='myPolygonMap'></div>");
+	// Load map
+	var modalOn = false;
+	$.ajax({ url: "./fragments/map.poly.fragment.html", async: false })
+	.done(function (data) {
+		modalOn = true;
+		$("#myPolygonMap").html(data);
+	})
+	.fail(function (jqXHR, textStatus) { showMsg("Could not load map content.", "ERROR"); });
+	if (modalOn) {
+		if ($(polygon2DField).length > 0) {
+			$("#myModalMap #polygon2D").val(polygon2DField.val());
+			$("#myModalMap").on('hide.bs.modal', function () {
+				polygon2DField.val($("#polygon2D").val());
+				$(this).removeData("bs.modal");
+				$(this).remove();
+				$("#myPolygonMap").remove();
+			});
+		}
+		$("#myModalMap").modal("show");
+	}
+}

@@ -50,8 +50,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         $tblEdt = $("#tbl-edt-sysvar");
         $tblEdt.find(".val-row").each(function() {
             var k = $(".var-id",$(this)).html();
-            var v = $(".var-value",$(this)).val();
-            cV[k] = v;
+            cV[k] = $(".var-value",$(this)).val();
         });
         $propbar.qData.values = cV;
         $propbar.qData.user = $('input[name=qusername]', widgetRootEl).val();
@@ -86,7 +85,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 }
             })
             .fail(function(){
-                alert("Could udate query object", "ERROR");
+                alert("Could not udate query object", "ERROR");
             });
     };
 

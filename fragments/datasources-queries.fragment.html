@@ -165,6 +165,13 @@
 <script src="./assets/libs/jQuery/paginathing.js" type="text/javascript"></script>
 
 <script>
+// Load map poly
+$("#panel-topo-wrapper").on("click", ".ol", function (e) {
+	var mapContainer = $("#panel-topo-wrapper").closest(".content-wrapper");
+	var polygonField = $(this).parent().find("input");
+	openPolygonMap(mapContainer, polygonField);
+});
+
 var inputType = {
 		"Integer":{
 			type:"number",
@@ -223,7 +230,6 @@ function getDatasourcesList(){
     });
 }
 function showDatasourceParams(el){
-
 	$("#parameterList").css('display','');
 	$('input[name=product]').prop('checked',false);
 	$("#datasourceProducts").css('display','none');
@@ -234,7 +240,7 @@ function showDatasourceParams(el){
 		var textB = b.toUpperCase();
 		return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
 	});
-
+	
 	var html ='';
 	$.each(sortedParam, function(index, property){
 
@@ -256,7 +262,13 @@ function showDatasourceParams(el){
 		
             switch (paramType){
             	case "DataFormat":
-            	case "SensorType":
+					html +=  '		<input type="text" name="' + property + '" value=""  class="var_' + property + '">';
+					break;
+            	case "Polygon2D":
+					html +=  '		<input type="text" name="' + property + '" value=""  class="var_' + property + '"><i class="fa fa-fw fa-globe ol" style="font-size:1.8em;vertical-align:bottom;color:#2677a7;cursor:pointer"></i>';
+					
+					break;
+				case "SensorType":
             		
             		var enums = taoEnums.getEntity(param[property]['type']);
 				
@@ -619,4 +631,5 @@ $( document ).ready(function() {
 	});//end submit form editQueryParams
 	
 });
+//# sourceURL=datasources-queries.js
 </script>

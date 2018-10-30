@@ -199,7 +199,7 @@
 </section><!-- /.content -->
 
    
-<div class="modal-content modal-edit-tags">
+<div class="modal-content modal-edit-tags" style="display:none">
 	<div class="modal-header">
 	    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	    <h4 class="modal-title" id="myModalLabel">Edit tags</h4>
@@ -441,11 +441,11 @@
                   // add tags to datasources list object
                     $.each(datasourcesObj, function(index, res){
                     	datasourcesObj[index].tags = [];
-                    	findDatasource = datasourcesList.find(x => x.id === res.sensor+'-'+res.dataSourceName);
-                    	if(findDatasource != []){
-                    		datasourcesObj[index].tags = findDatasource.tags;
+                    	// Operator '=>' is not supported in IE
+                    	//findDatasource = datasourcesList.find(x => x.id === res.sensor+'-'+res.dataSourceName);
+                    	if(datasourcesList[index].id ===  res.sensor+'-'+res.dataSourceName){
+        					datasourcesObj[index].tags = datasourcesList[index].tags;
                     	}
-                    
                     });
                     
                     _mLIST.dataSourceList = datasourcesList;
@@ -716,8 +716,16 @@ html += "      </tbody>\n" +
             tags = tags.split(",");
         	
         	// add tags to datasources list object
-        	findDatasource = _mLIST.dataSourceList.find(x => x.id === _mLIST.dataOpQueue[0]['dna']['sensor']+'-'+_mLIST.dataOpQueue[0]['dna']['dataSourceName']);
+        	//findDatasource = _mLIST.dataSourceList.find(x => x.id === _mLIST.dataOpQueue[0]['dna']['sensor']+'-'+_mLIST.dataOpQueue[0]['dna']['dataSourceName']);
+        	var findDatasource = [];
+        	$.each(_mLIST.dataSourceList,function(index){
+				if(_mLIST.dataSourceList[index].id === _mLIST.dataOpQueue[0]['dna']['sensor']+'-'+_mLIST.dataOpQueue[0]['dna']['dataSourceName']){
+					findDatasource = _mLIST.dataSourceList[index];
+				}			
+			});
+        	if(findDatasource != []){
         	findDatasource.tags = tags;
+        	}        	
           
         	console.log(findDatasource);
         	$.ajax({

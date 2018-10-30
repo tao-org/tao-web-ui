@@ -334,10 +334,6 @@ function showDatasourceParams(el){
 				}
 				$("input[name='"+name+"_d2']").datepicker("option", "minDate", newDate);
 			}
-		}).keyup(function(e) {
-			if(e.keyCode == 8 || e.keyCode == 46) {
-				$.datepicker._clearDate(this);
-			}
 		});
 	});
 	
@@ -353,10 +349,6 @@ function showDatasourceParams(el){
 				}
 				$("input[name='"+name+"_d1']").datepicker("option", "maxDate", newDate);
 			}
-		}).keyup(function(e) {
-			if(e.keyCode == 8 || e.keyCode == 46) {
-				$.datepicker._clearDate(this);
-			}
 		});
 	});
 }
@@ -367,8 +359,7 @@ function showProductsTable(products,pagesize, pagenumber){
 
 	var html = '';
 	$.each(products, function(index,value){
-		var timestamp = Number(value.acquisitionDate);
-		var date = new Date(timestamp);
+		//var date = new Date(value.acquisitionDate).toLocaleString();
 		html +=	"<tr>"+
 				"	<th scope=\"row\" class=\"col-sm-1 col-md-1\">\n"+
 				"		<div class=\"checkbox\">\n"+
@@ -376,7 +367,7 @@ function showProductsTable(products,pagesize, pagenumber){
 				"		</div>\n"+
 				"	</th>\n"+
 				"	<td class=\"col-sm-6 col-md-5\">"+value.name+"</td>\n"+
-				"	<td class=\"col-sm-2 col-md-3\">"+date.toLocaleString()+"</td>\n"+
+				"	<td class=\"col-sm-2 col-md-3\">"+value.acquisitionDate+"</td>\n"+
 				"	<td class=\"col-sm-3 col-md-3\">"+value.productType+"</td>\n"+
 				"</tr>\n";
 	});
@@ -537,27 +528,33 @@ $( document ).ready(function() {
 		e.preventDefault();	
 		var formData = [];
 		if($('input[name=allproducts]').is('checked')){
-			 formData = listOfProducts;
+			 formData.products = listOfProducts;
 		}else{
+			var products = [];
 			checkedProducts = $('input[name=product]:checked');
-			$.each(checkedProducts,function(){
-				formData.push(listOfProducts.find(x => x.id === $(this).attr('value')));
-				console.log(formData);
-			});
+			$.each(checkedProducts,function(index){
+				if(listOfProducts[index].id === $(this).attr('value')){
+					products.push(listOfProducts[index]);
 		}
-		
+			});
+		    formData.products = products;
+		}
+		formData =$.extend({},formData);
+		if(Object.keys(formData.products).length > 0 ){
 		$.when( ajaxCallFnc("datasource/create", JSON.stringify(formData), "POST") ).done( function(data){
 				if($.type(data) == 'object' && data.status == "SUCCEEDED" ){ 
 					showMsg("Datasource component was successfully created.", "SUCCESS");
 
-					downloadProducts(formData);
+						downloadProducts(formData.products);
 	             }else if($.type(data) == 'object' && data.status == "FAILED"){
 	            	 showMsg(data.message, "FAILED");
 	             }else{
 	            	 showMsg("Datasource componet was not created.", "SUCCESS");
 	             }
 		});
-		
+		} else{
+			 showMsg("No products selected for download", "WARNING");
+		}
 	});//end submit form formDownloadProducts
 	
 	$("form#editQueryParams").submit(function(e){

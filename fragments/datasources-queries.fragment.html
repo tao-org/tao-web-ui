@@ -38,19 +38,28 @@
                 <!-- tab-content -->
 				<div class="tab-content">
 					<div class="tab-pane active" id="panel-datasources">
-					
 						<div class="form-horizontal">
-						<div class="row">
-							<div class="col-md-12">
-									<div class="form-horizontal form-group ">
-									<label for="listDatasources" class="col-sm-1 col-md-1 control-label">Datasources </label>
-									<div class="ui-widget col-sm-11 col-md-11">
-										<input id="listDatasources" class="form-control">
-										<input type="hidden" id="selectedDatasource" value="default">
-									</div>
-								</div>
-							</div>
-						</div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-horizontal form-group ">
+                                        <label for="queryLabel" class="col-sm-1 col-md-1 control-label">Query label</label>
+                                        <div class="ui-widget col-sm-11 col-md-11">
+                                            <input id="queryLabel" class="form-control" value="" placeholder="name of your query.">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                        <div class="form-horizontal form-group ">
+                                        <label for="listDatasources" class="col-sm-1 col-md-1 control-label">Datasources </label>
+                                        <div class="ui-widget col-sm-11 col-md-11">
+                                            <input id="listDatasources" class="form-control">
+                                            <input type="hidden" id="selectedDatasource" value="default">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 						</div>
 
 						<div  id="parameterList">
@@ -278,7 +287,7 @@ function showDatasourceParams(el){
 					}
 					
 					$.each(enums, function(index, values){
-					 if(lDefault == values.key){
+					 if(lDefault === values.key){
 						 html += "		<option value=\""+values.key+"\" selected=\"selected\">"+values.value+"</option>\n";
 					 }else{
 						 html += "		<option value=\""+values.key+"\" >"+values.value+"</option>\n";
@@ -299,7 +308,7 @@ function showDatasourceParams(el){
 							html += "   	<option value=\"default\" selected=\"selected\">Select </option>\n";
 						}
             			$.each(param[property]['valueSet'], function(index, value){
-   						 if(lDefault == value){
+   						 if(lDefault === value){
    							 html += "		<option value=\""+value+"\" selected=\"selected\">"+value+"</option>\n";
    						 }else{
    							 html += "		<option value=\""+value+"\" >"+value+"</option>\n";
@@ -435,10 +444,10 @@ function downloadProducts(formData){
 	$.when( ajaxCallFnc("query/fetch", JSON.stringify(data),"POST") ).done( function(data){
 		 console.log(data);
 
-         if($.type(data) == 'object' && data.status == "SUCCEEDED" ){ 
+         if($.type(data) === 'object' && data.status === "SUCCEEDED" ){
         	 showMsg("The selected products were successfully downloaded.", "SUCCESS");
         	 
-         }else if($.type(data) == 'object' && data.status == "FAILED"){
+         }else if($.type(data) === 'object' && data.status === "FAILED"){
         	 showMsg(data.message, "FAILED");
          }else{
         	 showMsg("The selected products were not downloaded.", "SUCCESS");
@@ -454,13 +463,11 @@ function checkProducts(listOfProducts){
 		 productsName.push(value.name);
 	 });
 	 console.log(productsName);	 
-		 
 	 $.when( ajaxCallFnc("product/check", {names:JSON.stringify(productsName)}, "GET") ).done( function(data){
 		 console.log("product/check =>"+productsName);	 
-		    if($.type(data) == 'object' && data.status == "SUCCEEDED" ){ 
-            	if(data.data.lenght > 0 && data.data.lenght == productsName.lenght ){
+		    if($.type(data) === 'object' && data.status === "SUCCEEDED" ){
+            	if(data.data.lenght > 0 && data.data.lenght === productsName.lenght ){
             		showMsg("The list of products returned already exists.", "SUCCESS");
-            		
             	}else if(data.data.lenght > 0){
             		var productsToDownload = [];
             		$.each(listOfProducts, function(index, product){
@@ -468,15 +475,13 @@ function checkProducts(listOfProducts){
             				productsToDownload.push(product);
             			}
             		});
-
             		//products to show for downloading
             		showProductsTable(productsToDownload);
             	}else{
             		//show all
             		showProductsTable(listOfProducts);
             	}
-           	 
-            }else if($.type(data) == 'object' && data.status == "FAILED"){
+            }else if($.type(data) === 'object' && data.status === "FAILED"){
            	 showMsg(data.message, "FAILED");
             }
 	});
@@ -485,7 +490,6 @@ function checkProducts(listOfProducts){
 
 $( document ).ready(function() {
 	$("#parameterList, #datasourceProducts").css('display','none');
-	
 	getDatasourcesList();
 	
 	//Initialize the autocomplete with the list of datasources
@@ -504,7 +508,11 @@ $( document ).ready(function() {
 			this.value = ui.item.label;
 
 			$("#selectedDatasource").val(val);
-				showDatasourceParams(val.replace('d_',''));
+            //autolabel query if empty
+			if($("#queryLabel").val()===""){
+                $("#queryLabel").val($("#listDatasources").val() + " (" + moment().format("YYYY-MM-DD HH:mm:ss").toString() + ")");
+            }
+			showDatasourceParams(val.replace('d_',''));
 			$( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
 
 			return false;// Prevent the widget from inserting the value.
@@ -525,28 +533,34 @@ $( document ).ready(function() {
 	
 	
 	$("form#formDownloadProducts").submit(function(e){
-		e.preventDefault();	
-		var formData = [];
+		e.preventDefault();
+		var label = $("#queryLabel").val();
+        if(label === ""){
+            showMsg("You must specify a label for your query in order to proceed.", "WARNING");
+            return;
+        }
+
+        var formData = {
+		    "label": label,
+            "products":[]
+		};
 		if($('input[name=allproducts]').is('checked')){
-			 formData.products = listOfProducts;
+			formData.products = listOfProducts;
 		}else{
-			var products = [];
 			checkedProducts = $('input[name=product]:checked');
 			$.each(checkedProducts,function(index){
 				if(listOfProducts[index].id === $(this).attr('value')){
-					products.push(listOfProducts[index]);
-		}
+                    formData.products.push(listOfProducts[index]);
+		        }
 			});
-		    formData.products = products;
 		}
-		formData =$.extend({},formData);
+//		formData =$.extend({},formData);
 		if(Object.keys(formData.products).length > 0 ){
 		$.when( ajaxCallFnc("datasource/create", JSON.stringify(formData), "POST") ).done( function(data){
-				if($.type(data) == 'object' && data.status == "SUCCEEDED" ){ 
+				if($.type(data) === 'object' && data.status === "SUCCEEDED" ){
 					showMsg("Datasource component was successfully created.", "SUCCESS");
-
-						downloadProducts(formData.products);
-	             }else if($.type(data) == 'object' && data.status == "FAILED"){
+					downloadProducts(formData.products);
+	             }else if($.type(data) === 'object' && data.status === "FAILED"){
 	            	 showMsg(data.message, "FAILED");
 	             }else{
 	            	 showMsg("Datasource componet was not created.", "SUCCESS");
@@ -565,25 +579,25 @@ $( document ).ready(function() {
 		var msg = "";
 		//get all elements that have a class starting with 'var_' and which are not necessarily the first class
 		$("[class^='var_'],[class*=' var_']").each(function () {
-			if($(this).val()!='default' && $.trim($(this).val())!=""){
+			if($(this).val()!=='default' && $.trim($(this).val())!==""){
 				if($(this).hasClass("datepicker") ){
 					var paramName = $(this).attr("data-name");
 							
 					if($.inArray(paramName, values) < 0){
 						var name = $(this).attr("name");
-						if(name == paramName+"_d1"){
+						if(name === paramName+"_d1"){
 							date1 = $(this).val();
 							date2 = $("input[name='"+paramName+"_d2']").val();
-						}else if(name == paramName+"_d2"){
+						}else if(name === paramName+"_d2"){
 							date2 = $(this).val();
 							date1 = $("input[name='"+paramName+"_d1']").val();
 						}
 						
-						if(date1 != "" && date2 != ""){
+						if(date1 !== "" && date2 !== ""){
 							values[paramName] = "["+date1+","+date2+"]";
-						}else if(date1 != ""){
+						}else if(date1 !== ""){
 							values[paramName] = date1;
-						}else if(date2 != ""){
+						}else if(date2 !== ""){
 							values[paramName] = date2;
 						}
 							
@@ -613,12 +627,12 @@ $( document ).ready(function() {
 	 	console.log(myQuery);
 
 			$.when( ajaxCallFnc("query/exec", JSON.stringify(myQuery), "POST") ).done( function(data){
-		             if($.type(data) == 'object' && data.status == "SUCCEEDED" && data.data.length>0){
+		             if($.type(data) === 'object' && data.status === "SUCCEEDED" && data.data.length>0){
 		            	 listOfProducts = data.data;
 						 //check if the list of products returned already exists
 				       	 checkProducts(listOfProducts);
 	
-					}else if($.type(data) == 'object' && data.status == "FAILED"){
+					}else if($.type(data) === 'object' && data.status === "FAILED"){
 						showMsg(data.message, "FAIL");
 					}else{
 						showMsg("No products were found for selected datasource.", "SUCCESS");

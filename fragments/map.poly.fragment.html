@@ -1,8 +1,8 @@
 <!-- OpenLayers -->
 <link href="./assets/libs/openlayers/ol.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="./assets/libs/openlayers/ol.js"></script>
-<link href="./assets/libs/openlayers/ol-ext.min.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="./assets/libs/openlayers/ol-ext.min.js"></script>
+<!-- ol-ext -->
+<script type="text/javascript" src="./assets/libs/openlayers/ol-ext.js"></script>
 
 <!-- modal dialog for selecting polygon shape -->
 <div id="myModalMap" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -21,6 +21,7 @@
 					</select>
 				</div>
 				<div id="map" class="map box-shadow--6dp" tabindex="0"></div>
+				<label class="map-title"></label>
 				<div class="form-group action-tools box-shadow--6dp">
 					<button class="btn btn-primary btn-white" id="addNewFeature"><i class="fa fa-plus fa-fw"></i>Add new</button>
 					<button class="btn btn-primary btn-white" id="removeSelectedFeatures"><i class="fa fa-trash-o fa-fw"></i>Remove selected</button>
@@ -28,7 +29,6 @@
 					<div class="TSwitch">
 						<input id="adjustFeature" type="checkbox"/>
 						<label for="adjustFeature"></label>
-						<span>Transform selected polygon</span>
 					</div>
 				</div>
 				<div class="form-group last">
@@ -60,6 +60,8 @@
 #useSelectedFeature{float:left}
 /* ===== MAP ===== */
 #myModalMap .map{height:400px;margin:-15px 0 0 0;border-bottom:1px solid #aad3df}
+#myModalMap .map-title{position:absolute;top:0px;color:#1680c5;font-size:1.5em;width:100%;text-align:center;margin:0 -15px;pointer-events:none;text-shadow:2px 2px white}
+#myModalMap .map-title.modify{color:#e16f00}
 #myModalMap .shape-type{position:absolute;top:5px;right:20px;background-color:rgba(255,255,255,.4);padding:4px;border-radius:4px;z-index:100}
 #myModalMap .shape-type select{background-color:#6690b9;border:0;font-size:1.1em;font-weight:700;color:white;padding:5px 10px}
 #myModalMap .shape-type select option{padding:20px}
@@ -90,10 +92,10 @@
 .TSwitch>input[type="checkbox"]{display:none}
 .TSwitch>label{cursor:pointer;height:0px;width:130px;font-weight:400;font-family:'FontAwesome','Source Sans Pro','Helvetica Neue';font-size:14px;line-height:1.3em}
 .TSwitch>label::before{background:#dadada;border:1px solid #dadada;border-radius:9px;content:'';height:18px;position:absolute;top:8px;left:0;width:130px;transition:all 0.4s ease-in-out}
-.TSwitch>label::after{background:#0099ff;border:1px solid #aad3df;content:'Reshape \00A0\00A0\f054';height:auto;position:absolute;width:auto;padding:8px 12px;top:0;left:10px;right:20px;text-align:left;color:white;transition:all 0.3s ease-in-out}
+.TSwitch>label::after{white-space:nowrap;background:#0099ff;border:1px solid #aad3df;content:'Modify \00A0\00A0\f054';height:auto;position:absolute;width:auto;padding:8px 12px;top:0;left:10px;right:20px;text-align:left;color:white;transition:all 0.3s ease-in-out}
 .TSwitch>input[type="checkbox"]:checked+label::before{content:''}
 .TSwitch>input[type="checkbox"]:disabled+label::before{content:'';background-color:transparent;border-color:transparent;cursor:default}
-.TSwitch>input[type="checkbox"]:checked+label::after{background:#e16f00;content:'\f053\00A0\00A0 Transform';left:20px;right:10px;text-align:right;color:white}
+.TSwitch>input[type="checkbox"]:checked+label::after{background:#e16f00;content:'\f053\00A0\00A0 Reshape';left:20px;right:10px;text-align:right}
 .TSwitch>input[type="checkbox"]:disabled+label::after{content:'\f057\00A0\00A0 Disabled';text-align:center;color:#54767f;opacity:0.65;left:15px;right:15px;cursor:default;border-color:transparent;background:transparent}
 .TSwitch>input[type="checkbox"]:disabled~span{display:none}
 </style>
@@ -110,7 +112,7 @@ var raster = new ol.layer.Tile({
 //	source: new ol.source.XYZ({	url: 'https://{a-d}.tiles.mapbox.com/v3/mapbox.natural-earth-hypso-bathy/{z}/{x}/{y}.png', attributions: [ '&copy; <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> ' ]  })
 });
 
-var vStroke = new ol.style.Stroke({ color: '#0099ff', width: 1 });
+var vStroke = new ol.style.Stroke({ color: '#0099ff', width: 1.5 });
 var vFill   = new ol.style.Fill  ({ color: [255, 255, 255, 0.3] });
 var vStyle  = new ol.style.Style ({ stroke: vStroke, fill: vFill });
 var vector  = new ol.layer.Vector({ source: source, style: vStyle });
@@ -142,8 +144,6 @@ function setStyle() {
 		xStroke = dStroke;
 		xFill   = dFill;
 	} else if (interaction instanceof ol.interaction.Modify) {
-		dStroke = new ol.style.Stroke({ color: '#0099ff', width: 1 });
-		dFill   = new ol.style.Fill  ({ color: [255, 255, 255, 0.3] });
 		xStroke = new ol.style.Stroke({ color: '#ff7300', width: 1 });
 		xFill   = new ol.style.Fill  ({ color: [255, 115, 0, 0.3] });
 	}
@@ -285,14 +285,27 @@ function resetInteractions() {
 	map.removeInteraction(snap);
 }
 
+function refreshMapTitle() {
+	if ($("#adjustFeature").is(':checked')) {
+		$("#myModalMap .map-title").html("Modify polygon at vertex level");
+		$("#myModalMap .map-title").addClass("modify");
+	} else {
+		$("#myModalMap .map-title").html("Reshape selected polygon");
+		$("#myModalMap .map-title").removeClass("modify");
+	}
+}
+
 function restartActiveInteraction() {
 	if ($("#adjustFeature").is(':checked')) {
-		$("#adjustFeature~span").html("Modify polygon at vertex level");
+		$("#myModalMap .map-title").html("Modify polygon at vertex level");
+		$("#myModalMap .map-title").addClass("modify");
 		startModifying();
 	} else {
-		$("#adjustFeature~span").html("Transform selected polygon");
+		$("#myModalMap .map-title").html("Reshape selected polygon");
+		$("#myModalMap .map-title").removeClass("modify");
 		startTransforming();
 	}
+	refreshMapTitle();
 }
 
 function startDrawing() {
@@ -326,6 +339,7 @@ function startTransforming() {
 	
 	setStyle();
 	$("#adjustFeature").prop("checked", false);
+	refreshMapTitle();
 }
 
 function startModifying() {
@@ -334,12 +348,21 @@ function startModifying() {
 	// Add MODIFY interaction on vertex level for all selected features
 	modify = new ol.interaction.Modify({
 		features: transform.get("selected"),
-		deleteCondition: function (e) { return ol.events.condition.singleClick(e); }
+		deleteCondition: function (e) { return ol.events.condition.click(e); }
 	});
 	map.addInteraction(modify);
 	modify.setActive(true);
-	
+	modify.set("lastAction", "none");
+	modify.on("modifystart", function (e) {
+		$.each(e.features.getArray(), function () {
+			this.coordinatesBefore = this.getGeometry().getCoordinates();
+		});
+	});
 	modify.on("modifyend", function (e) {
+		$.each(e.features.getArray(), function () {
+			delete this.coordinatesBefore;
+		});
+		modify.set("lastAction", e.mapBrowserEvent.type != "pointerup" ? "point removed" : "shape changed");
 		parseSelectedPolygons();
 	});
 	
@@ -350,6 +373,7 @@ function startModifying() {
 	
 	setStyle();
 	$("#adjustFeature").prop("checked", true);
+	refreshMapTitle();
 }
 
 function removeSelectedFeatures() {
@@ -416,6 +440,39 @@ function getTopFeatureAtCoordinate(coordinate) {
 	return topFeatureAtCoordinate;
 }
 
+function toggleFeatureInCollection(feature, features, shiftOn) {
+	var collection = [];
+	if (feature != undefined) {
+		var inCollection = false;
+		$.each(features, function() { if (feature.ol_uid == this.ol_uid) { inCollection = true; return false; } });
+		if (shiftOn) {
+			$.each(features, function () {
+				if (!inCollection || inCollection && feature.ol_uid != this.ol_uid) {
+					collection.push(this);
+				}
+			});
+			if (!inCollection) {
+				collection.push(feature);
+			}
+		} else {
+			collection.push(feature);
+		}
+	}
+	return collection;
+}
+
+function revertModifiedFeatures() {
+	var canceled = false;
+	$.each(transform.get("selected").getArray(), function (index, feature) {
+		if (this.coordinatesBefore != undefined) {
+			canceled = true;
+			this.getGeometry().setCoordinates(this.coordinatesBefore);
+			delete this.coordinatesBefore;
+		}
+	});
+	return canceled;
+}
+
 // Initialize map interactions (transform, modify, snap, draw)
 function initializeInteractions() {
 	/* =========== TRANSFORM =========== */
@@ -457,26 +514,51 @@ function initializeInteractions() {
 		
 		// DRAW keyboard interactions
 		// Cancel drawing on ESC
-		if (draw.getActive() && e.type == "keyup" && e.key.toLowerCase() == "escape") {
-			restartActiveInteraction();
-		}
+		if (e.type == "keyup" && e.key.toLowerCase() == "escape") {
+			if (draw.getActive()) {
+				restartActiveInteraction();
+			} else if (transform.getActive()) {
+				transform.select();
+				refreshSelection();
+			} else if (modify.getActive()) {
+				if (!revertModifiedFeatures()) {
+					transform.select();
+					refreshSelection();
+				}
+				startModifying();
+			}
+		}  
 	});
 	
 	map.on(['singleclick', 'dblclick'], function (e) {
-		// MODIFY mouse interactions
-		if (ol.events.condition.noModifierKeys(e)) {
-			// Get the top CLICK feature
-			var topFeatureAtCoordinate = getTopFeatureAtCoordinate(e.coordinate);
-			if (topFeatureAtCoordinate != undefined) {
-				if (modify.getActive() || (e.type == "dblclick" && !modify.getActive())) {
-					transform.select(topFeatureAtCoordinate);
-					refreshSelection();
-					startModifying();
+		if (e.type == 'singleclick') {
+			// Change selected features while in MODIFY mode for different CLICK/SHIFT combinations
+			if (modify.getActive() && modify.get("lastAction") != "point removed") {
+				var topFeatureAtCoordinate = getTopFeatureAtCoordinate(e.coordinate);
+				var selectedFeatures = toggleFeatureInCollection(topFeatureAtCoordinate, transform.get("selected").getArray(), ol.events.condition.shiftKeyOnly(e));
+				transform.select();
+				$.each(selectedFeatures, function () { transform.select(this, true); });
+				refreshSelection();
+				startModifying();
+			}
+		} else if (e.type == 'dblclick') {
+			// Switch interaction mode between TRANSFORM and MODIFY when DBLCLICK a feature (no modifiers keys allowed)
+			if (ol.events.condition.noModifierKeys(e)) {
+				var topFeatureAtCoordinate = getTopFeatureAtCoordinate(e.coordinate);
+				if (topFeatureAtCoordinate != undefined) {
+					if (modify.getActive()) {
+						transform.select(topFeatureAtCoordinate, false);
+						refreshSelection();
+						startTransforming();
+					} else {
+						refreshSelection();
+						startModifying();
+					}
 				}
-			} else if (e.type == "dblclick" && modify.getActive()) {
-				startTransforming();
 			}
 		}
+		// Reset last Modify action AFTER any mouse interaction processing
+		modify.set("lastAction", "none");
 	});
 	
 	transform.on('select', function (e) {
@@ -488,25 +570,12 @@ function initializeInteractions() {
 		transform.set("startCoordinate", e.target.coordinate_);
 	});
 	transform.on('translateend', function (e) {
-		// Toggle selection when SHIFT + CLICK / Change selection when just CLICK
+		// Change selected features while in TRANSFORM mode for different CLICK/SHIFT combinations
 		if (transform.get("startCoordinate") == e.target.coordinate_) {
-			// Get the top CLICK feature
 			var topFeatureAtCoordinate = getTopFeatureAtCoordinate(e.target.coordinate_);
-			
-			// Get the existing selection
-			if (transform.get("shiftOnly")) {
-				var selectedFeatures = transform.getFeatures();
-				transform.select();
-				// Exclude from existing selection the SHIFT + CLICK feature
-				$.each(selectedFeatures, function (index, feature) {
-					if (feature.ol_uid != topFeatureAtCoordinate.ol_uid) {
-						transform.select(feature, true);
-					}
-				});
-			} else {
-				// Only select the top CLICK feature
-				transform.select(topFeatureAtCoordinate, false);
-			}
+			var selectedFeatures = toggleFeatureInCollection(topFeatureAtCoordinate, transform.getFeatures(), transform.get("shiftOnly"));
+			transform.select();
+			$.each(selectedFeatures, function () { transform.select(this, true); });
 		}
 		refreshSelection();
 		

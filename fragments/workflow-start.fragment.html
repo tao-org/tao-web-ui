@@ -135,29 +135,12 @@
         }
         //remove error for some input elements
         $("#frmStartWF")
-
-
-//
-            // Load map poly
             .on("click", ".ol", function (e) {
-                var inputField = $(this).parent().find("input");
-                if ($("#myModalMap").length == 0) {
-                    $.ajax({ url: "./fragments/map.poly.fragment.html", async: false })
-                        .done(function (data) {
-                            $("#panel-topo-wrapper").closest(".content-wrapper").append(data);
-                            $("#myModalMap").find("#polygon2D").val(inputField.val());
-                            $("#myModalMap").on('hide.bs.modal', function () {
-                                inputField.val($("#polygon2D").val());
-                            });
-                            $("#myModalMap").modal("show");
-                        })
-                        .fail(function (jqXHR, textStatus) { showMsg("Could not load map content.", "ERROR"); });
-                } else {
-                    $("#myModalMap").find("#polygon2D").val(inputField.val());
-                    $("#myModalMap").modal("show");
-                }
+                // Load map poly
+//                var inputField = $(this).parent().find("input");
+//                var container = $("#panel-topo-wrapper").closest(".content-wrapper");
+                openPolygonMap($("#panel-topo-wrapper").closest(".content-wrapper"), $(this).parent().find("input"));
             })
-//
             .on("change",".var-value-string, .var-value-string2, .var-value-list",function(e){
                 var n = $(this).closest( '.val-row' ).find(".var-id").text();
                 if(n === "acquisition_date"){
@@ -168,7 +151,6 @@
                     } else{
                         $(this).siblings(".var-value").val(dstart+dstop);
                     }
-
                     return;
                 }
                 $(this).siblings(".var-value").val($(this).val());

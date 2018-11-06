@@ -79,7 +79,8 @@
 										<div class="form-group has-feedback">
 										    <label for="user_pass" class="col-sm-1 col-md-1 control-label">Password </label>
 										    <div class="col-sm-2 col-md-2">
-										        <input type="password" id="user_pass" value="" class="form-control" autocomplete="new-password">
+										        <input type="password" id="user_pass" name="user_pass" value="" class="form-control" autocomplete="new-password">
+										        <i class="glyphicon glyphicon-eye-open form-control-feedback" title="show password"></i>
 										    </div>
 										</div>
 									</div>
@@ -226,13 +227,13 @@ function getDatasourcesList(){
                 response = [];
             }
             datasourcesList = response;
-         
+            allDatasources = [];
 			$.each(response,function(k, v ){
 				allDatasources.push({label:v.sensor+" "+v.dataSourceName,value:'d_'+k});
 			});
 			//set the source option with the list of datasources retrieved
 			$( "#listDatasources" ).autocomplete( "option", "source",allDatasources);
-			
+			routeLoading('hide');
             showMsg("Datasources list successfully retrieved.", "SUCCESS");
 
         }
@@ -443,7 +444,7 @@ function downloadProducts(formData){
 	
 	$.when( ajaxCallFnc("query/fetch", JSON.stringify(data),"POST") ).done( function(data){
 		 console.log(data);
-
+		 routeLoading('hide');
          if($.type(data) === 'object' && data.status === "SUCCEEDED" ){
         	 showMsg("The selected products were successfully downloaded.", "SUCCESS");
         	 
@@ -466,6 +467,7 @@ function checkProducts(listOfProducts){
 	 $.when( ajaxCallFnc("product/check", {names:JSON.stringify(productsName)}, "GET") ).done( function(data){
 		 console.log("product/check =>"+productsName);	 
 		    if($.type(data) === 'object' && data.status === "SUCCEEDED" ){
+		    	routeLoading('hide');
             	if(data.data.lenght > 0 && data.data.lenght === productsName.lenght ){
             		showMsg("The list of products returned already exists.", "SUCCESS");
             	}else if(data.data.lenght > 0){
@@ -482,13 +484,45 @@ function checkProducts(listOfProducts){
             		showProductsTable(listOfProducts);
             	}
             }else if($.type(data) === 'object' && data.status === "FAILED"){
+        		routeLoading('hide');
            	 showMsg(data.message, "FAILED");
             }
 	});
 	
 }
 
+function refresh(){
+	routeLoading('show');
+	$("#parameterList, #datasourceProducts").css('display','none');	
+	$("#queryLabel").val('');
+	$("#listDatasources").val('');
+	setTimeout(function(){
+		getDatasourcesList();
+	},200);
+}
+
 $( document ).ready(function() {
+	$('.btn-action[data-action="refresh"]').on("click", function(event){
+	    event.preventDefault();
+	    refresh();
+	});
+	
+	
+	$('input[name="user_pass"] + .glyphicon ').css({'cursor':'pointer', 'pointer-events': 'all'});
+	$('input[name="user_pass"] + .glyphicon ').on('click',function() {
+			 if( $(this).hasClass('glyphicon-eye-open') ){
+				 $("#"+this.previousElementSibling.id ).attr('type','text');
+				 $(this).removeClass('glyphicon-eye-open');
+				 $(this).addClass('glyphicon-eye-close');
+				 $(this).attr('title','hide password');
+			 }else{
+				 $("#"+this.previousElementSibling.id ).attr('type','password');
+				 $(this).removeClass('glyphicon-eye-close');
+				 $(this).addClass('glyphicon-eye-open');
+				 $(this).attr('title','show password');
+				 }
+	});
+	
 	$("#parameterList, #datasourceProducts").css('display','none');
 	getDatasourcesList();
 	
@@ -509,9 +543,9 @@ $( document ).ready(function() {
 
 			$("#selectedDatasource").val(val);
             //autolabel query if empty
-			if($("#queryLabel").val()===""){
+			//if($("#queryLabel").val()===""){
                 $("#queryLabel").val($("#listDatasources").val() + " (" + moment().format("YYYY-MM-DD HH:mm:ss").toString() + ")");
-            }
+          //  }
 			showDatasourceParams(val.replace('d_',''));
 			$( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
 
@@ -534,15 +568,18 @@ $( document ).ready(function() {
 	
 	$("form#formDownloadProducts").submit(function(e){
 		e.preventDefault();
+		routeLoading('show');
 		var label = $("#queryLabel").val();
         if(label === ""){
+        	routeLoading('hide');
             showMsg("You must specify a label for your query in order to proceed.", "WARNING");
             return;
         }
-
+    	var selectedDatasource = $("#selectedDatasource").val().replace('d_','');
         var formData = {
 		    "label": label,
-            "products":[]
+            "products":[],
+            "productType":datasourcesList[selectedDatasource]['sensor']
 		};
 		if($('input[name=allproducts]').is('checked')){
 			formData.products = listOfProducts;
@@ -561,18 +598,22 @@ $( document ).ready(function() {
 					showMsg("Datasource component was successfully created.", "SUCCESS");
 					downloadProducts(formData.products);
 	             }else if($.type(data) === 'object' && data.status === "FAILED"){
+	            	 routeLoading('hide');
 	            	 showMsg(data.message, "FAILED");
 	             }else{
+	            	 routeLoading('hide');
 	            	 showMsg("Datasource componet was not created.", "SUCCESS");
 	             }
 		});
 		} else{
+			routeLoading('hide');
 			 showMsg("No products selected for download", "WARNING");
 		}
 	});//end submit form formDownloadProducts
 	
 	$("form#editQueryParams").submit(function(e){
 		e.preventDefault();
+		routeLoading('show');
 		 
 		var param = datasourcesList[$("#selectedDatasource").val().replace('d_','')].parameters;
 		var values = {};
@@ -633,8 +674,10 @@ $( document ).ready(function() {
 				       	 checkProducts(listOfProducts);
 	
 					}else if($.type(data) === 'object' && data.status === "FAILED"){
+						routeLoading('hide');
 						showMsg(data.message, "FAIL");
 					}else{
+						routeLoading('hide');
 						showMsg("No products were found for selected datasource.", "SUCCESS");
 					}
 				});

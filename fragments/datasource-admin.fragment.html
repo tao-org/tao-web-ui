@@ -438,14 +438,13 @@
                         _mLIST.dataAllTags.sort();
                         _mLIST.dataAllTags = arrayDuplicateRemove(_mLIST.dataAllTags);
 
-                  // add tags to datasources list object
+                    // add tags to datasources list object
                     $.each(datasourcesObj, function(index, res){
                     	datasourcesObj[index].tags = [];
-                    	// Operator '=>' is not supported in IE
-                    	//findDatasource = datasourcesList.find(x => x.id === res.sensor+'-'+res.dataSourceName);
-                    	if(datasourcesList[index].id ===  res.sensor+'-'+res.dataSourceName){
-        					datasourcesObj[index].tags = datasourcesList[index].tags;
-                    	}
+                        var foundDatasource = _.findWhere(datasourcesList, {id: res.sensor+'-'+res.dataSourceName});
+                        if(foundDatasource && foundDatasource.tags && foundDatasource.tags.length>0){
+                            datasourcesObj[index].tags = foundDatasource.tags;
+                        }
                     });
                     
                     _mLIST.dataSourceList = datasourcesList;

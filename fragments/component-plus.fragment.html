@@ -803,10 +803,14 @@
 	}
 	
     $(document).ready( function(){
+        
+        initializeTagsInputAutocomplete("#formTags", "component"); 
         //no edit in shared workspace
         //$("#frmExecNodeEdit").on("keypress change","*", function(e){
             if(routeTags[0] === "shared"){
                 $("#frmExecNodeEdit :input").prop("disabled", true);
+                $("#frmExecNodeEdit input#formTags").css('display','');
+                $("#frmExecNodeEdit div#formTags_tagsinput").hide();              
                 $("#frmExecNodeEdit button[type=\"submit\"]").hide();
                 $("#myModalNodes .modal-note h4").html("Warrning");
                 $("#myModalNodes .modal-note p").html(SHARED_EDIT_RESTRICTED);
@@ -1136,7 +1140,6 @@
             return false;
         });
         
-        initializeTagsInputAutocomplete("#formTags", "component"); 
 
     });
     //# sourceURL=comp-plus.js

@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fragments/datasources-queries.fragment.html" beforeDir="false" afterPath="$PROJECT_DIR$/fragments/datasources-queries.fragment.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" beforeDir="false" afterPath="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,46 +18,47 @@
     <session id="-1298493351">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="13" />
+          <entry key="project.closed" value="15" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.18" value="1" />
           <entry key="project.open.time.23" value="1" />
           <entry key="project.open.time.24" value="1" />
-          <entry key="project.open.time.25" value="1" />
+          <entry key="project.open.time.25" value="2" />
           <entry key="project.open.time.26" value="5" />
+          <entry key="project.open.time.28" value="1" />
           <entry key="project.open.time.29" value="2" />
           <entry key="project.open.time.37" value="1" />
           <entry key="project.open.time.42" value="1" />
           <entry key="project.open.time.57" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="16" />
+          <entry key="project.opened" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="css" value="462" />
-          <entry key="html" value="3115" />
+          <entry key="html" value="3238" />
           <entry key="js" value="4691" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSS" value="462" />
-          <entry key="HTML" value="3115" />
+          <entry key="HTML" value="3238" />
           <entry key="JavaScript" value="4691" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="7" />
-          <entry key="html" value="33" />
+          <entry key="html" value="35" />
           <entry key="js" value="36" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSS" value="7" />
-          <entry key="HTML" value="33" />
+          <entry key="HTML" value="35" />
           <entry key="JavaScript" value="36" />
         </counts>
       </usages-collector>
@@ -104,20 +105,33 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/workflow/propbar.content.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="23" lean-forward="true" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
+            <state relative-caret-position="255">
+              <caret line="15" column="57" selection-start-line="15" selection-start-column="57" selection-end-line="15" selection-end-column="57" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fragments/datasources-queries.fragment.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="94">
+              <caret line="37" column="36" selection-start-line="37" selection-start-column="36" selection-end-line="37" selection-end-column="36" />
+              <folding>
+                <element signature="n#style#0;n#i#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#label#0;n#div#0;n#th#0;n#tr#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/fragments/datasources-queries.fragment.html">
+        <entry file="file://$PROJECT_DIR$/fragments/datasource-admin.fragment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="502">
-              <caret line="517" column="72" lean-forward="true" selection-start-line="517" selection-start-column="72" selection-end-line="517" selection-end-column="72" />
+            <state relative-caret-position="366">
+              <caret line="440" column="20" selection-start-line="440" selection-start-column="20" selection-end-line="440" selection-end-column="20" />
               <folding>
-                <element signature="n#style#0;n#i#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#0;n#label#0;n#div#0;n#th#0;n#tr#0;n#!!top" expanded="true" />
+                <element signature="e#163#170#1" expanded="true" />
+                <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#1;n#div#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -165,10 +179,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>wf_renderComponentsToolBox</find>
-      <find>toolbox-header</find>
-      <find>/</find>
-      <find>each(componentTemplate.parameterDescriptors</find>
       <find>wf_loadModuleProcessing</find>
       <find>ajax</find>
       <find>datasource/query</find>
@@ -195,6 +205,10 @@
       <find>showDatasourceParams</find>
       <find>listDatasources</find>
       <find>selectedDatasource</find>
+      <find>format</find>
+      <find>name of your</find>
+      <find>tags</find>
+      <find>is not supported in IE</find>
     </findStrings>
     <dirStrings>
       <dir>D:\_work\tao\tao-web-ui\workflow</dir>
@@ -238,7 +252,6 @@
         <option value="$PROJECT_DIR$/fragments/users-edit.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/tao-faq.fragment.html" />
         <option value="$PROJECT_DIR$/assets/dist/js/router.js" />
-        <option value="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/workflows-all.fragment.html" />
         <option value="$PROJECT_DIR$/assets/dist/js/general-functions.js" />
         <option value="$PROJECT_DIR$/fragments/users-admin.fragment.html" />
@@ -258,6 +271,7 @@
         <option value="$PROJECT_DIR$/fragments/map.poly.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/workflow-start.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/datasources-queries.fragment.html" />
+        <option value="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
       </list>
     </option>
   </component>
@@ -321,6 +335,11 @@
               <item name="assets" type="462c0819:PsiDirectoryNode" />
               <item name="libs" type="462c0819:PsiDirectoryNode" />
               <item name="np" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tao-web-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="fragments" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
@@ -495,12 +514,14 @@
       <workItem from="1539085532880" duration="8076000" />
       <workItem from="1539345777443" duration="27437000" />
       <workItem from="1539954304814" duration="18588000" />
-      <workItem from="1540905151349" duration="4175000" />
+      <workItem from="1540905151349" duration="6485000" />
+      <workItem from="1540994661872" duration="1819000" />
+      <workItem from="1541082226320" duration="2475000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1314009000" />
+    <option name="totallyTimeSpent" value="1320613000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -515,7 +536,7 @@
     <frame x="-8" y="-8" width="1696" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18948655" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19437653" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -526,7 +547,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3290461" />
       <window_info anchor="bottom" id="PHP-CGI Server" order="7" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="8" visible="true" weight="0.16505896" />
+      <window_info anchor="bottom" id="Version Control" order="8" visible="true" weight="0.16505896" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
@@ -588,12 +609,12 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/bootstrap/css/bootstrap.css.map">
+      <provider editor-type-id="sourcemapFileViewerProvider" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="1" column="2" selection-start-line="1" selection-start-column="2" selection-end-line="1" selection-end-column="2" />
         </state>
       </provider>
-      <provider editor-type-id="sourcemapFileViewerProvider" />
     </entry>
     <entry file="file://$PROJECT_DIR$/_rest/login/auth/authorize/index.html" />
     <entry file="file://$PROJECT_DIR$/fragments/mock-viewprojectresults.fragment.html">
@@ -677,13 +698,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="371">
           <caret line="619" column="19" lean-forward="true" selection-start-line="619" selection-start-column="19" selection-end-line="619" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/datasource-admin.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11509">
-          <caret line="677" column="28" selection-start-line="677" selection-start-column="28" selection-end-line="677" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -870,8 +884,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/workflow/propbar.content.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="23" lean-forward="true" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
+        <state relative-caret-position="255">
+          <caret line="15" column="57" selection-start-line="15" selection-start-column="57" selection-end-line="15" selection-end-column="57" />
         </state>
       </provider>
     </entry>
@@ -901,11 +915,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fragments/datasources-queries.fragment.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="502">
-          <caret line="517" column="72" lean-forward="true" selection-start-line="517" selection-start-column="72" selection-end-line="517" selection-end-column="72" />
+        <state relative-caret-position="94">
+          <caret line="37" column="36" selection-start-line="37" selection-start-column="36" selection-end-line="37" selection-end-column="36" />
           <folding>
             <element signature="n#style#0;n#i#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#input#0;n#label#0;n#div#0;n#th#0;n#tr#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/datasource-admin.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="440" column="20" selection-start-line="440" selection-start-column="20" selection-end-line="440" selection-end-column="20" />
+          <folding>
+            <element signature="e#163#170#1" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#1;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>

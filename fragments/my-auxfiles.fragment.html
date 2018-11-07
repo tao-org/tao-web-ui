@@ -14,6 +14,7 @@
 				<div class="box-header">
 					<div class="treeview-header">
 						<h4>Your files:</h4>
+						<button id="importProducts" class="btn bg-green btn-flat"><i class="fa fa-upload fa-fw"></i>Import products</button>
 						<button id="uploadFiles" class="btn bg-green btn-flat"><i class="fa fa-upload fa-fw"></i>Upload files</button>
 						<button id="createQuery" class="btn bg-green btn-flat" disabled><i class="fa fa-square-o fa-fw"></i>Create query</button>
 						<div class="col-md-12 loading hidden">
@@ -168,6 +169,59 @@
 				</div>
 			</form>
 			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- modal dialog for uploading files -->
+<div id="myImportProducts" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title">Import</h1>
+			</div>
+			<form id="frmImportProducts" class="form-horizontal" enctype="multipart/form-data" role="form">
+				<div class="modal-body">
+					<section class="upload-message collapse">
+						<h4>Products successfully imported.</h4>
+					</section>
+					<section class="upload-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label class="col-sm-12 col-md-12">Path:</label>
+									<div class="col-sm-12 col-md-12">
+										<input type="text" class="form-control" name="path" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-12 col-md-12">Symbolic link:</label>
+									<div class="col-sm-2 col-md-2">
+										<input type="radio" name="symbolicLink" value="true"> Yes
+									</div>
+									<div class="col-sm-2 col-md-2">
+  										<input type="radio" name="symbolicLink" value="false" checked> No
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<div class="col-md-12 col-sm-12">
+										<button type="submit" class="btn btn-primary btn-submit">Import products</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button class="btn btn-default upload-back collapse" style="float:left">Back</button>
 				<button class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
@@ -1134,6 +1188,93 @@ $(document).ready(function() {
 			$("#frmUploadFile input[name='file']").rules("add", { filesize: bytesFromSizeUnits(maxFileSizeUnits) });
 		}
 	});
+	
+	// Open import products dialog window
+	$("#importProducts, #myImportProducts .upload-back").on("click", function(){
+		// close file attributes window
+		closePorperties();
+		
+		// reset dialog contents
+		$("#myImportProducts .upload-content").show();
+		$("#myImportProducts .upload-message").hide();
+		$("#myImportProducts .upload-back").hide();
+		
+		// reset form (fields & validator)
+		$('#frmImportProducts')[0].reset();
+		$("#frmImportProducts").validate().resetForm();
+		$("#frmImportProducts .form-control").parent().removeClass("has-error");
+		
+		// show dialog
+		$("#myImportProducts").modal('show');
+		
+	});
+	
+	// Set import validation rules
+	$("#frmImportProducts").validate({
+		rules: {
+			path: { required: true }
+		},
+		highlight: function(element, errorClass) {
+			$(element).parent().addClass("has-error");
+		},
+		unhighlight: function(element, errorClass) {
+			$(element).parent().removeClass("has-error");
+		},
+		errorPlacement: function(error, element) {
+			error.appendTo(element.parent());
+		},
+		success: function(label) {
+			label.remove();
+		}
+	});
+	
+	// Start importing products
+	$("#frmImportProducts").submit(function (event) {
+		event.preventDefault();
+		if ($(this).valid()) {
+			routeLoading('show');
+			var form = new FormData();
+			form.append("sourceDir", $("input[name='path']").val());
+			form.append("linkOnly", $("input[name='symbolicLink']").val());
+
+			$.ajax({
+				cache: false,
+				url: baseRestApiURL + "product/import",
+				type: "POST",
+				data: form,
+			 	async: true,
+			 	crossDomain: true,
+				headers: {
+				  "cache-control": "no-cache",
+				  "X-Auth-Token": window.tokenKey
+				},
+				processData: false,
+				contentType: false
+			//	mimeType: "multipart/form-data",
+			})
+            .done(function (data) {	            	
+	             console.log(data);
+	        		             
+	             if($.type(data) === 'object' && data.status === "SUCCEEDED" ){
+	            	 $("#myImportProducts").modal('hide');
+	            	 showMsg("The selected products were successfully imported.", "SUCCESS");		     
+	            	 $.when(refreshTree()).done(function () { routeLoading('hide'); });
+	             }else if($.type(data) === 'object' && data.status === "FAILED"){
+	            	 showMsg(data.message, "FAILED");
+	             }else{
+	            	 showMsg("The selected products were not imported.", "SUCCESS");
+	             }
+		         
+            })
+            .fail(function (jqXHR, textStatus) {
+                alert("Operation failed. Please try again or contact app admin");
+            });
+				
+		}
+		return false; // To avoid actual submission of the form
+	});
+	
+
 });
 
 //# sourceURL=my-auxfiles.js

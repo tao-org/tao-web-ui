@@ -198,8 +198,9 @@
     </div>
 </section><!-- /.content -->
 
-   
-<div class="modal-content modal-edit-tags" style="display:none">
+<div id="myModalEditTags" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content modal-edit-tags">
 	<div class="modal-header">
 	    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	    <h4 class="modal-title" id="myModalLabel">Edit tags</h4>
@@ -233,6 +234,8 @@
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	</div> 
 </div><!-- /.modal-content -->
+	</div>
+</div>
 <link rel="stylesheet" href="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.css" type="text/css" />
 <script src="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.js" type="text/javascript"></script>
 <!-- 1.12.1/jquery-ui.min.js for autocomplete -->
@@ -240,7 +243,6 @@
 <script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
                 
 <script>
-	var modalEdit = '';
     if(_mLIST){
         for (var member in _mLIST) delete _mLIST[member];
     }
@@ -527,24 +529,14 @@
             }
         };
     myModalNodesOpShow = function(operationid){
-        var $modal = $("#myModalNodes");
-      //  $(".modal-dialog",$modal).removeClass("modal-lg");
-       // var rm_contentUrl = '/_tao/rm_content/rm_blank.php';
-        var rmContent = '';
 
         if(operationid === "view"){
-            //$(".modal-dialog",$modal).addClass("modal-lg");
+        var $modal = $("#myModalNodes");
+        var rmContent = '';
+
             $(".modal-dialog",$modal).removeClass("modal-lg");
             rmContent = buildModalParamsList();
-        }
         
-        if(operationid === "edit"){
-			rmContent = modalEdit;
-			if(_mLIST.dataOpQueue[0]['dna'].hasOwnProperty('tags') && _mLIST.dataOpQueue[0]['dna']['tags']!= null){
-				$('#formTags').importTags( _mLIST.dataOpQueue[0]['dna']['tags'].join());
-			}
-			modalEdit.css('display','');
-        }
         if(rmContent !== ''){
             $modal.find('.modal-dialog').html(rmContent);
         }else{
@@ -552,6 +544,16 @@
             return;
         }
         $modal.modal('show');
+        }
+        
+        if(operationid === "edit"){
+			
+			if(_mLIST.dataOpQueue[0]['dna'].hasOwnProperty('tags') && _mLIST.dataOpQueue[0]['dna']['tags']!= null){
+				$('#formTags').importTags( _mLIST.dataOpQueue[0]['dna']['tags'].join());
+			}
+			$("#myModalEditTags").modal('show');
+        }
+           
     };
     //bind some actions to active elements
     _mLIST.$el.itemsBox
@@ -714,25 +716,12 @@ html += "      </tbody>\n" +
         	var tags = $('input[name=formTags]', this).val();
             tags = tags.split(",");
         	
-        	// add tags to datasources list object
-        	//findDatasource = _mLIST.dataSourceList.find(x => x.id === _mLIST.dataOpQueue[0]['dna']['sensor']+'-'+_mLIST.dataOpQueue[0]['dna']['dataSourceName']);
-        	var findDatasource = [];
-        	$.each(_mLIST.dataSourceList,function(index){
-				if(_mLIST.dataSourceList[index].id === _mLIST.dataOpQueue[0]['dna']['sensor']+'-'+_mLIST.dataOpQueue[0]['dna']['dataSourceName']){
-					findDatasource = _mLIST.dataSourceList[index];
-				}			
-			});
-        	if(findDatasource != []){
-        	findDatasource.tags = tags;
-        	}        	
-          
-        	console.log(findDatasource);
         	$.ajax({
         		cache: false,
                 type: "PUT",
-                url: baseRestApiURL + "datasource/"+id,
+                url: baseRestApiURL + "datasource/"+id+"/tag",
               //  dataType: "json",
-                data: JSON.stringify(findDatasource),
+                data: JSON.stringify(tags),
                 contentType: "application/json; charset=utf-8",
                 headers: {
                     "Accept": "application/json",
@@ -745,21 +734,18 @@ html += "      </tbody>\n" +
                 success: function(r) {
                     var response = chkTSRF(r);
                     console.log(response);
-                    if(response.status!=undefined){
-                    	showMsg("Tags successfully saved.", "SUCCESS");	
+                    if(response != {}){
+                    	showMsg("Datasources tags successfully saved.", "SUCCESS");	
                     }else{
-                    	showMsg("Tags were not saved.", "SUCCESS");	
+                    	showMsg("Datasources tags were not saved.", "FAILED");	
                     }
                    	
-                    $("#myModalNodes").modal('hide');
+                    $("#myModalEditTags").modal('hide');
                     _mLIST.refresh();
                 }
         	});
         	return false;
         });
-        
-        modalEdit =  $('.modal-edit-tags');
-        modalEdit.css('display','none');
         
         initializeTagsInputAutocomplete("#formTags", "datasource");
     });

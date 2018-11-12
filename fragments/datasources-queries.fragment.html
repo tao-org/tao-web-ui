@@ -43,7 +43,7 @@
                                 <div class="col-md-12">
                                     <div class="form-horizontal form-group ">
                                         <label for="queryLabel" class="col-sm-1 col-md-1 control-label">Query label</label>
-                                        <div class="ui-widget col-sm-11 col-md-11">
+                                        <div class="col-sm-11 col-md-11">
                                             <input id="queryLabel" class="form-control" value="" placeholder="name of your query.">
                                         </div>
                                     </div>
@@ -54,7 +54,7 @@
                                         <div class="form-horizontal form-group ">
                                         <label for="listDatasources" class="col-sm-1 col-md-1 control-label">Datasources </label>
                                         <div class="ui-widget col-sm-11 col-md-11">
-                                            <input id="listDatasources" class="form-control">
+                                        	<select id="listDatasources" name="listDatasources" class="form-control"></select>
                                             <input type="hidden" id="selectedDatasource" value="default">
                                         </div>
                                     </div>
@@ -230,9 +230,12 @@ function getDatasourcesList(){
             allDatasources = [];
 			$.each(response,function(k, v ){
 				allDatasources.push({label:v.sensor+" "+v.dataSourceName,value:'d_'+k});
+				$( "#listDatasources" ).append($('<option>', {
+			        value: 'd_'+k,
+			        text: v.sensor+" "+v.dataSourceName
+			    }));
 			});
 			//set the source option with the list of datasources retrieved
-			$( "#listDatasources" ).autocomplete( "option", "source",allDatasources);
 			routeLoading('hide');
             showMsg("Datasources list successfully retrieved.", "SUCCESS");
 
@@ -336,6 +339,8 @@ function showDatasourceParams(el){
 	$.each($("input[name*='_d1']"), function(){
 		var name = $(this).attr('data-name');
 		$(this).datepicker({
+			changeYear: true,
+			changeMonth: true,
 			dateFormat: 'yy-mm-dd',
 			onSelect:function(selected,evnt){
 				var newDate = new Date(selected);
@@ -350,6 +355,8 @@ function showDatasourceParams(el){
 	$.each($("input[name*='_d2']"), function(){
 		var name = $(this).attr('data-name');
 		$(this).datepicker({
+			changeYear: true,
+			changeMonth: true,
 			dateFormat: 'yy-mm-dd',
 			onSelect:function(selected,evnt){
 				var newDate = new Date(selected);
@@ -495,10 +502,150 @@ function refresh(){
 	routeLoading('show');
 	$("#parameterList, #datasourceProducts").css('display','none');	
 	$("#queryLabel").val('');
-	$("#listDatasources").val('');
 	setTimeout(function(){
 		getDatasourcesList();
 	},200);
+}
+
+function initComboboxAutocomplete(){
+	 $.widget("custom.combobox", {
+	        _create: function () {
+	            this.wrapper = $("<span>")
+	                .addClass("custom-combobox")
+	                .insertAfter(this.element);
+
+	            this.element.hide();
+	            this._createAutocomplete();
+	            this._createShowAllButton();
+	        },
+
+	        _createAutocomplete: function () {
+	            var selected = this.element.children(":selected"),
+	                value = selected.val() ? selected.text() : "";
+
+	            this.input = $("<input>")
+	                .appendTo(this.wrapper)
+	                .val(value)
+	                .attr("title", "")
+	                .addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+	                .autocomplete({
+	                delay: 0,
+	                minLength: 0,
+	                source: $.proxy(this, "_source")
+	            })
+	                .tooltip({
+	                tooltipClass: "ui-state-highlight"
+	            });
+
+	            this._on(this.input, {
+	                autocompleteselect: function (event, ui) {
+	                    ui.item.option.selected = true;
+	                    this._trigger("select", event, {
+	                        item: ui.item.option
+	                    });
+	                    
+	                	//event.preventDefault();
+	        			console.log(ui.item.value);console.log(ui.item.label);
+	        		//	var val = ui.item.value;
+	        		//	this.value = ui.item.label;
+
+	        			$("#selectedDatasource").val(ui.item.option.value);
+	                    //autolabel query 
+	                    $("#queryLabel").val(ui.item.label + " (" + moment().format("YYYY-MM-DD HH:mm:ss").toString() + ")");
+
+	        			showDatasourceParams(ui.item.option.value.replace('d_',''));
+	        			$( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
+
+	        			//return false;// Prevent the widget from inserting the value.
+	                },
+
+	                autocompletechange: "_removeIfInvalid"
+	            });
+	        },
+
+	        _createShowAllButton: function () {
+	            var input = this.input,
+	                wasOpen = false;
+
+	            $("<a>")
+	                .attr("tabIndex", -1)
+	              //  .attr("title", "Show All Items")
+	                .tooltip()
+	                .appendTo(this.wrapper)
+	                .button({
+	                icons: {
+	                    primary: "ui-icon-triangle-1-s"
+	                },
+	                text: false
+	            })
+	                .removeClass("ui-corner-all")
+	                .addClass("custom-combobox-toggle ui-corner-right")
+	                .click(function(event){
+	                	  if (input.autocomplete("widget").is(":visible")) {
+	                        //  input.autocomplete("close");
+	                          return;
+	                      }
+	                      input.focus();
+	                	  
+	                      // Pass empty string as value to search for, displaying all results
+	                	  input.autocomplete("search", "");
+	                   
+	                   	  event.stopImmediatePropagation();
+	                })	             
+	        },
+
+	        _source: function (request, response) {
+	            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+	            response(this.element.children("option").map(function () {
+	                var text = $(this).text();
+	                if (this.value && (!request.term || matcher.test(text))) return {
+	                    label: text,
+	                    value: text,
+	                    option: this
+	                };
+	            }));
+	        },
+
+	        _removeIfInvalid: function (event, ui) {
+
+	            // Selected an item, nothing to do
+	            if (ui.item) {
+	                return;
+	            }
+
+	            // Search for a match (case-insensitive)
+	            var value = this.input.val(),
+	                valueLowerCase = value.toLowerCase(),
+	                valid = false;
+	            this.element.children("option").each(function () {
+	                if ($(this).text().toLowerCase() === valueLowerCase) {
+	                    this.selected = valid = true;
+	                    return false;
+	                }
+	            });
+
+	            // Found a match, nothing to do
+	            if (valid) {
+	                return;
+	            }
+
+	            // Remove invalid value
+	            this.input.val("")
+	                .attr("title", value + " didn't match any item")
+	                .tooltip("open");
+	            this.element.val("");
+	            this._delay(function () {
+	                this.input.tooltip("close").attr("title", "");
+	            }, 2500);
+	            this.input.data("ui-autocomplete").term = "";
+	        },
+
+	        _destroy: function () {
+	            this.wrapper.remove();
+	            this.element.show();
+	        }
+	    });
+
 }
 
 $( document ).ready(function() {
@@ -526,33 +673,15 @@ $( document ).ready(function() {
 	$("#parameterList, #datasourceProducts").css('display','none');
 	getDatasourcesList();
 	
-	//Initialize the autocomplete with the list of datasources
-	$( "#listDatasources" ).autocomplete({
-		source: function(request, response) {
-			var results = $.ui.autocomplete.filter(allDatasources, request.term);
-			response(results);
-			},
-		focus: function(event, ui) {
-			return false; // Prevent the widget from inserting the value.
-		},
-		select: function( event, ui ) {
-			event.preventDefault();
-			console.log(ui.item.value);console.log(ui.item.label);
-			var val = ui.item.value;
-			this.value = ui.item.label;
+	initComboboxAutocomplete();
+	$( "#listDatasources" ).combobox();
 
-			$("#selectedDatasource").val(val);
-            //autolabel query if empty
-			//if($("#queryLabel").val()===""){
-                $("#queryLabel").val($("#listDatasources").val() + " (" + moment().format("YYYY-MM-DD HH:mm:ss").toString() + ")");
-          //  }
-			showDatasourceParams(val.replace('d_',''));
-			$( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
-
-			return false;// Prevent the widget from inserting the value.
-		}
-	});
+	$(".ui-autocomplete-input").addClass("form-control");
+	$(".ui-widget.ui-widget-content").css({'background-color':'#ffffff'})
 	$(".ui-autocomplete").css({ "max-height": "400px", "overflow-y": "scroll", "overflow-x": "hidden"});
+	$('.custom-combobox').css({'position': 'relative', 'display': 'block'});
+	$('a.custom-combobox-toggle').css({'position': 'absolute',
+	    'top': '0px','bottom': '0px','right':'-3px'});
 	
 	//add pagination
 	$('table#tbdatasourceProducts tbody').paginathing({firstLast:false});

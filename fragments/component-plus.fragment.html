@@ -140,6 +140,18 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div> <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputComponentType" class="col-sm-2 col-md-2 control-label">Component Type </label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <select id="inputComponentType" name="inputComponentType" class="form-control">
+                                                        <option value="EXECUTABLE" selected="selected">Executable</option>
+                                                        <option value="SCRIPT" >Script</option>                                                       
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
@@ -638,6 +650,9 @@
                     //!!!!!!$('input[name=inputTemplateName]', $el).val(response.template.name);
                     $('textarea[name=inputTemplateContents]', $el).val(response.templatecontents);
 
+                    $('select[name=inputComponentType] option', $el).removeAttr("selected");
+                    $('select[name=inputComponentType] option[value="'+response.componentType+'"]', $el).attr("selected", "selected");
+
                     if(response.tags != null && response.tags !=""){
 						$('#formTags').importTags( response.tags.join());
 					}
@@ -846,6 +861,7 @@
                     $(".modal-title").html("Edit processing component");
                     $("#saveExecNode").html("Save processing component");
                     $("#inputCompID").attr('disabled','disabled');
+                    $("#inputComponentType").attr('disabled','disabled');
                     getComponentDataById(_mLIST.dataOpQueue[0].dna.id);
                 }
             })

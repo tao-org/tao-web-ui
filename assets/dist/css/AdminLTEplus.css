@@ -1064,12 +1064,17 @@ input[type=checkbox].big{
     font-size: 32px;
     font-weight: 500;
 }
-.card .card-body p{
-    border-bottom: 1px solid #ccc;
-    line-height: 1.64em;
-    text-align: left;
+.card .card-body .col-sm-6, .card .card-body .col-md-6{
+	padding: 2px 0px 0px 5px;
 }
 
+.card .card-body .col-sm-5, .card .card-body .col-md-5{
+	padding: 2px 0px;   
+}
+/*'contenteditable = true' height in FireFox*/
+.card .card-body [contenteditable='true']:before {
+    content: "\feff ";
+}
 /* notifications */
 #notifications-panel-list li{
     position: relative;

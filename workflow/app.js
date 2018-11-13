@@ -539,9 +539,10 @@ jsPlumb.ready(function () {
             } ],
             [ "Label", { label: "FOO", id: "label", cssClass: "aLabel" }]
         ],
-        Container: "canvas"
+        Container: "canvas",
+        Anchor:"Center"
     });
-	
+
 	$( window )
 	.on( "resize", function() {
 		makeWFPreview();
@@ -567,6 +568,10 @@ jsPlumb.ready(function () {
 
     instance.bind("groupDragStop", function(params) {
         jsPlumb.fire("tao_updateNodePosition", [params.el.id, params.finalPos[0], params.finalPos[1]]);
+        var groupID = $("#"+params.el.id).data("group");
+        if(groupID){
+            canvasRenderer.fitGroup(groupID);
+        }
         makeWFPreview();
     });
     // bind a click listener to each connection; the connection is deleted
@@ -855,6 +860,16 @@ var tao_adModuleToSelection = function(id){
 	toolboxModules.rescanSelected();
 	console.log("mousedown on "+id);
 };
-
+var tao_adGroupNodesToSelection = function(groupCanvasID){
+    console.log("add group to selection");
+    if(!keyboardShifted){ //if keyboard is shifted keep current selection else unselect al modules on workspace
+        $(".w",$elCanvas).removeClass("selected");
+    }
+    $(".g_"+groupCanvasID , $elCanvas).each(function(index) {
+        var nodeID = $(this).attr("id");
+        $("#"+nodeID).addClass("selected");
+    });
+    toolboxModules.rescanSelected();
+};
 
 

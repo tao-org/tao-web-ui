@@ -1,23 +1,93 @@
 <div class="card">
+	<form class="form-edit-profile" action ="">
         <div class="modal-body">
 
             <div class="card-profile">
-                <img src="https://www.gravatar.com/avatar/00000000?d=mp&s=160" style="width:100%">
-                <span class="card-title val-user-fullname">John Doe</span>
+                <img src="https://www.gravatar.com/avatar/00000000?d=mp&s=160" style="width:50%,height:50%"></br>
+                <span class="card-title val-user-fullname"></span>
             </div>
-            <div class="card-body">
-                <p>first name: <span class="val-user-fname"></span></p>
-                <p>last name: <span class="val-user-lname"></span></p>
-                <p>organization: <span class="val-user-org"></span></p>
-                <p>role: <span class="val-user-role"></span></p>
-                <p>username: <span class="val-user-name"></span></p>
-                <p>email: <span class="val-user-email"></span></p>
-                <p>alternative email: <span class="val-user-email2"></span></p>
-                <p>phone: <span class="val-user-phone"></span></p>
-                <p>quota: <span class="val-user-quota"></span></p>
+            <div class="card-body" style="text-align:left">
+            	<div class="row">
+                	<div class="col-md-12">
+            			<div class="form-group">
+		                	<label for="val-user-fname" class="control-label col-sm-5 col-md-5">First name:</label> 
+		                	<div class="val-user-fname col-sm-6 col-md-6" id="val-user-fname" contenteditable="false"></div>
+                		</div>
+                	</div>
+                </div>
+                <div class="row">
+                	<div class="col-md-12">
+            			<div class="form-group">
+		                	<label for="val-user-lname" class="control-label col-sm-5 col-md-5">Last name:</label> 
+		                	<div class="val-user-lname col-sm-6 col-md-6" id="val-user-fname" contenteditable="false"></div>
+                		</div>
+                	</div>
+                </div>
+                <div class="row">
+                	<div class="col-md-12">
+            			<div class="form-group">
+		                	<label for="val-user-org" class="control-label col-sm-5 col-md-5">Organization:</label> 
+		                	<div class="val-user-org col-sm-6 col-md-6" id="val-user-fname" contenteditable="false"></div>
+                		</div>
+                	</div>
+                </div>
+                <div class="row">
+                	<div class="col-md-12">
+            			<div class="form-group">
+		                	<label for="val-user-role" class="control-label col-sm-5 col-md-5">Role:</label> 
+		                	<div class="val-user-role col-sm-6 col-md-6" id="val-user-fname" ></div>
+                		</div>
+                	</div>
+                </div>
+                 <div class="row">
+                	<div class="col-md-12">
+            			<div class="form-group">
+		                	<label for="val-user-name" class="control-label col-sm-5 col-md-5">Username:</label> 
+		                	<div class="val-user-name col-sm-6 col-md-6" id="val-user-fname" ></div>
+                		</div>
+                	</div>
+                </div>
+                <div class="row">
+                	<div class="col-md-12">
+            			<div class="form-group">
+		                	<label for="val-user-email" class="control-label col-sm-5 col-md-5">Email:</label> 
+		                	<div class="val-user-email col-sm-6 col-md-6" id="val-user-fname" contenteditable="false"></div>
+                		</div>
+                	</div>
+                </div>
+                <div class="row">
+                	<div class="col-md-12">
+            			<div class="form-group">
+		                	<label for="val-user-email2" class="control-label col-sm-5 col-md-5">Alternative email:</label> 
+		                	<div class="val-user-email2 col-sm-6 col-md-6" id="val-user-fname" contenteditable="false"></div>
+                		</div>
+                	</div>
+                </div>
+                <div class="row">
+                	<div class="col-md-12">
+            			<div class="form-group">
+		                	<label for="val-user-phone" class="control-label col-sm-5 col-md-5">Phone:</label> 
+		                	<div class="val-user-phone col-sm-6 col-md-6" id="val-user-fname" contenteditable="false"></div>
+                		</div>
+                	</div>
+                </div>
+                <div class="row">
+                	<div class="col-md-12">
+            			<div class="form-group">
+		                	<label for="val-user-quota" class="control-label col-sm-5 col-md-5">Quota:</label> 
+		                	<div class="val-user-quota col-sm-6 col-md-6" id="val-user-fname" ></div>
+                		</div>
+                	</div>
+            </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
+        	<div class="pull-left">
+            	<button type="button" class="btn btn-default btn-edit-profile" data-action="edit">Edit</button>
+            </div>
+            <div class="pull-right">
+            	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        	</div>
+		</div>
+	</form>
 </div>

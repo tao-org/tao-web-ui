@@ -120,6 +120,50 @@ $(function () {
 
 (function(){
     var $elModalProfile = $("#myModalWorkFlow");
+    function updateProfile(form){
+    	$.ajax({
+    		 cache: false,
+             url: baseRestApiURL + "user/"+form.username,
+             dataType : 'json',
+             type: 'PUT',
+             data: JSON.stringify(form),
+     		 async: false,
+             headers: {
+                 "Accept": "application/json",
+                 "Content-Type": "application/json",
+                 "X-Auth-Token": window.tokenKey
+             },
+    	 error : function (jqXHR, textStatus, errorThrown) {
+             chkXHR(jqXHR.status);
+         },
+         success: function(r,textStatus, jqXHR) {
+           	  console.log(r)
+    		  var r = chkTSRF(r);
+    		  //inject additional elements into user profile data.
+              if(r.id){
+                  taoUserProfile = r;
+                  taoUserProfile.userEmailMD5 = CryptoJS.MD5(r.email).toString();
+                  if(r.groups && r.groups[0]){
+                      taoUserProfile.userRole = r.groups[0]["name"];
+                  }else{
+                      alert("Your account membership has been revoked.\nYou are not a member of any user groups therefore you are denied access and you will be redirected to the login page.\nContact your TAO administrator to fix the account permissions.");
+                      window.location = 'login.html';
+                  }
+              }
+              $(".val-user-fullname").html(taoUserProfile.lastName+" "+taoUserProfile.firstName);
+              $(".val-user-role").html(taoUserProfile.userRole);
+              $(".val-user-email").html(taoUserProfile.email);
+              var gravatarUrl = "https://www.gravatar.com/avatar/"+taoUserProfile.userEmailMD5+"?d=mp&s=160";
+              $(".val-user-avatar").attr("src", gravatarUrl);
+              $(document).trigger( "quota:update" );
+              $(".wrapper").fadeTo( "slow", 1, function() {}); 
+              showMsg("Your profile was successufuly updated.", "SUCCESS");
+              $elModalProfile.modal("hide");
+    	}
+    	});
+    	
+    }
+    
     function f(){
         $.ajax({ cache: false,
             url: "./fragments/profile.fragment.html"
@@ -127,7 +171,7 @@ $(function () {
             .done(function (data) {
                 $(".modal-dialog",$elModalProfile).html(data);
                 var gravatarUrl = "https://www.gravatar.com/avatar/"+taoUserProfile.userEmailMD5+"?d=mp&s=160";
-                $(".card-profile img",$elModalProfile).attr("src", gravatarUrl);
+                $(".card-profile img",$elModalProfile).attr("src", gravatarUrl).css({'width':'50%', 'height':'50%'});
                 $(".val-user-fullname",$elModalProfile).html(taoUserProfile.lastName+" "+taoUserProfile.firstName);
 
                 $(".val-user-fname",$elModalProfile).html(taoUserProfile.firstName);
@@ -140,6 +184,35 @@ $(function () {
                 $(".val-user-name",$elModalProfile).html(taoUserProfile.username);
                 $(".val-user-phone",$elModalProfile).html(taoUserProfile.phone);
                 $(".val-user-quota",$elModalProfile).html(taoUserProfile.quota);
+                $("[contenteditable]").css({"word-wrap":"break-word", "white-space": "pre-wrap"});
+                
+                $(".btn-edit-profile").on("click", function(){
+                	if($(this).attr("data-action") == "edit"){//make divs available to edit
+                		$(this).text('Save').attr("data-action","save");
+                    	$.each($(".card-body div[contenteditable]"),function(){
+                    		$(this).attr("contenteditable","true").css({"background":"#fff"});
+                    	});
+                	}else{
+                		//save 
+                	    var formData = {
+                                "id" : taoUserProfile.id,
+                                "username" : taoUserProfile.username,
+                                "password" : $("div.val-user-pwd[contenteditable='true']").text(),
+                                "email" : $("div.val-user-email[contenteditable='true']").text(),
+                                "alternativeEmail" : $("div.val-user-email2[contenteditable='true']").text(),
+                                "lastName" : $("div.val-user-lname[contenteditable='true']").text(),
+                                "firstName" : $("div.val-user-fname[contenteditable='true']").text(),
+                                "phone" : $("div.val-user-phone[contenteditable='true']").text(),
+                                "quota" : $("div.val-user-quota[contenteditable='true']").text(),
+                                "organization" : $("div.val-user-org[contenteditable='true']").text(),
+                                "external" : taoUserProfile.external,
+                                "groups" : taoUserProfile.groups,
+                                "preferences" : taoUserProfile.preferences
+                            };
+                		updateProfile(formData);
+                	}
+                	
+            	});
                 $elModalProfile.modal("show");
             })
             .fail(function (jqXHR, textStatus) {

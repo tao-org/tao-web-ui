@@ -44,8 +44,10 @@ $(function () {
     hashRoutesMap["admin/dashboard"] = "./fragments/dashboard-admin.fragment.html";
     hashRoutesMap["projects"] = '';
 
+    if (taoUserProfile.userRole == "ADMIN") {
     hashRoutesMap["admin/users"] = "./fragments/users-admin.fragment.html";
     hashRoutesMap["admin/topology"] = "./fragments/topology-admin.fragment.html";
+    }
 
     hashRoutesMap["documentation/intro"] = "./fragments/tao-documentation.fragment.html";
     hashRoutesMap["howto/intro"] = "./fragments/tao-howto.fragment.html";
@@ -53,7 +55,7 @@ $(function () {
     hashRoutesMap["my/workflows"] = "./fragments/workflows-all.fragment.html";
     hashRoutesMap["my/components"] = "./fragments/component-admin.fragment.html";
     hashRoutesMap["my/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
-    hashRoutesMap["my/scripts"] = "./fragments/my-scripts.fragment.html";
+    //hashRoutesMap["my/scripts"] = "./fragments/my-scripts.fragment.html";
     hashRoutesMap["my/queries"] = "./fragments/datasources-queries.fragment.html";
 
     hashRoutesMap["shared/workflows"] = "./fragments/workflows-all.fragment.html";

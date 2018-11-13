@@ -305,7 +305,7 @@
                     <ul class="treeview-menu">
                     	<li class="routed routed-my-queries"><a href="#my/queries">Queries</a></li>                        
                         <li class="routed routed-my-components"><a href="#my/components">Components</a></li>                        
-                        <li class="routed routed-my-scripts"><a href="#my/scripts">Scripts</a></li>
+                        <!-- <li class="routed routed-my-scripts"><a href="#my/scripts">Scripts</a></li> -->
                         <li class="routed routed-my-workflows"><a href="#my/workflows">Workflows</a></li>
                         <li class="routed routed-my-auxfiles"><a href="#my/auxfiles">My Files</a></li>
                         
@@ -321,7 +321,7 @@
                     </ul>
                 </li>
 
-                <li class="treeview routed routed-admin-datasources routed-admin-modules routed-admin-topology routed-admin-users">
+                <li class="treeview routed routed-admin-topology routed-admin-users">
                     <a href="#"><i class="fa fa-link"></i> <span>RESOURCES</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">                        
                         <li class="routed routed-admin-topology"><a href="#admin/topology">Topology</a></li>
@@ -597,6 +597,12 @@ Nothing to see!
 
     ///////////////////////////////////////
     $(document).ready( function(){
+    	if (taoUserProfile.userRole != "ADMIN") {
+    		$("li.routed-admin-topology.routed-admin-users").css("display","none");
+    	}else{
+    		$("li.routed-admin-topology.routed-admin-users").css("display","");
+    	}
+    	
         console.log("document ready!!!");
 
         $("#selectPane").on("change", function(event){

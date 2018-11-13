@@ -324,6 +324,10 @@
     box-shadow: 0 0 0 40000px grey;
     opacity: 0.4;
 }
+#img-wf-preview .preview-node.group {
+    background-color: transparent;
+    border: 1px solid #7dabc9;
+}
 
 #img-wf-preview .preview-viewfinder{
 	top: 100px;

@@ -1,3 +1,5 @@
+var groupGutter = {"l":20,"t":20,"r":20,"b":20};
+
 var wfPlumbCanvasData = {};
 var tao_resetCanvasData = function() {
     wfPlumbCanvasData = {
@@ -32,6 +34,11 @@ var tao_resetCanvasData = function() {
     };
 };
 tao_resetCanvasData();
+
+var tao_getCanvasIdByNodeId = function(nodeID){
+    var map = _.invert(wfPlumbCanvasData.nodesMap);
+    return map[nodeID];
+};
 
 var tao_setWF2CanvasData = function(currentWfData){
     wfPlumbCanvasData._remote = currentWfData;
@@ -174,8 +181,10 @@ var tao_setWF2CanvasData = function(currentWfData){
                     });
                     //render nodes
                     $.each(currentWfData.nodes, function(i, wfOneNode) {
-                        console.log("addNewNode call");
-                        console.log(wfOneNode);
+                        if(wfOneNode.componentType === "GROUP"){
+                            return;
+                        }
+                        console.log("addNewNode call");console.log(wfOneNode);
                         var ntype = "unknown";
                         if(wfOneNode.componentType === "DATASOURCE"){
                             ntype = "ds";
@@ -186,7 +195,6 @@ var tao_setWF2CanvasData = function(currentWfData){
                         if(wfOneNode.componentType === "SCRIPT"){
                             ntype = "sc";
                         }
-
                         var nodeData = {
                             "ntype":ntype,
                             "ntemplateid": wfOneNode.componentId,
@@ -196,6 +204,23 @@ var tao_setWF2CanvasData = function(currentWfData){
                         };
                         addNewNode(wfOneNode.xCoord,wfOneNode.yCoord,nodeData);
                     });
+                    //render groups
+                    $.each(currentWfData.nodes, function(i, wfOneNode) {
+                        if(wfOneNode.componentType !== "GROUP"){
+                            return;
+                        }
+                        console.log("addNewNode call for group");console.log(wfOneNode);
+                        var ntype = "g";
+                        var nodeData = {
+                            "ntype":ntype,
+                            "ntemplateid": wfOneNode.componentId,
+                            "mtype":wfOneNode.componentId,
+                            "mlabel":wfOneNode.name,
+                            "fullData":wfOneNode
+                        };
+                        addNewNode(wfOneNode.xCoord,wfOneNode.yCoord,nodeData);
+                    });
+
                     //render connectors
                     // suspend drawing and initialise.
                     jsp.batch(function () {
@@ -330,6 +355,10 @@ var tao_setWF2CanvasData = function(currentWfData){
                         canvasRenderer.createNode(componentTemplate, dna);
                     });
             }
+            if(dna.ntype === "g"){
+                console.log("render group: "+ dna.mtype);
+                canvasRenderer.createGroup(dna);
+            }
         }else{
             canvasRenderer.createNode(componentTemplate, dna);
         }
@@ -340,7 +369,7 @@ var tao_setWF2CanvasData = function(currentWfData){
 var canvasRenderer = {
     initPort: function(el, pType) {
         // initialise draggable elements.
-        //window.jsp.draggable(el);
+        // window.jsp.draggable(el);
         if(pType === "out")
             window.jsp.makeSource(el, {
                 filter: ".n-p-o",
@@ -365,34 +394,32 @@ var canvasRenderer = {
     },
     createNode: function(componentTemplate, dna){
         if(componentTemplate === null){
-            //set component template for unknown
-            componentTemplate = {
-                "id": "component-unavilable",
-                "label": "Unknown",
-                "version": "1.0",
-                "description": "Component has been removed from toolbox",
-                "authors": "SNAP Team",
-                "copyright": "(C) SNAP Team",
-                "nodeAffinity": "Any",
-                "sources": [],
-                "targets": [],
-                "containerId": "3513b060dab3",
-                "fileLocation": "",
-                "workingDirectory": "",
-                "templateType": "VELOCITY",
-                "variables": [],
-                "multiThread": true,
-                "visibility": "SYSTEM",
-                "active": true,
-                "componentType": "EXECUTABLE",
-                "owner": "SystemAccount",
-                "parameterDescriptors": [],
-                "templatecontents": ""
-            };
-            dna.ntype = "unknown";
+                //set component template for unknown
+                componentTemplate = {
+                    "id": "component-unavilable",
+                    "label": "Unknown",
+                    "version": "1.0",
+                    "description": "Component has been removed from toolbox",
+                    "authors": "SNAP Team",
+                    "copyright": "(C) SNAP Team",
+                    "nodeAffinity": "Any",
+                    "sources": [],
+                    "targets": [],
+                    "containerId": "3513b060dab3",
+                    "fileLocation": "",
+                    "workingDirectory": "",
+                    "templateType": "VELOCITY",
+                    "variables": [],
+                    "multiThread": true,
+                    "visibility": "SYSTEM",
+                    "active": true,
+                    "componentType": "EXECUTABLE",
+                    "owner": "SystemAccount",
+                    "parameterDescriptors": [],
+                    "templatecontents": ""
+                };
+                dna.ntype = "unknown";
         }
-
-
 
         var completeness = 0;
         var maxPorts = Math.max(componentTemplate.sources.length, componentTemplate.targets.length);
@@ -459,7 +486,14 @@ var canvasRenderer = {
         d.onmousedown = function(){
             tao_adModuleToSelection(dna.nodeID);
         };
-        window.jsp.getContainer().appendChild(d);
+
+        if((dna.fullData.id === 11) || (dna.fullData.id === 12)){
+            window.jsp.getContainer().appendChild(d);
+        }else{
+            window.jsp.getContainer().appendChild(d);
+        }
+
+
         $("#"+dna.nodeID).fadeTo( "slow" , .8, function() {});
         //add node to toolbox
         toolboxModules.newModule(dna);
@@ -479,6 +513,7 @@ var canvasRenderer = {
         }
 
         var elNB = document.getElementById(dna.nodeID);
+
         window.jsp.addGroup({
             el:elNB,
             id:"ng_"+dna.nodeID,
@@ -495,5 +530,106 @@ var canvasRenderer = {
         wfPlumbCanvasData.nodes[dna.nodeID] = dna.fullData;
         jsPlumb.fire("jsPlumbNodeAdded", d);
         return d;
+    },
+    fitGroup(groupCanvasID){
+        var d = document.getElementById(groupCanvasID);
+        console.log("fit group: "+groupCanvasID);
+
+        var minLeft			= 0;
+        var minTop			= 0;
+        var maxBottom		= 0;
+        var maxRight		= 0;
+        var spanY			= 0;
+        var spanX			= 0;
+
+        var itemOffset		= {};
+        $(".g_"+groupCanvasID , $elCanvas).each(function(index) {
+            itemOffset = {};
+            itemOffset = $(this).offset();
+            itemOffset.w = $(this).outerWidth();
+            itemOffset.h = $(this).outerHeight();
+            itemOffset.right = $(this).offset().left + itemOffset.w;
+            itemOffset.bottom = $(this).offset().top + itemOffset.h;
+            if(index === 0){
+                minLeft = itemOffset.left;
+                minTop = itemOffset.top;
+                maxBottom = itemOffset.bottom;
+                maxRight = itemOffset.right;
+            }
+            minLeft = Math.min(minLeft,itemOffset.left);
+            minTop = Math.min(minTop,itemOffset.top);
+            maxBottom = Math.max(maxBottom,itemOffset.bottom);
+            maxRight = Math.max(maxRight,itemOffset.right);
+        });
+
+        spanX = maxRight-minLeft;
+        spanY = maxBottom-minTop;
+        minTop -= groupGutter.t;
+        minLeft -= groupGutter.l;
+        spanX += groupGutter.l + groupGutter.r;
+        spanY += groupGutter.t + groupGutter.b;
+
+        d.setAttribute("style","top:"+minTop+"px;left:"+minLeft+"px;width:"+spanX+"px;height:"+spanY+"px;");
+
+    },
+    markGroupMembers: function(fullData){
+        var groupCanvasID = tao_getCanvasIdByNodeId(fullData.id);
+        if(fullData && fullData.nodes){
+            $.each(fullData.nodes, function(i, oneNode) {
+                var canvasID = tao_getCanvasIdByNodeId(oneNode.id);
+                $("#"+canvasID).addClass('g_' + groupCanvasID).data('group', groupCanvasID);
+            });
+        }
+    },
+    createGroup: function(dna) {
+        wfPlumbCanvasData.nodesMap[dna.nodeID] = dna.fullData.id;
+        wfPlumbCanvasData.groups[dna.nodeID] = dna.fullData;
+
+        var d = document.createElement("div");
+        var id = jsPlumbUtil.uuid();
+        var canvas = window.jsp.getContainer();
+        d.className = "w g";
+        d.id = dna.nodeID;
+        d.innerHTML = "<div class=\"ep\"></div>";
+        d.onmousedown = function(){
+            tao_adGroupNodesToSelection(dna.nodeID);
+        };
+
+
+        d.setAttribute("style","top:10px;left:10px;width:40px;height:40px;");
+        //window.jsp.getContainer().appendChild(d);
+        canvas.insertBefore(d, canvas.firstChild);
+        this.initGroup(d);
+        this.markGroupMembers(dna.fullData);
+        //add nodes to workflow shadow data
+        this.fitGroup(d.id);
+        return d;
+    },
+    initGroup: function(el) {
+        // initialise draggable elements.
+        window.jsp.draggable(el);
+
+        window.jsp.makeSource(el, {
+            filter: ".ep",
+            anchor: "Continuous",
+            connectorStyle: { stroke: "#5c96bc", strokeWidth: 2, outlineStroke: "transparent", outlineWidth: 4 },
+            connectionType:"basic",
+            extract:{
+                "action":"the-action"
+            },
+            maxConnections: 2,
+            onMaxConnections: function (info, e) {
+                alert("Maximum connections (" + info.maxConnections + ") reached");
+            }
+        });
+        window.jsp.makeTarget(el, {
+            dropOptions: { hoverClass: "dragHover" },
+            anchor: "Continuous",
+            allowLoopback: true
+        });
+
+        // this is not part of the core demo functionality; it is a means for the Toolkit edition's wrapped
+        // version of this demo to find out about new nodes being added.
+        //window.jsp..fire("jsPlumbGroupAdded", el);
     }
 };

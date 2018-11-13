@@ -341,14 +341,16 @@ function describeArc(x, y, radius, startAngle, endAngle){
 				//var itemOffset = getTopLeftOffset($(this));
 				itemOffset = {};
 				itemOffset = $(this).offset();
+                itemOffset.selected = 0;
 				itemOffset.w = $(this).outerWidth()*wfZoom;
 				itemOffset.h = $(this).outerHeight()*wfZoom;
 				itemOffset.right = $(this).offset().left + itemOffset.w;
 				itemOffset.bottom = $(this).offset().top + itemOffset.h;
 				if($(this).hasClass("selected")){
 					itemOffset.selected = 1;
-				}else{
-					itemOffset.selected = 0;
+				}
+                if($(this).hasClass("g")){
+                    itemOffset.selected = -2;
 				}
 				
 //				if(index == 0){
@@ -374,20 +376,24 @@ function describeArc(x, y, radius, startAngle, endAngle){
 			};
 
 			$wfPreview.empty();
+        	var pHtml = '';
 			$.each( nodes, function( key, itemMatrix ) {
-                var pHtml;
 				if(itemMatrix.selected === 1){
-					pHtml = "<div class=\"preview-node selected\" style=\"top:"+(rezidualSpace.top+(itemMatrix.top-minTop)*previewScale)+"px;left:"+(rezidualSpace.left+(itemMatrix.left-minLeft)*previewScale)+"px;width:"+itemMatrix.w*previewScale+"px;height:"+itemMatrix.h*previewScale+"px\"></div>";
+					pHtml += "<div class=\"preview-node selected\" style=\"top:"+(rezidualSpace.top+(itemMatrix.top-minTop)*previewScale)+"px;left:"+(rezidualSpace.left+(itemMatrix.left-minLeft)*previewScale)+"px;width:"+itemMatrix.w*previewScale+"px;height:"+itemMatrix.h*previewScale+"px\"></div>";
 				}
 				if(itemMatrix.selected === 0){
-					pHtml = "<div class=\"preview-node\" style=\"top:"+(rezidualSpace.top+(itemMatrix.top-minTop)*previewScale)+"px;left:"+(rezidualSpace.left+(itemMatrix.left-minLeft)*previewScale)+"px;width:"+itemMatrix.w*previewScale+"px;height:"+itemMatrix.h*previewScale+"px\"></div>";
+					pHtml += "<div class=\"preview-node\" style=\"top:"+(rezidualSpace.top+(itemMatrix.top-minTop)*previewScale)+"px;left:"+(rezidualSpace.left+(itemMatrix.left-minLeft)*previewScale)+"px;width:"+itemMatrix.w*previewScale+"px;height:"+itemMatrix.h*previewScale+"px\"></div>";
 				}
+                if(itemMatrix.selected === -2){
+                    pHtml += "<div class=\"preview-node group\" style=\"top:"+(rezidualSpace.top+(itemMatrix.top-minTop)*previewScale)+"px;left:"+(rezidualSpace.left+(itemMatrix.left-minLeft)*previewScale)+"px;width:"+itemMatrix.w*previewScale+"px;height:"+itemMatrix.h*previewScale+"px\"></div>";
+                }
+
 				//add Viewfinder
 				if(itemMatrix.selected === -1){
-					pHtml = "<div class=\"preview-node viewfinder\" style=\"top:"+(rezidualSpace.top+(itemMatrix.top-minTop)*previewScale)+"px;left:"+(rezidualSpace.left+(itemMatrix.left-minLeft)*previewScale)+"px;width:"+itemMatrix.w*previewScale+"px;height:"+itemMatrix.h*previewScale+"px\"></div>";
+					pHtml += "<div class=\"preview-node viewfinder\" style=\"top:"+(rezidualSpace.top+(itemMatrix.top-minTop)*previewScale)+"px;left:"+(rezidualSpace.left+(itemMatrix.left-minLeft)*previewScale)+"px;width:"+itemMatrix.w*previewScale+"px;height:"+itemMatrix.h*previewScale+"px\"></div>";
 				}
-				$wfPreview.append(pHtml);
 			});
+        	$wfPreview.append(pHtml);
     }
 
 	//prevent browser zooming on mouse scroll only.

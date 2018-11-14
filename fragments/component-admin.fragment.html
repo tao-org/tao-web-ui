@@ -342,12 +342,89 @@
                         });
                 }
             },
+            getAllComponentsForUser: function(){
+            	 var getExecutableComponentsAjax = $.ajax({
+                     cache: false,
+                     type: "get",
+                     url: baseRestApiURL + "component/user/?type=EXECUTABLE",
+                     headers: {
+                         "Accept": "application/json",
+                         "Content-Type": "application/json",
+                         "X-Auth-Token": window.tokenKey
+                     },
+                     error : function (jqXHR, textStatus, errorThrown) {
+                         chkXHR(jqXHR.status);
+                     },
+                     success: function(r,textStatus, jqXHR) {
+                     }
+                 });
+                 
+                 var getScriptComponentAjax = $.ajax({
+                 	 cache: false,
+                      type: "get",
+                      url: baseRestApiURL + "component/user/?type=SCRIPT",
+                      headers: {
+                          "Accept": "application/json",
+                          "Content-Type": "application/json",
+                          "X-Auth-Token": window.tokenKey
+                      },
+                      error : function (jqXHR, textStatus, errorThrown) {
+                          chkXHR(jqXHR.status);
+                      },
+                      success: function(r,textStatus, jqXHR) {
+                      }
+                 });
+                 
+
+         		$.when( getExecutableComponentsAjax, getScriptComponentAjax).done( function(dataExecutable, dataScript){
+ 					var dataExecutableObj = chkTSRF(dataExecutable[0]);
+ 					var dataScriptObj = chkTSRF(dataScript[0]);
+ 					if(dataExecutable[2].status === 204 && dataScript[2].status === 204){
+ 						showMsg("No processing components found.", "SUCCESS");
+ 						 response = [];
+                      }
+ 					showMsg("Processing components list successfully retrieved.", "SUCCESS");
+ 					response = $.merge(dataScriptObj,dataExecutableObj);
+ 					//sort alphabetically by id
+ 					response.sort(function (a, b) {
+ 					    var textA = a.id.toUpperCase();
+ 					    var textB = b.id.toUpperCase();
+
+ 					    return textA.localeCompare(textB);
+ 					  });
+ 					
+ 			  		var j = 0;
+                     _mLIST.dataAllTags = [];
+                     for (j = 0; j < response.length; j++){
+                         if(response[j].tags!=null){
+                         _mLIST.dataAllTags = _mLIST.dataAllTags.concat(response[j].tags);
+                         }
+                        
+                     }
+                     _mLIST.dataAllTags.sort();
+                     _mLIST.dataAllTags = arrayDuplicateRemove(_mLIST.dataAllTags);
+
+                     _mLIST.data = response;
+                     _mLIST.dataFull = response;
+                     routeLoading('hide');
+                     //keep this order
+                     _mLIST.repaintTags();
+                     _mLIST.repaint();
+
+                 });
+            },
             getData: function (){ // populate/refresh docs array
                 var	lcl_postdata = {
                     "from": 0,
                     "to": 0,
                     "order": "none"
                 };
+           
+            	if (routeTags[0]!=="shared" && taoUserProfile.userRole != "ADMIN") {
+            		_mLIST.getAllComponentsForUser();
+            		return;
+                }
+                
                 $.ajax({
                     cache: false,
                     type: "get",

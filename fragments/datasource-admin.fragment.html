@@ -709,6 +709,12 @@ html += "      </tbody>\n" +
             e.preventDefault(e);
         });
         _mLIST.getData();
+       
+        if (taoUserProfile.userRole == "ADMIN") {
+        	$('button[data-action="edit"').css('display','');
+        }else{
+        	$('button[data-action="edit"').css('display','none');
+        }
                 
         $("#frmEditDatasourceTags").on("submit", function(e){
         	 e.preventDefault(e);

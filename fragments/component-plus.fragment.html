@@ -921,8 +921,8 @@
                         $("#saveExecNode").removeAttr('disabled');
                     }
                 }
-            })
-            .on("focusout", function(){
+            });
+            /*.on("focusout", function(){
                 if($(this).data("errorspan")){
                     if (($(this).val() === "")||($(this).val() === 0)||($(this).val() === "0")){
                         $(".error-"+$(this).data("errorspan"),".modal-error").css('display', 'inline-block');
@@ -930,7 +930,7 @@
                         $("#saveExecNode").attr('disabled','disabled');
                     }
                 }
-            });
+            });*/
 
         $("#inputCompname").focusout(function(e) {
             if($(this).val() === "")
@@ -1123,15 +1123,15 @@
                     }
                     showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
                 },
-                success: function(response) {
+                success: function(response,textStatus, jqXHR) {
                     var r = chkTSRF(response);
                     if(response.status === "FAILED"){
                         if(response.message){
                             showMsg("Error adding execution node. Please check you data, one or more values for the attributes was not in the acceptable range.", "ERROR");
                             //handle error messages
 
-
                             var objResponse = JSON.parse(jqXHR.responseText);
+                            objResponse = objResponse.message.split(';');
                             if(objResponse[0] !== "Entity has validation errors"){
                                 return;
                             }

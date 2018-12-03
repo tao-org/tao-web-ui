@@ -143,6 +143,16 @@ body.size-larger { font-size: 18px; }
 .info-box-nr-inreg, .info-box-date-arrival{
 	font-weight:bold;
 }
+
+.error-msg-box{
+    width: 50%;
+}
+@media only screen and (max-width: 768px) {
+    .error-msg-box{
+        width: 90%;
+    }
+}
+
 .login-box-body, .register-box-body {
     background: #FFFFFF;
 	background: rgba(255, 255, 255, 0.7);
@@ -336,7 +346,7 @@ transition: All 0.5s ease;
     text-align: left;
     top: 60px;
     width: 66%;
-    z-index: 1051;
+    z-index: 1200;
     pointer-events: none;
 }
 @media (min-width: 768px) {

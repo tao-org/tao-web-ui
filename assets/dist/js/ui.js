@@ -111,6 +111,10 @@ $(function () {
             var gravatarUrl = "https://www.gravatar.com/avatar/"+taoUserProfile.userEmailMD5+"?d=mp&s=160";
             $(".val-user-avatar").attr("src", gravatarUrl);
             $(document).trigger( "quota:update" );
+            //remove ui elements visible only to ADMIN role
+            if (taoUserProfile.userRole !== "ADMIN") {
+                $(".wrapper .admin-mode-only").remove();
+            }
             $(".wrapper").fadeTo( "slow", 1, function() {});
         })
         .fail(function (jqXHR, status, textStatus) {
@@ -402,15 +406,14 @@ $(function () {
             if(flagExecRefresh){
                 $("#exec-list-panel, #exec-history-panel").trigger("panel:refresh");
             }
+            setTimeout(function(){
+                retriveNotifications();
+            }, notificationsCheckInterval);
         })
-        .fail(function (jqXHR, textStatus) {
+        .fail(function (jqXHR) {
+            chkXHR(jqXHR.status);
         })
         .complete(function(){
-                //if($("#widget-master-monitor").length){
-                setTimeout(function(){
-                    retriveNotifications();
-                },notificationsCheckInterval);
-                //}
         });
     }
     $(".val-notificationsmaxnumber", "#bot-notice-chat").html(notificationsMaxNumber);

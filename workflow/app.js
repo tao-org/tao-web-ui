@@ -655,7 +655,7 @@ jsPlumb.ready(function () {
             $.when(putOneConnection)
                 .done(function (putOneConnectionResponse) {
                     var r = chkTSRF(putOneConnectionResponse);
-                    if((putOneConnectionResponse.status == "SUCCEEDED") && r.id){
+                    if((putOneConnectionResponse.status === "SUCCEEDED") && r.id){
                         $(".v-lastaction","#infoband").html("connection added");
                         var linkData = (_.find(r.incomingLinks, function(item) {
                             return (item.output.id === t[2] && item.input.id === s[2]);

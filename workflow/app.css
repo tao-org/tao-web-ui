@@ -313,20 +313,11 @@ float: right;
     z-index: 3;
 }
 
-
-#group1 {
-    left: 500px;
-    top: 300px;
-    width: 500px;
-    height: 400px;
-}
-
 .w.g {
     border: 1px dashed #2e6f9a;
     border-radius: 0;
     box-shadow: none;
 }
-
 .w.g:hover {
     box-shadow: none;
     border: 1px dashed #2e6f9a;

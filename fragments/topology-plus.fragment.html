@@ -12,7 +12,7 @@
 
         <div class="modal-error collapse">
             <h4 class="modal-title">Error adding execution node!</h4>
-            <p id="modal-error-msg">Please check you data, one or more values for the attributes is not in the acceptable range.</p>
+            <p id="modal-error-msg">Please check your data, one or more values for the attributes is not in the acceptable range.</p>
             <p>
                 <span class="error-hostName collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Invalid hostname.</span>
                 <span class="error-memorySize collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Memory size cannot be empty.</span>
@@ -220,15 +220,6 @@
                     $("#saveExecNode").removeAttr('disabled');
                 }
             }
-        })
-        .on("focusout", function(){
-            if($(this).data("errorspan")){
-                if (($(this).val() === "")||($(this).val() === 0)||($(this).val() === "0")){
-                    $(".error-"+$(this).data("errorspan"),".modal-error").css('display', 'inline-block');
-                    $(".modal-error").fadeIn("slow");
-                    $("#saveExecNode").attr('disabled','disabled');
-                }
-            }
         });
         $("form#frmExecNodeEdit")
         .on("focusout","#inputHostname",function(e) {
@@ -268,11 +259,11 @@
                 },
                 error : function (jqXHR, textStatus, errorThrown) {
                     if(jqXHR.status === 500){
-                        showMsg("Error adding execution node. Please check you data and try again.", "ERROR");
+                        showMsg("Error adding execution node. Please check your data and try again.", "ERROR");
                         return;
                     }
                     if(jqXHR.status === 406){
-                        showMsg("Error adding execution node. Please check you data, one or more values for the attributes was not in the acceptable range.", "ERROR");
+                        showMsg("Error adding execution node. Please check your data, one or more values for the attributes was not in the acceptable range.", "ERROR");
                         //handle error messages
                         var objResponse = JSON.parse(jqXHR.responseText);
                         if(objResponse[0] !== "Entity has validation errors"){
@@ -290,7 +281,31 @@
                     }
                     showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
                 },
-                success: function(data) {
+                success: function(response, textStatus, jqXHR) {
+                	 var r = chkTSRF(response);
+               	  	 if(response.status === "FAILED"){
+                         if(response.message){
+                             showMsg("Error adding execution node. Please check your data, one or more values for the attributes was not in the acceptable range.", "ERROR");
+                             //handle error messages
+
+                             var objResponse = JSON.parse(jqXHR.responseText);
+                             objResponse = objResponse.message.split(';');
+                             if(objResponse[0] !== "Entity has validation errors"){
+                                 return;
+                             }
+                             for(i=0;i<objResponse.length;i++) {
+                                 var matches = objResponse[i].match(/\[(.*?)\]/);
+                                 if (matches) {
+                                     $(".error-"+matches[1],".modal-error").css('display', 'inline-block');
+                                 }
+                             }
+                             $(".modal-error ").fadeIn("slow");
+                             $('#myModalNodes').animate({scrollTop: 0}, 250);
+                             return;
+                         }
+                         showMsg("Error adding execution node. Please check your data and try again.", "ERROR");
+                     }
+               	
                     showMsg("Execution node successfully saved.", "SUCCESS");
                     $("#myModalNodes").modal('hide');
                     _mLIST.refresh();

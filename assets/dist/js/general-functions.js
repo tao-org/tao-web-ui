@@ -394,20 +394,41 @@ var _settings = {
 
 function chkXHR(status, redirect){
     b = (typeof redirect !== 'undefined') ? redirect : true;
+    var txtMsg = '';
+    var txtAlert = '';
     if(status === 0){
-        alert("Your request timed out. Please check your Internet connection and retry the request!");
-        return 0;
+        txtMsg = "<strong>A Communication failure occurred.</strong><br>Your request timed out. The Server may be busy, please try again later. Also check your Internet connection. If the problem persists contact your administrator to check if the service is running.<br><br>Thank you."
+        txtAlert = "Your request timed out. Please check your Internet connection and retry the request!";
     }
     if(status === 401){
-        alert("Your session has expired or is invalid. Please log in again!");
+        txtMsg = "<strong>Your session has expired or is invalid.</strong><br> Please log in again.<br><br>Thank you."
+        txtAlert = "Your session has expired or is invalid. Please log in again!";
     }
     if(status === 403){
-        alert("403 - Forbidden: Server responded with access is denied message. You do not have permission to access the page using the credentials that you supplied!");
+        txtAlert = "403 - Forbidden: Server responded with access is denied message. You do not have permission to access the page using the credentials that you supplied!";
+        txtMsg = "<strong>Forbidden: Server responded with access is denied message.</strong><br>You do not have permission to access the resource using the credentials that you supplied! Please log in again.<br><br>Thank you."
     }
-
+    //alert(txtAlert);
     if(redirect){
         window.location = 'login.html';
     }
+    var html = '<div class="login-box error-msg-box collapse">\n' +
+        '    <div class="login-logo">\n' +
+        '        <b>TAO</b>\n' +
+        '    </div><!-- /.login-logo -->\n' +
+        '    <div class="login-box-body">\n' +
+        '            <div class="callout callout-danger" role="alert" aria-atomic="true">\n' +
+        '                <p>' + txtMsg + '</p>\n' +
+        '            </div>\n' +
+        '            <div class="row">\n' +
+        '                <div class="col-xs-4">\n' +
+        '                    <a href="sap.html"><button class="btn btn-primary btn-block btn-flat">Try again</button></a>\n' +
+        '                </div><!-- /.col -->\n' +
+        '            </div>\n' +
+        '    </div><!-- /.login-box-body -->\n' +
+        '</div>';
+    $("body").empty().append(html);
+    $(".login-box").fadeIn();
 }
 
 function chkTSRF(r){

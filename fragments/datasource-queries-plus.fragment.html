@@ -1,0 +1,1015 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edit query</h4>
+    </div>
+	<!--  
+    <form id="frmQueryEdit" class="form-horizontal form-newpc" role="form">
+        <input type="hidden" id="op" name="op" class="op" value="op-plus" />
+        <input type="hidden" id="id_u" name="id_u" value="0" />
+        <input type="hidden" name="clickedon" value="">-->
+
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error adding query!</h4>
+            <p id="modal-error-msg">Please check your data, one or more values for the attributes is not in the acceptable range.</p>
+            <p>
+                <span class="error-inputQueryID collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
+                <span class="error-label collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
+            </p>
+            <p id="modal-error-msg-server"></p>
+        </div>
+
+        <div class="modal-body">
+            <section>
+               <div id="map-panel-topo-wrapper" class="row">
+                    <div class="col-md-12">                           
+                        <div class="tab-content">
+                            <div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
+                            <div class="form-horizontal">
+                               <div class="row">
+	                                <div class="col-md-12">
+	                                    <div class="form-group ">
+	                                        <label for="queryLabel" class="col-sm-2 col-md-2 control-label">Label</label>
+	                                        <div class="col-sm-10 col-md-10">
+	                                            <input type="text" id="queryLabel" name="queryLabel" class="form-control" value="" placeholder="name of your query" autocomplete="off" value="" data-errorspan="label">
+	                                        	<input type="hidden" id="actionType" name="actionType" value="edit">
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            <div class="row">
+	                                <div class="col-md-12">
+	                                	<div class="form-group ">
+	                                        <label for="listDatasources" class="col-sm-2 col-md-2 control-label">Datasources </label>
+	                                        <div class="ui-widget col-sm-10 col-md-10">
+	                                        	<select id="listDatasources" name="listDatasources" class="form-control"></select>
+	                                            <input type="hidden" id="selectedDatasource" class="form-control" value="default">
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            </div>
+
+								<!-- Parameter list -->
+								<div  id="parameterList">
+									<form id="editQueryParams" class="form-horizontal form-newpc" role="form">   
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group has-feedback">
+													<label for="user_name" class="col-sm-2 col-md-2 control-label">User </label>
+													<div class="col-sm-3 col-md-3">
+														<input type="text" id="user_name" value="" class="form-control">
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group has-feedback">
+												    <label for="user_pass" class="col-sm-2 col-md-2 control-label">Password </label>
+												    <div class="col-sm-3 col-md3">
+												        <input type="password" id="user_pass" name="user_pass" value="" class="form-control" autocomplete="new-password">
+												        <i class="glyphicon glyphicon-eye-open form-control-feedback" title="show password"></i>
+												    </div>
+												</div>
+											</div>
+										</div>
+										<div class="row"><!-- row -->
+											<div class="col-md-12">
+										        <p>Parameter list:</p>
+													<table class="table table-bordered box-shadow--6dp" id="datasourceParams">
+														<thead>
+															<tr>
+																 <th></th>
+																 <th>Name</th>
+																 <th>Type</th>
+																 <th>Value</th>
+															</tr>
+														</thead>
+													</table>
+											</div><!-- /.box -->
+										</div><!-- /.row -->
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group ">
+													<label for="limit" class="col-sm-2 col-md-2 control-label">Limit</label>
+			                              			<div class="col-sm-2 col-md-2">
+			                              				<input type="number" id="limit" value="" class="form-control" min="0">
+								                    </div>
+			                              			<label for="pageNumber" class="col-sm-2 col-md-2 control-label">Page number</label>
+			                              			<div class="col-sm-2 col-md-2">
+			                              				<input type="number" id="pageNumber" value="" class="form-control" min="0">
+			                              			</div>
+			                              			<label for="pageSize" class="col-sm-2 col-md-2 control-label">Page size</label>
+			                              			<div class="col-sm-2 col-md-2">
+			                              				<input type="number" id="pageSize" value="" class="form-control" min="0">
+			                              			</div>	                              			
+												</div>
+											</div>
+										</div>
+			                            <div class="row">
+			                            	<div class="col-md-12">
+												<div class="form-group ">
+			                            			<div class="col-sm-2 col-md-2">
+														<button id="addQuery" type="text" class="btn btn-primary" name="btnAdd">Add Query</button>
+													</div>
+													<div class="col-sm-2 col-md-2">
+														<button id="saveParams" type="submit" class="btn btn-primary btn-submit" name="btnSave">Execute Query</button>
+													</div>
+												</div>
+											</div>			                           
+			                            </div><!-- /.row -->
+									</form>   
+								</div><!-- /params -->
+								
+								<!--  datasourceProducts -->
+								<div id="datasourceProducts">
+									<form id="formDownloadProducts" class="form-horizontal" role="form">
+										<div class="row"><!-- row -->
+												<div class="col-md-12">
+													<p>Products list:</p>
+													<table class="table table-bordered box-shadow--6dp paginated" id="tbdatasourceProducts">
+														<thead>
+															<tr>
+																<th scope="row" style="text-align:center">
+																	<div class="checkbox"><input type="checkbox" name="allproducts" value="all">Select all</div>
+																</th>
+																<th>Name</th>
+																<th>Acquisition Date</th>
+																<th>Product Type</th>
+															</tr>
+														</thead>
+													</table>
+											</div><!-- /.box -->
+										</div><!-- /.row -->
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group ">
+													<div class="col-sm-8 col-md-8"></div>
+													<div class="col-sm-2 col-md-2">					         				   
+														<button id="saveQuery" type="text" class="btn btn-primary" name="btnSaveQuery">Save Query</button>
+													</div>													
+													<div class="col-sm-2 col-md-2">					         				   
+														<button id="downloadProducts" type="submit" class="btn btn-primary btn-submit" name="btnDownload" >Download</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</form><!-- /form -->
+								</div> <!--  /datasourceProducts -->
+								
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--  
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-5 col-sm-5">
+                               <button id="saveParams" type="submit" class="btn btn-primary btn-submit" name="btnSave">Execute Query</button>
+                            </div>
+                             <div class="col-md-5 col-sm-5">
+                                <button id="saveQuery" type="submit" class="btn btn-primary btn-submit" name="btnSave">Save query</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+            </section>
+        </div><!-- /.modal-body
+    </form>
+    -->
+     <div class="modal-note" style="display:none">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11">
+                        <p>Please note that some of the query parameters weren't found through the corresponding datasource parameteres.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div><!-- /.modal-content -->
+
+<!-- /Main content -->
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.theme.css" type="text/css" />
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.structure.css" type="text/css" />
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.css" type="text/css" />
+<script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
+<script src="./assets/libs/jQuery/paginathing.js" type="text/javascript"></script>
+
+<script>
+
+	
+	var inputType = {
+			"Integer":{
+				type:"number",
+				min:"0"
+			},
+			"Float":{
+				type:"number",
+			},
+			"Double":{
+				type:"number",
+			},
+			"String":{
+				type:"text"
+			}
+			
+	};
+ 
+
+    function initComboboxAutocomplete(){
+    	 $.widget("custom.combobox", {
+    	        _create: function () {
+    	            this.wrapper = $("<span>")
+    	                .addClass("custom-combobox")
+    	                .insertAfter(this.element);
+
+    	            this.element.hide();
+    	            this._createAutocomplete();
+    	            this._createShowAllButton();
+    	        },
+
+    	        _createAutocomplete: function () {
+    	            var selected = this.element.children(":selected"),
+    	                value = selected.val() ? selected.text() : "";
+
+    	            this.input = $("<input>")
+    	                .appendTo(this.wrapper)
+    	                .val(value)
+    	                .attr("title", "")
+    	                .addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+    	                .autocomplete({
+    	                delay: 0,
+    	                minLength: 0,
+    	                source: $.proxy(this, "_source")
+    	            })
+    	                .tooltip({
+    	                tooltipClass: "ui-state-highlight"
+    	            });
+
+    	            this._on(this.input, {
+    	                autocompleteselect: function (event, ui) {
+    	                    ui.item.option.selected = true;
+    	                    this._trigger("select", event, {
+    	                        item: ui.item.option
+    	                    });
+
+    	        			$("#selectedDatasource").val(ui.item.option.value);
+    	                    //autolabel query 
+    	                    $("#queryLabel").val(ui.item.label + " (" + moment().format("YYYY-MM-DD HH:mm:ss").toString() + ")");
+
+    	        			showDatasourceParams(datasourcesList[ui.item.option.value.replace('d_','')].parameters);
+    	        			$( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
+    	        			//return false;// Prevent the widget from inserting the value.
+    	                },
+
+    	                autocompletechange: "_removeIfInvalid"
+    	            });
+    	        },
+
+    	        _createShowAllButton: function () {
+    	            var input = this.input,
+    	                wasOpen = false;
+
+    	            $("<a>")
+    	                .attr("tabIndex", -1)
+    	              //  .attr("title", "Show All Items")
+    	                .tooltip()
+    	                .appendTo(this.wrapper)
+    	                .button({
+    	                icons: {
+    	                    primary: "ui-icon-triangle-1-s"
+    	                },
+    	                text: false
+    	            })
+    	                .removeClass("ui-corner-all")
+    	                .addClass("custom-combobox-toggle ui-corner-right")
+    	                .click(function(event){
+    	                	  if (input.autocomplete("widget").is(":visible")) {
+    	                        //  input.autocomplete("close");
+    	                          return;
+    	                      }
+    	                      input.focus();
+    	                	  
+    	                      // Pass empty string as value to search for, displaying all results
+    	                	  input.autocomplete("search", "");
+    	                   
+    	                   	  event.stopImmediatePropagation();
+    	                })	             
+    	        },
+
+    	        _source: function (request, response) {
+    	            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+    	            response(this.element.children("option").map(function () {
+    	                var text = $(this).text();
+    	                if (this.value && (!request.term || matcher.test(text))) return {
+    	                    label: text,
+    	                    value: text,
+    	                    option: this
+    	                };
+    	            }));
+    	        },
+
+    	        _removeIfInvalid: function (event, ui) {
+
+    	            // Selected an item, nothing to do
+    	            if (ui.item) {
+    	                return;
+    	            }
+
+    	            // Search for a match (case-insensitive)
+    	            var value = this.input.val(),
+    	                valueLowerCase = value.toLowerCase(),
+    	                valid = false;
+    	            this.element.children("option").each(function () {
+    	                if ($(this).text().toLowerCase() === valueLowerCase) {
+    	                    this.selected = valid = true;
+    	                    return false;
+    	                }
+    	            });
+
+    	            // Found a match, nothing to do
+    	            if (valid) {
+    	                return;
+    	            }
+
+    	            // Remove invalid value
+    	            this.input.val("")
+    	                .attr("title", value + " didn't match any item")
+    	                .tooltip("open");
+    	            this.element.val("");
+    	            this._delay(function () {
+    	                this.input.tooltip("close").attr("title", "");
+    	            }, 2500);
+    	            this.input.data("ui-autocomplete").term = "";
+    	        },
+
+    	        _destroy: function () {
+    	            this.wrapper.remove();
+    	            this.element.show();
+    	        }
+    	    });
+
+    }
+
+    var datasourcesList = [];
+    var listOfProducts = [];
+    var myQuery = {};
+    var modeEdit = false;
+	var currentQuery = '';
+
+    function getDatasourcesList(){
+    	var url = 'query/';
+    	if(userOpStack[0] && userOpStack[0].action ==="edit"){
+        	$(".modal-title").html("Edit query");
+    	}
+    	
+        $.ajax({
+            cache: false,
+            type: "get",
+            url: baseRestApiURL + url,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            },
+            error : function (jqXHR, textStatus, errorThrown) {
+                chkXHR(jqXHR.status);
+            },
+            success: function(r,textStatus, jqXHR) {
+                var response = chkTSRF(r);
+                if(jqXHR.status === 204){
+                    showMsg("No query found.", "SUCCESS");
+                    response = [];
+                }
+                datasourcesList = response;
+
+                if(modeEdit){ 	
+					queryParamsNotFound = [];
+                	currentQuery = _.findWhere(datasourcesList, {sensor:_mLIST.dataOpQueue[0].dna.sensor, dataSourceName:_mLIST.dataOpQueue[0].dna.dataSource});
+                	currentQuery.id = _mLIST.dataOpQueue[0].dna.id;
+	                if(currentQuery != undefined){
+		                var param = currentQuery.parameters;
+		                $.each(_mLIST.dataOpQueue[0].dna.values, function(k, v){
+		                	if(param.hasOwnProperty(k)){
+		                	param[k]['defaultValue'] = v;
+		                	}else{
+		                		queryParamsNotFound.push(k);
+		                	}
+		                	
+	                	});
+		                showDatasourceParams(param);
+		                
+		                $("#queryLabel").val(_mLIST.dataOpQueue[0].dna.label);
+		                $("#listDatasources").css({"display":"none"});;
+		                $("#selectedDatasource").attr("type","text").attr('disabled','disabled').val(_mLIST.dataOpQueue[0].dna.sensor+' '+_mLIST.dataOpQueue[0].dna.dataSource);
+		                $("#limit").val(_mLIST.dataOpQueue[0].dna.limit);
+		                $("#pageNumber").val(_mLIST.dataOpQueue[0].dna.pageNumber);
+		                $("#pageSize").val(_mLIST.dataOpQueue[0].dna.pageSize);
+		                $("#user_name").val(_mLIST.dataOpQueue[0].dna.user);
+		                $("#user_pass").val(_mLIST.dataOpQueue[0].dna.password);		                
+		                $("#addQuery").text("Save Query");			               
+		                if(queryParamsNotFound.length > 0){
+		                	$('<br><p>Parameters not found: ' + queryParamsNotFound.join() + '.</p>' ).appendTo(".modal-note p");
+		                	$(".modal-note").css('display','');
+		                }
+	                }
+                }else{
+        			$.each(response,function(k, v ){    				
+        				$( "#listDatasources" ).append($('<option>', {
+        			        value: 'd_'+k,
+        			        text: v.sensor+" "+v.dataSourceName
+        			    }));
+        			});
+                }    			
+    			//set the source option with the list of datasources retrieved
+    			routeLoading('hide');
+                showMsg("Datasources list successfully retrieved.", "SUCCESS");
+
+            }
+        });
+    }
+     
+    function showDatasourceParams(param){
+    	$("#parameterList").css('display','');
+    	$('input[name=product]').prop('checked',false);
+    	$("#datasourceProducts").css('display','none');
+    	//var param = datasourcesList[el].parameters;
+    	
+    	var sortedParam = Object.keys(param).sort(function(a, b) {
+    		var textA = a.toUpperCase();
+    		var textB = b.toUpperCase();
+    		return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    	});
+    	
+    	var html ='';
+    	$.each(sortedParam, function(index, property){
+
+            if (param.hasOwnProperty(property)) {
+            	var lType = param[property]['type'].split(".");
+            	
+                var lDefault = '';
+                if(param[property]['defaultValue']!== null){   
+                    lDefault = param[property]['defaultValue'];
+                }
+                
+                html += " <tr>\n" +
+                "          <th scope=\"row\" >"+(param[property]['required']?"*":"")+"</th>\n" +
+    	                "	<td class=\"col-sm-4 col-md-4\">"+param[property]['name']+"</td>\n"+
+    	                "	<td class=\"col-sm-2 col-md-2\">"+lType[lType.length-1]+"</td>\n"+
+    	            	"	<td class=\"col-sm-6 col-md-6\">";
+    			var paramType = lType[lType.length-1];
+    			paramType = $.trim(paramType.replace(/;/g,''));
+    		
+                switch (paramType){
+                	case "DataFormat":
+    					html +=  '		<input type="text" name="' + property + '" value=""  class="var_' + property + '">';
+    					break;
+                	case "Polygon2D":
+    					html +=  '		<input type="text" name="' + property + '" value=""  class="var_' + property + '"><i class="fa fa-fw fa-globe ol" style="font-size:1.8em;vertical-align:bottom;color:#2677a7;cursor:pointer"></i>';
+    					
+    					break;
+    				case "SensorType":
+                		
+                		var enums = taoEnums.getEntity(param[property]['type']);
+    				
+     					html +=  "		<select name=\""+property+"\" class=\"var_"+property+"\">\n";
+    					if(param[property]['defaultValue'] == null){
+    						html += "   	<option value=\"default\" selected=\"selected\">Select </option>\n";
+    					}
+    					
+    					$.each(enums, function(index, values){
+    					 if(lDefault === values.key){
+    						 html += "		<option value=\""+values.key+"\" selected=\"selected\">"+values.value+"</option>\n";
+    					 }else{
+    						 html += "		<option value=\""+values.key+"\" >"+values.value+"</option>\n";
+    					 }
+                
+    					});
+    					break;
+    					
+                	case "Date":
+                		 lDefault = lDefault.replace(']','');
+                		 lDefault = lDefault.replace('[','');
+                		 lDefault = lDefault.split(',');
+                		 var lDefault1=''; lDefault2 ='';
+                		 if(lDefault.length >1 ) {
+                			 lDefault1 = lDefault[0];
+                			 lDefault2 = lDefault[1];
+                		 }else{
+                			 lDefault1 = lDefault[0];
+                		 }
+                		 html +=  "		<input type=\"text\" name=\""+property+"_d1\" class=\"datepicker var_"+property+"\" data-name=\""+property+"\" value=\""+lDefault1+"\">\n";
+                		 html +=  "		<input type=\"text\" name=\""+property+"_d2\" class=\"datepicker var_"+property+"\" data-name=\""+property+"\" value=\""+lDefault2+"\">\n";
+                		 break;
+                	
+                	default:
+                		if(param[property]['valueSet']!== null){
+                			html +=  "		<select name=\""+property+"\" class=\"var_"+property+"\">\n";
+                			if(param[property]['defaultValue'] == null){
+    							html += "   	<option value=\"default\" selected=\"selected\">Select </option>\n";
+    						}
+                			$.each(param[property]['valueSet'], function(index, value){
+       						 if(lDefault === value){
+       							 html += "		<option value=\""+value+"\" selected=\"selected\">"+value+"</option>\n";
+       						 }else{
+       							 html += "		<option value=\""+value+"\" >"+value+"</option>\n";
+       						 }
+                	
+       						});
+                }else{
+                			var type = (inputType.hasOwnProperty(paramType))? ((inputType[paramType].hasOwnProperty("type"))? inputType[paramType]['type']:"text"):"text";
+                			var min = (inputType.hasOwnProperty(paramType))? ((inputType[paramType].hasOwnProperty("min"))? "min=\""+inputType[paramType]['min']+"\"":""):"";
+
+                			html +=  "		<input type=\""+type+"\" name=\""+property+"\" value=\""+lDefault+"\" "+min+" class=\"var_"+property+"\">\n";
+              
+                }
+
+                }
+                
+                html +="	</td>\n"+
+                	   "</tr>\n";
+    		}
+    	});
+    	$('table#datasourceParams tbody').remove();
+    	$('table#datasourceParams ').append('<tbody>'+html+'</tbody>');
+    		
+    	//remove old datepickers
+    	$("#" + $.datepicker.dpDiv.attr("id")).remove();
+    	
+    	//initialize the new datepickers
+    	$.each($("input[name*='_d1']"), function(){
+    		var name = $(this).attr('data-name');
+    		$(this).datepicker({
+    			changeYear: true,
+    			changeMonth: true,
+    			dateFormat: 'yy-mm-dd',
+    			onSelect:function(selected,evnt){
+    				var newDate = new Date(selected);
+    				if (newDate) { // Not null
+    					newDate.setDate(newDate.getDate() + 1);
+    				}
+    				$("input[name='"+name+"_d2']").datepicker("option", "minDate", newDate);
+    			}
+    		});
+    	});
+    	
+    	$.each($("input[name*='_d2']"), function(){
+    		var name = $(this).attr('data-name');
+    		$(this).datepicker({
+    			changeYear: true,
+    			changeMonth: true,
+    			dateFormat: 'yy-mm-dd',
+    			onSelect:function(selected,evnt){
+    				var newDate = new Date(selected);
+    				if (newDate) { // Not null
+    					newDate.setDate(newDate.getDate() - 1);
+
+    				}
+    				$("input[name='"+name+"_d1']").datepicker("option", "maxDate", newDate);
+    			}
+    		});
+    	});
+    }
+
+    function showProductsTable(products,pagesize, pagenumber){
+    	$("#parameterList").css('display','none');
+    	$("#datasourceProducts").css('display','');
+
+    	var html = '';
+    	$.each(products, function(index,value){
+    		//var date = new Date(value.acquisitionDate).toLocaleString();
+    		html +=	"<tr>"+
+    				"	<th scope=\"row\" class=\"col-sm-1 col-md-1\">\n"+
+    				"		<div class=\"checkbox\">\n"+
+    				"			<label><input type=\"checkbox\" name=\"product\" value=\""+value.id+"\" style=\"margin:auto\"></label>\n"+
+    				"		</div>\n"+
+    				"	</th>\n"+
+    				"	<td class=\"col-sm-6 col-md-5\">"+value.name+"</td>\n"+
+    				"	<td class=\"col-sm-2 col-md-3\">"+value.acquisitionDate+"</td>\n"+
+    				"	<td class=\"col-sm-3 col-md-3\">"+value.productType+"</td>\n"+
+    				"</tr>\n";
+    	});
+    	$('table#tbdatasourceProducts tbody').remove();
+    	$('table#tbdatasourceProducts ').append('<tbody>'+html+'</tbody>');
+
+    	$('.pagination-container').remove();
+    	$('table#tbdatasourceProducts tbody').paginathing({
+    		firstLast:false,
+    	    perPage: 10,
+    	    pageNumbers:'number',
+    	    insertAfter: 'table#tbdatasourceProducts',
+    	   // limitPagination: 5
+    		});
+    }
+
+    function ajaxCallFnc(url, data, type){
+    	return $.ajax({
+             cache: false,
+             url: baseRestApiURL + url,
+             type: type,
+             data: data,
+             headers: {
+                 "Accept": "application/json",
+                 "Content-Type": "application/json",
+                 "X-Auth-Token": window.tokenKey
+             },
+             error : function (jqXHR, textStatus, errorThrown) {
+                 if(jqXHR.status === 500){
+                     showMsg("Please check your data and try again.", "ERROR");
+                     return;
+                 }
+                 if(jqXHR.status === 406){
+                     showMsg("Please check your data, one or more values for the attributes was not in the acceptable range.", "ERROR");
+                     //handle error messages
+                     var objResponse = JSON.parse(jqXHR.responseText);
+                     if(objResponse[0] !== "Entity has validation errors"){
+                         return;
+                     }
+                     for(i=0;i<objResponse.length;i++) {
+                         var matches = objResponse[i].match(/\[(.*?)\]/);
+                         if (matches) {
+                             $(".error-"+matches[1],".modal-error").css('display', 'inline-block');
+                         }
+                     }
+                     $(".modal-error ").fadeIn("slow");
+                    
+                     return;
+                 }
+                 showMsg("Unknown error. Please try again.", "ERROR");
+             },
+             success: function(data, textStatus, jqXHR) {
+            	 console.log(textStatus); console.log(jqXHR);
+                 console.log(data);
+             }
+         });
+    }
+
+    function downloadProducts(formData){
+    	var data = {
+    			"query": myQuery,
+    			"products": formData,
+    			"mode": "1"//RESUME
+    	};
+    	
+    	$.when( ajaxCallFnc("query/fetch", JSON.stringify(data),"POST") ).done( function(data){
+    		 console.log(data);
+    		 routeLoading('hide');
+             if($.type(data) === 'object' && data.status === "SUCCEEDED" ){
+            	 showMsg("The selected products were successfully downloaded.", "SUCCESS");
+            	 
+             }else if($.type(data) === 'object' && data.status === "FAILED"){
+            	 showMsg(data.message, "FAILED");
+             }else{
+            	 showMsg("The selected products were not downloaded.", "SUCCESS");
+             }
+    	});
+    		
+    }
+
+
+    function checkProducts(listOfProducts){
+    	 var productsName = [];
+    	 $.each(listOfProducts, function(index, value){
+    		 productsName.push(value.name);
+    	 });
+    	 console.log(productsName);	 
+    	 $.when( ajaxCallFnc("product/check", {names:JSON.stringify(productsName)}, "GET") ).done( function(data){
+    		 console.log("product/check =>"+productsName);	 
+    		    if($.type(data) === 'object' && data.status === "SUCCEEDED" ){
+    		    	routeLoading('hide');
+                	if(data.data.length > 0 && data.data.length === productsName.length ){
+                		showMsg("The list of products returned already exists.", "SUCCESS");
+                	}else if(data.length > 0){
+                		var productsToDownload = [];
+                		$.each(listOfProducts, function(index, product){
+                			if($.inArray(product.name, data.data) > 0){
+                				productsToDownload.push(product);
+                			}
+                		});
+                		//products to show for downloading
+                		showProductsTable(productsToDownload);
+                	}else{
+                		//show all
+                		showProductsTable(listOfProducts);
+                	}
+                }else if($.type(data) === 'object' && data.status === "FAILED"){
+            		routeLoading('hide');
+               	 showMsg(data.message, "FAILED");
+                }
+    	});
+    	
+    }
+    
+    $(document).ready( function(){
+    	// Load map poly
+    	$("#map-panel-topo-wrapper").on("click", ".ol", function (e) {
+    		var mapContainer = $("#map-panel-topo-wrapper").closest(".content-wrapper");
+    		var polygonField = $(this).parent().find("input");
+    		openPolygonMap(mapContainer, polygonField);
+    	});
+    	
+    	if(userOpStack[0] && userOpStack[0].action ==="edit"){ 	
+	 		modeEdit = true;
+	 	}
+    	
+        //remove error for some input elements
+        $("input, textarea","form#frmQueryEdit")
+            .on("keypress change", function(){
+                if($(this).data("errorspan")) {
+                    $(".error-" + $(this).data("errorspan"), ".modal-error").css('display', 'none');
+                    if($(".modal-error").find("span:visible").length == 0) {
+                        $(".modal-error").hide();
+                        $("#saveQuery").removeAttr('disabled');
+                    }
+                }
+            });
+    	
+    	
+    	$('input[name="user_pass"] + .glyphicon ').css({'cursor':'pointer', 'pointer-events': 'all'});
+    	$('input[name="user_pass"] + .glyphicon ').on('click',function() {
+    			 if( $(this).hasClass('glyphicon-eye-open') ){
+    				 $("#"+this.previousElementSibling.id ).attr('type','text');
+    				 $(this).removeClass('glyphicon-eye-open');
+    				 $(this).addClass('glyphicon-eye-close');
+    				 $(this).attr('title','hide password');
+    			 }else{
+    				 $("#"+this.previousElementSibling.id ).attr('type','password');
+    				 $(this).removeClass('glyphicon-eye-close');
+    				 $(this).addClass('glyphicon-eye-open');
+    				 $(this).attr('title','show password');
+    				 }
+    	});
+    	
+    	$("#parameterList, #datasourceProducts").css('display','none');
+    	getDatasourcesList();
+    	
+    	if(userOpStack[0] && userOpStack[0].action ==="add"){ 	
+	    	initComboboxAutocomplete();
+	    	$( "#listDatasources" ).combobox();
+	
+	    	$(".ui-autocomplete-input").addClass("form-control");
+	    	$(".ui-widget.ui-widget-content").css({'background-color':'#ffffff'})
+	    	$(".ui-autocomplete").css({ "max-height": "400px", "overflow-y": "scroll", "overflow-x": "hidden", "z-index":"1100"});
+	    	$('.custom-combobox').css({'position': 'relative', 'display': 'block'});
+	    	$('a.custom-combobox-toggle').css({'position': 'absolute',
+	    	    'top': '0px','bottom': '0px','right':'-3px'});
+    	}
+    	//add pagination
+    	$('table#tbdatasourceProducts tbody').paginathing({firstLast:false});
+    	
+    	$('input[name=allproducts]').click( function(){
+    			if( $(this).is(':checked') ){
+    				$('input[name=product]').prop('checked',true);
+    			}else{
+    				$('input[name=product]').prop('checked',false);
+    			}
+    	});
+		
+    });
+    
+    $("#saveParams").on("click",function(e){
+		e.preventDefault();
+		routeLoading('show');
+		myQuery = {};
+		myQuery = { 
+				   "userId": taoUserProfile.userRole,
+				   "user" : $('#user_name').val(),
+	               "password" : $('#user_pass').val(),
+	               "limit":  $('#limit').val(),
+	               "pageNumber":  $('#pageNumber').val(),
+	               "pageSize":  $('#pageSize').val()
+				}
+		
+		if(modeEdit){
+			var param = currentQuery.parameters;
+			myQuery.sensor = currentQuery.sensor;
+			myQuery.dataSource = currentQuery.dataSourceName;		              
+		}else{
+			var param = datasourcesList[$("#selectedDatasource").val().replace('d_','')].parameters;
+			var selectedDatasource = $("#selectedDatasource").val().replace('d_','');
+			myQuery.sensor =  datasourcesList[selectedDatasource]['sensor'];
+			myQuery.dataSource = datasourcesList[selectedDatasource]['dataSourceName'];		       
+		}
+	
+		var values = {};
+		var msg = "";
+		//get all elements that have a class starting with 'var_' and which are not necessarily the first class
+		$("[class^='var_'],[class*=' var_']").each(function () {
+			if($(this).val()!=='default' && $.trim($(this).val())!==""){
+				if($(this).hasClass("datepicker") ){
+					var paramName = $(this).attr("data-name");
+							
+					if($.inArray(paramName, values) < 0){
+						var name = $(this).attr("name");
+						if(name === paramName+"_d1"){
+							date1 = $(this).val();
+							date2 = $("input[name='"+paramName+"_d2']").val();
+						}else if(name === paramName+"_d2"){
+							date2 = $(this).val();
+							date1 = $("input[name='"+paramName+"_d1']").val();
+						}
+						
+						if(date1 !== "" && date2 !== ""){
+							values[paramName] = "["+date1+","+date2+"]";
+						}else if(date1 !== ""){
+							values[paramName] = date1;
+						}else if(date2 !== ""){
+							values[paramName] = date2;
+						}
+							
+					}
+					
+				}else{
+					values[$(this).attr('name')] = $(this).val();
+				}
+			}
+		});		
+		myQuery.values = values;
+	 	console.log(myQuery);
+
+		$.when( ajaxCallFnc("query/exec", JSON.stringify(myQuery), "POST") ).done( function(data){
+	             if($.type(data) === 'object' && data.status === "SUCCEEDED" && data.data.length>0){
+	            	 listOfProducts = data.data;
+					 //check if the list of products returned already exists
+			       	 checkProducts(listOfProducts);
+				}else if($.type(data) === 'object' && data.status === "FAILED"){
+					routeLoading('hide');
+					showMsg(data.message, "FAIL");
+				}else{
+					routeLoading('hide');
+					showMsg("No products were found for selected datasource.", "SUCCESS");
+				}
+			});
+
+	});//end submit form editQueryParams
+	
+	
+	//$("form#formDownloadProducts").submit(function(e){
+	$("#downloadProducts").on("click",function(e){
+		e.preventDefault();
+		routeLoading('show');
+		
+		var label = $("#queryLabel").val();
+        if(label === ""){
+        	routeLoading('hide');
+            showMsg("You must specify a label for your query in order to proceed.", "WARNING");
+            return;
+        }
+        var formData = {
+    		    "label": label,
+                "products":[]
+        	};
+        if(modeEdit){
+        	formData.productType = currentQuery.sensor;
+        }else{
+        	var selectedDatasource = $("#selectedDatasource").val().replace('d_','');
+        	formData.productType = datasourcesList[selectedDatasource]['sensor'];
+        }
+    	
+		if($('input[name=allproducts]').is('checked')){
+			formData.products = listOfProducts;
+		}else{
+			checkedProducts = $('input[name=product]:checked');
+			$.each(checkedProducts,function(index){
+				if(listOfProducts[index].id === $(this).attr('value')){
+                    formData.products.push(listOfProducts[index]);
+		        }
+			});
+		}
+		if($('input[name=allproducts]').is('checked')){
+			formData.products = listOfProducts;
+		}else{
+			checkedProducts = $('input[name=product]:checked');
+			$.each(checkedProducts,function(index){
+				if(listOfProducts[index].id === $(this).attr('value')){
+                    formData.products.push(listOfProducts[index]);
+		        }
+			});
+		}
+
+		if(Object.keys(formData.products).length > 0 ){
+		$.when( ajaxCallFnc("datasource/create", JSON.stringify(formData), "POST") ).done( function(data){
+				if($.type(data) === 'object' && data.status === "SUCCEEDED" ){
+					showMsg("Datasource component was successfully created.", "SUCCESS");
+					downloadProducts(formData.products);
+	             }else if($.type(data) === 'object' && data.status === "FAILED"){
+	            	 routeLoading('hide');
+	            	 showMsg(data.message, "FAILED");
+	             }else{
+	            	 routeLoading('hide');
+	            	 showMsg("Datasource componet was not created.", "SUCCESS");
+	             }
+		});
+		} else{
+			routeLoading('hide');
+			 showMsg("No products selected for download", "WARNING");
+		}
+	});//end submit form formDownloadProducts
+	
+	
+	$("#addQuery, #saveQuery").on("click",function(e){
+		//create/edit  query
+		e.preventDefault();
+		routeLoading('show');
+		
+		myQuery = {};
+		myQuery = {
+				   "label":  $("#queryLabel").val(),		
+	               "user" : $('#user_name').val(),
+	               "password" : $('#user_pass').val(),
+	               "limit":  $('#limit').val(),
+	               "pageNumber":  $('#pageNumber').val(),
+	               "pageSize":  $('#pageSize').val()
+		               
+		           };
+				
+		if(modeEdit){
+			var param = currentQuery.parameters;
+			myQuery.id = currentQuery.id;
+			myQuery.sensor = currentQuery.sensor;
+			myQuery.dataSource = currentQuery.dataSourceName;		              
+		}else{
+			var selectedDatasource = $("#selectedDatasource").val().replace('d_','');
+			var param = datasourcesList[selectedDatasource].parameters;		
+			myQuery.sensor =  datasourcesList[selectedDatasource]['sensor'];
+			myQuery.dataSource = datasourcesList[selectedDatasource]['dataSourceName'];		       
+		}
+		
+		var values = {};
+		var msg = "";
+		//get all elements that have a class starting with 'var_' and which are not necessarily the first class
+		$("[class^='var_'],[class*=' var_']").each(function () {
+			if($(this).val()!=='default' && $.trim($(this).val())!==""){
+				if($(this).hasClass("datepicker") ){
+					var paramName = $(this).attr("data-name");
+							
+					if($.inArray(paramName, values) < 0){
+						var name = $(this).attr("name");
+						if(name === paramName+"_d1"){
+							date1 = $(this).val();
+							date2 = $("input[name='"+paramName+"_d2']").val();
+						}else if(name === paramName+"_d2"){
+							date2 = $(this).val();
+							date1 = $("input[name='"+paramName+"_d1']").val();
+						}
+						
+						if(date1 !== "" && date2 !== ""){
+							values[paramName] = "["+date1+","+date2+"]";
+						}else if(date1 !== ""){
+							values[paramName] = date1;
+						}else if(date2 !== ""){
+							values[paramName] = date2;
+						}
+							
+					}
+					
+				}else{
+					values[$(this).attr('name')] = $(this).val();
+				}
+			}
+		});
+		
+		myQuery.values = values;
+	 	console.log(myQuery);	 	
+	
+	 	var method = "POST";
+	 	if(modeEdit){ 	
+	 		method = "PUT";
+	 	}
+		$.when( ajaxCallFnc("datasource/query/", JSON.stringify(myQuery), method) ).done( function(data){
+	             if($.type(data) === 'object' && data.status === "SUCCEEDED" && Object.keys(data.data).length>0){
+	            	 routeLoading('hide');	            	
+	            	 showMsg("Query succesufully saved", "SUCCESS");
+	            	 
+	            	 _mLIST.refresh();
+	            	
+	                if(!modeEdit){
+	                	modeEdit = true;
+	                	currentQuery = _.findWhere(datasourcesList, {sensor:data.data.sensor, dataSourceName: data.data.dataSource});
+		            	currentQuery.id = data.data.id;
+		                if(currentQuery != undefined){			               
+			                $.each(myQuery.values, function(k, v){
+			                	currentQuery.parameters[k]['defaultValue'] = v;
+		                	});
+		                }
+		                $("#addQuery").text("Save Query");		                
+	                }
+	            	
+
+				}else if($.type(data) === 'object' && data.status === "FAILED"){
+					routeLoading('hide');
+					showMsg(data.message, "FAIL");
+				}
+			});
+	});
+    //# sourceURL=datasource-queries-plus.js
+</script>

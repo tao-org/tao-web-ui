@@ -11,7 +11,7 @@
 
         <div class="modal-error collapse">
             <h4 class="modal-title">Error adding processing component!</h4>
-            <p id="modal-error-msg">Please check you data, one or more values for the attributes is not in the acceptable range.</p>
+            <p id="modal-error-msg">Please check your data, one or more values for the attributes is not in the acceptable range.</p>
             <p>
                 <span class="error-inputCompID collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
                 <span class="error-label collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
@@ -1118,7 +1118,7 @@
                 },
                 error : function (jqXHR, textStatus, errorThrown) {
                     if(jqXHR.status === 500){
-                        showMsg("Error adding execution node. Please check you data and try again.", "ERROR");
+                        showMsg("Error adding execution node. Please check your data and try again.", "ERROR");
                         return;
                     }
                     showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
@@ -1127,7 +1127,7 @@
                     var r = chkTSRF(response);
                     if(response.status === "FAILED"){
                         if(response.message){
-                            showMsg("Error adding execution node. Please check you data, one or more values for the attributes was not in the acceptable range.", "ERROR");
+                            showMsg("Error adding execution node. Please check your data, one or more values for the attributes was not in the acceptable range.", "ERROR");
                             //handle error messages
 
                             var objResponse = JSON.parse(jqXHR.responseText);
@@ -1146,7 +1146,7 @@
                             $('#myModalNodes').animate({scrollTop: 0}, 250);
                             return;
                         }
-                        showMsg("Error adding execution node. Please check you data and try again.", "ERROR");
+                        showMsg("Error adding execution node. Please check your data and try again.", "ERROR");
                     }
                     showMsg("Execution node successfully saved.", "SUCCESS");
                     $("#myModalNodes").modal('hide');

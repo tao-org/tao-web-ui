@@ -112,7 +112,11 @@
                     }
                 })
                 .fail(function (jqXHR, status, textStatus) {
-                    $("#frmSignInMsg").show("slow");
+                    if(jqXHR.status === 401){
+                        $("#frmSignInMsg").show("slow");
+                    }else{
+                        chkXHR(jqXHR.status);
+                    }
                 });
         });
     });

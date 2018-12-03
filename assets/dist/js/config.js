@@ -1,7 +1,7 @@
 //localhost API
-var baseRestApiURL = 'http://localhost:8080/';
+//var baseRestApiURL = 'http://localhost:8080/';
 //live API
-//var baseRestApiURL = '/';
+var baseRestApiURL = '/';
 
 var prefferences = {
     "viewMode": "grid",

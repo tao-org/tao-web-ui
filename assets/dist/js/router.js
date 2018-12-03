@@ -44,10 +44,8 @@ $(function () {
     hashRoutesMap["admin/dashboard"] = "./fragments/dashboard-admin.fragment.html";
     hashRoutesMap["projects"] = '';
 
-    if (taoUserProfile.userRole == "ADMIN") {
     hashRoutesMap["admin/users"] = "./fragments/users-admin.fragment.html";
     hashRoutesMap["admin/topology"] = "./fragments/topology-admin.fragment.html";
-    }
 
     hashRoutesMap["documentation/intro"] = "./fragments/tao-documentation.fragment.html";
     hashRoutesMap["howto/intro"] = "./fragments/tao-howto.fragment.html";

@@ -337,6 +337,10 @@ transition: All 0.5s ease;
 	background-color: #FAEBD7;
 }
 
+body.sidebar-collapse #wrapper-quota{
+    display:none;
+}
+
 /*message box style*/
 #messagesBox {
     margin: 0;
@@ -1215,3 +1219,35 @@ svg .small-cog{
         transform: rotate(-360deg);
     }
 }
+
+/*notification toolbar*/
+li.notif-info{
+	position: relative;
+    padding: 5px;
+    -webkit-transition: all .5s ease-out;
+    -moz-transition: all .5s ease-out;
+    -o-transition: all .5s ease-out;
+    transition: all .5s ease-out;
+}
+li.notif-info span.text{
+    display: block;
+    margin-left: 18px;
+    font-weight: 600;
+   
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+li.notif-info span.label{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+li.notif-info:hover{position: relative;background-color: #fff8df; }
+li.notif-info div.expand{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+li.notif-info:hover div.expand{overflow:auto;white-space:normal;text-overflow:none; padding: 10px 5px 5px 5px; word-break: break-word;}
+.glyphicon.markasread{color:#3c8dbc; cursor: pointer}
+span.markasread:hover{color:green}
+span.notification-menu-header{display:block;text-align:center}
+span.markallasread{color:#3c8dbc;  cursor: pointer}
+span.markallasread:hover{color:green}

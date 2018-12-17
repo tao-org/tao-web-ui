@@ -13,10 +13,10 @@
 			<div class="box">
 				<div class="box-header">
 					<div class="treeview-header">
-						<h4>Your files:</h4>
-						<button id="importProducts" class="btn bg-green btn-flat"><i class="fa fa-upload fa-fw"></i>Import products</button>
-						<button id="uploadFiles" class="btn bg-green btn-flat"><i class="fa fa-upload fa-fw"></i>Upload files</button>
-						<button id="createQuery" class="btn bg-green btn-flat" disabled><i class="fa fa-square-o fa-fw"></i>Create query</button>
+						<h4>My Files:</h4>
+						<button id="importProducts" class="btn bg-green btn-flat"><i class="fa fa-upload fa-fw"></i>Import Products</button>
+						<button id="uploadFiles" class="btn bg-green btn-flat"><i class="fa fa-upload fa-fw"></i>Upload Files</button>
+						<button id="createQuery" class="btn bg-green btn-flat" disabled><i class="fa fa-square-o fa-fw"></i>Create Query</button>
 						<div class="col-md-12 loading hidden">
 							<img src="./assets/dist/img/loading.gif" />
 						</div>
@@ -82,7 +82,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">Upload</h1>
+				<h4 class="modal-title">Upload</h4>
 			</div>
 			<form id="frmUploadFile" class="form-horizontal" enctype="multipart/form-data" role="form">
 				<div class="modal-body">
@@ -131,7 +131,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">Create custom query</h1>
+				<h4 class="modal-title">Create Custom Query</h4>
 			</div>
 			<form id="frmCreateQuery" class="form-horizontal" role="form">
 				<div class="modal-body">
@@ -145,13 +145,13 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group">
-									<label class="col-sm-12 col-md-12">Query name:</label>
+									<label class="col-sm-12 col-md-12">Query Name:</label>
 									<div class="col-sm-12 col-md-12">
 										<input type="text" class="form-control" name="queryLabel" />
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-12 col-md-12">Selected products:</label>
+									<label class="col-sm-12 col-md-12">Selected Products:</label>
 									<div class="products"></div>
 								</div>
 							</div>
@@ -160,7 +160,7 @@
 							<div class="col-md-12">
 								<div class="form-group">
 									<div class="col-md-12 col-sm-12">
-										<button type="submit" class="btn btn-primary btn-submit">Create custom query</button>
+										<button type="submit" class="btn btn-primary btn-submit">Create Custom Query</button>
 									</div>
 								</div>
 							</div>
@@ -181,7 +181,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">Import</h1>
+				<h4 class="modal-title">Import</h4>
 			</div>
 			<form id="frmImportProducts" class="form-horizontal" enctype="multipart/form-data" role="form">
 				<div class="modal-body">
@@ -198,7 +198,7 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-12 col-md-12">Symbolic link:</label>
+									<label class="col-sm-12 col-md-12">Link Only:</label>
 									<div class="col-sm-2 col-md-2">
 										<input type="radio" name="symbolicLink" value="true"> Yes
 									</div>
@@ -212,7 +212,7 @@
 							<div class="col-md-12">
 								<div class="form-group">
 									<div class="col-md-12 col-sm-12">
-										<button type="submit" class="btn btn-primary btn-submit">Import products</button>
+										<button type="submit" class="btn btn-primary btn-submit">Import Products</button>
 									</div>
 								</div>
 							</div>
@@ -1152,7 +1152,7 @@ $(document).ready(function() {
 	$("#tree-content").removeClass("user-files shared-files");
 	if (sharedFiles) {
 		$("#tree-content").addClass("shared-files");
-		$(".content-header>h1").html("Shared files<small>Full list of <strong>public files</strong>.</small>");
+		$(".content-header>h1").html("Common Files<small>Here you can find files and products that can be used as inputs for workflows.</small>");
 		
 		if (taoUserProfile.userRole != "ADMIN") {
 			$("#myModalUpload").remove();
@@ -1160,7 +1160,7 @@ $(document).ready(function() {
 		}
 	} else {
 		$("#tree-content").addClass("user-files");
-		$(".content-header>h1").html("User files<small>Full list of <strong>your files</strong>.</small>");
+		$(".content-header>h1").html("User Files<small>Here you can find your uploaded files and the execution outputs of your workflows.</small>");
 	}
 	
 	// Get files

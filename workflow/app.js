@@ -102,24 +102,36 @@ jsPlumb.bind("jsPlumbPortAdded", function() {
     console.log("new port added");
 });
 
-jsPlumb.bind("jsPlumbDemoLoaded", function(instance) {
+jsPlumb.bind("jsPlumbLoaded", function(instance) {
     //show toolbox
     toolboxSidebar.init();
 });
 
 jsPlumb.bind("tao_updateNodePosition", function(params) {
-    if(wfPlumbCanvasData.nodes[params[0]]){
-        wfPlumbCanvasData.nodes[params[0]].xCoord = params[1];
-        wfPlumbCanvasData.nodes[params[0]].yCoord = params[2];
-    }else{
-        alert("an error occured. Please reload your workflow.")
-    }
-    var lcl_postdata = wfPlumbCanvasData.nodes[params[0]];
-    var putOneComponent = $.ajax({
+    var lcl_postdata = {};
+    var groups = [];
+    $(".w.selected", $elCanvas).each(function(){
+        var canvasID = $(this).attr('id');
+        var nodeId =  wfPlumbCanvasData.nodesMap[canvasID];
+        var top = this.offsetTop;
+        var left = this.offsetLeft;
+        if(wfPlumbCanvasData.nodes[canvasID]){
+            wfPlumbCanvasData.nodes[canvasID].xCoord = left;
+            wfPlumbCanvasData.nodes[canvasID].yCoord = top;
+        }
+        lcl_postdata[nodeId] = [left,top];
+        var groupID = $(this).data("group");
+        if(groupID && $.inArray( groupID, groups )){
+            canvasRenderer.fitGroup(groupID);
+            groups.push(groupID);
+        }
+    });
+    makeWFPreview();
+    var postNodesPosition = $.ajax({
         cache: false,
-        url: baseRestApiURL + "workflow/node?workflowId=" + currentWfID,
+        url: baseRestApiURL + "workflow/positions?workflowId=" + currentWfID,
         dataType : 'json',
-        type: 'PUT',
+        type: 'POST',
         data: JSON.stringify(lcl_postdata),
         headers: {
             "Accept": "application/json",
@@ -127,7 +139,7 @@ jsPlumb.bind("tao_updateNodePosition", function(params) {
             "X-Auth-Token": window.tokenKey
         }
     });
-    $.when(putOneComponent)
+    $.when(postNodesPosition)
         .done(function (putOneComponentResponse) {
             $(".v-lastaction","#infoband").html("position updated");
         })
@@ -567,11 +579,8 @@ jsPlumb.ready(function () {
     var windows = jsPlumb.getSelector("#canvas .w");
 
     instance.bind("groupDragStop", function(params) {
+        console.log("groupDragStop: "+params.el.id);
         jsPlumb.fire("tao_updateNodePosition", [params.el.id, params.finalPos[0], params.finalPos[1]]);
-        var groupID = $("#"+params.el.id).data("group");
-        if(groupID){
-            canvasRenderer.fitGroup(groupID);
-        }
         makeWFPreview();
     });
     // bind a click listener to each connection; the connection is deleted
@@ -729,7 +738,6 @@ jsPlumb.ready(function () {
 
         //remove node and ports from canvasdata
         var removeOneNodeFromCanvas = function (){
-
             $( "#"+el+" .n-p-o-wrapp, #"+el+" .n-p-i-wrapp").each(function(){
                 delete wfPlumbCanvasData.ports[$(this).attr("id")];
             });
@@ -745,20 +753,9 @@ jsPlumb.ready(function () {
 
     console.log("jsPlumb ready end");
 	jsPlumb.setContainer("canvas");
-	jsPlumb.fire("jsPlumbDemoLoaded", instance);
+	jsPlumb.fire("jsPlumbLoaded", instance);
     //loadWorkflow;
 	jsPlumb.fire("tao_loadWorkflowById");
-/*
-var tmp_d = newNode(584,42,{"mtype":"ds-SciHubSentinel-2","mlabel":"SciHub Sentinel-2"});
-var tmp_m1 = newNode(391,295,{"mtype":"otb-BandMath","mlabel":"Band Math"});
-var tmp_m2 = newNode(780,297,{"mtype":"otb-BandMath","mlabel":"Band Math"});
-var tmp_mc = newNode(562,547,{"mtype":"otb-ConcatenateImages","mlabel":"Images Concatenation"});
-
-instance.connect({ source:$(tmp_d).attr("id"), target:$(tmp_m1).attr("id"), type:"basic" });
-instance.connect({ source:$(tmp_d).attr("id"), target:$(tmp_m2).attr("id"), type:"basic" });
-instance.connect({ source:$(tmp_m1).attr("id"), target:$(tmp_mc).attr("id"), type:"basic" });
-instance.connect({ source:$(tmp_m2).attr("id"), target:$(tmp_mc).attr("id"), type:"basic" });
-*/
 });
 
 
@@ -793,6 +790,25 @@ updateModuleStatus("", {"state":"completed", "progress":68});
             callbackCancel:function(){}
         });
 	})
+    .on( "click",".btn-action-groupmodule", function(e) { //group selected modules
+        e.stopPropagation();
+        var nodeID = $(this).closest(".w").attr("id");
+        console.log("group invocation");
+        toolboxModules.rescanSelected();
+        if (toolboxModules.selected.length<2){
+            alert("You need to select at least 2 components in order to create a group.");
+        }
+
+
+            $('#confirm-dialog').modal('confirm',{
+            msg:"Are you sure you want to group the selected modules?",
+            callbackConfirm: function() {
+                //toolboxModules.rmSelected();
+                //console.log(id);
+            },
+            callbackCancel:function(){}
+        });
+    })
     .on( "click",".btn-action-editmodule", function(e) { //erase module on trash icon click
             e.stopPropagation();
             var nodeID = $(this).closest(".w").attr("id");

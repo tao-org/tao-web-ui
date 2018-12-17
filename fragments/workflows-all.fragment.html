@@ -18,7 +18,7 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-    <h1>Workflows <small>Full list of <strong>Workflows</strong> grouped by current state.</small></h1>
+    <h1>Workflows <small>The list of <strong>workflows</strong> created by you or published by other users.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Workflows</li>
@@ -186,7 +186,7 @@
                             <core-node-box id="node-master-template-list" class="collapse">
                             <div class="col-md-12 proj-element">
                                 <div class="node-tools pull-right">
-                                    <button class="btn btn-box-tool wf-edit text-black btn-action" data-action="wf-edit" data-toggle="tooltip" data-original-title="Edit workflow">
+                                    <button class="btn btn-box-tool wf-edit text-black btn-action btn-nodeop" data-action="wf-edit" data-toggle="tooltip" data-original-title="Edit workflow">
 		<span class="value-dependent value-1 collapse">
 			<span class="fa-stack fa-lg">
 				<i class="fa fa-circle fa-stack-2x text-green" style=""></i>
@@ -205,7 +205,7 @@
 			</span>
 		</span>
                                     </button>
-                                    <button class="btn btn-box-tool wf-build text-black btn-action" data-action="wf-build" data-toggle="tooltip" data-original-title="Build workflow">
+								    <button class="btn btn-box-tool wf-build text-black btn-action btn-nodeop" data-action="wf-build" data-toggle="tooltip" data-original-title="Build workflow">
 		<span class="value-dependent value-1 collapse">
 			<span class="fa-stack fa-lg">
 				<i class="fa fa-circle fa-stack-2x text-green" style=""></i>
@@ -224,7 +224,7 @@
 			</span>
 		</span>
                                     </button>
-                                    <button class="btn btn-box-tool op-5 text-black btn-action" data-action="wf-clone" data-toggle="tooltip" data-original-title="Clone workflow">
+                                    <button class="btn btn-box-tool op-5 text-black btn-action btn-nodeop" data-action="wf-clone" data-toggle="tooltip" data-original-title="Clone workflow">
 		<span class="value-dependent value-1 collapse">
 			<span class="fa-stack fa-lg">
 				<i class="fa fa-circle fa-stack-2x text-green" style=""></i>
@@ -244,7 +244,7 @@
 		</span>
                                         <span class="label value-copies collapse bg-black"></span>
                                     </button>
-                                    <button class="btn btn-box-tool op-20 text-black btn-action" data-action="wf-start" data-toggle="tooltip" data-original-title="Deploy and start execution">
+                                    <button class="btn btn-box-tool op-20 text-black btn-action btn-nodeop" data-action="wf-start" data-toggle="tooltip" data-original-title="Deploy and start execution">
 		<span class="value-dependent value-1 collapse">
 			<span class="fa-stack fa-lg">
 				<i class="fa fa-circle fa-stack-2x text-green" style=""></i>
@@ -263,28 +263,28 @@
 			</span>
 		</span>
                                     </button>
-                                    <button class="btn btn-box-tool op-6 text-black btn-action disabled " data-action="op-6" data-toggle="tooltip" data-original-title="Publish current workflow">
+                                    <button class="btn btn-box-tool op-6 text-black btn-action btn-nodeop disabled " data-action="op-6" data-toggle="tooltip" data-original-title="Publish current workflow">
 		<span class="value-dependent value-default">
 			<span class="fa-stack fa-lg value-dependent value-default">
 				<i class="fa fa-bullhorn"></i>
 			</span>
 		</span>
                                     </button>
-                                    <button class="btn btn-box-tool op-6 text-black btn-action" data-action="wf-delete" data-toggle="tooltip" data-original-title="Delete current workflow">
+                                    <button class="btn btn-box-tool op-6 text-black btn-action btn-nodeop" data-action="wf-delete" data-toggle="tooltip" data-original-title="Delete current workflow">
 		<span class="value-dependent value-default">
 			<span class="fa-stack fa-lg value-dependent value-default">
 				<i class="fa fa-trash-o"></i>
 			</span>
 		</span>
                                     </button>
-                                    <button class="btn btn-box-tool text-black btn-action" data-action="view-results" data-toggle="tooltip" data-original-title="Show execution results">
+                                    <button class="btn btn-box-tool text-black btn-action btn-nodeop" data-action="view-results" data-toggle="tooltip" data-original-title="Show execution results">
 		<span class="value-dependent value-default">
 			<span class="fa-stack fa-lg value-dependent value-default">
 				<i class="fa fa-picture-o"></i>
 			</span>
 		</span>
                                     </button>
-                                    <button class="btn btn-box-tool text-black btn-action" data-action="trace-execution" data-toggle="tooltip" data-original-title="Trace execution">
+                                    <button class="btn btn-box-tool text-black btn-action btn-nodeop" data-action="trace-execution" data-toggle="tooltip" data-original-title="Trace execution">
 		<span class="value-dependent value-default">
 			<span class="fa-stack fa-lg value-dependent value-default">
 				<i class="fa fa-road"></i>
@@ -838,7 +838,7 @@
         //contextual location based variations
         if(routeTags[0]==="shared"){
             $el=$("section.tao-async-ph");
-            $el.find("h1").html("Shared workflows <small>Full list of <strong>shared workflows</strong>.</small>");
+            $el.find("h1").html("Shared Workflows<small>List of <strong>workflows</strong> shared by other users.</small>");
             $el.find("li.active").html("Shared workflows");
         }
         $("form.search-container").on("submit",function(e){

@@ -1,0 +1,143 @@
+[{
+	"name":"Topology",
+	"value": [{
+		"cardinality": 1,
+		"title": "How to add a new execution node?",
+		"content": "A pop-up window for adding a new execution node will be open if you click on the {plus_icon} icon. <br>After you add all the information about the new node you have to click the button {add_new_execution_node}.<br> If everything goes well, the new node will be displayed in the page. ",
+		"note":"In order to see the submenu 'Topology', in the left menu, under the section 'Resources', you must have an administrator profile.<br>{resources_menu}<br><br>"
+	}, {
+		"cardinality": 2,
+		"title": "How to edit an execution node?",
+		"content": "For editing an execution node, you have to click on the {edit_icon} icon. A pop-up window will be open.The changes will only apply after clicking the {save_changes} button and if no error message is displayed."
+	}, {
+		"cardinality": 3,
+		"title": "How to delete an execution node?",
+		"content": "  Clicking on the {delete_icon} icon of an execution node, you can delete it. Before the action to be done, a confirmation box will be displayed. The node will actually be deleted if you click the 'Confirm' button."
+	}]
+},
+	
+{
+	"name":"Users",
+	"value": [{
+		"cardinality": 1,
+		"title": "How to add a new user?",
+		"content": "A pop-up window for adding a new user will be open if you click on the {plus_icon} icon. After you add all the information about the new user you have to click the button {add_user}.If everything goes well, the new user will be displayed in the page. ",
+		"note":"In order to see the submenu 'Users', in the left menu, under the section 'Resources', you must have an administrator profile.<br>{resources_menu_users}<br><br>"
+	}, {
+		"cardinality": 2,
+		"title": "How to edit an user informations?",
+		"content": "For editing an user informations, you have to click on the {edit_icon} icon. A pop-up window will be open.The changes will only apply after clicking the {save_changes} button and if no error message is displayed."
+	}, {
+		"cardinality": 3,
+		"title": "How to disable an user?",
+		"content": "  Clicking on the {disable_user} icon you can disable the user. Before the action to be done, a confirmation box will be displayed.The user will be disabled if you click the 'Confirm' button."
+	}]
+},
+
+{
+	"name":"Queries",
+	"value": [{
+		"cardinality": 1,
+		"title": "How to add a new query?",
+		"content": "A pop-up window for adding a new query will be open if you click on the {plus_icon} icon.<br> From datasources list you have to select a data source. You can easily type 2 or more characters for a list of suggestions of data sources to be displayed or you can click on the {combobox_button} to see the full list. After you add all the information about the new query you have to click the button {add_query}. ",
+		"note":"The queries can be managed from 'My Workspace' menu:<br>{my_workspace_menu}"
+	}, {
+		"cardinality": 2,
+		"title": "How to edit query parameters?",
+		"content": "For editing a query parameters, you have to click on the {edit_icon} icon. A pop-up window will be open.The changes will only apply after clicking the button {save_query} and if no error message is displayed."
+	}, {
+		"cardinality": 3,
+		"title": "How to delete a query?",
+		"content": "Clicking on the {delete_icon} icon of a query you can delete it. Before the action to be done, a confirmation box will be displayed. The query will actually be deleted if you click the 'Confirm' button."
+	},
+	{
+		"cardinality": 4,
+		"title": "How to execute a query?",
+		"content": "From editing window (see 'How to edit query parameters?'), you have to click on the button {execute_query}. A list of products to be downloaded will be displayed."
+	},
+	{
+		"cardinality": 4,
+		"title": "How to create a datasource component?",
+		"content": "A datasource component is created from editing window (see 'How to edit query parameters?') after the query was executed (see 'How to execute a query?') when is clicked the button {download_button}."
+	}]
+},
+
+{
+	"name":"Components",
+	"value":[{
+		"cardinality": 1,
+		"title": "How to add a new component?",
+		"content": "A pop-up window for adding a new component will be open if you click on the {plus_icon} icon. After you complete all the parameteres of the new component you have to click the button {add_new_processing_component}.If everything goes well, the new component will be displayed in the page 'All components'. ",
+		"note":"The components can be managed from 'My Workspace' menu:<br>{my_workspace_menu}<br>This interface allows to the user to add processing components that can be used later in the construction of the workflows.<br> A processing component represents an execution step in a workflow and can be: <br>- An OTB application<br>- A SNAP module<br>- An user defined script."
+		},
+		{
+		"cardinality": 2,
+		"title": "How to edit a component parameters?",
+		"content": "For editing a component parameters, you have to click on the {edit_icon} icon. A pop-up window will be open.The changes will only apply after clicking the {save_processing_component} button and if no error message is displayed."
+	}, {
+		"cardinality": 3,
+		"title": "How to delete a component?",
+		"content": "Clicking on the icon {delete_icon} of any component, you can delete it. Before the action to be done, a confirmation box will be displayed.The component will actually be deleted if you click the 'Confirm' button."
+	}]
+},
+
+{
+	"name":"Workflows",
+	"value": [{
+		"cardinality": 1,
+		"title": "How to add a new workflow?",
+		"content": "A pop-up window for adding a new workflow will be open if you click on the {plus_icon} icon. After you add all the information about the new workflow you have to click the button {save_workflow}. If everything goes well, the new workflow will be displayed in the page. ",
+		"note":"The workflows management is accessible via the <strong>WORKFLOWS</strong> menu option under <strong>'My workspace'</strong>:<br>{my_workspace_menu}<br> "
+	}, {
+		"cardinality": 2,
+		"title": "How to edit a workflow?",
+		"content": "For editing a workflow, you have to click on the pencil icon. A pop-up window will be open.The changes will only apply after clicking the {save_workflow} button and if no error message is displayed."
+	}, {
+		"cardinality": 3,
+		"title": "How to delete a workflow?",
+		"content": "Clicking on the {delete_icon} icon of any workflow, you can delete it. Before the action to be done, a confirmation box will be displayed.The workflow will actually be deleted if you click the 'Confirm' button."
+	}, {
+		"cardinality": 4,
+		"title": "How to start processing a workflow?",
+		"content": "A workflow can be process  clicking on the {process_workflow_button} on the pop-up window displayed after the {start_processing_workflow_icon} icon is pressed."
+	},
+	{
+		"cardinality": 5,
+		"title": "How to see the workflow execution results?",
+		"content": "The execution results are available in the pop-up window that appears after clicking the {workflow_results_execution_icon} icon."
+	},
+	{
+		"cardinality": 6,
+		"title": "How to see the workflow execution traces?",
+		"content": "The execution traces are available in the pop-up window that appears after clicking the {workflow_trace_execution_icon} icon."
+	},{
+		"cardinality": 7,
+		"title": "How to clone a workflow?",
+		"content": "A workflow is automatically cloned clicking on the {clone_workflow_icon} icon."
+	}]
+},
+
+
+{
+	"name":"My Files",
+	"value": [{	
+	"cardinality": 1,
+	"title":"",
+	"content":"",
+	"note":"'My Files' menu option is available under the menu:<br>{my_workspace_menu}"
+	}]
+},
+
+{
+	"name":"Datasources",
+	"value": [{
+		"cardinality": 1,
+		"title": "How to add/edit/delete tags?",
+		"content": "A pop-up window for editing or adding a tag will be open if you click on the button {edit_icon}.<br> In the input 'Tags' you can delete existing tags just clicking on the icon {tag_delete_icon} or add new tags just typing and pressing enter on input field.<br> Tags suggestion can be displayed after 2 characters typed if in database exists tags which contains those characters. If you try to add an already existing tag on the same datasource, the text will be colored in red.<br> All modified and new tags will be saved after the button {save_tags_button} is pressed. ",
+		"note":"The datasource can be managed from 'Shared workspace' menu:<br>{shared_workspace_menu}<br>Data sources cannot be added, deleted or edited from here. Instead, they are plugins of the TAO framework, which are detected at system startup (therefore, to add/remove a new data source, it is sufficient to put/remove the plugin JAR into/from the system class path)."
+	}, {
+		"cardinality": 2,
+		"title": "How to view data source parameters?",
+		"content": "In order to view the parameters of a data source, the button {view_button}  can be clicked, and the following dialog will be open: {view_datasource_dialog}"
+	}]
+}]

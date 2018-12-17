@@ -880,18 +880,9 @@
 		}else{
 			checkedProducts = $('input[name=product]:checked');
 			$.each(checkedProducts,function(index){
-				if(listOfProducts[index].id === $(this).attr('value')){
-                    formData.products.push(listOfProducts[index]);
-		        }
-			});
-		}
-		if($('input[name=allproducts]').is('checked')){
-			formData.products = listOfProducts;
-		}else{
-			checkedProducts = $('input[name=product]:checked');
-			$.each(checkedProducts,function(index){
-				if(listOfProducts[index].id === $(this).attr('value')){
-                    formData.products.push(listOfProducts[index]);
+				prodFound = _.findWhere(listOfProducts, {id:$(this).attr('value')});
+				if(prodFound != undefined){
+                    formData.products.push(prodFound);
 		        }
 			});
 		}

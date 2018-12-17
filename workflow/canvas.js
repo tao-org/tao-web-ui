@@ -50,9 +50,14 @@ var tao_setWF2CanvasData = function(currentWfData){
     wfPlumbCanvasData.header.username = currentWfData.userName;
     wfPlumbCanvasData.header.visibility = currentWfData.visibility;
     wfPlumbCanvasData.usedComponents = [];
+    wfPlumbCanvasData.usedGroups = [];
     var nodesNo = wfPlumbCanvasData._remote.nodes.length;
     for (var i = 0; i < nodesNo; i++) {
-        wfPlumbCanvasData.usedComponents.push(wfPlumbCanvasData._remote.nodes[i].componentId);
+        if(wfPlumbCanvasData._remote.nodes[i].componentType === "GROUP"){
+            wfPlumbCanvasData.usedGroups.push(wfPlumbCanvasData._remote.nodes[i].componentId);
+        } else {
+            wfPlumbCanvasData.usedComponents.push(wfPlumbCanvasData._remote.nodes[i].componentId);
+        }
     }
 };
 
@@ -147,12 +152,28 @@ var tao_setWF2CanvasData = function(currentWfData){
                     "X-Auth-Token": window.tokenKey
                 }
             });
-            $.when(getComponentsList, getDatasourcesList)
-                .done(function (getComponentsListResponse, getDatasourcesListResponse) {
+            //get component templates for all groups in workflow
+            var groupListQueryString = wfPlumbCanvasData.usedGroups.join(',');
+            var getGroupsList = $.ajax({
+                cache: false,
+                url: baseRestApiURL + "component/group?id="+groupListQueryString,
+                dataType : 'json',
+                type: 'GET',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": window.tokenKey
+                }
+            });
+
+            $.when(getComponentsList, getDatasourcesList, getGroupsList)
+                .done(function (getComponentsListResponse, getDatasourcesListResponse, getGroupsListResponse) {
                     var currentWfComponentsList = chkTSRF(getComponentsListResponse[0]);
                     var currentWfDatasourcesList = chkTSRF(getDatasourcesListResponse[0]);
+                    var currentWfGroupsList = chkTSRF(getGroupsListResponse[0]);
                     console.log("workflow components:"); console.log(currentWfComponentsList);
                     console.log("workflow datasopurces:"); console.log(currentWfDatasourcesList);
+                    console.log("workflow groups:"); console.log(currentWfGroupsList);
                     $.each(currentWfComponentsList, function(i, item) {
                         var hash = "tboid"+jsHashCode(item.id);
                         if(wfPlumbCanvasData.nodeTemplates.pc[hash]){
@@ -174,6 +195,19 @@ var tao_setWF2CanvasData = function(currentWfData){
                             wfPlumbCanvasData.nodeTemplates.ds[hash] = {
                                 id: hash,
                                 type: "datasource",
+                                label: item.label,
+                                dna: item
+                            };
+                        }
+                    });
+                    $.each(currentWfGroupsList, function(i, item) {
+                        var hash = "tboid"+jsHashCode(item.id);
+                        if(wfPlumbCanvasData.nodeTemplates.pc[hash]){
+                            alert("Processing components collision. duplicate id detected");
+                        }else{
+                            wfPlumbCanvasData.nodeTemplates.pc[hash] = {
+                                id: hash,
+                                type: "group",
                                 label: item.label,
                                 dna: item
                             };
@@ -273,6 +307,10 @@ var tao_setWF2CanvasData = function(currentWfData){
         if( dna.ntype === "pc" && wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid] ){
             componentTemplate = wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid].dna;
         }
+        //groups are stored as regular processing components
+        if( dna.ntype === "g" && wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid] ){
+            componentTemplate = wfPlumbCanvasData.nodeTemplates.pc[dna.ntemplateid].dna;
+        }
         //ds components can be system or user datasources, but it's all the same
         if( dna.ntype === "ds" && wfPlumbCanvasData.nodeTemplates.ds[dna.ntemplateid] ){
             componentTemplate = wfPlumbCanvasData.nodeTemplates.ds[dna.ntemplateid].dna;
@@ -356,11 +394,48 @@ var tao_setWF2CanvasData = function(currentWfData){
                     });
             }
             if(dna.ntype === "g"){
-                console.log("render group: "+ dna.mtype);
-                canvasRenderer.createGroup(dna);
+                console.log("get group "+ dna.mtype);
+
+                var getGroupById = $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + "component/group?id="+dna.mtype,
+                    dataType : 'json',
+                    type: 'GET',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "X-Auth-Token": window.tokenKey
+                    }
+                });
+                $.when(getGroupById)
+                    .done(function (getGroupByIdResponse) {
+                        var pcData = chkTSRF(getGroupByIdResponse);
+                        console.log("g data:"); console.log(pcData);
+                        if(pcData[0] && pcData[0].id && (pcData[0].id === dna.mtype)) {
+                            //template returned, add to used pc, add template too
+                            var hash = "tboid" + jsHashCode(dna.mtype);
+                            componentTemplate = pcData[0];
+                            wfPlumbCanvasData.usedComponents.push(dna.mtype);
+                            wfPlumbCanvasData.nodeTemplates.pc[hash] = {
+                                "dna": componentTemplate,
+                                "id": hash,
+                                "label": "xxxxx",
+                                "type": "group"
+                            };
+                        }
+                        canvasRenderer.createGroup(componentTemplate, dna);
+                    })
+                    .fail(function () {
+                        alert("Could not retrive pc data.", "ERROR");
+                        canvasRenderer.createGroup(componentTemplate, dna);
+                    });
             }
         }else{
-            canvasRenderer.createNode(componentTemplate, dna);
+            if(dna.ntype === "g"){
+                canvasRenderer.createGroup(componentTemplate, dna);
+            } else{
+                canvasRenderer.createNode(componentTemplate, dna);
+            }
         }
 	};
 
@@ -470,6 +545,7 @@ var canvasRenderer = {
         if(dna.ntype !== "unknown") {
             innerHTML += "<div class=\"meta\"><button class=\"btn-transparent btn-action-editmodule\"><i class=\"fa fa-pencil\"></i><span class=\"sr-only\">Edit module</span></button></div>";
         }
+        innerHTML += "<div class=\"meta collapse\"><button class=\"btn-transparent btn-action-groupmodule\"><i class=\"fa fa-object-group\"></i><span class=\"sr-only\">Group module</span></button></div>";
         innerHTML += "</footer>";
 //
         if(dna.ntype === "unknown"){
@@ -534,43 +610,43 @@ var canvasRenderer = {
     fitGroup(groupCanvasID){
         var d = document.getElementById(groupCanvasID);
         console.log("fit group: "+groupCanvasID);
-
-        var minLeft			= 0;
-        var minTop			= 0;
-        var maxBottom		= 0;
-        var maxRight		= 0;
+        var itemPos		    = {};
+        var groupBounds		= {};
         var spanY			= 0;
         var spanX			= 0;
 
-        var itemOffset		= {};
-        $(".g_"+groupCanvasID , $elCanvas).each(function(index) {
-            itemOffset = {};
-            itemOffset = $(this).offset();
-            itemOffset.w = $(this).outerWidth();
-            itemOffset.h = $(this).outerHeight();
-            itemOffset.right = $(this).offset().left + itemOffset.w;
-            itemOffset.bottom = $(this).offset().top + itemOffset.h;
-            if(index === 0){
-                minLeft = itemOffset.left;
-                minTop = itemOffset.top;
-                maxBottom = itemOffset.bottom;
-                maxRight = itemOffset.right;
+        var groupELs = document.getElementsByClassName("g_"+groupCanvasID);
+        for(var i = 0; i < groupELs.length; i++)
+        {
+            itemPos.top = groupELs.item(i).offsetTop;
+            itemPos.left = groupELs.item(i).offsetLeft;
+            itemPos.height = groupELs.item(i).offsetHeight;
+            itemPos.width = groupELs.item(i).offsetWidth;
+            itemPos.right = itemPos.left + itemPos.width;
+            itemPos.bottom = itemPos.top + itemPos.height;
+            if(i === 0){
+                groupBounds.left = itemPos.left;
+                groupBounds.top = itemPos.top;
+                groupBounds.bottom = itemPos.bottom;
+                groupBounds.right = itemPos.right;
+            }else{
+                groupBounds.left = Math.min(groupBounds.left,itemPos.left);
+                groupBounds.top = Math.min(groupBounds.top,itemPos.top);
+                groupBounds.bottom = Math.max(groupBounds.bottom,itemPos.bottom);
+                groupBounds.right = Math.max(groupBounds.right,itemPos.right);
             }
-            minLeft = Math.min(minLeft,itemOffset.left);
-            minTop = Math.min(minTop,itemOffset.top);
-            maxBottom = Math.max(maxBottom,itemOffset.bottom);
-            maxRight = Math.max(maxRight,itemOffset.right);
-        });
+        }
+        spanX = groupBounds.right - groupBounds.left;
+        spanY = groupBounds.bottom -groupBounds.top;
 
-        spanX = maxRight-minLeft;
-        spanY = maxBottom-minTop;
-        minTop -= groupGutter.t;
-        minLeft -= groupGutter.l;
+        //compute group bounds to include group gutter
+        groupBounds.top -= groupGutter.t;
+        groupBounds.left -= groupGutter.l;
         spanX += groupGutter.l + groupGutter.r;
         spanY += groupGutter.t + groupGutter.b;
 
-        d.setAttribute("style","top:"+minTop+"px;left:"+minLeft+"px;width:"+spanX+"px;height:"+spanY+"px;");
-
+        d.setAttribute("style","top:"+groupBounds.top+"px;left:"+groupBounds.left+"px;width:"+spanX+"px;height:"+spanY+"px;");
+        jsp.revalidate(d.id);
     },
     markGroupMembers: function(fullData){
         var groupCanvasID = tao_getCanvasIdByNodeId(fullData.id);
@@ -581,7 +657,99 @@ var canvasRenderer = {
             });
         }
     },
-    createGroup: function(dna) {
+/////////////////////////
+    createGroup: function(componentTemplate, dna){
+        if(componentTemplate === null){
+            //set component template for unknown
+            componentTemplate = {
+                "id": "component-unavilable",
+                "label": "Unknown",
+                "version": "1.0",
+                "description": "Component has been removed from toolbox",
+                "authors": "SNAP Team",
+                "copyright": "(C) SNAP Team",
+                "nodeAffinity": "Any",
+                "sources": [],
+                "targets": [],
+                "containerId": "3513b060dab3",
+                "fileLocation": "",
+                "workingDirectory": "",
+                "templateType": "VELOCITY",
+                "variables": [],
+                "multiThread": true,
+                "visibility": "SYSTEM",
+                "active": true,
+                "componentType": "EXECUTABLE",
+                "owner": "SystemAccount",
+                "parameterDescriptors": [],
+                "templatecontents": ""
+            };
+            dna.ntype = "unknown";
+        }
+
+        var maxPorts = Math.max(componentTemplate.sources.length, componentTemplate.targets.length);
+        var d = document.createElement("div");
+        var innerHTML ="";
+        innerHTML += "<div class=\"module-ports\">";
+        for (i = 0; i < maxPorts; i++) {
+            innerHTML += "<div class=\"module-ports-row\">";
+            if(componentTemplate.targets[i]) innerHTML += "<div id=\"p_"+dna.fullData.id+"_"+componentTemplate.targets[i].id+"\" class=\"n-p-o-wrapp\"><div class=\"n-p-o\"></div><div class=\"l-n-p-o\"><i class=\"fa fa-sign-out\" aria-hidden=\"true\"></i>&nbsp;"+componentTemplate.targets[i].name+"</div></div>";
+            if(componentTemplate.sources[i]) innerHTML += "<div id=\"p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id+"\" class=\"n-p-i-wrapp\"><div class=\"n-p-i\"></div><div class=\"l-n-p-i\"><i class=\"fa fa-sign-in\" aria-hidden=\"true\"></i>&nbsp;"+componentTemplate.sources[i].name+"</div></div>";
+            innerHTML += "</div>";
+        }
+        innerHTML += "</div>";
+
+        d.className = "w g";
+        d.id = dna.nodeID;
+        d.innerHTML = innerHTML;
+        d.setAttribute("style","top:"+dna.fullData.yCoord+"px;left:"+dna.fullData.xCoord+"px;width:140px;height:140px;");
+        d.dataset.dna = JSON.stringify(dna); //Having to access dataset
+        d.style.opacity = 0;
+        d.onmousedown = function(){
+            tao_adModuleToSelection(dna.nodeID);
+            tao_adGroupNodesToSelection(dna.nodeID);
+        };
+
+        //window.jsp.getContainer().appendChild(d);
+        canvas.insertBefore(d, canvas.firstChild);
+        $("#"+dna.nodeID).fadeTo( "slow" , .8, function() {});
+        //add node to toolbox
+        toolboxModules.newModule(dna);
+        //init ports as jsplumb nodes
+        for (i = 0; i < maxPorts; i++) {
+            var elPort;
+            if(componentTemplate.targets[i]) {
+                elPort = document.getElementById("p_"+dna.fullData.id+"_"+componentTemplate.targets[i].id);
+                this.initPort(elPort, "out");
+                wfPlumbCanvasData.ports["p_"+dna.fullData.id+"_"+componentTemplate.targets[i].id] = {"type":"out", "parentID":dna.fullData.id, "fullData":componentTemplate.targets[i]};
+            }
+            if(componentTemplate.sources[i]) {
+                elPort = document.getElementById("p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id);
+                this.initPort(elPort, "in");
+                wfPlumbCanvasData.ports["p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id] = {"type":"in", "parentID":dna.fullData.id, "fullData":componentTemplate.sources[i]};
+            }
+        }
+
+        var elNB = document.getElementById(dna.nodeID);
+        window.jsp.addGroup({
+            el:elNB,
+            id:"ng_"+dna.nodeID,
+            constrain:true,
+            anchor:"Continuous",
+            endpoint:"Blank",
+            droppable:false
+        });
+
+        //add nodes to workflow shadow data
+        wfPlumbCanvasData.nodesMap[dna.nodeID] = dna.fullData.id;
+        wfPlumbCanvasData.nodes[dna.nodeID] = dna.fullData;
+        this.markGroupMembers(dna.fullData);
+        this.fitGroup(d.id);
+        jsPlumb.fire("jsPlumbNodeAdded", d);
+        return d;
+    },
+//////////////////////
+    createGroupOld: function(dna) {
         wfPlumbCanvasData.nodesMap[dna.nodeID] = dna.fullData.id;
         wfPlumbCanvasData.groups[dna.nodeID] = dna.fullData;
 
@@ -590,11 +758,10 @@ var canvasRenderer = {
         var canvas = window.jsp.getContainer();
         d.className = "w g";
         d.id = dna.nodeID;
-        d.innerHTML = "<div class=\"ep\"></div>";
+        //d.innerHTML = "<div class=\"ep\"></div>";
         d.onmousedown = function(){
             tao_adGroupNodesToSelection(dna.nodeID);
         };
-
 
         d.setAttribute("style","top:10px;left:10px;width:40px;height:40px;");
         //window.jsp.getContainer().appendChild(d);
@@ -608,7 +775,17 @@ var canvasRenderer = {
     initGroup: function(el) {
         // initialise draggable elements.
         window.jsp.draggable(el);
+        var elNB = document.getElementById(el.id);
+        window.jsp.addGroup({
+            el:elNB,
+            id:"agroup",
+            constrain:true,
+            anchor:"Continuous",
+            endpoint:"Blank",
+            droppable:false
+        });
 
+/*
         window.jsp.makeSource(el, {
             filter: ".ep",
             anchor: "Continuous",
@@ -627,7 +804,7 @@ var canvasRenderer = {
             anchor: "Continuous",
             allowLoopback: true
         });
-
+*/
         // this is not part of the core demo functionality; it is a means for the Toolkit edition's wrapped
         // version of this demo to find out about new nodes being added.
         //window.jsp..fire("jsPlumbGroupAdded", el);

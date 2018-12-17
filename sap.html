@@ -51,7 +51,7 @@
 <body class="skin-blue sidebar-mini size-normal noselect">
 <!-- messages -->
 <div id="messagesBox">
-    <div id="messagesBoxItemX" class="messagesBoxItem hidden" style="">Dummy message text.</div>
+    <div id="messagesBoxItemX" class="messagesBoxItem hidden" style=""></div>
 </div>
 <!-- messages -->
 <!-- modal loading -->
@@ -106,7 +106,7 @@
     <!-- Main Header -->
     <header class="main-header">
         <!-- Logo -->
-        <a href="./" class="logo">
+        <a href="./sap.html" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini">TAO</span>
             <!-- logo for regular state and mobile devices -->
@@ -122,118 +122,37 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <!-- Messages: style can be found in dropdown.less-->
-                    <li class="dropdown messages-menu">
+                    <li class="dropdown messages-menu info-notif-menu">
                         <!-- Menu toggle button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-flag-o"></i>
                             <span id="val-newdocs02" class="label label-success">0</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">You have new events</li>
+                            <li class="header">No new events to show</li>
                                               <li>
-                                                <ul class="menu">
-                                                  <li>
-                                                    <a href="#">
-                                                      <div class="pull-left">
-                                                        <img src="https://www.gravatar.com/avatar/0000000000?d=mp&s=160" class="img-circle" alt="User Image" />
-                                                      </div>
-                                                      <h4>
-                                                        user request
-                                                        <small><i class="fa fa-clock-o"></i> 10:42 AM</small>
-                                                      </h4>
-                                                      <p>from: Will Smith</p>
-                                                    </a>
-                                                  </li>
-                                                  <li>
-                                                    <a href="#">
-                                                      <div class="pull-left">
-                                                        <img src="https://www.gravatar.com/avatar/0000000000?d=mp&s=160" class="img-circle" alt="User Image" />
-                                                      </div>
-                                                      <h4>
-                                                        New feature
-                                                        <small><i class="fa fa-clock-o"></i> 10:42 AM</small>
-                                                      </h4>
-                                                      <p>from: George Maxwell</p>
-                                                    </a>
-                                                  </li>
-                                                </ul>
+                           		<ul class="menu"><!-- notifications --></ul>	                    
                                               </li>
-
-                            <li class="footer"><a href="#">See all new notifications</a></li>
+                            <li class="footer"><a href="#"></a></li>
                         </ul>
                     </li><!-- /.messages-menu -->
 
                     <!-- Notifications Menu -->
-                    <li class="dropdown notifications-menu">
+                    <li class="dropdown messages-menu execution-notif-menu">
                         <!-- Menu toggle button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-random"></i>
                             <span id="val-countdocs02" class="label label-warning">0</span>
                         </a>
-                        <ul class="dropdown-menu">
-                            <!-- to be done -->
-                            <li class="header">x jobs in progress now:</li>
-                            <li>
-                                <ul class="menu">
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-aqua"></i> 2 finished
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-aqua"></i> 2 in execution
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="footer"><a href="#">See all your projects</a></li>
-                        </ul>
                     </li>
                     <!-- Tasks Menu -->
-                    <li class="dropdown tasks-menu">
+                    <li class="dropdown messages-menu error-notif-menu">
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
                             <span id="val-latedocs02" class="label label-danger">0</span>
                         </a>
-                        <ul class="dropdown-menu">
-                            <li class="header">Canceled or finished with error status</li>
-                            <li>
-                                <!-- Inner menu: contains the tasks -->
-                                <ul class="menu">
-                                    <li><!-- Task item -->
-                                        <a href="#">
-                                            <!-- Task title and progress text -->
-                                            <h3>
-                                                Canceled
-                                                <small class="pull-right">2</small>
-                                            </h3>
-                                        </a>
-                                    </li><!-- end task item -->
-                                    <li><!-- Task item -->
-                                        <a href="#">
-                                            <!-- Task title and progress text -->
-                                            <h3>
-                                                Error during execution
-                                                <small class="pull-right">1</small>
-                                            </h3>
-                                            <!-- The progress bar -->
-                                            <div class="progress xs">
-                                                <!-- Change the css width attribute to simulate progress -->
-                                                <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                    <span class="sr-only">20% Complete</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li><!-- end task item -->
 
-                                </ul>
-                            </li>
-                            <li class="footer">
-                                <a href="#">see all ...</a>
-                            </li>
-                        </ul>
                     </li>
                     <!-- User Account Menu -->
                     <li class="dropdown user user-menu">
@@ -242,13 +161,13 @@
                             <!-- The user image in the navbar-->
                             <img src="https://www.gravatar.com/avatar/0000000000?d=mp&s=160" class="user-image val-user-avatar"/>
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs val-user-fullname">Max Mustermann</span>
+                            <span class="hidden-xs val-user-fullname"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
                             <li class="user-header">
                                 <img src="https://www.gravatar.com/avatar/0000000000?d=mp&s=160" class="img-circle val-user-avatar"/>
-                                <p><span class="val-user-fullname">Max Mustermann</span><br><span class="user-role">Role:&nbsp;</span><span class="val-user-role user-role">User role</span><small class="val-user-email">user@domain</small></p>
+                                <p><span class="val-user-fullname"></span><br><span class="user-role"></span><span class="val-user-role user-role"></span><small class="val-user-email"></small></p>
                             </li>
                             <li class="user-footer">
                                 <div class="pull-left">
@@ -277,9 +196,9 @@
                     <img src="https://www.gravatar.com/avatar/0000000000?d=mp&s=160" class="img-circle val-user-avatar" alt="User Image" />
                 </div>
                 <div class="pull-left info">
-                    <p class="val-user-fullname">Max Mustermann</p>
+                    <p class="val-user-fullname"></p>
                     <!-- Status -->
-                    <a href="#my/profile"><i class="fa fa-circle text-success"></i><span class="val-user-role">user role</span></a>
+                    <a href="#"><i class="fa fa-circle text-success"></i><span class="val-user-role"></span></a>
                 </div>
             </div>
 
@@ -300,7 +219,7 @@
                 <li class="routed routed-admin-dashboard active">
                     <a href="#admin/dashboard"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
                 </li>
-                <li class="treeview routed routed-my-workflows routed-my-components routed-my-auxfiles routed-my-scripts">
+                <li class="treeview routed routed-my-workflows routed-my-components routed-my-auxfiles routed-my-scripts routed-my-queries">
                     <a href="#default"><i class="fa fa-briefcase"></i><span>My WORKSPACE</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
                     	<li class="routed routed-my-queries"><a href="#my/queries">Queries</a></li>                        
@@ -329,11 +248,11 @@
                     </ul>
                 </li>
                 <li class="header">DOCUMENTATION</li>
-                <li class="routed routed-documentation routed-documentation-intro">
+                <!--<li class="routed routed-documentation routed-documentation-intro">
                     <a href="#documentation/intro">
                         <i class="fa fa-book"></i><span>TAO Documentation</span>
                     </a>
-                </li>
+                </li>-->
                 <li class="routed routed-howto routed-howto-intro">
                     <a href="#howto/intro">
                         <i class="fa fa-info-circle"></i><span>How To</span>
@@ -593,8 +512,143 @@ Nothing to see!
         	prefferences.viewMode = "grid";
         }
     })();
+	var notificationsList = [];
+	var topics = {'info':{'header':'You have new events'},'execution':{'header':'You have new events'},'error':{'header':'You have new events'}};
+	var menu = $(".messages-menu .dropdown-menu");
+	function getNotificationBody(data, topic){
+            		var list ='';
+		$.each(data,function(index,value){
+            		list = list+  '		<li class="notif-info">'+
+            					'				<div class="expand">  '+
+            					'					<div class="pull-left">'+
+    					'						<span class="glyphicon glyphicon-ok markasread"  title="mark as read" id="'+value.timestamp+'_'+value.user+'" data-topic="'+topic+'"></span>'+		                             			
+            					'					</div>'+
+            					'					<span class="text">'+
+            										JSON.parse(value.data).Payload +'</span>'+
+            					'				  <small style="float:right" class="label label-info"><i class="fa fa-clock-o "></i>'+value.timestamp+'</small>'+
+            					'				 </div>'+
+            					'		</li>';
+            		});
+		return list;
+	}
+        					
+	function markAsRead(data){
+        					$.ajax({
+        						cache: false,
+        			            url: baseRestApiURL + "monitor/notification/ack/",
+            data:JSON.stringify(data),
+        			            type: 'POST',
+        			            headers: {
+        			                "Accept": "application/json",
+        			                "Content-Type": "application/json",
+        			                "X-Auth-Token": window.tokenKey
+        			            }
+        					}).done(function (response) {
+        						console.log(response);
+        					}).fail(function (jqXHR, textStatus) {
+        						console.log(textStatus);
+        						console.log(jqXHR);
+        			        }).complete(function(){
+        		                	getUnreadNotifications();
+    	});
+	}
+	function displayNotifications(data, topic, id){
+		if(data.length > 0){
+			$("."+id+"-notif-menu .dropdown-menu .header").html("<span class='notification-menu-header'>"+topics[id].header+"</span><span class='glyphicon glyphicon-check markallasread' id='"+topic+"_markall'></span>Mark all as read  ");
+		}
+		$("."+id+"-notif-menu a span").text(data.length);
+		
+		var list ='';
+		list = getNotificationBody(data, topic);
+		$("."+id+"-notif-menu .dropdown-menu .menu").append(list);
+		        			 
+		$("."+id+"-notif-menu .dropdown-menu .menu span.markasread").each(function(){
+			 $(this).click(function(event){
+				var el = event.target.id;
+				el = el.split('_');
+				var topic = event.target.getAttribute('data-topic');
+				el =_.findWhere(notificationsList[topic], {timestamp:el[0], user:el[1]});
+				if(el != undefined){
+					el.data = JSON.parse(el.data).Payload;
+					markAsRead([el]);
+        					}
+        				 });//click event end
+        			 });
+		
+		$("span.markallasread").each(function(){
+			 $(this).click(function(event){
+				var el = event.target.id;
+				el = el.split('_');
+				if(notificationsList.hasOwnProperty(el[0])){
+					var payload = notificationsList[el[0]];
+					$.each(payload,function(index,value){
+						payload[index].data = JSON.parse(payload[index].data).Payload;
+					})
+					markAsRead(payload);
+				}
+				
+			});
+		});
 
+	}
+	
+    function getUnreadNotifications(){
+        $.ajax({
+            cache: false,
+            url: baseRestApiURL + "monitor/notification/unread/",
+            dataType : 'json',
+            type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "user": taoUserProfile.username,
+                "X-Auth-Token": window.tokenKey
+            }
+        }).done(function (notificationsResponse) {
+            var r = chkTSRF(notificationsResponse);
+            notificationsList = [];
+            if(r instanceof Object ){
+            	notificationsList = r;
+            	console.log('caca');
+            	console.log($("li[class$='-notif-menu'] ul.dropdown-menu"));
+            	$(".messages-menu ul.dropdown-menu").remove();
+            	console.log($("li[class$='-notif-menu'] ul.dropdown-menu"));
+            	menu.clone().insertAfter(".info-notif-menu a");
+            	menu.clone().insertAfter(".error-notif-menu a");
+            	menu.clone().insertAfter(".execution-notif-menu a");
+            	
+            	$("li[class$='-notif-menu'] .dropdown-menu .header").text(0);
+            	
+        		$(".info-notif-menu .dropdown-menu .header").text("No new events to show");
+        		$(".execution-notif-menu .dropdown-menu .header").text("No new execution infos to show");
+        		$(".error-notif-menu .dropdown-menu .header").text("No new errors to show");
+         
+            	if(r.hasOwnProperty('info')){
+            		console.log(r.info);
+            		displayNotifications(r.info,'info','info');
+            	}
+            	
+            	//display execution notifications in toolbar
+				if(r.hasOwnProperty('execution.status.changed') ){
+					console.log(r["execution.status.changed"]);
+					displayNotifications(r["execution.status.changed"],'execution.status.changed','execution');
+            	}
+            	
+				//display error notifications in toolbar
+				if(r.hasOwnProperty('error') ){
+					displayNotifications(r["error"],'error','error');
+            	}
+				// PREVENT INSIDE CLICK DROPDOWN
+				$('.dropdown-menu').on("click.bs.dropdown", function (e) { e.stopPropagation(); e.preventDefault(); });
+            }
+        }).fail(function (jqXHR, textStatus) {
+        }).complete(function(){           
+                setTimeout(function(){
+                	getUnreadNotifications();
+                },10000);
 
+        });
+ 	}
     ///////////////////////////////////////
     $(document).ready( function(){
     	if (taoUserProfile.userRole != "ADMIN") {
@@ -701,5 +755,11 @@ Nothing to see!
 
         //trigger some events
         $(document).trigger( "quota:update" );
+                
+        //get unreaded notification for toolbar
+        console.log( "getUnreadNotifications");
+        getUnreadNotifications();
+        
+     
     });
 </script>

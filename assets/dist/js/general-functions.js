@@ -252,6 +252,27 @@ return Hex.encode(Sha256.hash(ASCII.decode(plaintextPass)));
 }
 
 
+//geometry function for svg arc
+function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+    var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+    return {
+        x: centerX + (radius * Math.cos(angleInRadians)),
+        y: centerY + (radius * Math.sin(angleInRadians))
+    };
+}
+function describeArc(x, y, radius, startAngle, endAngle){
+    var start = polarToCartesian(x, y, radius, endAngle);
+    var end = polarToCartesian(x, y, radius, startAngle);
+    var arcSweep = endAngle - startAngle <= 180 ? "0" : "1";
+    return d = [
+        "M", start.x, start.y,
+        "A", radius, radius, 0, arcSweep, 0, end.x, end.y,
+        //"L", x, y, "Z"
+    ].join(" ");
+}
+
+
+
 var jsHashCode = function(str){
     var hash = 0, i, chr;
     if (str.length === 0) return hash;

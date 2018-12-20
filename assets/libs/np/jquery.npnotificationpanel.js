@@ -1,5 +1,5 @@
 /*!
- * npExecPanels jQuery plugin
+ * npNotificationsPanels jQuery plugin
  *
  * it only applies to a single DOM element and options must include end-point url
  * creates job execution lists and maintain pagination and data refresh
@@ -19,10 +19,9 @@
  * limitations under the License.
  */
 
-jQuery.fn.npExecPanels = function(options){
+jQuery.fn.npNotificationsPanels = function(options){
     var settings = $.extend({
         msgEmpty:"Empty dataset",
-        msgEnd:"No more records",
         itemsOnPage: 3,
         url: ''
     }, options );
@@ -39,16 +38,17 @@ jQuery.fn.npExecPanels = function(options){
         data = d;
         renderExecHistoryCurrentPage(data);
     };
-    var getData = function(){
+    var getData = function(page){
         $.ajax({
             cache: false,
-            url: settings.url ,
+            url: settings.url + (page+1),
             dataType : 'json',
             type: 'GET',
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
+                //"X-Auth-Token": window.tokenKey
+                "user": settings.headerUser
             }
         }).done(function (response) {
             setNewData(response.data);
@@ -62,35 +62,26 @@ jQuery.fn.npExecPanels = function(options){
         $panel.empty();
         if(jobs){
             var count = jobs.length;
-            pages = Math.ceil(count/settings.itemsOnPage);
-            //var itemStop = Math.max(0, count - currentPage*settings.itemsOnPage);
-            //var itemStart = Math.max(0, count - (currentPage+1)*settings.itemsOnPage);
-            var itemStart = Math.max(0, currentPage*settings.itemsOnPage);
-            var itemStop = Math.min(count, itemStart+settings.itemsOnPage);
-
-            for(i = itemStart; i < itemStop; i++){
-                var job = jobs[i];
-                var htmlContent = '<h4>Job name: <strong>'+job.jobName+'</strong></h4>';
-                htmlContent += '<p>Workflow: <b>'+job.workflowName+'</b></p>';
-                htmlContent += 'user: '+job.user+', status: '+job.jobStatus+' <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+niceIsoTime(job.jobStart)+'</small> - <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+niceIsoTime(job.jobEnd)+'</small>';
-                htmlContent += '<div class="tasks">Task sumary:';
-                for(ii = 0; ii<job.taskSummaries.length; ii++) {
-                    var task = job.taskSummaries[ii];
-                    var statusIcon = ui_getTaskStatusIcon(task.taskStatus);
-                    htmlContent += '<div class="one-task">';
-                    htmlContent += statusIcon + '<strong>' +task.componentName + '</strong>' +' ['+ niceIsoTime(task.taskStart) +'-'+ niceIsoTime(task.taskEnd) +']' + ui_getTaskHost(task.host);
-                    htmlContent += '</div>'
+            for(i = 0; i < count; i++){
+                var notification = jobs[i];
+                var ts = niceIsoTime(notification["timestamp"]);
+                try {
+                    var lclData = JSON.parse(notification["data"]);
+                    var lclMsg = lclData.Payload;
+                } catch(e) {
+                    console.log(e); // error in the above string (in this case, yes)!
                 }
-                htmlContent += '</div>';
-                var css = 'job-history-one'+ui_getJobStatusClass(job.jobStatus)+' collapse';
-                var $newEl = $('<div>',{
-                    'class' : css,
+                var li = document.createElement("li");
+                var htmlContent = "<span class=\"text\">"+lclMsg+"</span><small class=\"label label-info\"><i class=\"fa fa-clock-o fa-fw\"></i>"+ts+"</small>";
+                var $newEl = $('<li>',{
                     'html' : htmlContent
                 });
                 $newEl.appendTo($panel).fadeIn('slow');
             }
+
             //show end of records notice
-            if((itemStop-itemStart) > 0){
+
+            if(count > 0){
                 $panelEmpty.hide();
             }else{
                 if(currentPage>0){
@@ -102,7 +93,7 @@ jQuery.fn.npExecPanels = function(options){
             }
             //syncronize pagination
             $(".val-current-page",$panelWrapper).html(currentPage+1);
-            if(currentPage < pages){
+            if(count>0){
                 $(".next",$panelWrapper).removeClass("disabled");
             }else{
                 $(".next",$panelWrapper).addClass("disabled");
@@ -114,31 +105,7 @@ jQuery.fn.npExecPanels = function(options){
             }
         }
     };
-    var ui_getJobStatusClass = function(jobStatus){
-        var className = ''; //UNDETERMINED
-        if(jobStatus === "DONE") className = ' success';
-        if(jobStatus === "FAILED") className = ' fail';
-        if(jobStatus === "QUEUED_ACTIVE") className = ' queued-active';
-        if(jobStatus === "SUSPENDED") className = ' suspended';
-        if(jobStatus === "CANCELLED") className = ' cancelled';
-        if(jobStatus === "RUNNING") className = ' running';
-        return className;
-    };
 
-    var ui_getTaskHost = function(host){
-        var html = '';
-        if(host && host !== null){
-            html = ', on host <strong>' + host + "</strong>";
-        }
-        return html;
-    };
-    var ui_getTaskStatusIcon = function(taskStatus){
-        var html = '<i class="icon fa fa-ban fa-fw" aria-hidden="true"></i>';
-        if (taskStatus === "DONE") html = '<i class="icon fa fa-check fa-fw" aria-hidden="true"></i>';
-        if (taskStatus === "RUNNING") html = '<i class="fa fa-bolt fa-fw" aria-hidden="true"></i>';
-        if (taskStatus === "UNDETERMINED") html = '<i class="fa fa-question fa-fw" aria-hidden="true"></i>';
-        return html;
-    };
     var ui_showExecNotification = function(){
         $notification.addClass("show");
         setTimeout(function(){
@@ -156,24 +123,26 @@ jQuery.fn.npExecPanels = function(options){
             var action = $(this).data("action");
             if(action === 'go-next'){
                 currentPage++;
+                ui_showExecNotification();
             }
             if(action === 'go-prev'){
                 currentPage--;
+                ui_showExecNotification();
             }
             if(action === 'go-refresh'){
                 currentPage = 0;
                 ui_showExecNotification();
             }
-            getData();
+            getData(currentPage);
         })
         .on("panel:refresh", function(e) {
             currentPage = 0;
             ui_showExecNotification();
-            getData();
+            getData(currentPage);
         });
 
     // Initializing
     currentPage = 0;
-    getData();
+    getData(currentPage);
     return this;
 };

@@ -545,7 +545,9 @@ var canvasRenderer = {
         if(dna.ntype !== "unknown") {
             innerHTML += "<div class=\"meta\"><button class=\"btn-transparent btn-action-editmodule\"><i class=\"fa fa-pencil\"></i><span class=\"sr-only\">Edit module</span></button></div>";
         }
-        innerHTML += "<div class=\"meta collapse\"><button class=\"btn-transparent btn-action-groupmodule\"><i class=\"fa fa-object-group\"></i><span class=\"sr-only\">Group module</span></button></div>";
+        if(dna.ntype === "pc") {
+            innerHTML += "<div class=\"meta meta-group\"><button class=\"btn-transparent btn-action-groupmodule\"><i class=\"fa fa-object-group\"></i><span class=\"sr-only\">Group module</span></button></div>";
+        }
         innerHTML += "</footer>";
 //
         if(dna.ntype === "unknown"){
@@ -654,6 +656,7 @@ var canvasRenderer = {
             $.each(fullData.nodes, function(i, oneNode) {
                 var canvasID = tao_getCanvasIdByNodeId(oneNode.id);
                 $("#"+canvasID).addClass('g_' + groupCanvasID).data('group', groupCanvasID);
+                $(".meta.meta-group","#"+canvasID).hide();
             });
         }
     },

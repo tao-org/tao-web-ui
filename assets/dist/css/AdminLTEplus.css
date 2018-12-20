@@ -341,6 +341,37 @@ body.sidebar-collapse #wrapper-quota{
     display:none;
 }
 
+#wrapper-quota-small{
+    display:none;
+    padding: 5px 5px;
+}
+.quota-tool-tip{
+    white-space: nowrap;
+    text-align: left;
+    padding: 0;
+    width:180px;
+}
+
+body.sidebar-collapse #wrapper-quota-small{
+    display:block;
+}
+#wrapper-quota-small .quota-icon {
+    background-color: #FFFFFF;
+    color: #fff;
+    border-radius: 50%;
+    font-family: Helvetica,Arial Narrow,sans-serif;
+    font-size: 28px;
+    left: 10px;
+    top: -20px;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    text-align: center;
+    transform: scale(0.7);
+}
+
+
+
 /*message box style*/
 #messagesBox {
     margin: 0;
@@ -1090,6 +1121,14 @@ input[type=checkbox].big{
     content: "\feff ";
 }
 /* notifications */
+.callout.callout-empty{
+    background-color: #eaeaea !important;
+    border-color: #bdbdbd;
+}
+.callout.callout-empty p{
+    color: #2d2d2d;
+    text-shadow: 1px 1px #ffffff;
+}
 #notifications-panel-list li{
     position: relative;
     padding: 5px;
@@ -1106,6 +1145,7 @@ input[type=checkbox].big{
     display: block;
     margin-left: 5px;
     font-weight: 600;
+    font-size: 12px;
     margin-right: 126px;
     white-space: nowrap;
     overflow: hidden;

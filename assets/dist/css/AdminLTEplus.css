@@ -1214,6 +1214,15 @@ input[type=checkbox].big{
     line-height: 1em;
 }
 
+/* fa animations */
+
+.fa-spin-hover:hover {
+    animation: fa-spin 1s infinite linear;
+}
+@-webkit-keyframes fa-spin{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}100%{-webkit-transform:rotate(359deg);transform:rotate(359deg)}}
+@keyframes fa-spin{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}100%{-webkit-transform:rotate(359deg);transform:rotate(359deg)}}
+
+
 /* svg animations */
 svg .loading{
     margin:0;

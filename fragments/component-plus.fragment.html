@@ -801,11 +801,11 @@
 					"parentId"       : parentId,
 					"name"           : port_name,
 					"cardinality"    : port_cardinality,
-					"id"             : port_id        == "" ? null : port_id,
+					"id"             : port_id        === "" ? null : port_id,
 					"dataDescriptor" : {
-						"geometry"   : port_geometry  == "" ? null : port_geometry,
-						"crs"        : port_crs       == "" ? null : port_crs,
-						"dimension"  : port_dimension == "" ? null : port_dimension,
+						"geometry"   : port_geometry  === "" ? null : port_geometry,
+						"crs"        : port_crs       === "" ? null : port_crs,
+						"dimension"  : port_dimension === "" ? null : port_dimension,
 						"formatType" : port_formatType,
 						"sensorType" : port_sensorType,
 						"location"   : null
@@ -857,12 +857,12 @@
                         $('#inputContainerId').append($('<option>').text(value.name).attr('value', value.id));
                     }
                 });
-                if(userOpStack[0] && userOpStack[0].action ==="comp_edit" && _mLIST.dataOpQueue[0] && _mLIST.dataOpQueue[0].dna.id){
+                if(userOpStack[0] && userOpStack[0].action ==="comp_edit" && userOpStack[0] && userOpStack[0].dna.id){
                     $(".modal-title").html("Edit processing component");
                     $("#saveExecNode").html("Save processing component");
                     $("#inputCompID").attr('disabled','disabled');
                     $("#inputComponentType").attr('disabled','disabled');
-                    getComponentDataById(_mLIST.dataOpQueue[0].dna.id);
+                    getComponentDataById(userOpStack[0].dna.id);
                 }
             })
             .fail(function () {
@@ -1034,7 +1034,7 @@
                 var k = $(this).find("input.var-key").val();
                 var v = $(this).find("input.var-value").val();
                 var newSysVar = {};
-                if( ((typeof k != "undefined") && (typeof k.valueOf() == "string") && (k.length > 0)) && ((typeof v != "undefined") && (typeof v.valueOf() == "string"))) {
+                if( ((typeof k !== "undefined") && (typeof k.valueOf() === "string") && (k.length > 0)) && ((typeof v !== "undefined") && (typeof v.valueOf() === "string"))) {
                     newSysVar.key = k;
                     newSysVar.value = v;
                     formData.variables.push(newSysVar);
@@ -1107,7 +1107,7 @@
 			var callType = (userOpStack[0] && userOpStack[0].action ==="comp_edit") ? "PUT" : "POST";
             $.ajax({
                 cache: false,
-                url: baseRestApiURL + "component/" + (callType == "PUT" ? formData.id : ""),
+                url: baseRestApiURL + "component/" + (callType === "PUT" ? formData.id : ""),
                 dataType: 'json',
                 type: callType,
                 data: JSON.stringify(formData),
@@ -1150,13 +1150,11 @@
                     }
                     showMsg("Execution node successfully saved.", "SUCCESS");
                     $("#myModalNodes").modal('hide');
-                    _mLIST.refresh();
+                    panelComp.refreshData();
                 }
             });
             return false;
         });
-        
-
     });
     //# sourceURL=comp-plus.js
 </script>

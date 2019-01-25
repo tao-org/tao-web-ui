@@ -51,10 +51,11 @@ $(function () {
     hashRoutesMap["howto/intro"] = "./fragments/tao-howto.fragment.html";
 
     hashRoutesMap["my/workflows"] = "./fragments/workflows-all.fragment.html";
-    hashRoutesMap["my/components"] = "./fragments/component-admin.fragment.html";
+    hashRoutesMap["my/components"] = "./fragments/component-admin2.fragment.html";
     hashRoutesMap["my/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
     //hashRoutesMap["my/scripts"] = "./fragments/my-scripts.fragment.html";
     hashRoutesMap["my/queries"] = "./fragments/datasources-queries.fragment.html";
+    hashRoutesMap["my/datasetwizzard"] = "./fragments/datasources-queries.fragment.html";
 
     hashRoutesMap["shared/workflows"] = "./fragments/workflows-all.fragment.html";
     hashRoutesMap["shared/components"] = "./fragments/component-admin.fragment.html";

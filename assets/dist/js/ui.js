@@ -302,7 +302,6 @@ $(function () {
 (function () {
     var $elQuota = $("#wrapper-quota");
     var $elQuotaSmall = $("#wrapper-quota-small");
-
     var q = {
         "total":100,
         "used":0,
@@ -320,19 +319,16 @@ $(function () {
         if(pct>100){pct = 100;}
         $elQuota.find(".val-quota-pct-ui").width(pct+"%");
         $elQuota.find(".val-quota-usage-details").html(quota_usage_details);
-        //$elQuota.show();
         $elQuotaSmall.find("#arc1").attr("d",describeArc(20, 20, 12, 0, (pct>=100?99.99:pct)/100*360));
         var toolTipHTML= '<div class="quota-tool-tip">' +
             '        <h4 class="control-sidebar-subheading">' +
-            '            User quota:&nbsp;<span class="val-quota">'+quota+'</span>' +
-            '            <span class="label label-danger pull-right val-quota-pct">'+pct+'%</span>' +
+            '            User quota:&nbsp;<span class="val-quota">'+quota+'</span><span class="label label-danger pull-right val-quota-pct">'+pct+'%</span>' +
             '        </h4>' +
             '        <div class="progress progress-xxs">' +
             '            <div class="progress-bar progress-bar-danger val-quota-pct-ui" style="width: '+pct+'%;"></div>' +
             '        </div>' +
             '        <p style="color: #4b646f;"><small class="val-quota-usage-details">'+quota_usage_details+'</small></p>' +
             '     </div>';
-
         $elQuotaSmall.find(".quota-icon").attr("data-original-title", toolTipHTML);
         return true;
     }

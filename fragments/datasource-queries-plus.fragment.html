@@ -135,6 +135,7 @@
 																	<div class="checkbox"><input type="checkbox" name="allproducts" value="all">Select all</div>
 																</th>
 																<th>Name</th>
+																<th>Preview</th>
 																<th>Acquisition Date</th>
 																<th>Product Type</th>
 															</tr>
@@ -585,30 +586,53 @@
     	$("#datasourceProducts").css('display','');
 
     	var html = '';
-    	$.each(products, function(index,value){
-    		//var date = new Date(value.acquisitionDate).toLocaleString();
-    		html +=	"<tr>"+
+		$.each(products, function(index,value){
+			//var date = new Date(value.acquisitionDate).toLocaleString();
+			var previewUrl = value.quicklookLocation == undefined ? "" : encodeURIComponent(value.quicklookLocation).replace(/'/g, "%27").replace(/"/g, "%22");
+			html +=	"<tr" + (value.quicklookLocation == undefined ? "" : " data-preview='" + previewUrl + "'") + ">" +
     				"	<th scope=\"row\" class=\"col-sm-1 col-md-1\">\n"+
     				"		<div class=\"checkbox\">\n"+
     				"			<label><input type=\"checkbox\" name=\"product\" value=\""+value.id+"\" style=\"margin:auto\"></label>\n"+
     				"		</div>\n"+
     				"	</th>\n"+
-    				"	<td class=\"col-sm-6 col-md-5\">"+value.name+"</td>\n"+
-    				"	<td class=\"col-sm-2 col-md-3\">"+value.acquisitionDate+"</td>\n"+
-    				"	<td class=\"col-sm-3 col-md-3\">"+value.productType+"</td>\n"+
+    				"	<td class=\"col-sm-5 col-md-5\">"+value.name+"</td>\n"+
+					"	<td class=\"col-sm-1 col-md-1\"><img width='64px' src='./media/images/preview-not-available.png' /></td>\n"+
+    				"	<td class=\"col-sm-3 col-md-3\">"+value.acquisitionDate.replace(".000+0000", "").replace("T", " ")+"</td>\n"+
+    				"	<td class=\"col-sm-2 col-md-2\">"+value.productType+"</td>\n"+
     				"</tr>\n";
     	});
-    	$('table#tbdatasourceProducts tbody').remove();
+		$('table#tbdatasourceProducts tbody').remove();
     	$('table#tbdatasourceProducts ').append('<tbody>'+html+'</tbody>');
 
+		$.each($('table#tbdatasourceProducts tbody tr'), function () {
+			var previewUrl = $(this).data("preview");
+			var $img = $(this).find("td img");
+			if (previewUrl != undefined) {
+				$.ajax({
+					url: baseRestApiURL + "utilities/tunnel/get",
+					type: "GET",
+					data: {
+						url: decodeURIComponent(previewUrl),
+						user: $('#user_name').val(),
+						password: $('#user_pass').val()
+					},
+					beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
+					success: function(response) {
+						if (response != "") {
+							$img.attr("src", "data:image/jpeg;base64, " + response);
+						}
+					}
+				});
+			 }
+		});
+		
     	$('.pagination-container').remove();
     	$('table#tbdatasourceProducts tbody').paginathing({
     		firstLast:false,
     	    perPage: 10,
     	    pageNumbers:'number',
     	    insertAfter: 'table#tbdatasourceProducts',
-    	   // limitPagination: 5
-    		});
+		});
     }
 
     function ajaxCallFnc(url, data, type){

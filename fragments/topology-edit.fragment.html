@@ -146,7 +146,8 @@
 <script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
 <script>
     function getHostNameData(){
-        var editHostmane = _mLIST.dataOpQueue[0].dna.id;
+        //window.userOpStack
+        var editHostmane = window.userOpStack[0].dna.id;
         $.ajax({
             cache: false,
             type: "get",
@@ -180,7 +181,7 @@
                     $('textarea[name=inputDescription]', $el).val(response.description);
                     $('select[name=inputActive] option', $el).removeAttr("selected");
                     $('select[name=inputActive] option[value="'+response.active+'"]', $el).attr("selected", "selected");
-                    if(response.tags != null && response.tags !=""){
+                    if(response.tags != null && response.tags !==""){
 						$('#formTags').importTags( response.tags.join());
 					}
                     
@@ -235,7 +236,7 @@
                 },
                 error : function (jqXHR, textStatus, errorThrown) {
                     console.log("error");
-                    if(jqXHR.status == 500 ){
+                    if(jqXHR.status === 500 ){
                         showMsg("Unable to update execution name. Please try again.", "ERROR");
                         return;
                     }
@@ -285,7 +286,7 @@
                 	
                     showMsg("Execution node successfully updated.", "SUCCESS");
                     $("#myModalNodes").modal('hide');
-                    _mLIST.refresh();
+                    panelComp.refreshData();
                 }
             });
             return false;

@@ -230,12 +230,12 @@
     $("#inputEmail, #inputEmail2").focusout(function(e) {
         var attrId = $(this).attr("id");
         if(attrId) {
-            validateUserEmails(attrId, _mLIST.dataOpQueue[0].dna.username);
+            validateUserEmails(attrId, userOpStack[0].dna.username);
         }
     });
 
     $(document).ready( function(){
-        var currentUserName = _mLIST.dataOpQueue[0].dna.username;
+        var currentUserName = userOpStack[0].dna.username;
         //populate data with fresh, just in time values
         function populateCurrentUser(){
             $.ajax({
@@ -294,7 +294,7 @@
             event.preventDefault();
 
             var formData = {
-                "id" : _mLIST.dataOpQueue[0].dna.id,
+                "id" : window.userOpStack[0].dna.id,
                 "username" : $('input[name=inputUsername]', this).val(),
                 "password" : null,
                 "email" : $('input[name=inputEmail]', this).val(),
@@ -352,7 +352,7 @@
                 success: function(data) {
                     showMsg("New user successfully added.", "SUCCESS");
                     $("#myModalNodes").modal('hide');
-                    _mLIST.refresh();
+                    panelComp.refreshData();
                 }
             });
             return false;

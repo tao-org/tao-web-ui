@@ -273,7 +273,7 @@ function getWorkflowResults(workflowId) {
 
 $(document).ready( function() {
 	// Get executions results for selected workflow
-	var currentWfID = _mLIST.dataOpQueue[0].dna.id;
+	var currentWfID = window.userOpStack[0].dna.id;
 	getWorkflowResults(currentWfID);
 	
 	// Show execution result attributes

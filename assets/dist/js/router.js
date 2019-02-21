@@ -44,13 +44,11 @@ $(function () {
     hashRoutesMap["admin/dashboard"] = "./fragments/dashboard-admin.fragment.html";
     hashRoutesMap["projects"] = '';
 
-    hashRoutesMap["admin/users"] = "./fragments/users-admin.fragment.html";
-    hashRoutesMap["admin/topology"] = "./fragments/topology-admin.fragment.html";
-
+    hashRoutesMap["admin/users"] = "./fragments/users-admin2.fragment.html";
+    hashRoutesMap["admin/topology"] = "./fragments/topology-admin2.fragment.html";
     hashRoutesMap["documentation/intro"] = "./fragments/tao-documentation.fragment.html";
     hashRoutesMap["howto/intro"] = "./fragments/tao-howto.fragment.html";
-
-    hashRoutesMap["my/workflows"] = "./fragments/workflows-all.fragment.html";
+    hashRoutesMap["my/workflows"] = "./fragments/workflows-admin2.fragment.html";
     hashRoutesMap["my/components"] = "./fragments/component-admin2.fragment.html";
     hashRoutesMap["my/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
     //hashRoutesMap["my/scripts"] = "./fragments/my-scripts.fragment.html";
@@ -58,14 +56,13 @@ $(function () {
     hashRoutesMap["my/datasetwizzard"] = "./fragments/datasources-queries.fragment.html";
 
     hashRoutesMap["shared/workflows"] = "./fragments/workflows-all.fragment.html";
-    hashRoutesMap["shared/components"] = "./fragments/component-admin.fragment.html";
+    hashRoutesMap["shared/workflows"] = "./fragments/workflows-admin2.fragment.html";
+    hashRoutesMap["shared/components"] = "./fragments/component-admin2.fragment.html";
     hashRoutesMap["shared/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
-    hashRoutesMap["shared/datasources"] = "./fragments/datasource-admin.fragment.html";
-
+    hashRoutesMap["shared/datasources"] = "./fragments/datasource-admin2.fragment.html";
     hashRoutesMap["undefined/page"] = "./fragments/tao-howto.fragment.html";
 
     // Event handlers for frontend navigation
-    // An event handler witch calls the router function on every hashchange.
     $(window).on('hashchange', function(){
         //check authtoken
         var tokenKey = _settings.readCookie("tokenKey");
@@ -125,7 +122,6 @@ $(function () {
         // Sync active menu. Remove active from navigation, and generically mark branch as active.
         $('.sidebar-menu .routed').removeClass('active');
         $('.sidebar-menu .routed-'+routeTags[0]+'-'+routeTags[1]).addClass("active");
-        //console.log('.sidebar-menu .routed-'+routeTags[0]+'-'+routeTags[1]);
 
         if(routeTags[0] === "account"){
             if(routeTags[1] === "profile"){

@@ -1,0 +1,404 @@
+<!-- modal nodes op -->
+<div id="myModalNodes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- modal nodes op -->
+
+<!-- modal tags edit -->
+<div id="myModalEditTags" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content modal-edit-tags">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit tags</h4>
+            </div>
+            <form id="frmEditDatasourceTags" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="formTags" class="col-sm-2 col-md-2 control-label">Tags </label>
+                                    <div class="col-sm-10 col-md-10">
+                                        <input id="formTags" name="formTags" class="form-control" value="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                                        <button id="saveDatasourcesTags" type="submit" class="btn btn-primary btn-action" name="btnSave">Save tags</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
+<!-- modal tags edit -->
+
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header tao-async-ph">
+    <h1>Data Sources <small>Data sources are components that can query (and retrieve) products from remote sources.</small></h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Datasources</li>
+    </ol>
+</section>
+<!-- /Content Header (Page header) -->
+
+<!-- Main content -->
+<section class="content tao-async-mc">
+    <div id="panel-topo-wrapper" class="row collapseX">
+        <div class="col-md-12">
+            <!-- Custom Tabs -->
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
+                    <li class="role-dropdown active">
+                        <select id="selectUserPanel" name="selectUserPanel" class="form-control form-changepane" title="Select desired node view.">
+                            <option class="role role-admin" value="all_nodes">All datasources </option>
+                        </select>
+                    </li>
+                </ul>
+                <ul class="nav nav-tabs hidden-xs">
+                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_nodes" aria-expanded="true">All datasources</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="panel-nodes">
+                        <div class="row">
+                            <div class="col-md-12" id="list-master-controls">
+                                <div class="box-tools pull-left">
+                                    <button class="btn btn-master-tool text-black" data-action="op-filter" data-toggle="tooltip" data-original-title="Filter by tags"><i class="fa fa-filter"></i><span class="label label-warning val-count-filters" style="display:none;">0</span></button>
+                                </div>
+                                <div class="box-tools pull-left">
+                                    <form class="search-container collapse" action="">
+                                        <input id="search-box" type="text" class="search-box" name="q" placeholder="Search by label" />
+                                        <label for="search-box"><i class="fa fa-search search-icon" aria-hidden="true"></i></label>
+                                        <input type="submit" id="search-submit" />
+                                    </form>
+                                </div>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-master-tool text-black" data-action="refresh-list" data-toggle="tooltip" data-original-title="Refresh"><i class="fa fa-refresh fa-spin-hover"></i></button>
+                                    <button class="btn btn-master-tool text-black" data-action="view-list" data-toggle="tooltip" data-original-title="List view"><i class="fa fa-list"></i></button>
+                                    <button class="btn btn-master-tool text-black" data-action="view-table" data-toggle="tooltip" data-original-title="Grid view"><i class="fa fa-table"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 like collapse">
+                                <span data-tag="tag">Label like: <strong class="val-q"></strong>&nbsp;<i class="fa fa-times fa-fw clear-search" aria-hidden="true"></i></span>
+                            </div>
+                            <div class="col-md-12 tags collapse">
+                                <span class="collapse" data-tag="tag">tag<i class="fa fa-check fa-fw" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                        <div class="row" id="list-work-users">
+                            <div class="col-sm-12">
+                                <div class="box box-success">
+                                    <div class="box-header">
+                                        <i class="fa fa-database"></i>
+                                        <h3 class="box-title">Datasources -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
+                                        <div class="box-tools pull-right nppaginatedcells-order collapse" data-toggle="tooltip" title="Change order"></div>
+                                    </div>
+                                    <div class="nppaginatedcells-empty callout callout-empty">
+                                        <p>Datasources list is empty. <span class="results-empty">You do not have any datasources.</span><span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
+                                    </div>
+                                    <div class="box-body chat users-box">
+                                        <div class="nppaginatedcells-panel-body">
+                                        </div>
+                                        <div class="cell-templates collapse">
+                                            <core-cell-list>
+                                                <div class="col-md-12 col-sm-12">
+                                                    <div class="nodes-item-core-box">
+                                                        <div class="box-top-tags">
+                                                        </div>
+                                                        <div class="box-top">
+                                                            <div class="box-title"><span class="val-label"></span></div>
+                                                            <div class="box-subtitle"><span class="val-id"></span></div>
+                                                            <div class="box-text">Version: <span class="val-version"></span></div>
+                                                            <div class="box-text">Authors: <span class="val-authors"></span></div>
+                                                            <div class="box-text">Copyright: <span class="val-copyright"></span></div>
+                                                            <div class="box-text">Node affinity: <span class="val-nodeAffinity"></span></div>
+                                                            <div class="box-text">Datasource name: <span class="val-dataSourceName"></span></div>
+                                                            <div class="box-text">Sensor name: <span class="val-sensorName"></span></div>
+                                                            <div class="box-icon">
+                                                                <i class="fa fa-database"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                <p><span class="val-description"></span></p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-12 col-xs-12">
+                                                                <div class="text-right" style="padding-top: 30px;">
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view"><i class="fa fa-eye fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;View parameters</span></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </core-cell-list>
+                                            <core-cell-grid>
+                                                <div class="col-md-3 col-sm-6">
+                                                    <div class="nodes-item-core-box">
+                                                        <div class="box-top-tags">
+                                                        </div>
+                                                        <div class="box-top">
+                                                            <div class="box-title"><span class="val-label"></span></div>
+                                                            <div class="box-subtitle"><span class="val-id"></span></div>
+                                                            <div class="box-text">Version: <span class="val-version"></span></div>
+                                                            <div class="box-text">Authors: <span class="val-authors"></span></div>
+                                                            <div class="box-text space-after-10">Copyright: <span class="val-copyright"></span></div>
+                                                            <div class="box-text">Node affinity: <span class="val-nodeAffinity"></span></div>
+                                                            <div class="box-text">Datasource name: <span class="val-dataSourceName"></span></div>
+                                                            <div class="box-text">Sensor name: <span class="val-sensorName"></span></div>
+                                                            <div class="box-icon">
+                                                                <i class="fa fa-database"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="box-description">
+                                                            <p><span class="val-description"></span></p>
+                                                        </div>
+                                                        <div class="box-bottom with-line">
+                                                            <div class="">
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view"><i class="fa fa-eye fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;View parameters</span></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </core-cell-grid>
+                                        </div>
+                                    </div>
+                                    <div class="box-footer clearfix no-border">
+                                        <div class="box-tools pull-right">
+                                            <ul class="nppaginatedcells-panel-pagination pagination pagination-sm inline">
+                                                <li><a href="#" data-page="prev">«</a></li>
+                                                <li class="active"><a href="#" data-page="0">1</a></li>
+                                                <li><a href="#" data-page="1">2</a></li>
+                                                <li><a href="#" data-page="2">3</a></li>
+                                                <li><a href="#" data-page="next">»</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="box-notification"><p><span>List updated</span></p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.tab-pane -->
+
+                    <div class="tab-pane" id="panel-nodesX">
+                    </div><!-- /.tab-pane -->
+
+                </div><!-- /.tab-content -->
+            </div><!-- nav-tabs-custom -->
+        </div>
+    </div>
+</section><!-- /.content -->
+<link rel="stylesheet" href="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.css" type="text/css" />
+<script src="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.js" type="text/javascript"></script>
+<!-- 1.12.1/jquery-ui.min.js for autocomplete -->
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.css" type="text/css" />
+<script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
+
+<script>
+    function buildModalParamsList(dna, parameters){
+        var html = "<div class=\"modal-content\">\n" +
+            "    <div class=\"modal-header\">\n" +
+            "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span></button>\n" +
+            "        <h4 class=\"modal-title\" id=\"myModalLabel\">Datasource</h4>\n" +
+            "    </div>\n" +
+            "        <div class=\"modal-body\">\n" +
+            "            <section>\n" +
+            "            <div class=\"row\">\n" +
+            "                        <div class=\"col-md-12\">\n" +
+            "                            <!-- small box -->\n" +
+            "                            <div class=\"small-box bg-yellow\">\n" +
+            "                                <div class=\"inner\">\n" +
+            "                                    <h3>"+dna['sensorName']+"</h3>\n" +
+            "                                    <p style=\"line-height: 1em;\">\n" +
+            dna['dataSourceName']+
+            "                                    </p>\n" +
+            "                                </div>\n" +
+            "                                <div class=\"icon\"><i class=\"fa fa-database\"></i></div>\n" +
+            "                                <a href=\"#\" class=\"small-box-footer\">See note <i class=\"fa fa-arrow-circle-right\"></i></a>\n" +
+            "                            </div>\n" +
+            "                        </div>\n" +
+            "             </div>"+
+            "                <div class=\"row\">\n" +
+            "                    <div class=\"col-md-12\">\n";
+
+        html +="<p>Parameter list:</p><div class=\"responsive\">\n" +
+            "    <table class=\"table table-bordered box-shadow--6dp\">\n" +
+            "      <thead>\n" +
+            "        <tr>\n" +
+            "          <th></th>\n" +
+            "          <th>Name</th>\n" +
+            "          <th>Type</th>\n" +
+            "          <th>Default value</th>\n" +
+            "        </tr>\n" +
+            "      </thead>\n" +
+            "      <tbody>\n";
+
+        for (var i = 0, j = parameters.length; i < j; i++) {
+            var lType = parameters[i]['type'].split(".");
+            var lDefault = '';
+            if(parameters[i]['defaultValue']!== null){
+                lDefault = parameters[i]['defaultValue'];
+            }
+            html += "        <tr>\n" +
+                "          <th scope=\"row\">"+(parameters[i]['required']?"*":"")+"</th>\n" +
+                "          <td>"+parameters[i]['name']+"</td>\n" +
+                "          <td>"+lType[lType.length-1]+"</td>\n" +
+                "          <td>"+lDefault+"</td>\n" +
+                "        </tr>\n";
+        }
+        html += "      </tbody>\n" +
+            "    </table>\n" +
+            "  </div>";
+        html += "                    </div>\n" +
+            "                </div>\n" +
+            "            </section>\n" +
+            "        </div><!-- /.modal-body -->\n" +
+            "    <div class=\"modal-note\">\n" +
+            "        <div class=\"row\">\n" +
+            "            <div class=\"col-md-12\">\n" +
+            "                <div class=\"form-group\">\n" +
+            "                    <div class=\"col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10\">\n" +
+            "                        <h4>Notice</h4>\n" +
+            "                        <p>Parameters will be populated with specific values only in the workflow definition stage.</p>\n" +
+            "                    </div>\n" +
+            "                </div>\n" +
+            "            </div>\n" +
+            "        </div>\n" +
+            "    </div>\n" +
+            "    <div class=\"modal-footer\">\n" +
+            "        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n" +
+            "    </div>\n" +
+            "</div><!-- /.modal-content -->";
+        return html;
+    }
+
+    var myModalViewDatasource = function(action, args){
+        var getDatasourceParameters = $.ajax({
+                cache: false,
+                url: baseRestApiURL + "query/sensor/"+args.dna.sensorName+"/"+args.dna.dataSourceName,
+                dataType : 'json',
+                type: 'GET',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": window.tokenKey
+                }
+            });
+        $.when(getDatasourceParameters)
+            .done(function (getDatasourceParametersResponse) {
+                var parameters = chkTSRF(getDatasourceParametersResponse);
+                var $modal = $("#myModalNodes");
+                var rmContent = buildModalParamsList(args.dna, parameters);
+                $modal.find('.modal-dialog').html(rmContent);
+                $modal.modal('show');
+            })
+            .fail(function () {
+                alert("Could not retrive parameters for selected datasource.", "ERROR");
+            });
+    };
+
+    var showModalTagsEdit = function(action, args){
+        window.userOpStack = [{
+            "dna": args.dna,
+            "action": "comp_edit"
+        }];
+        if(args.dna.hasOwnProperty('tags') && args.dna['tags']!= null){
+            $('#formTags').importTags( args.dna['tags'].join());
+        }
+        $("#myModalEditTags").modal('show');
+    };
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    $( document ).ready(function() {
+        var urls = [
+                baseRestApiURL + "datasource/"
+            ];
+
+        window.panelComp = $('#panel-nodes').npPaginatedCells({
+            headerUser: taoUserProfile.username,
+            url: urls,
+            viewMode: prefferences.viewMode,
+            filterAttribute: "label",
+            order:[
+                {
+                    "label":"Name ascending",
+                    "objAttributeName":"label",
+                    "direction":"ASC"
+                },
+                {
+                    "label":"Name descending",
+                    "objAttributeName":"label",
+                    "direction":"DSC"
+                }
+            ],
+            doAction: function(action, args){
+                if(action === "edit") showModalTagsEdit(action, args);
+                if(action === "view") myModalViewDatasource(action, args);
+            }
+        });
+
+
+        $("#frmEditDatasourceTags").on("submit", function(e){
+            e.preventDefault(e);
+            var id =  window.userOpStack[0]['dna']['sensorName'] + '-' + window.userOpStack[0]['dna']['dataSourceName'];
+            var tags = $('input[name=formTags]', this).val();
+            tags = tags.split(",");
+
+            $.ajax({
+                cache: false,
+                type: "PUT",
+                url: baseRestApiURL + "datasource/"+id+"/tag",
+                data: JSON.stringify(tags),
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": window.tokenKey
+                },
+                error : function (jqXHR, textStatus, errorThrown) {
+                    showMsg("Unknown error. Unable to update tags name. Please try again.", "ERROR");
+                },
+                success: function(r) {
+                    var response = chkTSRF(r);
+                    console.log(response);
+                    if(response !== {}){
+                        showMsg("Datasources tags successfully saved.", "SUCCESS");
+                    }else{
+                        showMsg("Datasources tags were not saved.", "FAILED");
+                    }
+
+                    $("#myModalEditTags").modal('hide');
+                    panelComp.refreshData();
+                }
+            });
+            return false;
+        });
+
+        initializeTagsInputAutocomplete("#formTags", "datasource");
+
+    });
+    //# sourceURL=datasource-admin2.js
+</script>

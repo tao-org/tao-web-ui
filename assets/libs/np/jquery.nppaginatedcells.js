@@ -2,7 +2,7 @@
  * npNotificationsPanels jQuery plugin
  *
  * it only applies to a single DOM element and options must include end-point url
- * creates job execution lists and maintain pagination and data refresh
+ * creates paginated cell view, grid or list
  *
  * Copyright  CS ROMANIA, http://c-s.ro
  *
@@ -45,8 +45,11 @@ jQuery.fn.npPaginatedCells = function(options){
         itemsOnPage: 8,
         url: '',
         order:[],
+        filterAttribute: "",
         viewMode: "list",
-        doAction: function (actionName) {}
+        doAction: function (actionName) {},
+        doDataPreprocessing: function(data){return data;},
+        doCustomRender: function($el, data){return;}
     }, options );
 
 
@@ -67,22 +70,65 @@ jQuery.fn.npPaginatedCells = function(options){
     var dataFull = [];
 
     var getFromEndpoint = function(){
-        var getDataAjax = $.ajax({
-            cache: false,
-            url: settings.url,
-            dataType : 'json',
-            type: 'GET',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
+        var req = [];
+        for (var j = 0; j < settings.url.length; j++){
+            var getDataAjax = $.ajax({
+                cache: false,
+                url: settings.url[j],
+                dataType : 'json',
+                type: 'GET',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": window.tokenKey
+                }
+            });
+            req.push(getDataAjax);
+        }
+        $.when.apply($, req).done(function(){
+            var retData = [];
+            if(req.length === 1){
+                retData = arguments[0].data;
             }
+            if(req.length > 1){
+                var response = [];
+                for (var i = 0; i < req.length; i++){
+                    response = $.merge(response,arguments[i][0].data);
+                }
+                retData = response;
+            }
+            retData = settings.doDataPreprocessing(retData)
+            data = retData;
+            dataFull = retData;
+            if( (orderIndex === -1) && (settings.order.length>0) ){
+                orderIndex = 0;
+            }
+            if(orderIndex !== -1){
+                repaintOrder();
+                changeOrder();
+            }
+            dataAllTags = [];
+            for (var j = 0; j < dataFull.length; j++){
+                if(dataFull[j].tags!=null){
+                    dataAllTags = _.union(dataAllTags,dataFull[j].tags);
+                }
+            }
+            dataAllTags.sort();
+            repaintTags();
+            repaintSearchBox();
+            console.log("data loaded");
+            repaint();
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert("Plugin: Could not retrive data.");
+            console.log(textStatus + ': ' + errorThrown);
         });
-        $.when(getDataAjax)
+
+/*
+        $.when(req[0])
             .done(function (getDataAjaxResponse) {
                 data = getDataAjaxResponse.data;
                 dataFull = getDataAjaxResponse.data;
-                if( (orderIndex === -1) && (settings.order.length>0)){
+                if( (orderIndex === -1) && (settings.order.length>0) ){
                     orderIndex = 0;
                 }
                 if(orderIndex !== -1){
@@ -97,12 +143,14 @@ jQuery.fn.npPaginatedCells = function(options){
                 }
                 dataAllTags.sort();
                 repaintTags();
+                repaintSearchBox();
                 console.log("data loaded");
                 repaint();
             })
             .fail(function () {
                 alert("Plugin: Could not retrive data.");
             });
+*/
     };
 
     var clearCells = function() {
@@ -134,6 +182,7 @@ jQuery.fn.npPaginatedCells = function(options){
             $elClone = $cellTemplateList.clone();
         }
         //iterate values and populate all inner html of val-propname with value of propname.
+        //call custom cell alterations
         for (var property in elX) {
             if (elX.hasOwnProperty(property)) {
                 $(".val-"+property, $elClone).html(elX[property]);
@@ -150,9 +199,19 @@ jQuery.fn.npPaginatedCells = function(options){
         if(elX.active === false){
             $elClone.addClass("disabled");
         }
+        //render custom
+        settings.doCustomRender($elClone, elX);
         $elClone.fadeIn('slow');
     };
-//////
+//show/hide/append ui elements based on dataset and configuration
+    var repaintSearchBox = function(){
+        if((settings.filterAttribute === undefined) || (settings.filterAttribute === '')){
+            $searchForm.hide();
+        }else{
+            $searchForm.show();
+        }
+    };
+
     var repaintTags = function(){
         $tags.empty();
         if(dataAllTags.length === 0 ){
@@ -235,7 +294,8 @@ jQuery.fn.npPaginatedCells = function(options){
         if (dataFilter.searchString !== ''){
             var re = new RegExp(dataFilter.searchString, 'i');
             data = $.map(data,function(val,key){
-                if( val.label.match(re) ) return val;
+                //if( val.label.match(re) ) return val;
+                if( val[settings.filterAttribute].match(re) ) return val;
             });
         }
         //show empty results warning
@@ -278,7 +338,7 @@ jQuery.fn.npPaginatedCells = function(options){
         }
         function compare(a,b) {
             if(a[objAttribute] && b[objAttribute]){
-                return a.label.localeCompare(b.label);
+                return a[objAttribute].localeCompare(b[objAttribute]);
             }else{
                 return 0;
             }
@@ -384,7 +444,11 @@ jQuery.fn.npPaginatedCells = function(options){
             console.log(dataFull);
             return selectedObjects;
         },
-        refreshData : function(){
+        refreshData : function(url){
+            if(url && (url instanceof Array)){
+                console.log('change url');
+                settings.url = url;
+            }
             getFromEndpoint();
             return selectedObjects;
         }

@@ -209,7 +209,7 @@ function getWorkflowExecutions(workflowId) {
 
 $(document).ready( function() {
 	// Get project details
-	var currentWf = _mLIST.dataOpQueue[0].dna;
+	var currentWf = window.userOpStack[0].dna;
 	var wfDetails = '<div class="row"><label class="col-sm-3 col-md-3">Workflow name:</label><div class="col-sm-9 col-md-9">' + currentWf.name       + '</div></div>' +
 					'<div class="row"><label class="col-sm-3 col-md-3">Initiator:</label>    <div class="col-sm-9 col-md-9">' + currentWf.userName   + '</div></div>' +
 					'<div class="row"><label class="col-sm-3 col-md-3">Status:</label>       <div class="col-sm-9 col-md-9">' + currentWf.status     + '</div></div>' +

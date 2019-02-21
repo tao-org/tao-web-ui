@@ -405,6 +405,8 @@ $(function () {
                     }
                     catch(err) {
                         $el.find(".val-msg-txt").html("unparsable message");
+                        console.log("message unparsable");
+                        console.log(getMonitorNotificationResponse);
                     }
                     $($el).prependTo(".direct-chat-messages", "#bot-notice-chat");
                     var count = $(".direct-chat-messages > .direct-chat-msg").length;

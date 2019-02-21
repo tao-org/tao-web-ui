@@ -338,7 +338,7 @@
                 success: function(data) {
                     showMsg("New user successfully added.", "SUCCESS");
                     $("#myModalNodes").modal('hide');
-                    _mLIST.refresh();
+                    panelComp.refreshData();
                 }
             });
             return false;

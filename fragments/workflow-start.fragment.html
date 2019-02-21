@@ -128,8 +128,8 @@
 
 <script>
     $(document).ready( function(){
-        if(_mLIST.dataOpQueue[0] && _mLIST.dataOpQueue[0].dna.id){
-            getWFDataById(_mLIST.dataOpQueue[0].dna.id);
+        if(window.userOpStack[0].dna && window.userOpStack[0].dna.id){
+            getWFDataById(window.userOpStack[0].dna.id);
         }else{
             alert("Error determining workflow ID.");
         }
@@ -159,7 +159,7 @@
             e.preventDefault();
             var formData = {};
                 formData['name'] = $("#inputWorkflowInstanceName",$(this)).val();
-                formData['workflowId'] = _mLIST.dataOpQueue[0].dna.id;
+                formData['workflowId'] = window.userOpStack[0].dna.id;
                 formData['parameters'] = {};
 
             $('#accordion>div.panel').each(function(){

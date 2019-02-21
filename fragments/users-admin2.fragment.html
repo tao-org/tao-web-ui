@@ -1,36 +1,38 @@
 <!-- modal nodes op -->
-<div id="myModalNodes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="myModalNodes" class="modal fade modal-form-focus" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <!-- modal nodes op -->
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-    <h1>Processing Components<small>Processing components are the ones that will be executed in workflows.</small></h1>
+    <h1>Users management<small>The <strong>users</strong> of the TAO platform.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Components</li>
+        <li class="active">Users</li>
     </ol>
 </section>
 <!-- /Content Header (Page header) -->
 
 <!-- Main content -->
 <section class="content tao-async-mc">
-    <div id="panel-topo-wrapper" class="row collapseX">
+    <div id="panel-users-wrapper" class="row collapseX">
         <div class="col-md-12">
             <!-- Custom Tabs -->
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
                     <li class="role-dropdown active">
                         <select id="selectUserPanel" name="selectUserPanel" class="form-control form-changepane" title="Select desired node view.">
-                            <option class="role role-admin" value="all_nodes">All components </option>
-                            <option class="role role-admin" value="disabled_nodes">Disabled components</option>
+                            <option class="role role-admin" value="all_users">Active users </option>
+                            <option class="role role-admin" value="pending_users">Pending users</option>
+                            <option class="role role-admin" value="disabled_users">Disabled users</option>
                         </select>
                     </li>
                 </ul>
                 <ul class="nav nav-tabs hidden-xs">
-                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_nodes" aria-expanded="true">All components</a></li>
-                    <li class="role role-admin"><a href="#panel-nodesX" data-toggle="tab" data-action="disabled_nodes" aria-expanded="false">Disabled components</a></li>
+                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_users" aria-expanded="true">Active users</a></li>
+                    <li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="pending_users" aria-expanded="false">Pending users</a></li>
+                    <li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="disabled_users" aria-expanded="false">Disabled users</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -69,8 +71,8 @@
                             <div class="col-sm-12">
                                 <div class="box box-success">
                                     <div class="box-header">
-                                        <i class="fa fa-server"></i>
-                                        <h3 class="box-title">Processing components -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
+                                        <i class="fa fa-user"></i>
+                                        <h3 class="box-title">Users -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
                                         <div class="box-tools pull-right nppaginatedcells-order collapse" data-toggle="tooltip" title="Change order"></div>
                                     </div>
                                     <div class="nppaginatedcells-empty callout callout-empty">
@@ -84,27 +86,35 @@
                                                 <div class="col-md-12 col-sm-12">
                                                     <div class="nodes-item-core-box">
                                                         <div class="box-top-tags">
+                                                            <span>Tag1</span><span>Tag2</span><span>Tag3</span>
                                                         </div>
                                                         <div class="box-top">
-                                                            <div class="box-title"><span class="val-label"></span></div>
-                                                            <div class="box-subtitle"><span class="val-id"></span></div>
-                                                            <div class="box-text">Version: <span class="val-version"></span></div>
-                                                            <div class="box-text">Authors: <span class="val-authors"></span></div>
-                                                            <div class="box-text">Copyright: <span class="val-copyright"></span></div>
-                                                            <div class="box-icon">
-                                                                <i class="fa fa-plug"></i>
+                                                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i>&nbsp;<span class="val-ago">never</span></small>
+                                                            <div class="box-title"><span class="val-fullName"> ##### </span></div>
+                                                            <div class="box-subtitle"><span class="val-username">  #####  </span></div>
+                                                        </div>
+                                                        <div class="row user-info-row">
+                                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                <img src="https://www.gravatar.com/avatar/87876294a3cb8e341dfb6b4f675c52fe?d=mm" alt="user image" class="online val-gravatar">
+                                                                <p class="message">
+                                                                    <span class="u-i-span">Groups: <strong><span class="val-labelGroups">###</span></strong></span>
+                                                                    <span class="u-i-span">Email address: <strong><span class="val-email">###</span></strong></span>
+                                                                    <span class="u-i-span">Alternative email: <strong><span class="val-alternativeEmail">###</span></strong></span>
+                                                                    <span class="u-i-span">User type: <strong><span class="val-labelUserType">###</span></strong></span>
+                                                                    <span class="u-i-span">Status: <strong><span class="val-status">###</span></strong></span>
+                                                                    <span class="u-i-span">Phone: <strong><span class="val-phone">###</span></strong></span>
+                                                                    <span class="u-i-span">Organization: <strong><span class="val-organization">###</span></strong></span>
+                                                                    <span class="u-i-span">Quota: <strong><span class="val-quota">###</span>GB</strong></span>
+                                                                </p>
                                                             </div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                                                <p><span class="val-description"></span></p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-sm-12 col-xs-12">
                                                                 <div class="text-right" style="padding-top: 30px;">
                                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
-                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Disable</span></button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Enable</span></button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -115,24 +125,31 @@
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="nodes-item-core-box">
                                                         <div class="box-top-tags">
+                                                            <span>Tag1</span><span>Tag2</span><span>Tag3</span>
                                                         </div>
                                                         <div class="box-top">
-                                                            <div class="box-title"><span class="val-label"></span></div>
-                                                            <div class="box-subtitle"><span class="val-id"></span></div>
-                                                            <div class="box-text">Version: <span class="val-version"></span></div>
-                                                            <div class="box-text">Authors: <span class="val-authors"></span></div>
-                                                            <div class="box-text space-after-10">Copyright: <span class="val-copyright"></span></div>
-                                                            <div class="box-icon">
-                                                                <i class="fa fa-plug"></i>
-                                                            </div>
+                                                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i>&nbsp;<span class="val-ago">never</span></small>
+                                                            <div class="box-title"><span class="val-fullName"> ##### </span></div>
+                                                            <div class="box-subtitle"><span class="val-username">  #####  </span></div>
                                                         </div>
-                                                        <div class="box-description">
-                                                            <p><span class="val-description"></span></p>
-                                                        </div>
-                                                        <div class="box-bottom with-line">
+                                                        <img src="https://www.gravatar.com/avatar/87876294a3cb8e341dfb6b4f675c52fe?d=mm" alt="user image" class="online val-gravatar">
+                                                        <br>
+                                                        <p class="message">
+                                                            <span class="u-i-span">Groups: <strong><span class="val-labelGroups">###</span></strong></span>
+                                                            <span class="u-i-span">Email address: <strong><span class="val-email">###</span></strong></span>
+                                                            <span class="u-i-span">Alternative email: <strong><span class="val-alternativeEmail">###</span></strong></span>
+                                                            <span class="u-i-span">User type: <strong><span class="val-labelUserType">###</span></strong></span>
+                                                            <span class="u-i-span">Status: <strong><span class="val-status">###</span></strong></span>
+                                                            <span class="u-i-span">Phone: <strong><span class="val-phone">###</span></strong></span>
+                                                            <span class="u-i-span">Organization: <strong><span class="val-organization">###</span></strong></span>
+                                                            <span class="u-i-span">Quota: <strong><span class="val-quota">###</span>GB</strong></span>
+                                                        </p>
+                                                        <div class="box-bottom">
                                                             <div class="">
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
-                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Disable</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Enable</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete</span></button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -166,30 +183,24 @@
     </div>
 </section><!-- /.content -->
 <script>
-    deleteProcessingComponentById = function(id){
-        $.ajax({
-            cache: false,
-            url: baseRestApiURL + "component/"+id+"/",
-            dataType : 'json',
-            type: 'DELETE',
-            headers: {
-                "Accept": "application/json",
+
+    disableUser = function(username){
+        var settings = {
+            "async": true,
+            "url": baseRestApiURL + "admin/users/"+ username +"/disable",
+            "method": "POST",
+            "headers": {
                 "Content-Type": "application/json",
+                "Cache-Control": "no-cache",
                 "X-Auth-Token": window.tokenKey
             },
-            error : function (jqXHR, textStatus, errorThrown) {
-                console.log("error");
-                if(jqXHR.status === 500 ){
-                    showMsg("Unable to delete node. Please try again.", "ERROR");
-                } else {
-                    alert('An error has occurred, please try again or contact app admin.');
-                }
-            },
-            success: function(data) {
-                showMsg("Processing component successfully deleted.", "SUCCESS");
+            "data": "{\"deletePrivateResources\" : true}"
+        };
+        $.ajax(settings)
+            .done(function (response) {
+                showMsg("User "+ username +" successfully disabled.", "SUCCESS");
                 panelComp.refreshData();
-            }
-        });
+            });
     };
 
     myModalNodesOpShow = function(operationid, args){
@@ -200,17 +211,17 @@
         window.userOpStack = [];
 
         if(operationid === "op-plus"){
-            $(".modal-dialog",$modal).addClass("modal-lg");
-            rm_contentUrl="./fragments/component-plus.fragment.html?" + Math.random();
+            //$(".modal-dialog",$modal).addClass("modal-lg");
+            rm_contentUrl="./fragments/users-plus.fragment.html?" + Math.random();
         }
         if(operationid === "edit"){
             window.userOpStack = [{
                 "dna": args.dna,
                 "action": "comp_edit"
             }];
-            $(".modal-dialog",$modal).addClass("modal-lg");
-            rm_contentUrl="./fragments/component-plus.fragment.html?" + Math.random();
+            rm_contentUrl="./fragments/users-edit.fragment.html?" + Math.random();
         }
+
         if(rm_contentUrl === ''){
             alert("TAO - Operation mismatch");
             return;
@@ -230,39 +241,68 @@
         });
     };
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     $( document ).ready(function() {
-        var urls = [];
-        if (routeTags[0]!=="shared") {
-            urls = [
-                baseRestApiURL + "component/user/?type=SCRIPT",
-                baseRestApiURL + "component/user/?type=EXECUTABLE"
-            ];
-        }else{
-            urls = [
-                baseRestApiURL + "component/"
-            ];
-        }
+        var userType = "ACTIVE";
+        var urls = [
+            baseRestApiURL + "admin/users?status="+userType,
+        ];
 
-
+        $("#selectUserPanel").on("change", function(event){
+            var current_pane = $(this).val() || 0;
+            $("a[data-action='" + current_pane +"']",'#panel-users-wrapper').trigger( "click" );
+        });
+        $('a[data-toggle="tab"]', '#panel-users-wrapper').on('shown.bs.tab', function (e) {
+            var action = $(this).data("action");
+            if(action ==="all_users"){
+                userType = "ACTIVE";
+            }
+            if(action ==="disabled_users"){
+                userType = "DISABLED";
+            }
+            if(action ==="pending_users"){
+                userType = "PENDING";
+            }
+            window.panelComp.refreshData([
+                baseRestApiURL + "admin/users?status="+userType,
+            ]);
+        });
 
         window.panelComp = $('#panel-nodes').npPaginatedCells({
             headerUser: taoUserProfile.username,
             url: urls,
             viewMode: prefferences.viewMode,
-            filterAttribute: "label",
+            filterAttribute: "fullName",
             order:[
                 {
                     "label":"Name ascending",
-                    "objAttributeName":"label",
+                    "objAttributeName":"fullName",
                     "direction":"ASC"
                 },
                 {
                     "label":"Name descending",
-                    "objAttributeName":"label",
+                    "objAttributeName":"fullName",
                     "direction":"DSC"
                 }
             ],
+            doDataPreprocessing: function(data){
+                for (var i = 0; i < data.length; i++){
+                    data[i].fullName = data[i].firstName+" "+data[i].lastName;
+                    var groupsLabels = _.map(data[i].groups, function(g){ return g["name"];});
+                    data[i].labelGroups = groupsLabels.join(", ");
+                    data[i].ago = niceIsoTime(data[i].lastLoginDate);
+                    var userEmailMD5 = CryptoJS.MD5(data[i].email).toString();
+                    data[i].gravatarUrl = "https://www.gravatar.com/avatar/"+userEmailMD5+"?d=mp&s=80";
+                    if(data[i].external){
+                        data[i].labelUserType = "external user (LDAP)";
+                    } else{
+                        data[i].labelUserType = "TAO local user";
+                    }
+                }
+                return data;
+            },
+            doCustomRender: function($el, data){
+                $(".val-gravatar", $el).attr("src", data.gravatarUrl);
+            },
             doAction: function(action, args){
                 if(action === "op-plus"){
                     if( taoUserProfile.userRole !== "ADMIN"){
@@ -272,30 +312,22 @@
                     myModalNodesOpShow(action, args);
                 }
                 if(action === "edit") myModalNodesOpShow(action, args);
-                if(action === "delete"){
+                if(action === "disable"){
                     if( taoUserProfile.userRole !== "ADMIN"){
                         alert("not allowed");
                         return;
                     }
                     $('#confirm-dialog').modal('confirm',{
-                        msg:"Are you sure you want to delete processing component: <strong>"+args.dna.label+"</strong>?",
+                        msg:"Are you sure you want to disable user: <strong>"+args.dna.fullName+"</strong>?",
+
                         callbackConfirm: function() {
-                            deleteProcessingComponentById(args.dna.id);
+                            disableUser(args.dna.username);
                         },
                         callbackCancel:function(){}
                     });
                 }
             }
         });
-        //contextual location based variations
-        if(routeTags[0]==="shared"){
-            $el=$("section.tao-async-ph");
-            $el.find("h1").html("Shared Processing Components<small>System or user-published processing components.</small>");
-            $el.find("li.active").html("Shared components");
-            if(taoUserProfile.userRole !== "ADMIN"){
-                $('#panel-nodes').find("button[data-action='delete']").hide();
-            }
-        }
     });
-    //# sourceURL=filename.js
+    //# sourceURL=users-admin2.fragment.js
 </script>

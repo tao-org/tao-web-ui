@@ -196,13 +196,11 @@
 
     $(document).ready( function(){
         //get all availlable dockers
-        if(userOpStack[0] && userOpStack[0].action ==="wf_edit" && _mLIST.dataOpQueue[0] && _mLIST.dataOpQueue[0].dna.id){
+        if(userOpStack[0] && userOpStack[0].action ==="wf_edit" && window.userOpStack[0] && window.userOpStack[0].dna.id){
             $(".modal-title").html("Edit workflow");
             $("#saveExecNode").html("Save workflow");
-            getWFDataById(_mLIST.dataOpQueue[0].dna.id);
+            getWFDataById(window.userOpStack[0].dna.id);
         }
-
-
 
 
 
@@ -321,7 +319,7 @@ console.log(JSON.stringify(formData));
                 success: function(data) {
                     showMsg("Workflow successfully saved.", "SUCCESS");
                     $("#myModalNodes").modal('hide');
-                    _mLIST.refresh();
+                    panelComp.refreshData();
                 }
             });
             return false;

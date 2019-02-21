@@ -653,7 +653,7 @@
                     $('select[name=inputComponentType] option', $el).removeAttr("selected");
                     $('select[name=inputComponentType] option[value="'+response.componentType+'"]', $el).attr("selected", "selected");
 
-                    if(response.tags != null && response.tags !=""){
+                    if(response.tags != null && response.tags !== ""){
 						$('#formTags').importTags( response.tags.join());
 					}
                     
@@ -700,7 +700,7 @@
         var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
         $el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
         
-		$('input.var-id', $el).val(obj.id)
+		$('input.var-id', $el).val(obj.id);
 		$('input.var-name', $el).val(obj.name);
         $('select.var-formatType option', $el).removeAttr("selected");
         $('select.var-formatType option[value="'+obj.dataDescriptor.formatType+'"]', $el).attr("selected", "selected");
@@ -822,7 +822,7 @@
         initializeTagsInputAutocomplete("#formTags", "component"); 
         //no edit in shared workspace
         //$("#frmExecNodeEdit").on("keypress change","*", function(e){
-            if(routeTags[0] === "shared"){
+            if((routeTags[0] === "shared") && (taoUserProfile.userRole !== "ADMIN")){
                 $("#frmExecNodeEdit :input").prop("disabled", true);
                 $("#frmExecNodeEdit input#formTags").css('display','');
                 $("#frmExecNodeEdit div#formTags_tagsinput").hide();              
@@ -951,7 +951,7 @@
 		
         $("form#frmExecNodeEdit").submit(function (e) {
             e.preventDefault();
-            if(routeTags[0] === "shared"){
+            if((routeTags[0] === "shared") && (taoUserProfile.userRole !== "ADMIN")){
                 showMsg(SHARED_EDIT_RESTRICTED, "ERROR");
                 return -1;
             }

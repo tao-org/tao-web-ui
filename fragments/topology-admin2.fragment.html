@@ -1,0 +1,534 @@
+<!-- modal nodes op -->
+<div id="myModalNodes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- modal nodes op -->
+<!-- modal monitoring -->
+<div id="myModalMonitor" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Node monitor: </h4>
+            </div>
+            <div class="modal-body">
+                <section>
+                    <!-- row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- small box -->
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <h3>Node monitor</h3>
+                                    <p style="line-height: 1em;">
+                                        Hostname: <span class="val-sshHost"></span>
+                                    </p>
+                                </div>
+                                <div class="icon"><i class="fa fa-exclamation-triangle"></i></div>
+                                <a href="#" class="small-box-footer">Open in new window instead <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div><!-- /.row -->
+                    <div class="row">
+                        <div class="col-md-12" id="monitorIframeWrapper"></div><!-- /.col -->
+                    </div>
+                </section>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- modal monitoring -->
+
+<!-- modal ssh -->
+<div id="myModalSSH" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="false">
+    <div class="modal-dialog modal-lg modal-xlg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel2">SSH terminal: </h4>
+            </div>
+            <div class="modal-body">
+                <!-- document timeline content -->
+                <section>
+                    <!-- row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- small box -->
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <h3>SSH Termial</h3>
+                                    <p style="line-height: 1em;">
+                                        Hostname: <span class="val-sshHost"></span>
+                                    </p>
+                                </div>
+                                <div class="icon"><i class="fa fa-exclamation-triangle"></i></div>
+                                <a href="#" class="small-box-footer">Open in new window instead <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div><!-- /.row -->
+                    <!-- row -->
+                    <div class="row">
+                        <div class="col-md-12" id="sshIframeWrapper">
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+                <!-- /.timeline content -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- modal ssh -->
+
+<!-- modal satus -->
+<div id="myModalSatus" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Services status: </h4>
+            </div>
+            <div class="modal-body">
+                <!-- document timeline content -->
+                <section>
+                    <!-- row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- small box -->
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <h3>Services Status</h3>
+                                    <p style="line-height: 1em;">
+                                        Hostname: <span class="val-sshHost"></span>
+                                    </p>
+                                </div>
+                                <div class="icon"><i class="fa fa-exclamation-triangle"></i></div>
+                                <p>&nbsp;</p>
+                            </div>
+                        </div>
+                    </div><!-- /.row -->
+                    <!-- row -->
+                    <div class="row">
+                        <div class="col-md-12" id="servicesStatusWrapper">
+                            <div class="box box-primary">
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <strong><i class="fa fa-file-text-o fa-fw"></i> Notes</strong>
+                            <p>Only installed services are present in the services status.</p>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+                <!-- /.timeline content -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- modal status -->
+
+<!-- Content Header (Page header) -->
+<section class="content-header tao-async-ph">
+    <h1>Topology <small>The available <strong>nodes</strong> (machines) that can be used for executing workflows.</small></h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Topology</li>
+    </ol>
+</section>
+<!-- /Content Header (Page header) -->
+<!-- Main content -->
+<section class="content tao-async-mc">
+    <div id="panel-topo-wrapper" class="row collapseX">
+        <div class="col-md-12">
+            <!-- Custom Tabs -->
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
+                    <li class="role-dropdown active">
+                        <select id="selectUserPanel" name="selectUserPanel" class="form-control form-changepane" title="Select desired node view.">
+                            <option class="role role-admin" value="all_nodes">All nodes </option>
+                        </select>
+                    </li>
+                </ul>
+                <ul class="nav nav-tabs hidden-xs">
+                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_nodes" aria-expanded="true">All nodes</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="panel-nodes">
+                        <div class="row">
+                            <div class="col-md-12" id="list-master-controls">
+                                <div class="box-tools pull-left">
+                                    <button class="btn btn-master-tool text-black" data-action="op-plus" data-toggle="tooltip" data-original-title="Add new processing component"><i class="fa fa-plus"></i></button>
+                                </div>
+                                <div class="box-tools pull-left">
+                                    <button class="btn btn-master-tool text-black" data-action="op-filter" data-toggle="tooltip" data-original-title="Filter by tags"><i class="fa fa-filter"></i><span class="label label-warning val-count-filters" style="display:none;">0</span></button>
+                                </div>
+                                <div class="box-tools pull-left">
+                                    <form class="search-container collapse" action="">
+                                        <input id="search-box" type="text" class="search-box" name="q" placeholder="Search by label" />
+                                        <label for="search-box"><i class="fa fa-search search-icon" aria-hidden="true"></i></label>
+                                        <input type="submit" id="search-submit" />
+                                    </form>
+                                </div>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-master-tool text-black" data-action="refresh-list" data-toggle="tooltip" data-original-title="Refresh"><i class="fa fa-refresh fa-spin-hover"></i></button>
+                                    <button class="btn btn-master-tool text-black" data-action="view-list" data-toggle="tooltip" data-original-title="List view"><i class="fa fa-list"></i></button>
+                                    <button class="btn btn-master-tool text-black" data-action="view-table" data-toggle="tooltip" data-original-title="Grid view"><i class="fa fa-table"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 like collapse">
+                                <span data-tag="tag">Label like: <strong class="val-q"></strong>&nbsp;<i class="fa fa-times fa-fw clear-search" aria-hidden="true"></i></span>
+                            </div>
+                            <div class="col-md-12 tags collapse">
+                                <span class="collapse" data-tag="tag">tag<i class="fa fa-check fa-fw" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                        <div class="row" id="list-work-users">
+                            <div class="col-sm-12">
+                                <div class="box box-success">
+                                    <div class="box-header">
+                                        <i class="fa fa-server" aria-hidden="true"></i>
+                                        <h3 class="box-title">Nodes -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
+                                        <div class="box-tools pull-right nppaginatedcells-order collapse" data-toggle="tooltip" title="Change order"></div>
+                                    </div>
+                                    <div class="nppaginatedcells-empty callout callout-empty">
+                                        <p>Component list is empty. <span class="results-empty">You do not have any components.</span><span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
+                                    </div>
+                                    <div class="box-body chat users-box">
+                                        <div class="nppaginatedcells-panel-body">
+                                        </div>
+                                        <div class="cell-templates collapse">
+                                            <core-cell-list>
+                                                <div class="col-md-12 col-sm-12">
+                                                    <div class="nodes-item-core-box">
+                                                        <div class="box-top-tags">
+                                                            <span>Tag1</span><span>Tag2</span><span>Tag3</span>
+                                                        </div>
+                                                        <div class="box-top">
+                                                            <div class="box-title"><span class="val-id"> Lynx Node </span></div>
+                                                            <div class="box-subtitle"><span class="val-nnet">  //193.231.40.37  </span></div>
+                                                            <div class="box-icon">
+                                                                <i class="fa fa-server"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                <p><span class="val-description"> Sample description text ... Sample description text ... Sample description text ... Sample description text ... Sample description text ... Sample description text ... </span></p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                                                <div class='square-box'>
+                                                                    <div class='square-content'>
+                                                                        <div><span class="val-processorCount">4</span></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class='square-box'>
+                                                                    <div class='square-content'>
+                                                                        <div><span class="val-memorySizeGB">16</span></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class='square-box'>
+                                                                    <div class='square-content'>
+                                                                        <div><span class="val-diskSpaceSizeGB">500</span></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                                                <div class="text-right" style="padding-top: 30px;">
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-1" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Disable</span></button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-0" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Enable</span></button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="ssh"><i class="fa fa-terminal fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;SSH Terminal</span></button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="monitor"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Monitor</span></button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="status"><i class="fa fa-stethoscope fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Service status</span></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </core-cell-list>
+                                            <core-cell-grid>
+                                                <div class="col-md-3 col-sm-6">
+                                                    <div class="nodes-item-core-box">
+                                                        <div class="box-top-tags">
+                                                            <span>Tag1</span><span>Tag2</span><span>Tag3</span>
+                                                        </div>
+                                                        <div class="box-top">
+                                                            <div class="box-title"><span class="val-id"> Lynx Node </span></div>
+                                                            <div class="box-subtitle"><span class="val-nnet">  //193.231.40.37  </span></div>
+                                                            <div class="box-icon">
+                                                                <i class="fa fa-server"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="box-description">
+                                                            <p><span class="val-description"> Sample description text ... Sample description text ... Sample description text ... Sample description text ... Sample description text ... Sample description text ... </span></p>
+                                                        </div>
+                                                        <div class="box-stats">
+                                                            <div class="row">
+                                                                <div class="col-sm-4 col-xs-4">
+                                                                    <div class="box-stats-gfx"><span class="val-processorCount">4x</span></div>
+                                                                    <div class="box-stats-title">
+                                                                        <span>PROCESSOR</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4 col-xs-4">
+                                                                    <div class="box-stats-gfx"><span class="val-memorySizeGB"> 16GB </span></div>
+                                                                    <div class="box-stats-title">
+                                                                        <span>MEMORY</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4 col-xs-4">
+                                                                    <div class="box-stats-gfx"><span class="val-diskSpaceSizeGB"> 500GB </span></div>
+                                                                    <div class="box-stats-title">
+                                                                        <span>STORAGE</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="box-bottom">
+                                                            <div class="">
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-1" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Disable</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-0" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Enable</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="ssh"><i class="fa fa-terminal fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;SSH Terminal</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="monitor"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Monitor</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="status"><i class="fa fa-stethoscope fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Service status</span></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </core-cell-grid>
+                                        </div>
+                                    </div>
+                                    <div class="box-footer clearfix no-border">
+                                        <div class="box-tools pull-right">
+                                            <ul class="nppaginatedcells-panel-pagination pagination pagination-sm inline">
+                                                <li><a href="#" data-page="prev">«</a></li>
+                                                <li class="active"><a href="#" data-page="0">1</a></li>
+                                                <li><a href="#" data-page="1">2</a></li>
+                                                <li><a href="#" data-page="2">3</a></li>
+                                                <li><a href="#" data-page="next">»</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="box-notification"><p><span>List updated</span></p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.tab-pane -->
+
+                    <div class="tab-pane" id="panel-nodesX">
+                    </div><!-- /.tab-pane -->
+
+                </div><!-- /.tab-content -->
+            </div><!-- nav-tabs-custom -->
+        </div>
+    </div>
+</section><!-- /.content -->
+<script>
+
+    var monitorNode = function(id){
+            var $sshModal = $("#myModalMonitor");
+            $(".val-sshHost",$sshModal).text(id);
+            var sshURL = './nodemonitor.html?node='+id;
+            var parentIframe = document.getElementById("monitorIframeWrapper");
+            //$("#monitorIframeWrapper").hide();
+            var iframe = document.createElement('iframe');
+            iframe.id = "randomid"+Math.floor(Math.random() * 10000000);
+            iframe.src = sshURL;
+            iframe.style.width = "100%";
+            iframe.style.height = "0";
+            iframe.style.border = "0";
+            parentIframe.appendChild(iframe);
+            $sshModal.modal('show');
+            $sshModal
+                .off("click", ".small-box-footer")
+                .on("click", ".small-box-footer", function(e){
+                    e.preventDefault();
+                    var newwindow = window.open(sshURL, "_blank", "resizable=yes, scrollbars=yes, titlebar=yes, width=800, height=405, top=10, left=10");
+                    $sshModal.modal('hide');
+                });
+    };
+    var sshNode = function(nodeDNA){
+            var $sshModal = $("#myModalSSH");
+            $(".val-sshHost",$sshModal).text(nodeDNA.id);
+            var sshURL = 'http://masterslurm.tao.c-s.ro:4200/?node='+nodeDNA.id+'&user='+nodeDNA.userName+'&passwd='+nodeDNA.userPass;
+            var parentIframe = document.getElementById("sshIframeWrapper");
+            var iframe = document.createElement('iframe');
+            iframe.id="randomid"+Math.floor(Math.random() * 10000000);
+            iframe.src = sshURL;
+            iframe.style.width = "100%";
+            iframe.style.height = "500px";
+            parentIframe.appendChild(iframe);
+            $sshModal.modal('show');
+            $sshModal
+                .off("click", ".small-box-footer")
+                .on("click", ".small-box-footer", function(e){
+                    e.preventDefault();
+                    var windowObjectReference;
+                    var strWindowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+                    windowObjectReference = window.open(sshURL, "SSH terminal to "+nodeDNA.id, strWindowFeatures);
+                    $sshModal.modal('hide');
+                });
+            return 1;
+    };
+    var statusNode = function(nodeDNA){
+        var $sshModal = $("#myModalSatus");
+        $(".val-sshHost",$sshModal).text(nodeDNA.id);
+
+        var html = "";
+        for (var i = 0; i < nodeDNA.servicesStatus.length; i++){
+            html += '<p class="pull-right"><span class="label label-success">' + nodeDNA.servicesStatus[i].status + '</span></p>' +
+                '<strong><i class="fa fa-check-circle fa-fw"></i>' + nodeDNA.servicesStatus[i].serviceDescription.name + '</strong>, version: ' + nodeDNA.servicesStatus[i].serviceDescription.version + '<br>' + nodeDNA.servicesStatus[i].serviceDescription.description +
+                '<hr>\n';
+        }
+        if(html === ""){
+            html = '<strong><i class="fa fa-exclamation-triangle fa-fw"></i> No installed services reported</strong>';
+        }
+        $("#servicesStatusWrapper .box-body").html(html);
+        $sshModal.modal('show');
+    };
+    deleteNodeById = function(id){
+        $.ajax({
+            cache: false,
+            url: baseRestApiURL + "topology/"+id+"/",
+            dataType : 'json',
+            type: 'DELETE',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            },
+            error : function (jqXHR, textStatus, errorThrown) {
+                console.log("error");
+                if(jqXHR.status === 500 ){
+                    showMsg("Unable to delete node. Please try again.", "ERROR");
+                } else {
+                    alert('An error has occurred, please try again or contact app admin.');
+                }
+            },
+            success: function(data) {
+                showMsg("Execution node successfully deleted.", "SUCCESS");
+                panelComp.refreshData();
+            }
+        });
+    };
+
+    myModalNodesOpShow = function(operationid, args){
+        var $modal = $("#myModalNodes");
+        $(".modal-dialog",$modal).removeClass("modal-lg");
+        var rm_contentUrl = '';
+        var rmContent = '';
+        window.userOpStack = [];
+
+        if(operationid === "op-plus"){
+            //$(".modal-dialog",$modal).addClass("modal-lg");
+            rm_contentUrl="./fragments/topology-plus.fragment.html?" + Math.random();
+        }
+        if(operationid === "edit"){
+            window.userOpStack = [{
+                "dna": args.dna,
+                "action": "comp_edit"
+            }];
+            $(".modal-dialog",$modal).addClass("modal-lg");
+            rm_contentUrl="./fragments/topology-edit.fragment.html?" + Math.random();
+        }
+
+        if(rm_contentUrl === ''){
+            alert("TAO - Operation mismatch");
+            return;
+        }
+        $.ajax({
+            url: rm_contentUrl,
+            success: function(result) {
+                rmContent = result;
+                if(rmContent !== ''){
+                    $modal.find('.modal-dialog').html(rmContent);
+                }else{
+                    alert("Could not retrive needed data from server.");
+                    return e.preventDefault();
+                }
+                $modal.modal('show');
+            }
+        });
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    $( document ).ready(function() {
+        var urls = [
+                baseRestApiURL + "topology/"
+            ];
+        window.panelComp = $('#panel-nodes').npPaginatedCells({
+            headerUser: taoUserProfile.username,
+            url: urls,
+            viewMode: prefferences.viewMode,
+            filterAttribute: "id",
+            order:[
+                {
+                    "label":"Name ascending",
+                    "objAttributeName":"id",
+                    "direction":"ASC"
+                },
+                {
+                    "label":"Name descending",
+                    "objAttributeName":"id",
+                    "direction":"DSC"
+                }
+            ],
+            doDataPreprocessing: function(data){
+                for (var i = 0; i < data.length; i++){
+                    data[i].memorySizeGB = data[i].memorySizeGB+"GB";
+                    data[i].processorCount = data[i].processorCount+"X";
+                    data[i].diskSpaceSizeGB = data[i].diskSpaceSizeGB+"GB";
+                }
+                return data;
+            },
+            doAction: function(action, args){
+                if(action === "op-plus"){
+                    if( taoUserProfile.userRole !== "ADMIN"){
+                        showMsg("Only admin roles can ad components to the shared workspace. You should try adding components to your own workspace", "ERROR");
+                        return;
+                    }
+                    myModalNodesOpShow(action, args);
+                }
+                if(action==="monitor") monitorNode(args.dna.id);
+                if(action==="ssh") sshNode(args.dna);
+                if(action==="status") statusNode(args.dna);
+                if(action === "edit") myModalNodesOpShow(action, args);
+                if(action === "delete"){
+                    if( taoUserProfile.userRole !== "ADMIN"){
+                        alert("not allowed");
+                        return;
+                    }
+                    $('#confirm-dialog').modal('confirm',{
+                        msg:"Are you sure you want to delete processing component: <strong>"+args.dna.label+"</strong>?",
+                        callbackConfirm: function() {
+                            deleteNodeById(args.dna.id);
+                        },
+                        callbackCancel:function(){}
+                    });
+                }
+            }
+        });
+        //remove iframe on modal hide end event
+        $('#myModalSSH, #myModalMonitor').on('hidden.bs.modal', function () {
+            $("iframe", this).remove();
+        });
+    });
+    //# sourceURL=topology-admin2.fragment.js
+</script>

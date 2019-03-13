@@ -17,6 +17,7 @@
   var Paginator = function(element, options) {
     this.el = $(element);
     this.options = $.extend({}, $.fn.paginathing.defaults, options);
+	this.options.perPage = parseInt(this.options.perPage) == 0 ? 10 : this.options.perPage;
 
     this.startPage = 1;
     this.currentPage = 1;
@@ -214,7 +215,8 @@
     var _self = this;
 
     return _self.each(function() {
-      return new Paginator(this, options);
+      var paginaThing = new Paginator(this, options);
+	  $(this).data("paginaThing", paginaThing);
     });
   };
 
@@ -236,3 +238,5 @@
     pageNumbers: false,
   };
 })(jQuery, window, document);
+
+//# sourceURL=paginathing.js

@@ -325,7 +325,9 @@ function datetimeFromArray(arr){
 
 function niceIsoTime(t){
     if(t && (t !== null)){
-        return t;
+        var mom = moment(t, "YYYY-MM-DDTHH:mm:ss.SSSSZ");
+		
+		return mom.format("YYYY-MM-DD HH:mm:ss");
     }else{
         return 'n/a';
     }
@@ -506,34 +508,25 @@ function initializeTagsInputAutocomplete(id, url){
  	$(".ui-autocomplete").css({ "max-height": "400px", "overflow-y": "scroll", "overflow-x": "hidden","z-index":"1100"});
 }
 
-function openPolygonMap(mapContainer, polygon2DField) {
-	// Remove map if existing
-	if ($("#myPolygonMap").length > 0) {
-		if ($("#myModalMap").length > 0) {
-			$("#myModalMap").removeData("bs.modal");
-			$("#myModalMap").remove();
-		}
-		$("#myPolygonMap").remove();
-	}
-	mapContainer.append("<div id='myPolygonMap'></div>");
-	// Load map
-	var modalOn = false;
-	$.ajax({ url: "./fragments/map.poly.fragment.html", async: false })
-	.done(function (data) {
-		modalOn = true;
-		$("#myPolygonMap").html(data);
-	})
-	.fail(function (jqXHR, textStatus) { showMsg("Could not load map content.", "ERROR"); });
-	if (modalOn) {
-		if ($(polygon2DField).length > 0) {
-			$("#myModalMap #polygon2D").val(polygon2DField.val());
-			$("#myModalMap").on('hide.bs.modal', function () {
-				polygon2DField.val($("#polygon2D").val());
-				$(this).removeData("bs.modal");
-				$(this).remove();
-				$("#myPolygonMap").remove();
-			});
-		}
-		$("#myModalMap").modal("show");
-	}
+function openPolygonMap(mapContainer, footprintField) {
+	// Create simple window for map
+	var $poly2D = $("<div class='for-poly2D' style='position:fixed;top:10%;left:10%;width:80%;height:80%;background-color:white;border:3px solid #3c8dbc;border-radius:10px;overflow:hidden'>" +
+					"	<div class='content-header' style='height:45px;padding:10px 15px;position:absolute;top:0;left:0;width:100%'>" +
+					"		<button type='button' class='close use-footprint'><span>&times;</span></button>" +
+					"		<h1 class='modal-title' style='line-height:1em'>Map<small>Select your <strong>Region of Interest</strong>.</small></h4>" +
+					"	</div>" +
+					"	<div id='mapExtent' style='height:94%;height:calc(100% - 45px);position:relative;margin-top:45px'></div>" +
+					"	<div style='height:55px;padding:10px 15px;position:absolute;bottom:0;left:0'>" +
+					"		<button class='btn btn-primary btn-submit use-footprint'>Use selected polygons</button>" +
+					"	</div>" +
+					"</div>");
+	$(".use-footprint", $poly2D).on("click", function () { $(this).closest(".for-poly2D").remove(); });
+	mapContainer.append($poly2D);
+	
+	var olPoly = $("#mapExtent", mapContainer).poly2D({ maxFeaturesNo: 1, defaultFootprint: footprintField.val() });
+	$.when(olPoly).done(function (result) {
+		window.myPolygonMap = result;
+		window.myPolygonMap.fitAllFeatures();
+		window.myPolygonMap.el.on("newfootprint", function (evt, footprint) { footprintField.val(footprint); });
+	});
 }

@@ -26,7 +26,9 @@ var userOpStack = [];  //holder for aditional user action parameters
 //UI loading indicator management
 function routeLoading(action){
     if(action === "show"){
-        taoLoadingDiv.modal('show');
+		if (taoLoadingDiv.data("bs.modal") && taoLoadingDiv.data("bs.modal").$backdrop == null) {
+			taoLoadingDiv.modal('show');
+		}
     }
     if(action === "hide"){
         setTimeout(function(){
@@ -53,8 +55,6 @@ $(function () {
     hashRoutesMap["my/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
     //hashRoutesMap["my/scripts"] = "./fragments/my-scripts.fragment.html";
     hashRoutesMap["my/queries"] = "./fragments/datasources-queries.fragment.html";
-    hashRoutesMap["my/datasetwizzard"] = "./fragments/datasources-queries.fragment.html";
-
     hashRoutesMap["shared/workflows"] = "./fragments/workflows-all.fragment.html";
     hashRoutesMap["shared/workflows"] = "./fragments/workflows-admin2.fragment.html";
     hashRoutesMap["shared/components"] = "./fragments/component-admin2.fragment.html";

@@ -336,6 +336,57 @@ $(function () {
 }());
 
 (function () {
+    var version = '0.3',
+        $elMsgBox = $("#messagesBox"),
+        my_messages_index = 0;
+	function checkLocked() {
+		if ($(".messagesBoxItem.locked", $elMsgBox).length > 0) {
+			$elMsgBox.addClass("locked");
+		} else {
+			$elMsgBox.removeClass("locked");
+		}
+	}
+	function messagestack(msg, status) {
+		var o = {
+			msg     : msg,
+			status  : status,
+			lifetime: 4000,
+			closable: true
+		};
+		
+		// Set message color
+		var collor_class = "";
+		switch (o.status.toUpperCase()) {
+			case 'SUCCESS': collor_class = " msg-green" ; break;
+			case 'INFO'   : collor_class = " msg-blue"  ; break;
+			case 'WARN'   : collor_class = " msg-yellow"; break;
+			case 'WARNING': collor_class = " msg-yellow"; break;
+			case 'FAIL'   : collor_class = " msg-red locked"; o.closable = false; break;
+			case 'FAILED' : collor_class = " msg-red locked"; o.closable = false; break;
+			case 'ERROR'  : collor_class = " msg-red locked"; o.closable = false; break;
+		}
+		
+		// Set message ID
+		my_messages_index++;
+		
+		// Add message to stack
+		$elMsgBox.append('<div id="messagesBoxItem'+my_messages_index+'" class="messagesBoxItem'+collor_class+'"><span class="glyphicon glyphicon-remove"></span>'+o.msg+'</div>');
+		
+		// Manual close
+		$elMsgBox.on("click", "#messagesBoxItem"+my_messages_index+" span.glyphicon-remove", function () {
+			$(this).closest(".messagesBoxItem").remove();
+			checkLocked();
+		});
+		
+		// Automatic close
+		if (o.closable) { $('#messagesBoxItem'+my_messages_index).delay(o.lifetime).fadeOut(function () { $(this).remove(); checkLocked(); }); }
+		checkLocked();
+    }
+	window.showMsg=messagestack;
+	return this;
+}());
+
+(function () {
     var version = '0.2',
         $elMsgBox = $("#messagesBox"),
         my_messages_index = 0;
@@ -364,7 +415,7 @@ $(function () {
         $('#messagesBoxItem'+my_messages_index).delay(4000).fadeOut(function(){$(this).remove();});
         return true;
     }
-    window.showMsg=f;
+    window.showMsgOld=f;
     return true;
 }());
 

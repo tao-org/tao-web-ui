@@ -125,7 +125,7 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
 </div><!-- /.modal-content -->
-
+<script type="text/javascript" src="./assets/libs/openlayers/ol-poly.js"></script>
 <script>
     $(document).ready( function(){
         if(window.userOpStack[0].dna && window.userOpStack[0].dna.id){
@@ -137,9 +137,7 @@
         $("#frmStartWF")
             .on("click", ".ol", function (e) {
                 // Load map poly
-//                var inputField = $(this).parent().find("input");
-//                var container = $("#panel-topo-wrapper").closest(".content-wrapper");
-                openPolygonMap($("#panel-topo-wrapper").closest(".content-wrapper"), $(this).parent().find("input"));
+                openPolygonMap($("#myModalNodes"), $(this).parent().find("input"));
             })
             .on("change",".var-value-string, .var-value-string2, .var-value-list",function(e){
                 var n = $(this).closest( '.val-row' ).find(".var-id").text();

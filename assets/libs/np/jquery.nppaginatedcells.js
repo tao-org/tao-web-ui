@@ -59,7 +59,7 @@ jQuery.fn.npPaginatedCells = function(options){
         itemsOnPage: settings.itemsOnPage,
         currentPage: 0
     };
-    var orderIndex = -1;
+	var orderIndex = Math.max.apply(Math, $.merge([-1], $.map(settings.order, function (o, i) { return o.selected || o.default ? i : null; })));
     var dataFilter = {
         selectedTags: [],
         searchString: ""
@@ -231,7 +231,7 @@ jQuery.fn.npPaginatedCells = function(options){
     };
     var repaintPagination = function(){
         var tP = Math.ceil(parseFloat(data.length/dataPagination.itemsOnPage) || 0);
-        if((dataPagination.currentPage > tP) || isNaN(dataPagination.currentPage) || (dataPagination.currentPage<0)){
+        if((dataPagination.currentPage >= tP) || isNaN(dataPagination.currentPage) || (dataPagination.currentPage<0)){
             dataPagination.currentPage = 0;
         }
         var fP = dataPagination.currentPage - dataPagination.directPagesNo;
@@ -387,7 +387,7 @@ jQuery.fn.npPaginatedCells = function(options){
             }
             settings.doAction(action);
         })
-        .on("click", ".btn-nodeop", function(){
+        .on("click", ".btn-nodeop", function(event){
             event.preventDefault();
             var action = $(this).data("action");
             var $root = $(this).closest(".node-root");

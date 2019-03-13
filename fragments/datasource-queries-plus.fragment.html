@@ -1,613 +1,1066 @@
-<div class="modal-content">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Edit query</h4>
-    </div>
-	<!--  
-    <form id="frmQueryEdit" class="form-horizontal form-newpc" role="form">
-        <input type="hidden" id="op" name="op" class="op" value="op-plus" />
-        <input type="hidden" id="id_u" name="id_u" value="0" />
-        <input type="hidden" name="clickedon" value="">-->
+<style>
+::placeholder{font-style:italic}
+.main-header .navbar{opacity:0.8}
 
-        <div class="modal-error collapse">
-            <h4 class="modal-title">Error adding query!</h4>
-            <p id="modal-error-msg">Please check your data, one or more values for the attributes is not in the acceptable range.</p>
-            <p>
-                <span class="error-inputQueryID collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
-                <span class="error-label collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
-            </p>
-            <p id="modal-error-msg-server"></p>
-        </div>
+/* ======== CUSTOM COMBOBOX ======== */
+.custom-combobox{position:relative;display:block}
+.custom-combobox .custom-combobox-input{background-color:white}
+.custom-combobox .custom-combobox-input[disabled]{background-color:#eee}
+.custom-combobox .custom-combobox-toggle{position:absolute;top:0;bottom:0;right:-3px}
+ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:2000}
+/* ======== #myModalNodes ======== */
+#myModalNodes{position:relative;width:100%;height:900px;z-index:800}
+#myModalNodes #myFlatMap .ol-zoom{top:100px}
+#myModalNodes #myFlatMap .poly-map-title{padding-left:30%;top:55px}
+#myModalNodes #myFlatMap .poly-shape-type{top:60px}
+#myModalNodes .box-shadow--6dp{box-shadow:0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2) !important}
+/* ======== MODAL CONTROLS AND PANELS ======== */
+#myModalNodes .modal-content.minimized{display:inline-block;width:40px;height:40px;cursor:pointer;border-radius:5px;padding:5px;text-align:center}
+#myModalNodes .modal-content.minimized>*{display:none}
+#myModalNodes .modal-content.minimized::after{content:"\f0c9";font-family:"FontAwesome";font-size:22px}
+#myModalNodes .modal-content .close{margin-left:10px;font-size:25px;outline:none}
+#myModalNodes .modal-body{overflow-x:hidden;overflow-y:auto}
+#myModalNodes .modal-body .row .last{width:100%;float:left;padding-top:15px}
+#myModalNodes .modal-note{background-color:#ffffd2;border-top:1px solid #eac9a5}
+#myModalNodes .modal-note strong{display:inline-block;width:40px;color:#a71f16}
+#myModalNodes .modal-note p{margin:0}
+#myModalNodes .modal-note p+p{margin:5px 0 0 42px}
+#myModalNodes .modal-note p i{font-weight:700;color:#3d6f8a}
+/* ======== MODAL EXTENTS ======== */
+#myModalNodes .modal-content,
+#myModalNodes .extent{-webkit-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-o-transition:all 0.5s ease;-ms-transition:all 0.5s ease;transition:all 0.5s ease}
+#myModalNodes .extent{position:absolute;top:0;left:0;margin:0;padding:10px;width:37%;z-index:2000}
+#myModalNodes #mapExtent{display:block;width:100%;height:100%;position:fixed;top:0;right:0;background-color:white}
+#myModalNodes #collectionExtent{opacity:0.9}
+#myModalNodes #collectionExtent.no-map{margin-left:30%;background-color:white;border:5px solid #2a6283;border-radius:15px;opacity:1}
+#myModalNodes #collectionExtent.no-map .minimize{display:none}
+#myModalNodes #queryExtent{top:100px;width:34%}
+#myModalNodes #queryExtent.shifted{left:-40%}
+#myModalNodes #executionExtent{top:44px}
+#myModalNodes #executionExtent.shifted{left:-45%}
+/* ======== TABLE CONTENTS ======== */
+#myModalNodes .vertical-container{clear:both;border-top:1px solid #9dc8db;overflow-x:hidden;overflow-y:auto;scroll-behavior:smooth;border-bottom:1px solid #93c2da}
+#myModalNodes .sticky{position:relative;position:sticky;top:0;background-color:#cee9f9;padding:12px 50px 12px 15px;z-index:2001;border-bottom:1px solid #9dc8db}
+#myModalNodes table{position:relative;table-layout:fixed;margin:0}
+#myModalNodes table tr>*{vertical-align:middle;position:relative}
+#myModalNodes table td{word-break:break-all}
+#myModalNodes table>tbody+tbody{border-top:1px solid #93c2da}
+#myModalNodes table.ds-params{table-layout:auto}
+#myModalNodes table.ds-params::before{content:" ";position:absolute;width:15px;height:100%;top:0;left:0;background-color:#b4e0a5}
+#myModalNodes table.ds-params td{padding:2px 15px}
+#myModalNodes table.ds-params tbody tr:first-child td{padding-top:10px}
+#myModalNodes table.ds-params tbody tr:last-child td{padding-bottom:10px}
+#myModalNodes table.ds-params tbody td:first-child{font-weight:700;text-align:right;color:#455c80;line-height:1.2em}
+#myModalNodes table.ds-params tbody td span{font-style:normal;font-size:0.8em;color:#c0c0c0;font-weight:400}
+#myModalNodes table.ds-params tbody td:last-child{width:66.666667%}
+#myModalNodes table.ds-params td{border:0}
+#myModalNodes table.ds-params input,
+#myModalNodes table.ds-params select,
+#myModalNodes table.ds-params textarea{width:100%;border:1px solid #d2d6de;height:2em;padding:0 4px;outline:0;border-radius:2px}
+#myModalNodes table.ds-params input.datepicker{max-width:48%}
+#myModalNodes table.ds-params input.datepicker:last-child{float:right}
+#myModalNodes table.ds-products tr{background-color:white;-webkit-transition:all 0.2s ease;-moz-transition:all 0.2s ease;-o-transition:all 0.2s ease;-ms-transition:all 0.2s ease;transition:all 0.2s ease}
+#myModalNodes table.ds-products td{padding:6px 37px 4px 12px;color:#737373;border-top-color:#ccc}
+#myModalNodes table.ds-products tbody tr:first-child td{border-top:0}
+#myModalNodes table.ds-products tr.selected{background-color:#ffedbd}
+#myModalNodes table.ds-products tr:hover{background-color:#fff4d6}
+#myModalNodes table.ds-products img{margin:5px 0 10px 0;float:left}
+#myModalNodes table.ds-products span.highlight{background-color:#ffc188;color:#a71f16}
+#myModalNodes table.ds-products span.name{color:#a71f16;font-weight:700}
+#myModalNodes table.ds-products span.info{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;font-size:0.9em;font-weight:700;display:inline-block;width:90%;width:calc(100% - 48px);margin:0;padding:5px 8px 5px 25px}
+#myModalNodes table.ds-products span.info.top{width:100%;padding:0;font-size:1em}
+#myModalNodes table.ds-products span.info span{padding:2px 5px;margin-right:5px}
+#myModalNodes table.ds-products span.info i{color:#0068c1;font-weight:400;margin-right:10px;line-height:1.3em;max-height:2.6em;display:inline-block;vertical-align:bottom;overflow-y:hidden;border-bottom:1px dashed #a6cddc}
+#myModalNodes table.ds-products span p{white-space:normal;word-break:break-word;padding:2px 5px;margin:0}
+#myModalNodes table.ds-products tr.datasource{font-weight:700;background-color:#cee9f9}
+#myModalNodes table.ds-products tr.datasource td{border:0;padding:8px 5px 8px 15px;color:#286080}
+#myModalNodes table.ds-products tr.datasource:hover{background-color:#cee9f9}
+#myModalNodes table.ds-products tr.datasource span.title{width:86%;display:inline-block}
+#myModalNodes table.ds-products tr.datasource span.info{width:96%;width:calc(100% - 32px)}
+#myModalNodes table.ds-products tr.datasource.disabled{opacity:0.3}
+#myModalNodes table.ds-products tr.datasource.deprecated{background-color:#ffd1d1}
+#myModalNodes table.ds-products label.deprecated{font-style:italic;color:red;font-size:1.1em;white-space:normal;word-break:break-word;text-align:justify;padding:2px 5px}
+#myModalNodes table.ds-products label.deprecated ul{position:relative;margin:0;font-weight:400}
+#myModalNodes table.ds-products label.deprecated ul li button{padding:0;text-decoration:underline;font-weight:700}
+#myModalNodes table.ds-products label.deprecated ul li button:hover{color:#286080}
+/* ======== TABLE ACTION CONTROLS ======== */
+#myModalNodes table.ds-products .qry-ac-group{position:absolute;left:0;width:100%;padding:2px 10px;color:#286080}
+#myModalNodes table.ds-products .top-group{top:0;font-size:16px}
+#myModalNodes table.ds-products .bottom-group{bottom:0;font-size:16px;opacity:0.1;-webkit-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-o-transition:all 0.5s ease;-ms-transition:all 0.5s ease;transition:all 0.5s ease}
+#myModalNodes table.ds-products tr.datasource .top-group{font-size:20px}
+#myModalNodes table.ds-products tr.datasource .bottom-group{opacity:0.5;font-size:20px}
+#myModalNodes table.ds-products tr.selected .bottom-group,
+#myModalNodes table.ds-products tr:hover .bottom-group{opacity:1}
+#myModalNodes table.ds-products .btn-action{float:left;background-color:transparent;border:0;outline:none}
+#myModalNodes table.ds-products .btn-action:hover{color:#e92f2f}
+#myModalNodes table.ds-products .btn-action[disabled]{color:#286080;opacity:0.3}
+#myModalNodes table.ds-products .btn-ul-action{float:none;font-size:1em}
+/* ======== OTHER CONTROLS ======== */
+#myModalNodes .dataset-label{padding:0 15px;display:table;width:100%;margin-bottom:10px;background:white}
+#myModalNodes .dataset-label>*{display:table-cell;width:1px}
+#myModalNodes .dataset-label input{width:100%;border:0;background-color:transparent;color:#3d6f8a}
+#myModalNodes .checkbox{margin:0;padding:0;position:absolute;right:7px;top:0}
+#myModalNodes .checkbox label{margin:0;padding:8px}
+#myModalNodes .checkbox input{margin:0;padding:0;position:relative;cursor:pointer}
+#myModalNodes .checkbox input{margin:0;padding:0;position:relative}
+#myModalNodes .checkbox input[name='allproducts']{margin-top:7px}
+#myModalNodes .pagination{margin:10px 15px 0 15px}
+#myModalNodes .pagination>li>a,.pagination>li>span{padding:4px 10px}
+#myModalNodes .btn-primary+.btn-primary{margin-left:10px}
 
-        <div class="modal-body">
-            <section>
-               <div id="map-panel-topo-wrapper" class="row">
-                    <div class="col-md-12">                           
-                        <div class="tab-content">
-                            <div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
-                            <div class="form-horizontal">
-                               <div class="row">
-	                                <div class="col-md-12">
-	                                    <div class="form-group ">
-	                                        <label for="queryLabel" class="col-sm-2 col-md-2 control-label">Label</label>
-	                                        <div class="col-sm-10 col-md-10">
-	                                            <input type="text" id="queryLabel" name="queryLabel" class="form-control" value="" placeholder="name of your query" autocomplete="off" value="" data-errorspan="label">
-	                                        	<input type="hidden" id="actionType" name="actionType" value="edit">
-	                                        </div>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                            <div class="row">
-	                                <div class="col-md-12">
-	                                	<div class="form-group ">
-	                                        <label for="listDatasources" class="col-sm-2 col-md-2 control-label">Datasources </label>
-	                                        <div class="ui-widget col-sm-10 col-md-10">
-	                                        	<select id="listDatasources" name="listDatasources" class="form-control"></select>
-	                                            <input type="hidden" id="selectedDatasource" class="form-control" value="default">
-	                                        </div>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                            </div>
+#collectionExtent.locked .modal-content:last-child{pointer-events:none}
+#collectionExtent.locked .modal-content:last-child::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(255, 255, 255, 0.6);z-index:2010}
+#collectionExtent.locked .modal-content:last-child button{opacity:0.1}
+</style>
 
-								<!-- Parameter list -->
-								<div  id="parameterList">
-									<form id="editQueryParams" class="form-horizontal form-newpc" role="form">   
-										<div class="row">
-											<div class="col-md-12">
-												<div class="form-group has-feedback">
-													<label for="user_name" class="col-sm-2 col-md-2 control-label">User </label>
-													<div class="col-sm-3 col-md-3">
-														<input type="text" id="user_name" value="" class="form-control">
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-md-12">
-												<div class="form-group has-feedback">
-												    <label for="user_pass" class="col-sm-2 col-md-2 control-label">Password </label>
-												    <div class="col-sm-3 col-md3">
-												        <input type="password" id="user_pass" name="user_pass" value="" class="form-control" autocomplete="new-password">
-												        <i class="glyphicon glyphicon-eye-open form-control-feedback" title="show password"></i>
-												    </div>
-												</div>
-											</div>
-										</div>
-										<div class="row"><!-- row -->
-											<div class="col-md-12">
-										        <p>Parameter list:</p>
-													<table class="table table-bordered box-shadow--6dp" id="datasourceParams">
-														<thead>
-															<tr>
-																 <th></th>
-																 <th>Name</th>
-																 <th>Type</th>
-																 <th>Value</th>
-															</tr>
-														</thead>
-													</table>
-											</div><!-- /.box -->
-										</div><!-- /.row -->
-										<div class="row">
-											<div class="col-md-12">
-												<div class="form-group ">
-													<label for="limit" class="col-sm-2 col-md-2 control-label">Limit</label>
-			                              			<div class="col-sm-2 col-md-2">
-			                              				<input type="number" id="limit" value="" class="form-control" min="0">
-								                    </div>
-			                              			<label for="pageNumber" class="col-sm-2 col-md-2 control-label">Page number</label>
-			                              			<div class="col-sm-2 col-md-2">
-			                              				<input type="number" id="pageNumber" value="" class="form-control" min="0">
-			                              			</div>
-			                              			<label for="pageSize" class="col-sm-2 col-md-2 control-label">Page size</label>
-			                              			<div class="col-sm-2 col-md-2">
-			                              				<input type="number" id="pageSize" value="" class="form-control" min="0">
-			                              			</div>	                              			
-												</div>
-											</div>
-										</div>
-			                            <div class="row">
-			                            	<div class="col-md-12">
-												<div class="form-group ">
-			                            			<div class="col-sm-2 col-md-2">
-														<button id="addQuery" type="text" class="btn btn-primary" name="btnAdd">Add Query</button>
-													</div>
-													<div class="col-sm-2 col-md-2">
-														<button id="saveParams" type="submit" class="btn btn-primary btn-submit" name="btnSave">Execute Query</button>
-													</div>
-												</div>
-											</div>			                           
-			                            </div><!-- /.row -->
-									</form>   
-								</div><!-- /params -->
-								
-								<!--  datasourceProducts -->
-								<div id="datasourceProducts">
-									<form id="formDownloadProducts" class="form-horizontal" role="form">
-										<div class="row"><!-- row -->
-												<div class="col-md-12">
-													<p>Products list:</p>
-													<table class="table table-bordered box-shadow--6dp paginated" id="tbdatasourceProducts">
-														<thead>
-															<tr>
-																<th scope="row" style="text-align:center">
-																	<div class="checkbox"><input type="checkbox" name="allproducts" value="all">Select all</div>
-																</th>
-																<th>Name</th>
-																<th>Preview</th>
-																<th>Acquisition Date</th>
-																<th>Product Type</th>
-															</tr>
-														</thead>
-													</table>
-											</div><!-- /.box -->
-										</div><!-- /.row -->
-										<div class="row">
-											<div class="col-md-12">
-												<div class="form-group ">
-													<div class="col-sm-8 col-md-8"></div>
-													<div class="col-sm-2 col-md-2">					         				   
-														<button id="saveQuery" type="text" class="btn btn-primary" name="btnSaveQuery">Save Query</button>
-													</div>													
-													<div class="col-sm-2 col-md-2">					         				   
-														<button id="downloadProducts" type="submit" class="btn btn-primary btn-submit" name="btnDownload" >Download</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</form><!-- /form -->
-								</div> <!--  /datasourceProducts -->
-								
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--  
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <div class="col-md-5 col-sm-5">
-                               <button id="saveParams" type="submit" class="btn btn-primary btn-submit" name="btnSave">Execute Query</button>
-                            </div>
-                             <div class="col-md-5 col-sm-5">
-                                <button id="saveQuery" type="submit" class="btn btn-primary btn-submit" name="btnSave">Save query</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
-            </section>
-        </div><!-- /.modal-body
-    </form>
-    -->
-     <div class="modal-note" style="display:none">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <div class="col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11">
-                        <p>Please note that some of the query parameters weren't found through the corresponding datasource parameteres.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    </div>
-</div><!-- /.modal-content -->
+<div id="mapExtent" class="hidden">
+</div>
 
-<!-- /Main content -->
-<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.theme.css" type="text/css" />
-<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.structure.css" type="text/css" />
-<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.css" type="text/css" />
-<script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
-<script src="./assets/libs/jQuery/paginathing.js" type="text/javascript"></script>
+<div id="collectionExtent" class="extent no-map">
+	<div class="modal-content box-shadow--6dp">
+		<div class="modal-header dataset-label" style="border:0">
+			<label for="datasetLabel" style="">Label:</label>
+			<input type="text" id="datasetLabel" class="form-control" name="datasetLabel" placeholder="Name of your dataset collection" value="" />
+		</div>
+		<button type="button" class="close" data-dismiss="modal" style="position:absolute;top:4px;right:14px;"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	</div>
+	<div class="modal-content box-shadow--6dp">
+		<div class="modal-header" style="border:0">
+			<button type="button" class="close minimize"><span aria-hidden="true">&minus;</span><span class="sr-only">Minimize</span></button>
+			<h4 class="modal-title" id="myModalLabel">Edit query</h4>
+		</div>
+		<div class="modal-body" style="padding-top:0">
+			<div class="row">
+				<div class="vertical-container">
+					<table id="tbAddNewCriteria" class="sticky table ds-products">
+						<tr class="datasource" data-index="-1">
+							<td>Add new search criteria...<span class="qry-ac-group top-group"><span class="pull-right"><button class="btn-action op-addnew" data-action="op-addnew"><i class="fa fa-plus"></i></button></span></span></td>
+						</tr>
+					</table>
+					<table id="tbSelectedProducts" class="table ds-products">
+						<tbody><tr style='background-color:#fff4d6'><td>No queries added</td></tr></tbody>
+					</table>
+				</div>
+				<div class="last">
+					<div class="col-sm-12 col-md-12">
+						<button type="button" id="saveQuery" name="btnSaveQuery" class="btn btn-primary">Save collection</button>
+						<button type="button" id="saveComponent" name="saveComponent" class="btn btn-primary hidden">Create datasource component</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="queryExtent" class="extent shifted">
+	<div class="modal-content box-shadow--6dp query-parameters">
+		<div class="modal-header">
+			<button type="button" class="cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<h4 class="modal-title">Datasource Interrogation</h4>
+		</div>
+		<div class="modal-body">
+			<div class="row form-horizontal">
+				<div class="col-sm-12 col-md-12">                           
+					<div class="form-group">
+						<label for="queryLabel" class="col-sm-4 col-md-4 control-label">Label</label>
+						<div class="col-sm-8 col-md-8">
+							<input type="hidden" id="queryLabelDefault" name="queryLabelDefault" value="">
+							<input type="text" id="queryLabel" name="queryLabel" class="form-control" value="" placeholder="Name of your query" autocomplete="off" value="" data-errorspan="label">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 col-md-4 control-label">Datasource</label>
+						<div class="ui-widget col-sm-8 col-md-8">
+							<select id="listDatasources" name="listDatasources" class="form-control"></select>
+							<input type="hidden" id="selectedDatasource" class="form-control" value="default">
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Parameters list -->
+			<div id="parameterList" class="row hidden">
+				<div class="col-sm-12 col-md-12 form-horizontal">
+					<div class="form-group has-feedback">
+						<label for="user_name" class="col-sm-4 col-md-4 control-label">User </label>
+						<div class="col-sm-5 col-md-5">
+							<input type="text" id="user_name" value="" class="form-control">
+						</div>
+					</div>
+					<div class="form-group has-feedback">
+						<label for="user_pass" class="col-sm-4 col-md-4 control-label">Password </label>
+						<div class="col-sm-5 col-md5">
+							<input type="password" id="user_pass" name="user_pass" value="" class="form-control" autocomplete="new-password">
+							<i class="glyphicon glyphicon-eye-open form-control-feedback" title="show password"></i>
+						</div>
+					</div>
+				</div>
+				<div class="vertical-container">
+					<table id="tbDatasourceParams" class="table ds-params" style="table-layout:auto"></table>
+				</div>
+				<div class="last">
+					<div class="form-group" style="float:left">
+						<label for="limit" class="col-sm-2 col-md-2 control-label">Limit</label>
+						<div class="col-sm-2 col-md-2">
+							<input type="number" id="limit" value="20" class="form-control" min="0" />
+						</div>
+						<label for="pageNumber" class="col-sm-2 col-md-2 control-label">Page number</label>
+						<div class="col-sm-2 col-md-2">
+							<input type="number" id="pageNumber" value="1" class="form-control" min="0" />
+						</div>
+						<label for="pageSize" class="col-sm-2 col-md-2 control-label">Page size</label>
+						<div class="col-sm-2 col-md-2">
+							<input type="number" id="pageSize" value="10" class="form-control" min="0" />
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-12">
+						<button type="button" id="startInterrogation" name="btnStartInterrogation" class="btn btn-primary">Start interrogation</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal-note hidden">
+			<p class="note"><strong>Note:</strong> Some query parameters were not found in the list of corresponding datasource parameteres:</p>
+		</div>
+	</div>
+</div>
+
+<div id="executionExtent" class="extent shifted">
+	<div class="modal-content box-shadow--6dp execution-results">
+		<div class="modal-header" style="padding-bottom:0;border:0">
+			<button type="button" class="cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<h4 class="modal-title">Query product results</h4>
+		</div>
+		<div class="modal-body">
+			<div id="datasourceProducts" class="row">
+				<div class="vertical-container">
+					<div class="sticky">
+						<span id="countVisible" style="font-weight:700">Display 1 to n of n products.</span>
+						<span id="countSelected" style="float:right;font-weight:700">0 products selected</span>
+						<div class="checkbox"><label><input type="checkbox" name="allproducts" value="all" /></label></div>
+					</div>
+					<table id="tbDatasourceProducts" class="table paginated ds-products"></table>
+				</div>
+				<div class="last">
+					<div class="col-sm-12 col-md-12">
+						<button type="button" id="collectProducts" name="btnCollectProducts" class="btn btn-primary">Collect selected products</button>
+						<button type="button" id="cancelExecution" name="btnCancelExecution" class="btn btn-primary" style="float:right">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <script>
-
+    var isCollection     = false;
+    var modeEdit         = false;
+	var objDna           = {};
+	var datasourcesList  = [];
+    var queryCollection  = [];
+	var selectedProducts = [];
+    var listOfProducts   = [];
+	var defaultFootprint = "";
+	var defaultInterval  = "";
+	var localEditMode    = false;
+	var myPolygonMap     = { mapActive: false };
+	var inputType        = { "Integer": { type: "number", min: "0" }, "Float": { type: "number" }, "Double": { type: "number" }, "String": { type: "text" } };
 	
-	var inputType = {
-			"Integer":{
-				type:"number",
-				min:"0"
+	function waitForExecution(action) {
+		setTimeout(function () { taoLoadingDiv.modal(action); }, action === "show" ? 10 : 200);
+	}
+	
+	function ajaxCallFnc(url, data, type, async) {
+		var showWaitMsg = (typeof async === "boolean") ? async : true;
+		if (showWaitMsg) waitForExecution('show');
+		var deferred = $.Deferred();
+		$.ajax({
+			cache  : false,
+			url    : baseRestApiURL + url,
+			type   : type,
+			data   : data,
+			async  : (typeof async === "undefined" ? true : async),
+			headers: {
+				"Accept"      : "application/json",
+				"Content-Type": "application/json",
+				"X-Auth-Token": window.tokenKey
 			},
-			"Float":{
-				type:"number",
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (showWaitMsg) waitForExecution('hide');
+				if (jqXHR.status === 400) {
+					showMsg(typeof jqXHR.responseJSON === "undefined" ? textStatus : jqXHR.responseJSON.error, "FAILED");
+				} else if (jqXHR.status === 500) {
+					showMsg("Please check your data and try again.", "ERROR");
+				} else if (jqXHR.status === 406) {
+					showMsg("Please check your data for inconsisntent attributes values.", "ERROR");
+				} else {
+					showMsg("Unknown error. Please try again.", "ERROR");
+				}
+				deferred.reject(jqXHR, textStatus, errorThrown);
 			},
-			"Double":{
-				type:"number",
+			success: function(response, textStatus, jqXHR) {
+				if (showWaitMsg) waitForExecution('hide');
+				deferred.resolve(response, textStatus, jqXHR);
+			}
+		});
+		return deferred.promise();
+    }
+	
+    function initComboboxAutocomplete() {
+		$.widget("custom.combobox", {
+			_create: function () {
+				this.wrapper = $("<span>")
+					.addClass("custom-combobox")
+					.insertAfter(this.element);
+
+				this.element.hide();
+				this._createAutocomplete();
+				this._createShowAllButton();
 			},
-			"String":{
-				type:"text"
+
+			_createAutocomplete: function () {
+				var selected = this.element.children(":selected"),
+					value = selected.val() ? selected.text() : "";
+
+				this.input = $("<input>")
+					.appendTo(this.wrapper)
+					.val(value)
+					.attr("title", "")
+					.addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+					.autocomplete({
+						delay: 0,
+						minLength: 0,
+						source: $.proxy(this, "_source")
+					})
+					.tooltip({
+						tooltipClass: "ui-state-highlight"
+					});
+
+				this._on(this.input, {
+					autocompleteselect: function (event, ui) {
+						ui.item.option.selected = true;
+						this._trigger("select", event, {
+							item: ui.item.option
+						});
+
+						$("#selectedDatasource").val(ui.item.option.value);
+						//autolabel query when not in edit mode
+						if (!localEditMode) {
+							$("#queryLabelDefault").val(ui.item.label + " (" + moment().format("YYYY-MM-DD HH:mm:ss.SSS").toString() + ")");
+							if ($("#queryLabel").val() == "") {
+								$("#queryLabel").attr({ "placeholder": $("#queryLabelDefault").val() });
+							}
+							this.input.prop("disabled", false);
+						} else {
+							this.input.prop("disabled", true);
+						}
+						
+						showDatasourceParams(datasourcesList[ui.item.option.value.replace('d_','')].parameters);
+						$(".datepicker").datepicker({ dateFormat: 'yy-mm-dd' });
+					},
+					autocompletechange: "_removeIfInvalid"
+				});
+			},
+			
+			_createShowAllButton: function () {
+				var input = this.input,
+					wasOpen = false;
+
+				$("<a>")
+					.attr("tabIndex", -1)
+					.tooltip()
+					.appendTo(this.wrapper)
+					.button({
+						icons: { primary: "ui-icon-triangle-1-s" },
+						text: false
+					})
+					.removeClass("ui-corner-all")
+					.addClass("custom-combobox-toggle ui-corner-right")
+					.click(function (event) {
+						if (input.prop("disabled")) return;
+						if (input.autocomplete("widget").is(":visible")) return;
+						
+						input.focus();
+
+						// Pass empty string as value to search for, displaying all results
+						input.autocomplete("search", "");
+
+						event.stopImmediatePropagation();
+					});
+				input.dblclick(function (event) {
+						if (input.prop("disabled") || input.val() != "") return;
+						if (input.autocomplete("widget").is(":visible")) return;
+						
+						input.focus();
+
+						// Pass empty string as value to search for, displaying all results
+						input.autocomplete("search", "");
+
+						event.stopImmediatePropagation();
+					});
+			},
+			
+			_source: function (request, response) {
+				var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+				response(this.element.children("option").map(function () {
+					var text = $(this).text();
+					if (this.value && (!request.term || matcher.test(text))) return {
+						label: text,
+						value: text,
+						option: this
+					};
+				}));
+			},
+			
+			_removeIfInvalid: function (event, ui) {
+				// Selected an item, nothing to do
+				if (ui.item) {
+					return;
+				}
+				
+				// Search for a match (case-insensitive)
+				var value = this.input.val(),
+					valueLowerCase = value.toLowerCase(),
+					valid = false;
+				this.element.children("option").each(function () {
+					if ($(this).text().toLowerCase() === valueLowerCase) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+				
+				// Found a match, nothing to do
+				if (valid) {
+					return;
+				}
+				
+				// Remove invalid value
+				this.input.val("")
+					.attr("title", value + " didn't match any item")
+					.tooltip("open");
+				this.element.val("");
+				this._delay(function () {
+					this.input.tooltip("close").attr("title", "");
+					
+				}, 2500);
+				this.input.data("ui-autocomplete").term = "";
+			},
+			_destroy: function () {
+				this.wrapper.remove();
+				this.element.show();
+			},
+			autocomplete: function(value) {
+				var ui = {
+					item: {
+						label: value.name,
+						option: $("#listDatasources option")[value.id],
+						value: value.name
+					}
+				}
+				this.element.val(value.name);
+				this.input.val(value.name);
+				this.input.trigger("autocompleteselect", ui);
+			},
+			clear: function() {
+				this.input.prop("disabled", false);
+				this.input.val("");
+				this.element.val("");
+				this.input.data("ui-autocomplete").term = "";
+			},
+			focus: function() {
+				this.input.focus();
+			},
+			enable: function() {
+				this.input.prop("disabled", false);
+			},
+			disable: function() {
+				this.input.prop("disabled", true);
+			},
+			selectedIndex: function() {
+				return $(this.element).prop("selectedIndex");
+			}
+		});
+    }
+	
+	function handlePolygonMapEvents(olPoly) {
+		olPoly.el.on("newfootprint", function (evt, footprint) {
+			$("#tbDatasourceParams input[name='footprint']").val(footprint);
+			defaultFootprint = footprint;
+		});
+		olPoly.el.on("clickextrafeature", function (evt, feature, modifier) {
+			var tableName = $("#executionExtent").hasClass("shifted") ? "tbSelectedProducts" : "tbDatasourceProducts";
+			if (feature) {
+				$.each($("#" + tableName + " tbody tr:not(.datasource)"), function () {
+					var $tr = $(this);
+					if ($tr.data("id") == feature.getId()) {
+						var $chk = $tr.find(".checkbox input[name='product']");
+						if ($chk.length > 0) {
+							$chk.trigger("click");
+							if ($chk.is(":checked")) {
+								// Change table page if product not on current page
+								if (!$tr.is(":visible")) {
+									var $pag = $tr.closest("tbody").data("paginaThing");
+									if ($pag) {
+										$pag.show(parseInt($tr.index()/$pag.options.perPage) + 1);
+									}
+								}
+								if (!$tr.is(":visible") && $tr.hasClass("hidden")) {
+									$tr.removeClass("hidden");
+									$tr.siblings().removeClass("hidden");
+								}
+								// Scroll product into view
+								var $table     = $tr.closest("table");
+								var $container = $tr.closest(".vertical-container");
+								var $sticky    = $container.find(".sticky");
+								var scroll     = $tr.offset().top -
+												 ($table.length     > 0 ? $table.offset().top      : 0);
+								var maxScroll  = ($table.length     > 0 ? $table.outerHeight()     : 0) +
+												 ($sticky.length    > 0 ? $sticky.outerHeight()    : 0) -
+												 ($container.length > 0 ? $container.outerHeight() : 0) + $container.outerHeight() + 2;
+								if (scroll < maxScroll) {
+									$container.scrollTop(scroll);
+								} else {
+									$tr.get(0).scrollIntoView();
+								}
+								return false;
+							}
+						} else {
+							
+							return false;
+						}
+					}
+				});
+			}
+		});
+	}
+	
+	function autoPanMap() {
+		if (myPolygonMap.mapActive) {
+			var mapW = $("#mapExtent").outerWidth();
+			if (mapW > 0) {
+				var panelW = $(".main-sidebar").outerWidth() + ($("#collectionExtent").hasClass("minimized") ? 0 : $("#collectionExtent").outerWidth() - 10);
+				var prc = parseInt(100*panelW/mapW);
+				if (prc != myPolygonMap.options.panPrc) {
+					setTimeout(function () { myPolygonMap.setPanPercentage(prc); }, 100);
+				}
+			}
+		}
+	}
+	
+	function previewProducts(table) {
+		if (myPolygonMap.mapActive) {
+			// remove all previous preview features on map
+			myPolygonMap.removeFeaturesByProperty({ "description": "preview" });
+			// add new preview fetures on map
+			$.each($("#" + table + " tbody tr"), function () {
+				var $tr = $(this);
+				if ($tr.data("geometry")) {
+					var geometry = $tr.data("geometry")
+						.replace('MULTIPOLYGON (((', 'POLYGON((')
+						.replace(')))', '))')
+						.replace(' ((', '((');
+					
+					var highlighted = $tr.find("input[name='product']").is(":checked");
+					var properties = {
+						"description": "preview",
+						"id"         : $tr.data("id"),
+						"name"       : $tr.data("name"),
+						"highlighted": (highlighted ? "true" : "false")
+					}
+					myPolygonMap.createShapeFromGeometry(geometry, properties);
+				}
+			});
+			// set style for all new preview features on map
+			resetPreviewProductsStyle();
+		}
+	}
+	
+	function resetPreviewProductsStyle() {
+		if (myPolygonMap.mapActive) {
+			// set style for all new preview features on map
+			var pStroke = new ol.style.Stroke({ color: [255, 119, 0, 0.3], width: 2 });
+			var pFill   = new ol.style.Fill  ({ color: [255, 153, 0, 0.1] });
+			var pStyle  = new ol.style.Style ({ stroke: pStroke, fill: pFill });
+			myPolygonMap.setFeaturesStyleByProperty({ "description": "preview" }, pStyle);
+			
+			var hStroke = new ol.style.Stroke({ color: [255, 0, 0, 1], width: 4 });
+			var hFill   = new ol.style.Fill  ({ color: [255, 153, 0, 0.1] });
+			var hStyle  = new ol.style.Style ({ stroke: hStroke, fill: hFill });
+			myPolygonMap.setFeaturesStyleByProperty({ "highlighted": "true" }, hStyle);
+		}
+	}
+	
+	function initControls() {
+		// Set page element attributes according to current action type
+		if (isCollection) {
+			$("#myModalLabel").html(modeEdit ? "Edit collection" : "Create collection");
+			
+			$("#saveQuery").html(modeEdit ? "Update collection" : "Create collection");
+			$("#saveQuery").prop("disabled", selectedProducts.length == 0 || ($.unique($.map(selectedProducts, function (item) { return (item._dsLabelDefault); })).length != queryCollection.length));
+			
+			$("#saveComponent").addClass("hidden");
+			$("#saveComponent").html("Create datasource component");
+			$("#saveComponent").prop("disabled", true);
+			
+			$("#datasetLabel").prop("disabled", false);
+		} else {
+			$("#myModalLabel").html(modeEdit ? "Edit query" : "Create query");
+			
+			$("#saveQuery").html(modeEdit ? "Update query" : "Create query");
+			$("#saveQuery").prop("disabled", queryCollection.length == 0);
+			
+			$("#saveComponent").removeClass("hidden");
+			$("#saveComponent").html("Create datasource component");
+			$("#saveComponent").prop("disabled", selectedProducts.length == 0);
+			
+			$("#datasetLabel").prop("disabled", true);
+			if (queryCollection.length == 0) {
+				// Enable Addnew button
+				$("#tbAddNewCriteria .datasource").removeClass("disabled");
+				$("#tbAddNewCriteria button.op-addnew").prop("disabled", false);
+				// Reset query label on top
+				$("#datasetLabel").val("");
+				$("#datasetLabel").attr("placeholder", "Name of your dataset collection");
+			} else if (queryCollection.length == 1)	{
+			 	// Disable Addnew button
+				$("#tbAddNewCriteria .datasource").addClass("disabled");
+				$("#tbAddNewCriteria button.op-addnew").prop("disabled", true);
+				// Set query label on top
+				$("#datasetLabel").val(queryCollection[0].label);
+				$("#datasetLabel").attr("placeholder", queryCollection[0]._dsLabelDefault);
+			} else {
+				// Shold not have more than 1 query
+				alert("Error. You have more than one query active.");
+			}
+		}
+	}
+	
+	function initDatasources() {
+		$.when(ajaxCallFnc("query/", {}, "GET", false))
+		.done(function (response, textStatus, jqXHR) {
+			datasourcesList = chkTSRF(response);
+			if (jqXHR.status === 204) {
+				showMsg("No datasource found.", "SUCCESS");
+				datasourcesList = [];
+			}
+			$("option", "#listDatasources").remove();
+			$.each(datasourcesList, function (k, v) {
+				$("#listDatasources").append($('<option>', { value: 'd_' + k, text: v.sensor + " " + v.dataSourceName }));
+			});
+			initComboboxAutocomplete();
+			$("#listDatasources").combobox();
+			$(".ui-autocomplete-input").addClass("form-control");
+		});
+	}
+	
+	function getCollectionByComponentId(componentId) {
+		var collection = false;
+		$.when(ajaxCallFnc("datasource/user/group/", {}, "GET", false))
+		.done(function (response) {
+			if (response.status === "SUCCEEDED") {
+				var dsGroups = response.data;
+				var dsComponents = [];
+				$.each(dsGroups, function (index, group) {
+					var exit = false;
+					$.each(group.dataSourceComponents, function (index, component) {
+						if (component.id == componentId) {
+							collection = group;
+							exit = true;
+							return false;
+						}
+					});
+					if (exit) return false;
+				});
+			}
+		});
+		return collection;
+	}
+	
+	function initQuery() {
+		queryCollection  = [];
+		selectedProducts = [];
+		listOfProducts   = [];
+		
+		// Populate page forms depending on action type
+		if (modeEdit) {
+			var dsQueries = [objDna];
+			if (!isCollection && objDna.componentId) {
+				var collection = getCollectionByComponentId(objDna.componentId);
+				if (collection) {
+					isCollection = true;
+					dsQueries = [collection];
+					localEditMode = true;
+				}
 			}
 			
-	};
- 
+			var dsComponents = [];
+			if (isCollection) {
+				$("#datasetLabel").val(dsQueries[0].label).data("groupId", dsQueries[0].id);
+				// Get query collection
+				$.when(ajaxCallFnc("datasource/user/group", { id: dsQueries[0].id }, "GET", false))
+				.done(function (response) {
+					dsQueries = [];
+					if (response.status === "SUCCEEDED") {
+						dsQueries    = response.data.dataSourceQueries;
+						dsComponents = response.data.dataSourceComponents;
+					} else {
+						showMsg(response.message, "FAIL");
+					}
+				});
+			}
+			
+			var addQueriesInCollection = function (qryList) {
+				if (qryList && qryList.length > 0) {
+					var deferred = $.Deferred();
+					$.each(qryList, function (index, query) {
+						// Make sure that queries within collection are given unique local id by delaying progressively each iteration
+						setTimeout(function () {
+							var dsId = _.findIndex(datasourcesList, {sensor: query.sensor, dataSourceName: query.dataSource});
+							if (dsId >= 0) {
+								var qry = $.extend(true, {}, query);
+								qry._dsId           = dsId;
+								qry._dsName         = qry.sensor + " " + qry.dataSource;
+								qry._dsLabelDefault = qry._dsName + " (" + moment().format("YYYY-MM-DD HH:mm:ss.SSS").toString() + ")";
+								qry.label = (qry.label === "") ? qry._dsLabelDefault : qry.label;
+								// Set geometry lat/lon precision to 6 decimals
+								if (myPolygonMap.mapActive && typeof qry.values !== "undefined" && typeof qry.values.footprint !== "undefined") {
+									qry.values.footprint = myPolygonMap.polygonTextFromArray(myPolygonMap.polygonArrayFromText(qry.values.footprint));
+								}
+								registerQueryInCollection(qry);
+								if (index == qryList.length - 1) {
+									return deferred.resolve();
+								}
+							}
+						}, index*50);
+					});
+					return deferred.promise();
+				}
+			}
+			$(".extent", "#myModalNodes").addClass("hidden");
+			$.when(addQueriesInCollection(dsQueries)).done(function () {
+				$(".extent", "#myModalNodes").removeClass("hidden");
+				$.each(dsComponents, function (index, component) {
+					$.each(component.sources, function (idx, source) {
+						var parentQuery = _.findWhere(queryCollection, { componentId: source.parentId });
+						if (parentQuery) {
+							var productNames = typeof source.dataDescriptor.location === "undefined" ? "" : source.dataDescriptor.location;
+							if (productNames != "") {
+								var productsRead = false;
+								$.when(ajaxCallFnc("product", { name: source.dataDescriptor.location }, "GET", false))
+								.done(function (response) {
+									if (response.status === "SUCCEEDED") {
+										$.each(response.data, function (index, product) {
+											product._dsThumb        = "./media/images/preview-not-available.png"
+											product._dsName         = parentQuery._dsName,
+											product._dsLabelDefault = parentQuery._dsLabelDefault,
+											selectedProducts.push(product);
+											productsRead = true;
+										});
+									}
+								});
+								// Create dummy products when unable to read from DB
+								if (!productsRead) {
+									var products = productNames.split(",");
+									$.each(products, function (index, name) {
+										var product = {
+											id             : name,
+											name           : name,
+											geometry       : "",
+											location       : "-",
+											approximateSize: 0,
+											productType    : parentQuery.sensor,
+											acquisitionDate: parentQuery.created,
+											_dsThumb       : "./media/images/preview-not-available.png",
+											_dsName        : parentQuery._dsName,
+											_dsLabelDefault: parentQuery._dsLabelDefault
+										};
+										selectedProducts.push(product);
+									});
+								}
+							}
+						}
+					});
+				});
+				
+				// Set default footprint
+				if (myPolygonMap.mapActive && defaultFootprint != "") {
+					myPolygonMap.createShapeFromGeometry(defaultFootprint, null, true);
+				}
+				updateSelectedProductsTable();
+				
+				if (isCollection && localEditMode) {
+					// Open query from collection for editing
+					qryIndex = _.findIndex(queryCollection, { "componentId": objDna.componentId });
+					$($("#tbSelectedProducts tr.datasource[data-index='" + qryIndex + "'] button.op-edit").get(0)).trigger("click");
+				} else if (!isCollection) {
+					// Open standalone query for editing
+					$($("#tbSelectedProducts tr.datasource button.op-edit").get(0)).trigger("click");
+				}
+				
+			});
+		} else if (!isCollection) {
+			// Add new: auto open the query parameters section
+			$($("#tbAddNewCriteria tr.datasource button.op-addnew").get(0)).trigger("click");
+		} else {
+			showMsg("Datasources list successfully retrieved.", "SUCCESS");
+			showPanel("selected products");
+		}
+	}
+	
+	function resizePanels() {
+		if ($("#tbDatasourceParams, #tbSelectedProducts, #tbDatasourceProducts").length < 3) return false;
+		
+		var h = $(window).height();
+		var hH = $(".main-header").outerHeight();
+		$("#myModalNodes").css({ height: (h - hH) + "px" });
+		
+		h -= 25; // set panel bottom gap
+		
+		// resize query parameters section
+		var h1 = h - $("#tbDatasourceParams").parent().offset().top;
+		h1 -= $("#parameterList .last").outerHeight();
+		h1 -= $("#queryExtent .modal-note").outerHeight();
+		h1 = h1 < 60 ? 60 : h1;
+		$("#tbDatasourceParams").parent().css({ "max-height": h1 + "px" });
+		
+		// resize query results section
+		var h2 = h - $("#tbDatasourceProducts").parent().offset().top;
+		h2 -= $("#datasourceProducts .pagination-container").outerHeight();
+		h2 -= $("#datasourceProducts .last").outerHeight();
+		h2 = h2 < 60 ? 60 : h2;
+		$("#tbDatasourceProducts").parent().css({ "max-height": h2 + "px" });
+		
+		// resize query collection section
+		var h3 = h - $("#tbSelectedProducts").parent().offset().top;
+		h3 -= $("#datasourceProducts .last").outerHeight();
+		h3 -= myPolygonMap.mapActive ? 0 : 10;
+		h3 = h3 < 60 ? 60 : h3;
+		$("#tbSelectedProducts").parent().css({ "max-height": h3 + "px" });
+	}
+	
+	function showPanel(panel) {
+		if (panel == "query parameters") {
+			$("#collectionExtent").addClass("locked");
+			if (myPolygonMap.mapActive) {
+				myPolygonMap.setReadOnly(false);
+			}
+			$("#executionExtent").addClass("shifted");
+			// show parameters
+			$("#queryExtent").removeClass("shifted");
+			$("#listDatasources").combobox("focus");
+		} else if (panel == "query execution results") {
+			$("#collectionExtent").addClass("locked");
+			if (myPolygonMap.mapActive) {
+				myPolygonMap.setReadOnly(true);
+			}
+			$("#queryExtent").addClass("shifted");
+			// clear datasource parameters
+			//resetDatasourcesList();
+			// reset checkboxes
+			$('input[name=allproducts]').prop('checked', false);
+			// show execution results
+			$("#executionExtent").removeClass("shifted");
+			//$("#executionExtent").removeClass("hidden");
+		} else { // if (panel == "selected products") {
+			$("#collectionExtent").removeClass("locked");
+			if (myPolygonMap.mapActive) {
+				myPolygonMap.setReadOnly(true);
+			}
+			$("#queryExtent").addClass("shifted");
+			$("#executionExtent").addClass("shifted");
+		}
+	}
+	
+	function resetDatasourcesList() {
+		// Reset query labels
+		$("#queryLabelDefault").val("");
+		$("#queryLabel").val("");
+		$("#queryLabel").prop("placeholder", "Name of your query");
+		// Reset datasource combo
+		$("#listDatasources").combobox("clear");
+		$("#selectedDatasource").val("");
+		$("#parameterList").addClass("hidden");
+	}
+	
+    function showDatasourceParams(param) {
+		$("#parameterList").removeClass("hidden");
+		
+		var sortedParam = Object.keys(param).sort(function (a, b) {
+			var textA = a.toUpperCase();
+			var textB = b.toUpperCase();
+			return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+		});
+		
+		var html = "";
+		$.each(sortedParam, function (index, property) {
+			if (param.hasOwnProperty(property)) {
+				var lType = param[property]['type'].split(".");
+				
+				var lDefault = "";
+				if(param[property]['defaultValue'] !== null) {
+					lDefault = param[property]['defaultValue'];
+				}
 
-    function initComboboxAutocomplete(){
-    	 $.widget("custom.combobox", {
-    	        _create: function () {
-    	            this.wrapper = $("<span>")
-    	                .addClass("custom-combobox")
-    	                .insertAfter(this.element);
+				html += "<tr" + (param[property]['required'] ? " class='required'" : "") + ">" +
+						"<td>" + param[property]['name'] + "<br><span>[" + lType[lType.length - 1] + "]</span></td>" +
+						"<td>";
+				var paramType = lType[lType.length - 1];
+				paramType = $.trim(paramType.replace(/;/g,''));
 
-    	            this.element.hide();
-    	            this._createAutocomplete();
-    	            this._createShowAllButton();
-    	        },
-
-    	        _createAutocomplete: function () {
-    	            var selected = this.element.children(":selected"),
-    	                value = selected.val() ? selected.text() : "";
-
-    	            this.input = $("<input>")
-    	                .appendTo(this.wrapper)
-    	                .val(value)
-    	                .attr("title", "")
-    	                .addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
-    	                .autocomplete({
-    	                delay: 0,
-    	                minLength: 0,
-    	                source: $.proxy(this, "_source")
-    	            })
-    	                .tooltip({
-    	                tooltipClass: "ui-state-highlight"
-    	            });
-
-    	            this._on(this.input, {
-    	                autocompleteselect: function (event, ui) {
-    	                    ui.item.option.selected = true;
-    	                    this._trigger("select", event, {
-    	                        item: ui.item.option
-    	                    });
-
-    	        			$("#selectedDatasource").val(ui.item.option.value);
-    	                    //autolabel query 
-    	                    $("#queryLabel").val(ui.item.label + " (" + moment().format("YYYY-MM-DD HH:mm:ss").toString() + ")");
-
-    	        			showDatasourceParams(datasourcesList[ui.item.option.value.replace('d_','')].parameters);
-    	        			$( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
-    	        			//return false;// Prevent the widget from inserting the value.
-    	                },
-
-    	                autocompletechange: "_removeIfInvalid"
-    	            });
-    	        },
-
-    	        _createShowAllButton: function () {
-    	            var input = this.input,
-    	                wasOpen = false;
-
-    	            $("<a>")
-    	                .attr("tabIndex", -1)
-    	              //  .attr("title", "Show All Items")
-    	                .tooltip()
-    	                .appendTo(this.wrapper)
-    	                .button({
-    	                icons: {
-    	                    primary: "ui-icon-triangle-1-s"
-    	                },
-    	                text: false
-    	            })
-    	                .removeClass("ui-corner-all")
-    	                .addClass("custom-combobox-toggle ui-corner-right")
-    	                .click(function(event){
-    	                	  if (input.autocomplete("widget").is(":visible")) {
-    	                        //  input.autocomplete("close");
-    	                          return;
-    	                      }
-    	                      input.focus();
-    	                	  
-    	                      // Pass empty string as value to search for, displaying all results
-    	                	  input.autocomplete("search", "");
-    	                   
-    	                   	  event.stopImmediatePropagation();
-    	                })	             
-    	        },
-
-    	        _source: function (request, response) {
-    	            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-    	            response(this.element.children("option").map(function () {
-    	                var text = $(this).text();
-    	                if (this.value && (!request.term || matcher.test(text))) return {
-    	                    label: text,
-    	                    value: text,
-    	                    option: this
-    	                };
-    	            }));
-    	        },
-
-    	        _removeIfInvalid: function (event, ui) {
-
-    	            // Selected an item, nothing to do
-    	            if (ui.item) {
-    	                return;
-    	            }
-
-    	            // Search for a match (case-insensitive)
-    	            var value = this.input.val(),
-    	                valueLowerCase = value.toLowerCase(),
-    	                valid = false;
-    	            this.element.children("option").each(function () {
-    	                if ($(this).text().toLowerCase() === valueLowerCase) {
-    	                    this.selected = valid = true;
-    	                    return false;
-    	                }
-    	            });
-
-    	            // Found a match, nothing to do
-    	            if (valid) {
-    	                return;
-    	            }
-
-    	            // Remove invalid value
-    	            this.input.val("")
-    	                .attr("title", value + " didn't match any item")
-    	                .tooltip("open");
-    	            this.element.val("");
-    	            this._delay(function () {
-    	                this.input.tooltip("close").attr("title", "");
-    	            }, 2500);
-    	            this.input.data("ui-autocomplete").term = "";
-    	        },
-
-    	        _destroy: function () {
-    	            this.wrapper.remove();
-    	            this.element.show();
-    	        }
-    	    });
-
+				switch (paramType) {
+					case "DataFormat":
+						html += '<input type="text" name="' + property + '" value=""  class="var_' + property + '">';
+					break;
+					case "Polygon2D":
+						// Check current footprint
+						lDefault = myPolygonMap.mapActive ? myPolygonMap.getFootprint() : defaultFootprint;
+						html += '<input type="text" name="' + property + '" value="' + lDefault + '"  class="var_' + property + '" placeholder="Please select your area of interest on the map..."' + (myPolygonMap.mapActive ? ' disabled' : '') + ' />';
+					break;
+					case "SensorType":
+						var enums = taoEnums.getEntity(param[property]['type']);
+						
+						html += "<select name='" + property + "' class='var_" + property + "'>";
+						html += (param[property]['defaultValue'] == null) ? "<option value='default' selected='selected'>Select</option>" : "";
+						$.each(enums, function (index, values) {
+							html += "<option value='" + values.key + "'" + (lDefault === values.key ? " selected='selected'" : "") + ">" + values.value + "</option>";
+						});
+					break;
+					case "Date":
+						// Set the startDate default value to the last one set by the user
+						if (property == "startDate") {
+							if (localEditMode) {
+								lDefault = (lDefault == "") ? defaultInterval : lDefault;
+							} else {
+								lDefault = (defaultInterval == "") ? lDefault : defaultInterval;
+							}
+						}
+						lDefault = lDefault.replace(']', '');
+						lDefault = lDefault.replace('[', '');
+						lDefault = lDefault.split(',');
+						var lDefault1=''; lDefault2 ='';
+						if (lDefault.length > 1) {
+							lDefault1 = lDefault[0];
+							lDefault2 = lDefault[1];
+						} else {
+							lDefault1 = lDefault[0];
+						}
+						
+						html += "<input type='text' autocomplete='off' name='" + property + "_d1' class='datepicker var_" + property + "' data-name='" + property + "' value='" + lDefault1 + "'>";
+						html += "<input type='text' autocomplete='off' name='" + property + "_d2' class='datepicker var_" + property + "' data-name='" + property + "' value='" + lDefault2 + "'>";
+					break;
+					default:
+						if (param[property]['valueSet'] !== null) {
+							html += "<select name='" + property + "' class='var_" + property + "'>";
+							html += (param[property]['defaultValue'] == null) ? "<option value='default' selected='selected'>Select </option>" : "";
+							$.each(param[property]['valueSet'], function (index, value) {
+								html += "<option value='" + value + "'" + (lDefault === value ? " selected='selected'" : "") + ">" + value + "</option>";
+							});
+						} else {
+							var type = (inputType.hasOwnProperty(paramType)) ? ((inputType[paramType].hasOwnProperty("type"))? inputType[paramType]['type'] : "text") : "text";
+							var min  = (inputType.hasOwnProperty(paramType)) ? ((inputType[paramType].hasOwnProperty("min")) ? "min='" + inputType[paramType]['min'] + "'" : "") : "";
+							
+							html +=  "<input type='" + type + "' name='" + property + "' value='" + lDefault + "' " + min + " class='var_" + property + "'>";
+						}
+					break;
+				}
+				
+				html +="</td>"+
+				"</tr>";
+			}
+		});
+		$('table#tbDatasourceParams tbody').remove();
+		$('table#tbDatasourceParams ').append('<tbody>'+html+'</tbody>');
+		
+		//remove old datepickers
+		$("#" + $.datepicker.dpDiv.attr("id")).remove();
+		
+		//initialize the new datepickers
+		$.each($("input[name*='_d1']"), function () {
+			var name = $(this).attr('data-name');
+			$(this).datepicker({
+				changeYear : true,
+				changeMonth: true,
+				dateFormat : 'yy-mm-dd',
+				onSelect   : function (selected,evnt) {
+					var newDate = new Date(selected);
+					if (newDate) { // Not null
+						newDate.setDate(newDate.getDate() + 1);
+					}
+					$("input[name='" + name + "_d2']").datepicker("option", "minDate", newDate);
+				}
+			});
+		});
+		
+		$.each($("input[name*='_d2']"), function () {
+			var name = $(this).attr('data-name');
+			$(this).datepicker({
+				changeYear : true,
+				changeMonth: true,
+				dateFormat : 'yy-mm-dd',
+				onSelect   : function (selected,evnt) {
+					var newDate = new Date(selected);
+					if (newDate) { // Not null
+						newDate.setDate(newDate.getDate() - 1);
+					}
+					$("input[name='" + name + "_d1']").datepicker("option", "maxDate", newDate);
+				}
+			});
+		});
+		
+		resizePanels();
     }
-
-    var datasourcesList = [];
-    var listOfProducts = [];
-    var myQuery = {};
-    var modeEdit = false;
-	var currentQuery = '';
-
-    function getDatasourcesList(){
-    	var url = 'query/';
-    	if(userOpStack[0] && userOpStack[0].action ==="edit"){
-        	$(".modal-title").html("Edit query");
-    	}
-    	
-        $.ajax({
-            cache: false,
-            type: "get",
-            url: baseRestApiURL + url,
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
-            },
-            error : function (jqXHR, textStatus, errorThrown) {
-                chkXHR(jqXHR.status);
-            },
-            success: function(r,textStatus, jqXHR) {
-                var response = chkTSRF(r);
-                if(jqXHR.status === 204){
-                    showMsg("No query found.", "SUCCESS");
-                    response = [];
-                }
-                datasourcesList = response;
-
-                if(modeEdit){ 	
-					queryParamsNotFound = [];
-                	currentQuery = _.findWhere(datasourcesList, {sensor:_mLIST.dataOpQueue[0].dna.sensor, dataSourceName:_mLIST.dataOpQueue[0].dna.dataSource});
-                	currentQuery.id = _mLIST.dataOpQueue[0].dna.id;
-	                if(currentQuery != undefined){
-		                var param = currentQuery.parameters;
-		                $.each(_mLIST.dataOpQueue[0].dna.values, function(k, v){
-		                	if(param.hasOwnProperty(k)){
-		                	param[k]['defaultValue'] = v;
-		                	}else{
-		                		queryParamsNotFound.push(k);
-		                	}
-		                	
-	                	});
-		                showDatasourceParams(param);
-		                
-		                $("#queryLabel").val(_mLIST.dataOpQueue[0].dna.label);
-		                $("#listDatasources").css({"display":"none"});;
-		                $("#selectedDatasource").attr("type","text").attr('disabled','disabled').val(_mLIST.dataOpQueue[0].dna.sensor+' '+_mLIST.dataOpQueue[0].dna.dataSource);
-		                $("#limit").val(_mLIST.dataOpQueue[0].dna.limit);
-		                $("#pageNumber").val(_mLIST.dataOpQueue[0].dna.pageNumber);
-		                $("#pageSize").val(_mLIST.dataOpQueue[0].dna.pageSize);
-		                $("#user_name").val(_mLIST.dataOpQueue[0].dna.user);
-		                $("#user_pass").val(_mLIST.dataOpQueue[0].dna.password);		                
-		                $("#addQuery").text("Save Query");			               
-		                if(queryParamsNotFound.length > 0){
-		                	$('<br><p>Parameters not found: ' + queryParamsNotFound.join() + '.</p>' ).appendTo(".modal-note p");
-		                	$(".modal-note").css('display','');
-		                }
-	                }
-                }else{
-        			$.each(response,function(k, v ){    				
-        				$( "#listDatasources" ).append($('<option>', {
-        			        value: 'd_'+k,
-        			        text: v.sensor+" "+v.dataSourceName
-        			    }));
-        			});
-                }    			
-    			//set the source option with the list of datasources retrieved
-    			routeLoading('hide');
-                showMsg("Datasources list successfully retrieved.", "SUCCESS");
-
-            }
-        });
-    }
-     
-    function showDatasourceParams(param){
-    	$("#parameterList").css('display','');
-    	$('input[name=product]').prop('checked',false);
-    	$("#datasourceProducts").css('display','none');
-    	//var param = datasourcesList[el].parameters;
-    	
-    	var sortedParam = Object.keys(param).sort(function(a, b) {
-    		var textA = a.toUpperCase();
-    		var textB = b.toUpperCase();
-    		return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-    	});
-    	
-    	var html ='';
-    	$.each(sortedParam, function(index, property){
-
-            if (param.hasOwnProperty(property)) {
-            	var lType = param[property]['type'].split(".");
-            	
-                var lDefault = '';
-                if(param[property]['defaultValue']!== null){   
-                    lDefault = param[property]['defaultValue'];
-                }
-                
-                html += " <tr>\n" +
-                "          <th scope=\"row\" >"+(param[property]['required']?"*":"")+"</th>\n" +
-    	                "	<td class=\"col-sm-4 col-md-4\">"+param[property]['name']+"</td>\n"+
-    	                "	<td class=\"col-sm-2 col-md-2\">"+lType[lType.length-1]+"</td>\n"+
-    	            	"	<td class=\"col-sm-6 col-md-6\">";
-    			var paramType = lType[lType.length-1];
-    			paramType = $.trim(paramType.replace(/;/g,''));
-    		
-                switch (paramType){
-                	case "DataFormat":
-    					html +=  '		<input type="text" name="' + property + '" value=""  class="var_' + property + '">';
-    					break;
-                	case "Polygon2D":
-    					html +=  '		<input type="text" name="' + property + '" value=""  class="var_' + property + '"><i class="fa fa-fw fa-globe ol" style="font-size:1.8em;vertical-align:bottom;color:#2677a7;cursor:pointer"></i>';
-    					
-    					break;
-    				case "SensorType":
-                		
-                		var enums = taoEnums.getEntity(param[property]['type']);
-    				
-     					html +=  "		<select name=\""+property+"\" class=\"var_"+property+"\">\n";
-    					if(param[property]['defaultValue'] == null){
-    						html += "   	<option value=\"default\" selected=\"selected\">Select </option>\n";
-    					}
-    					
-    					$.each(enums, function(index, values){
-    					 if(lDefault === values.key){
-    						 html += "		<option value=\""+values.key+"\" selected=\"selected\">"+values.value+"</option>\n";
-    					 }else{
-    						 html += "		<option value=\""+values.key+"\" >"+values.value+"</option>\n";
-    					 }
-                
-    					});
-    					break;
-    					
-                	case "Date":
-                		 lDefault = lDefault.replace(']','');
-                		 lDefault = lDefault.replace('[','');
-                		 lDefault = lDefault.split(',');
-                		 var lDefault1=''; lDefault2 ='';
-                		 if(lDefault.length >1 ) {
-                			 lDefault1 = lDefault[0];
-                			 lDefault2 = lDefault[1];
-                		 }else{
-                			 lDefault1 = lDefault[0];
-                		 }
-                		 html +=  "		<input type=\"text\" name=\""+property+"_d1\" class=\"datepicker var_"+property+"\" data-name=\""+property+"\" value=\""+lDefault1+"\">\n";
-                		 html +=  "		<input type=\"text\" name=\""+property+"_d2\" class=\"datepicker var_"+property+"\" data-name=\""+property+"\" value=\""+lDefault2+"\">\n";
-                		 break;
-                	
-                	default:
-                		if(param[property]['valueSet']!== null){
-                			html +=  "		<select name=\""+property+"\" class=\"var_"+property+"\">\n";
-                			if(param[property]['defaultValue'] == null){
-    							html += "   	<option value=\"default\" selected=\"selected\">Select </option>\n";
-    						}
-                			$.each(param[property]['valueSet'], function(index, value){
-       						 if(lDefault === value){
-       							 html += "		<option value=\""+value+"\" selected=\"selected\">"+value+"</option>\n";
-       						 }else{
-       							 html += "		<option value=\""+value+"\" >"+value+"</option>\n";
-       						 }
-                	
-       						});
-                }else{
-                			var type = (inputType.hasOwnProperty(paramType))? ((inputType[paramType].hasOwnProperty("type"))? inputType[paramType]['type']:"text"):"text";
-                			var min = (inputType.hasOwnProperty(paramType))? ((inputType[paramType].hasOwnProperty("min"))? "min=\""+inputType[paramType]['min']+"\"":""):"";
-
-                			html +=  "		<input type=\""+type+"\" name=\""+property+"\" value=\""+lDefault+"\" "+min+" class=\"var_"+property+"\">\n";
-              
-                }
-
-                }
-                
-                html +="	</td>\n"+
-                	   "</tr>\n";
-    		}
-    	});
-    	$('table#datasourceParams tbody').remove();
-    	$('table#datasourceParams ').append('<tbody>'+html+'</tbody>');
-    		
-    	//remove old datepickers
-    	$("#" + $.datepicker.dpDiv.attr("id")).remove();
-    	
-    	//initialize the new datepickers
-    	$.each($("input[name*='_d1']"), function(){
-    		var name = $(this).attr('data-name');
-    		$(this).datepicker({
-    			changeYear: true,
-    			changeMonth: true,
-    			dateFormat: 'yy-mm-dd',
-    			onSelect:function(selected,evnt){
-    				var newDate = new Date(selected);
-    				if (newDate) { // Not null
-    					newDate.setDate(newDate.getDate() + 1);
-    				}
-    				$("input[name='"+name+"_d2']").datepicker("option", "minDate", newDate);
-    			}
-    		});
-    	});
-    	
-    	$.each($("input[name*='_d2']"), function(){
-    		var name = $(this).attr('data-name');
-    		$(this).datepicker({
-    			changeYear: true,
-    			changeMonth: true,
-    			dateFormat: 'yy-mm-dd',
-    			onSelect:function(selected,evnt){
-    				var newDate = new Date(selected);
-    				if (newDate) { // Not null
-    					newDate.setDate(newDate.getDate() - 1);
-
-    				}
-    				$("input[name='"+name+"_d1']").datepicker("option", "maxDate", newDate);
-    			}
-    		});
-    	});
-    }
-
-    function showProductsTable(products,pagesize, pagenumber){
-    	$("#parameterList").css('display','none');
-    	$("#datasourceProducts").css('display','');
-
-    	var html = '';
-		$.each(products, function(index,value){
-			//var date = new Date(value.acquisitionDate).toLocaleString();
-			var previewUrl = value.quicklookLocation == undefined ? "" : encodeURIComponent(value.quicklookLocation).replace(/'/g, "%27").replace(/"/g, "%22");
-			html +=	"<tr" + (value.quicklookLocation == undefined ? "" : " data-preview='" + previewUrl + "'") + ">" +
-    				"	<th scope=\"row\" class=\"col-sm-1 col-md-1\">\n"+
-    				"		<div class=\"checkbox\">\n"+
-    				"			<label><input type=\"checkbox\" name=\"product\" value=\""+value.id+"\" style=\"margin:auto\"></label>\n"+
-    				"		</div>\n"+
-    				"	</th>\n"+
-    				"	<td class=\"col-sm-5 col-md-5\">"+value.name+"</td>\n"+
-					"	<td class=\"col-sm-1 col-md-1\"><img width='64px' src='./media/images/preview-not-available.png' /></td>\n"+
-    				"	<td class=\"col-sm-3 col-md-3\">"+value.acquisitionDate.replace(".000+0000", "").replace("T", " ")+"</td>\n"+
-    				"	<td class=\"col-sm-2 col-md-2\">"+value.productType+"</td>\n"+
-    				"</tr>\n";
-    	});
-		$('table#tbdatasourceProducts tbody').remove();
-    	$('table#tbdatasourceProducts ').append('<tbody>'+html+'</tbody>');
-
-		$.each($('table#tbdatasourceProducts tbody tr'), function () {
+	
+	function resizeBase64Img(base64, width, height) {
+		var canvas = document.createElement("canvas");
+		canvas.width = width;
+		canvas.height = height;
+		var context = canvas.getContext("2d");
+		var deferred = $.Deferred();
+		$("<img/>").attr("src", "data:image/jpeg;base64," + base64).load(function() {
+			context.scale(width/this.width, height/this.height);
+			context.drawImage(this, 0, 0);
+			deferred.resolve($("<img/>").attr("src", canvas.toDataURL()));
+		});
+		return deferred.promise();
+	}
+	
+    function showProductsTable() {
+    	showPanel("query execution results");
+		
+		$('table#tbDatasourceProducts tbody').remove();
+		$('table#tbDatasourceProducts').append('<tbody></tbody>');
+		$.each(listOfProducts, function (index, value) {
+			var str = value.name;
+			var platform = str.substring(0, str.indexOf("_"));
+			str = str.substring(str.indexOf("_") + 1);
+			var instrument = str.substring(0, str.indexOf("_"));
+			var size = Math.floor(value.approximateSize*100/1024/1024)/100 + " MB";
+			
+			var existing = _.findWhere(selectedProducts, { id: value.id });
+			var $tr = $("<tr" + (existing ? " class='selected'" : "") + "></tr>");
+			$tr.data("name", value.name);
+			$tr.data("id", value.name);
+			if (value.geometry) { $tr.data("geometry", value.geometry); }
+			if (value.quicklookLocation) { $tr.data("preview", encodeURIComponent(value.quicklookLocation).replace(/'/g, "%27").replace(/"/g, "%22")); }
+			$tr.html(
+					"	<td>" +
+					"		<span class='info top'>" +
+					"			<span class='highlight'>" + platform + "</span><span class='highlight'>" + instrument + "</span><span class='name'>" + value.name + "</span>" +
+					"		</span>" +
+					"		<img width='48px' src='./media/images/preview-not-available.png' />" +
+					"		<span class='info'>" +
+					"			<span>Download URL: <i>" + value.location + "</i></span>" +
+					"			<p>Mission: <i>" + value.productType + "</i> Instrument: <i>" + instrument + "</i> Sensing Date: <i>" + value.acquisitionDate.replace(".000+0000", "").replace("T", " ") + "</i> Size: <i>" + size + "</i></p>" +
+					"		</span>" +
+					"		<div class='checkbox'><label><input type='checkbox' name='product' value='" + value.id + "'" + (existing ? " checked='checked'" : "") + " /></label></div>" +
+					"	</td>"
+			);
+			$('table#tbDatasourceProducts tbody').append($tr);
+		});
+		
+		$.each($('table#tbDatasourceProducts tbody tr'), function () {
 			var previewUrl = $(this).data("preview");
 			var $img = $(this).find("td img");
-			if (previewUrl != undefined) {
+			if (previewUrl) {
 				$.ajax({
 					url: baseRestApiURL + "utilities/tunnel/get",
 					type: "GET",
@@ -619,7 +1072,10 @@
 					beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
 					success: function(response) {
 						if (response != "") {
-							$img.attr("src", "data:image/jpeg;base64, " + response);
+							//$img.attr("src", "data:image/jpeg;base64," + response);
+							resizeBase64Img(response, 48, 48).then(function (newImg) {
+								$img.attr("src", $(newImg).attr("src"));
+							});
 						}
 					}
 				});
@@ -627,404 +1083,760 @@
 		});
 		
     	$('.pagination-container').remove();
-    	$('table#tbdatasourceProducts tbody').paginathing({
-    		firstLast:false,
-    	    perPage: 10,
-    	    pageNumbers:'number',
-    	    insertAfter: 'table#tbdatasourceProducts',
+    	$('table#tbDatasourceProducts tbody').paginathing({
+    		firstLast: false,
+    	    perPage: parseInt($("#pageSize", "#queryExtent").val()) || 10,
+    	    pageNumbers: 'number',
+    	    insertAfter: $("#tbDatasourceProducts").parent(),
 		});
-    }
-
-    function ajaxCallFnc(url, data, type){
-    	return $.ajax({
-             cache: false,
-             url: baseRestApiURL + url,
-             type: type,
-             data: data,
-             headers: {
-                 "Accept": "application/json",
-                 "Content-Type": "application/json",
-                 "X-Auth-Token": window.tokenKey
-             },
-             error : function (jqXHR, textStatus, errorThrown) {
-                 if(jqXHR.status === 500){
-                     showMsg("Please check your data and try again.", "ERROR");
-                     return;
-                 }
-                 if(jqXHR.status === 406){
-                     showMsg("Please check your data, one or more values for the attributes was not in the acceptable range.", "ERROR");
-                     //handle error messages
-                     var objResponse = JSON.parse(jqXHR.responseText);
-                     if(objResponse[0] !== "Entity has validation errors"){
-                         return;
-                     }
-                     for(i=0;i<objResponse.length;i++) {
-                         var matches = objResponse[i].match(/\[(.*?)\]/);
-                         if (matches) {
-                             $(".error-"+matches[1],".modal-error").css('display', 'inline-block');
-                         }
-                     }
-                     $(".modal-error ").fadeIn("slow");
-                    
-                     return;
-                 }
-                 showMsg("Unknown error. Please try again.", "ERROR");
-             },
-             success: function(data, textStatus, jqXHR) {
-            	 console.log(textStatus); console.log(jqXHR);
-                 console.log(data);
-             }
-         });
-    }
-
-    function downloadProducts(formData){
-    	var data = {
-    			"query": myQuery,
-    			"products": formData,
-    			"mode": "1"//RESUME
-    	};
-    	
-    	$.when( ajaxCallFnc("query/fetch", JSON.stringify(data),"POST") ).done( function(data){
-    		 console.log(data);
-    		 routeLoading('hide');
-             if($.type(data) === 'object' && data.status === "SUCCEEDED" ){
-            	 showMsg("The selected products were successfully downloaded.", "SUCCESS");
-            	 
-             }else if($.type(data) === 'object' && data.status === "FAILED"){
-            	 showMsg(data.message, "FAILED");
-             }else{
-            	 showMsg("The selected products were not downloaded.", "SUCCESS");
-             }
-    	});
-    		
-    }
-
-
-    function checkProducts(listOfProducts){
-    	 var productsName = [];
-    	 $.each(listOfProducts, function(index, value){
-    		 productsName.push(value.name);
-    	 });
-    	 console.log(productsName);	 
-    	 $.when( ajaxCallFnc("product/check", {names:JSON.stringify(productsName)}, "GET") ).done( function(data){
-    		 console.log("product/check =>"+productsName);	 
-    		    if($.type(data) === 'object' && data.status === "SUCCEEDED" ){
-    		    	routeLoading('hide');
-                	if(data.data.length > 0 && data.data.length === productsName.length ){
-                		showMsg("The list of products returned already exists.", "SUCCESS");
-                	}else if(data.length > 0){
-                		var productsToDownload = [];
-                		$.each(listOfProducts, function(index, product){
-                			if($.inArray(product.name, data.data) > 0){
-                				productsToDownload.push(product);
-                			}
-                		});
-                		//products to show for downloading
-                		showProductsTable(productsToDownload);
-                	}else{
-                		//show all
-                		showProductsTable(listOfProducts);
-                	}
-                }else if($.type(data) === 'object' && data.status === "FAILED"){
-            		routeLoading('hide');
-               	 showMsg(data.message, "FAILED");
-                }
-    	});
-    	
-    }
-    
-    $(document).ready( function(){
-    	// Load map poly
-    	$("#map-panel-topo-wrapper").on("click", ".ol", function (e) {
-    		var mapContainer = $("#map-panel-topo-wrapper").closest(".content-wrapper");
-    		var polygonField = $(this).parent().find("input");
-    		openPolygonMap(mapContainer, polygonField);
-    	});
-    	
-    	if(userOpStack[0] && userOpStack[0].action ==="edit"){ 	
-	 		modeEdit = true;
-	 	}
-    	
-        //remove error for some input elements
-        $("input, textarea","form#frmQueryEdit")
-            .on("keypress change", function(){
-                if($(this).data("errorspan")) {
-                    $(".error-" + $(this).data("errorspan"), ".modal-error").css('display', 'none');
-                    if($(".modal-error").find("span:visible").length == 0) {
-                        $(".modal-error").hide();
-                        $("#saveQuery").removeAttr('disabled');
-                    }
-                }
-            });
-    	
-    	
-    	$('input[name="user_pass"] + .glyphicon ').css({'cursor':'pointer', 'pointer-events': 'all'});
-    	$('input[name="user_pass"] + .glyphicon ').on('click',function() {
-    			 if( $(this).hasClass('glyphicon-eye-open') ){
-    				 $("#"+this.previousElementSibling.id ).attr('type','text');
-    				 $(this).removeClass('glyphicon-eye-open');
-    				 $(this).addClass('glyphicon-eye-close');
-    				 $(this).attr('title','hide password');
-    			 }else{
-    				 $("#"+this.previousElementSibling.id ).attr('type','password');
-    				 $(this).removeClass('glyphicon-eye-close');
-    				 $(this).addClass('glyphicon-eye-open');
-    				 $(this).attr('title','show password');
-    				 }
-    	});
-    	
-    	$("#parameterList, #datasourceProducts").css('display','none');
-    	getDatasourcesList();
-    	
-    	if(userOpStack[0] && userOpStack[0].action ==="add"){ 	
-	    	initComboboxAutocomplete();
-	    	$( "#listDatasources" ).combobox();
-	
-	    	$(".ui-autocomplete-input").addClass("form-control");
-	    	$(".ui-widget.ui-widget-content").css({'background-color':'#ffffff'})
-	    	$(".ui-autocomplete").css({ "max-height": "400px", "overflow-y": "scroll", "overflow-x": "hidden", "z-index":"1100"});
-	    	$('.custom-combobox').css({'position': 'relative', 'display': 'block'});
-	    	$('a.custom-combobox-toggle').css({'position': 'absolute',
-	    	    'top': '0px','bottom': '0px','right':'-3px'});
-    	}
-    	//add pagination
-    	$('table#tbdatasourceProducts tbody').paginathing({firstLast:false});
-    	
-    	$('input[name=allproducts]').click( function(){
-    			if( $(this).is(':checked') ){
-    				$('input[name=product]').prop('checked',true);
-    			}else{
-    				$('input[name=product]').prop('checked',false);
-    			}
-    	});
+		countSelectedProducts("tbDatasourceProducts");
 		
-    });
-    
-    $("#saveParams").on("click",function(e){
-		e.preventDefault();
-		routeLoading('show');
-		myQuery = {};
-		myQuery = { 
-				   "userId": taoUserProfile.userRole,
-				   "user" : $('#user_name').val(),
-	               "password" : $('#user_pass').val(),
-	               "limit":  $('#limit').val(),
-	               "pageNumber":  $('#pageNumber').val(),
-	               "pageSize":  $('#pageSize').val()
-				}
-		
-		if(modeEdit){
-			var param = currentQuery.parameters;
-			myQuery.sensor = currentQuery.sensor;
-			myQuery.dataSource = currentQuery.dataSourceName;		              
-		}else{
-			var param = datasourcesList[$("#selectedDatasource").val().replace('d_','')].parameters;
-			var selectedDatasource = $("#selectedDatasource").val().replace('d_','');
-			myQuery.sensor =  datasourcesList[selectedDatasource]['sensor'];
-			myQuery.dataSource = datasourcesList[selectedDatasource]['dataSourceName'];		       
-		}
+		resizePanels();
+		previewProducts("tbDatasourceProducts");
+    }
 	
-		var values = {};
-		var msg = "";
-		//get all elements that have a class starting with 'var_' and which are not necessarily the first class
-		$("[class^='var_'],[class*=' var_']").each(function () {
-			if($(this).val()!=='default' && $.trim($(this).val())!==""){
-				if($(this).hasClass("datepicker") ){
-					var paramName = $(this).attr("data-name");
-							
-					if($.inArray(paramName, values) < 0){
-						var name = $(this).attr("name");
-						if(name === paramName+"_d1"){
-							date1 = $(this).val();
-							date2 = $("input[name='"+paramName+"_d2']").val();
-						}else if(name === paramName+"_d2"){
-							date2 = $(this).val();
-							date1 = $("input[name='"+paramName+"_d1']").val();
-						}
-						
-						if(date1 !== "" && date2 !== ""){
-							values[paramName] = "["+date1+","+date2+"]";
-						}else if(date1 !== ""){
-							values[paramName] = date1;
-						}else if(date2 !== ""){
-							values[paramName] = date2;
-						}
-							
+	function registerQueryInCollection(query) {
+		// Update default values for footprint and time interval
+		defaultFootprint = (typeof query.values !== "undefined" && typeof query.values.footprint !== "undefined") ? query.values.footprint : defaultFootprint;
+		defaultInterval  = (typeof query.values !== "undefined" && typeof query.values.startDate !== "undefined") ? query.values.startDate : "";
+		// Update or save query in collection
+		if (query._dsId >= 0) {
+			qryIndex = _.findIndex(queryCollection, { "_dsId": query._dsId, "_dsLabelDefault": query._dsLabelDefault });
+			if (qryIndex >= 0) {
+				// Complete query with original data before updating it (id, componentId, ...)
+				$.each(Object.keys(queryCollection[qryIndex]), function (index, key) {
+					if (!query.hasOwnProperty(key)) {
+						query[key] = queryCollection[qryIndex][key];
 					}
-					
-				}else{
-					values[$(this).attr('name')] = $(this).val();
-				}
+				});
+				queryCollection[qryIndex] = query;
+			} else {
+				queryCollection.push(query);
 			}
-		});		
-		myQuery.values = values;
-	 	console.log(myQuery);
-
-		$.when( ajaxCallFnc("query/exec", JSON.stringify(myQuery), "POST") ).done( function(data){
-	             if($.type(data) === 'object' && data.status === "SUCCEEDED" && data.data.length>0){
-	            	 listOfProducts = data.data;
-					 //check if the list of products returned already exists
-			       	 checkProducts(listOfProducts);
-				}else if($.type(data) === 'object' && data.status === "FAILED"){
-					routeLoading('hide');
-					showMsg(data.message, "FAIL");
-				}else{
-					routeLoading('hide');
-					showMsg("No products were found for selected datasource.", "SUCCESS");
+		}
+	}
+	
+	function updateSelectedProductsTable() {
+		showPanel("selected products");
+		$('table#tbSelectedProducts tbody').remove();
+		
+		// Parse and render table headers for each datasource
+		$.each(queryCollection, function(index, query) {
+			var $crtDatasetHeader =	$(	"<tbody><tr class='datasource' data-index='" + index + "'><td>" +
+										"	<span class='qry-ac-group top-group'>" +
+										"		<span class='pull-right'>" +
+										(modeEdit && !isCollection ? "" :
+										"			<button class='btn-action op-discard' data-action='op-discard' title='Remove query from collection'><i class='fa fa-trash'></i></button>") +
+										"			<button class='btn-action op-edit' data-action='op-edit' title='Edit query'><i class='fa fa-pencil'></i></button>" +
+										"		</span>" +
+										"	</span>" +
+										"	<span class='qry-ac-group bottom-group'>" +
+										"		<span class='pull-right'>" +
+										"			<button class='btn-action op-toggle' data-action='op-toggle'><i class='fa fa-angle-double-left'></i></button>" +
+										"		</span>" +
+										"	</span>" +
+										"	<span class='title'>" + query._dsName + " / " + (query.label == "" ? query._dsLabelDefault : query.label) + "</span>" +
+										"	<span class='info'><p></p></span>" +
+										"</td></tr></tbody>");
+			$crtDatasetHeader.find("tr.datasource").data("dsName", query._dsName);
+			$crtDatasetHeader.find("tr.datasource").data("dsLabelDefault", query._dsLabelDefault);
+			var $pf = $crtDatasetHeader.find("tr.datasource p");
+			$.each(query.values, function (key, value) {
+				if (key == "footprint") {
+					if (value != defaultFootprint) {
+						$crtDatasetHeader.find(".datasource").addClass("deprecated");
+						$pf.before("<label class='deprecated' for=''>The footprint on the map has changed:" +
+									"	<ul class='qry-ac-group'>" +
+									"		<li><button class='btn-action btn-ul-action op-edit deprecated' data-action='op-edit'>Re-interrogate the datasource</button>, then refresh your product selection</li>" +
+									"		<li><button class='btn-action btn-ul-action op-footprint deprecated' data-action='op-footprint'>Restore the footprint</button> from the previous interrogation.</li>" +
+									"	</ul>" +
+									"</label>");
+						$pf.append(key + ": <i style='color:red;overflow-y:auto'>" + value + "</i>");
+					} else {
+						$pf.append(key + ": <i style='overflow-y:auto'>" + value + "</i>");
+					}
+				} else {
+					$pf.append(key + ": <i>" + value + "</i>");
 				}
 			});
-
-	});//end submit form editQueryParams
-	
-	
-	//$("form#formDownloadProducts").submit(function(e){
-	$("#downloadProducts").on("click",function(e){
-		e.preventDefault();
-		routeLoading('show');
-		
-		var label = $("#queryLabel").val();
-        if(label === ""){
-        	routeLoading('hide');
-            showMsg("You must specify a label for your query in order to proceed.", "WARNING");
-            return;
-        }
-        var formData = {
-    		    "label": label,
-                "products":[]
-        	};
-        if(modeEdit){
-        	formData.productType = currentQuery.sensor;
-        }else{
-        	var selectedDatasource = $("#selectedDatasource").val().replace('d_','');
-        	formData.productType = datasourcesList[selectedDatasource]['sensor'];
-        }
-    	
-		if($('input[name=allproducts]').is('checked')){
-			formData.products = listOfProducts;
-		}else{
-			checkedProducts = $('input[name=product]:checked');
-			$.each(checkedProducts,function(index){
-				prodFound = _.findWhere(listOfProducts, {id:$(this).attr('value')});
-				if(prodFound != undefined){
-                    formData.products.push(prodFound);
-		        }
-			});
-		}
-
-		if(Object.keys(formData.products).length > 0 ){
-		$.when( ajaxCallFnc("datasource/create", JSON.stringify(formData), "POST") ).done( function(data){
-				if($.type(data) === 'object' && data.status === "SUCCEEDED" ){
-					showMsg("Datasource component was successfully created.", "SUCCESS");
-					downloadProducts(formData.products);
-	             }else if($.type(data) === 'object' && data.status === "FAILED"){
-	            	 routeLoading('hide');
-	            	 showMsg(data.message, "FAILED");
-	             }else{
-	            	 routeLoading('hide');
-	            	 showMsg("Datasource componet was not created.", "SUCCESS");
-	             }
+			$('table#tbSelectedProducts').append($crtDatasetHeader);
 		});
-		} else{
-			routeLoading('hide');
-			 showMsg("No products selected for download", "WARNING");
-		}
-	});//end submit form formDownloadProducts
-	
-	
-	$("#addQuery, #saveQuery").on("click",function(e){
-		//create/edit  query
-		e.preventDefault();
-		routeLoading('show');
 		
-		myQuery = {};
-		myQuery = {
-				   "label":  $("#queryLabel").val(),		
-	               "user" : $('#user_name').val(),
-	               "password" : $('#user_pass').val(),
-	               "limit":  $('#limit').val(),
-	               "pageNumber":  $('#pageNumber').val(),
-	               "pageSize":  $('#pageSize').val()
-		               
-		           };
+		// Parse products
+		$.each(selectedProducts, function(index, value) {
+			// Find the datasource section where the product should be added
+			var $crtDatasetHeader = false;
+			$.each($('table#tbSelectedProducts tbody tr.datasource'), function () {
+				if ($(this).data("dsName") === value._dsName && $(this).data("dsLabelDefault") === value._dsLabelDefault) {
+					$crtDatasetHeader = $(this);
+					return false;
+				}
+			});
+			if ($crtDatasetHeader) {
+				var str = value.name;
+				var platform = str.substring(0, str.indexOf("_"));
+				str = str.substring(str.indexOf("_") + 1);
+				var instrument = str.substring(0, str.indexOf("_"));
+				var size = Math.floor(value.approximateSize*100/1024/1024)/100 + " MB";
 				
-		if(modeEdit){
-			var param = currentQuery.parameters;
-			myQuery.id = currentQuery.id;
-			myQuery.sensor = currentQuery.sensor;
-			myQuery.dataSource = currentQuery.dataSourceName;		              
-		}else{
-			var selectedDatasource = $("#selectedDatasource").val().replace('d_','');
-			var param = datasourcesList[selectedDatasource].parameters;		
-			myQuery.sensor =  datasourcesList[selectedDatasource]['sensor'];
-			myQuery.dataSource = datasourcesList[selectedDatasource]['dataSourceName'];		       
+				var $tr = $("<tr></tr>");
+				$tr.data("dsIndex", $crtDatasetHeader.data("index"));
+				$tr.data("id", $crtDatasetHeader.data("index") + "_" + value.name);
+				$tr.data("name", value.name);
+				if (value.geometry) { $tr.data("geometry", value.geometry); }
+				if (value.quicklookLocation) { $tr.data("preview", encodeURIComponent(value.quicklookLocation).replace(/'/g, "%27").replace(/"/g, "%22")); }
+				$tr.html(	"<td>" +
+							"	<span class='qry-ac-group bottom-group'>" +
+							"		<span class='pull-right'>" +
+							(!myPolygonMap.mapActive ? "" :
+							"			<button class='btn-action op-locate' data-action='op-locate' title='Locate product on map'><i class='glyphicon glyphicon-screenshot'></i></button>") +
+							"			<button class='btn-action op-details' data-action='op-details' title='View product details' disabled><i class='glyphicon glyphicon-eye-open'></i></button>" +
+							"			<button class='btn-action op-remove' data-action='op-remove' title='Remove product from collection'><i class='glyphicon glyphicon-remove'></i></button>" +
+							"		</span>" +
+							"	</span>" +
+							"	<span class='info top'>" +
+							"		<span class='highlight'>" + platform + "</span><span class='highlight'>" + instrument + "</span><span class='name'>" + value.name + "</span><br/>" +
+							"	</span>" +
+							"	<img width='48px' src='" + value._dsThumb + "' />" +
+							"	<span class='info'>" +
+							"		<span>Download URL: <i>" + value.location + "</i></span>" +
+							"		<p>Mission: <i>" + value.productType + "</i> Instrument: <i>" + instrument + "</i> Sensing Date: <i>" + value.acquisitionDate.replace(".000+0000", "").replace("T", " ") + "</i> Size: <i>" + size + "</i></p>" +
+							"	</span>" +
+							"	<div class='checkbox hidden'><label><input type='checkbox' name='product' value='" + value.id + "' /></label></div>" +
+							"</td>"
+				);
+				
+				$crtDatasetHeader.after($tr);
+			}
+    	});
+		if ($("#tbSelectedProducts tbody").length == 0) {
+			$("#tbSelectedProducts").append("<tbody><tr style='background-color:#fff4d6'><td>No queries added</td></tr></tbody>")
+		}
+		$.each($("#tbSelectedProducts tr.datasource"), function () {
+			if ($(this).find("+tr td>img").length == 0) {
+				$(this).after("<tr style='background-color:#fff4d6'><td>No selected products for this datasource component</td></tr>")
+			}
+		});
+		resetDatasourcesList();
+		
+		resizePanels();
+		// Show products on map
+		previewProducts("tbSelectedProducts");
+		
+		initControls();
+	}
+	
+	function countSelectedProducts(tableName) {
+		var count = $("#"+ tableName + " input[name='product']:checked").length;
+		if (tableName == "tbDatasourceProducts") {
+			$("#countSelected").html(count + " product" + (count == 1 ? "" : "s") + " selected");
+			
+			var visibleFirst = $("#"+ tableName + " tbody tr:visible").first().index() + 1;
+			var visibleLast  = $("#"+ tableName + " tbody tr:visible").last().index() + 1;
+			$("#countVisible").html("Display " + visibleFirst + " to " + visibleLast + " from " + $("#"+ tableName + " tbody tr").length);
+		} else if (tableName == "tbSelectedProducts") {
+			
+		}
+	}
+	
+	function clearHighlightedProducts() {
+		var highlighted = false;
+		$("table.ds-products tbody tr input[name=product]").prop("checked", false);
+		$("table.ds-products tbody tr").removeClass("selected");
+		setFeaturesDataByProperty({ "description": "preview" }, { "highlighted": false })
+		resetPreviewProductsStyle();
+	}
+	
+	function removeExtraDsInfo(object) {
+		$.each(Object.keys(object), function (index, key) {
+			if (key.indexOf("_ds") == 0) {
+				delete object[key];
+			}
+		});
+	}
+	
+	function getCurrentUserQuery() {
+		var dsId = $("#listDatasources").combobox("selectedIndex");
+		if (!datasourcesList[dsId]) {
+			return false;
 		}
 		
+		// Get all updated values for query parameters
 		var values = {};
-		var msg = "";
-		//get all elements that have a class starting with 'var_' and which are not necessarily the first class
-		$("[class^='var_'],[class*=' var_']").each(function () {
-			if($(this).val()!=='default' && $.trim($(this).val())!==""){
-				if($(this).hasClass("datepicker") ){
+		$("[class^='var_'],[class*=' var_']", "#queryExtent").each(function () {
+			if ($(this).val() !== 'default' && $.trim($(this).val()) !== "") {
+				if ($(this).hasClass("datepicker") ) {
 					var paramName = $(this).attr("data-name");
-							
-					if($.inArray(paramName, values) < 0){
+					if ($.inArray(paramName, values) < 0) {
 						var name = $(this).attr("name");
-						if(name === paramName+"_d1"){
+						if (name === paramName + "_d1") {
 							date1 = $(this).val();
-							date2 = $("input[name='"+paramName+"_d2']").val();
-						}else if(name === paramName+"_d2"){
+							date2 = $("input[name='" + paramName + "_d2']").val();
+						} else if (name === paramName + "_d2") {
 							date2 = $(this).val();
-							date1 = $("input[name='"+paramName+"_d1']").val();
+							date1 = $("input[name='" + paramName + "_d1']").val();
 						}
-						
-						if(date1 !== "" && date2 !== ""){
-							values[paramName] = "["+date1+","+date2+"]";
-						}else if(date1 !== ""){
+						if (date1 !== "" && date2 !== "") {
+							values[paramName] = "[" + date1 + "," + date2 + "]";
+						} else if (date1 !== "") {
 							values[paramName] = date1;
-						}else if(date2 !== ""){
+						} else if (date2 !== "") {
 							values[paramName] = date2;
 						}
-							
 					}
-					
-				}else{
+				} else {
 					values[$(this).attr('name')] = $(this).val();
 				}
 			}
 		});
-		
-		myQuery.values = values;
-	 	console.log(myQuery);	 	
+		var query = {
+			userId    : taoUserProfile.username,
+			label     : $("#queryLabel").val(),
+			sensor    : datasourcesList[dsId]['sensor'],
+			dataSource: datasourcesList[dsId]['dataSourceName'],
+			user      : $('#user_name').val(),
+			password  : $('#user_pass').val(),
+			limit     : parseInt($("#limit"     , "#queryExtent").val()) || 10,
+			pageNumber: parseInt($("#pageNumber", "#queryExtent").val()) || 1,
+			pageSize  : parseInt($("#pageSize"  , "#queryExtent").val()) || 10,
+			values    : values
+		}
+		return query;
+	}
 	
-	 	var method = "POST";
-	 	if(modeEdit){ 	
-	 		method = "PUT";
-	 	}
-		$.when( ajaxCallFnc("datasource/query/", JSON.stringify(myQuery), method) ).done( function(data){
-	             if($.type(data) === 'object' && data.status === "SUCCEEDED" && Object.keys(data.data).length>0){
-	            	 routeLoading('hide');	            	
-	            	 showMsg("Query succesufully saved", "SUCCESS");
-	            	 
-	            	 _mLIST.refresh();
-	            	
-	                if(!modeEdit){
-	                	modeEdit = true;
-	                	currentQuery = _.findWhere(datasourcesList, {sensor:data.data.sensor, dataSourceName: data.data.dataSource});
-		            	currentQuery.id = data.data.id;
-		                if(currentQuery != undefined){			               
-			                $.each(myQuery.values, function(k, v){
-			                	currentQuery.parameters[k]['defaultValue'] = v;
-		                	});
-		                }
-		                $("#addQuery").text("Save Query");		                
-	                }
-	            	
-
-				}else if($.type(data) === 'object' && data.status === "FAILED"){
-					routeLoading('hide');
-					showMsg(data.message, "FAIL");
+	$("#collectionExtent").on("click", ".modal-header .minimize", function (e) {
+		showPanel("selected products");
+		$(this).closest(".modal-content").addClass("minimized");
+		$(this).closest(".extent").addClass("minimized");
+		
+		autoPanMap();
+	});
+	
+	$("#collectionExtent").on("click", ".modal-content.minimized", function (e) {
+		$(this).removeClass("minimized");
+		$(this).closest(".extent").removeClass("minimized");
+		resizePanels();
+		
+		autoPanMap();
+	});
+	
+	$("#collectionExtent").on("click", ".btn-action", function (e) {
+		var goBack = true;
+		
+		var $tr = $(this).closest("tr");
+		if ($tr.length == 0) return;
+		if ($tr.hasClass("datasource")) {
+			localEditMode = false;
+			// query stuff
+			if (typeof $tr.data("index") !== "undefined") {
+				var crtQuery = $tr.hasClass("datasource") ? queryCollection[$tr.data("index")] : null;
+				switch ($(this).data("action")) {
+					case "op-toggle":
+						goBack = false;
+						if ($(this).find("i").hasClass("fa-angle-double-left")) {
+							$(this).find("i").removeClass("fa-angle-double-left").addClass("fa-angle-double-down");
+						} else {
+							$(this).find("i").addClass("fa-angle-double-left").removeClass("fa-angle-double-down");
+						}
+						$(this).closest("tr").siblings().toggleClass("hidden");
+					break;
+					case "op-addnew":
+						if ($("#queryExtent").hasClass("shifted") || $("#queryExtent").data("query")) {
+							goBack = false;
+							updateSelectedProductsTable();
+							resetDatasourcesList();
+							showPanel("query parameters");
+							
+							$("#queryExtent").removeData("query");
+						}
+					break;
+					case "op-edit":
+						if (crtQuery && ($("#queryExtent").hasClass("shifted") || crtQuery !== $("#queryExtent").data("query"))) {
+							goBack = false;
+							localEditMode = true;
+							
+							// Open the parameters section and populate the form with query data for editing
+							updateSelectedProductsTable();
+							
+							// restore query label
+							$("#queryLabelDefault").val(crtQuery._dsLabelDefault);
+							$("#queryLabel").val(crtQuery.label);
+							$("#queryLabel").attr({ "placeholder": (crtQuery._dsLabelDefault == "" ? "name of your query" : crtQuery._dsLabelDefault) });
+							
+							// restore datasource default values for all parameters before restoring the query datasource
+							var defaults   = crtQuery.values;
+							var parameters = datasourcesList[crtQuery._dsId].parameters;
+							$.each(parameters, function (key, param) {
+								param['defaultValue'] = (defaults.hasOwnProperty(key) ? defaults[key] : null);
+							});
+							// Search for unknown parameters
+							var queryParamsNotFound = $.map(defaults, function (val, key) { return (parameters.hasOwnProperty(key) ? null : key); });
+							if (queryParamsNotFound.length > 0) {
+								$("#queryExtent .modal-note p.note+p").remove();
+								$("#queryExtent .modal-note p.note").after('<p>Parameters not found: <i>' + queryParamsNotFound.join().replace(",", ", ") + '</i></p>' );
+								$("#queryExtent .modal-note").removeClass("hidden");
+							} else {
+								$("#queryExtent .modal-note").addClass("hidden");
+							}
+							
+							// restore query datasource
+							$("#listDatasources").combobox("autocomplete", { name: crtQuery._dsName, id: crtQuery._dsId });
+							
+							// restore query general info
+							$("#user_name").val(crtQuery.user);
+							$("#user_pass").val(crtQuery.password);
+							$("#limit").val(crtQuery.limit);
+							$("#pageNumber").val(crtQuery.pageNumber);
+							$("#pageSize").val(crtQuery.pageSize);
+							
+							showPanel("query parameters");
+							
+							$("#queryExtent").data("query", crtQuery);
+						}
+					break;
+					case "op-footprint":
+						if (crtQuery && crtQuery.values.footprint) {
+							goBack = false;
+							$('#confirm-dialog').modal('confirm', {
+								msg: "Are you sure you want to restore the previous footprint?",
+								callbackConfirm: function () {
+									if (myPolygonMap.mapActive) {
+										if (myPolygonMap.createShapeFromGeometry(crtQuery.values.footprint, null, true)) {
+											// Prevent footprint match errors due to precision
+											crtQuery.values.footprint = myPolygonMap.getFootprint();
+										}
+									} else {
+										defaultFootprint = crtQuery.values.footprint;
+									}								
+									updateSelectedProductsTable();
+									$("#queryExtent").removeData("query");
+								},
+								callbackCancel: function () { }
+							});
+						}
+					break;
+					case "op-discard":
+						goBack = false;
+						$('#confirm-dialog').modal('confirm', {
+							msg: "Are you sure you want to remove the selected query with all its associated products?",
+							callbackConfirm: function () {
+								// Remove products for selected query
+								var trimSelectedProducts = $.map(selectedProducts, function (product, index) {
+									return (product._dsName == crtQuery._dsName && product._dsLabelDefault == crtQuery._dsLabelDefault ? null : product);
+								});
+								selectedProducts = trimSelectedProducts;
+								// Remove selected query from collection
+								queryCollection.splice($.inArray(crtQuery, queryCollection), 1);
+								
+								updateSelectedProductsTable();
+								$("#queryExtent").removeData("query");
+							},
+							callbackCancel: function () { }
+						});
+					break;
+				}
+			}
+		} else {
+			// product stuff
+			switch ($(this).data("action")) {
+				case "op-locate":
+					goBack = false;
+					if (myPolygonMap.mapActive && $tr.data("id")) {
+						myPolygonMap.fitFeatureById($tr.data("id"));
+						var $chk = $tr.find(".checkbox input[name='product']");
+						if ($chk.length > 0) { $chk.trigger("click"); }
+					}
+				break;
+				case "op-remove":
+					goBack = false;
+					$('#confirm-dialog').modal('confirm', {
+						msg: "Are you sure you want to remove this product from the list",
+						callbackConfirm: function () {
+							// Remove selected products
+							var prodName       = $tr.data("name");
+							var dsLabelDefault = queryCollection[$tr.data("dsIndex")]._dsLabelDefault;
+							selectedProducts.splice(_.findIndex(selectedProducts, { "name": prodName, "_dsLabelDefault": dsLabelDefault }), 1);
+							
+							updateSelectedProductsTable();
+							$("#queryExtent").removeData("query");
+						},
+						callbackCancel: function () { }
+					});
+				break;
+				case "op-details":
+					goBack = false;
+				break;
+			}
+		}
+		if (goBack) {
+			updateSelectedProductsTable();
+			$("#queryExtent").removeData("query");
+		}
+	});
+	
+	$("#queryExtent, #executionExtent").on("click", ".cancel", function (e) {
+		updateSelectedProductsTable();
+	});
+	
+	$("#datasourceProducts").on("mouseup", ".pagination li", function (e) {
+		if (e.button == 0) {
+			setTimeout(function () { countSelectedProducts("tbDatasourceProducts"); }, 50);
+		}
+	});
+	
+	$("#datasourceProducts").on("click", "input[name='allproducts']", function (e) {
+		var highlighted = false;
+		if ($(this).is(':checked')) {
+			$('#datasourceProducts input[name=product]').prop('checked', true);
+			highlighted = true;
+		} else {
+			$('#datasourceProducts input[name=product]').prop('checked', false);
+		}
+		$.each($("table#tbDatasourceProducts tbody tr"), function () {
+			var $tr = $(this);
+			if (highlighted) {
+				$tr.addClass("selected");
+			} else {
+				$tr.removeClass("selected");
+			}
+			if ($tr.data("id")) {
+				if (myPolygonMap.mapActive) {
+					var feature = myPolygonMap.getFeatureById($tr.data("id"));
+					if (feature) {
+						feature.setProperties({ "highlighted": (highlighted ? "true" : "false") });
+					}
+				}
+			}
+		});
+		resetPreviewProductsStyle();
+		countSelectedProducts("tbDatasourceProducts");
+	});
+	
+	$("#tbDatasourceProducts, #tbSelectedProducts").on("click", "input[name='product']", function (e) {
+		var $tr = $(this).closest("tr");
+		
+		// Reset highlight for all other products when in "Selected Products" table
+		if (typeof $tr.data("dsIndex") !== "undefined") {
+			$tr.closest("table").find("tr").removeClass("selected");
+			$tr.closest("table").find("tr .checkbox").addClass("hidden");
+			$tr.closest("tbody").siblings().find("input[name='product']").prop("checked", false);
+			$tr.siblings().find("input[name='product']").prop("checked", false);
+			if (myPolygonMap.mapActive) {
+				myPolygonMap.setFeaturesDataByProperty({ "description": "preview" }, { "highlighted": "false" });
+			}
+			if ($(this).is(':checked')) {
+				$(this).closest(".checkbox").removeClass("hidden");
+			}
+		}
+		
+		var highlighted = false;
+		if ($(this).is(':checked')) {
+			$tr.addClass("selected");
+			highlighted = true;
+		} else {
+			$tr.removeClass("selected");
+		}
+		if (myPolygonMap.mapActive) {
+			var feature = myPolygonMap.getFeatureById($tr.data("id"));
+			if (feature) {
+				feature.setProperties({ "highlighted": (highlighted ? "true" : "false") });
+			}
+		}
+		resetPreviewProductsStyle();
+		countSelectedProducts(e.delegateTarget.id);
+	});
+	
+	$("#tbDatasourceProducts, #tbSelectedProducts").on("mouseenter", "tbody tr", function (e) {
+		// restore style for all preview features
+		resetPreviewProductsStyle();
+		var $tr = $(this);
+		if ($tr.data("id")) {
+			// highlight hovered feature
+			if (myPolygonMap.mapActive) {
+				var hStroke = new ol.style.Stroke({ color: [255, 119, 0, 1], width: 4 });
+				var hFill   = new ol.style.Fill  ({ color: [255, 153, 0, 0.5] });
+				var hStyle  = new ol.style.Style ({ stroke: hStroke, fill: hFill });
+				myPolygonMap.setFeaturesStyleById($tr.data("id"), hStyle);
+			}
+		}
+	});
+	
+	$("#tbDatasourceProducts, #tbSelectedProducts").on("mouseleave", "tbody", function (e) {
+		resetPreviewProductsStyle();
+	});
+	
+    $("#startInterrogation").on("click", function (e) {
+		if (myPolygonMap.mapActive && myPolygonMap.getFootprint().length == 0) {
+			showMsg("Please select your area of interest on the map before continuing with your interrogation.", "WARNING");
+			return false;
+		}
+		var qry = getCurrentUserQuery();
+		if (!qry) {
+			showMsg("Please select a valid datasource.", "WARNING");
+			return;
+		}
+		var _self = $(this);
+		_self.prop("enabled", false);
+		$.when(ajaxCallFnc("query/exec", JSON.stringify(qry), "POST"))
+		.done(function (response) {
+			_self.prop("enabled", true);
+			if ($.type(response) === 'object' && response.status === "SUCCEEDED" && Object.keys(response.data).length > 0) {
+				listOfProducts = response.data;
+				showProductsTable();
+			} else if ($.type(response) === 'object' && response.status === "FAILED") {
+				showMsg(response.message, "FAIL");
+			} else {
+				showMsg("No products were found for selected datasource.", "INFO");
+			}
+		})
+		.fail(function (jqXHR, status, error) {
+			_self.prop("enabled", true);
+		});
+	});
+	
+	$("#collectProducts").on("click", function (e) {
+		var qry = getCurrentUserQuery();
+		if (!qry) {
+			showMsg("Please select a valid datasource.", "WARNING");
+			return;
+		}
+		// Append some extra info to current query for later use
+		qry._dsId           = $("#listDatasources").combobox("selectedIndex");
+		qry._dsName         = qry.sensor + " " + qry.dataSource;
+		qry._dsLabelDefault = $("#queryLabelDefault").val();
+		
+		// Clear from the final collection, all the products associated with the current datasource
+		var trimSelectedProducts = $.map(selectedProducts, function (item, index) {
+			return (item._dsName == qry._dsName && item._dsLabelDefault == qry._dsLabelDefault ? null : item);
+		});
+		selectedProducts = trimSelectedProducts;
+		$.each($('table#tbDatasourceProducts input[name=product]:checked'), function (index) {
+			// Add all selected products to the final collection results
+			var prodFound = _.findWhere(listOfProducts, { id: $(this).attr('value') });
+			if (prodFound){
+				prodFound._dsName         = qry._dsName;
+				prodFound._dsLabelDefault = qry._dsLabelDefault;
+				prodFound._dsThumb        = $(this).closest("tr").find("img").attr("src");
+				selectedProducts.push(prodFound);
+			}
+		});
+		
+		registerQueryInCollection(qry);
+		updateSelectedProductsTable();
+	});
+	
+	$("#cancelExecution").on("click", function (e) {
+		updateSelectedProductsTable();
+	});
+	
+	$("#saveComponent").on("click", function (e) {
+		$(this).prop("disabled", true);
+		if (!isCollection && queryCollection.length == 1) {
+			// Save user datasource component
+			var query = queryCollection[0];
+			var label = query.label == "" ? query._dsLabelDefault : query.label;
+			if (label == "") {
+				showMsg("You must specify a label for your query in order to proceed.", "WARNING");
+				return false;
+			}
+			
+			var formData = {
+				label      : label,
+				dataSource : query.dataSource,
+				productType: query.sensor,
+				products   : []
+			};
+			
+			$.each(selectedProducts, function (index, product) {
+				if (product._dsLabelDefault == query._dsLabelDefault) {
+					var prod = $.extend(true, {}, product);
+					// remove extra info
+					removeExtraDsInfo(prod);
+					formData.products.push(prod);
 				}
 			});
+			
+			if (formData.products.length > 0) {
+				$.when(ajaxCallFnc("datasource/create", JSON.stringify(formData), "POST"))
+				.done(function (data) {
+					if($.type(data) === 'object' && data.status === "SUCCEEDED") {
+						showMsg("Datasource component was successfully created.", "SUCCESS");
+						
+						// Start downloading selected products
+						showMsg("Start downloading selected products. Please wait!", "INFO");
+						var queryData = {
+							"query"   : $.extend(true, {}, query),
+							"products": formData.products,
+							"mode"    : "1"//RESUME
+						};
+						removeExtraDsInfo(queryData.query);
+						$.when(ajaxCallFnc("query/fetch", JSON.stringify(queryData), "POST"))
+						.done(function (data) {
+							if ($.type(data) === 'object' && data.status === "SUCCEEDED") {
+								showMsg("The selected products were successfully downloaded.", "SUCCESS");
+							} else if ($.type(data) === 'object' && data.status === "FAILED") {
+								showMsg(data.message, "FAILED");
+							} else {
+								showMsg("The selected products were not downloaded.", "INFO");
+							}
+						});
+					} else if ($.type(data) === 'object' && data.status === "FAILED") {
+						showMsg(data.message, "FAILED");
+					} else {
+						showMsg("Datasource component was not created.", "SUCCESS");
+					}
+					$("#myModalNodes").modal("hide");
+				});
+			} else {
+				showMsg("No products selected for download", "WARNING");
+			}
+		}
 	});
-    //# sourceURL=datasource-queries-plus.js
+	
+	$("#saveQuery").on("click", function (e) {
+		if (isCollection) {
+			// Create/Save existing query collection
+			if (queryCollection.length == 0) {
+				showMsg("You must define at least one query in order to proceed.", "FAILED");
+				return false;
+			}
+			
+			var label = $("#datasetLabel").val();
+			if (label == "") {
+				showMsg("You must specify a label for your collection in order to proceed.", "FAILED");
+				return false;
+			}
+			var myGroup = {
+				groupId   : $("#datasetLabel").data("groupId"),
+				groupLabel: label,
+				queries   : []
+			};
+			
+			if (!modeEdit) { delete myGroup["groupId"]; }
+			$.each(queryCollection, function (index, query) {
+				var queryData = {
+					query: $.extend(true, {}, query),
+					products: []
+				}
+				
+				// trim query from unnecessary data and make sure the label is not empty
+				queryData.query.label = (queryData.query.label === "") ? queryData.query['_dsLabelDefault'] : queryData.query.label;
+				removeExtraDsInfo(queryData.query);
+				// get query selected products
+				$.each(selectedProducts, function (idx, product) {
+					if (product._dsLabelDefault == query._dsLabelDefault) {
+						// Remove temporary information from product and save it in colection
+						var productData = $.extend(true, {}, product);
+						removeExtraDsInfo(productData);
+						queryData.products.push(productData);
+					}
+				});
+				myGroup.queries.push(queryData);
+			});
+			console.log(myGroup);
+			$.when(ajaxCallFnc("datasource/user/group/save", JSON.stringify(myGroup), "POST"))
+			.done(function (response) {
+				if ($.type(response) === 'object' && response.status === "SUCCEEDED" && Object.keys(response.data).length > 0) {
+					showMsg("Your query collection has been successfully " + (modeEdit ? "updated." : "saved."), "SUCCESS");
+					
+					modeEdit = true;
+					objDna = response.data;
+					console.log(objDna);
+					
+					// Initialize query functionality after map is loaded
+					initControls();
+					initDatasources();
+					initQuery();
+					
+				} else if ($.type(response) === 'object' && response.status === "FAILED") {
+					showMsg(response.message, "FAILED");
+				} else {
+					showMsg("Failed to save your query collection.", "FAILED");
+				}
+			});
+		} else {
+			// Create/Save existing query
+			if (queryCollection.length != 1) { return false; }
+			
+			var qry = $.extend(true, {}, queryCollection[0]);
+			qry.label = (qry.label == "") ? qry._dsLabelDefault : qry.label;
+			removeExtraDsInfo(qry);
+			console.log(qry);
+			var method = modeEdit ? "PUT" : "POST";
+			console.log(qry);
+			$.when(ajaxCallFnc("datasource/query/", JSON.stringify(qry), method))
+			.done(function (response) {
+				if ($.type(response) === 'object' && response.status === "SUCCEEDED" && Object.keys(response.data).length > 0) {
+					showMsg("Your query has been successfully " + (modeEdit ? "updated." : "saved."), "SUCCESS");
+					
+					modeEdit = true;
+					objDna = response.data;
+					$.each(Object.keys(objDna), function (index, key) {
+						queryCollection[0][key] = objDna[key];
+					});
+					
+					initControls();
+				} else if ($.type(response) === 'object' && response.status === "FAILED") {
+					showMsg(response.message, "FAIL");
+				} else {
+					showMsg("Failed to save your query.", "FAILED");
+				}
+			});
+		}
+	});
+	
+    $(window).resize(function() {
+		resizePanels();
+	});
+	
+    $(document).ready(function() {
+		// Get modal data
+		isCollection = $("#myModalNodes").data("isCollection");
+		modeEdit     = $("#myModalNodes").data("action") == "edit";
+		objDna       = $("#myModalNodes").data("dna");
+		$("#myModalNodes").removeData(["isCollection", "action", "dna"]);
+		
+		// Hide/Show password by clicking on the eye glyphicon
+    	$('input[name="user_pass"] + .glyphicon ').css({ 'cursor': 'pointer', 'pointer-events': 'all' });
+    	$('input[name="user_pass"] + .glyphicon ').on('click', function () {
+			if ($(this).hasClass('glyphicon-eye-open')) {
+				$("#" + this.previousElementSibling.id ).attr('type','text');
+				$(this).removeClass('glyphicon-eye-open');
+				$(this).addClass('glyphicon-eye-close');
+				$(this).attr('title', 'hide password');
+			} else {
+				$("#" + this.previousElementSibling.id).attr('type', 'password');
+				$(this).removeClass('glyphicon-eye-close');
+				$(this).addClass('glyphicon-eye-open');
+				$(this).attr('title', 'show password');
+			}
+    	});
+		
+		// Initialize map and query
+		var olPoly = $("#mapExtent").poly2D({ maxFeaturesNo: 1, extraFeatureDescription: "preview" });
+		$.when(olPoly)
+		.done(function (result) {
+			if (typeof result.readOnly === "boolean") {
+				$("#collectionExtent").removeClass("no-map");
+				$("#mapExtent").removeClass("hidden");
+				myPolygonMap = result;
+				handlePolygonMapEvents(myPolygonMap);
+				
+				autoPanMap();
+			}
+			
+			// Initialize query functionality after map is loaded
+			initControls();
+			initDatasources();
+			initQuery();
+		})
+		// Initialize query functionality without map
+		.fail(function () {
+			initControls();
+			initDatasources();
+			initQuery();
+		});
+    });
+		
+//# sourceURL=datasource-queries-plus.js
 </script>

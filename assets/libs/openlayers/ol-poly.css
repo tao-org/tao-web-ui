@@ -1,0 +1,37 @@
+/* ===== MAP CONTAINER ===== */
+#myFlatMap {font-size:14px;max-height:100%}
+/* ===== MAP ===== */
+#myFlatMap .map{height:400px;border-bottom:1px solid #96c1ce}
+/* ===== MAP TITLE ===== */
+#myFlatMap .poly-map-title{position:absolute;top:10px;color:#1680c5;font-size:1.5em;width:100%;text-align:center;margin:0 -15px;pointer-events:none;text-shadow:2px 2px white}
+#myFlatMap .poly-map-title.modify{color:#e16f00}
+/* ===== MAP CONTROLS ===== */
+#myFlatMap .ol-zoom{right:10px;left:auto;top:46px;padding:0}
+#myFlatMap .ol-zoom button{line-height:1em;border:1px solid #3c8dbc;border-radius:0}
+#myFlatMap .ol-attribution{display:none}
+#myFlatMap .poly-shape-type{position:absolute;top:10px;right:10px;z-index:100}
+#myFlatMap .poly-shape-type select{background-color:#6690b9;border:1px solid #3c8dbc;font-size:1.1em;font-weight:700;color:white;padding:5px 10px;height:2.2em}
+#myFlatMap .poly-shape-type select option{padding:20px}
+#myFlatMap .poly-shape-type select.disabled{color:#8bb4bf}
+#myFlatMap .poly-actions-panel{position:absolute;bottom:10px;right:10px;width:50%;border:1px solid #97c1ce;box-shadow:0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12),0 3px 5px -1px rgba(0,0,0,.2) !important}
+#myFlatMap .poly-action-tools{padding:3px 10px;background-color:#aad3df;line-height:30px;color:#2e6da4;font-weight:700}
+#myFlatMap .btn-poly{border:0;padding:3px;background-color:transparent;color:#2e6da4;font-weight:400;line-height:1.6em;vertical-align:top;outline:none}
+#myFlatMap .btn-poly:hover{color:#17466f;text-decoration:underline}
+#myFlatMap .btn-poly:focus{text-decoration:underline}
+#myFlatMap .btn-poly:active{-moz-box-shadow:none;-webkit-box-shadow:none;box-shadow:none;padding:4px 2px 2px 4px;outline-width:0}
+#myFlatMap .btn-poly:disabled{background-color:#aad3df;color:#8bb4bf;border-color:#aad3df;text-decoration:none}
+/* ===== USER TEXT ===== */
+#myFlatMap textarea{width:100%;border:0;resize:none;float:left;padding:4px;line-height:1.3em;color:#666;outline:none}
+#myFlatMap textarea.error{color:red}
+/* ===== SWITCH ===== */
+#myFlatMap .poly-switch{position:relative;float:right}
+#myFlatMap .poly-switch span{position:absolute;right:140px;top:0;white-space:nowrap;font-weight:400}
+#myFlatMap .poly-switch>input[type="checkbox"]{display:none}
+#myFlatMap .poly-switch>label{cursor:pointer;height:0px;width:130px;font-weight:400;font-family:'FontAwesome','Source Sans Pro','Helvetica Neue';font-size:14px;line-height:1.6em}
+#myFlatMap .poly-switch>label::before{background:#dadada;border:1px solid #dadada;border-radius:9px;content:'';height:10px;position:absolute;top:10px;left:0;width:130px;transition:all 0.4s ease-in-out}
+#myFlatMap .poly-switch>label::after{white-space:nowrap;background:#0099ff;border:1px solid #aad3df;border-radius:12px;content:'Modify \00A0\00A0\f054';height:auto;position:absolute;width:auto;padding:3px 12px;top:0;left:10px;right:20px;text-align:left;color:white;transition:all 0.3s ease-in-out}
+#myFlatMap .poly-switch>input[type="checkbox"]:checked+label::before{content:''}
+#myFlatMap .poly-switch>input[type="checkbox"]:disabled+label::before{content:'';background-color:transparent;border-color:transparent;cursor:default}
+#myFlatMap .poly-switch>input[type="checkbox"]:checked+label::after{background:#e16f00;content:'\f053\00A0\00A0 Reshape';left:20px;right:10px;text-align:right}
+#myFlatMap .poly-switch>input[type="checkbox"]:disabled+label::after{content:'\f057\00A0\00A0 Disabled';text-align:center;color:#54767f;opacity:0.65;left:15px;right:15px;cursor:default;border-color:transparent;background:transparent}
+#myFlatMap .poly-switch>input[type="checkbox"]:disabled~span{display:none}

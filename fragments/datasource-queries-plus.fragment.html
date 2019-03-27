@@ -9,16 +9,21 @@
 .custom-combobox .custom-combobox-toggle{position:absolute;top:0;bottom:0;right:-3px}
 ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:2000}
 /* ======== #myModalNodes ======== */
-#myModalNodes{position:relative;width:100%;height:900px;z-index:800}
+#myModalNodes{position:absolute;width:100%;height:900px;z-index:800}
 #myModalNodes #myFlatMap .ol-zoom{top:100px}
 #myModalNodes #myFlatMap .poly-map-title{padding-left:30%;top:55px}
 #myModalNodes #myFlatMap .poly-shape-type{top:60px}
-#myModalNodes .box-shadow--6dp{box-shadow:0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2) !important}
+#myModalNodes #topInfo{position:fixed;z-index:2000;background-color:#fff4d6;border:1px solid #ffd154;top:60px;padding:0 4px;font-weight:700;color:#a71f16;border-radius:5px;pointer-events:none}
 /* ======== MODAL CONTROLS AND PANELS ======== */
-#myModalNodes .modal-content.minimized{display:inline-block;width:40px;height:40px;cursor:pointer;border-radius:5px;padding:5px;text-align:center}
+#myModalNodes .box-shadow--6dp{box-shadow:0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2) !important;border-radius:10px}
+#myModalNodes .modal-header{background-color:#79bde4;color:white;padding:10px 15px;border-radius:10px 10px 0 0}
+#myModalNodes .modal-content.minimized{display:inline-block;width:40px;height:40px;cursor:pointer;border-radius:5px;padding:5px;text-align:center;border:0}
 #myModalNodes .modal-content.minimized>*{display:none}
 #myModalNodes .modal-content.minimized::after{content:"\f0c9";font-family:"FontAwesome";font-size:22px}
-#myModalNodes .modal-content .close{margin-left:10px;font-size:25px;outline:none}
+#myModalNodes .modal-content .close{margin-left:10px;font-size:25px;outline:none;opacity:1;color:white}
+#myModalNodes .modal-content .close:hover{color:#c9e5f4}
+#myModalNodes .modal-content .close.custom{position:absolute;color:#286080;top:0px;right:14px;font-size:30px}
+#myModalNodes .modal-content .close.custom:hover{color:#79bde5}
 #myModalNodes .modal-body{overflow-x:hidden;overflow-y:auto}
 #myModalNodes .modal-body .row .last{width:100%;float:left;padding-top:15px}
 #myModalNodes .modal-note{background-color:#ffffd2;border-top:1px solid #eac9a5}
@@ -29,24 +34,26 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 /* ======== MODAL EXTENTS ======== */
 #myModalNodes .modal-content,
 #myModalNodes .extent{-webkit-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-o-transition:all 0.5s ease;-ms-transition:all 0.5s ease;transition:all 0.5s ease}
-#myModalNodes .extent{position:absolute;top:0;left:0;margin:0;padding:10px;width:37%;z-index:2000}
+#myModalNodes .extent{position:absolute;top:0;left:0;margin:0;padding:10px;width:40%;z-index:2000}
 #myModalNodes #mapExtent{display:block;width:100%;height:100%;position:fixed;top:0;right:0;background-color:white}
 #myModalNodes #collectionExtent{opacity:0.9}
-#myModalNodes #collectionExtent.no-map{margin-left:30%;background-color:white;border:5px solid #2a6283;border-radius:15px;opacity:1}
+#myModalNodes #collectionExtent.no-map{opacity:1}
 #myModalNodes #collectionExtent.no-map .minimize{display:none}
 #myModalNodes #queryExtent{top:100px;width:34%}
 #myModalNodes #queryExtent.shifted{left:-40%}
 #myModalNodes #executionExtent{top:44px}
 #myModalNodes #executionExtent.shifted{left:-45%}
+#myModalNodes #detailsExtent{left:auto;right:0;width:60.5%;width:calc(60% + 10px)}
+#myModalNodes #detailsExtent.shifted{right:-65%}
 /* ======== TABLE CONTENTS ======== */
-#myModalNodes .vertical-container{clear:both;border-top:1px solid #9dc8db;overflow-x:hidden;overflow-y:auto;scroll-behavior:smooth;border-bottom:1px solid #93c2da}
-#myModalNodes .sticky{position:relative;position:sticky;top:0;background-color:#cee9f9;padding:12px 50px 12px 15px;z-index:2001;border-bottom:1px solid #9dc8db}
+#myModalNodes .vertical-container{clear:both;border-top:1px solid #79bde4;overflow-x:hidden;overflow-y:auto;scroll-behavior:smooth;border-bottom:1px solid #79bde4}
+#myModalNodes .sticky{position:relative;position:sticky;top:0;background-color:#cee9f9;padding:12px 50px 12px 15px;z-index:2001;border-bottom:1px solid #93c2da}
 #myModalNodes table{position:relative;table-layout:fixed;margin:0}
 #myModalNodes table tr>*{vertical-align:middle;position:relative}
 #myModalNodes table td{word-break:break-all}
 #myModalNodes table>tbody+tbody{border-top:1px solid #93c2da}
 #myModalNodes table.ds-params{table-layout:auto}
-#myModalNodes table.ds-params::before{content:" ";position:absolute;width:15px;height:100%;top:0;left:0;background-color:#b4e0a5}
+#myModalNodes table.ds-params::before{content:" ";position:absolute;width:15px;height:100%;top:0;left:0;background-color:#79bde4}
 #myModalNodes table.ds-params td{padding:2px 15px}
 #myModalNodes table.ds-params tbody tr:first-child td{padding-top:10px}
 #myModalNodes table.ds-params tbody tr:last-child td{padding-bottom:10px}
@@ -60,7 +67,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes table.ds-params input.datepicker{max-width:48%}
 #myModalNodes table.ds-params input.datepicker:last-child{float:right}
 #myModalNodes table.ds-products tr{background-color:white;-webkit-transition:all 0.2s ease;-moz-transition:all 0.2s ease;-o-transition:all 0.2s ease;-ms-transition:all 0.2s ease;transition:all 0.2s ease}
-#myModalNodes table.ds-products td{padding:6px 37px 4px 12px;color:#737373;border-top-color:#ccc}
+#myModalNodes table.ds-products td{padding:6px;color:#737373;border-top-color:#ccc}
 #myModalNodes table.ds-products tbody tr:first-child td{border-top:0}
 #myModalNodes table.ds-products tr.selected{background-color:#ffedbd}
 #myModalNodes table.ds-products tr:hover{background-color:#fff4d6}
@@ -83,14 +90,21 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes table.ds-products label.deprecated ul{position:relative;margin:0;font-weight:400}
 #myModalNodes table.ds-products label.deprecated ul li button{padding:0;text-decoration:underline;font-weight:700}
 #myModalNodes table.ds-products label.deprecated ul li button:hover{color:#286080}
+#myModalNodes table.pd-details{table-layout:auto}
+#myModalNodes table.pd-details td{vertical-align:top;border:0;padding:10px 15px 10px 15px}
+#myModalNodes table.pd-details td.preview{padding:0;min-width:400px;vertical-align:middle;text-align:center}
+#myModalNodes table.pd-details .row{border-bottom:1px solid #f4f4f4}
+#myModalNodes table.pd-details label{color:#286080;padding:0 10px}
+#myModalNodes table.pd-details span{padding:0 10px}
+#myModalNodes table.pd-details img{max-width:400px;min-width:64px}
 /* ======== TABLE ACTION CONTROLS ======== */
 #myModalNodes table.ds-products .qry-ac-group{position:absolute;left:0;width:100%;padding:2px 10px;color:#286080}
 #myModalNodes table.ds-products .top-group{top:0;font-size:16px}
 #myModalNodes table.ds-products .bottom-group{bottom:0;font-size:16px;opacity:0.1;-webkit-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-o-transition:all 0.5s ease;-ms-transition:all 0.5s ease;transition:all 0.5s ease}
 #myModalNodes table.ds-products tr.datasource .top-group{font-size:20px}
 #myModalNodes table.ds-products tr.datasource .bottom-group{opacity:0.5;font-size:20px}
-#myModalNodes table.ds-products tr.selected .bottom-group,
 #myModalNodes table.ds-products tr:hover .bottom-group{opacity:1}
+#myModalNodes table.ds-products tr.selected .bottom-group{opacity:1;padding-right:35px}
 #myModalNodes table.ds-products .btn-action{float:left;background-color:transparent;border:0;outline:none}
 #myModalNodes table.ds-products .btn-action:hover{color:#e92f2f}
 #myModalNodes table.ds-products .btn-action[disabled]{color:#286080;opacity:0.3}
@@ -99,8 +113,8 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes .dataset-label{padding:0 15px;display:table;width:100%;margin-bottom:10px;background:white}
 #myModalNodes .dataset-label>*{display:table-cell;width:1px}
 #myModalNodes .dataset-label input{width:100%;border:0;background-color:transparent;color:#3d6f8a}
-#myModalNodes .checkbox{margin:0;padding:0;position:absolute;right:7px;top:0}
-#myModalNodes .checkbox label{margin:0;padding:8px}
+#myModalNodes .checkbox{margin:0;padding:0;position:absolute;right:7px;bottom:0}
+#myModalNodes .checkbox label{margin:0;padding:4px 10px}
 #myModalNodes .checkbox input{margin:0;padding:0;position:relative;cursor:pointer}
 #myModalNodes .checkbox input{margin:0;padding:0;position:relative}
 #myModalNodes .checkbox input[name='allproducts']{margin-top:7px}
@@ -109,7 +123,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes .btn-primary+.btn-primary{margin-left:10px}
 
 #collectionExtent.locked .modal-content:last-child{pointer-events:none}
-#collectionExtent.locked .modal-content:last-child::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(255, 255, 255, 0.6);z-index:2010}
+#collectionExtent.locked .modal-content:last-child::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(255, 255, 255, 0.6);z-index:2010;border-radius:10px}
 #collectionExtent.locked .modal-content:last-child button{opacity:0.1}
 </style>
 
@@ -117,12 +131,12 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 </div>
 
 <div id="collectionExtent" class="extent no-map">
-	<div class="modal-content box-shadow--6dp">
-		<div class="modal-header dataset-label" style="border:0">
+	<div class="modal-content box-shadow--6dp" style="border:0">
+		<div class="modal-header dataset-label" style="border:0;color:#286080;border-radius:15px">
 			<label for="datasetLabel" style="">Label:</label>
 			<input type="text" id="datasetLabel" class="form-control" name="datasetLabel" placeholder="Name of your dataset collection" value="" />
 		</div>
-		<button type="button" class="close" data-dismiss="modal" style="position:absolute;top:4px;right:14px;"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		<button type="button" class="close custom" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	</div>
 	<div class="modal-content box-shadow--6dp">
 		<div class="modal-header" style="border:0">
@@ -226,11 +240,11 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 
 <div id="executionExtent" class="extent shifted">
 	<div class="modal-content box-shadow--6dp execution-results">
-		<div class="modal-header" style="padding-bottom:0;border:0">
+		<div class="modal-header" style="border:0">
 			<button type="button" class="cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 			<h4 class="modal-title">Query product results</h4>
 		</div>
-		<div class="modal-body">
+		<div class="modal-body" style="padding-top:0">
 			<div id="datasourceProducts" class="row">
 				<div class="vertical-container">
 					<div class="sticky">
@@ -250,6 +264,43 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		</div>
 	</div>
 </div>
+
+<div id="detailsExtent" class="extent shifted">
+	<div class="modal-content box-shadow--6dp">
+		<div class="modal-header" style="border:0">
+			<button type="button" class="cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<h4 class="modal-title">Product Details</h4>
+		</div>
+		<div class="modal-body" style="padding-top:0">
+			<div id="productDetails" class="row">
+				<div class="vertical-container">
+					<table id="tbProductDetails" class="table pd-details">
+						<tbody>
+							<tr>
+								<td class="details">
+									<label>Param 1<span>Value 1</span></label>
+									<label>Param 2<span>Value 2</span></label>
+									<label>Param 3<span>Value 3</span></label>
+									<label>Param 4<span>Value 4</span></label>
+								</td>
+								<td class="preview">
+									<img id="productPreview" src="./media/images/preview-not-available.png" />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="last">
+					<div class="col-sm-12 col-md-12">
+						<button type="button" id="closeDetails" class="btn btn-primary" style="float:right">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="topInfo"></div>
 
 <script>
     var isCollection     = false;
@@ -495,6 +546,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 						var $chk = $tr.find(".checkbox input[name='product']");
 						if ($chk.length > 0) {
 							$chk.trigger("click");
+							showTopInfo();
 							if ($chk.is(":checked")) {
 								// Change table page if product not on current page
 								if (!$tr.is(":visible")) {
@@ -521,6 +573,9 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 								} else {
 									$tr.get(0).scrollIntoView();
 								}
+								
+								setTimeout(function () { showTopInfo($tr); }, 500);
+								
 								return false;
 							}
 						} else {
@@ -652,29 +707,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		});
 	}
 	
-	function getCollectionByComponentId(componentId) {
-		var collection = false;
-		$.when(ajaxCallFnc("datasource/user/group/", {}, "GET", false))
-		.done(function (response) {
-			if (response.status === "SUCCEEDED") {
-				var dsGroups = response.data;
-				var dsComponents = [];
-				$.each(dsGroups, function (index, group) {
-					var exit = false;
-					$.each(group.dataSourceComponents, function (index, component) {
-						if (component.id == componentId) {
-							collection = group;
-							exit = true;
-							return false;
-						}
-					});
-					if (exit) return false;
-				});
-			}
-		});
-		return collection;
-	}
-	
 	function initQuery() {
 		queryCollection  = [];
 		selectedProducts = [];
@@ -786,6 +818,9 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 					myPolygonMap.createShapeFromGeometry(defaultFootprint, null, true);
 				}
 				updateSelectedProductsTable();
+				if (myPolygonMap.mapActive && defaultFootprint != "") {
+					myPolygonMap.fitAllFeatures();
+				}
 				
 				if (isCollection && localEditMode) {
 					// Open query from collection for editing
@@ -804,6 +839,29 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			showMsg("Datasources list successfully retrieved.", "SUCCESS");
 			showPanel("selected products");
 		}
+	}
+	
+	function getCollectionByComponentId(componentId) {
+		var collection = false;
+		$.when(ajaxCallFnc("datasource/user/group/", {}, "GET", false))
+		.done(function (response) {
+			if (response.status === "SUCCEEDED") {
+				var dsGroups = response.data;
+				var dsComponents = [];
+				$.each(dsGroups, function (index, group) {
+					var exit = false;
+					$.each(group.dataSourceComponents, function (index, component) {
+						if (component.id == componentId) {
+							collection = group;
+							exit = true;
+							return false;
+						}
+					});
+					if (exit) return false;
+				});
+			}
+		});
+		return collection;
 	}
 	
 	function resizePanels() {
@@ -832,18 +890,27 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		// resize query collection section
 		var h3 = h - $("#tbSelectedProducts").parent().offset().top;
 		h3 -= $("#datasourceProducts .last").outerHeight();
-		h3 -= myPolygonMap.mapActive ? 0 : 10;
 		h3 = h3 < 60 ? 60 : h3;
 		$("#tbSelectedProducts").parent().css({ "max-height": h3 + "px" });
+
+		// resize details section
+		var h4 = h - $("#tbProductDetails").parent().offset().top;
+		h4 -= $("#productDetails .last").outerHeight();
+		h4 = h4 < 60 ? 60 : h4;
+		$("#tbProductDetails").parent().css({ "max-height": h4 + "px" });
 	}
 	
 	function showPanel(panel) {
+		showTopInfo();
+		
 		if (panel == "query parameters") {
 			$("#collectionExtent").addClass("locked");
 			if (myPolygonMap.mapActive) {
 				myPolygonMap.setReadOnly(false);
 			}
+			// hide other panels
 			$("#executionExtent").addClass("shifted");
+			$("#detailsExtent").addClass("shifted");
 			// show parameters
 			$("#queryExtent").removeClass("shifted");
 			$("#listDatasources").combobox("focus");
@@ -852,21 +919,24 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			if (myPolygonMap.mapActive) {
 				myPolygonMap.setReadOnly(true);
 			}
+			// hide other panels
 			$("#queryExtent").addClass("shifted");
-			// clear datasource parameters
-			//resetDatasourcesList();
+			$("#detailsExtent").addClass("shifted");
 			// reset checkboxes
 			$('input[name=allproducts]').prop('checked', false);
 			// show execution results
 			$("#executionExtent").removeClass("shifted");
-			//$("#executionExtent").removeClass("hidden");
+		} else if (panel == "product details") {
+			$("#detailsExtent").removeClass("shifted");
 		} else { // if (panel == "selected products") {
 			$("#collectionExtent").removeClass("locked");
 			if (myPolygonMap.mapActive) {
 				myPolygonMap.setReadOnly(true);
 			}
+			// hide other panels
 			$("#queryExtent").addClass("shifted");
 			$("#executionExtent").addClass("shifted");
+			$("#detailsExtent").addClass("shifted");
 		}
 	}
 	
@@ -899,9 +969,9 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				if(param[property]['defaultValue'] !== null) {
 					lDefault = param[property]['defaultValue'];
 				}
-
+				var label = param[property]['label'] ? param[property]['label'] : param[property]['name'];
 				html += "<tr" + (param[property]['required'] ? " class='required'" : "") + ">" +
-						"<td>" + param[property]['name'] + "<br><span>[" + lType[lType.length - 1] + "]</span></td>" +
+						"<td>" + label + "<br><span>[" + lType[lType.length - 1] + "]</span></td>" +
 						"<td>";
 				var paramType = lType[lType.length - 1];
 				paramType = $.trim(paramType.replace(/;/g,''));
@@ -1015,12 +1085,51 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		canvas.height = height;
 		var context = canvas.getContext("2d");
 		var deferred = $.Deferred();
-		$("<img/>").attr("src", "data:image/jpeg;base64," + base64).load(function() {
+		$("<img/>").attr({ "src": "data:image/jpeg;base64," + base64, "crossOrigin": "anonymous" }).load(function() {
 			context.scale(width/this.width, height/this.height);
 			context.drawImage(this, 0, 0);
 			deferred.resolve($("<img/>").attr("src", canvas.toDataURL()));
 		});
 		return deferred.promise();
+	}
+	
+	function setProductThumbnails($table, username, password) {
+		var qryUser = username ? username : "";
+		var qryPass = password ? password : "";
+		$.each($('tbody', $table), function (index, tbody) {
+			if (qryUser == "" && qryPass == "") {
+				var qry = queryCollection[$(tbody).find("tr.datasource").data("index")];
+				qryUser = qry ? qry.user : "";
+				qryPass = qry ? qry.password : "";
+			}
+			if (qryUser != "" && qryPass != "") {
+				$.each($('tr:not(.datasource)', $(tbody)), function (index, tr) {
+					var previewUrl = $(tr).data("preview");
+					var $img = $(tr).find("td img");
+					if ($img.length > 0 && $img.attr("src").indexOf("data:image/png;base64") == -1 && previewUrl) {
+						$.ajax({
+							url: baseRestApiURL + "utilities/tunnel/get",
+							type: "GET",
+							data: { url: decodeURIComponent(previewUrl), user: qryUser, password: qryPass },
+							beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
+							success: function(response) {
+								if (response != "") {
+									//$img.attr("src", "data:image/jpeg;base64," + response);
+									resizeBase64Img(response, 48, 48).then(function (newImg) {
+										$img.attr("src", $(newImg).attr("src"));
+										// Update thumbnail in selected products list
+										var product = selectedProducts[$(tr).data("selIndex")];
+										if (typeof product !== "undefined") {
+											product._dsThumb = $(newImg).attr("src");
+										}
+									});
+								}
+							}
+						});
+					 }
+				});
+			}
+		});
 	}
 	
     function showProductsTable() {
@@ -1056,31 +1165,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			);
 			$('table#tbDatasourceProducts tbody').append($tr);
 		});
-		
-		$.each($('table#tbDatasourceProducts tbody tr'), function () {
-			var previewUrl = $(this).data("preview");
-			var $img = $(this).find("td img");
-			if (previewUrl) {
-				$.ajax({
-					url: baseRestApiURL + "utilities/tunnel/get",
-					type: "GET",
-					data: {
-						url: decodeURIComponent(previewUrl),
-						user: $('#user_name').val(),
-						password: $('#user_pass').val()
-					},
-					beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
-					success: function(response) {
-						if (response != "") {
-							//$img.attr("src", "data:image/jpeg;base64," + response);
-							resizeBase64Img(response, 48, 48).then(function (newImg) {
-								$img.attr("src", $(newImg).attr("src"));
-							});
-						}
-					}
-				});
-			 }
-		});
+		setProductThumbnails($("table#tbDatasourceProducts"), $('#user_name').val(), $('#user_pass').val());
 		
     	$('.pagination-container').remove();
     	$('table#tbDatasourceProducts tbody').paginathing({
@@ -1181,16 +1266,20 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				
 				var $tr = $("<tr></tr>");
 				$tr.data("dsIndex", $crtDatasetHeader.data("index"));
+				$tr.data("selIndex", index);
 				$tr.data("id", $crtDatasetHeader.data("index") + "_" + value.name);
 				$tr.data("name", value.name);
 				if (value.geometry) { $tr.data("geometry", value.geometry); }
+				if (!value.quicklookLocation && value.location.indexOf("/$value") >= 0) {
+					value.quicklookLocation = value.location.replace("/$value", "/Products('Quicklook')/$value");
+				}
 				if (value.quicklookLocation) { $tr.data("preview", encodeURIComponent(value.quicklookLocation).replace(/'/g, "%27").replace(/"/g, "%22")); }
 				$tr.html(	"<td>" +
 							"	<span class='qry-ac-group bottom-group'>" +
 							"		<span class='pull-right'>" +
 							(!myPolygonMap.mapActive ? "" :
 							"			<button class='btn-action op-locate' data-action='op-locate' title='Locate product on map'><i class='glyphicon glyphicon-screenshot'></i></button>") +
-							"			<button class='btn-action op-details' data-action='op-details' title='View product details' disabled><i class='glyphicon glyphicon-eye-open'></i></button>" +
+							"			<button class='btn-action op-details' data-action='op-details' title='View product details'><i class='glyphicon glyphicon-eye-open'></i></button>" +
 							"			<button class='btn-action op-remove' data-action='op-remove' title='Remove product from collection'><i class='glyphicon glyphicon-remove'></i></button>" +
 							"		</span>" +
 							"	</span>" +
@@ -1205,7 +1294,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 							"	<div class='checkbox hidden'><label><input type='checkbox' name='product' value='" + value.id + "' /></label></div>" +
 							"</td>"
 				);
-				
 				$crtDatasetHeader.after($tr);
 			}
     	});
@@ -1217,6 +1305,8 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				$(this).after("<tr style='background-color:#fff4d6'><td>No selected products for this datasource component</td></tr>")
 			}
 		});
+		setProductThumbnails($("table#tbSelectedProducts"));
+		
 		resetDatasourcesList();
 		
 		resizePanels();
@@ -1304,21 +1394,18 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		return query;
 	}
 	
-	$("#collectionExtent").on("click", ".modal-header .minimize", function (e) {
-		showPanel("selected products");
-		$(this).closest(".modal-content").addClass("minimized");
-		$(this).closest(".extent").addClass("minimized");
-		
-		autoPanMap();
-	});
-	
-	$("#collectionExtent").on("click", ".modal-content.minimized", function (e) {
-		$(this).removeClass("minimized");
-		$(this).closest(".extent").removeClass("minimized");
-		resizePanels();
-		
-		autoPanMap();
-	});
+	function showTopInfo($tr) {
+		if (typeof $tr !== "undefined" &&  $(".top.info .name", $tr).length > 0) {
+			var topInfo = $(".top.info .name", $tr).html();
+			var tp = $(".top.info .name", $tr).offset().top;
+			var lf = $(".top.info .name", $tr).offset().left;
+			$("#topInfo").css({ left: lf+"px", top: tp+"px" })
+			$("#topInfo").html(topInfo);
+		} else {
+			$("#topInfo").html("");
+			$("#topInfo").css({ left: "0px", top: "0px" });
+		}
+	}
 	
 	$("#collectionExtent").on("click", ".btn-action", function (e) {
 		var goBack = true;
@@ -1441,6 +1528,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			switch ($(this).data("action")) {
 				case "op-locate":
 					goBack = false;
+					$("#detailsExtent").addClass("shifted");
 					if (myPolygonMap.mapActive && $tr.data("id")) {
 						myPolygonMap.fitFeatureById($tr.data("id"));
 						var $chk = $tr.find(".checkbox input[name='product']");
@@ -1465,6 +1553,52 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				break;
 				case "op-details":
 					goBack = false;
+					
+					showPanel("product details");
+					var $tbody = $(this).closest("tbody");
+					var $tr = $(this).closest("tr");
+					var details = "";
+					if ($tbody.length > 0 && $tr.length > 0) {
+						// Get product attributes
+						var product = selectedProducts[$tr.data("selIndex")];
+						
+						$(".modal-title", "#detailsExtent").html("Product Details");
+						$.each(Object.keys(product), function (index, key) {
+							if (key == "name") {
+								$(".modal-title", "#detailsExtent").html(product[key]);
+							} else if (key.indexOf("_ds") == -1 && typeof product[key] !== "object") {
+								details += "<div class='row'><label class='col-md-4'>" + key + ":</label><span class='col-md-8'>" + product[key] + "</span></div>";
+							}
+						});
+						
+						// Get thumbnail preview image
+						var $img = $tr.find("td img");
+						$("#productPreview").attr("src", $img.length > 0 ? $img.attr("src") : "./media/images/preview-not-available.png");
+						
+						// Get large preview image
+						var qry = queryCollection[$tbody.find("tr.datasource").data("index")];
+						qryUser = qry ? qry.user : "";
+						qryPass = qry ? qry.password : "";
+						if (qryUser != "" && qryPass != "") {
+							var previewUrl = $tr.data("preview");
+							if (previewUrl) {
+								$.ajax({
+									url: baseRestApiURL + "utilities/tunnel/get",
+									type: "GET",
+									data: { url: decodeURIComponent(previewUrl), user: qryUser, password: qryPass },
+									beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
+									success: function(response) {
+										if (response != "") {
+											//$("#productPreview").attr("src", "data:image/jpeg;base64," + response);
+											// resize preview
+											resizeBase64Img(response, 400, 400).then(function (newImg) { $("#productPreview").attr("src",  $(newImg).attr("src")); });
+										}
+									}
+								});
+							 }
+						}
+					}
+					$("#tbProductDetails tbody td.details").html(details);
 				break;
 			}
 		}
@@ -1474,7 +1608,23 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		}
 	});
 	
-	$("#queryExtent, #executionExtent").on("click", ".cancel", function (e) {
+	$("#collectionExtent").on("click", ".modal-header .minimize", function (e) {
+		showPanel("selected products");
+		$(this).closest(".modal-content").addClass("minimized");
+		$(this).closest(".extent").addClass("minimized");
+		
+		autoPanMap();
+	});
+	
+	$("#collectionExtent").on("click", ".modal-content.minimized", function (e) {
+		$(this).removeClass("minimized");
+		$(this).closest(".extent").removeClass("minimized");
+		resizePanels();
+		
+		autoPanMap();
+	});
+	
+	$("#queryExtent, #executionExtent, #detailsExtent").on("click", ".cancel", function (e) {
 		updateSelectedProductsTable();
 	});
 	
@@ -1559,10 +1709,12 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				myPolygonMap.setFeaturesStyleById($tr.data("id"), hStyle);
 			}
 		}
+		showTopInfo($tr);
 	});
 	
 	$("#tbDatasourceProducts, #tbSelectedProducts").on("mouseleave", "tbody", function (e) {
 		resetPreviewProductsStyle();
+		showTopInfo();
 	});
 	
     $("#startInterrogation").on("click", function (e) {
@@ -1584,7 +1736,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				listOfProducts = response.data;
 				showProductsTable();
 			} else if ($.type(response) === 'object' && response.status === "FAILED") {
-				showMsg(response.message, "FAIL");
+				showMsg(response.message, "WARNING");
 			} else {
 				showMsg("No products were found for selected datasource.", "INFO");
 			}
@@ -1625,7 +1777,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		updateSelectedProductsTable();
 	});
 	
-	$("#cancelExecution").on("click", function (e) {
+	$("#cancelExecution, #closeDetails").on("click", function (e) {
 		updateSelectedProductsTable();
 	});
 	
@@ -1733,7 +1885,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				});
 				myGroup.queries.push(queryData);
 			});
-			console.log(myGroup);
 			$.when(ajaxCallFnc("datasource/user/group/save", JSON.stringify(myGroup), "POST"))
 			.done(function (response) {
 				if ($.type(response) === 'object' && response.status === "SUCCEEDED" && Object.keys(response.data).length > 0) {
@@ -1741,7 +1892,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 					
 					modeEdit = true;
 					objDna = response.data;
-					console.log(objDna);
 					
 					// Initialize query functionality after map is loaded
 					initControls();
@@ -1761,9 +1911,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			var qry = $.extend(true, {}, queryCollection[0]);
 			qry.label = (qry.label == "") ? qry._dsLabelDefault : qry.label;
 			removeExtraDsInfo(qry);
-			console.log(qry);
 			var method = modeEdit ? "PUT" : "POST";
-			console.log(qry);
 			$.when(ajaxCallFnc("datasource/query/", JSON.stringify(qry), method))
 			.done(function (response) {
 				if ($.type(response) === 'object' && response.status === "SUCCEEDED" && Object.keys(response.data).length > 0) {
@@ -1783,6 +1931,10 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				}
 			});
 		}
+	});
+	
+	$(".vertical-container").scroll(function (e) {
+		showTopInfo();
 	});
 	
     $(window).resize(function() {
@@ -1816,6 +1968,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		var olPoly = $("#mapExtent").poly2D({ maxFeaturesNo: 1, extraFeatureDescription: "preview" });
 		$.when(olPoly)
 		.done(function (result) {
+			//*
 			if (typeof result.readOnly === "boolean") {
 				$("#collectionExtent").removeClass("no-map");
 				$("#mapExtent").removeClass("hidden");
@@ -1824,7 +1977,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				
 				autoPanMap();
 			}
-			
+			/* */
 			// Initialize query functionality after map is loaded
 			initControls();
 			initDatasources();

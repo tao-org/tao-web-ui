@@ -1,15 +1,20 @@
 <style>
+.content-wrapper{position:relative}
+
 .box-body.chat{padding:10px}
 
 .fa-plus-plus::before{color:gray}
 .fa-plus-plus::after{color:black;content:"\f067";position:absolute;left:9px;top:12px;text-shadow:-1px -1px 0 white}
 
 .nodes-item-core-box{position:relative;z-index:1;border:1px solid #96c2da;border-top:2px solid #3c8dbc}
-.nodes-item-core-box .box-bottom.with-line{border-top:0;border-bottom:2px solid rgba(0, 100, 160, 0.1);padding:0 0 5px 0;margin-bottom:5px}
+.nodes-item-core-box .box-bottom.with-line{border-top:0;border-bottom:6px double rgba(0, 100, 160, 0.1);padding:0 0 15px 0}
 .nodes-item-core-box .box-top .box-title{font-size:1.6em}
 .nodes-item-core-box .box-top .box-subtitle{margin-bottom:0}
 .nodes-item-core-box .box-top .box-text{font-size:1.2em}
 .nodes-item-core-box .box-top-tags{top:-12px;right:10px}
+.nodes-item-core-box .box-top-tags span{padding:0 8px;background-color:white;font-weight:600;color:#4693bf}
+.query-group     .nodes-item-core-box .box-top-tags span{background-color:#4693bf;color:white;border:4px double white}
+.query-component .nodes-item-core-box .box-top-tags span{background-color:#ecf7fd}
 
 .query-group .nodes-item-core-box{border-top-left-radius:40px;border-top-right-radius:20px;background-color:#c6e7fb}
 .query-group>div::before,.query-group>div::after{content:"";position:absolute;border-radius:4px;width:120px;height:50%;max-width:30%;background-color:#70aed2}
@@ -17,6 +22,8 @@
 .query-group>div::after{background-color:#ecf7fd;left:19px;top:4px;width:90px;border-top:2px solid #3c8dbc;border-left:1px solid #70aed2}
 .query-component .nodes-item-core-box{background-color:#ecf7fd}
 .query-component>div::before{content:"";position:absolute;border-radius:4px;width:90px;height:50%;max-width:30%;background-color:#ecf7fd;bottom:13px;left:30px;border:1px solid #b0d7ec}
+
+.nodes-item-core-box .box-bottom .btn-nodeop:disabled{opacity:0.3}
 </style>
 
 <div id="myModalNodes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
@@ -169,6 +176,7 @@
 					],
 		filterAttribute: "customField",
 		doDataPreprocessing: function (data) {
+			var trimmed = [];
 			$.each(data, function (index, item) {
 				var isCollection = typeof item.dataSourceComponents !== "undefined";
 				var isQueryInCollection = typeof item.componentId === "string";
@@ -176,8 +184,13 @@
 				item.tags        = isQueryInCollection ? ["component"] : (isCollection ? ["collection"] : ["query"]);
 				item.dsLabel     = isCollection ? "Query collection" : item.sensor + " - " + item.dataSource;
 				item.customField = item.dsLabel.replace(" - ", " ") + " "  + item.label;
+				if (isQueryInCollection) {
+					trimmed.push(item);
+				} else {
+					trimmed.push(item);
+				}
 			});
-			return data;
+			return trimmed;
 		},
 		doAction: function(action, args){
 			myModalNodesOpShow(action, (typeof args === "undefined") ? args : args.dna);
@@ -186,8 +199,10 @@
 			if (elX.tags[0] === "collection") {
 				$elClone.addClass("query-group");
 				$(".fa-cube", $elClone).removeClass("fa-cube").addClass("fa-cubes");
-			};
-			if (elX.tags[0] === "component" ) $elClone.addClass("query-component");
+			} else if (elX.tags[0] === "component" ) {
+				$elClone.addClass("query-component");
+				$("button[data-action='delete']", $elClone).prop({ disabled: true });
+			}
 		}
 	});
 	

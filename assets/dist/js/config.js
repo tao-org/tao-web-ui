@@ -1,9 +1,8 @@
 //localhost API
-//var baseRestApiURL = 'https://localhost:8443/';
 //var baseRestApiURL = 'http://localhost:8080/';
-var baseRestApiURL = 'https://localhost:8443/';
+//var baseRestApiURL = 'https://localhost:8443/';
 //live API
-//var baseRestApiURL = '/';
+var baseRestApiURL = '/';
 
 var prefferences = {
     "viewMode": "grid",

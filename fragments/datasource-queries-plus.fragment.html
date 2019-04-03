@@ -1,29 +1,32 @@
 <style>
+body{padding-right:0 !important}
 ::placeholder{font-style:italic}
 .main-header .navbar{opacity:0.8}
-
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn{opacity:0.4 !important}
 /* ======== CUSTOM COMBOBOX ======== */
 .custom-combobox{position:relative;display:block}
 .custom-combobox .custom-combobox-input{background-color:white}
 .custom-combobox .custom-combobox-input[disabled]{background-color:#eee}
 .custom-combobox .custom-combobox-toggle{position:absolute;top:0;bottom:0;right:-3px}
-ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:2000}
+ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:1009}
 /* ======== #myModalNodes ======== */
-#myModalNodes{position:absolute;width:100%;height:900px;z-index:800}
+#myModalNodes{position:relative;width:100%;height:auto;z-index:800;padding:0 !important}
 #myModalNodes #myFlatMap .ol-zoom{top:100px}
 #myModalNodes #myFlatMap .poly-map-title{padding-left:30%;top:55px}
 #myModalNodes #myFlatMap .poly-shape-type{top:60px}
-#myModalNodes #topInfo{position:fixed;z-index:2000;background-color:#fff4d6;border:1px solid #ffd154;top:60px;padding:0 4px;font-weight:700;color:#a71f16;border-radius:5px;pointer-events:none}
+#myModalNodes #topInfo{position:fixed;background-color:#fff4d6;border:1px solid #ffd154;top:60px;padding:0 4px;font-weight:700;color:#a71f16;border-radius:5px;pointer-events:none;min-height:1.6em;z-index:800}
 /* ======== MODAL CONTROLS AND PANELS ======== */
-#myModalNodes .box-shadow--6dp{box-shadow:0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2) !important;border-radius:10px}
-#myModalNodes .modal-header{background-color:#79bde4;color:white;padding:10px 15px;border-radius:10px 10px 0 0}
-#myModalNodes .modal-content.minimized{display:inline-block;width:40px;height:40px;cursor:pointer;border-radius:5px;padding:5px;text-align:center;border:0}
-#myModalNodes .modal-content.minimized>*{display:none}
-#myModalNodes .modal-content.minimized::after{content:"\f0c9";font-family:"FontAwesome";font-size:22px}
+#myModalNodes .modal-body .form-control:not(select){height:2em;line-height:2em;padding:0 5px}
+#myModalNodes .modal-body .form-control-feedback{height:2em;line-height:2em}
+#myModalNodes .box-shadow--6dp{box-shadow:0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2) !important;border-radius:5px}
+#myModalNodes .modal-header{background-color:#79bde4;color:white;padding:10px 15px;border-radius:5px 5px 0 0}
+#myModalNodes .modal-header.ui-draggable-handle{position:relative;cursor:ew-resize}
+#myModalNodes .modal-header.ui-draggable-handle::before{font:normal normal normal 20px/1 FontAwesome;content:"\f07e";background-color:#79bde4;position:absolute;left:15px;top:-10px;padding:0 10px;border-radius:10px;border:1px solid #56b0e4}
+#myModalNodes .modal-title{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
 #myModalNodes .modal-content .close{margin-left:10px;font-size:25px;outline:none;opacity:1;color:white}
 #myModalNodes .modal-content .close:hover{color:#c9e5f4}
 #myModalNodes .modal-content .close.custom{position:absolute;color:#286080;top:0px;right:14px;font-size:30px}
-#myModalNodes .modal-content .close.custom:hover{color:#79bde5}
+#myModalNodes .modal-content .close.custom:hover{color:#e92f2f}
 #myModalNodes .modal-body{overflow-x:hidden;overflow-y:auto}
 #myModalNodes .modal-body .row .last{width:100%;float:left;padding-top:15px}
 #myModalNodes .modal-note{background-color:#ffffd2;border-top:1px solid #eac9a5}
@@ -32,22 +35,29 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes .modal-note p+p{margin:5px 0 0 42px}
 #myModalNodes .modal-note p i{font-weight:700;color:#3d6f8a}
 /* ======== MODAL EXTENTS ======== */
-#myModalNodes .modal-content,
+/*#myModalNodes .modal-content,*/
 #myModalNodes .extent{-webkit-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-o-transition:all 0.5s ease;-ms-transition:all 0.5s ease;transition:all 0.5s ease}
-#myModalNodes .extent{position:absolute;top:0;left:0;margin:0;padding:10px;width:40%;z-index:2000}
-#myModalNodes #mapExtent{display:block;width:100%;height:100%;position:fixed;top:0;right:0;background-color:white}
-#myModalNodes #collectionExtent{opacity:0.9}
+#myModalNodes .extent.no-transitions,
+#myModalNodes .extent.ui-draggable-dragging{-webkit-transition:none;-moz-transition:none;-o-transition:none;-ms-transition:none;transition:none}
+#myModalNodes .extent{position:absolute;top:0;left:0;margin:0;padding:10px;width:40%;max-width:800px;z-index:800}
+#myModalNodes .extent.shifted{left:-41% !important}
+#myModalNodes.full-map-view .main-panel{display:inline-block;width:40px;height:40px;cursor:pointer;border-radius:5px;padding:5px;text-align:center;border:0}
+#myModalNodes.full-map-view .main-panel>*{display:none}
+#myModalNodes.full-map-view .main-panel::after{content:"\f2d2";font-family:"FontAwesome";font-size:22px;color:#286080}
+#myModalNodes .extent.locked .modal-content.locked{pointer-events:none}
+#myModalNodes .extent.locked .modal-content.locked::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(255, 255, 255, 0.6);z-index:810;border-radius:5px}
+#myModalNodes .extent.locked .modal-content.locked button{opacity:0.4}
 #myModalNodes #collectionExtent.no-map{opacity:1}
 #myModalNodes #collectionExtent.no-map .minimize{display:none}
+#myModalNodes #queryExtent.no-map{left:18%}
+#myModalNodes #mapExtent{display:block;width:100%;height:100%;position:fixed;top:0;right:0;background-color:white}
+#myModalNodes #collectionExtent{opacity:0.9}
 #myModalNodes #queryExtent{top:100px;width:34%}
-#myModalNodes #queryExtent.shifted{left:-40%}
-#myModalNodes #executionExtent{top:44px}
-#myModalNodes #executionExtent.shifted{left:-45%}
-#myModalNodes #detailsExtent{left:auto;right:0;width:60.5%;width:calc(60% + 10px)}
-#myModalNodes #detailsExtent.shifted{right:-65%}
+#myModalNodes #detailsExtent{left:40%;width:30%}
+#myModalNodes.full-map-view #detailsExtent{left:3%;width:37%}
 /* ======== TABLE CONTENTS ======== */
-#myModalNodes .vertical-container{clear:both;border-top:1px solid #79bde4;overflow-x:hidden;overflow-y:auto;scroll-behavior:smooth;border-bottom:1px solid #79bde4}
-#myModalNodes .sticky{position:relative;position:sticky;top:0;background-color:#cee9f9;padding:12px 50px 12px 15px;z-index:2001;border-bottom:1px solid #93c2da}
+#myModalNodes .vertical-container{clear:both;border-top:1px solid #79bde4;overflow-x:hidden;overflow-y:auto;scroll-behavior:smooth;border-bottom:1px solid #79bde4;height:100%;background-color:white}
+#myModalNodes .sticky{position:relative;position:sticky;top:0;background-color:#cee9f9;padding:7px 50px 7px 15px;z-index:801;border-bottom:1px solid #93c2da;line-height:2em}
 #myModalNodes table{position:relative;table-layout:fixed;margin:0}
 #myModalNodes table tr>*{vertical-align:middle;position:relative}
 #myModalNodes table td{word-break:break-all}
@@ -71,10 +81,11 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes table.ds-products tbody tr:first-child td{border-top:0}
 #myModalNodes table.ds-products tr.selected{background-color:#ffedbd}
 #myModalNodes table.ds-products tr:hover{background-color:#fff4d6}
-#myModalNodes table.ds-products img{margin:5px 0 10px 0;float:left}
+#myModalNodes table.ds-products img{position:relative;margin:5px 0;float:left;cursor:pointer}
+#myModalNodes table.ds-products img:hover{border:3px solid red}
 #myModalNodes table.ds-products span.highlight{background-color:#ffc188;color:#a71f16}
 #myModalNodes table.ds-products span.name{color:#a71f16;font-weight:700}
-#myModalNodes table.ds-products span.info{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;font-size:0.9em;font-weight:700;display:inline-block;width:90%;width:calc(100% - 48px);margin:0;padding:5px 8px 5px 25px}
+#myModalNodes table.ds-products span.info{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;font-size:0.9em;font-weight:700;display:inline-block;width:90%;width:calc(100% - 48px);margin:0;padding:0 8px 0 25px}
 #myModalNodes table.ds-products span.info.top{width:100%;padding:0;font-size:1em}
 #myModalNodes table.ds-products span.info span{padding:2px 5px;margin-right:5px}
 #myModalNodes table.ds-products span.info i{color:#0068c1;font-weight:400;margin-right:10px;line-height:1.3em;max-height:2.6em;display:inline-block;vertical-align:bottom;overflow-y:hidden;border-bottom:1px dashed #a6cddc}
@@ -82,36 +93,42 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes table.ds-products tr.datasource{font-weight:700;background-color:#cee9f9}
 #myModalNodes table.ds-products tr.datasource td{border:0;padding:8px 5px 8px 15px;color:#286080}
 #myModalNodes table.ds-products tr.datasource:hover{background-color:#cee9f9}
-#myModalNodes table.ds-products tr.datasource span.title{width:86%;display:inline-block}
+#myModalNodes table.ds-products tr.datasource span.title{width:90%;display:inline-block}
 #myModalNodes table.ds-products tr.datasource span.info{width:96%;width:calc(100% - 32px)}
 #myModalNodes table.ds-products tr.datasource.disabled{opacity:0.3}
 #myModalNodes table.ds-products tr.datasource.deprecated{background-color:#ffd1d1}
+#myModalNodes table.ds-products tr.flash{background-color:#ffccbd}
 #myModalNodes table.ds-products label.deprecated{font-style:italic;color:red;font-size:1.1em;white-space:normal;word-break:break-word;text-align:justify;padding:2px 5px}
 #myModalNodes table.ds-products label.deprecated ul{position:relative;margin:0;font-weight:400}
 #myModalNodes table.ds-products label.deprecated ul li button{padding:0;text-decoration:underline;font-weight:700}
 #myModalNodes table.ds-products label.deprecated ul li button:hover{color:#286080}
 #myModalNodes table.pd-details{table-layout:auto}
-#myModalNodes table.pd-details td{vertical-align:top;border:0;padding:10px 15px 10px 15px}
-#myModalNodes table.pd-details td.preview{padding:0;min-width:400px;vertical-align:middle;text-align:center}
-#myModalNodes table.pd-details .row{border-bottom:1px solid #f4f4f4}
-#myModalNodes table.pd-details label{color:#286080;padding:0 10px}
-#myModalNodes table.pd-details span{padding:0 10px}
-#myModalNodes table.pd-details img{max-width:400px;min-width:64px}
+#myModalNodes table.pd-details td{vertical-align:top;border:0;padding:10px}
+#myModalNodes table.pd-details label{color:#286080;line-height:1.2em;display:block;text-align:justify;max-height:4.8em;overflow-x:hidden;overflow-y:auto;padding-bottom:2px;margin-bottom:5px;font-size:13px}
+#myModalNodes table.pd-details span{padding:0 5px;font-weight:400;color:#555}
+#myModalNodes table.pd-details .summary{margin-bottom:10px}
+#myModalNodes table.pd-details .summary-header{border-bottom:1px solid #cfe6f6}
+#myModalNodes table.pd-details .summary-header label{font-size:16px;margin:0;padding:2px 0 2px 5px;line-height:1.9em;cursor:pointer;background-color:#f0f8fc}
+#myModalNodes table.pd-details .summary-header button{font-size:20px;padding-right:15px}
+#myModalNodes table.pd-details .summary-content{padding:5px 10px;user-select:text}
 /* ======== TABLE ACTION CONTROLS ======== */
 #myModalNodes table.ds-products .qry-ac-group{position:absolute;left:0;width:100%;padding:2px 10px;color:#286080}
 #myModalNodes table.ds-products .top-group{top:0;font-size:16px}
 #myModalNodes table.ds-products .bottom-group{bottom:0;font-size:16px;opacity:0.1;-webkit-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-o-transition:all 0.5s ease;-ms-transition:all 0.5s ease;transition:all 0.5s ease}
+#myModalNodes table.ds-products tr.datasource .qry-ac-group .pull-right{background-color:rgba(206,233,249,0.6)}
+#myModalNodes table.ds-products tr.datasource.deprecated .qry-ac-group .pull-right{background-color:rgba(255, 209, 209, 0.6)}
 #myModalNodes table.ds-products tr.datasource .top-group{font-size:20px}
 #myModalNodes table.ds-products tr.datasource .bottom-group{opacity:0.5;font-size:20px}
 #myModalNodes table.ds-products tr:hover .bottom-group{opacity:1}
 #myModalNodes table.ds-products tr.selected .bottom-group{opacity:1;padding-right:35px}
-#myModalNodes table.ds-products .btn-action{float:left;background-color:transparent;border:0;outline:none}
-#myModalNodes table.ds-products .btn-action:hover{color:#e92f2f}
-#myModalNodes table.ds-products .btn-action[disabled]{color:#286080;opacity:0.3}
-#myModalNodes table.ds-products .btn-ul-action{float:none;font-size:1em}
+#myModalNodes .btn-action{float:left;background-color:transparent;border:0;outline:none}
+#myModalNodes .btn-action:hover{color:#e92f2f}
+#myModalNodes .btn-action[disabled]{color:#286080;opacity:0.3}
+#myModalNodes .btn-ul-action{float:none;font-size:1em}
+#myModalNodes .modal-content .btn-movable{float:right;font-size:14px;text-shadow:none;line-height:1.9em}
 /* ======== OTHER CONTROLS ======== */
 #myModalNodes .dataset-label{padding:0 15px;display:table;width:100%;margin-bottom:10px;background:white}
-#myModalNodes .dataset-label>*{display:table-cell;width:1px}
+#myModalNodes .dataset-label>*{display:table-cell;width:1px;vertical-align:middle}
 #myModalNodes .dataset-label input{width:100%;border:0;background-color:transparent;color:#3d6f8a}
 #myModalNodes .checkbox{margin:0;padding:0;position:absolute;right:7px;bottom:0}
 #myModalNodes .checkbox label{margin:0;padding:4px 10px}
@@ -121,26 +138,57 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes .pagination{margin:10px 15px 0 15px}
 #myModalNodes .pagination>li>a,.pagination>li>span{padding:4px 10px}
 #myModalNodes .btn-primary+.btn-primary{margin-left:10px}
+#myModalNodes .btn-primary.btn-red{background-color:red;border-color:#c50000}
+#myModalNodes .btn-primary.btn-red:hover{background-color:#e20000;border-color:#a90000}
+#myModalNodes .btn-primary label{font-size:0.7em;font-weight:400;margin:0;line-height:1em;vertical-align:top}
+#myModalNodes .btn-primary label:hover{text-shadow:0px 0px 4px white}
+#myModalNodes .btn-primary input{margin-right:5px;float:left}
+/* ======== THUMBNAILS ======== */
+#myModalNodes #thumbsExtent{bottom:0;padding:10px;height:auto !important}
+#myModalNodes #thumbsExtent .ui-resizable-n{background-color:#79bde4;cursor:ns-resize;text-align:center;width:97%;width:calc(100% - 20px);margin:0 10px;top:0;height:10px}
+#myModalNodes #thumbsExtent .ui-resizable-n::after{content:"\f0c9";color:white;font:normal normal normal 11px/1 FontAwesome}
+#myModalNodes #thumbsExtent .vertical-container{padding:5px;border-radius:0 0 5px 5px;overflow-y:scroll}
+#myModalNodes #thumbsExtent .thumbnails{width:100%;display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:flex-end;overflow-x:hidden;overflow-y:auto;clear:both;scroll-behavior:smooth}
+#myModalNodes #thumbsExtent .thumbnails>div{display:inline-block;width:15.5%;min-width:80px;margin:2px 1% 2px 0;position:relative;text-align:right;border-radius:5px}
+#myModalNodes #thumbsExtent .thumbnails>div::after{content:"";display:block;padding-bottom:100%}
+#myModalNodes #thumbsExtent .thumbnails>div img{position:absolute;top:0;bottom:0;left:0;right:0;width:100%;max-height:100%;object-fit:fill;object-position:center;cursor:pointer;border:4px solid transparent;border-radius:5px;box-shadow:0px 0px 4px 0 rgba(0, 0, 0, .14), 0px 0px 4px 0 rgba(0, 0, 0, .14)}
+#myModalNodes #thumbsExtent .thumbnails>div:hover::before{content:"\f00e";color:white;font:normal normal normal 16px/1 FontAwesome;position:absolute;right:5px;top:5px;background-color:rgba(13, 134, 204, 0.5);padding:5px;border-radius:12px;pointer-events:none;z-index:1}
+#myModalNodes #thumbsExtent .thumbnails>div.selected img,
+#myModalNodes #thumbsExtent .thumbnails>div img:hover{border-color:#f23b3b}
+#myModalNodes #thumbsExtent .thumbnails>div .op-exclude .fa::before{content:"\f096"}
+#myModalNodes #thumbsExtent .thumbnails>div.selected .op-exclude .fa::before{content:"\f046"}
+#myModalNodes #thumbsExtent .thumbnails>div img{-webkit-transition:all 0.3s ease;-moz-transition:all 0.3s ease;-o-transition:all 0.3s ease;-ms-transition:all 0.3s ease;transition:all 0.3s ease}
+#myModalNodes #thumbsExtent .thumbnails>div.flash{background-color:red}
+#myModalNodes #thumbsExtent .thumbnails>div.flash img{border-color:#f23b3b;opacity:0.75}
+#myModalNodes #thumbsExtent .thumbnails>div ul.controls{display:none;position:absolute;bottom:7px;right:7px;margin:0;padding:0}
+#myModalNodes #thumbsExtent .thumbnails>div:hover ul.controls{display:block}
+#myModalNodes #thumbsExtent .thumbnails>div ul.controls>li{display:block;width:20px;padding:2px 5px;margin:2px 0 0 0;background-color:red;color:white;text-shadow:2px 2px 5px black;border-radius:3px;line-height:1.3em;cursor:pointer;text-align:center;float:none;font-size:0.9em;font-weight:700}
+#myModalNodes #thumbsExtent .thumbnails>div ul.controls>li:hover{color:red;text-shadow:1px 1px 3px #ffabab;background-color:white}
+#myModalNodes #floatingExtent{position:absolute;width:98%;height:98%;top:1%;left:1%;pointer-events:none;z-index:800}
+#myModalNodes #floatingExtent .floating{width:75%;height:75%;position:absolute;bottom:0;right:0;width:auto;min-width:150px}
+#myModalNodes #floatingExtent .floating>div{width:100%;height:100%;pointer-events:all}
+#myModalNodes #floatingExtent .floating>div:hover::after{content:"\f010";color:white;font:normal normal normal 16px/1 FontAwesome;position:absolute;right:5px;top:5px;background-color:rgba(13, 134, 204, 0.5);padding:5px;border-radius:12px;pointer-events:none}
+#myModalNodes #floatingExtent .floating>div img{width:100%;height:100%;cursor:pointer;box-shadow:0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2);border-radius:10px;border:3px solid rgba(255, 255, 255, 0.4)}
 
-#collectionExtent.locked .modal-content:last-child{pointer-events:none}
-#collectionExtent.locked .modal-content:last-child::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(255, 255, 255, 0.6);z-index:2010;border-radius:10px}
-#collectionExtent.locked .modal-content:last-child button{opacity:0.1}
+@media (max-width: 767px) {
+.sidebar-open #myModalNodes{width:70%;width: calc(100% - 230px)}
+}
+
 </style>
 
-<div id="mapExtent" class="hidden">
-</div>
+<div id="mapExtent" class="hidden"></div>
 
-<div id="collectionExtent" class="extent no-map">
+<div id="collectionExtent" class="extent no-map no-transitions">
 	<div class="modal-content box-shadow--6dp" style="border:0">
-		<div class="modal-header dataset-label" style="border:0;color:#286080;border-radius:15px">
+		<div class="modal-header dataset-label" style="border:0;color:#286080;border-radius:5px">
 			<label for="datasetLabel" style="">Label:</label>
 			<input type="text" id="datasetLabel" class="form-control" name="datasetLabel" placeholder="Name of your dataset collection" value="" />
 		</div>
-		<button type="button" class="close custom" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		<button class="close custom" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	</div>
-	<div class="modal-content box-shadow--6dp">
+	<div class="modal-content main-panel box-shadow--6dp" style="border-radius:5px 5px 0 0">
 		<div class="modal-header" style="border:0">
-			<button type="button" class="close minimize"><span aria-hidden="true">&minus;</span><span class="sr-only">Minimize</span></button>
+			<button class="close minimize"><span aria-hidden="true">&minus;</span><span class="sr-only">Minimize</span></button>
 			<h4 class="modal-title" id="myModalLabel">Edit query</h4>
 		</div>
 		<div class="modal-body" style="padding-top:0">
@@ -157,8 +205,8 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				</div>
 				<div class="last">
 					<div class="col-sm-12 col-md-12">
-						<button type="button" id="saveQuery" name="btnSaveQuery" class="btn btn-primary">Save collection</button>
-						<button type="button" id="saveComponent" name="saveComponent" class="btn btn-primary hidden">Create datasource component</button>
+						<button id="saveQuery" name="btnSaveQuery" class="btn btn-primary">Save collection</button>
+						<button id="saveComponent" name="saveComponent" class="btn btn-primary hidden">Create datasource component&nbsp;&nbsp;( <label title="Products will be downloaded automatically"><input type="checkbox" />Download<br/>products?</label> )</button>
 					</div>
 				</div>
 			</div>
@@ -166,10 +214,48 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	</div>
 </div>
 
-<div id="queryExtent" class="extent shifted">
+<div id="executionExtent" class="extent no-map movable shifted">
+	<div class="modal-content box-shadow--6dp execution-results" style="border-radius:5px 5px 0 0">
+		<div class="modal-header" style="border:0">
+			<button class="cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<button class="close btn btn-movable op-reset-position" data-action="op-reset-position" title="Restore initial position" disabled><i class="fa fa-outdent"></i></button>
+			<h4 class="modal-title">Query product results</h4>
+		</div>
+		<div class="modal-body" style="padding-top:0">
+			<div id="datasourceProducts" class="row">
+				<div class="vertical-container">
+					<div class="sticky">
+						<span id="countVisible" style="font-weight:700">Display 1 to n of n products.</span>
+						<span id="countSelected" style="float:right;font-weight:700">0 products selected</span>
+						<div class="checkbox"><label><input type="checkbox" name="allproducts" value="all" /></label></div>
+					</div>
+					<table id="tbDatasourceProducts" class="table paginated ds-products"></table>
+				</div>
+				<div class="last">
+					<div class="col-sm-12 col-md-12">
+						<button id="collectProducts" name="btnCollectProducts" class="btn btn-primary">Collect selected products</button>
+						<button id="discardProducts" name="btnDiscardProducts" class="btn btn-primary btn-red" title="Remove selected products from list">Remove products from list</button>
+						<button id="cancelExecution" name="btnCancelExecution" class="btn btn-primary cancel" style="float:right">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="topInfo"></div>
+
+<div id="thumbsExtent" class="extent no-map no-transitions">
+	<div class="vertical-container box-shadow--6dp">
+		<div class="thumbnails"></div>
+	</div>
+</div>
+
+<div id="queryExtent" class="extent no-map movable shifted">
 	<div class="modal-content box-shadow--6dp query-parameters">
 		<div class="modal-header">
-			<button type="button" class="cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<button class="cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<button class="close btn btn-movable op-reset-position" data-action="op-reset-position" title="Restore initial position" disabled><i class="fa fa-outdent"></i></button>
 			<h4 class="modal-title">Datasource Interrogation</h4>
 		</div>
 		<div class="modal-body">
@@ -208,7 +294,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 						</div>
 					</div>
 				</div>
-				<div class="vertical-container">
+				<div tabindex="0" class="vertical-container">
 					<table id="tbDatasourceParams" class="table ds-params" style="table-layout:auto"></table>
 				</div>
 				<div class="last">
@@ -227,7 +313,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 						</div>
 					</div>
 					<div class="col-sm-12 col-md-12">
-						<button type="button" id="startInterrogation" name="btnStartInterrogation" class="btn btn-primary">Start interrogation</button>
+						<button id="startInterrogation" name="btnStartInterrogation" class="btn btn-primary">Start interrogation</button>
 					</div>
 				</div>
 			</div>
@@ -238,37 +324,13 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	</div>
 </div>
 
-<div id="executionExtent" class="extent shifted">
-	<div class="modal-content box-shadow--6dp execution-results">
-		<div class="modal-header" style="border:0">
-			<button type="button" class="cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-			<h4 class="modal-title">Query product results</h4>
-		</div>
-		<div class="modal-body" style="padding-top:0">
-			<div id="datasourceProducts" class="row">
-				<div class="vertical-container">
-					<div class="sticky">
-						<span id="countVisible" style="font-weight:700">Display 1 to n of n products.</span>
-						<span id="countSelected" style="float:right;font-weight:700">0 products selected</span>
-						<div class="checkbox"><label><input type="checkbox" name="allproducts" value="all" /></label></div>
-					</div>
-					<table id="tbDatasourceProducts" class="table paginated ds-products"></table>
-				</div>
-				<div class="last">
-					<div class="col-sm-12 col-md-12">
-						<button type="button" id="collectProducts" name="btnCollectProducts" class="btn btn-primary">Collect selected products</button>
-						<button type="button" id="cancelExecution" name="btnCancelExecution" class="btn btn-primary" style="float:right">Cancel</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+<div id="floatingExtent"><div class="floating"></div></div>
 
-<div id="detailsExtent" class="extent shifted">
+<div id="detailsExtent" class="extent no-map movable shifted">
 	<div class="modal-content box-shadow--6dp">
 		<div class="modal-header" style="border:0">
-			<button type="button" class="cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<button class="cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<button class="close btn btn-movable op-reset-position" data-action="op-reset-position" title="Restore initial position" disabled><i class="fa fa-outdent"></i></button>
 			<h4 class="modal-title">Product Details</h4>
 		</div>
 		<div class="modal-body" style="padding-top:0">
@@ -278,13 +340,14 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 						<tbody>
 							<tr>
 								<td class="details">
-									<label>Param 1<span>Value 1</span></label>
-									<label>Param 2<span>Value 2</span></label>
-									<label>Param 3<span>Value 3</span></label>
-									<label>Param 4<span>Value 4</span></label>
-								</td>
-								<td class="preview">
-									<img id="productPreview" src="./media/images/preview-not-available.png" />
+									<div class="summary dt-summary">
+										<div class="summary-header"><label><button class="btn-action op-toggle" data-action="op-toggle"><i class="fa fa-angle-double-left"></i></button>Product Summary</label></div>
+										<div class='summary-content'></div>
+									</div>
+									<div class="summary dt-attributes">
+										<div class="summary-header"><label><button class="btn-action op-toggle" data-action="op-toggle"><i class="fa fa-angle-double-left"></i></button>Product Attributes</label></div>
+										<div class='summary-content'></div>
+									</div>
 								</td>
 							</tr>
 						</tbody>
@@ -292,7 +355,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				</div>
 				<div class="last">
 					<div class="col-sm-12 col-md-12">
-						<button type="button" id="closeDetails" class="btn btn-primary" style="float:right">Close</button>
+						<button id="closeDetails" class="btn btn-primary cancel" style="float:right">Close</button>
 					</div>
 				</div>
 			</div>
@@ -300,10 +363,9 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	</div>
 </div>
 
-<div id="topInfo"></div>
-
 <script>
-    var isCollection     = false;
+    var $myModalNodes    = $("#myModalNodes");
+	var isCollection     = false;
     var modeEdit         = false;
 	var objDna           = {};
 	var datasourcesList  = [];
@@ -315,6 +377,20 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	var localEditMode    = false;
 	var myPolygonMap     = { mapActive: false };
 	var inputType        = { "Integer": { type: "number", min: "0" }, "Float": { type: "number" }, "Double": { type: "number" }, "String": { type: "text" } };
+	
+	function niceFileSize(size) {
+		if (size < 1024) {
+			return size + " B";
+		} else if (size < 1024*1024) {
+			return Math.round(size*100/1024)/100 + " KB";
+		} else if (size < 1024*1024*1024) {
+			return Math.round(size*100/1024/1024)/100 + " MB";
+		} else if (size < 1024*1024*1024*1024) {
+			return Math.round(size*100/1024/1024/1024)/100 + " GB";
+		} else {
+			return Math.round(size*100/1024/1024/1024/1024)/100 + " TB";
+		}
+	}
 	
 	function waitForExecution(action) {
 		setTimeout(function () { taoLoadingDiv.modal(action); }, action === "show" ? 10 : 200);
@@ -537,49 +613,39 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			$("#tbDatasourceParams input[name='footprint']").val(footprint);
 			defaultFootprint = footprint;
 		});
-		olPoly.el.on("clickextrafeature", function (evt, feature, modifier) {
+		olPoly.el.on("clickextrafeature dblclickextrafeature", function (evt, feature, modifier) {
+			evt.stopPropagation();
 			var tableName = $("#executionExtent").hasClass("shifted") ? "tbSelectedProducts" : "tbDatasourceProducts";
 			if (feature) {
 				$.each($("#" + tableName + " tbody tr:not(.datasource)"), function () {
 					var $tr = $(this);
 					if ($tr.data("id") == feature.getId()) {
-						var $chk = $tr.find(".checkbox input[name='product']");
+						var $chk = $(".checkbox input[name='product']", $tr);
 						if ($chk.length > 0) {
+							if (evt.type == "dblclickextrafeature") {
+								$chk.prop({ "checked": false });
+							}
+							
 							$chk.trigger("click");
+							// Hide floating panels
 							showTopInfo();
+							hideFloatingThumbnail();
+							
 							if ($chk.is(":checked")) {
-								// Change table page if product not on current page
-								if (!$tr.is(":visible")) {
-									var $pag = $tr.closest("tbody").data("paginaThing");
-									if ($pag) {
-										$pag.show(parseInt($tr.index()/$pag.options.perPage) + 1);
+								highlightProduct($tr, true, true);
+								setTimeout(function () { 
+									if (evt.type == "dblclickextrafeature") {
+										showDetailsPanel($tr);
+									} else {
+										updateDetailsPanel($tr);
+										updateFloatingThumbnail($tr);
 									}
-								}
-								if (!$tr.is(":visible") && $tr.hasClass("hidden")) {
-									$tr.removeClass("hidden");
-									$tr.siblings().removeClass("hidden");
-								}
-								// Scroll product into view
-								var $table     = $tr.closest("table");
-								var $container = $tr.closest(".vertical-container");
-								var $sticky    = $container.find(".sticky");
-								var scroll     = $tr.offset().top -
-												 ($table.length     > 0 ? $table.offset().top      : 0);
-								var maxScroll  = ($table.length     > 0 ? $table.outerHeight()     : 0) +
-												 ($sticky.length    > 0 ? $sticky.outerHeight()    : 0) -
-												 ($container.length > 0 ? $container.outerHeight() : 0) + $container.outerHeight() + 2;
-								if (scroll < maxScroll) {
-									$container.scrollTop(scroll);
-								} else {
-									$tr.get(0).scrollIntoView();
-								}
-								
+								}, 100);
 								setTimeout(function () { showTopInfo($tr); }, 500);
 								
 								return false;
 							}
 						} else {
-							
 							return false;
 						}
 					}
@@ -592,7 +658,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		if (myPolygonMap.mapActive) {
 			var mapW = $("#mapExtent").outerWidth();
 			if (mapW > 0) {
-				var panelW = $(".main-sidebar").outerWidth() + ($("#collectionExtent").hasClass("minimized") ? 0 : $("#collectionExtent").outerWidth() - 10);
+				var panelW = $(".main-sidebar").outerWidth() + ($myModalNodes.hasClass("full-map-view") ? 0 : $("#collectionExtent").outerWidth() - 10);
 				var prc = parseInt(100*panelW/mapW);
 				if (prc != myPolygonMap.options.panPrc) {
 					setTimeout(function () { myPolygonMap.setPanPercentage(prc); }, 100);
@@ -601,12 +667,12 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		}
 	}
 	
-	function previewProducts(table) {
+	function previewProducts($table) {
 		if (myPolygonMap.mapActive) {
 			// remove all previous preview features on map
 			myPolygonMap.removeFeaturesByProperty({ "description": "preview" });
 			// add new preview fetures on map
-			$.each($("#" + table + " tbody tr"), function () {
+			$.each($("tbody tr", $table), function () {
 				var $tr = $(this);
 				if ($tr.data("geometry")) {
 					var geometry = $tr.data("geometry")
@@ -644,6 +710,61 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		}
 	}
 	
+	function highlightProduct($tr, scrollIntoView, flashOnOff) {
+		if (scrollIntoView) {
+			// Change table page if product not on current page
+			if (!$tr.is(":visible")) {
+				var $pag = $('+.pagination-container', $tr.closest(".vertical-container")).data("paginaThing");
+				if ($pag) {
+					$pag.show(parseInt($tr.index()/$pag.options.perPage) + 1);
+				}
+			}
+			if (!$tr.is(":visible") && $tr.hasClass("hidden")) {
+				$tr.closest("tbody").find(".datasource .op-toggle").trigger("click");
+			}
+			// Scroll product into view
+			var $table     = $tr.closest("table");
+			var $container = $tr.closest(".vertical-container");
+			var $sticky    = $(".sticky", $container);
+			var scroll     = $tr.offset().top - $table.offset().top;
+			var maxScroll  = $table.outerHeight() + ($sticky.length > 0 ? $sticky.outerHeight() : 0) + 2;
+			if (scroll < maxScroll) {
+				$container.scrollTop(scroll);
+			} else {
+				$tr.get(0).scrollIntoView();
+			}
+		}
+		// highlight product in table
+		$("tr", $tr.closest("table")).removeClass("flash");
+		$tr.addClass("flash");
+		// delay showing the top info until scrollTop/scrollIntoView is finished
+		setTimeout(function () {
+			if (flashOnOff) $tr.removeClass("flash");
+			showTopInfo($tr);
+		}, 500);
+	}
+	
+	function highlightFeature($tr) {
+		if (myPolygonMap.mapActive) {
+			// partially hide all preview features on map
+			var pStroke = new ol.style.Stroke({ color: [255, 255, 255, 1], width: 2 });
+			var pFill   = new ol.style.Fill  ({ color: [255, 255, 255, 0.1] });
+			var pStyle  = new ol.style.Style ({ stroke: pStroke, fill: pFill });
+			myPolygonMap.setFeaturesStyleByProperty({ "description": "preview" }, pStyle);
+
+			var hStroke = new ol.style.Stroke({ color: [255, 0, 0, 1], width: 4 });
+			var hFill   = new ol.style.Fill  ({ color: [255, 153, 0, 0.1] });
+			var hStyle  = new ol.style.Style ({ stroke: hStroke, fill: hFill });
+			myPolygonMap.setFeaturesStyleByProperty({ "highlighted": "true" }, hStyle);
+			
+			// locate selected features on map
+			var pStroke = new ol.style.Stroke({ color: [255, 0, 0, 1], width: 4 });
+			var pFill   = new ol.style.Fill  ({ color: [255, 0, 0, 0.3] });
+			var pStyle  = new ol.style.Style ({ stroke: pStroke, fill: pFill });
+			myPolygonMap.setFeaturesStyleById($tr.data("id"), pStyle);
+		}
+	}
+	
 	function initControls() {
 		// Set page element attributes according to current action type
 		if (isCollection) {
@@ -653,7 +774,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			$("#saveQuery").prop("disabled", selectedProducts.length == 0 || ($.unique($.map(selectedProducts, function (item) { return (item._dsLabelDefault); })).length != queryCollection.length));
 			
 			$("#saveComponent").addClass("hidden");
-			$("#saveComponent").html("Create datasource component");
 			$("#saveComponent").prop("disabled", true);
 			
 			$("#datasetLabel").prop("disabled", false);
@@ -664,7 +784,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			$("#saveQuery").prop("disabled", queryCollection.length == 0);
 			
 			$("#saveComponent").removeClass("hidden");
-			$("#saveComponent").html("Create datasource component");
 			$("#saveComponent").prop("disabled", selectedProducts.length == 0);
 			
 			$("#datasetLabel").prop("disabled", true);
@@ -738,6 +857,18 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 						showMsg(response.message, "FAIL");
 					}
 				});
+			} else if (objDna.componentId) {
+				// Get datasource component
+				$.when(ajaxCallFnc("datasource/user", { id: objDna.componentId }, "GET", false))
+				.done(function (response) {
+					if (response.status === "SUCCEEDED") {
+						dsComponents.push(response.data);
+					} else {
+						showMsg(response.message, "FAIL");
+					}
+				});
+			} else {
+				localEditMode = true;
 			}
 			
 			var addQueriesInCollection = function (qryList) {
@@ -781,7 +912,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 								.done(function (response) {
 									if (response.status === "SUCCEEDED") {
 										$.each(response.data, function (index, product) {
-											product._dsThumb        = "./media/images/preview-not-available.png"
+											product._dsThumb        = "media/images/preview-not-available.png"
 											product._dsName         = parentQuery._dsName,
 											product._dsLabelDefault = parentQuery._dsLabelDefault,
 											selectedProducts.push(product);
@@ -801,7 +932,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 											approximateSize: 0,
 											productType    : parentQuery.sensor,
 											acquisitionDate: parentQuery.created,
-											_dsThumb       : "./media/images/preview-not-available.png",
+											_dsThumb       : "media/images/preview-not-available.png",
 											_dsName        : parentQuery._dsName,
 											_dsLabelDefault: parentQuery._dsLabelDefault
 										};
@@ -826,7 +957,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 					// Open query from collection for editing
 					qryIndex = _.findIndex(queryCollection, { "componentId": objDna.componentId });
 					$($("#tbSelectedProducts tr.datasource[data-index='" + qryIndex + "'] button.op-edit").get(0)).trigger("click");
-				} else if (!isCollection) {
+				} else if (!isCollection && localEditMode) {
 					// Open standalone query for editing
 					$($("#tbSelectedProducts tr.datasource button.op-edit").get(0)).trigger("click");
 				}
@@ -865,79 +996,111 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	}
 	
 	function resizePanels() {
-		if ($("#tbDatasourceParams, #tbSelectedProducts, #tbDatasourceProducts").length < 3) return false;
+		if ($("#tbDatasourceParams, #tbDatasourceProducts, #tbSelectedProducts, #tbProductDetails").length < 4) return false;
+		
+		var prevH = $("#myModalNodes").outerHeight();
 		
 		var h = $(window).height();
-		var hH = $(".main-header").outerHeight();
-		$("#myModalNodes").css({ height: (h - hH) + "px" });
+		var hH = h - $(".main-header").outerHeight();
+		$("#myModalNodes").css({ height: hH + "px" });
 		
-		h -= 25; // set panel bottom gap
+		// resize thumbnails section
+		var h0 = prevH - $("#thumbsExtent").get(0).offsetTop;
+		if ($(".thumbnails>div", "#thumbsExtent").length == 0) {
+			h0 = $("#thumbsExtent").outerHeight() - $("#thumbsExtent").height() + 10;
+		} else {
+			var th = $(".thumbnails>div:first-child", "#thumbsExtent").outerHeight(true);
+			th += $(".vertical-container", "#thumbsExtent").outerHeight() - $(".vertical-container", "#thumbsExtent").height();
+			th += $("#thumbsExtent").outerHeight() - $("#thumbsExtent").height();
+			if (h0 < th) h0 = th;
+		}
+		var t0 = hH - h0;
+		t0 *= t0 < 0 ? 0 : 1;
+		h0 = hH - t0;
+		$("#thumbsExtent").css({ top: t0 + "px" });
+		
+		h -= 15; // set panel bottom gap
 		
 		// resize query parameters section
-		var h1 = h - $("#tbDatasourceParams").parent().offset().top;
-		h1 -= $("#parameterList .last").outerHeight();
-		h1 -= $("#queryExtent .modal-note").outerHeight();
-		h1 = h1 < 60 ? 60 : h1;
-		$("#tbDatasourceParams").parent().css({ "max-height": h1 + "px" });
+		if (!$("#queryExtent").hasClass("shifted")) {
+			var h1 = h - $("#tbDatasourceParams").parent().offset().top - 10;
+			h1 -= $("#queryExtent .last").outerHeight();
+			h1 -= $("#queryExtent .modal-note").outerHeight();
+			h1 = h1 < 60 ? 60 : h1;
+			$("#tbDatasourceParams").parent().css({ "max-height": h1 + "px" });
+		}
 		
 		// resize query results section
-		var h2 = h - $("#tbDatasourceProducts").parent().offset().top;
-		h2 -= $("#datasourceProducts .pagination-container").outerHeight();
-		h2 -= $("#datasourceProducts .last").outerHeight();
-		h2 = h2 < 60 ? 60 : h2;
-		$("#tbDatasourceProducts").parent().css({ "max-height": h2 + "px" });
+		var tp = $("#tbSelectedProducts").closest(".modal-content").offset().top - 60;
+		$("#executionExtent").css({ top: tp + "px" });
+		if (!$("#executionExtent").hasClass("shifted")) {
+			var h2 = h - $("#tbDatasourceProducts").parent().offset().top;
+			h2 -= $("#executionExtent .pagination-container").outerHeight();
+			h2 -= $("#executionExtent .last").outerHeight();
+			h2 -= h0;
+			h2 = h2 < 60 ? 60 : h2;
+			$("#tbDatasourceProducts").parent().css({ "height": h2 + "px" });
+		}
 		
-		// resize query collection section
-		var h3 = h - $("#tbSelectedProducts").parent().offset().top;
-		h3 -= $("#datasourceProducts .last").outerHeight();
-		h3 = h3 < 60 ? 60 : h3;
-		$("#tbSelectedProducts").parent().css({ "max-height": h3 + "px" });
-
-		// resize details section
-		var h4 = h - $("#tbProductDetails").parent().offset().top;
-		h4 -= $("#productDetails .last").outerHeight();
-		h4 = h4 < 60 ? 60 : h4;
-		$("#tbProductDetails").parent().css({ "max-height": h4 + "px" });
+		// resize collection section
+		if (!$myModalNodes.hasClass("full-map-view")) {
+			var h3 = h - $("#tbSelectedProducts").parent().offset().top;
+			h3 -= $("#collectionExtent .last").outerHeight();
+			h3 -= h0;
+			h3 = h3 < 60 ? 60 : h3;
+			$("#tbSelectedProducts").parent().css({ "height": h3 + "px" });
+		}
+		
+		// resize product details section
+		var tp = $("#tbSelectedProducts").closest(".modal-content").offset().top - 60;
+		$("#detailsExtent").css({ top: tp + "px" });
+		if (!$("#detailsExtent").hasClass("shifted")) {
+			var h4 = h - $("#tbProductDetails").parent().offset().top - 10;
+			h4 -= $("#productDetails .last").outerHeight();
+			h4 = h4 < 60 ? 60 : h4;
+			$("#tbProductDetails").parent().css({ "max-height": h4 + "px" });
+		}
 	}
 	
 	function showPanel(panel) {
 		showTopInfo();
-		
 		if (panel == "query parameters") {
-			$("#collectionExtent").addClass("locked");
+			$("#collectionExtent, #collectionExtent .modal-content:last-child").addClass("locked");
 			if (myPolygonMap.mapActive) {
 				myPolygonMap.setReadOnly(false);
 			}
 			// hide other panels
 			$("#executionExtent").addClass("shifted");
-			$("#detailsExtent").addClass("shifted");
 			// show parameters
 			$("#queryExtent").removeClass("shifted");
 			$("#listDatasources").combobox("focus");
 		} else if (panel == "query execution results") {
-			$("#collectionExtent").addClass("locked");
+			$("#collectionExtent, #collectionExtent .modal-content:last-child").addClass("locked");
 			if (myPolygonMap.mapActive) {
 				myPolygonMap.setReadOnly(true);
 			}
 			// hide other panels
 			$("#queryExtent").addClass("shifted");
-			$("#detailsExtent").addClass("shifted");
 			// reset checkboxes
 			$('input[name=allproducts]').prop('checked', false);
 			// show execution results
 			$("#executionExtent").removeClass("shifted");
-		} else if (panel == "product details") {
-			$("#detailsExtent").removeClass("shifted");
-		} else { // if (panel == "selected products") {
-			$("#collectionExtent").removeClass("locked");
+		} else {
+			$("#collectionExtent, #collectionExtent .modal-content:last-child").removeClass("locked");
 			if (myPolygonMap.mapActive) {
 				myPolygonMap.setReadOnly(true);
 			}
 			// hide other panels
 			$("#queryExtent").addClass("shifted");
 			$("#executionExtent").addClass("shifted");
-			$("#detailsExtent").addClass("shifted");
 		}
+		// Only hide details panel when main panel is not minimized
+		if (!$myModalNodes.hasClass("full-map-view")) {
+			hideDetailsPanel();
+		}
+		
+		$(".thumbnails>div", "#thumbsExtent").remove();
+		hideFloatingThumbnail();
 	}
 	
 	function resetDatasourcesList() {
@@ -953,89 +1116,80 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	
     function showDatasourceParams(param) {
 		$("#parameterList").removeClass("hidden");
-		
-		var sortedParam = Object.keys(param).sort(function (a, b) {
-			var textA = a.toUpperCase();
-			var textB = b.toUpperCase();
-			return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-		});
-		
 		var html = "";
-		$.each(sortedParam, function (index, property) {
-			if (param.hasOwnProperty(property)) {
-				var lType = param[property]['type'].split(".");
-				
-				var lDefault = "";
-				if(param[property]['defaultValue'] !== null) {
-					lDefault = param[property]['defaultValue'];
-				}
-				var label = param[property]['label'] ? param[property]['label'] : param[property]['name'];
-				html += "<tr" + (param[property]['required'] ? " class='required'" : "") + ">" +
-						"<td>" + label + "<br><span>[" + lType[lType.length - 1] + "]</span></td>" +
-						"<td>";
-				var paramType = lType[lType.length - 1];
-				paramType = $.trim(paramType.replace(/;/g,''));
-
-				switch (paramType) {
-					case "DataFormat":
-						html += '<input type="text" name="' + property + '" value=""  class="var_' + property + '">';
-					break;
-					case "Polygon2D":
-						// Check current footprint
-						lDefault = myPolygonMap.mapActive ? myPolygonMap.getFootprint() : defaultFootprint;
-						html += '<input type="text" name="' + property + '" value="' + lDefault + '"  class="var_' + property + '" placeholder="Please select your area of interest on the map..."' + (myPolygonMap.mapActive ? ' disabled' : '') + ' />';
-					break;
-					case "SensorType":
-						var enums = taoEnums.getEntity(param[property]['type']);
-						
-						html += "<select name='" + property + "' class='var_" + property + "'>";
-						html += (param[property]['defaultValue'] == null) ? "<option value='default' selected='selected'>Select</option>" : "";
-						$.each(enums, function (index, values) {
-							html += "<option value='" + values.key + "'" + (lDefault === values.key ? " selected='selected'" : "") + ">" + values.value + "</option>";
-						});
-					break;
-					case "Date":
-						// Set the startDate default value to the last one set by the user
-						if (property == "startDate") {
-							if (localEditMode) {
-								lDefault = (lDefault == "") ? defaultInterval : lDefault;
-							} else {
-								lDefault = (defaultInterval == "") ? lDefault : defaultInterval;
-							}
-						}
-						lDefault = lDefault.replace(']', '');
-						lDefault = lDefault.replace('[', '');
-						lDefault = lDefault.split(',');
-						var lDefault1=''; lDefault2 ='';
-						if (lDefault.length > 1) {
-							lDefault1 = lDefault[0];
-							lDefault2 = lDefault[1];
-						} else {
-							lDefault1 = lDefault[0];
-						}
-						
-						html += "<input type='text' autocomplete='off' name='" + property + "_d1' class='datepicker var_" + property + "' data-name='" + property + "' value='" + lDefault1 + "'>";
-						html += "<input type='text' autocomplete='off' name='" + property + "_d2' class='datepicker var_" + property + "' data-name='" + property + "' value='" + lDefault2 + "'>";
-					break;
-					default:
-						if (param[property]['valueSet'] !== null) {
-							html += "<select name='" + property + "' class='var_" + property + "'>";
-							html += (param[property]['defaultValue'] == null) ? "<option value='default' selected='selected'>Select </option>" : "";
-							$.each(param[property]['valueSet'], function (index, value) {
-								html += "<option value='" + value + "'" + (lDefault === value ? " selected='selected'" : "") + ">" + value + "</option>";
-							});
-						} else {
-							var type = (inputType.hasOwnProperty(paramType)) ? ((inputType[paramType].hasOwnProperty("type"))? inputType[paramType]['type'] : "text") : "text";
-							var min  = (inputType.hasOwnProperty(paramType)) ? ((inputType[paramType].hasOwnProperty("min")) ? "min='" + inputType[paramType]['min'] + "'" : "") : "";
-							
-							html +=  "<input type='" + type + "' name='" + property + "' value='" + lDefault + "' " + min + " class='var_" + property + "'>";
-						}
-					break;
-				}
-				
-				html +="</td>"+
-				"</tr>";
+		$.each(param, function (index, property) {
+			var lType = property.type.split(".");
+			
+			var lDefault = "";
+			if(property.defaultValue !== null) {
+				lDefault = property.defaultValue;
 			}
+			var label = property.label ? property.label : property.name;
+			html += "<tr" + (property.required ? " class='required'" : "") + ">" +
+					"<td>" + label + "<br/><span>[" + lType[lType.length - 1] + "]</span></td>" +
+					"<td>";
+			var paramType = lType[lType.length - 1];
+			paramType = $.trim(paramType.replace(/;/g,''));
+			
+			switch (paramType) {
+				case "DataFormat":
+					html += '<input type="text" name="' + index + '" value=""  class="var_' + index + '">';
+				break;
+				case "Polygon2D":
+					// Check current footprint
+					lDefault = myPolygonMap.mapActive ? myPolygonMap.getFootprint() : defaultFootprint;
+					html += '<input type="text" name="' + index + '" value="' + lDefault + '"  class="var_' + index + '" placeholder="Please select your area of interest on the map..."' + (myPolygonMap.mapActive ? ' disabled' : '') + ' />';
+				break;
+				case "SensorType":
+					var enums = taoEnums.getEntity(property.type);
+					
+					html += "<select name='" + index + "' class='var_" + index + "'>";
+					html += (property.defaultValue == null) ? "<option value='default' selected='selected'>Select</option>" : "";
+					$.each(enums, function (index, values) {
+						html += "<option value='" + values.key + "'" + (lDefault === values.key ? " selected='selected'" : "") + ">" + values.value + "</option>";
+					});
+				break;
+				case "Date":
+					// Set the startDate default value to the last one set by the user
+					if (index == "startDate") {
+						if (localEditMode) {
+							lDefault = (lDefault == "") ? defaultInterval : lDefault;
+						} else {
+							lDefault = (defaultInterval == "") ? lDefault : defaultInterval;
+						}
+					}
+					lDefault = lDefault.replace(']', '');
+					lDefault = lDefault.replace('[', '');
+					lDefault = lDefault.split(',');
+					var lDefault1=''; lDefault2 ='';
+					if (lDefault.length > 1) {
+						lDefault1 = lDefault[0];
+						lDefault2 = lDefault[1];
+					} else {
+						lDefault1 = lDefault[0];
+					}
+					
+					html += "<input type='text' autocomplete='off' name='" + index + "_d1' class='datepicker var_" + index + "' data-name='" + index + "' value='" + lDefault1 + "'>";
+					html += "<input type='text' autocomplete='off' name='" + index + "_d2' class='datepicker var_" + index + "' data-name='" + index + "' value='" + lDefault2 + "'>";
+				break;
+				default:
+					if (property.valueSet !== null) {
+						html += "<select name='" + index + "' class='var_" + index + "'>";
+						html += (property.defaultValue == null) ? "<option value='default' selected='selected'>Select </option>" : "";
+						$.each(property.valueSet, function (index, value) {
+							html += "<option value='" + value + "'" + (lDefault === value ? " selected='selected'" : "") + ">" + value + "</option>";
+						});
+					} else {
+						var type = (inputType.hasOwnProperty(paramType)) ? ((inputType[paramType].hasOwnProperty("type"))? inputType[paramType]['type'] : "text") : "text";
+						var min  = (inputType.hasOwnProperty(paramType)) ? ((inputType[paramType].hasOwnProperty("min")) ? "min='" + inputType[paramType]['min'] + "'" : "") : "";
+						
+						html +=  "<input type='" + type + "' name='" + index + "' value='" + lDefault + "' " + min + " class='var_" + index + "'>";
+					}
+				break;
+			}
+			
+			html +="</td>"+
+			"</tr>";
 		});
 		$('table#tbDatasourceParams tbody').remove();
 		$('table#tbDatasourceParams ').append('<tbody>'+html+'</tbody>');
@@ -1079,56 +1233,20 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		resizePanels();
     }
 	
-	function resizeBase64Img(base64, width, height) {
-		var canvas = document.createElement("canvas");
-		canvas.width = width;
-		canvas.height = height;
-		var context = canvas.getContext("2d");
-		var deferred = $.Deferred();
-		$("<img/>").attr({ "src": "data:image/jpeg;base64," + base64, "crossOrigin": "anonymous" }).load(function() {
-			context.scale(width/this.width, height/this.height);
-			context.drawImage(this, 0, 0);
-			deferred.resolve($("<img/>").attr("src", canvas.toDataURL()));
+	function rebuildPagination($table, pageSize) {
+		// Define pagination
+		var $insertAfter = $table.closest(".vertical-container");
+		$('+.pagination-container', $insertAfter).remove();
+		$('tbody', $table).paginathing({
+    		firstLast: false,
+    	    perPage: pageSize || 10,
+    	    pageNumbers: 'number',
+    	    insertAfter: $insertAfter,
 		});
-		return deferred.promise();
-	}
-	
-	function setProductThumbnails($table, username, password) {
-		var qryUser = username ? username : "";
-		var qryPass = password ? password : "";
-		$.each($('tbody', $table), function (index, tbody) {
-			if (qryUser == "" && qryPass == "") {
-				var qry = queryCollection[$(tbody).find("tr.datasource").data("index")];
-				qryUser = qry ? qry.user : "";
-				qryPass = qry ? qry.password : "";
-			}
-			if (qryUser != "" && qryPass != "") {
-				$.each($('tr:not(.datasource)', $(tbody)), function (index, tr) {
-					var previewUrl = $(tr).data("preview");
-					var $img = $(tr).find("td img");
-					if ($img.length > 0 && $img.attr("src").indexOf("data:image/png;base64") == -1 && previewUrl) {
-						$.ajax({
-							url: baseRestApiURL + "utilities/tunnel/get",
-							type: "GET",
-							data: { url: decodeURIComponent(previewUrl), user: qryUser, password: qryPass },
-							beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
-							success: function(response) {
-								if (response != "") {
-									//$img.attr("src", "data:image/jpeg;base64," + response);
-									resizeBase64Img(response, 48, 48).then(function (newImg) {
-										$img.attr("src", $(newImg).attr("src"));
-										// Update thumbnail in selected products list
-										var product = selectedProducts[$(tr).data("selIndex")];
-										if (typeof product !== "undefined") {
-											product._dsThumb = $(newImg).attr("src");
-										}
-									});
-								}
-							}
-						});
-					 }
-				});
-			}
+		// Get thumbnails after pagination
+ 		$('+.pagination-container', $insertAfter).on("pagechange", function (e, data) {
+			getVisibleProductsThumbnails($table);
+			countSelectedProducts($table.attr("id"));
 		});
 	}
 	
@@ -1137,47 +1255,55 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		
 		$('table#tbDatasourceProducts tbody').remove();
 		$('table#tbDatasourceProducts').append('<tbody></tbody>');
-		$.each(listOfProducts, function (index, value) {
-			var str = value.name;
+		$.each(listOfProducts, function (index, product) {
+			var str = product.name;
 			var platform = str.substring(0, str.indexOf("_"));
 			str = str.substring(str.indexOf("_") + 1);
-			var instrument = str.substring(0, str.indexOf("_"));
-			var size = Math.floor(value.approximateSize*100/1024/1024)/100 + " MB";
+			var instrument = "-";
+			var attributes = {};
+			$.each(product.attributes, function (index, attribute) { attributes[attribute.name] = attribute.value; });
+			if (attributes.instrumentshortname) {
+				instrument = attributes.instrumentshortname.indexOf(" ") >= 0 ? attributes.instrumentshortname.substring(0, attributes.instrumentshortname.indexOf(" ")) : attributes.instrumentshortname;
+			}
 			
-			var existing = _.findWhere(selectedProducts, { id: value.id });
+			var existing = _.findWhere(selectedProducts, { id: product.id });
 			var $tr = $("<tr" + (existing ? " class='selected'" : "") + "></tr>");
-			$tr.data("name", value.name);
-			$tr.data("id", value.name);
-			if (value.geometry) { $tr.data("geometry", value.geometry); }
-			if (value.quicklookLocation) { $tr.data("preview", encodeURIComponent(value.quicklookLocation).replace(/'/g, "%27").replace(/"/g, "%22")); }
+			$tr.data("name", product.name);
+			$tr.data("selIndex", index);
+			$tr.data("id", product.name).attr("id", product.name);
+			if (product.geometry) { $tr.data("geometry", product.geometry); }
+			if (product.quicklookLocation) { $tr.data("preview", encodeURIComponent(product.quicklookLocation).replace(/'/g, "%27").replace(/"/g, "%22")); }
 			$tr.html(
 					"	<td>" +
+					"	<span class='qry-ac-group bottom-group' style='padding-right:35px'>" +
+					"		<span class='pull-right'>" +
+					(!myPolygonMap.mapActive ? "" :
+					"			<button class='btn-action op-locate' data-action='op-locate' title='Locate product on map'><i class='glyphicon glyphicon-screenshot'></i></button>") +
+					"			<button class='btn-action op-details' data-action='op-details' title='View product details'><i class='glyphicon glyphicon-eye-open'></i></button>" +
+					"		</span>" +
+					"	</span>" +
 					"		<span class='info top'>" +
-					"			<span class='highlight'>" + platform + "</span><span class='highlight'>" + instrument + "</span><span class='name'>" + value.name + "</span>" +
+					"			<span class='highlight'>" + platform + "</span><span class='highlight'>" + instrument + "</span><span class='name'>" + product.name + "</span>" +
 					"		</span>" +
-					"		<img width='48px' src='./media/images/preview-not-available.png' />" +
+					"		<img width='48px' height='48px' src='./media/images/preview-not-available.png' />" +
 					"		<span class='info'>" +
-					"			<span>Download URL: <i>" + value.location + "</i></span>" +
-					"			<p>Mission: <i>" + value.productType + "</i> Instrument: <i>" + instrument + "</i> Sensing Date: <i>" + value.acquisitionDate.replace(".000+0000", "").replace("T", " ") + "</i> Size: <i>" + size + "</i></p>" +
+					"			<span>Download URL: <i>" + product.location + "</i></span>" +
+					"			<p>Mission: <i>" + product.productType + "</i> Instrument: <i>" + instrument + "</i> Sensing Date: <i>" + niceIsoTime(product.acquisitionDate) + "</i> Size: <i>" + niceFileSize(product.approximateSize) + "</i></p>" +
 					"		</span>" +
-					"		<div class='checkbox'><label><input type='checkbox' name='product' value='" + value.id + "'" + (existing ? " checked='checked'" : "") + " /></label></div>" +
+					"		<div class='checkbox'><label><input type='checkbox' name='product' value='" + product.id + "'" + (existing ? " checked='checked'" : "") + " /></label></div>" +
 					"	</td>"
 			);
 			$('table#tbDatasourceProducts tbody').append($tr);
 		});
-		setProductThumbnails($("table#tbDatasourceProducts"), $('#user_name').val(), $('#user_pass').val());
 		
-    	$('.pagination-container').remove();
-    	$('table#tbDatasourceProducts tbody').paginathing({
-    		firstLast: false,
-    	    perPage: parseInt($("#pageSize", "#queryExtent").val()) || 10,
-    	    pageNumbers: 'number',
-    	    insertAfter: $("#tbDatasourceProducts").parent(),
-		});
+    	rebuildPagination($("table#tbDatasourceProducts"), parseInt($("#pageSize", "#queryExtent").val()));
+		getVisibleProductsThumbnails($("table#tbDatasourceProducts"));
 		countSelectedProducts("tbDatasourceProducts");
 		
 		resizePanels();
-		previewProducts("tbDatasourceProducts");
+		previewProducts($("table#tbDatasourceProducts"));
+		
+		showThumbnails($("#tbDatasourceProducts"));
     }
 	
 	function registerQueryInCollection(query) {
@@ -1248,32 +1374,37 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		});
 		
 		// Parse products
-		$.each(selectedProducts, function(index, value) {
+		$.each(selectedProducts, function(index, product) {
 			// Find the datasource section where the product should be added
 			var $crtDatasetHeader = false;
 			$.each($('table#tbSelectedProducts tbody tr.datasource'), function () {
-				if ($(this).data("dsName") === value._dsName && $(this).data("dsLabelDefault") === value._dsLabelDefault) {
+				if ($(this).data("dsName") === product._dsName && $(this).data("dsLabelDefault") === product._dsLabelDefault) {
 					$crtDatasetHeader = $(this);
 					return false;
 				}
 			});
 			if ($crtDatasetHeader) {
-				var str = value.name;
+				var str = product.name;
 				var platform = str.substring(0, str.indexOf("_"));
 				str = str.substring(str.indexOf("_") + 1);
-				var instrument = str.substring(0, str.indexOf("_"));
-				var size = Math.floor(value.approximateSize*100/1024/1024)/100 + " MB";
+				
+				var instrument = "-";
+				var attributes = {};
+				$.each(product.attributes, function (index, attribute) { attributes[attribute.name] = attribute.value; });
+				if (attributes.instrumentshortname) {
+					instrument = attributes.instrumentshortname.indexOf(" ") >= 0 ? attributes.instrumentshortname.substring(0, attributes.instrumentshortname.indexOf(" ")) : attributes.instrumentshortname;
+				}
 				
 				var $tr = $("<tr></tr>");
 				$tr.data("dsIndex", $crtDatasetHeader.data("index"));
 				$tr.data("selIndex", index);
-				$tr.data("id", $crtDatasetHeader.data("index") + "_" + value.name);
-				$tr.data("name", value.name);
-				if (value.geometry) { $tr.data("geometry", value.geometry); }
-				if (!value.quicklookLocation && value.location.indexOf("/$value") >= 0) {
-					value.quicklookLocation = value.location.replace("/$value", "/Products('Quicklook')/$value");
+				$tr.data("id", $crtDatasetHeader.data("index") + "_" + product.name).attr("id", $crtDatasetHeader.data("index") + "_" + product.name);
+				$tr.data("name", product.name);
+				if (product.geometry) { $tr.data("geometry", product.geometry); }
+				if (!product.quicklookLocation && product.location.indexOf("/$value") >= 0) {
+					product.quicklookLocation = product.location.replace("/$value", "/Products('Quicklook')/$value");
 				}
-				if (value.quicklookLocation) { $tr.data("preview", encodeURIComponent(value.quicklookLocation).replace(/'/g, "%27").replace(/"/g, "%22")); }
+				if (product.quicklookLocation) { $tr.data("preview", encodeURIComponent(product.quicklookLocation).replace(/'/g, "%27").replace(/"/g, "%22")); }
 				$tr.html(	"<td>" +
 							"	<span class='qry-ac-group bottom-group'>" +
 							"		<span class='pull-right'>" +
@@ -1284,14 +1415,14 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 							"		</span>" +
 							"	</span>" +
 							"	<span class='info top'>" +
-							"		<span class='highlight'>" + platform + "</span><span class='highlight'>" + instrument + "</span><span class='name'>" + value.name + "</span><br/>" +
+							"		<span class='highlight'>" + platform + "</span><span class='highlight'>" + instrument + "</span><span class='name'>" + product.name + "</span><br/>" +
 							"	</span>" +
-							"	<img width='48px' src='" + value._dsThumb + "' />" +
+							"	<img width='48px' height='48px' src='" + product._dsThumb + "' />" +
 							"	<span class='info'>" +
-							"		<span>Download URL: <i>" + value.location + "</i></span>" +
-							"		<p>Mission: <i>" + value.productType + "</i> Instrument: <i>" + instrument + "</i> Sensing Date: <i>" + value.acquisitionDate.replace(".000+0000", "").replace("T", " ") + "</i> Size: <i>" + size + "</i></p>" +
+							"		<span>Download URL: <i>" + product.location + "</i></span>" +
+							"		<p>Mission: <i>" + product.productType + "</i> Instrument: <i>" + instrument + "</i> Sensing Date: <i>" + niceIsoTime(product.acquisitionDate) + "</i> Size: <i>" + niceFileSize(product.approximateSize) + "</i></p>" +
 							"	</span>" +
-							"	<div class='checkbox hidden'><label><input type='checkbox' name='product' value='" + value.id + "' /></label></div>" +
+							"	<div class='checkbox hidden'><label><input type='checkbox' name='product' value='" + product.id + "' /></label></div>" +
 							"</td>"
 				);
 				$crtDatasetHeader.after($tr);
@@ -1305,15 +1436,15 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				$(this).after("<tr style='background-color:#fff4d6'><td>No selected products for this datasource component</td></tr>")
 			}
 		});
-		setProductThumbnails($("table#tbSelectedProducts"));
+		getVisibleProductsThumbnails($("table#tbSelectedProducts"));
 		
 		resetDatasourcesList();
-		
 		resizePanels();
-		// Show products on map
-		previewProducts("tbSelectedProducts");
-		
 		initControls();
+		
+		// Show products on map
+		previewProducts($("table#tbSelectedProducts"));
+		showThumbnails($("table#tbSelectedProducts"));
 	}
 	
 	function countSelectedProducts(tableName) {
@@ -1395,22 +1526,439 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	}
 	
 	function showTopInfo($tr) {
-		if (typeof $tr !== "undefined" &&  $(".top.info .name", $tr).length > 0) {
+		if (typeof $tr !== "undefined" &&  $(".top.info .name", $tr).length > 0 && $tr.closest(".ui-draggable-dragging").length == 0) {
+			// get tooltip text
 			var topInfo = $(".top.info .name", $tr).html();
+			
+			// calculate tooltip position
 			var tp = $(".top.info .name", $tr).offset().top;
 			var lf = $(".top.info .name", $tr).offset().left;
-			$("#topInfo").css({ left: lf+"px", top: tp+"px" })
-			$("#topInfo").html(topInfo);
+			
+			// prevent showing tooltip over the sticky section
+			var $sticky = $tr.closest("table").siblings(".sticky");
+			var minTop = $sticky.offset().top + $sticky.outerHeight();
+			
+			var $container = $tr.closest(".vertical-container");
+			var maxTop = $container.offset().top + $container.outerHeight() - $("#topInfo").outerHeight();
+			if (tp >= minTop && tp <= maxTop) {
+				$("#topInfo").css({ left: lf+"px", top: tp+"px" })
+				$("#topInfo").html(topInfo);
+			} else {
+				$("#topInfo").html("");
+				$("#topInfo").css({ left: "0px", top: "0px" });
+			}
 		} else {
 			$("#topInfo").html("");
 			$("#topInfo").css({ left: "0px", top: "0px" });
 		}
 	}
 	
-	$("#collectionExtent").on("click", ".btn-action", function (e) {
+	function setProductImageSource(previewUrl, qryUser, qryPass, prodName) {
+		var notAvailable = "media/images/preview-not-available.png";
+		var deferred = $.Deferred();
+		$.ajax({
+			url: baseRestApiURL + "utilities/tunnel/get",
+			type: "GET",
+			data: { url: decodeURIComponent(previewUrl), user: qryUser, password: qryPass, name: prodName },
+			beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
+			success: function(response) {
+				deferred.resolve(response === "" ? notAvailable : response);
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				deferred.resolve(notAvailable);
+			}
+		});
+		return deferred.promise();
+	}
+	
+	function getVisibleProductsThumbnails($table) {
+		var isSelectedProductsTable = $table.get(0).id === "tbSelectedProducts";
+		
+		$.each($('tbody', $table), function (index, tbody) {
+			var $tbody = $(tbody);
+			
+			var qryUser = isSelectedProductsTable ? "" : $("#user_name").val();
+			var qryPass = isSelectedProductsTable ? "" : $("#user_pass").val();
+			if (isSelectedProductsTable) {
+				var qry = queryCollection[$("tr.datasource", $tbody).data("index")];
+				qryUser = qry ? qry.user : "";
+				qryPass = qry ? qry.password : "";
+			}
+			$.each($('tr:not(.datasource)', $tbody), function (index, tr) {
+				var $tr = $(tr);
+				var previewUrl = $tr.data("preview");
+				var prodName = $tr.data("name");
+				var $img = $("td img", tr);
+				if ($tr.is(":visible") && $img.length > 0 && $img.attr("src").indexOf("preview-not-available.png") >= 0) {
+					$.when(setProductImageSource(previewUrl, qryUser, qryPass, prodName)).done(function (response) { $img.attr("src", response); });
+				}
+			});
+		});
+	}
+	
+	function resizeFloatingThumbnail(ratio) {
+		var $img = $(".floating>div img", "#floatingExtent");
+		if ($img.length > 0) {
+			var $floating = $img.closest(".floating");
+			if (typeof ratio === "undefined") {
+				ratio = $img.data("ratio");
+			}
+			var w = Math.max($img.get(0).naturalWidth, $img.get(0).naturalHeight);
+			var h = w*ratio;
+			
+			var maxW = 3/4*$("#floatingExtent").outerWidth();
+			var maxH = 3/4*$("#floatingExtent").outerHeight();
+			if (w > maxW) {
+				w = maxW;
+				h = w*ratio;
+			}
+			if (h > maxH) {
+				h = maxH;
+				w = h/ratio;
+			}
+			var rg = $floating.get(0).offsetLeft + w;
+			if (rg > $("#floatingExtent").outerWidth()) {
+				var lf = $("#floatingExtent").outerWidth() - w;
+				$floating.css({ right: "unset", left: lf + "px" });
+			}
+			var bt = $floating.get(0).offsetTop + h;
+			if (bt > $("#floatingExtent").outerHeight()) {
+				var tp = $("#floatingExtent").outerHeight() - h;
+				$floating.css({ bottom: "unset", top: tp + "px" });
+			}
+			$floating.css({ width: w + "px", height: h + "px" });
+			$img.data("ratio", ratio);
+			var id = $img.closest("div").attr("id");
+			//$(".thumbnails>div", "#thumbsExtent").removeClass("selected");
+			//$("div#" + id, "#thumbsExtent").addClass("selected");
+		}
+	}
+	
+	function showFloatingThumbnail($tr) {
+		var trId = $tr.get(0).id;
+		var $thumbnail = $(".thumbnails>div#" + trId, "#thumbsExtent");
+		if ($thumbnail.length == 0) return;
+		
+		// Show product large preview image
+		var $floating = $(".floating>div", "#floatingExtent");
+		var feature = myPolygonMap.getFeatureById(trId);
+		var extent = feature.getGeometry().getExtent();
+		var ratio = 1;
+		var angleR_ = 0;
+		if (feature.getGeometry().flatCoordinates.length == 10) {
+			var center = [feature.getGeometry().getInteriorPoint().flatCoordinates[0], feature.getGeometry().getInteriorPoint().flatCoordinates[1]];
+			var lon1 = feature.getGeometry().flatCoordinates[0];
+			var lat1 = feature.getGeometry().flatCoordinates[1];
+			var lon2 = feature.getGeometry().flatCoordinates[2];
+			var lat2 = feature.getGeometry().flatCoordinates[3];
+			
+			angle_ = Math.atan2(lat2-lat1, lon2-lon1);
+			var angle_ = angle_*180/Math.PI;
+			if (angle_ >  135) angle_ -= 180;
+			if (angle_ < -135) angle_ += 180;
+			if (angle_ >   45) angle_ -=  90;
+			if (angle_ <  -45) angle_ +=  90;
+			angleR_ = (-1)*angle_*Math.PI/180;
+			
+			var tmp = feature.clone();
+			tmp.getGeometry().rotate(angleR_, center);
+			extent = tmp.getGeometry().getExtent();
+			var fW = ol.extent.getWidth(extent);
+			var fH = ol.extent.getHeight(extent);
+			ratio = fH/fW;
+		}
+		
+		//var url = $("img", $thumbnail).attr("src");
+		//displayProductImage(url, extent, (-1)*angle_);
+		
+		$(".floating", "#floatingExtent").html("").append($thumbnail.clone());
+		$(".controls", "#floatingExtent").remove();
+		resizeFloatingThumbnail(ratio);
+	}
+	
+	function hideFloatingThumbnail() {
+		$(".floating>div", "#floatingExtent").remove();
+	}
+	
+	function toggleFloatingThumbnail($tr) {
+		if ($(".floating>div", "#floatingExtent").length == 0 || $(".floating>div", "#floatingExtent").attr("id") !== $tr.attr("id")) {
+			showFloatingThumbnail($tr);
+		} else{
+			hideFloatingThumbnail();
+		}
+	}
+	
+	function updateFloatingThumbnail($tr) {
+		if ($tr && $tr.length > 0 && $tr.data("id") && $(".floating>div", "#floatingExtent").length > 0) {
+			showFloatingThumbnail($tr);
+		}
+	}
+	
+	function showThumbnails($table) {
+		$(".thumbnails", "#thumbsExtent").html("");
+		$.each($("tr:not(.datasource)", $table), function (index, tr) {
+			showThumbnail($(tr));
+		});
+		resizePanels();
+	}
+	
+	function showThumbnail($tr) {
+		if ($tr && $tr.length > 0 && $tr.data("id")) {
+			var trId = $tr.data("id");
+			var isSelectedProductsTable = $tr.closest("table").get(0).id === "tbSelectedProducts";
+			
+			var $chk = $(".checkbox input[name='product']", $tr);
+			if ($chk.length == 0) return;
+			
+			var $thumbnail = $(".thumbnails>div#" + trId, "#thumbsExtent");
+			if ($thumbnail.length == 0) {
+				var $img = $("td img", $tr);
+				var $div = $(
+					"<div id='" + trId + "'" + ($chk.is(":checked") ? " class='selected'" : "") + ">" +
+					"	<img src='" + ($img.length > 0 ? $img.attr("src") : "media/images/preview-not-available.png") + "' />" +
+					"	<ul class='controls'>" +
+					"		<li class='btn-action op-exclude' data-action='op-exclude'><i class='fa'></i></li>" +
+					"		<li class='btn-action op-remove' data-action='op-remove'><i class='fa fa-trash'></i></li>" +
+					"	</ul>" +
+					"</div>"
+				);
+				$(".thumbnails", "#thumbsExtent").prepend($div);
+				$img = $(".thumbnails>div#"+ trId + " img", "#thumbsExtent");
+				if ($img.attr("src").indexOf("preview-not-available.png") >= 0) {
+					var qryUser = isSelectedProductsTable ? "" : $("#user_name").val();
+					var qryPass = isSelectedProductsTable ? "" : $("#user_pass").val();
+					if (isSelectedProductsTable) {
+						var $tbody = $tr.closest("tbody");
+						if ($tbody.length > 0) {
+							var qry = queryCollection[$("tr.datasource", $tbody).data("index")];
+							qryUser = qry ? qry.user : "";
+							qryPass = qry ? qry.password : "";
+						}
+					}
+					var previewUrl = $tr.data("preview");
+					var prodName = $tr.data("name");
+					$.when(setProductImageSource(previewUrl, qryUser, qryPass, prodName)).done(function (response) {
+						$img.attr("src", response);
+					});
+				}
+			} else {
+				if ($chk.is(":checked")) {
+					$thumbnail.addClass("selected");
+				} else {
+					$thumbnail.removeClass("selected");	
+				}
+			}
+		}
+	}
+
+	function highlightThumbnail($tr, scrollIntoView) {
+		var $thumbnail = $(".thumbnails>div#" + $tr.data("id"), "#thumbsExtent");
+		if ($thumbnail.length > 0) {
+			var $thumbnails = $thumbnail.closest(".thumbnails");
+			var $container  = $thumbnail.closest(".vertical-container");
+			if (scrollIntoView) {
+				var scroll    = $thumbnail.offset().top - $thumbnails.offset().top;
+				var maxScroll = $thumbnails.outerHeight();
+				if (scroll < maxScroll) {
+					$container.scrollTop(scroll);
+				} else {
+					$thumbnail.get(0).scrollIntoView();
+				}
+			}
+			$thumbnail.addClass("flash");
+			setTimeout(function () {
+				$thumbnail.removeClass("flash");
+			}, 500);
+		}
+	}
+	
+	function updateThumbnailControls($thumbnail) {
+		var selected = $thumbnail.hasClass("selected");
+		var ul = 	"<ul class='controls'>" +
+					"	<li class='btn-action' data-action='op-exclude' title='Unselect product'><i class='fa " + (selected ? "fa-square-o" : "fa-check-square-o") + "'></i></li>" +
+					"	<li class='btn-action' data-action='op-remove' title='Remove product from results'><i class='fa fa-trash'></i></li>" +
+					"</ul>"
+		$thumbnail.append(ul);
+	}
+	
+	function showDetailsPanel($tr) {
+		if ($tr && $tr.length > 0 && $tr.closest("tbody").length > 0) {
+			var $tbody  = $tr.closest("tbody");
+			$(".summary-content", "#tbProductDetails").html("");
+			
+			// Get product attributes
+			var isSelectedProductsTable = $tr.closest("table").attr("id") === "tbSelectedProducts";
+			var product = isSelectedProductsTable ? selectedProducts[$tr.data("selIndex")] : listOfProducts[$tr.data("selIndex")];
+			$(".modal-title", "#detailsExtent").html("Product Details");
+			
+			var attributes = {
+				date      : niceIsoTime(product.acquisitionDate),
+				id        : "-",
+				filename  : "-",
+				instrument: "-",
+				sensor    : "-",
+				size      : "0"
+			};
+			
+			var detailsProd = "";
+			var detailsLast = "";
+			$.each(Object.keys(product), function (index, key) {
+					   if (key == "acquisitionDate") { attributes.date   = niceIsoTime(product[key]);
+				} else if (key == "name"           ) { attributes.id     = product[key];
+				} else if (key == "productType"    ) { attributes.sensor = product[key];
+				} else if (key == "approximateSize") { attributes.size   = niceFileSize(product[key]); detailsProd += "<label>" + key + ":<span>" + product[key] + "</span></label>";
+				} else if (key.indexOf("_ds") == -1 && typeof product[key] !== "object") {
+					if ((product[key] + "").indexOf("http:") == 0 ||
+						(product[key] + "").indexOf("https:") == 0 ||
+						(product[key] + "").indexOf("file:") == 0 ||
+						(product[key] + "").indexOf("POLYGON") == 0 ||
+						(product[key] + "").indexOf("MULTIPOLYGON") == 0
+						) {
+						detailsLast += "<label>" + key + ":<span>" + product[key] + "</span></label>";
+					} else if ((key != "width" && key != "height") || (product[key] != -1)) {
+						detailsProd += "<label>" + key + ":<span>" + product[key] + "</span></label>";
+					}
+				}
+			});
+			
+			detailsAttr = "";
+			if (typeof product.attributes !== "undefined") {
+				$.each(product.attributes, function (index, attribute) {
+					switch (attribute.name) {
+						case "instrumentshortname":
+							attributes.instrument = attribute.value.indexOf(" ") >= 0 ? attribute.value.substring(0, attribute.value.indexOf(" ")) : attribute.value;
+							if (attributes.instrument != attribute.value) detailsAttr += "<label>" + attribute.name + ":<span>" + attribute.value + "</span></label>";
+							break;
+						case "filename":
+							attributes.filename = attribute.value;
+							break;
+						default:
+							detailsAttr += "<label>" + attribute.name + ":<span>" + attribute.value + "</span></label>";
+							break;
+					}
+				});
+			}
+			
+			detailsFirst = "";
+			$.each(Object.keys(attributes), function (index, key) {
+				detailsFirst += "<label style='text-transform:capitalize'>" + key + ":<span>" + attributes[key] + "</span></label>";
+			});
+			
+			$(".dt-summary .summary-content"   , "#tbProductDetails").html(detailsFirst + "<br/>" + detailsProd);
+			$(".dt-attributes .summary-content", "#tbProductDetails").html(detailsAttr  + detailsLast);
+			
+			if (attributes.id != "-") { $(".modal-title", "#detailsExtent").html(attributes.id); }
+		}
+		
+		$("#detailsExtent").removeClass("shifted");
+		$("#detailsExtent").data("id", $tr.data("id"));
+		
+		resizePanels();
+		showTopInfo();
+	}
+	
+	function hideDetailsPanel() {
+		$("#detailsExtent").addClass("shifted").removeData("id");
+	}
+	
+	function toggleDetailsPanel($tr) {
+		if ($("#detailsExtent").hasClass("shifted") || $("#detailsExtent").data("id") !== $tr.data("id")) {
+			showDetailsPanel($tr);
+		} else{
+			hideDetailsPanel();
+		}
+	}
+	
+	function updateDetailsPanel($tr) {
+		if ($tr && $tr.length > 0 && !$("#detailsExtent").hasClass("shifted")) {
+			showDetailsPanel($tr);
+		}
+	}
+
+	function rotateImage(url, bearing) {
+		var canvas = document.createElement("canvas");
+		var ctx = canvas.getContext('2d');
+		var img = new Image();
+		var deferred = $.Deferred();
+		img.onload = function () { //on image load do the following stuff
+			canvas.width = this.width*2; //Any width
+			canvas.height = this.height*2; //Any height
+			var cache = this; //cache the local copy of image element for future reference
+			var iw = cache.width;
+			var ih = cache.height;
+			
+			ctx.save(); //saves the state of canvas
+			ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the canvas
+			ctx.translate(canvas.width/2, canvas.height/2); //let's translate
+			ctx.rotate(bearing/2 * Math.PI / 180); //increment the angle and rotate the image 
+			ctx.translate(-(canvas.width/2), -(canvas.height/2)); //let's translate
+			ctx.drawImage(img, canvas.width/2 - iw/2, canvas.height/2 - ih/2, iw, ih); //draw the image ;)
+			ctx.restore(); //restore the state of canvas
+			
+			deferred.resolve($("<img/>").attr("src", canvas.toDataURL()));
+			
+		};
+		img.src = url;
+		return deferred.promise();
+	}
+	
+	function displayProductImage(imageUrl, extent, bearing) {
+		if (myPolygonMap.mapActive) {
+			$.each(myPolygonMap.map.getLayers().getArray(), function (index, layer) {
+				if (layer instanceof ol.layer.Image) {
+					myPolygonMap.map.removeLayer(layer);
+				}
+			});
+			if (imageUrl) {
+				rotateImage(imageUrl, bearing).then(function (newImg) {
+					var imageLayer = new ol.layer.Image({
+						opacity: 0.75,
+						source: new ol.source.ImageStatic({
+							url: $(newImg).attr("src"),
+							projection: myPolygonMap.map.getView().getProjection(),
+							imageExtent: extent
+						})
+					});
+					myPolygonMap.map.addLayer(imageLayer);
+				});
+			}
+		}
+	};
+
+	$("#tbSelectedProducts, #tbDatasourceProducts").on("click dblclick", "tr img", function (e) {
+		e.stopPropagation();
+		var $tr = $(this).closest("tr");
+		toggleFloatingThumbnail($tr);
+		$tr.trigger("click");
+	});
+	
+	$("#thumbsExtent").on("click", ".thumbnails>div", function (e) {
+		// Update details panel if visible
+		var tableName = $("#executionExtent").hasClass("shifted") ? "tbSelectedProducts" : "tbDatasourceProducts";
+		var $tr = $("tr#" + this.id, "table#" + tableName);
+		if ($tr.length > 0) {
+			highlightProduct($tr, true);
+			toggleFloatingThumbnail($tr);
+			$tr.trigger("click");
+		}
+	});
+	
+	$("#floatingExtent").on("click", ".floating>div", function (e) {
+		hideFloatingThumbnail();
+	});
+	
+	$(".btn-movable").on("click", function (e) {
+		$(this).closest(".extent").css({ left: "" });
+		$(this).prop("disabled", true);
+	});
+	
+	$("#tbSelectedProducts, #tbDatasourceProducts, #tbAddNewCriteria, #tbProductDetails, #thumbsExtent").on("click dblclick", ".btn-action", function (e) {
+		e.stopPropagation();
+		
+		if (e.type == "dblclick") return;
 		var goBack = true;
 		
-		var $tr = $(this).closest("tr");
+		var $tr = (e.delegateTarget.id == "thumbsExtent") ? $("tr#" + $(this).closest("div").attr("id"), $("#executionExtent").hasClass("shifted") ? "#tbSelectedProducts" : "#tbDatasourceProducts") : $(this).closest("tr");
 		if ($tr.length == 0) return;
 		if ($tr.hasClass("datasource")) {
 			localEditMode = false;
@@ -1422,23 +1970,22 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 						goBack = false;
 						if ($(this).find("i").hasClass("fa-angle-double-left")) {
 							$(this).find("i").removeClass("fa-angle-double-left").addClass("fa-angle-double-down");
+							$(this).closest("tr").siblings().addClass("hidden");
 						} else {
 							$(this).find("i").addClass("fa-angle-double-left").removeClass("fa-angle-double-down");
+							$(this).closest("tr").siblings().removeClass("hidden");
 						}
-						$(this).closest("tr").siblings().toggleClass("hidden");
 					break;
 					case "op-addnew":
-						if ($("#queryExtent").hasClass("shifted") || $("#queryExtent").data("query")) {
+						if ($("#queryExtent").hasClass("shifted")) {
 							goBack = false;
 							updateSelectedProductsTable();
 							resetDatasourcesList();
 							showPanel("query parameters");
-							
-							$("#queryExtent").removeData("query");
 						}
 					break;
 					case "op-edit":
-						if (crtQuery && ($("#queryExtent").hasClass("shifted") || crtQuery !== $("#queryExtent").data("query"))) {
+						if (crtQuery && $("#queryExtent").hasClass("shifted")) {
 							goBack = false;
 							localEditMode = true;
 							
@@ -1466,6 +2013,8 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 								$("#queryExtent .modal-note").addClass("hidden");
 							}
 							
+							showPanel("query parameters");
+							
 							// restore query datasource
 							$("#listDatasources").combobox("autocomplete", { name: crtQuery._dsName, id: crtQuery._dsId });
 							
@@ -1475,8 +2024,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 							$("#limit").val(crtQuery.limit);
 							$("#pageNumber").val(crtQuery.pageNumber);
 							$("#pageSize").val(crtQuery.pageSize);
-							
-							showPanel("query parameters");
 							
 							$("#queryExtent").data("query", crtQuery);
 						}
@@ -1496,7 +2043,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 										defaultFootprint = crtQuery.values.footprint;
 									}								
 									updateSelectedProductsTable();
-									$("#queryExtent").removeData("query");
 								},
 								callbackCancel: function () { }
 							});
@@ -1516,7 +2062,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 								queryCollection.splice($.inArray(crtQuery, queryCollection), 1);
 								
 								updateSelectedProductsTable();
-								$("#queryExtent").removeData("query");
 							},
 							callbackCancel: function () { }
 						});
@@ -1526,115 +2071,90 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		} else {
 			// product stuff
 			switch ($(this).data("action")) {
+				case "op-toggle":
+					goBack = false;
+					if ($(this).find("i").hasClass("fa-angle-double-left")) {
+						$(this).find("i").removeClass("fa-angle-double-left").addClass("fa-angle-double-down");
+						$(this).closest(".summary-header").siblings().addClass("hidden");
+					} else {
+						$(this).find("i").addClass("fa-angle-double-left").removeClass("fa-angle-double-down");
+						$(this).closest(".summary-header").siblings().removeClass("hidden");
+					}
+				break;
 				case "op-locate":
 					goBack = false;
-					$("#detailsExtent").addClass("shifted");
+					var $chk = $(".checkbox input[name='product']", $tr);
+					if (e.delegateTarget.id == "tbSelectedProducts" && $chk.length > 0 && !$chk.is(":checked")) {
+						$chk.trigger("click");
+					}
+					updateDetailsPanel($tr);
+					updateFloatingThumbnail($tr);
+					
 					if (myPolygonMap.mapActive && $tr.data("id")) {
 						myPolygonMap.fitFeatureById($tr.data("id"));
-						var $chk = $tr.find(".checkbox input[name='product']");
-						if ($chk.length > 0) { $chk.trigger("click"); }
+						highlightFeature($tr);
 					}
+				break;
+				case "op-details":
+					goBack = false;
+					var $chk = $(".checkbox input[name='product']", $tr);
+					if (e.delegateTarget.id == "tbSelectedProducts" && $chk.length > 0 && !$chk.is(":checked")) {
+						$chk.trigger("click");
+					}
+					toggleDetailsPanel($tr);
+					updateFloatingThumbnail($tr);
 				break;
 				case "op-remove":
 					goBack = false;
 					$('#confirm-dialog').modal('confirm', {
-						msg: "Are you sure you want to remove this product from the list",
+						msg: "Are you sure you want to remove this product from the list?",
 						callbackConfirm: function () {
 							// Remove selected products
-							var prodName       = $tr.data("name");
-							var dsLabelDefault = queryCollection[$tr.data("dsIndex")]._dsLabelDefault;
-							selectedProducts.splice(_.findIndex(selectedProducts, { "name": prodName, "_dsLabelDefault": dsLabelDefault }), 1);
-							
-							updateSelectedProductsTable();
-							$("#queryExtent").removeData("query");
+							var prodName = $tr.data("name");
+							var $table = $tr.closest("table");
+							if ($table.get(0).id == "tbDatasourceProducts") {
+								// remove product thumbnail and floating image
+								var $thumbnail = $(".thumbnails>div#"+ $tr.data("id"), "#thumbsExtent");
+								$thumbnail.remove();
+								hideFloatingThumbnail();
+								
+								// remove product from products list and recalculate indexes
+								listOfProducts.splice(_.findIndex(listOfProducts, { "name": prodName }), 1);
+								$tr.remove();
+								$.each($("tbody tr", $table), function (index, tr) {
+									$(tr).data("selIndex", _.findIndex(listOfProducts, { "name": tr.id }));
+								});
+								
+								// rebuild table pagination
+								var $pag = $('+.pagination-container', $table.closest(".vertical-container")).data("paginaThing");
+								var pageSize = (typeof $pag === "undefined") ? 10 : $pag.options.perPage;
+								rebuildPagination($table, pageSize);
+								
+								previewProducts($table);
+							} else {
+								var dsLabelDefault = queryCollection[$tr.data("dsIndex")]._dsLabelDefault;
+								selectedProducts.splice(_.findIndex(selectedProducts, { "name": prodName, "_dsLabelDefault": dsLabelDefault }), 1);
+								updateSelectedProductsTable();
+							}
 						},
 						callbackCancel: function () { }
 					});
 				break;
-				case "op-details":
+				case "op-exclude":
 					goBack = false;
-					
-					showPanel("product details");
-					var $tbody = $(this).closest("tbody");
-					var $tr = $(this).closest("tr");
-					var details = "";
-					if ($tbody.length > 0 && $tr.length > 0) {
-						// Get product attributes
-						var product = selectedProducts[$tr.data("selIndex")];
-						
-						$(".modal-title", "#detailsExtent").html("Product Details");
-						$.each(Object.keys(product), function (index, key) {
-							if (key == "name") {
-								$(".modal-title", "#detailsExtent").html(product[key]);
-							} else if (key.indexOf("_ds") == -1 && typeof product[key] !== "object") {
-								details += "<div class='row'><label class='col-md-4'>" + key + ":</label><span class='col-md-8'>" + product[key] + "</span></div>";
-							}
-						});
-						
-						// Get thumbnail preview image
-						var $img = $tr.find("td img");
-						$("#productPreview").attr("src", $img.length > 0 ? $img.attr("src") : "./media/images/preview-not-available.png");
-						
-						// Get large preview image
-						var qry = queryCollection[$tbody.find("tr.datasource").data("index")];
-						qryUser = qry ? qry.user : "";
-						qryPass = qry ? qry.password : "";
-						if (qryUser != "" && qryPass != "") {
-							var previewUrl = $tr.data("preview");
-							if (previewUrl) {
-								$.ajax({
-									url: baseRestApiURL + "utilities/tunnel/get",
-									type: "GET",
-									data: { url: decodeURIComponent(previewUrl), user: qryUser, password: qryPass },
-									beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
-									success: function(response) {
-										if (response != "") {
-											//$("#productPreview").attr("src", "data:image/jpeg;base64," + response);
-											// resize preview
-											resizeBase64Img(response, 400, 400).then(function (newImg) { $("#productPreview").attr("src",  $(newImg).attr("src")); });
-										}
-									}
-								});
-							 }
-						}
-					}
-					$("#tbProductDetails tbody td.details").html(details);
+					var $chk = $(".checkbox input[name='product']", $tr);
+					$chk.trigger("click");
 				break;
 			}
 		}
 		if (goBack) {
 			updateSelectedProductsTable();
-			$("#queryExtent").removeData("query");
-		}
-	});
-	
-	$("#collectionExtent").on("click", ".modal-header .minimize", function (e) {
-		showPanel("selected products");
-		$(this).closest(".modal-content").addClass("minimized");
-		$(this).closest(".extent").addClass("minimized");
-		
-		autoPanMap();
-	});
-	
-	$("#collectionExtent").on("click", ".modal-content.minimized", function (e) {
-		$(this).removeClass("minimized");
-		$(this).closest(".extent").removeClass("minimized");
-		resizePanels();
-		
-		autoPanMap();
-	});
-	
-	$("#queryExtent, #executionExtent, #detailsExtent").on("click", ".cancel", function (e) {
-		updateSelectedProductsTable();
-	});
-	
-	$("#datasourceProducts").on("mouseup", ".pagination li", function (e) {
-		if (e.button == 0) {
-			setTimeout(function () { countSelectedProducts("tbDatasourceProducts"); }, 50);
 		}
 	});
 	
 	$("#datasourceProducts").on("click", "input[name='allproducts']", function (e) {
+		e.stopPropagation();
+		
 		var highlighted = false;
 		if ($(this).is(':checked')) {
 			$('#datasourceProducts input[name=product]').prop('checked', true);
@@ -1644,10 +2164,13 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		}
 		$.each($("table#tbDatasourceProducts tbody tr"), function () {
 			var $tr = $(this);
+			var $thumbnail = $(".thumbnails>div#" + $tr.attr("id"), "#thumbsExtent");
 			if (highlighted) {
 				$tr.addClass("selected");
+				$thumbnail.addClass("selected");
 			} else {
 				$tr.removeClass("selected");
+				$thumbnail.removeClass("selected");
 			}
 			if ($tr.data("id")) {
 				if (myPolygonMap.mapActive) {
@@ -1662,12 +2185,17 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		countSelectedProducts("tbDatasourceProducts");
 	});
 	
-	$("#tbDatasourceProducts, #tbSelectedProducts").on("click", "input[name='product']", function (e) {
-		var $tr = $(this).closest("tr");
+	$("#tbSelectedProducts, #tbDatasourceProducts").on("click dblclick", "input[name='product']", function (e) {
+		e.stopPropagation();
 		
+		if (e.type == "dblclick") return;
+		
+		var $tr = $(this).closest("tr");
+		var $thumbnail = $(".thumbnails>div#" + $tr.attr("id"), "#thumbsExtent");
 		// Reset highlight for all other products when in "Selected Products" table
 		if (typeof $tr.data("dsIndex") !== "undefined") {
-			$tr.closest("table").find("tr").removeClass("selected");
+			$("tr", $tr.closest("table")).removeClass("selected");
+			$(">div", $thumbnail.closest(".thumbnails")).removeClass("selected");
 			$tr.closest("table").find("tr .checkbox").addClass("hidden");
 			$tr.closest("tbody").siblings().find("input[name='product']").prop("checked", false);
 			$tr.siblings().find("input[name='product']").prop("checked", false);
@@ -1677,14 +2205,18 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			if ($(this).is(':checked')) {
 				$(this).closest(".checkbox").removeClass("hidden");
 			}
+		} else {
+			showThumbnail($tr);
 		}
 		
 		var highlighted = false;
 		if ($(this).is(':checked')) {
 			$tr.addClass("selected");
+			$thumbnail.addClass("selected");
 			highlighted = true;
 		} else {
 			$tr.removeClass("selected");
+			$thumbnail.removeClass("selected");
 		}
 		if (myPolygonMap.mapActive) {
 			var feature = myPolygonMap.getFeatureById($tr.data("id"));
@@ -1692,29 +2224,95 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				feature.setProperties({ "highlighted": (highlighted ? "true" : "false") });
 			}
 		}
-		resetPreviewProductsStyle();
+		if (true) {//(!e.originalEvent.isTrusted) {
+			resetPreviewProductsStyle();
+		}
 		countSelectedProducts(e.delegateTarget.id);
 	});
 	
-	$("#tbDatasourceProducts, #tbSelectedProducts").on("mouseenter", "tbody tr", function (e) {
+	$("#tbSelectedProducts, #tbDatasourceProducts").on("click dblclick", "tbody tr:not(.datasource)", function (e) {
+		e.stopPropagation();
+		var $tr = $(this);
+		
+		var $chk = $(".checkbox input[name='product']", $tr);
+		var $loc = $("button.op-locate", $tr);
+		if (e.type == "click") {
+			if (e.delegateTarget.id == "tbSelectedProducts") {
+				if ($chk.length > 0 && !$chk.is(":checked")) { $chk.trigger("click"); }
+			}
+			updateDetailsPanel($tr);
+			updateFloatingThumbnail($tr);
+		} else {
+			$loc.trigger("click");
+		}
+	});
+	
+	$("#tbSelectedProducts, #tbDatasourceProducts").on("mouseenter", "tbody tr", function (e) {
 		// restore style for all preview features
 		resetPreviewProductsStyle();
 		var $tr = $(this);
 		if ($tr.data("id")) {
-			// highlight hovered feature
-			if (myPolygonMap.mapActive) {
-				var hStroke = new ol.style.Stroke({ color: [255, 119, 0, 1], width: 4 });
-				var hFill   = new ol.style.Fill  ({ color: [255, 153, 0, 0.5] });
-				var hStyle  = new ol.style.Style ({ stroke: hStroke, fill: hFill });
-				myPolygonMap.setFeaturesStyleById($tr.data("id"), hStyle);
-			}
+			highlightFeature($tr);
+			highlightThumbnail($tr, true);
 		}
 		showTopInfo($tr);
 	});
 	
-	$("#tbDatasourceProducts, #tbSelectedProducts").on("mouseleave", "tbody", function (e) {
+	$("#tbSelectedProducts, #tbDatasourceProducts").on("mouseleave", "tbody", function (e) {
 		resetPreviewProductsStyle();
 		showTopInfo();
+	});
+	
+	$("#thumbsExtent").on("mouseenter", ".thumbnails>div", function (e) {
+		var $tr = $("tr#" + this.id, $("#executionExtent").hasClass("shifted") ? "#tbSelectedProducts" : "#tbDatasourceProducts");
+		if ($tr.length > 0) {
+			highlightProduct($tr);
+			resetPreviewProductsStyle();
+			if (myPolygonMap.mapActive) {
+				highlightFeature($tr);
+			}
+		}
+	});
+	
+	$("#thumbsExtent").on("mouseleave", ".thumbnails", function (e) {
+		$(".ds-products tr", "#myModalNodes").removeClass("flash");
+		resetPreviewProductsStyle();
+		showTopInfo();
+	});
+	
+	$("#collectionExtent").on("click", ".minimize, .main-panel", function (e, t) {
+		if ($(e.currentTarget).hasClass("minimize")) {
+			e.stopPropagation();
+			$myModalNodes.addClass("full-map-view");
+			
+			setTimeout(function () {
+				var maxW = $("#myModalNodes").outerWidth();
+				var rg = $("#detailsExtent").position().left + $("#detailsExtent").outerWidth();
+				var lf = 0;
+				if (rg > maxW) {
+					lf = parseFloat(100 - 100*$("#detailsExtent").outerWidth()/maxW).toFixed(1);
+					lf *= lf < 0 ? 0 : 1;
+					$("#detailsExtent").css({ left: lf + "%" });
+				}
+			}, 500);
+			showTopInfo();
+			
+			if ($("#detailsExtent").hasClass("shifted")) { autoPanMap(); }
+			
+		} else if ($(e.currentTarget).hasClass("main-panel") && $myModalNodes.hasClass("full-map-view")) {
+			$myModalNodes.removeClass("full-map-view");
+			resizePanels();
+			
+			if ($("#detailsExtent").hasClass("shifted")) { autoPanMap(); }
+		}
+	});
+	
+	$("#queryExtent, #executionExtent").on("click", ".cancel", function (e) {
+		updateSelectedProductsTable();
+	});
+	
+	$("#detailsExtent").on("click", ".cancel", function (e) {
+		hideDetailsPanel();
 	});
 	
     $("#startInterrogation").on("click", function (e) {
@@ -1777,12 +2375,48 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		updateSelectedProductsTable();
 	});
 	
-	$("#cancelExecution, #closeDetails").on("click", function (e) {
-		updateSelectedProductsTable();
+	$("#discardProducts").on("click", function (e) {
+		$('#confirm-dialog').modal('confirm', {
+			msg: "Are you sure you want to remove all selected product from the list?",
+			callbackConfirm: function () {
+				// Remove thumbnails and hide floating image preview
+				$(".thumbnails>div.selected", "#thumbsExtent").remove();
+				hideFloatingThumbnail();
+				
+				$("input[name='allproducts']", "#datasourceProducts").prop("checked", false);
+				
+				var $table = $("table#tbDatasourceProducts");
+				$.each($("tr.selected", $table), function (index, tr) {
+					// Remove product from products list
+					listOfProducts.splice(_.findIndex(listOfProducts, { "name": $(tr).data("name") }), 1);
+					$(tr).remove();
+				});
+				// Recalculate indexes
+				$.each($("tr", $table), function (index, tr) {
+					$(tr).data("selIndex", _.findIndex(listOfProducts, { "name": tr.id }));
+				});
+				
+				// Rebuild table pagination
+				var $pag = $('+.pagination-container', $table.closest(".vertical-container")).data("paginaThing");
+				var pageSize = (typeof $pag === "undefined") ? 10 : $pag.options.perPage;
+				rebuildPagination($table, pageSize);
+				
+				// Redraw product map features
+				previewProducts($table);
+				
+				resizePanels();
+			},
+			callbackCancel: function () { }
+		});
+	});
+	
+	$("#saveComponent").on("click", "input[type='checkbox'], label", function (e) {
+		e.stopPropagation();
 	});
 	
 	$("#saveComponent").on("click", function (e) {
-		$(this).prop("disabled", true);
+		$btn = $(this);
+		$btn.prop("disabled", true);
 		if (!isCollection && queryCollection.length == 1) {
 			// Save user datasource component
 			var query = queryCollection[0];
@@ -1796,7 +2430,8 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				label      : label,
 				dataSource : query.dataSource,
 				productType: query.sensor,
-				products   : []
+				products   : [],
+				queryId    : typeof query.id === "undefined" ? null : query.id
 			};
 			
 			$.each(selectedProducts, function (index, product) {
@@ -1815,23 +2450,25 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 						showMsg("Datasource component was successfully created.", "SUCCESS");
 						
 						// Start downloading selected products
-						showMsg("Start downloading selected products. Please wait!", "INFO");
-						var queryData = {
-							"query"   : $.extend(true, {}, query),
-							"products": formData.products,
-							"mode"    : "1"//RESUME
-						};
-						removeExtraDsInfo(queryData.query);
-						$.when(ajaxCallFnc("query/fetch", JSON.stringify(queryData), "POST"))
-						.done(function (data) {
-							if ($.type(data) === 'object' && data.status === "SUCCEEDED") {
-								showMsg("The selected products were successfully downloaded.", "SUCCESS");
-							} else if ($.type(data) === 'object' && data.status === "FAILED") {
-								showMsg(data.message, "FAILED");
-							} else {
-								showMsg("The selected products were not downloaded.", "INFO");
-							}
-						});
+						var $chk = $("input[type='checkbox']", $btn);
+						if ($chk.is(":checked")) {
+							var queryData = {
+								"query"   : $.extend(true, {}, query),
+								"products": formData.products,
+								"mode"    : "1"//RESUME
+							};
+							removeExtraDsInfo(queryData.query);
+							$.when(ajaxCallFnc("query/fetch", JSON.stringify(queryData), "POST"))
+							.done(function (data) {
+								if ($.type(data) === 'object' && data.status === "SUCCEEDED") {
+									showMsg("Started downloading selected products. Please wait!", "INFO");
+								} else if ($.type(data) === 'object' && data.status === "FAILED") {
+									showMsg(data.message, "FAILED");
+								} else {
+									showMsg("The selected products were not downloaded.", "INFO");
+								}
+							});
+						}
 					} else if ($.type(data) === 'object' && data.status === "FAILED") {
 						showMsg(data.message, "FAILED");
 					} else {
@@ -1933,15 +2570,25 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		}
 	});
 	
-	$(".vertical-container").scroll(function (e) {
+	$(".modal-body .vertical-container").scroll(function (e) {
 		showTopInfo();
 	});
 	
-    $(window).resize(function() {
-		resizePanels();
+    $(window).off("resize");
+	
+    $(window).on("resize", function(e) {
+		setTimeout(function () {
+			resizePanels();
+			resizeFloatingThumbnail();
+		}, 100);
 	});
 	
     $(document).ready(function() {
+		// fix bug in Firefox when selecting the month in datepicker inside a bootstrap-modal won't work (when modal tabindex is set)
+		if (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1) {
+			$.fn.modal.Constructor.prototype.enforceFocus = function (){};
+		}
+		
 		// Get modal data
 		isCollection = $("#myModalNodes").data("isCollection");
 		modeEdit     = $("#myModalNodes").data("action") == "edit";
@@ -1970,7 +2617,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		.done(function (result) {
 			//*
 			if (typeof result.readOnly === "boolean") {
-				$("#collectionExtent").removeClass("no-map");
+				$(".extent", "#myModalNodes").removeClass("no-map");
 				$("#mapExtent").removeClass("hidden");
 				myPolygonMap = result;
 				handlePolygonMapEvents(myPolygonMap);
@@ -1989,7 +2636,54 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			initDatasources();
 			initQuery();
 		});
-    });
 		
+		$myModalNodes.removeClass("full-map-view");
+		$(".movable").draggable({
+			containment: "#myModalNodes",
+			axis       : "x",
+			handle     : ".modal-header",
+			opacity    : 0.8,
+			stop: function(event, ui) {
+				var maxW = $("#myModalNodes").outerWidth();
+				var rg = ui.position.left + ui.helper.outerWidth();
+				var lf = 0;
+				if (rg > maxW) {
+					lf = parseFloat(100 - 100*ui.helper.outerWidth()/maxW).toFixed(1);
+				} else {
+					lf = parseFloat(100*ui.position.left/maxW).toFixed(1);
+				}
+				ui.helper.css({ left: lf + "%" });
+				
+				$(".btn-movable", ui.helper).prop("disabled", false);
+			}
+		});
+		$(".floating", "#floatingExtent").draggable({
+			containment: "#floatingExtent",
+			handle     : "img",
+			opacity    : 0.8,
+			start: function(event, ui) { $(this).css({ bottom: "unset", right: "unset" }); },
+			stop: function(event, ui) {
+				var maxW = $("#myModalNodes").offset().left + $("#myModalNodes").outerWidth();
+				var rg = ui.helper.offset().left + ui.helper.outerWidth();
+				if (rg > maxW) {
+					var lf = maxW - ui.helper.outerWidth() - ui.helper.parent().offset().left;
+					ui.helper.css({ left: lf + "px" });
+				}
+				
+				var maxH = $("#myModalNodes").offset().top + $("#myModalNodes").outerHeight();
+				var bt = ui.helper.offset().top + ui.helper.outerHeight();
+				if (bt > maxH) {
+					var tp = maxH - ui.helper.outerHeight() - ui.helper.parent().offset().top;
+					ui.helper.css({ top: tp + "px" });
+				}
+			}
+		});
+		$("#thumbsExtent").resizable({
+			handles: "n",
+			containment: "parent",
+			stop: function (event, ui) { resizePanels(); }
+		});
+    });
+
 //# sourceURL=datasource-queries-plus.js
 </script>

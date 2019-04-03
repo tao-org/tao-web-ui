@@ -208,6 +208,9 @@
 
       _self.render(page);
       _self.handle();
+	  
+	  // Trigger pagechange for outside use
+      _self.container.trigger("pagechange", [page]);
     },
   };
 
@@ -216,7 +219,7 @@
 
     return _self.each(function() {
       var paginaThing = new Paginator(this, options);
-	  $(this).data("paginaThing", paginaThing);
+	  paginaThing.container.data("paginaThing", paginaThing);
     });
   };
 

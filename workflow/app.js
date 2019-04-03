@@ -238,7 +238,7 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
     });
     var getAllUserDatasources = $.ajax({
         cache: false,
-        url: baseRestApiURL + "datasource/user",
+        url: baseRestApiURL + "datasource/user/",
         dataType : 'json',
         type: 'GET',
         headers: {

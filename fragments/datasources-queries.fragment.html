@@ -9,7 +9,7 @@
 .nodes-item-core-box{position:relative;z-index:1;border:1px solid #96c2da;border-top:2px solid #3c8dbc}
 .nodes-item-core-box .box-bottom.with-line{border-top:0;border-bottom:6px double rgba(0, 100, 160, 0.1);padding:0 0 15px 0}
 .nodes-item-core-box .box-top .box-title{font-size:1.6em}
-.nodes-item-core-box .box-top .box-subtitle{margin-bottom:0}
+.nodes-item-core-box .box-top .box-subtitle{line-height:1.2em;margin:5px 0 0 0}
 .nodes-item-core-box .box-top .box-text{font-size:1.2em}
 .nodes-item-core-box .box-top-tags{top:-12px;right:10px}
 .nodes-item-core-box .box-top-tags span{padding:0 8px;background-color:white;font-weight:600;color:#4693bf}
@@ -100,7 +100,7 @@
 														<div class="box-top-tags"></div>
 														<div class="box-top">
 															<div class="box-title"><span class="val-dsLabel"></span></div>
-															<div class="box-subtitle" style="min-height:35px;max-height:35px;"><span class="val-label"></span></div>
+															<div class="box-subtitle" style="min-height:2.4em;max-height:2.4em;overflow-y:auto"><span class="val-dsSubtitle"></span></div>
 															<div class="box-icon"><i class="fa fa-cube"></i></div>
 														</div>
 														<div class="box-bottom with-line">
@@ -118,7 +118,7 @@
 														<div class="box-top-tags"></div>
 														<div class="box-top">
 															<div class="box-title"><span class="val-dsLabel"></span></div>
-															<div class="box-subtitle"><span class="val-label"></span></div>
+															<div class="box-subtitle"><span class="val-dsSubtitle"></span></div>
 															<div class="box-icon"><i class="fa fa-cube"></i></div>
 														</div>
 														<div class="row">
@@ -156,6 +156,7 @@
 <script src="./assets/libs/jQuery/paginathing.js" type="text/javascript"></script>
 
 <script type="text/javascript" src="./assets/libs/openlayers/ol-poly.js"></script>
+<script type="text/javascript" src="./assets/libs/openlayers/jRotate.js"></script>
 
 <script>
 	var urls = [
@@ -174,17 +175,24 @@
 						{ "label": "Date ascending" , "objAttributeName": "modified", "direction": "ASC" },
 						{ "label": "Date descending", "objAttributeName": "modified", "direction": "DSC" }
 					],
-		filterAttribute: "customField",
+		filterAttribute: "filterField",
 		doDataPreprocessing: function (data) {
 			var trimmed = [];
 			$.each(data, function (index, item) {
-				var isCollection = typeof item.dataSourceComponents !== "undefined";
-				var isQueryInCollection = typeof item.componentId === "string";
+				var isCollection   = typeof item.dataSourceComponents !== "undefined";
+				var isInCollection = typeof item.groupId === "string";
+				
+				var subComponents = "";
+				$.each(item.dataSourceComponents, function (idx, cmp) {
+					subComponents += (subComponents == "" ? "" : "<br/>") + (idx + 1) + ". " + cmp.label + " - " + cmp.sensorName;
+				});
 				// Add extra custom fields
-				item.tags        = isQueryInCollection ? ["component"] : (isCollection ? ["collection"] : ["query"]);
-				item.dsLabel     = isCollection ? "Query collection" : item.sensor + " - " + item.dataSource;
-				item.customField = item.dsLabel.replace(" - ", " ") + " "  + item.label;
-				if (isQueryInCollection) {
+				item.tags        = isCollection ? ["collection"] : (isInCollection ? ["component"] : ["query"]);
+				item.dsLabel     = isCollection ? "[" + item.label  + "]" : (isInCollection ? "[" + item.groupLabel  + "]" : item.sensor + " - " + item.dataSource);
+				item.dsSubtitle  = isCollection ? subComponents : item.label;
+				item.customField = isCollection ? item.dsLabel : ((isInCollection ? item.dsLabel : "") + item.dsSubtitle);
+				item.filterField = (item.dsLabel + item.dsSubtitle).replace(/(<br\/>)|(\[)|(\])|( - )|(\d\. )/g, "").replace(" - ", "");
+				if (isInCollection) {
 					trimmed.push(item);
 				} else {
 					trimmed.push(item);
@@ -224,12 +232,14 @@
 						// Remove all extra custom fields added in data preprocessing stage (tags, dsLabel, customField)
 						delete oDna["tags"];
 						delete oDna["dsLabel"];
+						delete oDna["dsSubtitle"];
 						delete oDna["customField"];
+						delete oDna["filterField"];
 						$modal.data({ isCollection: isCollection, action: oAction, dna: oDna });
 						
 						$modal.html(result);
 						$modal.modal({ backdrop: false, keyboard: false });
-						$modal.modal("show");
+						
 						$modal.off('hidden.bs.modal');
 						$modal.on('hidden.bs.modal', function () {
 							// Kill all datepicker controls when parent window is closed
@@ -238,6 +248,8 @@
 							// Refresh data
 							panelComp.refreshData();
 						});
+						
+						$modal.modal("show");
 					}
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
@@ -279,7 +291,7 @@
 				});
 			}
 		}
-    };
+	};
 
 //# sourceURL=filename.js
 </script>

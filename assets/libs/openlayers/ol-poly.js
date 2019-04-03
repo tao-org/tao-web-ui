@@ -135,7 +135,7 @@
 			setTimeout(function() {
 				$(_self.map.getTargetElement()).css({ "height": _self.el.height() + "px" });
 				_self.map.updateSize();
-			}, 100);
+			}, 300);
 		},
 		setReadOnly: function (readonly) {
 			var _self = this;
@@ -333,7 +333,6 @@
 			}
 			return false;
 		},
-		
 		getFeaturesGeometry: function () {
 			var _self = this;
 			var polys = [];
@@ -512,7 +511,7 @@
 			if (feature) {
 				_self.map.getView().fit(feature.getGeometry(), _self.map.getSize());
 				var crtZoom = myPolygonMap.map.getView().getZoom();
-				if (crtZoom - 2 >= _self.options.minZoom) myPolygonMap.map.getView().setZoom(crtZoom - 2);
+				if (crtZoom - 1 >= _self.options.minZoom) myPolygonMap.map.getView().setZoom(crtZoom - 1);
 				_self.panToFit();
 				
 				// Bring feature on top
@@ -737,10 +736,10 @@
 					_self.modify.set("lastAction", "none");
 				} else {
 					// Retrieve extra feature at pointer position
-					if (e.type == 'singleclick') {
+					if (e.type == 'singleclick' || e.type == 'dblclick') {
 						var topFeatureAtCoordinate = _self.getTopFeatureAtCoordByProperty(e.coordinate, { "description": _self.options.extraFeatureDescription });
 						var modifier = { "ctrlKey": e.originalEvent.ctrlKey, "altKey": e.originalEvent.altKey, "shiftKey": e.originalEvent.shiftKey }
-						_self.el.trigger("clickextrafeature", [topFeatureAtCoordinate, modifier]);
+						_self.el.trigger(e.type == 'singleclick' ? "clickextrafeature" : "dblclickextrafeature", [topFeatureAtCoordinate, modifier]);
 					}
 				}
 			});

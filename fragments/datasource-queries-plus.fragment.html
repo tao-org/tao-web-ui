@@ -10,7 +10,7 @@ body{padding-right:0 !important}
 .custom-combobox .custom-combobox-toggle{position:absolute;top:0;bottom:0;right:-3px}
 ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:1009}
 /* ======== #myModalNodes ======== */
-#myModalNodes{position:relative;width:100%;height:auto;z-index:800;padding:0 !important}
+#myModalNodes{position:absolute;width:100%;height:auto;z-index:800;padding:0 !important}
 #myModalNodes #myFlatMap .ol-zoom{top:100px}
 #myModalNodes #myFlatMap .poly-map-title{padding-left:30%;top:55px}
 #myModalNodes #myFlatMap .poly-shape-type{top:60px}
@@ -44,9 +44,10 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes.full-map-view .main-panel{display:inline-block;width:40px;height:40px;cursor:pointer;border-radius:5px;padding:5px;text-align:center;border:0}
 #myModalNodes.full-map-view .main-panel>*{display:none}
 #myModalNodes.full-map-view .main-panel::after{content:"\f2d2";font-family:"FontAwesome";font-size:22px;color:#286080}
-#myModalNodes .extent.locked .modal-content.locked{pointer-events:none}
-#myModalNodes .extent.locked .modal-content.locked::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(255, 255, 255, 0.6);z-index:810;border-radius:5px}
-#myModalNodes .extent.locked .modal-content.locked button{opacity:0.4}
+#myModalNodes .extent.locked div.locked{pointer-events:none}
+#myModalNodes .extent.locked div.locked::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(255, 255, 255, 0.6);z-index:810;border-radius:5px}
+#myModalNodes .extent.locked div.locked button{opacity:0.4}
+#myModalNodes .extent.locked .ui-resizable-handle{pointer-events:none;background-color:lightgray !important}
 #myModalNodes #collectionExtent.no-map{opacity:1}
 #myModalNodes #collectionExtent.no-map .minimize{display:none}
 #myModalNodes #queryExtent.no-map{left:18%}
@@ -56,7 +57,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes #detailsExtent{left:40%;width:30%}
 #myModalNodes.full-map-view #detailsExtent{left:3%;width:37%}
 /* ======== TABLE CONTENTS ======== */
-#myModalNodes .vertical-container{clear:both;border-top:1px solid #79bde4;overflow-x:hidden;overflow-y:auto;scroll-behavior:smooth;border-bottom:1px solid #79bde4;height:100%;background-color:white}
+#myModalNodes .vertical-container{position:relative;clear:both;border-top:1px solid #79bde4;overflow-x:hidden;overflow-y:auto;scroll-behavior:smooth;border-bottom:1px solid #79bde4;height:100%;background-color:white}
 #myModalNodes .sticky{position:relative;position:sticky;top:0;background-color:#cee9f9;padding:7px 50px 7px 15px;z-index:801;border-bottom:1px solid #93c2da;line-height:2em}
 #myModalNodes table{position:relative;table-layout:fixed;margin:0}
 #myModalNodes table tr>*{vertical-align:middle;position:relative}
@@ -144,10 +145,12 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes .btn-primary label:hover{text-shadow:0px 0px 4px white}
 #myModalNodes .btn-primary input{margin-right:5px;float:left}
 /* ======== THUMBNAILS ======== */
-#myModalNodes #thumbsExtent{bottom:0;padding:10px;height:auto !important}
-#myModalNodes #thumbsExtent .ui-resizable-n{background-color:#79bde4;cursor:ns-resize;text-align:center;width:97%;width:calc(100% - 20px);margin:0 10px;top:0;height:10px}
-#myModalNodes #thumbsExtent .ui-resizable-n::after{content:"\f0c9";color:white;font:normal normal normal 11px/1 FontAwesome}
-#myModalNodes #thumbsExtent .vertical-container{padding:5px;border-radius:0 0 5px 5px;overflow-y:scroll}
+#myModalNodes #thumbsExtent{bottom:0;padding:10px;height:auto !important;opacity:0.9}
+#myModalNodes.full-map-view #thumbsExtent .ui-resizable-handle{border-radius:5px 5px 0 0}
+#myModalNodes #thumbsExtent .ui-resizable-handle{background-color:#79bde4;cursor:ns-resize;text-align:center;width:97%;width:calc(100% - 20px);margin:0 10px;top:0;height:10px}
+#myModalNodes #thumbsExtent .ui-resizable-handle::after{content:"\f0c9";color:white;font:normal normal normal 11px/1 FontAwesome}
+#myModalNodes #thumbsExtent .vertical-container{padding:5px;border-radius:0 0 5px 5px;overflow-y:scroll;border:0}
+#myModalNodes #thumbsExtent.locked .vertical-container{overflow-y:auto}
 #myModalNodes #thumbsExtent .thumbnails{width:100%;display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:flex-end;overflow-x:hidden;overflow-y:auto;clear:both;scroll-behavior:smooth}
 #myModalNodes #thumbsExtent .thumbnails>div{display:inline-block;width:15.5%;min-width:80px;margin:2px 1% 2px 0;position:relative;text-align:right;border-radius:5px}
 #myModalNodes #thumbsExtent .thumbnails>div::after{content:"";display:block;padding-bottom:100%}
@@ -178,7 +181,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 
 <div id="mapExtent" class="hidden"></div>
 
-<div id="collectionExtent" class="extent no-map no-transitions">
+<div id="collectionExtent" class="extent no-map no-transitions can-be-locked">
 	<div class="modal-content box-shadow--6dp" style="border:0">
 		<div class="modal-header dataset-label" style="border:0;color:#286080;border-radius:5px">
 			<label for="datasetLabel" style="">Label:</label>
@@ -186,7 +189,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		</div>
 		<button class="close custom" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	</div>
-	<div class="modal-content main-panel box-shadow--6dp" style="border-radius:5px 5px 0 0">
+	<div class="modal-content main-panel box-shadow--6dp can-be-locked" style="border-radius:5px 5px 0 0">
 		<div class="modal-header" style="border:0">
 			<button class="close minimize"><span aria-hidden="true">&minus;</span><span class="sr-only">Minimize</span></button>
 			<h4 class="modal-title" id="myModalLabel">Edit query</h4>
@@ -245,9 +248,11 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 
 <div id="topInfo"></div>
 
-<div id="thumbsExtent" class="extent no-map no-transitions">
-	<div class="vertical-container box-shadow--6dp">
-		<div class="thumbnails"></div>
+<div id="thumbsExtent" class="extent no-map no-transitions can-be-locked">
+	<div class="can-be-locked" style="position:relative;height:100%">
+		<div class="vertical-container box-shadow--6dp">
+			<div class="thumbnails"></div>
+		</div>
 	</div>
 </div>
 
@@ -627,12 +632,10 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 							}
 							
 							$chk.trigger("click");
-							// Hide floating panels
 							showTopInfo();
-							hideFloatingThumbnail();
-							
 							if ($chk.is(":checked")) {
 								highlightProduct($tr, true, true);
+								highlightThumbnail($tr, true);
 								setTimeout(function () { 
 									if (evt.type == "dblclickextrafeature") {
 										showDetailsPanel($tr);
@@ -831,6 +834,8 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		selectedProducts = [];
 		listOfProducts   = [];
 		
+		resizePanels();
+		
 		// Populate page forms depending on action type
 		if (modeEdit) {
 			var dsQueries = [objDna];
@@ -967,7 +972,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			// Add new: auto open the query parameters section
 			$($("#tbAddNewCriteria tr.datasource button.op-addnew").get(0)).trigger("click");
 		} else {
-			showMsg("Datasources list successfully retrieved.", "SUCCESS");
 			showPanel("selected products");
 		}
 	}
@@ -995,6 +999,28 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		return collection;
 	}
 	
+	function unlockPanels(panelId) {
+		if (typeof panelId === "undefined") {
+			$(".can-be-locked", "#myModalNodes").removeClass("locked");
+		} else {
+			$(panelId).removeClass("locked");
+			$(".can-be-locked", panelId).removeClass("locked");
+		}
+		// Thumbnails panel should always be locked when empty
+		if ($(".thumbnails>div", "#thumbsExtent").length == 0) {
+			lockPanels("#thumbsExtent");
+		}
+	}
+	
+	function lockPanels(panelId) {
+		if (typeof panelId === "undefined") {
+			$(".can-be-locked", "#myModalNodes").addClass("locked");
+		} else {
+			$(panelId).addClass("locked");
+			$(".can-be-locked", panelId).addClass("locked");
+		}
+	}
+	
 	function resizePanels() {
 		if ($("#tbDatasourceParams, #tbDatasourceProducts, #tbSelectedProducts, #tbProductDetails").length < 4) return false;
 		
@@ -1004,15 +1030,18 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		var hH = h - $(".main-header").outerHeight();
 		$("#myModalNodes").css({ height: hH + "px" });
 		
+		var thumbsPanelEmpty = false;
 		// resize thumbnails section
 		var h0 = prevH - $("#thumbsExtent").get(0).offsetTop;
+		var pd = 	$(".vertical-container", "#thumbsExtent").outerHeight() - $(".vertical-container", "#thumbsExtent").height() +
+					$("#thumbsExtent").outerHeight() - $("#thumbsExtent").height();
 		if ($(".thumbnails>div", "#thumbsExtent").length == 0) {
-			h0 = $("#thumbsExtent").outerHeight() - $("#thumbsExtent").height() + 10;
+			h0 = pd;
+			thumbsPanelEmpty = true;
 		} else {
-			var th = $(".thumbnails>div:first-child", "#thumbsExtent").outerHeight(true);
-			th += $(".vertical-container", "#thumbsExtent").outerHeight() - $(".vertical-container", "#thumbsExtent").height();
-			th += $("#thumbsExtent").outerHeight() - $("#thumbsExtent").height();
+			var th = $(".thumbnails>div:first-child", "#thumbsExtent").outerHeight(true) + pd;
 			if (h0 < th) h0 = th;
+			if (h0 > $(".thumbnails", "#thumbsExtent").outerHeight() + pd) h0 = $(".thumbnails", "#thumbsExtent").outerHeight() + pd;
 		}
 		var t0 = hH - h0;
 		t0 *= t0 < 0 ? 0 : 1;
@@ -1037,18 +1066,18 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			var h2 = h - $("#tbDatasourceProducts").parent().offset().top;
 			h2 -= $("#executionExtent .pagination-container").outerHeight();
 			h2 -= $("#executionExtent .last").outerHeight();
-			h2 -= h0;
+			h2 -= thumbsPanelEmpty ? 10 : h0;
 			h2 = h2 < 60 ? 60 : h2;
-			$("#tbDatasourceProducts").parent().css({ "height": h2 + "px" });
+			$("#tbDatasourceProducts").parent().css({ "max-height": h2 + "px", "height": h2 + "px" });
 		}
 		
 		// resize collection section
 		if (!$myModalNodes.hasClass("full-map-view")) {
 			var h3 = h - $("#tbSelectedProducts").parent().offset().top;
 			h3 -= $("#collectionExtent .last").outerHeight();
-			h3 -= h0;
+			h3 -= thumbsPanelEmpty ? 10 : h0;
 			h3 = h3 < 60 ? 60 : h3;
-			$("#tbSelectedProducts").parent().css({ "height": h3 + "px" });
+			$("#tbSelectedProducts").parent().css({ "max-height": h3 + "px", "height": h3 + "px" });
 		}
 		
 		// resize product details section
@@ -1060,22 +1089,35 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			h4 = h4 < 60 ? 60 : h4;
 			$("#tbProductDetails").parent().css({ "max-height": h4 + "px" });
 		}
+		
+		// Adjust panels height when thumbnails panel is empty
+		if (thumbsPanelEmpty) {
+			$("#tbDatasourceProducts, #tbSelectedProducts").parent().css({ "height": "" });
+			$("#tbDatasourceProducts, #tbSelectedProducts").closest(".modal-content").css({ "border-radius": "" });
+			$("#thumbsExtent").css({ "opacity": 0 });
+		} else {
+			$("#tbDatasourceProducts, #tbSelectedProducts").closest(".modal-content").css({ "border-radius": "5px 5px 0 0" });
+			$("#thumbsExtent").css({ "opacity": 0.9 });
+		}
 	}
 	
 	function showPanel(panel) {
 		showTopInfo();
+		
+		unlockPanels();
 		if (panel == "query parameters") {
-			$("#collectionExtent, #collectionExtent .modal-content:last-child").addClass("locked");
+			lockPanels("#collectionExtent");
+			lockPanels("#thumbsExtent");
 			if (myPolygonMap.mapActive) {
 				myPolygonMap.setReadOnly(false);
 			}
 			// hide other panels
 			$("#executionExtent").addClass("shifted");
-			// show parameters
+			// show required panels
 			$("#queryExtent").removeClass("shifted");
 			$("#listDatasources").combobox("focus");
 		} else if (panel == "query execution results") {
-			$("#collectionExtent, #collectionExtent .modal-content:last-child").addClass("locked");
+			lockPanels("#collectionExtent");
 			if (myPolygonMap.mapActive) {
 				myPolygonMap.setReadOnly(true);
 			}
@@ -1083,10 +1125,9 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			$("#queryExtent").addClass("shifted");
 			// reset checkboxes
 			$('input[name=allproducts]').prop('checked', false);
-			// show execution results
+			// show required panels
 			$("#executionExtent").removeClass("shifted");
 		} else {
-			$("#collectionExtent, #collectionExtent .modal-content:last-child").removeClass("locked");
 			if (myPolygonMap.mapActive) {
 				myPolygonMap.setReadOnly(true);
 			}
@@ -1099,7 +1140,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			hideDetailsPanel();
 		}
 		
-		$(".thumbnails>div", "#thumbsExtent").remove();
+		// Always hide floating picture preview when switching panels
 		hideFloatingThumbnail();
 	}
 	
@@ -1230,8 +1271,71 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			});
 		});
 		
+		$("input[name='tileId']", "#tbDatasourceParams").on("change", function (e) {
+			if (this.value != "") {
+				$.when(getTileFootprint(this.value))
+				.done(function (response) {
+					defaultFootprint = response;
+					$("input[name='footprint']", "#tbDatasourceParams").val(response);
+					if (myPolygonMap.mapActive) {
+						var features = null;
+						defaultFootprint = response;
+						if (features = myPolygonMap.createShapeFromGeometry(defaultFootprint, null, true)) {
+							// Prevent footprint match errors due to precision
+							defaultFootprint = myPolygonMap.getFootprint();
+							features[0].setId("tile_footprint");
+							myPolygonMap.fitFeatureById("tile_footprint");
+							showMsg("New default footprint set", "INFO");
+						} else {
+							showMsg("Inconsistent footprint information for the selected tile", "WARNING");
+						}
+					}								
+				})
+				.fail(function (jqXHR, status, error) {
+					showMsg(error, "WARNING");
+				});
+			}
+		});
+		
 		resizePanels();
     }
+	
+	function getTileFootprint(tileId) {
+		var deferred = $.Deferred();
+		
+		var dsId = $("#listDatasources").combobox("selectedIndex");
+		if (!datasourcesList[dsId]) {
+			deferred.reject(null, "FAILED", "The selected datasource is invalid");
+		} else {
+			var sensor = datasourcesList[dsId]['sensor'];
+			var url = "";
+			switch (sensor.toLowerCase()) {
+				case "sentinel2": url = "query/footprint/sentinel2"; break;
+				case "landsat8" : url = "query/footprint/landsat8" ; break;
+			}
+			if (url == "") {
+				deferred.reject(null, "FAILED", "The sensor for the selected datasource does not support tiles");
+			} else {
+				$.ajax({
+					url: baseRestApiURL + url,
+					type: "GET",
+					data: { tile: tileId },
+					beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
+					success: function(response) {
+						if (response.status === "SUCCEEDED") {
+							deferred.resolve(response.data);
+						} else {
+							deferred.reject(response.data, response.status, response.message);
+						}
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						deferred.reject(jqXHR, textStatus, errorThrown);
+					}
+				});
+			}
+		}
+		return deferred.promise();
+	}
 	
 	function rebuildPagination($table, pageSize) {
 		// Define pagination
@@ -1300,10 +1404,10 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		getVisibleProductsThumbnails($("table#tbDatasourceProducts"));
 		countSelectedProducts("tbDatasourceProducts");
 		
-		resizePanels();
+		// Show products on map
 		previewProducts($("table#tbDatasourceProducts"));
-		
 		showThumbnails($("#tbDatasourceProducts"));
+		unlockPanels("#thumbsExtent");
     }
 	
 	function registerQueryInCollection(query) {
@@ -1325,6 +1429,10 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				queryCollection.push(query);
 			}
 		}
+	}
+	
+	function resetSelectedProductsTable() {
+		$("input[name='product']:checked", "table#tbSelectedProducts").trigger("click");
 	}
 	
 	function updateSelectedProductsTable() {
@@ -1439,12 +1547,12 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		getVisibleProductsThumbnails($("table#tbSelectedProducts"));
 		
 		resetDatasourcesList();
-		resizePanels();
 		initControls();
 		
 		// Show products on map
 		previewProducts($("table#tbSelectedProducts"));
 		showThumbnails($("table#tbSelectedProducts"));
+		unlockPanels("#thumbsExtent");
 	}
 	
 	function countSelectedProducts(tableName) {
@@ -1599,38 +1707,42 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	function resizeFloatingThumbnail(ratio) {
 		var $img = $(".floating>div img", "#floatingExtent");
 		if ($img.length > 0) {
-			var $floating = $img.closest(".floating");
-			if (typeof ratio === "undefined") {
-				ratio = $img.data("ratio");
+			if ($img.attr("src").indexOf("preview-not-available") == -1) {
+				var $floating = $img.closest(".floating");
+				if (typeof ratio === "undefined") {
+					ratio = $img.data("ratio");
+				}
+				var w = Math.max($img.get(0).naturalWidth, $img.get(0).naturalHeight);
+				var h = w*ratio;
+				
+				var maxW = 3/4*$("#floatingExtent").outerWidth();
+				var maxH = 3/4*$("#floatingExtent").outerHeight();
+				if (w > maxW) {
+					w = maxW;
+					h = w*ratio;
+				}
+				if (h > maxH) {
+					h = maxH;
+					w = h/ratio;
+				}
+				var rg = $floating.get(0).offsetLeft + w;
+				if (rg > $("#floatingExtent").outerWidth()) {
+					var lf = $("#floatingExtent").outerWidth() - w;
+					$floating.css({ right: "unset", left: lf + "px" });
+				}
+				var bt = $floating.get(0).offsetTop + h;
+				if (bt > $("#floatingExtent").outerHeight()) {
+					var tp = $("#floatingExtent").outerHeight() - h;
+					$floating.css({ bottom: "unset", top: tp + "px" });
+				}
+				$floating.css({ width: w + "px", height: h + "px" });
+				$img.data("ratio", ratio);
+				var id = $img.closest("div").attr("id");
+				//$(".thumbnails>div", "#thumbsExtent").removeClass("selected");
+				//$("div#" + id, "#thumbsExtent").addClass("selected");
+			} else {
+				hideFloatingThumbnail();
 			}
-			var w = Math.max($img.get(0).naturalWidth, $img.get(0).naturalHeight);
-			var h = w*ratio;
-			
-			var maxW = 3/4*$("#floatingExtent").outerWidth();
-			var maxH = 3/4*$("#floatingExtent").outerHeight();
-			if (w > maxW) {
-				w = maxW;
-				h = w*ratio;
-			}
-			if (h > maxH) {
-				h = maxH;
-				w = h/ratio;
-			}
-			var rg = $floating.get(0).offsetLeft + w;
-			if (rg > $("#floatingExtent").outerWidth()) {
-				var lf = $("#floatingExtent").outerWidth() - w;
-				$floating.css({ right: "unset", left: lf + "px" });
-			}
-			var bt = $floating.get(0).offsetTop + h;
-			if (bt > $("#floatingExtent").outerHeight()) {
-				var tp = $("#floatingExtent").outerHeight() - h;
-				$floating.css({ bottom: "unset", top: tp + "px" });
-			}
-			$floating.css({ width: w + "px", height: h + "px" });
-			$img.data("ratio", ratio);
-			var id = $img.closest("div").attr("id");
-			//$(".thumbnails>div", "#thumbsExtent").removeClass("selected");
-			//$("div#" + id, "#thumbsExtent").addClass("selected");
 		}
 	}
 	
@@ -1639,41 +1751,46 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		var $thumbnail = $(".thumbnails>div#" + trId, "#thumbsExtent");
 		if ($thumbnail.length == 0) return;
 		
-		// Show product large preview image
 		var $floating = $(".floating>div", "#floatingExtent");
-		var feature = myPolygonMap.getFeatureById(trId);
-		var extent = feature.getGeometry().getExtent();
-		var ratio = 1;
-		var angleR_ = 0;
-		if (feature.getGeometry().flatCoordinates.length == 10) {
-			var center = [feature.getGeometry().getInteriorPoint().flatCoordinates[0], feature.getGeometry().getInteriorPoint().flatCoordinates[1]];
-			var lon1 = feature.getGeometry().flatCoordinates[0];
-			var lat1 = feature.getGeometry().flatCoordinates[1];
-			var lon2 = feature.getGeometry().flatCoordinates[2];
-			var lat2 = feature.getGeometry().flatCoordinates[3];
+		if ($floating.length > 0 == 0 || ($floating.length > 0 && trId != $floating.get(0).id)) {
+			// Show product large preview image
+			var ratio = 1;
+			if (myPolygonMap.mapActive) {
+				var feature = myPolygonMap.getFeatureById(trId);
+				if (feature) {
+					var extent = feature.getGeometry().getExtent();
+					var angleR_ = 0;
+					if (feature.getGeometry().flatCoordinates.length == 10) {
+						var center = [feature.getGeometry().getInteriorPoint().flatCoordinates[0], feature.getGeometry().getInteriorPoint().flatCoordinates[1]];
+						var lon1 = feature.getGeometry().flatCoordinates[0];
+						var lat1 = feature.getGeometry().flatCoordinates[1];
+						var lon2 = feature.getGeometry().flatCoordinates[2];
+						var lat2 = feature.getGeometry().flatCoordinates[3];
+						
+						angle_ = Math.atan2(lat2-lat1, lon2-lon1);
+						var angle_ = angle_*180/Math.PI;
+						if (angle_ >  135) angle_ -= 180;
+						if (angle_ < -135) angle_ += 180;
+						if (angle_ >   45) angle_ -=  90;
+						if (angle_ <  -45) angle_ +=  90;
+						angleR_ = (-1)*angle_*Math.PI/180;
+						
+						var tmp = feature.clone();
+						tmp.getGeometry().rotate(angleR_, center);
+						extent = tmp.getGeometry().getExtent();
+						var fW = ol.extent.getWidth(extent);
+						var fH = ol.extent.getHeight(extent);
+						ratio = fH/fW;
+					}
+				}
+				//var url = $("img", $thumbnail).attr("src");
+				//displayProductImage(url, extent, (-1)*angle_);
+			}
 			
-			angle_ = Math.atan2(lat2-lat1, lon2-lon1);
-			var angle_ = angle_*180/Math.PI;
-			if (angle_ >  135) angle_ -= 180;
-			if (angle_ < -135) angle_ += 180;
-			if (angle_ >   45) angle_ -=  90;
-			if (angle_ <  -45) angle_ +=  90;
-			angleR_ = (-1)*angle_*Math.PI/180;
-			
-			var tmp = feature.clone();
-			tmp.getGeometry().rotate(angleR_, center);
-			extent = tmp.getGeometry().getExtent();
-			var fW = ol.extent.getWidth(extent);
-			var fH = ol.extent.getHeight(extent);
-			ratio = fH/fW;
+			$(".floating", "#floatingExtent").html("").append($thumbnail.clone());
+			$(".controls", "#floatingExtent").remove();
+			resizeFloatingThumbnail(ratio);
 		}
-		
-		//var url = $("img", $thumbnail).attr("src");
-		//displayProductImage(url, extent, (-1)*angle_);
-		
-		$(".floating", "#floatingExtent").html("").append($thumbnail.clone());
-		$(".controls", "#floatingExtent").remove();
-		resizeFloatingThumbnail(ratio);
 	}
 	
 	function hideFloatingThumbnail() {
@@ -1750,7 +1867,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			}
 		}
 	}
-
+	
 	function highlightThumbnail($tr, scrollIntoView) {
 		var $thumbnail = $(".thumbnails>div#" + $tr.data("id"), "#thumbsExtent");
 		if ($thumbnail.length > 0) {
@@ -1956,18 +2073,16 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		e.stopPropagation();
 		
 		if (e.type == "dblclick") return;
-		var goBack = true;
 		
 		var $tr = (e.delegateTarget.id == "thumbsExtent") ? $("tr#" + $(this).closest("div").attr("id"), $("#executionExtent").hasClass("shifted") ? "#tbSelectedProducts" : "#tbDatasourceProducts") : $(this).closest("tr");
 		if ($tr.length == 0) return;
 		if ($tr.hasClass("datasource")) {
+			// per collection stuff
 			localEditMode = false;
-			// query stuff
 			if (typeof $tr.data("index") !== "undefined") {
 				var crtQuery = $tr.hasClass("datasource") ? queryCollection[$tr.data("index")] : null;
 				switch ($(this).data("action")) {
 					case "op-toggle":
-						goBack = false;
 						if ($(this).find("i").hasClass("fa-angle-double-left")) {
 							$(this).find("i").removeClass("fa-angle-double-left").addClass("fa-angle-double-down");
 							$(this).closest("tr").siblings().addClass("hidden");
@@ -1978,19 +2093,19 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 					break;
 					case "op-addnew":
 						if ($("#queryExtent").hasClass("shifted")) {
-							goBack = false;
-							updateSelectedProductsTable();
+							resetSelectedProductsTable();
 							resetDatasourcesList();
 							showPanel("query parameters");
+						} else {
+							showPanel("selected products");
 						}
 					break;
 					case "op-edit":
 						if (crtQuery && $("#queryExtent").hasClass("shifted")) {
-							goBack = false;
 							localEditMode = true;
 							
 							// Open the parameters section and populate the form with query data for editing
-							updateSelectedProductsTable();
+							resetSelectedProductsTable();
 							
 							// restore query label
 							$("#queryLabelDefault").val(crtQuery._dsLabelDefault);
@@ -2026,11 +2141,12 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 							$("#pageSize").val(crtQuery.pageSize);
 							
 							$("#queryExtent").data("query", crtQuery);
+						} else {
+							showPanel("selected products");
 						}
 					break;
 					case "op-footprint":
 						if (crtQuery && crtQuery.values.footprint) {
-							goBack = false;
 							$('#confirm-dialog').modal('confirm', {
 								msg: "Are you sure you want to restore the previous footprint?",
 								callbackConfirm: function () {
@@ -2046,10 +2162,11 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 								},
 								callbackCancel: function () { }
 							});
+						} else {
+							showPanel("selected products");
 						}
 					break;
 					case "op-discard":
-						goBack = false;
 						$('#confirm-dialog').modal('confirm', {
 							msg: "Are you sure you want to remove the selected query with all its associated products?",
 							callbackConfirm: function () {
@@ -2060,7 +2177,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 								selectedProducts = trimSelectedProducts;
 								// Remove selected query from collection
 								queryCollection.splice($.inArray(crtQuery, queryCollection), 1);
-								
 								updateSelectedProductsTable();
 							},
 							callbackCancel: function () { }
@@ -2069,10 +2185,9 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				}
 			}
 		} else {
-			// product stuff
+			// per product stuff
 			switch ($(this).data("action")) {
 				case "op-toggle":
-					goBack = false;
 					if ($(this).find("i").hasClass("fa-angle-double-left")) {
 						$(this).find("i").removeClass("fa-angle-double-left").addClass("fa-angle-double-down");
 						$(this).closest(".summary-header").siblings().addClass("hidden");
@@ -2082,7 +2197,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 					}
 				break;
 				case "op-locate":
-					goBack = false;
 					var $chk = $(".checkbox input[name='product']", $tr);
 					if (e.delegateTarget.id == "tbSelectedProducts" && $chk.length > 0 && !$chk.is(":checked")) {
 						$chk.trigger("click");
@@ -2096,7 +2210,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 					}
 				break;
 				case "op-details":
-					goBack = false;
 					var $chk = $(".checkbox input[name='product']", $tr);
 					if (e.delegateTarget.id == "tbSelectedProducts" && $chk.length > 0 && !$chk.is(":checked")) {
 						$chk.trigger("click");
@@ -2105,7 +2218,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 					updateFloatingThumbnail($tr);
 				break;
 				case "op-remove":
-					goBack = false;
 					$('#confirm-dialog').modal('confirm', {
 						msg: "Are you sure you want to remove this product from the list?",
 						callbackConfirm: function () {
@@ -2116,6 +2228,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 								// remove product thumbnail and floating image
 								var $thumbnail = $(".thumbnails>div#"+ $tr.data("id"), "#thumbsExtent");
 								$thumbnail.remove();
+								hideDetailsPanel();
 								hideFloatingThumbnail();
 								
 								// remove product from products list and recalculate indexes
@@ -2131,6 +2244,9 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 								rebuildPagination($table, pageSize);
 								
 								previewProducts($table);
+								
+								unlockPanels("#thumbsExtent");
+								resizePanels();
 							} else {
 								var dsLabelDefault = queryCollection[$tr.data("dsIndex")]._dsLabelDefault;
 								selectedProducts.splice(_.findIndex(selectedProducts, { "name": prodName, "_dsLabelDefault": dsLabelDefault }), 1);
@@ -2141,14 +2257,10 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 					});
 				break;
 				case "op-exclude":
-					goBack = false;
 					var $chk = $(".checkbox input[name='product']", $tr);
 					$chk.trigger("click");
 				break;
 			}
-		}
-		if (goBack) {
-			updateSelectedProductsTable();
 		}
 	});
 	
@@ -2381,6 +2493,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			callbackConfirm: function () {
 				// Remove thumbnails and hide floating image preview
 				$(".thumbnails>div.selected", "#thumbsExtent").remove();
+				hideDetailsPanel();
 				hideFloatingThumbnail();
 				
 				$("input[name='allproducts']", "#datasourceProducts").prop("checked", false);
@@ -2404,6 +2517,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				// Redraw product map features
 				previewProducts($table);
 				
+				unlockPanels("#thumbsExtent");
 				resizePanels();
 			},
 			callbackCancel: function () { }
@@ -2612,7 +2726,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
     	});
 		
 		// Initialize map and query
-		var olPoly = $("#mapExtent").poly2D({ maxFeaturesNo: 1, extraFeatureDescription: "preview" });
+		var olPoly = $("#mapExtent").poly2D({ startLat: 47, startLon: 14, zoom: 5, maxFeaturesNo: 1, extraFeatureDescription: "preview" });
 		$.when(olPoly)
 		.done(function (result) {
 			//*
@@ -2625,6 +2739,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				autoPanMap();
 			}
 			/* */
+			
 			// Initialize query functionality after map is loaded
 			initControls();
 			initDatasources();

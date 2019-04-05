@@ -2,20 +2,21 @@
 .content-wrapper{position:relative}
 
 .box-body.chat{padding:10px}
-
+/* ======== BUTTONS ======== */
 .fa-plus-plus::before{color:gray}
 .fa-plus-plus::after{color:black;content:"\f067";position:absolute;left:9px;top:12px;text-shadow:-1px -1px 0 white}
-
+/* ======== BOX ELEMENTS ======== */
 .nodes-item-core-box{position:relative;z-index:1;border:1px solid #96c2da;border-top:2px solid #3c8dbc}
+.nodes-item-core-box .box-top .box-title{font-size:1.4em;margin-bottom:5px}
+.nodes-item-core-box .box-top .box-subtitle{margin-bottom:5px}
+.nodes-item-core-box .box-top .box-text{margin:0;padding-left:10px;line-height:16px;overflow-y:auto;overflow-x:hidden;white-space:nowrap;text-overflow:ellipsis}
 .nodes-item-core-box .box-bottom.with-line{border-top:0;border-bottom:6px double rgba(0, 100, 160, 0.1);padding:0 0 15px 0}
-.nodes-item-core-box .box-top .box-title{font-size:1.6em}
-.nodes-item-core-box .box-top .box-subtitle{line-height:1.2em;margin:5px 0 0 0}
-.nodes-item-core-box .box-top .box-text{font-size:1.2em}
+/* ======== TAGS ======== */
 .nodes-item-core-box .box-top-tags{top:-12px;right:10px}
 .nodes-item-core-box .box-top-tags span{padding:0 8px;background-color:white;font-weight:600;color:#4693bf}
 .query-group     .nodes-item-core-box .box-top-tags span{background-color:#4693bf;color:white;border:4px double white}
 .query-component .nodes-item-core-box .box-top-tags span{background-color:#ecf7fd}
-
+/* ======== BOX APPEARANCE ======== */
 .query-group .nodes-item-core-box{border-top-left-radius:40px;border-top-right-radius:20px;background-color:#c6e7fb}
 .query-group>div::before,.query-group>div::after{content:"";position:absolute;border-radius:4px;width:120px;height:50%;max-width:30%;background-color:#70aed2}
 .query-group>div::before{top:-10px;border-radius:15px 25px 4px 4px}
@@ -98,9 +99,10 @@
 												<div class="col-md-3 col-sm-6">
 													<div class="nodes-item-core-box">
 														<div class="box-top-tags"></div>
-														<div class="box-top">
-															<div class="box-title"><span class="val-dsLabel"></span></div>
-															<div class="box-subtitle" style="min-height:2.4em;max-height:2.4em;overflow-y:auto"><span class="val-dsSubtitle"></span></div>
+														<div class="box-top" style="min-height:100px">
+															<div class="box-title"><span class="val-_dsLabel" title=""></span></div>
+															<div class="box-subtitle"><span class="val-_dsSubtitle"></span></div>
+															<div class="box-text" style="height:48px"><span class="val-_dsContents"></span></div>
 															<div class="box-icon"><i class="fa fa-cube"></i></div>
 														</div>
 														<div class="box-bottom with-line">
@@ -117,8 +119,9 @@
 													<div class="nodes-item-core-box">
 														<div class="box-top-tags"></div>
 														<div class="box-top">
-															<div class="box-title"><span class="val-dsLabel"></span></div>
-															<div class="box-subtitle"><span class="val-dsSubtitle"></span></div>
+															<div class="box-title"><span class="val-_dsLabel" title=""></span></div>
+															<div class="box-subtitle"><span class="val-_dsSubtitle"></span></div>
+															<div class="box-text"><span class="val-_dsContents"></span></div>
 															<div class="box-icon"><i class="fa fa-cube"></i></div>
 														</div>
 														<div class="row">
@@ -170,12 +173,12 @@
 		viewMode   : prefferences.viewMode,
 		itemsOnPage: 12,
 		order      :[
-						{ "label": "Name ascending" , "objAttributeName": "customField", "direction": "ASC", "default": true },
-						{ "label": "Name descending", "objAttributeName": "customField", "direction": "DSC" },
+						{ "label": "Name ascending" , "objAttributeName": "_dsOrderBy", "direction": "ASC", "default": true },
+						{ "label": "Name descending", "objAttributeName": "_dsOrderBy", "direction": "DSC" },
 						{ "label": "Date ascending" , "objAttributeName": "modified", "direction": "ASC" },
 						{ "label": "Date descending", "objAttributeName": "modified", "direction": "DSC" }
 					],
-		filterAttribute: "filterField",
+		filterAttribute: "_dsFilterBy",
 		doDataPreprocessing: function (data) {
 			var trimmed = [];
 			$.each(data, function (index, item) {
@@ -184,14 +187,30 @@
 				
 				var subComponents = "";
 				$.each(item.dataSourceComponents, function (idx, cmp) {
-					subComponents += (subComponents == "" ? "" : "<br/>") + (idx + 1) + ". " + cmp.label + " - " + cmp.sensorName;
+					subComponents += (subComponents == "" ? "" : "<br/>") + "#" + (idx + 1) + ". " + cmp.label + " - " + cmp.sensorName;
 				});
+				
+				// Get time interval for different components
+				var interval = "";
+				if (typeof item.values !== "undefined") {
+					if (typeof item.values.acquisition_date !== "undefined") {
+						interval = item.values.acquisition_date;
+					} else if (typeof item.values.startDate !== "undefined") {
+						interval = item.values.startDate;
+					} else if (typeof item.values.beginPosition !== "undefined" && typeof item.values.endPosition !== "undefined") {
+						interval = "[" + item.values.beginPosition + "," + item.values.endPosition + "]";
+					}
+				}
+				
 				// Add extra custom fields
 				item.tags        = isCollection ? ["collection"] : (isInCollection ? ["component"] : ["query"]);
-				item.dsLabel     = isCollection ? "[" + item.label  + "]" : (isInCollection ? "[" + item.groupLabel  + "]" : item.sensor + " - " + item.dataSource);
-				item.dsSubtitle  = isCollection ? subComponents : item.label;
-				item.customField = isCollection ? item.dsLabel : ((isInCollection ? item.dsLabel : "") + item.dsSubtitle);
-				item.filterField = (item.dsLabel + item.dsSubtitle).replace(/(<br\/>)|(\[)|(\])|( - )|(\d\. )/g, "").replace(" - ", "");
+				item._dsLabel    = isCollection ? "[" + item.label  + "]" : (isInCollection ? "[" + item.groupLabel  + "]" : item.sensor + " - " + item.dataSource);
+				item._dsSubtitle = isCollection ? "List of queries:" : item.label;
+				item._dsContents = isCollection ? subComponents : ("Datasource: " + item.dataSource + "<br/>" + "Sensor: " + item.sensor + "<br/>" + (isInCollection ? "Date: " : "Acquisition interval: ") + interval);
+				item._dsOrderBy  = isCollection ? item._dsLabel : ((isInCollection ? item._dsLabel : "") + item.label);
+				item._dsFilterBy = (item._dsLabel + item._dsContents).replace(/(<br\/>)|(\[)|(\])|( - )|(\d\. )/g, "").replace(" - ", "");
+				
+				// Save element
 				if (isInCollection) {
 					trimmed.push(item);
 				} else {
@@ -211,6 +230,7 @@
 				$elClone.addClass("query-component");
 				$("button[data-action='delete']", $elClone).prop({ disabled: true });
 			}
+			$(".box-top", $elClone).attr("title", $(".val-_dsLabel", $elClone).html());
 		}
 	});
 	
@@ -224,22 +244,19 @@
 				async: false,
 				success: function(result) {
 					if (result !== "") {
-						var $modal = $("#myModalNodes");
-						
-						// Prepare modal data
+						// Prepare data
 						var oAction = (action === "edit") ? "edit" : "add";
 						var oDna = $.extend(true, {}, dna);
-						// Remove all extra custom fields added in data preprocessing stage (tags, dsLabel, customField)
+						// Remove all extra custom fields added in data preprocessing stage (tags, ds...)
 						delete oDna["tags"];
-						delete oDna["dsLabel"];
-						delete oDna["dsSubtitle"];
-						delete oDna["customField"];
-						delete oDna["filterField"];
+						$.each(Object.keys(oDna), function (index, key) {
+							if (key.indexOf("_ds") >= 0) delete oDna[key];
+						});
+						// Modal stuff
+						var $modal = $("#myModalNodes");
 						$modal.data({ isCollection: isCollection, action: oAction, dna: oDna });
-						
 						$modal.html(result);
 						$modal.modal({ backdrop: false, keyboard: false });
-						
 						$modal.off('hidden.bs.modal');
 						$modal.on('hidden.bs.modal', function () {
 							// Kill all datepicker controls when parent window is closed
@@ -248,7 +265,6 @@
 							// Refresh data
 							panelComp.refreshData();
 						});
-						
 						$modal.modal("show");
 					}
 				},

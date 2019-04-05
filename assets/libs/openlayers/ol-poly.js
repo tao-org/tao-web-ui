@@ -94,7 +94,7 @@
 			],
 			target: 'map',
 			view  : new ol.View({
-				center : ol.proj.transform([25, 44.5], 'EPSG:4326', 'EPSG:3857'),
+				center : ol.proj.transform([_self.options.startLon, _self.options.startLat], 'EPSG:4326', 'EPSG:3857'),
 				extent : ol.proj.transformExtent([_self.options.lonMin, _self.options.latMin, _self.options.lonMax, _self.options.latMax], 'EPSG:4326', 'EPSG:3857'),
 				minZoom: _self.options.minZoom,
 				maxZoom: _self.options.maxZoom,
@@ -840,14 +840,16 @@
 	};
 	
 	$.fn.poly2D.defaults = {
-		latMin :  -85,
-		latMax :   85,
-		lonMin : -180,
-		lonMax :  180,
-		minZoom:    1,
-		maxZoom:   19,
-		zoom   :    7,
-		panPrc :    0,
+		startLat:   47,
+		startLon:   14,
+		latMin  :  -85,
+		latMax  :   85,
+		lonMin  : -180,
+		lonMax  :  180,
+		minZoom :    1,
+		maxZoom :   19,
+		zoom    :    5,
+		panPrc  :    0,
 		maxFeaturesNo: 10,
 		extraFeatureDescription: "preview",
 		// Styles

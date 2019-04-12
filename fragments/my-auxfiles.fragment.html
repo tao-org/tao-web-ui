@@ -1,233 +1,3 @@
-<!-- Content Header (Page header) -->
-<section class="content-header tao-async-ph">
-    <h1>Files<small>Full list of <strong>files</strong>.</small></h1>
-    <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">My Files</li>
-    </ol>
-</section>
-<!-- Main content -->
-<section id="tree-content" class="content">
-    <div class="row">
-        <div class="col-md-12">
-			<div class="box">
-				<div class="box-header">
-					<div class="treeview-header">
-						<h4>My Files:</h4>
-						<button id="importProducts" class="btn bg-green btn-flat"><i class="fa fa-upload fa-fw"></i>Import Products</button>
-						<button id="uploadFiles" class="btn bg-green btn-flat"><i class="fa fa-upload fa-fw"></i>Upload Files</button>
-						<button id="createQuery" class="btn bg-green btn-flat" disabled><i class="fa fa-square-o fa-fw"></i>Create Query</button>
-						<div class="col-md-12 loading hidden">
-							<img src="./assets/dist/img/loading.gif" />
-						</div>
-					</div>
-				</div>
-				<div class="box-body">
-					<div class="treeview sub"></div>
-					<div id="properties" class="folder hidden">
-						<div class="box-shadow--6dp properties-content">
-							<div class="callout properties-holder">
-								<div class="callout-title"><h4 class="title">File name</h4></div>
-								<button type="button" class="close">&times;</button>
-								<div class="holder"><div>
-									<table class="table table-hover">
-										<thead><tr><th>Name</th><th>Value</th></tr></thead>
-										<tbody></tbody>
-									</table>
-									<div class="imagepreview-holder hidden"><div><span class="fa fa-expand fa-fw full-preview"></span><img src=""/></div></div></div>
-								</div>
-							</div>
-							<div class="callout actions-holder">
-								<div class="callout-title"><h4>Actions</h4></div>
-								<table class="actions-set for-folders">
-									<tr class="action share-holder">
-										<td><span class="action-name">Share</span></td>
-										<td><span class="action-info"></span></td>
-										<td>
-											<div class="TSwitch">
-												<input id="TSPrimary" name="share-folder" type="checkbox" disabled/>
-												<label for="TSPrimary" class="label-success"></label>
-											</div>
-										</td>
-									</tr>
-									<tr class="action delete-holder">
-										<td><span class="action-name">Delete</span></td>
-										<td><span class="action-info"></span></td>
-										<td><button class="btn bg-green btn-flat" disabled><i class="fa fa-trash fa-fw"></i>Delete product</button></td>
-									</tr>
-								</table>
-								<table class="actions-set for-files">
-									<tr class="action download-holder">
-										<td><span class="action-name">Download</span></td>
-										<td><span class="action-info"></span></td>
-										<td><a href="#"><button class="btn bg-green btn-flat"><i class="fa fa-download fa-fw"></i>Download file</button></a></td>
-									</tr>
-									<tr class="action delete-holder">
-										<td><span class="action-name">Delete</span></td>
-										<td><span class="action-info"></span></td>
-										<td><button class="btn bg-green btn-flat" disabled><i class="fa fa-trash fa-fw"></i>Delete file</button></td>
-									</tr>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-        </div>
-    </div>
-</section>
-<!-- modal dialog for uploading files -->
-<div id="myModalUpload" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">Upload</h4>
-			</div>
-			<form id="frmUploadFile" class="form-horizontal" enctype="multipart/form-data" role="form">
-				<div class="modal-body">
-					<section class="upload-message collapse">
-						<h4>File successfully uploaded.</h4>
-					</section>
-					<section class="upload-content">
-						<div class="row">
-							<div class="col-md-12">
-								<div class="form-group">
-									<label class="col-sm-12 col-md-12">File:</label>
-									<div class="col-sm-12 col-md-12">
-										<input type="file" class="form-control" name="file" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-12 col-md-12">Description:</label>
-									<div class="col-sm-12 col-md-12">
-										<textarea class="form-control" name="desc" placeholder="File description"></textarea>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="form-group">
-									<div class="col-md-12 col-sm-12">
-										<button type="submit" class="btn btn-primary btn-submit">Upload selected file</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</section>
-				</div>
-			</form>
-			<div class="modal-footer">
-				<button class="btn btn-default upload-back collapse" style="float:left">Back</button>
-				<button class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- modal dialog for creting custom user data source -->
-<div id="myModalQuery" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">Create Custom Query</h4>
-			</div>
-			<form id="frmCreateQuery" class="form-horizontal" role="form">
-				<div class="modal-body">
-					<section class="query-message collapse">
-						<h4>Custom query successfully created.</h4>
-						<div class="form-group result-content">
-							<label class="col-sm-3 col-md-3">Label</label><p class="col-sm-9 col-md-9">Value</p>
-						</div>
-					</section>
-					<section class="query-content">
-						<div class="row">
-							<div class="col-md-12">
-								<div class="form-group">
-									<label class="col-sm-12 col-md-12">Query Name:</label>
-									<div class="col-sm-12 col-md-12">
-										<input type="text" class="form-control" name="queryLabel" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-12 col-md-12">Selected Products:</label>
-									<div class="products"></div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="form-group">
-									<div class="col-md-12 col-sm-12">
-										<button type="submit" class="btn btn-primary btn-submit">Create Custom Query</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</section>
-				</div>
-			</form>
-			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- modal dialog for uploading files -->
-<div id="myImportProducts" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">Import</h4>
-			</div>
-			<form id="frmImportProducts" class="form-horizontal" enctype="multipart/form-data" role="form">
-				<div class="modal-body">
-					<section class="upload-message collapse">
-						<h4>Products successfully imported.</h4>
-					</section>
-					<section class="upload-content">
-						<div class="row">
-							<div class="col-md-12">
-								<div class="form-group">
-									<label class="col-sm-12 col-md-12">Path:</label>
-									<div class="col-sm-12 col-md-12">
-										<input type="text" class="form-control" name="path" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-12 col-md-12">Link Only:</label>
-									<div class="col-sm-2 col-md-2">
-										<input type="radio" name="symbolicLink" value="true"> Yes
-									</div>
-									<div class="col-sm-2 col-md-2">
-  										<input type="radio" name="symbolicLink" value="false" checked> No
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="form-group">
-									<div class="col-md-12 col-sm-12">
-										<button type="submit" class="btn btn-primary btn-submit">Import Products</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</section>
-				</div>
-			</form>
-			<div class="modal-footer">
-				<button class="btn btn-default upload-back collapse" style="float:left">Back</button>
-				<button class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-
 <style>
 /* ===== HEADER ===== */
 #tree-content .box-header{padding:0}
@@ -301,10 +71,14 @@
 #tree-content .full-screen>div{position:unset}
 #tree-content .full-screen img{position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:auto;border:5px solid rgba(255, 255, 255, 0.3);border-radius:5px;max-width:100%;max-height:100%}
 #tree-content .fa-fw{margin-right:5px}
+#tree-content .treeview.compact{width:55%}
 /* ===== UPLOAD ===== */
 .upload-message.error{color:red}
 .upload-message h4{background-color:transparent;margin:-15px;padding:15px}
 .upload-message.error h4{margin-bottom:0;background-color:#ff00001c}
+.upload-content input[type="checkbox"]{-webkit-appearance:checkbox;-moz-appearance:unset;appearance:unset;height:20px;margin:7px 0 0 -12px;margin-bottom:20px}
+.upload-content .path-dummy{border:0;font-weight:700;color:#0f5075;white-space:nowrap;padding:6px 12px;float:left}
+.upload-content .path{width:auto;max-width:60%;border:0;font-weight:700;color:#0f5075;margin:0;white-space:nowrap;padding:6px 12px;overflow:hidden;text-overflow:ellipsis;direction:rtl;text-align:left;float:left}
 .form-control~label.error{font-weight:400;color:red}
 /* ===== QUERY ===== */
 .query-message.error{color:red}
@@ -328,17 +102,251 @@ font-weight:600
 .TSwitch>input[type="checkbox"]:disabled+label::before{content:'';background-color:transparent;border-color:#ececec;cursor:default}
 .TSwitch>input[type="checkbox"]:checked+label::after{background:inherit;content:'\f053\00A0\00A0 Unshare';left:30px;right:10px;text-align:right;color:white;border-color:#00a65a}
 .TSwitch>input[type="checkbox"]:disabled+label::after{content:'\f057\00A0\00A0 Disabled';text-align:center;color:rgba(154, 154, 154, 0.65);left:15px;right:15px;cursor:default;border-color:#ececec}
-
-#tree-content .treeview.compact{width:55%}
-
 </style>
 
-<script>
-// Check which page to dispay "My Files" or "Shared Files"
-var sharedFiles = decodeURI(window.location.hash).indexOf("shared") >= 0;
+<section class="content-header tao-async-ph">
+    <h1>Files<small>Full list of <strong>files</strong>.</small></h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">My Files</li>
+    </ol>
+</section>
 
-// BSwitch options
+<section id="tree-content" class="content">
+    <div class="row">
+        <div class="col-md-12">
+			<div class="box">
+				<div class="box-header">
+					<div class="treeview-header">
+						<h4>My Files:</h4>
+						<button id="importProducts" class="btn bg-green btn-flat"><i class="fa fa-upload fa-fw"></i>Import Products</button>
+						<button id="uploadFiles" class="btn bg-green btn-flat" disabled><i class="fa fa-upload fa-fw"></i>Upload Files</button>
+						<button id="createQuery" class="btn bg-green btn-flat" disabled><i class="fa fa-square-o fa-fw"></i>Create Query</button>
+						<div class="col-md-12 loading hidden">
+							<img src="./assets/dist/img/loading.gif" />
+						</div>
+					</div>
+				</div>
+				<div class="box-body">
+					<div class="treeview sub"></div>
+					<div id="properties" class="folder hidden">
+						<div class="box-shadow--6dp properties-content">
+							<div class="callout properties-holder">
+								<div class="callout-title"><h4 class="title">File name</h4></div>
+								<button type="button" class="close">&times;</button>
+								<div class="holder"><div>
+									<table class="table table-hover">
+										<thead><tr><th>Name</th><th>Value</th></tr></thead>
+										<tbody></tbody>
+									</table>
+									<div class="imagepreview-holder hidden"><div><span class="fa fa-expand fa-fw full-preview"></span><img src=""/></div></div></div>
+								</div>
+							</div>
+							<div class="callout actions-holder">
+								<div class="callout-title"><h4>Actions</h4></div>
+								<table class="actions-set for-folders">
+									<tr class="action share-holder">
+										<td><span class="action-name">Share</span></td>
+										<td><span class="action-info"></span></td>
+										<td>
+											<div class="TSwitch">
+												<input id="TSPrimary" name="share-folder" type="checkbox" disabled/>
+												<label for="TSPrimary" class="label-success"></label>
+											</div>
+										</td>
+									</tr>
+									<tr class="action delete-holder">
+										<td><span class="action-name">Delete</span></td>
+										<td><span class="action-info"></span></td>
+										<td><button class="btn bg-green btn-flat" disabled><i class="fa fa-trash fa-fw"></i>Delete product</button></td>
+									</tr>
+								</table>
+								<table class="actions-set for-files">
+									<tr class="action download-holder">
+										<td><span class="action-name">Download</span></td>
+										<td><span class="action-info"></span></td>
+										<td><a href="#"><button class="btn bg-green btn-flat"><i class="fa fa-download fa-fw"></i>Download file</button></a></td>
+									</tr>
+									<tr class="action delete-holder">
+										<td><span class="action-name">Delete</span></td>
+										<td><span class="action-info"></span></td>
+										<td><button class="btn bg-green btn-flat" disabled><i class="fa fa-trash fa-fw"></i>Delete file</button></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>
+</section>
+
+<div id="myModalUpload" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title">Upload</h4>
+			</div>
+			<form id="frmUploadFile" class="form-horizontal" enctype="multipart/form-data" role="form">
+				<div class="modal-body">
+					<section class="upload-message collapse">
+						<h4>File successfully uploaded.</h4>
+					</section>
+					<section class="upload-content">
+						<div class="row">
+							<div class="col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="col-sm-12 col-md-12">File:</label>
+									<div class="col-sm-12 col-md-12">
+										<input type="file" class="form-control" name="file" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-10 col-md-10">Upload path</label>
+									<label class="col-sm-2 col-md-2" style="padding:0">New folder?</label>
+									<div class="col-sm-10 col-md-10">
+										<p class="form-control path hidden" title="">/files/</p>
+										<input type="text" class="form-control" placeholder="/files/" name="subfolder" disabled />
+										<input type="hidden" name="folder" />
+									</div>
+									<div class="col-sm-2 col-md-2">
+										<input id="chkSubfolder" type="checkbox" class="form-control" name="chkSubfolder" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-12 col-md-12">Description:</label>
+									<div class="col-sm-12 col-md-12">
+										<textarea class="form-control" name="desc" rows="3" placeholder="File description" style="resize:vertical;min-height:75px;max-height:215px"></textarea>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-md-12 col-sm-12">
+										<button type="submit" class="btn btn-primary btn-submit">Upload selected file</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button class="btn btn-default upload-back collapse" style="float:left">Back</button>
+				<button class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="myModalQuery" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title">Create Custom Query</h4>
+			</div>
+			<form id="frmCreateQuery" class="form-horizontal" role="form">
+				<div class="modal-body">
+					<section class="query-message collapse">
+						<h4>Custom query successfully created.</h4>
+						<div class="form-group result-content">
+							<label class="col-sm-3 col-md-3">Label</label><p class="col-sm-9 col-md-9">Value</p>
+						</div>
+					</section>
+					<section class="query-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label class="col-sm-12 col-md-12">Query Name:</label>
+									<div class="col-sm-12 col-md-12">
+										<input type="text" class="form-control" name="queryLabel" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-12 col-md-12">Selected Products:</label>
+									<div class="products"></div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<div class="col-md-12 col-sm-12">
+										<button type="submit" class="btn btn-primary btn-submit">Create Custom Query</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="myImportProducts" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title">Import</h4>
+			</div>
+			<form id="frmImportProducts" class="form-horizontal" enctype="multipart/form-data" role="form">
+				<div class="modal-body">
+					<section class="upload-message collapse">
+						<h4>Products successfully imported.</h4>
+					</section>
+					<section class="upload-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label class="col-sm-12 col-md-12">Path:</label>
+									<div class="col-sm-12 col-md-12">
+										<input type="text" class="form-control" name="path" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-12 col-md-12">Link Only:</label>
+									<div class="col-sm-2 col-md-2">
+										<input type="radio" name="symbolicLink" value="true"> Yes
+									</div>
+									<div class="col-sm-2 col-md-2">
+  										<input type="radio" name="symbolicLink" value="false" checked> No
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<div class="col-md-12 col-sm-12">
+										<button type="submit" class="btn btn-primary btn-submit">Import Products</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button class="btn btn-default upload-back collapse" style="float:left">Back</button>
+				<button class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+var sharedFiles = decodeURI(window.location.hash).indexOf("shared") >= 0;
 var compsTree = $("#tree-content .treeview");
+
+var resizeTimer;
+$(window).on("ready resize", function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(function() { adjustPropertiesPosition(); }, 250); });
+$(window).on("scroll", function() { adjustPropertiesPosition(); });
 
 function detectIE() {
 	var ua = window.navigator.userAgent;
@@ -365,6 +373,8 @@ function detectIE() {
 	// other browser
 	return false;
 }
+
+// === FILE TREE SECTION ==========================================================================
 
 function refreshTree() {
 	var deferred = $.Deferred();
@@ -458,7 +468,6 @@ function renderFolder(relPath, file) {
 	return chk.find("~.sub");
 }
 
-// Render tree: folders and files
 function renderTree(response) {
 	compsTree.html("");
 	
@@ -526,12 +535,32 @@ function renderTree(response) {
 	$("#tree-content .treeview .select-for").closest(".sub").addClass("has-selectable-for");
 }
 
-// ==== PROPERTIES WINDOW SECTION =====================================================================
+function navigateTo(attributes) {
+	if (attributes.fileInfo.fileType === "folder") {
+		var $folder = $("input[id='" + attributes.fileInfo.relativePath + "']", ".treeview");
+		if ($folder.length > 0) {
+			// Check all folder checkboxes above current folder
+			$folder.prop("checked", true);
+			var $upLevelAttr = $folder.closest(".sub").siblings("label").find("a");
+			if ($upLevelAttr.length > 0) {
+				navigateTo($upLevelAttr.data("attributes"));
+			}
+		}
+	}
+}
+
+// Expand collapse folder when double-clicked
+$("#tree-content .treeview").on("dblclick", "label", function (e) {
+	if (!$(e.target).hasClass("select-for")) {
+		var chk = $(this).siblings("input[type='checkbox']");
+		chk.prop("checked", !chk.prop("checked"));
+	}
+});
+
+
+// === PROPERTIES WINDOW SECTION ==================================================================
 
 // Adjust properties windows size and position to properly fit inside browser's window
-var resizeTimer;
-$(window).on("ready resize", function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(function() { adjustPropertiesPosition(); }, 250); });
-$(window).on("scroll", function() { adjustPropertiesPosition(); });
 function adjustPropertiesPosition() {
 	if ($("#properties").length > 0 && !$("#properties").hasClass("hidden")) {
 		var scrollTop  = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
@@ -616,6 +645,11 @@ function showPorperties(attributes) {
 	if (attributes.fileInfo.fileType == "folder") {
 		$("#properties").addClass("folder");
 		$("#properties").removeClass("file");
+		
+		// Activate upload button
+		if (attributes.fileInfo.relativePath.indexOf("files") == 0)
+			$("#uploadFiles").prop("disabled", false);
+		
 	} else {
 		$("#properties").removeClass("folder");
 		$("#properties").addClass("file");
@@ -667,6 +701,9 @@ function closePorperties() {
 	// Hide properties window and clear data
 	$("#properties").removeClass("file folder").addClass("hidden").removeData("attributes");
 	compsTree.removeClass("compact");
+	
+	// Disable upload button
+	$("#uploadFiles").prop("disabled", true);
 }
 
 // Update properties window contents when folder or file is selected
@@ -678,14 +715,6 @@ $("#tree-content .treeview").on("click", "a", function (e) {
 	
 	showPorperties($(this).data("attributes"));
 	adjustPropertiesPosition();
-});
-
-// Toggle folder contents visibility
-$("#tree-content .treeview").on("dblclick", "label", function (e) {
-	if (!$(e.target).hasClass("select-for")) {
-		var chk = $(this).siblings("input[type='checkbox']");
-		chk.prop("checked", !chk.prop("checked"));
-	}
 });
 
 // Actions to perform when selecting at least one product
@@ -749,8 +778,9 @@ $("#properties").on("click", "button.close", function (e) {
 	$("#tree-content .treeview a.selected").removeClass("selected");
 });
 
-// === ACTIONS SECTION =====================================================================
+// === ACTIONS SECTION ============================================================================
 
+// Share selected product
 function toggleProductVisibility(attributes) {
 	var product    = attributes.fileInfo.relativePath;
 	var visibility = attributes.visibility != "PUBLIC" ? "PUBLIC" : "PRIVATE";
@@ -778,6 +808,7 @@ function toggleProductVisibility(attributes) {
 	});
 }
 
+// Delete selected prodict
 function deleteProduct(attributes) {
 	var deleteUrl = baseRestApiURL + "files/?fileName=" + attributes.fileInfo.relativePath;
 	$.ajax({
@@ -799,7 +830,7 @@ function deleteProduct(attributes) {
 	});
 }
 
-// Share: toggle product visibility
+// Share product
 $("#properties .share-holder").on("click", "input[name='share-folder']", function (e) {
 	e.preventDefault();
 	
@@ -814,7 +845,7 @@ $("#properties .share-holder").on("click", "input[name='share-folder']", functio
 	});
 });
 
-// Delete selected file
+// Delete selected product
 $("#properties .delete-holder").on("click", "button", function (e) {
 	e.preventDefault();
 	
@@ -886,9 +917,8 @@ $("#properties .download-holder").on("click", "a", function (e) {
 // Full screen preview events
 $("#tree-content").on("click", ".full-screen", function (event) { event.stopPropagation(); $(this).remove(); });
 
-// === UPLOAD SECTION =====================================================================
+// === UPLOAD SECTION =============================================================================
 
-// Maximum upload size
 var maxFileSizeUnits = "100 MB";
 
 // Get size in bytes from sizeUnits. Ex: 100 MB -> 104857600
@@ -904,6 +934,7 @@ function bytesFromSizeUnits(sizeUnits) {
 	}
 	return size;
 }
+
 // Format size in sizeUnits. Ex: 131334144 -> 125.25 MB
 function formatSizeUnits(bytes) {
    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -913,31 +944,105 @@ function formatSizeUnits(bytes) {
    return size.toFixed(2) + ' ' + sizes[i];
 }
 
+// Custom function to calculate element width based on the number of characters it contains
+$.fn.textWidth = function(){
+	var $div = $(this).closest("div");
+	var html_org = $div.html();
+	// replace last character with 'M' for better approximation
+	$div.html('<p class="path-dummy">' + $(this).html().replace(/.$/g, "M") + '</p>');
+	var width = $div.find('p:first').outerWidth();
+	$div.html(html_org);
+	return width;
+};
+
 // Open file upload dialog window
 $("#uploadFiles, #myModalUpload .upload-back").on("click", function (e) {
 	// close file attributes window
 	closePorperties();
 	
+	var $modal = $("#myModalUpload");
 	// reset upload dialog contents
-	$("#myModalUpload .upload-content").show();
-	$("#myModalUpload .upload-message").hide();
-	$("#myModalUpload .upload-back").hide();
+	$(".upload-content", $modal).show();
+	$(".upload-message", $modal).hide();
+	$(".upload-back", $modal).hide();
 	
 	// reset form (fields & validator)
 	$('#frmUploadFile')[0].reset();
 	$("#frmUploadFile").validate().resetForm();
 	$("#frmUploadFile .form-control").parent().removeClass("has-error");
 	
-	// show upload dialog
-	$("#myModalUpload").modal('show');
+	var $folder = $("#tree-content .treeview a.selected");
+	if ($folder.length > 0 && $folder.data("attributes")) {
+		var fileInfo = $folder.data("attributes").fileInfo;
+		if (fileInfo.fileType == "folder" && fileInfo.relativePath.indexOf("files") == 0) {
+			$("#frmUploadFile p.path").html("/" + fileInfo.relativePath + "/");
+			
+			// show upload dialog
+			$modal.off('hidden.bs.modal');
+			$modal.on('hidden.bs.modal', function () {
+				// Navigate back to selected or new folder
+				var $folder = $("#tree-content .treeview a.selected");
+				if ($folder.length > 0 && $folder.data("attributes")) {
+					var attributes = $folder.data("attributes");
+					showPorperties(attributes);
+					adjustPropertiesPosition();
+					navigateTo(attributes);
+					$("input[id='" + attributes.fileInfo.relativePath + "']", ".treeview").siblings("label").find("a").addClass("selected");
+				}
+			});
+			$modal.off('shown.bs.modal');
+			$modal.on('shown.bs.modal', function () {
+				var width = $("p.path", "#myModalUpload").textWidth();
+				$("p.path", "#myModalUpload").css({ width: width + "px" }).addClass("hidden");
+				var val = $("p.path", "#myModalUpload").html().replace(/\/$/, "");
+				$("#frmUploadFile input[name='subfolder']").prop("disabled", true).css({ width: "" }).val(val);
+			});
+			$modal.modal('show');
+			
+			if ($(e.target).hasClass("upload-back")) {
+				var width = $("p.path", "#myModalUpload").textWidth();
+				$("p.path", "#myModalUpload").css({ width: width + "px" }).addClass("hidden");
+				var val = $("p.path", "#myModalUpload").html().replace(/\/$/, "");
+				$("#frmUploadFile input[name='subfolder']").prop("disabled", true).css({ width: "" }).val(val);
+			}
+			return true;
+		}
+	}
+	showMsg("You can only upload files within 'files' folder and its subfolders.<br/>Please select a valid folder and try again.", "INFO");
 });
 
 // Check upload validation each time a new file is selected
-$("#frmUploadFile input[name='file']").on("change", function() { $(this).valid(); });
+$("#frmUploadFile input[name='file']").on("change", function() {
+	$(this).valid();
+});
+
+// Choose to create a new folder for uploaded file
+$("#frmUploadFile input[name='chkSubfolder']").on("click", function (e) {
+	$("#frmUploadFile input[name='subfolder']").prop("disabled", !$(this).is(":checked"));
+	if ($(this).is(":checked")) {
+		// show path and active input
+		$("#frmUploadFile input[name='subfolder']").prop("disabled", false).attr("placeholder", "New folder name").val("");
+		$("#frmUploadFile p.path").removeClass("hidden");
+		var width = $("#frmUploadFile p.path").parent().width() - $("#frmUploadFile p.path").outerWidth();
+		$("#frmUploadFile input[name='subfolder']").css({ width: width + "px" });
+	} else {
+		// only show disabled input
+		$("#frmUploadFile input[name='subfolder']").prop("disabled", true).val($("#frmUploadFile p.path").html().replace(/\/$/, ""));
+		$("#frmUploadFile p.path").addClass("hidden");
+		$("#frmUploadFile input[name='subfolder']").css({ width: "" });
+		$("#frmUploadFile input[name='subfolder']").valid();
+	}
+});
+
+$.validator.addMethod("regex", function (value, element, regexp) {
+	return this.optional(element) || regexp.test(value) || element.disabled;
+}, "Please enter a valid path.");
+
 $("#frmUploadFile").validate({
 	rules: {
-		file: { required: true },
-		desc: { required: true }
+		file     : { required: true },
+		desc     : { required: true },
+		subfolder: { required: "#chkSubfolder:checked", regex: /^(?![\.\/])((?![<>:"\\|?*]|(\/\/)).)*(?<![\.\/])$/ }
 	},
 	highlight: function(element, errorClass) {
 		$(element).parent().addClass("has-error");
@@ -955,10 +1060,9 @@ $("#frmUploadFile").validate({
 
 // Display the upload message result (success / fail)
 function showUploadMessage(message, error) {
-	showMsg(message, error ? "ERROR" : "SUCCESS");
-	
 	$("#frmUploadFile .upload-message").html("<h4>" + message + "</h4>");
 	if (!error) {
+		showMsg(message, "SUCCESS");
 		$("#frmUploadFile .upload-message").removeClass("error");
 		$("#frmUploadFile .upload-content").hide("slow");
 		$("#myModalUpload .upload-back").show();
@@ -972,6 +1076,11 @@ function showUploadMessage(message, error) {
 $("#frmUploadFile").submit(function (event) {
 	event.preventDefault();
 	if ($(this).valid()) {
+		var validPath = $("input[name='subfolder']", this).val().replace(/^(\/files\/)/, "");
+		if ($("#chkSubfolder", this).is(":checked")) {
+			validPath = $("p.path", "#frmUploadFile").html().replace(/^(\/files\/)/, "") + validPath;
+		}
+		$("input[name='folder']", this).val(validPath);
 		var formData = new FormData(this);
 		var xhr = new XMLHttpRequest();
 		xhr.open("POST", baseRestApiURL + "files/" + (sharedFiles ? "public" : "user") + "/upload", true);
@@ -995,18 +1104,27 @@ $("#frmUploadFile").submit(function (event) {
 						data = JSON.parse(data);
 					}
 				}
-				if (data.status == undefined) {
+				if (!data || typeof data.status === "undefined") {
 					// Inconclusive response from server
 					showUploadMessage("Operation failed. Please try again or contact app admin.", true);
 				} else if (data.status == responseStatus.success) {
 					showUploadMessage("File successfully uploaded.");
-					$.when(refreshTree()).done(function () {});
+					compsTree.html("");
+					$.when(refreshTree()).done(function () {
+						var $attr = $("input[id='files/" + validPath + "']", ".treeview").siblings("label").find("a");
+						if ($attr.length > 0) {
+							showPorperties($attr.data("attributes"));
+							adjustPropertiesPosition();
+							navigateTo($attr.data("attributes"));
+							$attr.addClass("selected");
+						}
+					});
 				} else {
 					showUploadMessage(data.message, true);
 				}
 			} else {
 				// Failed to connect to server
-				showUploadMessage("Operation failed. Please try again or contact app admin.", true);
+				showUploadMessage("Operation failed.<br/>" + this.response.error, true);
 			}
 		}
 		xhr.onerror = function (e, x, y) {
@@ -1018,8 +1136,9 @@ $("#frmUploadFile").submit(function (event) {
 	return false; // To avoid actual submission of the form
 });
 
-// === CUSTOM QUERY SECTION =====================================================================
+// === CUSTOM QUERY SECTION =======================================================================
 
+// Start creating user datasource component
 $("#createQuery").on("click", function (e) {
 	// Close file attributes window
 	closePorperties();
@@ -1069,8 +1188,8 @@ $("#frmCreateQuery").validate({
 });
 
 // Display the query creation message result (success / fail)
-function showQuerydMessage(message, error) {
-	showMsg(message, error ? "ERROR" : "SUCCESS");
+function showQueryMessage(message, error) {
+	if (!error) showMsg(message, error ? "ERROR" : "SUCCESS");
 	$("#frmCreateQuery .query-message").html("<h4>" + message + "</h4>");
 	if (!error) {
 		$("#frmCreateQuery .query-message").removeClass("error");
@@ -1109,11 +1228,11 @@ $("#frmCreateQuery").submit(function (event) {
 			success: function(response) {
 				if (response.status == undefined) {
 					// Inconclusive response from server
-					showQuerydMessage("Operation failed. Please try again or contact app admin.", true);
+					showQueryMessage("Operation failed. Please try again or contact app admin.", true);
 				} else if (response.status == responseStatus.success) {
 					// Show results message
 					if (response.data !== undefined && response.data !== null) {
-						showQuerydMessage("Your custom query has been successfully created:");
+						showQueryMessage("Your custom query has been successfully created:");
 						var html =
 							'<div class="form-group result-content">' +
 								(response.data.id             == undefined ? '' : '<label class="col-sm-3 col-md-3">Id</label><p class="col-sm-9 col-md-9">'             + response.data.id             + '</p>') +
@@ -1125,7 +1244,7 @@ $("#frmCreateQuery").submit(function (event) {
 							'</div>';
 						$("#frmCreateQuery .query-message").append(html);
 					} else {
-						showQuerydMessage("Your custom query has been successfully created.");
+						showQueryMessage("Your custom query has been successfully created.");
 					}
 					
 					// Clear product selection in tree
@@ -1134,18 +1253,18 @@ $("#frmCreateQuery").submit(function (event) {
 					$("#createQuery i").removeClass("fa-check-square-o").addClass("fa-square-o");
 					$("#createQuery").prop("disabled", true);
 				} else {
-					showQuerydMessage(response.message, true);
+					showQueryMessage(response.message, true);
 				}
 			},
 			error: function (jqXHR, textStatus) {
-				showQuerydMessage("Operation failed. Please try again or contact app admin.", true);			
+				showQueryMessage("Operation failed. Please try again or contact app admin.", true);			
 			}
 		});
 	}
 	return false; // To avoid actual submission of the form
 });
 
-// === START =====================================================================
+// === START ======================================================================================
 
 $(document).ready(function() {
 	// Set content class
@@ -1273,8 +1392,6 @@ $(document).ready(function() {
 		}
 		return false; // To avoid actual submission of the form
 	});
-	
-
 });
 
 //# sourceURL=my-auxfiles.js

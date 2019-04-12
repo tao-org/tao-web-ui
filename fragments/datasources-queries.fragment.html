@@ -7,10 +7,10 @@
 .fa-plus-plus::after{color:black;content:"\f067";position:absolute;left:9px;top:12px;text-shadow:-1px -1px 0 white}
 /* ======== BOX ELEMENTS ======== */
 .nodes-item-core-box{position:relative;z-index:1;border:1px solid #96c2da;border-top:2px solid #3c8dbc}
-.nodes-item-core-box .box-top .box-title{font-size:1.4em;margin-bottom:5px}
-.nodes-item-core-box .box-top .box-subtitle{margin-bottom:5px}
-.nodes-item-core-box .box-top .box-text{margin:0;padding-left:10px;line-height:16px;overflow-y:auto;overflow-x:hidden;white-space:nowrap;text-overflow:ellipsis}
-.nodes-item-core-box .box-bottom.with-line{border-top:0;border-bottom:6px double rgba(0, 100, 160, 0.1);padding:0 0 15px 0}
+.nodes-item-core-box .box-top .box-title{font-size:1.2em;font-weight:600;margin-bottom:5px}
+.nodes-item-core-box .box-top .box-subtitle{margin-bottom:5px;white-space:nowrap;text-overflow:ellipsis;overflow-x:hidden}
+.nodes-item-core-box .box-top .box-text{margin:0;padding-left:10px;line-height:16px;overflow-y:auto;overflow-x:hidden;white-space:nowrap;text-overflow:ellipsis;width:80%;width:calc(100% - 65px)}
+.nodes-item-core-box .box-bottom.with-line{border-top:0;position:absolute;right:15px;bottom:30px;width:auto}
 /* ======== TAGS ======== */
 .nodes-item-core-box .box-top-tags{top:-12px;right:10px}
 .nodes-item-core-box .box-top-tags span{padding:0 8px;background-color:white;font-weight:600;color:#4693bf}
@@ -45,7 +45,6 @@
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs hidden-xs">
 					<li class="role role-admin active"><a href="#panel-queries" data-toggle="tab" data-action="all_queries" aria-expanded="true">Queries</a></li>
-					<li class="pull-right"><a href="#" class="btn text-muted btn-action" data-action="refresh" data-toggle="tooltip" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a></li>
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane active" id="panel-nodes">
@@ -99,15 +98,15 @@
 												<div class="col-md-3 col-sm-6">
 													<div class="nodes-item-core-box">
 														<div class="box-top-tags"></div>
-														<div class="box-top" style="min-height:100px">
-															<div class="box-title"><span class="val-_dsLabel" title=""></span></div>
+														<div class="box-top" style="min-height:120px;border-bottom:4px double rgba(0, 100, 160, 0.1)">
+															<div class="box-title"><span class="val-_dsLabel"></span></div>
 															<div class="box-subtitle"><span class="val-_dsSubtitle"></span></div>
 															<div class="box-text" style="height:48px"><span class="val-_dsContents"></span></div>
 															<div class="box-icon"><i class="fa fa-cube"></i></div>
 														</div>
 														<div class="box-bottom with-line">
 															<div class="pocket">
-																<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
+																<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop btn-edit" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
 																<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete</span></button>
 															</div>
 														</div>
@@ -119,7 +118,7 @@
 													<div class="nodes-item-core-box">
 														<div class="box-top-tags"></div>
 														<div class="box-top">
-															<div class="box-title"><span class="val-_dsLabel" title=""></span></div>
+															<div class="box-title"><span class="val-_dsLabel"></span></div>
 															<div class="box-subtitle"><span class="val-_dsSubtitle"></span></div>
 															<div class="box-text"><span class="val-_dsContents"></span></div>
 															<div class="box-icon"><i class="fa fa-cube"></i></div>
@@ -223,14 +222,16 @@
 			myModalNodesOpShow(action, (typeof args === "undefined") ? args : args.dna);
 		},
 		doCustomRender: function($elClone, elX){
+			var title = $(".val-_dsSubtitle", $elClone).html();
 			if (elX.tags[0] === "collection") {
 				$elClone.addClass("query-group");
 				$(".fa-cube", $elClone).removeClass("fa-cube").addClass("fa-cubes");
+				title = $(".val-_dsLabel", $elClone).html();
 			} else if (elX.tags[0] === "component" ) {
 				$elClone.addClass("query-component");
 				$("button[data-action='delete']", $elClone).prop({ disabled: true });
+				title = $(".val-_dsLabel", $elClone).html() + "\n" + title;
 			}
-			$(".box-top", $elClone).attr("title", $(".val-_dsLabel", $elClone).html());
 		}
 	});
 	

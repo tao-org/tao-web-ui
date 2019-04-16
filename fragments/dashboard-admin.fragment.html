@@ -101,6 +101,31 @@
                     <div class="box-notification"><p><span>List updated</span></p></div>
                 </div>
                 <!-- /.box -->
+				
+                <div id="download-statistics-panel" class="box box-primary statistics">
+                    <div class="box-header" style="cursor: move;">
+                        <i class="ion ion-clipboard"></i>
+                        <h3 class="box-title">Download statistics</h3>
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li class="refresh"><a href="#refresh" class="refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+					<div class="box-body">
+						<div class="progress">
+							<div class="progress-bar progress-bar-success" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:'In progress',show:true});"></div>
+							<div class="progress-bar progress-bar-warning" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip();"></div>
+							<div class="progress-bar progress-bar-info"    role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip();"></div>
+							<div class="progress-bar progress-bar-danger"  role="progressbar" data-toggle="tooltip" title="" data-original-title="Failed downloads" data-placement="bottom" onmouseover="$(this).tooltip();"></div>
+						</div>
+						<div><label>Number of products to download: <span id="estimated_downloads"></span> </label></div>
+					</div>
+				</div>
+				<style>
+					.progress{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+					.progress,.progress>.progress-bar{clear:both;height:auto;margin-bottom:5px;text-align:left;text-shadow:1px 1px 1px black;text-indent:5px;line-height:2em;white-space:nowrap}
+				</style>
             </section>
             <!-- /.Left col -->
             <section class="col-lg-5">
@@ -319,7 +344,59 @@
             }
         });
     }
-
+	
+	function updateDownloadStatistics(once) {
+		$.ajax({
+            cache    : false,
+			url      : baseRestApiURL + "progress/",
+            dataType : 'json',
+            type     : 'GET',
+            headers  : {
+                "Accept"      : "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+		}).done(function (result) {
+			var res = chkTSRF(result);
+			
+			var totPrc = 0
+			var cnt = 0;
+			$(".statistics .progress").html("");
+			var $bar = "";
+			if (res.length > 0) {
+				res.sort(function (a, b){
+					if (a.name.toLowerCase() > b.name.toLowerCase()) { return 1; }
+					if (a.name.toLowerCase() < b.name.toLowerCase()) { return -1; }
+					return 0;
+				});
+				
+				$.each(res, function (index, resource) {
+					$bar = $('<div class="progress-bar progress-bar-success" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:"In progress",show:true});">' + resource.name + '</div>');
+					$bar.attr("title", parseInt(resource.progress*10000)/100 + "%");
+					$bar.css({ width: parseInt(resource.progress*10000)/100 + "%" });
+					$(".statistics .progress").append($bar);
+					
+					totPrc += resource.progress;
+					cnt ++;
+				});
+				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:"In progress",show:true});">Overall progress</div>');
+				$bar.attr("title", parseInt(totPrc*10000/cnt)/100 + "%");
+				$bar.css({ width: parseInt(totPrc*10000/cnt)/100 + "%" });
+			} else {
+				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:"In progress",show:true});">No downloads in progress</div>');
+				$bar.attr("title", "");
+				$bar.css({ width: "100%" });
+			}
+			$(".statistics .progress").prepend($bar);
+			$(".statistics #estimated_downloads").html(cnt);
+		}).fail(function (jqXHR, textStatus) {
+		}).complete(function () {
+			if (!once) {
+				setTimeout(function () { updateDownloadStatistics(); }, 20000);
+			}
+        });
+	}
+	
     $( document ).ready(function() {
         $( window )
             .resize(function() {
@@ -331,6 +408,7 @@
             })
             .trigger( "resize" );
         updateMasterMonitorWidget();
+		updateDownloadStatistics();
         //bind resize event
 
         $("#exec-list-panel").npExecPanels({
@@ -352,5 +430,11 @@
             headerUser: taoUserProfile.username,
             url: baseRestApiURL + "monitor/notification/"
         });
+		$("#download-statistics-panel").on("click", "a.refresh", function (e) {
+			e.preventDefault();
+			updateDownloadStatistics(true);
+		});
     });
+	
+//# sourceURL=dashboard-admin.js
 </script>

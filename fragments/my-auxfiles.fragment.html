@@ -28,6 +28,10 @@
 #tree-content .treeview:hover input:checked+label::before{color:#5c5d5e}
 #tree-content .treeview .sub{display:none;margin-left:22px}
 #tree-content .treeview input:checked~.sub{display:block}
+#tree-content .treeview input:checked~.sub.loading,
+#tree-content .treeview input:checked~.sub.empty{height:auto}
+#tree-content .treeview input:checked~.sub.empty::after{content:"Empty...";color:#b1d3e6;width:100%;display:block;padding:0 10px;text-align:left;font-size:0.8em;line-height:16px}
+#tree-content .treeview input:checked~.sub.loading::after{content:"Loading...";color:red;width:100%;display:block;padding:0 10px;text-align:left;font-size:1em;line-height:16px}
 /* ===== PRODUCTS ===== */
 #tree-content .treeview label.select-for{position:absolute;margin:0;top:0;left:0;width:23px;height:25px;cursor:pointer}
 #tree-content .treeview label.select-for::before{position:absolute;left:7px;top:9px;content:"\002713";line-height:0;padding:0}
@@ -44,6 +48,7 @@
 #properties.file .for-folders{display:none}
 #tree-content.shared-files #properties.folder .actions-holder{display:none}
 #tree-content.shared-files #properties.file   .delete-holder {display:none}
+#tree-content.shared-files #importProducts {display:block !important}
 #properties{position:fixed;right:25px;width:30%;z-index:998}
 #properties button.close{position:absolute;top:10px;right:12px;opacity:1;color:#3c8dbc;outline:0}
 #properties button.close:hover{color:#8bccf3}
@@ -76,9 +81,16 @@
 .upload-message.error{color:red}
 .upload-message h4{background-color:transparent;margin:-15px;padding:15px}
 .upload-message.error h4{margin-bottom:0;background-color:#ff00001c}
-.upload-content input[type="checkbox"]{-webkit-appearance:checkbox;-moz-appearance:unset;appearance:unset;height:20px;margin:7px 0 0 -12px;margin-bottom:20px}
-.upload-content .path-dummy{border:0;font-weight:700;color:#0f5075;white-space:nowrap;padding:6px 12px;float:left}
-.upload-content .path{width:auto;max-width:60%;border:0;font-weight:700;color:#0f5075;margin:0;white-space:nowrap;padding:6px 12px;overflow:hidden;text-overflow:ellipsis;direction:rtl;text-align:left;float:left}
+.upload-content{overflow:hidden}
+.upload-content .path{background-color:#eee;margin:0;direction:rtl;text-align:left;white-space:nowrap;text-overflow:ellipsis;overflow-x:hidden}
+.upload-content input[name='chkSubfolder']        ~label.new-folder-on{display:block;color:#378bbb;padding:0;margin:0;cursor:pointer;background-color:#eee;border:1px solid #b4d0e0;text-align:center;line-height:32px}
+.upload-content input[name='chkSubfolder']:checked~label.new-folder-on{display:none}
+.upload-content input[name='chkSubfolder']        ~label.new-folder-on:hover{background-color:#d8effd}
+.upload-content input[name='chkSubfolder']        ~label.new-folder-off{display:none;position:absolute;top:0;right:20px;line-height:22px;font-size:26px;cursor:pointer;padding:5px;z-index:1}
+.upload-content input[name='chkSubfolder']:checked~label.new-folder-off{display:block}
+.upload-content input[name='chkSubfolder']        ~label.new-folder-off:hover{color:red}
+.upload-content input[name='chkSubfolder']        ~div>input[name='subfolder']{position:absolute;right:-110%;padding-right:28px}
+.upload-content input[name='chkSubfolder']:checked~div>input[name='subfolder']{position:relative;right:auto}
 .form-control~label.error{font-weight:400;color:red}
 /* ===== QUERY ===== */
 .query-message.error{color:red}
@@ -119,7 +131,7 @@ font-weight:600
 				<div class="box-header">
 					<div class="treeview-header">
 						<h4>My Files:</h4>
-						<button id="importProducts" class="btn bg-green btn-flat"><i class="fa fa-upload fa-fw"></i>Import Products</button>
+						<button id="importProducts" class="btn bg-green btn-flat" style="display:none"><i class="fa fa-upload fa-fw"></i>Import Products</button>
 						<button id="uploadFiles" class="btn bg-green btn-flat" disabled><i class="fa fa-upload fa-fw"></i>Upload Files</button>
 						<button id="createQuery" class="btn bg-green btn-flat" disabled><i class="fa fa-square-o fa-fw"></i>Create Query</button>
 						<div class="col-md-12 loading hidden">
@@ -204,15 +216,18 @@ font-weight:600
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-10 col-md-10">Upload path</label>
-									<label class="col-sm-2 col-md-2" style="padding:0">New folder?</label>
-									<div class="col-sm-10 col-md-10">
-										<p class="form-control path hidden" title="">/files/</p>
-										<input type="text" class="form-control" placeholder="/files/" name="subfolder" disabled />
-										<input type="hidden" name="folder" />
+									<label class="col-sm-12 col-md-12">Upload path:</label>
+									<div class="col-sm-7 col-md-7">
+										<p class="form-control path" title="">/files/</p>
 									</div>
-									<div class="col-sm-2 col-md-2">
-										<input id="chkSubfolder" type="checkbox" class="form-control" name="chkSubfolder" />
+									<div class="col-sm-5 col-md-5">
+										<input id="chkSubfolder" type="checkbox" class="hidden" name="chkSubfolder" />
+										<label for="chkSubfolder" class="col-sm-12 col-md-12 new-folder-on">New folder</label>
+										<label for="chkSubfolder" class="new-folder-off">&times;</label>
+										<div>
+											<input type="text" class="form-control" placeholder="New folder name" name="subfolder" />
+											<input type="hidden" name="folder" />
+										</div>
 									</div>
 								</div>
 								<div class="form-group">
@@ -333,7 +348,6 @@ font-weight:600
 				</div>
 			</form>
 			<div class="modal-footer">
-				<button class="btn btn-default upload-back collapse" style="float:left">Back</button>
 				<button class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
@@ -341,982 +355,934 @@ font-weight:600
 </div>
 
 <script>
-var sharedFiles = decodeURI(window.location.hash).indexOf("shared") >= 0;
-var compsTree = $("#tree-content .treeview");
-
-var resizeTimer;
-$(window).on("ready resize", function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(function() { adjustPropertiesPosition(); }, 250); });
-$(window).on("scroll", function() { adjustPropertiesPosition(); });
-
-function detectIE() {
-	var ua = window.navigator.userAgent;
+	var sharedFiles = decodeURI(window.location.hash).indexOf("shared") >= 0;
+	var $compsTree = $("#tree-content .treeview");
+	var maxFileSizeUnits = "100 MB";
 	
-	// IE 10 or older => return version number
-	var msie = ua.indexOf('MSIE ');
-	if (msie > 0) {
-		return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
-	}
+	var resizeTimer;
+	$(window).on("ready resize", function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(function() { adjustPropertiesPosition(); }, 250); });
+	$(window).on("scroll", function() { adjustPropertiesPosition(); });
 	
-	// IE 11 => return version number
-	var trident = ua.indexOf('Trident/');
-	if (trident > 0) {
-		var rv = ua.indexOf('rv:');
-		return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
-	}
-	
-	// Edge (IE 12+) => return version number
-	var edge = ua.indexOf('Edge/');
-	if (edge > 0) {
-	   return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
-	}
-	
-	// other browser
-	return false;
-}
-
-// === FILE TREE SECTION ==========================================================================
-
-function refreshTree() {
-	var deferred = $.Deferred();
-	
-	$("#tree-content .loading").removeClass("hidden");
-	$.ajax({
-		url: baseRestApiURL + "files/" + (sharedFiles ? "public" : "user") + "/",
-		type: "GET",
-		dataType: 'json',
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("Accept", "application/json");
-			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.setRequestHeader("X-Auth-Token", tokenKey);
-		},
-		error: function (jqXHR, textStatus) {
-			$("#tree-content .loading").addClass("hidden");
-			
-			var msg = "Error while loading files.";
-			compsTree.closest(".box").addClass("box-warning");
-			deferred.reject(jqXHR, textStatus, msg);
-		},
-		success: function(response) {
-			$("#tree-content .loading").addClass("hidden");
-			
-			if (response.status == responseStatus.success) {
-				renderTree(response.data);
-				compsTree.closest(".box").addClass("box-success");
-				deferred.resolve(response);
-			} else {
-				showMsg(response.message);
-				deferred.reject(null, response.status, response.message);
-			}
-		}
-	});
-	return deferred.promise();
-}
-
-function getParentFolder(relativePath) {
-	var parentId = relativePath.substring(0, relativePath.lastIndexOf("/"));
-	var parent = $("input[id='" + parentId + "']").parent().find(">.sub");
-	if (parent.length == 0) { parent = compsTree; }
-	return parent;
-}
-
-function renderFolder(relPath, file) {
-	var attributes = (file != null ? file.attributes : null);
-	var relativePath = relPath.replace(/\\/g, "/");
-	
-	// get parent, render if null
-	var parent = getParentFolder(relativePath);
-	if (parent == compsTree && relativePath.indexOf("/") >= 0 ) {
-		parent = renderFolder(relativePath.substring(0, relativePath.lastIndexOf("/")), null);
-	}
-	
-	if (!attributes) { attributes = {}; }
-	attributes.fileInfo              = {};
-	attributes.fileInfo.relativePath = relativePath;
-	attributes.fileInfo.fileSize     = 0;
-	attributes.fileInfo.fileName     = relativePath.substring(relativePath.lastIndexOf("/") + 1);
-	attributes.fileInfo.fileType     = "folder";
-	attributes.fileInfo.uri          = "";
-	
-	// render folder if not found
-	var chk = parent.find("input[id='" + relativePath + "']");
-	if (chk.length == 0) {
-		var faPublic = attributes.visibility === "PUBLIC";
-		var selectable = sharedFiles && file != null && file.productName != undefined;
-		var element = $('<div' + (relativePath == 'files' ? ' class="files-folder"' : '') + ">" +
-							'<input type="checkbox" id="' + relativePath + '">' +
-							'<label for="' + relativePath + '">' +
-								(selectable ? '<label class="select-for"><input type="checkbox" class="select-for"></label>' : '') +
-								'<a href="#" title="' + attributes.fileInfo.fileName + '">' +
-									'<span class="fa fa-folder' + (faPublic ? " fa-public" : "") + '"></span>' +
-									attributes.fileInfo.fileName +
-								'</a>' +
-							'</label>' +
-							'<div class="sub"></div>' +
-						'</div>');
+	function detectIE() {
+		var ua = window.navigator.userAgent;
 		
-		// Make sure "/files" folder is always last in list
-		var filesFolder = $("#tree-content .treeview .files-folder");
-		if (filesFolder.length > 0 && parent.hasClass("treeview")) {
-			filesFolder.prepend(element);
-		} else {
-			parent.append(element);
-		}
-		chk = parent.find("input[id='" + relativePath + "']");
-	}
-	chk.find("~label>a").data("attributes", attributes);
-	
-	return chk.find("~.sub");
-}
-
-function renderTree(response) {
-	compsTree.html("");
-	
-	// Render tree folders first
-	$.each(response, function (index, file) {
-		if (file.folder && file.relativePath != "") {
-			renderFolder(file.relativePath, file);
-		}
-	});
-	
-	// Render files
-	$.each(response, function (index, file) {
-		if (!file.folder) {
-			var size = parseInt(file.size);
-			if (size < 1024) {
-				size = size + " B";
-			} else if (size < 1024*1024) {
-				size = parseFloat(size / 1024, 2).toFixed(2) + " KB";
-			} else if (size < 1024*1024*1024) {
-				size = parseFloat(size / 1024 / 1024, 2).toFixed(2) + " MB";
-			} else if (size < 1024*1024*1024*1024) {
-				size = parseFloat(size / 1024 / 1024 / 1024, 2).toFixed(2) + " GB";
-			} else {
-				size = parseFloat(size / 1024 / 1024 / 1024 / 1024, 2).toFixed(2) + " TB";
-			}
-			var relPath = file.relativePath.replace(/\\/g, "/");
-			var name    = relPath.substring(relPath.lastIndexOf("/") + 1);
-			var type    = relPath.substring(relPath.lastIndexOf("."));
-			var folder  = getParentFolder(relPath);
-			
-			// add "public/" prefix to filePath for all shared files in /public/files/
-			var addPublicPrefix = (sharedFiles && relPath.substr(0, 6) == "files/") ? "public/" : "";
-			var href = baseRestApiURL + 'files/download?fileName=' + addPublicPrefix + relPath;
-			
-			var fafile = "fa-file-o";
-			switch (type) {
-				case ".txt" : fafile = "fa-file-text-o"   ; break;
-				case ".log" : fafile = "fa-file-text-o"   ; break;
-				case ".html": fafile = "fa-file-code-o"   ; break;
-				case ".xml" : fafile = "fa-file-code-o"   ; break;
-				case ".json": fafile = "fa-file-code-o"   ; break;
-				case ".tif" : fafile = "fa-file-image-o"  ; break;
-				case ".png" : fafile = "fa-file-image-o"  ; break;
-				case ".jpg" : fafile = "fa-file-image-o"  ; break;
-				case ".jpeg": fafile = "fa-file-image-o"  ; break;
-				case ".pdf" : fafile = "fa-file-pdf-o"    ; break;
-				case ".zip" : fafile = "fa-file-archive-o"; break;
-			}
-			var element = $('<a href="#" title="' + name + '"><span class="fa ' + fafile + '"></span>' + name + '<span>' + size + '</span>' + '<span>' + type + '</span>' + '</a>');
-			
-			if (!file.attributes) { file.attributes = {}; }
-			file.attributes.fileInfo = {};
-			file.attributes.fileInfo.relativePath = relPath;
-			file.attributes.fileInfo.fileSize = size;
-			file.attributes.fileInfo.fileName = name;
-			file.attributes.fileInfo.fileType = type;
-			file.attributes.fileInfo.uri = href;
-			
-			element.data("attributes", file.attributes);
-			folder.append(element);
-		}
-	});
-	
-	// Adjust folder indentation
-	$("#tree-content .treeview .select-for").closest(".sub").addClass("has-selectable-for");
-}
-
-function navigateTo(attributes) {
-	if (attributes.fileInfo.fileType === "folder") {
-		var $folder = $("input[id='" + attributes.fileInfo.relativePath + "']", ".treeview");
-		if ($folder.length > 0) {
-			// Check all folder checkboxes above current folder
-			$folder.prop("checked", true);
-			var $upLevelAttr = $folder.closest(".sub").siblings("label").find("a");
-			if ($upLevelAttr.length > 0) {
-				navigateTo($upLevelAttr.data("attributes"));
-			}
-		}
-	}
-}
-
-// Expand collapse folder when double-clicked
-$("#tree-content .treeview").on("dblclick", "label", function (e) {
-	if (!$(e.target).hasClass("select-for")) {
-		var chk = $(this).siblings("input[type='checkbox']");
-		chk.prop("checked", !chk.prop("checked"));
-	}
-});
-
-
-// === PROPERTIES WINDOW SECTION ==================================================================
-
-// Adjust properties windows size and position to properly fit inside browser's window
-function adjustPropertiesPosition() {
-	if ($("#properties").length > 0 && !$("#properties").hasClass("hidden")) {
-		var scrollTop  = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
-		var treeTop    = $("#tree-content .treeview").offset().top;
-		var contentTop = $("#tree-content .treeview-header").offset().top + $("#tree-content .treeview-header").outerHeight();
-		
-		var sumHeight = 15;
-		$.each($("#properties .callout"), function () {
-			sumHeight += $(this).hasClass("properties-holder") ? $(this).find(".title").outerHeight() : $(this).outerHeight();
-		});
-		
-		var newTop = treeTop - scrollTop;
-		if (contentTop - scrollTop < 0) {
-			newTop = treeTop - contentTop;
-		}
-		var newWidth = $("#tree-content .box-body").width() - $("#tree-content .treeview").width();
-		$("#properties").css({ "width": newWidth + "px", "top": newTop + "px" });
-		
-		var newHeight = $(window).height() - newTop - sumHeight - (treeTop - contentTop);
-		$("#properties .properties-holder .holder").css({ "max-height": newHeight + "px" });
-		
-		if ($("#properties .properties-holder .holder").outerHeight() >= $("#properties .properties-holder .holder>div").outerHeight()) {
-			$("#properties .properties-holder .holder").css({ "overflow-y": "unset" });
-		} else {
-			$("#properties .properties-holder .holder").css({ "overflow-y": "" });
-		}
-	}
-}
-
-// Select which actions to be displayed for the selected element (folder/file)
-function displayActions(attributes) {
-	// Display actions for folders
-	if ($("#properties.folder").length > 0) {
-		// Delete
-		if (attributes.id != undefined && attributes.visibility == "PRIVATE") {
-			$(".for-folders .delete-holder .action-info").text("Delete selected product.");
-			$(".for-folders .delete-holder button").attr('disabled', false);
-		} else {
-			$(".for-folders .delete-holder .action-info").text(attributes.id == undefined ? "This folder can not be deleted" : "This product is public and can not be deleted.");
-			$(".for-folders .delete-holder button").attr('disabled', true);
+		// IE 10 or older => return version number
+		var msie = ua.indexOf('MSIE ');
+		if (msie > 0) {
+			return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
 		}
 		
-		// Sharing
-		if (attributes.visibility == "PUBLIC") {
-			// Folder is PUBLIC
-			$(".for-folders .share-holder .action-info").text("This product is public");
-			$(".for-folders .TSwitch>input[type='checkbox']").prop('checked', true);
-			$(".for-folders .TSwitch>input[type='checkbox']").attr('disabled', false);
-		} else if (attributes.visibility == "PRIVATE") {
-			// Folder is PRIVATE
-			$(".for-folders .share-holder .action-info").text("This product is not public");
-			$(".for-folders .TSwitch>input[type='checkbox']").prop('checked', false);
-			$(".for-folders .TSwitch>input[type='checkbox']").attr('disabled', false);
-		} else {
-			// Folder sharing status in unknown
-			$(".for-folders .share-holder .action-info").text("Sharing is disabled for this folder.");
-			$(".for-folders .TSwitch>input[type='checkbox']").prop('checked', false);
-			$(".for-folders .TSwitch>input[type='checkbox']").attr('disabled', true);
+		// IE 11 => return version number
+		var trident = ua.indexOf('Trident/');
+		if (trident > 0) {
+			var rv = ua.indexOf('rv:');
+			return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
 		}
-	// Display actions for files
-	} else {
-		// Download
-		$(".for-files .download-holder .action-info").text("Download size: " + attributes.fileInfo.fileSize);
-		$(".for-files .download-holder a").attr("href", attributes.fileInfo.uri);
 		
-		// Delete
-		if (attributes.fileInfo.relativePath.indexOf("files/") == -1) {
-			$(".for-files .delete-holder .action-info").text("Product contents can not be deleted.");
-			$(".for-files .delete-holder button").attr('disabled', true);
-		} else {
-			$(".for-files .delete-holder .action-info").text("Delete selected file.");
-			$(".for-files .delete-holder button").attr('disabled', false);
+		// Edge (IE 12+) => return version number
+		var edge = ua.indexOf('Edge/');
+		if (edge > 0) {
+		   return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
 		}
-	}
-}
-
-// Show properties window
-function showPorperties(attributes) {
-	closePorperties();
-	
-	$("#properties .properties-holder .title").text(attributes.fileInfo.fileName);
-	if (attributes.fileInfo.fileType == "folder") {
-		$("#properties").addClass("folder");
-		$("#properties").removeClass("file");
 		
-		// Activate upload button
-		if (attributes.fileInfo.relativePath.indexOf("files") == 0)
-			$("#uploadFiles").prop("disabled", false);
-		
-	} else {
-		$("#properties").removeClass("folder");
-		$("#properties").addClass("file");
+		// other browser
+		return false;
 	}
 	
-	var tableBody = $("#properties .properties-holder tbody");
-	var size = 0;
-	$.each(attributes, function (name, value) {
-		if (name == "productType" && value == "GeoTIFF" && attributes.fileInfo.fileType != "folder") {
-			tableBody.append('<tr><td>' + name + '</td><td>' + value + '<button class="btn bg-green btn-flat btn-xs image-preview"><i class="fa fa-eye fa-fw"></i>Toggle quick view</button></td></tr>');
-		} else if (name != "fileInfo") {
-			tableBody.append('<tr><td>' + name + '</td><td>' + value.replace(/[\r\n\x0B\x0C\u0085\u2028\u2029]+/g, "<br/>") + '</td></tr>');
-		} else {
-			size --;
-		}
-		size ++;
-	});
-	if (size == 0) {
-		tableBody.append('<tr><td>-</td><td>-</td></tr>');
-	}
+	// === FILE TREE SECTION ==========================================================================
 	
-	// Draw Actions
-	displayActions(attributes);
-	
-	$("#properties").data("attributes", attributes);
-	
-	// Unhide properties window
-	$("#properties").removeClass("hidden");
-	compsTree.addClass("compact");
-}
-
-// Close properties window
-function closePorperties() {
-	// Set attributes default values
-	$("#properties .properties-holder .title").text("File name");
-	var tableBody = $("#properties .properties-holder tbody");
-	tableBody.html("");
-	
-	// Empty image preview
-	$("#properties .imagepreview-holder").addClass("hidden");
-	$("#properties .imagepreview-holder img").attr("src", "");
-	
-	// Set actions default values and availability
-	$("#properties .actions-holder a").attr("href", "");
-	$("#properties .actions-holder .action-info").text("");
-	$("#properties .actions-holder button").attr('disabled', false);
-	$("#properties .actions-holder input[type='checkbox']").prop('checked', true);
-	
-	// Hide properties window and clear data
-	$("#properties").removeClass("file folder").addClass("hidden").removeData("attributes");
-	compsTree.removeClass("compact");
-	
-	// Disable upload button
-	$("#uploadFiles").prop("disabled", true);
-}
-
-// Update properties window contents when folder or file is selected
-$("#tree-content .treeview").on("click", "a", function (e) {
-	e.preventDefault();
-	
-	$("#tree-content .treeview a.selected").removeClass("selected");
-	$(this).addClass("selected");
-	
-	showPorperties($(this).data("attributes"));
-	adjustPropertiesPosition();
-});
-
-// Actions to perform when selecting at least one product
-$("#tree-content .treeview").on("change", "input.select-for", function (e) {
-	if ($(this).prop("checked"))
-		$(this).parent().addClass("checked");
-	else
-		$(this).parent().removeClass("checked");
-	
-	
-	if ($("#tree-content .treeview .select-for:checked").length > 0) {
-		$("#createQuery i").removeClass("fa-square-o").addClass("fa-check-square-o");
-		$("#createQuery").prop("disabled", false);
-	} else {
-		$("#createQuery i").removeClass("fa-check-square-o").addClass("fa-square-o");
-		$("#createQuery").prop("disabled", true);
-	}
-});
-
-// Adjust properties window size and position when image preview is loaded
-$("#properties .imagepreview-holder img").load(function () {
-	$("#properties .imagepreview-holder").removeClass("hidden");
-	$("#properties .properties-holder .holder").css({ "max-height": "" });
-	adjustPropertiesPosition();
-});
-
-// Toggle quick view product
-$("#properties").on("click", "button.image-preview", function (e) {
-	var attributes = $(this).closest("#properties").data("attributes");
-	if ($("#properties .imagepreview-holder img").attr("src") != "") {
-		$("#properties .imagepreview-holder").toggleClass("hidden");
-		adjustPropertiesPosition();
-	} else {
-		$("#properties .imagepreview-holder").addClass("hidden");
-		$("#properties .imagepreview-holder img").attr("src", "");
-		if (attributes.formatType == "RASTER") {
-			$.ajax({
-				url: attributes.fileInfo.uri.replace("download?fileName=", "preview?fileName="),
-				type: "GET",
-				beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
-				success: function(response) {
-					if (response.status == responseStatus.success) {
-						$("#properties .imagepreview-holder img").attr("src", "data:image/jpeg;base64, " + response.data);
-					}
-				}
-			});
-		}
-	}
-	
-});
-
-// Show fullscreen preview
-$("#properties").on("click", ".full-preview", function (e) {
-	$("#properties .imagepreview-holder").clone().appendTo("#tree-content").addClass("full-screen");
-	$("#tree-content .full-screen span").remove();
-});
-
-// Close properties window
-$("#properties").on("click", "button.close", function (e) {
-	closePorperties();
-	$("#tree-content .treeview a.selected").removeClass("selected");
-});
-
-// === ACTIONS SECTION ============================================================================
-
-// Share selected product
-function toggleProductVisibility(attributes) {
-	var product    = attributes.fileInfo.relativePath;
-	var visibility = attributes.visibility != "PUBLIC" ? "PUBLIC" : "PRIVATE";
-	var formData   = { "folder": product, "visibility": visibility };
-	$.ajax({
-		url: baseRestApiURL + "files/",
-		type: "POST",
-		data: formData,
-		beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
-		success: function(response) {
-			if (response.status == responseStatus.success) {
-				$.when(refreshTree()).done(function () {
-					var prod = compsTree.find("input[id='" + product + "']+label>a");
-					prod.addClass("selected");
-					showPorperties(prod.data("attributes"));
-					adjustPropertiesPosition();
-				});
-			} else {
-				$("#properties .share-holder input[name='share-folder']").prop("checked", attributes.visibility == "PUBLIC" ? true : false);
-			}
-		},
-		error: function (jqXHR, textStatus) {
-			$("#properties .share-holder input[name='share-folder']").prop("checked", attributes.visibility == "PUBLIC" ? true : false);
-		}
-	});
-}
-
-// Delete selected prodict
-function deleteProduct(attributes) {
-	var deleteUrl = baseRestApiURL + "files/?fileName=" + attributes.fileInfo.relativePath;
-	$.ajax({
-		url: deleteUrl,
-		type: "DELETE",
-		beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
-		success: function(response) {
-			if (response.status == responseStatus.success) {
-				showMsg(response.message);
-				$.when(refreshTree()).done(function () {});
-				closePorperties();
-			} else {
-				showMsg(response.message);
-			}
-		},
-		error: function (jqXHR, textStatus) {
-			showMsg("Error while deleting the selected element!");
-		}
-	});
-}
-
-// Share product
-$("#properties .share-holder").on("click", "input[name='share-folder']", function (e) {
-	e.preventDefault();
-	
-	var attributes = $("#properties").data("attributes");
-	var action = attributes.visibility != "PUBLIC" ? "share" : "unshare";
-	$('#confirm-dialog').modal('confirm', {
-		msg: "Are you sure you want to " + action + " this product?",
-		callbackConfirm: function () {
-			toggleProductVisibility(attributes);
-		},
-		callbackCancel: function () {}
-	});
-});
-
-// Delete selected product
-$("#properties .delete-holder").on("click", "button", function (e) {
-	e.preventDefault();
-	
-	var attributes = $("#properties").data("attributes");
-	$('#confirm-dialog').modal('confirm', {
-		msg: "Are you sure you want to delete this product?",
-		callbackConfirm: function () {
-			deleteProduct(attributes);
-		},
-		callbackCancel: function (){ }
-	});
-});
-
-// Download selected file
-$("#properties .download-holder").on("click", "a", function (e) {
-	e.preventDefault();
-	
-	var btn  = $(this).find("button");
-	var info = $(this).closest(".download-holder").find(".action-info");
-	var infoVal = info.text();
-	
-	var attributes = $(this).closest("#properties").data("attributes");
-	var filename   = attributes.fileInfo.fileName;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', this.href, true);
-	xhr.setRequestHeader("X-Auth-Token", tokenKey);
-	xhr.responseType = 'blob';
-	xhr.onload = function(e) {
-		info.text(infoVal);
-		btn.find("i").removeClass("fa-refresh fa-spin").addClass("fa-download");
-		btn.prop("disabled", false);
-		
-		if (this.status == 200) {
-	        var blob = new Blob([this.response], { type: this.getResponseHeader('Content-Type') });
-			
-	        if (typeof window.navigator.msSaveBlob !== 'undefined') {
-	            // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created.
-				// These URLs will no longer resolve as the data backing the URL has been freed."
-	            window.navigator.msSaveBlob(blob, filename);
-	        } else {
-	            var URL = window.URL || window.webkitURL;
-	            var downloadUrl = URL.createObjectURL(blob);
-				
-				// use HTML5 a[download] attribute to specify filename
-				var a = document.createElement("a");
-				// safari doesn't support this yet
-				if (typeof a.download === 'undefined') {
-					window.location = downloadUrl;
-				} else {
-					a.href = downloadUrl;
-					a.download = filename;
-					document.body.appendChild(a);
-					a.click();
-				}
-	            setTimeout(function () { URL.revokeObjectURL(downloadUrl); $(a).remove(); }, 100); // cleanup
-	        }
-		} else {
-			showMsg("An error occured while processing your request!");
-		}
-	}
-	xhr.send();
-	
-	btn.prop("disabled", true);
-	btn.find("i").removeClass("fa-download").addClass("fa-refresh fa-spin");
-	info.text("Please wait for your download to start!");
-});
-
-// Full screen preview events
-$("#tree-content").on("click", ".full-screen", function (event) { event.stopPropagation(); $(this).remove(); });
-
-// === UPLOAD SECTION =============================================================================
-
-var maxFileSizeUnits = "100 MB";
-
-// Get size in bytes from sizeUnits. Ex: 100 MB -> 104857600
-function bytesFromSizeUnits(sizeUnits) {
-	var size = parseFloat(sizeUnits.substr(0, sizeUnits.length - 2));
-	var unit = sizeUnits.substr(sizeUnits.length - 2).toUpperCase();
-	switch (unit) {
-		case "KB": size *= 1024; break;
-		case "MB": size *= 1024*1024; break;
-		case "GB": size *= 1024*1024*1024; break;
-		case "TB": size *= 1024*1024*1024*1024; break;
-		default  : size = 0; break;
-	}
-	return size;
-}
-
-// Format size in sizeUnits. Ex: 131334144 -> 125.25 MB
-function formatSizeUnits(bytes) {
-   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-   if (bytes == 0) return '0 Bytes';
-   var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-   var size = bytes / Math.pow(1024, i)
-   return size.toFixed(2) + ' ' + sizes[i];
-}
-
-// Custom function to calculate element width based on the number of characters it contains
-$.fn.textWidth = function(){
-	var $div = $(this).closest("div");
-	var html_org = $div.html();
-	// replace last character with 'M' for better approximation
-	$div.html('<p class="path-dummy">' + $(this).html().replace(/.$/g, "M") + '</p>');
-	var width = $div.find('p:first').outerWidth();
-	$div.html(html_org);
-	return width;
-};
-
-// Open file upload dialog window
-$("#uploadFiles, #myModalUpload .upload-back").on("click", function (e) {
-	// close file attributes window
-	closePorperties();
-	
-	var $modal = $("#myModalUpload");
-	// reset upload dialog contents
-	$(".upload-content", $modal).show();
-	$(".upload-message", $modal).hide();
-	$(".upload-back", $modal).hide();
-	
-	// reset form (fields & validator)
-	$('#frmUploadFile')[0].reset();
-	$("#frmUploadFile").validate().resetForm();
-	$("#frmUploadFile .form-control").parent().removeClass("has-error");
-	
-	var $folder = $("#tree-content .treeview a.selected");
-	if ($folder.length > 0 && $folder.data("attributes")) {
-		var fileInfo = $folder.data("attributes").fileInfo;
-		if (fileInfo.fileType == "folder" && fileInfo.relativePath.indexOf("files") == 0) {
-			$("#frmUploadFile p.path").html("/" + fileInfo.relativePath + "/");
-			
-			// show upload dialog
-			$modal.off('hidden.bs.modal');
-			$modal.on('hidden.bs.modal', function () {
-				// Navigate back to selected or new folder
-				var $folder = $("#tree-content .treeview a.selected");
-				if ($folder.length > 0 && $folder.data("attributes")) {
-					var attributes = $folder.data("attributes");
-					showPorperties(attributes);
-					adjustPropertiesPosition();
-					navigateTo(attributes);
-					$("input[id='" + attributes.fileInfo.relativePath + "']", ".treeview").siblings("label").find("a").addClass("selected");
-				}
-			});
-			$modal.off('shown.bs.modal');
-			$modal.on('shown.bs.modal', function () {
-				var width = $("p.path", "#myModalUpload").textWidth();
-				$("p.path", "#myModalUpload").css({ width: width + "px" }).addClass("hidden");
-				var val = $("p.path", "#myModalUpload").html().replace(/\/$/, "");
-				$("#frmUploadFile input[name='subfolder']").prop("disabled", true).css({ width: "" }).val(val);
-			});
-			$modal.modal('show');
-			
-			if ($(e.target).hasClass("upload-back")) {
-				var width = $("p.path", "#myModalUpload").textWidth();
-				$("p.path", "#myModalUpload").css({ width: width + "px" }).addClass("hidden");
-				var val = $("p.path", "#myModalUpload").html().replace(/\/$/, "");
-				$("#frmUploadFile input[name='subfolder']").prop("disabled", true).css({ width: "" }).val(val);
-			}
-			return true;
-		}
-	}
-	showMsg("You can only upload files within 'files' folder and its subfolders.<br/>Please select a valid folder and try again.", "INFO");
-});
-
-// Check upload validation each time a new file is selected
-$("#frmUploadFile input[name='file']").on("change", function() {
-	$(this).valid();
-});
-
-// Choose to create a new folder for uploaded file
-$("#frmUploadFile input[name='chkSubfolder']").on("click", function (e) {
-	$("#frmUploadFile input[name='subfolder']").prop("disabled", !$(this).is(":checked"));
-	if ($(this).is(":checked")) {
-		// show path and active input
-		$("#frmUploadFile input[name='subfolder']").prop("disabled", false).attr("placeholder", "New folder name").val("");
-		$("#frmUploadFile p.path").removeClass("hidden");
-		var width = $("#frmUploadFile p.path").parent().width() - $("#frmUploadFile p.path").outerWidth();
-		$("#frmUploadFile input[name='subfolder']").css({ width: width + "px" });
-	} else {
-		// only show disabled input
-		$("#frmUploadFile input[name='subfolder']").prop("disabled", true).val($("#frmUploadFile p.path").html().replace(/\/$/, ""));
-		$("#frmUploadFile p.path").addClass("hidden");
-		$("#frmUploadFile input[name='subfolder']").css({ width: "" });
-		$("#frmUploadFile input[name='subfolder']").valid();
-	}
-});
-
-$.validator.addMethod("regex", function (value, element, regexp) {
-	return this.optional(element) || regexp.test(value) || element.disabled;
-}, "Please enter a valid path.");
-
-$("#frmUploadFile").validate({
-	rules: {
-		file     : { required: true },
-		desc     : { required: true },
-		subfolder: { required: "#chkSubfolder:checked", regex: /^(?![\.\/])((?![<>:"\\|?*]|(\/\/)).)*(?<![\.\/])$/ }
-	},
-	highlight: function(element, errorClass) {
-		$(element).parent().addClass("has-error");
-	},
-	unhighlight: function(element, errorClass) {
-		$(element).parent().removeClass("has-error");
-	},
-	errorPlacement: function(error, element) {
-		error.appendTo(element.parent());
-	},
-	success: function(label) {
-		label.remove();
-	}
-});
-
-// Display the upload message result (success / fail)
-function showUploadMessage(message, error) {
-	$("#frmUploadFile .upload-message").html("<h4>" + message + "</h4>");
-	if (!error) {
-		showMsg(message, "SUCCESS");
-		$("#frmUploadFile .upload-message").removeClass("error");
-		$("#frmUploadFile .upload-content").hide("slow");
-		$("#myModalUpload .upload-back").show();
-	} else {
-		$("#frmUploadFile .upload-message").addClass("error");
-	}
-	$("#frmUploadFile .upload-message").show("slow");
-}
-
-// Start file upload
-$("#frmUploadFile").submit(function (event) {
-	event.preventDefault();
-	if ($(this).valid()) {
-		var validPath = $("input[name='subfolder']", this).val().replace(/^(\/files\/)/, "");
-		if ($("#chkSubfolder", this).is(":checked")) {
-			validPath = $("p.path", "#frmUploadFile").html().replace(/^(\/files\/)/, "") + validPath;
-		}
-		$("input[name='folder']", this).val(validPath);
-		var formData = new FormData(this);
-		var xhr = new XMLHttpRequest();
-		xhr.open("POST", baseRestApiURL + "files/" + (sharedFiles ? "public" : "user") + "/upload", true);
-		xhr.responseType = "json";
-		xhr.setRequestHeader("X-Auth-Token", tokenKey);
-		
-		xhr.upload.onprogress = function (e) {
-			if (e.lengthComputable) {
-				var percentComplete = (e.loaded / e.total) * 100;
-				console.log(percentComplete + '% uploaded');
-			}
-		};
-		xhr.onload = function (e) {
-			if (this.status == 200) {
-				var data = this.response;
-				
-				// Fix for IE not honoring responseType 'json' when the requested data is not of 'json' type
-				if (detectIE()) {
-					if (data.status == undefined && typeof(data) === "string") {
-						// Force JSON parse in IE
-						data = JSON.parse(data);
-					}
-				}
-				if (!data || typeof data.status === "undefined") {
-					// Inconclusive response from server
-					showUploadMessage("Operation failed. Please try again or contact app admin.", true);
-				} else if (data.status == responseStatus.success) {
-					showUploadMessage("File successfully uploaded.");
-					compsTree.html("");
-					$.when(refreshTree()).done(function () {
-						var $attr = $("input[id='files/" + validPath + "']", ".treeview").siblings("label").find("a");
-						if ($attr.length > 0) {
-							showPorperties($attr.data("attributes"));
-							adjustPropertiesPosition();
-							navigateTo($attr.data("attributes"));
-							$attr.addClass("selected");
-						}
-					});
-				} else {
-					showUploadMessage(data.message, true);
-				}
-			} else {
-				// Failed to connect to server
-				showUploadMessage("Operation failed.<br/>" + this.response.error, true);
-			}
-		}
-		xhr.onerror = function (e, x, y) {
-			// Failed to connect to server
-			showUploadMessage("Operation failed. Please try again or contact app admin.", true);
-		}
-		xhr.send(formData);
-	}
-	return false; // To avoid actual submission of the form
-});
-
-// === CUSTOM QUERY SECTION =======================================================================
-
-// Start creating user datasource component
-$("#createQuery").on("click", function (e) {
-	// Close file attributes window
-	closePorperties();
-	
-	// Reset query dialog contents
-	$("#myModalQuery .query-content").show();
-	$("#myModalQuery .query-message").hide();
-	
-	// Reset form (fields & validator)
-	$('#frmCreateQuery')[0].reset();
-	$("#frmCreateQuery").validate().resetForm();
-	$("#frmCreateQuery .form-control").parent().removeClass("has-error");
-	$("#frmCreateQuery .products").html("");
-	
-	// Show upload dialog
-	$("#myModalQuery").modal('show');
-	
-	// Populate products list categorized by product type
-	$.each($("#tree-content .treeview .select-for:checked"), function (index, prod) {
-		var attributes = $(this).parent().next().data("attributes");
-		if ($("#frmCreateQuery .products ." + attributes.productType).length == 0) {
-			var productClass = attributes.productType.replace(/  +/g, "");
-			$("#frmCreateQuery .products").append('<label class="col-sm-12 col-md-12">' + attributes.productType + ':</label><p class="col-sm-12 col-md-12 ' + productClass + '"></p>');
-			$("#frmCreateQuery .products ." + productClass).data({ productType: attributes.productType, productClass: productClass });
-		}
-		$("#frmCreateQuery .products ." + attributes.productType).append("<i>" + attributes.fileInfo.fileName + "</i>");
-	});
-});
-
-// Set query validation rules
-$("#frmCreateQuery").validate({
-	rules: {
-		queryLabel: { required: true }
-	},
-	highlight: function(element, errorClass) {
-		$(element).parent().addClass("has-error");
-	},
-	unhighlight: function(element, errorClass) {
-		$(element).parent().removeClass("has-error");
-	},
-	errorPlacement: function(error, element) {
-		error.appendTo(element.parent());
-	},
-	success: function(label) {
-		label.remove();
-	}
-});
-
-// Display the query creation message result (success / fail)
-function showQueryMessage(message, error) {
-	if (!error) showMsg(message, error ? "ERROR" : "SUCCESS");
-	$("#frmCreateQuery .query-message").html("<h4>" + message + "</h4>");
-	if (!error) {
-		$("#frmCreateQuery .query-message").removeClass("error");
-		$("#frmCreateQuery .query-content").hide("slow");
-	} else {
-		$("#frmCreateQuery .query-message").addClass("error");
-	}
-	$("#frmCreateQuery .query-message").show("slow");
-}
-
-// Start custom query creation
-$("#frmCreateQuery").submit(function (event) {
-	event.preventDefault();
-	if ($(this).valid()) {
-		var formData = {};
-		formData.label = $("#frmCreateQuery input[name='queryLabel'").val();
-		formData.productType = null;
-		formData.products = [];
-		$.each($("#frmCreateQuery .products p"), function (index, ptype) {
-			$.each($("#frmCreateQuery .products p." + $(ptype).data("productClass") + ">i"), function (index, prod) {
-				var product = {};
-				product.name = $(prod).html();
-				product.productType = $(ptype).data("productType");
-				formData.products.push(product);
-			});
-		});
+	function refreshTree(attributes) {
+		var root = (typeof attributes === "undefined") || (typeof attributes.fileInfo === "undefined") || (typeof attributes.fileInfo.relativePath === "undefined");
+		var deferred = $.Deferred();
+		if (root) $("#tree-content .loading").removeClass("hidden");
+		var url = baseRestApiURL + "files/" + (sharedFiles ? "public" : "user") + (root ? "/" : "?folder=" + attributes.fileInfo.relativePath)
 		$.ajax({
-			url: baseRestApiURL + "datasource/create",
-			type: "POST",
+			url: url,
+			type: "GET",
 			dataType: 'json',
-			data: JSON.stringify(formData),
 			beforeSend: function(xhr) {
-				xhr.setRequestHeader("X-Auth-Token", tokenKey);
+				xhr.setRequestHeader("Accept", "application/json");
 				xhr.setRequestHeader("Content-Type", "application/json");
+				xhr.setRequestHeader("X-Auth-Token", tokenKey);
+			},
+			error: function (jqXHR, textStatus) {
+				if (root) $("#tree-content .loading").addClass("hidden");
+				if (root) $compsTree.closest(".box").addClass("box-warning");
+				deferred.reject(jqXHR, textStatus, "Error while loading files.");
 			},
 			success: function(response) {
-				if (response.status == undefined) {
-					// Inconclusive response from server
-					showQueryMessage("Operation failed. Please try again or contact app admin.", true);
-				} else if (response.status == responseStatus.success) {
-					// Show results message
-					if (response.data !== undefined && response.data !== null) {
-						showQueryMessage("Your custom query has been successfully created:");
-						var html =
-							'<div class="form-group result-content">' +
-								(response.data.id             == undefined ? '' : '<label class="col-sm-3 col-md-3">Id</label><p class="col-sm-9 col-md-9">'             + response.data.id             + '</p>') +
-								(response.data.label          == undefined ? '' : '<label class="col-sm-3 col-md-3">Label</label><p class="col-sm-9 col-md-9">'          + response.data.label          + '</p>') +
-								(response.data.description    == undefined ? '' : '<label class="col-sm-3 col-md-3">Description</label><p class="col-sm-9 col-md-9">'    + response.data.description    + '</p>') +
-								(response.data.sensorName     == undefined ? '' : '<label class="col-sm-3 col-md-3">SensorName</label><p class="col-sm-9 col-md-9">'     + response.data.sensorName     + '</p>') +
-								(response.data.dataSourceName == undefined ? '' : '<label class="col-sm-3 col-md-3">DataSourceName</label><p class="col-sm-9 col-md-9">' + response.data.dataSourceName + '</p>') +
-								(response.data.authors        == undefined ? '' : '<label class="col-sm-3 col-md-3">Authors</label><p class="col-sm-9 col-md-9">'        + response.data.authors        + '</p>') +
-							'</div>';
-						$("#frmCreateQuery .query-message").append(html);
-					} else {
-						showQueryMessage("Your custom query has been successfully created.");
-					}
-					
-					// Clear product selection in tree
-					$("#tree-content .treeview input.select-for").prop("checked", false);
-					$("#tree-content .treeview label.select-for").removeClass("checked");
-					$("#createQuery i").removeClass("fa-check-square-o").addClass("fa-square-o");
-					$("#createQuery").prop("disabled", true);
+				if (root) $("#tree-content .loading").addClass("hidden");
+				if (response.status == responseStatus.success) {
+					renderTree(response.data, root ? void(0) : attributes.fileInfo.relativePath);
+					if (root) $compsTree.closest(".box").addClass("box-success");
+					deferred.resolve(response);
 				} else {
-					showQueryMessage(response.message, true);
+					showMsg(response.message, response.status);
+					deferred.reject(null, response.status, response.message);
+				}
+			}
+		});
+		return deferred.promise();
+	}
+	
+	function getParentFolder(relativePath) {
+		var parentId = relativePath.substring(0, relativePath.lastIndexOf("/"));
+		var parent = $("input[id='" + parentId + "']").parent().find(">.sub");
+		if (parent.length == 0) { parent = $compsTree; }
+		return parent;
+	}
+	
+	function renderFolder(relPath, file) {
+		var attributes = (file != null ? file.attributes : null);
+		var relativePath = relPath.replace(/\\/g, "/");
+		
+		// get parent, render if null
+		var parent = getParentFolder(relativePath);
+		if (parent == $compsTree && relativePath.indexOf("/") >= 0 ) {
+			parent = renderFolder(relativePath.substring(0, relativePath.lastIndexOf("/")), null);
+		}
+		
+		if (!attributes) { attributes = {}; }
+		attributes.fileInfo              = {};
+		attributes.fileInfo.relativePath = relativePath;
+		attributes.fileInfo.fileSize     = 0;
+		attributes.fileInfo.fileName     = relativePath.substring(relativePath.lastIndexOf("/") + 1);
+		attributes.fileInfo.fileType     = "folder";
+		attributes.fileInfo.uri          = "";
+		
+		// render folder if not found
+		var chk = parent.find("input[id='" + relativePath + "']");
+		if (chk.length == 0) {
+			var faPublic = attributes.visibility === "PUBLIC";
+			var selectable = sharedFiles && file != null && file.productName != undefined;
+			var element = $('<div' + (relativePath == 'files' ? ' class="files-folder"' : '') + ">" +
+								'<input type="checkbox" id="' + relativePath + '">' +
+								'<label for="' + relativePath + '">' +
+									(selectable ? '<label class="select-for"><input type="checkbox" class="select-for"></label>' : '') +
+									'<a href="#" title="' + attributes.fileInfo.fileName + '">' +
+										'<span class="fa fa-folder' + (faPublic ? " fa-public" : "") + '"></span>' +
+										attributes.fileInfo.fileName +
+									'</a>' +
+								'</label>' +
+								'<div class="sub loading empty"></div>' +
+							'</div>');
+			
+			// Make sure "/files" folder is always last in list
+			var $files = $(".files-folder", $compsTree);
+			if ($files.length > 0 && parent.hasClass("treeview")) {
+				$files.prepend(element);
+			} else {
+				parent.append(element);
+				parent.removeClass("empty loading");
+			}
+			chk = parent.find("input[id='" + relativePath + "']");
+		}
+		chk.find("~label>a").data("attributes", attributes);
+		
+		return chk.find("~.sub");
+	}
+	
+	function renderTree(response, relativePath) {
+		var parentFolder = (typeof relativePath === "undefined") ? "" : relativePath;
+		if (parentFolder == "") {
+			$compsTree.html("");
+		} else {
+			$("input[id='" + relativePath + "']~div.sub", $compsTree).html("");
+		}
+		
+		// Render tree folders first
+		$.each(response, function (index, file) {
+			if (file.folder && file.relativePath != "") {
+				if (file.relativePath != parentFolder) {
+					renderFolder(file.relativePath, file);
+				} else {
+					$("input[id='" + relativePath + "']~div.sub", $compsTree).removeClass("loading");
+				}
+			}
+		});
+		
+		// Render files
+		$.each(response, function (index, file) {
+			if (!file.folder) {
+				var size = parseInt(file.size);
+				if (size < 1024) {
+					size = size + " B";
+				} else if (size < 1024*1024) {
+					size = parseFloat(size / 1024, 2).toFixed(2) + " KB";
+				} else if (size < 1024*1024*1024) {
+					size = parseFloat(size / 1024 / 1024, 2).toFixed(2) + " MB";
+				} else if (size < 1024*1024*1024*1024) {
+					size = parseFloat(size / 1024 / 1024 / 1024, 2).toFixed(2) + " GB";
+				} else {
+					size = parseFloat(size / 1024 / 1024 / 1024 / 1024, 2).toFixed(2) + " TB";
+				}
+				var relPath = file.relativePath.replace(/\\/g, "/");
+				var name    = relPath.substring(relPath.lastIndexOf("/") + 1);
+				var type    = name.substring(name.lastIndexOf("."));
+					type    = type == name ? "-" : type;
+				var folder  = getParentFolder(relPath);
+				
+				// add "public/" prefix to filePath for all shared files in /public/files/
+				var addPublicPrefix = (sharedFiles && relPath.substr(0, 6) == "files/") ? "public/" : "";
+				var href = baseRestApiURL + 'files/download?fileName=' + addPublicPrefix + relPath;
+				
+				var fafile = "fa-file-o";
+				switch (type) {
+					case ".txt" : fafile = "fa-file-text-o"   ; break;
+					case ".log" : fafile = "fa-file-text-o"   ; break;
+					case ".html": fafile = "fa-file-code-o"   ; break;
+					case ".xml" : fafile = "fa-file-code-o"   ; break;
+					case ".json": fafile = "fa-file-code-o"   ; break;
+					case ".tif" : fafile = "fa-file-image-o"  ; break;
+					case ".png" : fafile = "fa-file-image-o"  ; break;
+					case ".jpg" : fafile = "fa-file-image-o"  ; break;
+					case ".jpeg": fafile = "fa-file-image-o"  ; break;
+					case ".pdf" : fafile = "fa-file-pdf-o"    ; break;
+					case ".zip" : fafile = "fa-file-archive-o"; break;
+				}
+				var element = $('<a href="#" title="' + name + '"><span class="fa ' + fafile + '"></span>' + name + '<span>' + size + '</span>' + '<span>' + type + '</span>' + '</a>');
+				
+				if (!file.attributes) { file.attributes = {}; }
+				file.attributes.fileInfo = {};
+				file.attributes.fileInfo.relativePath = relPath;
+				file.attributes.fileInfo.fileSize = size;
+				file.attributes.fileInfo.fileName = name;
+				file.attributes.fileInfo.fileType = type;
+				file.attributes.fileInfo.uri = href;
+				
+				element.data("attributes", file.attributes);
+				folder.append(element);
+				folder.removeClass("empty loading");
+			}
+		});
+		
+		// Adjust folder indentation
+		$(".select-for", $compsTree).closest(".sub").addClass("has-selectable-for");
+	}
+	
+	function navigateTo(attributes) {
+		if (attributes.fileInfo.fileType === "folder") {
+			var $folder = $("input[id='" + attributes.fileInfo.relativePath + "']", ".treeview");
+			if ($folder.length > 0) {
+				// Check all folder checkboxes above current folder
+				$folder.prop("checked", true);
+				var $upLevelAttr = $folder.closest(".sub").siblings("label").find("a");
+				if ($upLevelAttr.length > 0) {
+					navigateTo($upLevelAttr.data("attributes"));
+				}
+			}
+		}
+	}
+	
+	function expandFolder(relativePath) {
+		var $chk = $("input[id='" + relativePath + "']");
+		if ($chk.is(":checked") && $chk.siblings("div.sub.loading").length > 0) {
+			var attributes = $chk.siblings("label").find("a").data("attributes")
+			refreshTree(attributes);
+		}
+	}
+	
+	$("#tree-content .treeview").on("dblclick", "label", function (e) {
+		if (!$(e.target).hasClass("select-for")) {
+			var $chk = $(this).siblings("input[type='checkbox']");
+			if ($chk.length > 0) {
+				// Expand/collapse folder
+				$chk.prop("checked", !$chk.prop("checked"));
+				// Show folder contents
+				expandFolder($chk.attr("id"));
+			}
+		}
+	});
+	
+	$("#tree-content .treeview").on("change", "input[type='checkbox']", function (e) {
+		expandFolder($(this).attr("id"));
+	});
+	
+	// === PROPERTIES WINDOW SECTION ==================================================================
+	
+	function adjustPropertiesPosition() {
+		if ($("#properties").length > 0 && !$("#properties").hasClass("hidden")) {
+			var scrollTop  = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
+			var treeTop    = $("#tree-content .treeview").offset().top;
+			var contentTop = $("#tree-content .treeview-header").offset().top + $("#tree-content .treeview-header").outerHeight();
+			
+			var sumHeight = 15;
+			$.each($("#properties .callout"), function () {
+				sumHeight += $(this).hasClass("properties-holder") ? $(this).find(".title").outerHeight() : $(this).outerHeight();
+			});
+			
+			var newTop = treeTop - scrollTop;
+			if (contentTop - scrollTop < 0) {
+				newTop = treeTop - contentTop;
+			}
+			var newWidth = $("#tree-content .box-body").width() - $("#tree-content .treeview").width();
+			$("#properties").css({ "width": newWidth + "px", "top": newTop + "px" });
+			
+			var newHeight = $(window).height() - newTop - sumHeight - (treeTop - contentTop);
+			$("#properties .properties-holder .holder").css({ "max-height": newHeight + "px" });
+			
+			if ($("#properties .properties-holder .holder").outerHeight() >= $("#properties .properties-holder .holder>div").outerHeight()) {
+				$("#properties .properties-holder .holder").css({ "overflow-y": "unset" });
+			} else {
+				$("#properties .properties-holder .holder").css({ "overflow-y": "" });
+			}
+		}
+	}
+	
+	function displayActions(attributes) {
+		// Display actions for folders
+		if ($("#properties.folder").length > 0) {
+			// Delete
+			if (attributes.id != undefined && attributes.visibility == "PRIVATE") {
+				$(".for-folders .delete-holder .action-info").text("Delete selected product.");
+				$(".for-folders .delete-holder button").attr('disabled', false);
+			} else {
+				$(".for-folders .delete-holder .action-info").text(attributes.id == undefined ? "This folder can not be deleted" : "This product is public and can not be deleted.");
+				$(".for-folders .delete-holder button").attr('disabled', true);
+			}
+			
+			// Sharing
+			if (attributes.visibility == "PUBLIC") {
+				// Folder is PUBLIC
+				$(".for-folders .share-holder .action-info").text("This product is public");
+				$(".for-folders .TSwitch>input[type='checkbox']").prop('checked', true);
+				$(".for-folders .TSwitch>input[type='checkbox']").attr('disabled', false);
+			} else if (attributes.visibility == "PRIVATE") {
+				// Folder is PRIVATE
+				$(".for-folders .share-holder .action-info").text("This product is not public");
+				$(".for-folders .TSwitch>input[type='checkbox']").prop('checked', false);
+				$(".for-folders .TSwitch>input[type='checkbox']").attr('disabled', false);
+			} else {
+				// Folder sharing status in unknown
+				$(".for-folders .share-holder .action-info").text("Sharing is disabled for this folder.");
+				$(".for-folders .TSwitch>input[type='checkbox']").prop('checked', false);
+				$(".for-folders .TSwitch>input[type='checkbox']").attr('disabled', true);
+			}
+		// Display actions for files
+		} else {
+			// Download
+			$(".for-files .download-holder .action-info").text("Download size: " + attributes.fileInfo.fileSize);
+			$(".for-files .download-holder a").attr("href", attributes.fileInfo.uri);
+			
+			// Delete
+			if (attributes.fileInfo.relativePath.indexOf("files/") >= 0) {
+				$(".for-files .delete-holder .action-info").text("Delete selected file.");
+				$(".for-files .delete-holder button").attr('disabled', false);
+			} else {
+				$(".for-files .delete-holder .action-info").text("Product contents can not be deleted.");
+				$(".for-files .delete-holder button").attr('disabled', true);
+			}
+		}
+	}
+	
+	function showPorperties(attributes) {
+		closePorperties();
+		
+		$("#properties .properties-holder .title").text(attributes.fileInfo.fileName);
+		if (attributes.fileInfo.fileType == "folder") {
+			$("#properties").addClass("folder");
+			$("#properties").removeClass("file");
+			
+			// Activate upload button
+			if ($(".files-folder input[id='" + attributes.fileInfo.relativePath + "']", $compsTree).length > 0) {
+				$("#uploadFiles").prop("disabled", false);
+			}
+		} else {
+			$("#properties").removeClass("folder");
+			$("#properties").addClass("file");
+		}
+		
+		var tableBody = $("#properties .properties-holder tbody");
+		var size = 0;
+		$.each(attributes, function (name, value) {
+			if (name == "productType" && value == "GeoTIFF" && attributes.fileInfo.fileType != "folder") {
+				tableBody.append('<tr><td>' + name + '</td><td>' + value + '<button class="btn bg-green btn-flat btn-xs image-preview"><i class="fa fa-eye fa-fw"></i>Toggle quick view</button></td></tr>');
+			} else if (name != "fileInfo") {
+				tableBody.append('<tr><td>' + name + '</td><td>' + value.replace(/[\r\n\x0B\x0C\u0085\u2028\u2029]+/g, "<br/>") + '</td></tr>');
+			} else {
+				size --;
+			}
+			size ++;
+		});
+		if (size == 0) {
+			tableBody.append('<tr><td>-</td><td>-</td></tr>');
+		}
+		
+		// Draw Actions
+		displayActions(attributes);
+		
+		$("#properties").data("attributes", attributes);
+		
+		// Unhide properties window
+		$("#properties").removeClass("hidden");
+		$compsTree.addClass("compact");
+	}
+	
+	function closePorperties() {
+		// Set attributes default values
+		$("#properties .properties-holder .title").text("File name");
+		var tableBody = $("#properties .properties-holder tbody");
+		tableBody.html("");
+		
+		// Empty image preview
+		$("#properties .imagepreview-holder").addClass("hidden");
+		$("#properties .imagepreview-holder img").attr("src", "");
+		
+		// Set actions default values and availability
+		$("#properties .actions-holder a").attr("href", "");
+		$("#properties .actions-holder .action-info").text("");
+		$("#properties .actions-holder button").attr('disabled', false);
+		$("#properties .actions-holder input[type='checkbox']").prop('checked', true);
+		
+		// Hide properties window and clear data
+		$("#properties").removeClass("file folder").addClass("hidden").removeData("attributes");
+		$compsTree.removeClass("compact");
+		
+		// Disable upload button
+		$("#uploadFiles").prop("disabled", true);
+	}
+	
+	$("#tree-content .treeview").on("click", "a", function (e) {
+		e.preventDefault();
+		
+		$("#tree-content .treeview a.selected").removeClass("selected");
+		$(this).addClass("selected");
+		
+		showPorperties($(this).data("attributes"));
+		adjustPropertiesPosition();
+	});
+	
+	$("#tree-content .treeview").on("change", "input.select-for", function (e) {
+		if ($(this).prop("checked"))
+			$(this).parent().addClass("checked");
+		else
+			$(this).parent().removeClass("checked");
+		
+		
+		if ($("#tree-content .treeview .select-for:checked").length > 0) {
+			$("#createQuery i").removeClass("fa-square-o").addClass("fa-check-square-o");
+			$("#createQuery").prop("disabled", false);
+		} else {
+			$("#createQuery i").removeClass("fa-check-square-o").addClass("fa-square-o");
+			$("#createQuery").prop("disabled", true);
+		}
+	});
+	
+	$("#properties .imagepreview-holder img").load(function () {
+		$("#properties .imagepreview-holder").removeClass("hidden");
+		$("#properties .properties-holder .holder").css({ "max-height": "" });
+		adjustPropertiesPosition();
+	});
+	
+	$("#properties").on("click", "button.image-preview", function (e) {
+		var attributes = $(this).closest("#properties").data("attributes");
+		if ($("#properties .imagepreview-holder img").attr("src") != "") {
+			$("#properties .imagepreview-holder").toggleClass("hidden");
+			adjustPropertiesPosition();
+		} else {
+			$("#properties .imagepreview-holder").addClass("hidden");
+			$("#properties .imagepreview-holder img").attr("src", "");
+			if (attributes.formatType == "RASTER") {
+				$.ajax({
+					url: attributes.fileInfo.uri.replace("download?fileName=", "preview?fileName="),
+					type: "GET",
+					beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
+					success: function(response) {
+						if (response.status == responseStatus.success) {
+							$("#properties .imagepreview-holder img").attr("src", "data:image/jpeg;base64, " + response.data);
+						}
+					}
+				});
+			}
+		}
+		
+	});
+	
+	$("#properties").on("click", ".full-preview", function (e) {
+		$("#properties .imagepreview-holder").clone().appendTo("#tree-content").addClass("full-screen");
+		$("#tree-content .full-screen span").remove();
+	});
+	
+	$("#properties").on("click", "button.close", function (e) {
+		closePorperties();
+		$("#tree-content .treeview a.selected").removeClass("selected");
+	});
+	
+	// === ACTIONS SECTION ============================================================================
+	
+	function toggleProductVisibility(attributes) {
+		if ((typeof attributes === "undefined") || (typeof attributes.fileInfo === "undefined") || (typeof attributes.fileInfo.relativePath === "undefined"))
+			return;
+		
+		var visibility = attributes.visibility != "PUBLIC" ? "PUBLIC" : "PRIVATE";
+		var formData   = { "folder": attributes.fileInfo.relativePath, "visibility": visibility };
+		$.ajax({
+			url: baseRestApiURL + "files/",
+			type: "POST",
+			data: formData,
+			beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
+			success: function(response) {
+				if (response.status == responseStatus.success) {
+					$.when(refreshTree(attributes)).done(function () {
+						var prod = $compsTree.find("input[id='" + attributes.fileInfo.relativePath + "']+label>a");
+						prod.addClass("selected");
+						showPorperties(prod.data("attributes"));
+						adjustPropertiesPosition();
+					});
+				} else {
+					$("#properties .share-holder input[name='share-folder']").prop("checked", attributes.visibility == "PUBLIC");
 				}
 			},
 			error: function (jqXHR, textStatus) {
-				showQueryMessage("Operation failed. Please try again or contact app admin.", true);			
+				$("#properties .share-holder input[name='share-folder']").prop("checked", attributes.visibility == "PUBLIC");
 			}
 		});
 	}
-	return false; // To avoid actual submission of the form
-});
-
-// === START ======================================================================================
-
-$(document).ready(function() {
-	// Set content class
-	$("#tree-content").removeClass("user-files shared-files");
-	if (sharedFiles) {
-		$("#tree-content").addClass("shared-files");
-		$(".content-header>h1").html("Common Files<small>Here you can find files and products that can be used as inputs for workflows.</small>");
-		
-		if (taoUserProfile.userRole != "ADMIN") {
-			$("#myModalUpload").remove();
-			$("#uploadFiles").remove();
+	
+	function deleteProduct(attributes) {
+		var parentAttributes = attributes;
+		if ((typeof attributes === "undefined") || (typeof attributes.fileInfo === "undefined") || (typeof attributes.fileInfo.relativePath === "undefined")) {
+			return;
+		} else {
+			var $parentSub = (attributes.fileInfo.fileType == "folder") ? $("input[id='" + attributes.fileInfo.relativePath + "']").closest(".sub") : getParentFolder(attributes.fileInfo.relativePath);
+			parentAttributes = $parentSub.siblings("label").find("a").data("attributes");
 		}
-	} else {
-		$("#tree-content").addClass("user-files");
-		$(".content-header>h1").html("User Files<small>Here you can find your uploaded files and the execution outputs of your workflows.</small>");
+		
+		var deleteUrl = baseRestApiURL + "files/?fileName=" + attributes.fileInfo.relativePath;
+		$.ajax({
+			url: deleteUrl,
+			type: "DELETE",
+			beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
+			success: function(response) {
+				if (response.status == responseStatus.success) {
+					showMsg(response.message, "SUCCESS");
+					$.when(refreshTree(parentAttributes)).done(function () {
+						closePorperties();
+					});
+				} else {
+					showMsg(response.message, response.status);
+				}
+			},
+			error: function (jqXHR, textStatus) {
+				showMsg("Error while deleting the selected element!", "FAILED");
+			}
+		});
 	}
 	
-	// Get files
-	$.when(refreshTree()).done(function () {});
+	$("#properties .share-holder").on("click", "input[name='share-folder']", function (e) {
+		e.preventDefault();
+		
+		var attributes = $("#properties").data("attributes");
+		var action = attributes.visibility != "PUBLIC" ? "share" : "unshare";
+		$('#confirm-dialog').modal('confirm', {
+			msg: "Are you sure you want to " + action + " this product?",
+			callbackConfirm: function () {
+				toggleProductVisibility(attributes);
+			},
+			callbackCancel: function () {}
+		});
+	});
 	
-	// Set upload validation (max file size)
-	$.ajax({
-		url: baseRestApiURL + "files/config",
-		type: "GET",
-		dataType: 'json',
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader("X-Auth-Token", tokenKey);
-			xhr.setRequestHeader("Content-Type", "application/json");
-		},
-		success: function(response) {
-			if (response.status == responseStatus.success) {
-				maxFileSizeUnits = response.data["spring.http.multipart.max-file-size"];
-				maxFileSizeUnits = formatSizeUnits(bytesFromSizeUnits(maxFileSizeUnits));
+	$("#properties .delete-holder").on("click", "button", function (e) {
+		e.preventDefault();
+		
+		var attributes = $("#properties").data("attributes");
+		$('#confirm-dialog').modal('confirm', {
+			msg: "Are you sure you want to delete this product?",
+			callbackConfirm: function () {
+				deleteProduct(attributes);
+			},
+			callbackCancel: function (){ }
+		});
+	});
+	
+	$("#properties .download-holder").on("click", "a", function (e) {
+		e.preventDefault();
+		
+		var btn  = $(this).find("button");
+		var info = $(this).closest(".download-holder").find(".action-info");
+		var infoVal = info.text();
+		
+		var attributes = $(this).closest("#properties").data("attributes");
+		var filename   = attributes.fileInfo.fileName;
+		
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', this.href, true);
+		xhr.setRequestHeader("X-Auth-Token", tokenKey);
+		xhr.responseType = 'blob';
+		xhr.onload = function(e) {
+			info.text(infoVal);
+			btn.find("i").removeClass("fa-refresh fa-spin").addClass("fa-download");
+			btn.prop("disabled", false);
+			
+			if (this.status == 200) {
+				var blob = new Blob([this.response], { type: this.getResponseHeader('Content-Type') });
+				
+				if (typeof window.navigator.msSaveBlob !== 'undefined') {
+					// IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created.
+					// These URLs will no longer resolve as the data backing the URL has been freed."
+					window.navigator.msSaveBlob(blob, filename);
+				} else {
+					var URL = window.URL || window.webkitURL;
+					var downloadUrl = URL.createObjectURL(blob);
+					
+					// use HTML5 a[download] attribute to specify filename
+					var a = document.createElement("a");
+					// safari doesn't support this yet
+					if (typeof a.download === 'undefined') {
+						window.location = downloadUrl;
+					} else {
+						a.href = downloadUrl;
+						a.download = filename;
+						document.body.appendChild(a);
+						a.click();
+					}
+					setTimeout(function () { URL.revokeObjectURL(downloadUrl); $(a).remove(); }, 100); // cleanup
+				}
+			} else {
+				showMsg("An error occured while processing your request!", "ERROR");
 			}
-			// Define file size validation method
-			$.validator.addMethod('filesize', function (value, element, param) {
-				return this.optional(element) || (element.files[0].size <= param);
-			}, 'File size must be less than ' + maxFileSizeUnits);
-			// Apply file size validation rule
-			$("#frmUploadFile input[name='file']").rules("add", { filesize: bytesFromSizeUnits(maxFileSizeUnits) });
+		}
+		xhr.send();
+		
+		btn.prop("disabled", true);
+		btn.find("i").removeClass("fa-download").addClass("fa-refresh fa-spin");
+		info.text("Please wait for your download to start!");
+	});
+	
+	$("#tree-content").on("click", ".full-screen", function (event) {
+		event.stopPropagation();
+		$(this).remove();
+	});
+	
+	// === UPLOAD SECTION =============================================================================
+	
+	function bytesFromSizeUnits(sizeUnits) {
+		// Get size in bytes from sizeUnits. Ex: 100 MB -> 104857600
+		if (sizeUnits) {
+			var size = parseFloat(sizeUnits.substr(0, sizeUnits.length - 2));
+			var unit = sizeUnits.substr(sizeUnits.length - 2).toUpperCase();
+			switch (unit) {
+				case "KB": size *= 1024; break;
+				case "MB": size *= 1024*1024; break;
+				case "GB": size *= 1024*1024*1024; break;
+				case "TB": size *= 1024*1024*1024*1024; break;
+				default  : size = 0; break;
+			}
+		return size;
+		} else {
+			return false;
+		}
+	}
+	
+	function formatSizeUnits(bytes) {
+		// Format size in sizeUnits. Ex: 131334144 -> 125.25 MB
+	   if (bytes) {
+		   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+		   if (bytes == 0) return '0 Bytes';
+		   var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+		   var size = bytes / Math.pow(1024, i)
+		   return size.toFixed(2) + ' ' + sizes[i];
+	   } else {
+		return false;
+	   }
+	}
+	
+	$("#uploadFiles, #myModalUpload .upload-back").on("click", function (e) {
+		// close file attributes window
+		closePorperties();
+		
+		var $modal = $("#myModalUpload");
+		// reset upload dialog contents
+		$(".upload-content", $modal).show();
+		$(".upload-message", $modal).hide();
+		$(".upload-back", $modal).hide();
+		
+		// reset form (fields & validator)
+		$('#frmUploadFile')[0].reset();
+		$("#frmUploadFile").validate().resetForm();
+		$("#frmUploadFile .form-control").parent().removeClass("has-error");
+		
+		var $folder = $("#tree-content .treeview a.selected");
+		if ($folder.length > 0 && typeof $folder.data("attributes").fileInfo.relativePath !== "undefined") {
+			var fileInfo = $folder.data("attributes").fileInfo;
+			if (fileInfo.fileType == "folder" && fileInfo.relativePath.indexOf("files") == 0) {
+				$("#frmUploadFile p.path").html("/" + fileInfo.relativePath + "/").attr("title", "/" + fileInfo.relativePath + "/");
+				
+				// show upload dialog
+				$modal.off('hidden.bs.modal');
+				$modal.on('hidden.bs.modal', function (e) {
+					// Navigate back to selected or new folder
+					var $folder = $("#tree-content .treeview a.selected");
+					if ($folder.length > 0 && $folder.data("attributes")) {
+						var attributes = $folder.data("attributes");
+						showPorperties(attributes);
+						adjustPropertiesPosition();
+						navigateTo(attributes);
+						$("input[id='" + attributes.fileInfo.relativePath + "']", ".treeview").siblings("label").find("a").addClass("selected");
+					}
+				});
+				$modal.modal('show');
+				
+				return true;
+			}
+		}
+		showMsg("You can only upload files within 'files' folder and its subfolders.<br/>Please select a valid folder and try again.", "INFO");
+		$modal.modal('hide');
+	});
+	
+	$("#frmUploadFile input[name='file']").on("change", function() {
+		$(this).valid();
+	});
+	
+	$("#frmUploadFile input[name='chkSubfolder']").on("change", function (e) {
+		if ($(this).is(":checked")) {
+			$("#frmUploadFile input[name='subfolder']").focus();
+		} else {
+			$("#frmUploadFile input[name='subfolder']").valid();
 		}
 	});
 	
-	// Open import products dialog window
-	$("#importProducts, #myImportProducts .upload-back").on("click", function(){
+	$.validator.addMethod("regex", function (value, element, regexp) {
+		return this.optional(element) || regexp.test(value) || element.disabled;
+	}, "Please enter a valid path.");
+	
+	$.validator.addMethod("filesize", function (value, element, param) {
+		return this.optional(element) || (element.files[0].size <= param);
+	}, 'File size must be less than ' + maxFileSizeUnits );
+	
+	$("#frmUploadFile").validate({
+		rules: {
+			file     : { required: true, filesize: bytesFromSizeUnits(maxFileSizeUnits) },
+			desc     : { required: true },
+			subfolder: {
+				required: function () { return $("#chkSubfolder").is(":checked"); },
+				regex   : /^(?![\.\/\\])((?![<>:"\\|?*]|(\/\/)).)*[^\.\/<>:"\\|?*]$/
+		   }
+		},
+		highlight: function(element, errorClass) {
+			$(element).parent().addClass("has-error");
+		},
+		unhighlight: function(element, errorClass) {
+			$(element).parent().removeClass("has-error");
+		},
+		errorPlacement: function(error, element) {
+			error.appendTo(element.parent());
+		},
+		success: function(label) {
+			label.remove();
+		}
+	});
+	
+	function showUploadMessage(message, error) {
+		$("#frmUploadFile .upload-message").html("<h4>" + message + "</h4>");
+		if (!error) {
+			$("#frmUploadFile .upload-message").removeClass("error");
+			$("#frmUploadFile .upload-content").hide("slow");
+		} else {
+			$("#frmUploadFile .upload-message").addClass("error");
+		}
+		$("#frmUploadFile .upload-message").show("slow");
+	}
+	
+	$("#frmUploadFile").submit(function (event) {
+		event.preventDefault();
+		
+		if ($(this).valid()) {
+			var $folder = $("#tree-content .treeview a.selected");
+			if ($folder.length > 0 && typeof $folder.data("attributes").fileInfo.relativePath !== "undefined") {
+				var attributes = $folder.data("attributes");
+				var uploadPath = attributes.fileInfo.relativePath;
+				uploadPath = uploadPath.replace(/^(files)/, "");																		// remove main "files" folder name
+				uploadPath = uploadPath.replace(/^(\/)|(\/)$/, "");																		// remove shashes in front and at the end
+				uploadPath += ($("#chkSubfolder", this).is(":checked") ? "/" + $("input[name='subfolder']", this).val() : "");			// add subfolder name
+				uploadPath = uploadPath.replace(/^(\/)|(\/)$/, "");																		// remove shashes in front and at the end
+				
+				$("input[name='folder']", this).val(uploadPath);
+				var formData = new FormData(this);
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST", baseRestApiURL + "files/" + (sharedFiles ? "public" : "user") + "/upload", true);
+				xhr.responseType = "json";
+				xhr.setRequestHeader("X-Auth-Token", tokenKey);
+				
+				xhr.upload.onprogress = function (e) {
+					if (e.lengthComputable) {
+						var percentComplete = (e.loaded / e.total) * 100;
+						console.log(percentComplete + '% uploaded');
+					}
+				};
+				xhr.onload = function (e) {
+					if (this.status == 200) {
+						var data = this.response;
+						
+						// Fix for IE not honoring responseType 'json' when the requested data is not of 'json' type
+						if (detectIE()) {
+							if (data.status == undefined && typeof(data) === "string") {
+								// Force JSON parse in IE
+								data = JSON.parse(data);
+							}
+						}
+						if (!data || typeof data.status === "undefined") {
+							// Inconclusive response from server
+							showUploadMessage("Operation failed. Please try again or contact app admin.", true);
+						} else if (data.status == responseStatus.success) {
+							showUploadMessage("File successfully uploaded.");
+							$.when(refreshTree(attributes)).done(function () {
+								showPorperties(attributes);
+								adjustPropertiesPosition();
+								navigateTo(attributes);
+								$("input[id='" + attributes.fileInfo.relativePath + "']~label>a", ".treeview").addClass("selected");
+								
+								$("#myModalUpload .upload-back").show();
+							});
+						} else {
+							showUploadMessage(data.message, true);
+						}
+					} else {
+						// Failed to connect to server
+						showUploadMessage("Operation failed.<br/>" + this.response.error, true);
+					}
+				}
+				xhr.onerror = function (e, x, y) {
+					// Failed to connect to server
+					showUploadMessage("Operation failed. Please try again or contact app admin.", true);
+				}
+				xhr.send(formData);
+			} else {
+				showUploadMessage("Unable to locate the selected path for upload.<br/>Please try again or contact app admin.", true);
+			}
+		}
+		return false; // To avoid actual submission of the form
+	});
+	
+	// === CUSTOM QUERY SECTION =======================================================================
+	
+	$("#createQuery").on("click", function (e) {
+		// Close file attributes window
+		closePorperties();
+		
+		// Reset query dialog contents
+		$("#myModalQuery .query-content").show();
+		$("#myModalQuery .query-message").hide();
+		
+		// Reset form (fields & validator)
+		$('#frmCreateQuery')[0].reset();
+		$("#frmCreateQuery").validate().resetForm();
+		$("#frmCreateQuery .form-control").parent().removeClass("has-error");
+		$("#frmCreateQuery .products").html("");
+		
+		// Show upload dialog
+		$("#myModalQuery").modal('show');
+		
+		// Populate products list categorized by product type
+		$.each($("#tree-content .treeview .select-for:checked"), function (index, prod) {
+			var attributes = $(this).parent().next().data("attributes");
+			if ($("#frmCreateQuery .products ." + attributes.productType).length == 0) {
+				var productClass = attributes.productType.replace(/  +/g, "");
+				$("#frmCreateQuery .products").append('<label class="col-sm-12 col-md-12">' + attributes.productType + ':</label><p class="col-sm-12 col-md-12 ' + productClass + '"></p>');
+			}
+			$("#frmCreateQuery .products ." + attributes.productType).append("<i data-productname='" + attributes.id + "' data-producttype='" + attributes.productType + "'>" + attributes.fileInfo.fileName + "</i>");
+		});
+	});
+	
+	$("#frmCreateQuery").validate({
+		rules: {
+			queryLabel: { required: true }
+		},
+		highlight: function(element, errorClass) {
+			$(element).parent().addClass("has-error");
+		},
+		unhighlight: function(element, errorClass) {
+			$(element).parent().removeClass("has-error");
+		},
+		errorPlacement: function(error, element) {
+			error.appendTo(element.parent());
+		},
+		success: function(label) {
+			label.remove();
+		}
+	});
+	
+	function showQueryMessage(message, error) {
+		if (!error) showMsg(message, error ? "ERROR" : "SUCCESS");
+		$("#frmCreateQuery .query-message").html("<h4>" + message + "</h4>");
+		if (!error) {
+			$("#frmCreateQuery .query-message").removeClass("error");
+			$("#frmCreateQuery .query-content").hide("slow");
+		} else {
+			$("#frmCreateQuery .query-message").addClass("error");
+		}
+		$("#frmCreateQuery .query-message").show("slow");
+	}
+	
+	$("#frmCreateQuery").submit(function (event) {
+		event.preventDefault();
+		if ($(this).valid()) {
+			var formData = {};
+			var formData = {
+				label   :	$("#frmCreateQuery input[name='queryLabel'").val(),
+				products:	$.map($("#frmCreateQuery .products p>i"), function (prod) {
+								return { key: $(prod).data("productname"), value: $(prod).data("producttype") };
+							})
+			};
+			
+			$.ajax({
+				url: baseRestApiURL + "datasource/create/names",
+				type: "POST",
+				dataType: 'json',
+				data: JSON.stringify(formData),
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("X-Auth-Token", tokenKey);
+					xhr.setRequestHeader("Content-Type", "application/json");
+				},
+				success: function(response) {
+					if (response.status == undefined) {
+						// Inconclusive response from server
+						showQueryMessage("Operation failed. Please try again or contact app admin.", true);
+					} else if (response.status == responseStatus.success) {
+						// Show results message
+						if (response.data !== undefined && response.data !== null) {
+							showQueryMessage("Your custom query has been successfully created:");
+							var html =
+								'<div class="form-group result-content">' +
+									(response.data.id             == undefined ? '' : '<label class="col-sm-3 col-md-3">Id</label><p class="col-sm-9 col-md-9">'             + response.data.id             + '</p>') +
+									(response.data.label          == undefined ? '' : '<label class="col-sm-3 col-md-3">Label</label><p class="col-sm-9 col-md-9">'          + response.data.label          + '</p>') +
+									(response.data.description    == undefined ? '' : '<label class="col-sm-3 col-md-3">Description</label><p class="col-sm-9 col-md-9">'    + response.data.description    + '</p>') +
+									(response.data.sensorName     == undefined ? '' : '<label class="col-sm-3 col-md-3">SensorName</label><p class="col-sm-9 col-md-9">'     + response.data.sensorName     + '</p>') +
+									(response.data.dataSourceName == undefined ? '' : '<label class="col-sm-3 col-md-3">DataSourceName</label><p class="col-sm-9 col-md-9">' + response.data.dataSourceName + '</p>') +
+									(response.data.authors        == undefined ? '' : '<label class="col-sm-3 col-md-3">Authors</label><p class="col-sm-9 col-md-9">'        + response.data.authors        + '</p>') +
+								'</div>';
+							$("#frmCreateQuery .query-message").append(html);
+						} else {
+							showQueryMessage("Your custom query has been successfully created.");
+						}
+						
+						// Clear product selection in tree
+						$("#tree-content .treeview input.select-for").prop("checked", false);
+						$("#tree-content .treeview label.select-for").removeClass("checked");
+						$("#createQuery i").removeClass("fa-check-square-o").addClass("fa-square-o");
+						$("#createQuery").prop("disabled", true);
+					} else {
+						showQueryMessage(response.message, true);
+					}
+				},
+				error: function (jqXHR, textStatus) {
+					showQueryMessage("Operation failed. Please try again or contact app admin.", true);			
+				}
+			});
+		}
+		return false; // To avoid actual submission of the form
+	});
+	
+	// === IMPORT SECTION =============================================================================
+	
+	$("#importProducts").on("click", function(){
 		// close file attributes window
 		closePorperties();
 		
 		// reset dialog contents
 		$("#myImportProducts .upload-content").show();
 		$("#myImportProducts .upload-message").hide();
-		$("#myImportProducts .upload-back").hide();
 		
 		// reset form (fields & validator)
 		$('#frmImportProducts')[0].reset();
@@ -1325,10 +1291,8 @@ $(document).ready(function() {
 		
 		// show dialog
 		$("#myImportProducts").modal('show');
-		
 	});
 	
-	// Set import validation rules
 	$("#frmImportProducts").validate({
 		rules: {
 			path: { required: true }
@@ -1347,7 +1311,6 @@ $(document).ready(function() {
 		}
 	});
 	
-	// Start importing products
 	$("#frmImportProducts").submit(function (event) {
 		event.preventDefault();
 		if ($(this).valid()) {
@@ -1355,46 +1318,75 @@ $(document).ready(function() {
 			var form = new FormData();
 			form.append("sourceDir", $("input[name='path']").val());
 			form.append("linkOnly", $("input[name='symbolicLink']").val());
-
 			$.ajax({
-				cache: false,
-				url: baseRestApiURL + "product/import",
-				type: "POST",
-				data: form,
-			 	async: true,
-			 	crossDomain: true,
-				headers: {
-				  "cache-control": "no-cache",
-				  "X-Auth-Token": window.tokenKey
-				},
+				cache      : false,
+				url        : baseRestApiURL + "product/import",
+				type       : "POST",
+				data       : form,
+				async      : true,
+				crossDomain: true,
+				headers    : { "cache-control": "no-cache", "X-Auth-Token": window.tokenKey },
 				processData: false,
 				contentType: false
-			//	mimeType: "multipart/form-data",
 			})
-            .done(function (data) {	            	
-	             console.log(data);
-	        		             
-	             if($.type(data) === 'object' && data.status === "SUCCEEDED" ){
-	            	 $("#myImportProducts").modal('hide');
-	            	 showMsg("The selected products were successfully imported.", "SUCCESS");		     
-	            	 $.when(refreshTree()).done(function () { routeLoading('hide'); });
-	             }else if($.type(data) === 'object' && data.status === "FAILED"){
-	            	 showMsg(data.message, "FAILED");
-	             }else{
-	            	 showMsg("The selected products were not imported.", "SUCCESS");
-	             }
-		         
-            })
-            .fail(function (jqXHR, textStatus) {
-                alert("Operation failed. Please try again or contact app admin");
-            });
-				
+			.done(function (data) {	            	
+				routeLoading('hide');
+				if ($.type(data) === 'object' && data.status === "SUCCEEDED") {
+					$("#myImportProducts").modal('hide');
+					showMsg("The selected products were successfully imported.", "SUCCESS");		     
+					$.when(refreshTree()).done(function () { });
+				} else if ($.type(data) === 'object' && data.status === "FAILED") {
+					showMsg(data.message, "FAILED");
+				} else {
+					showMsg("The selected products were not imported.", "SUCCESS");
+				}
+			})
+			.fail(function (jqXHR, textStatus) {
+				routeLoading('hide');
+				showMsg("Operation failed. Please try again or contact app admin.", "FAIL");		     
+			});
 		}
 		return false; // To avoid actual submission of the form
 	});
-});
+	
+	// === START ======================================================================================
+	
+	$(document).ready(function() {
+		// Set content class
+		$("#tree-content").removeClass("user-files shared-files");
+		if (sharedFiles) {
+			$("#tree-content").addClass("shared-files");
+			$(".content-header>h1").html("Common Files<small>Here you can find files and products that can be used as inputs for workflows.</small>");
+			
+			if (taoUserProfile.userRole != "ADMIN") {
+				$("#myModalUpload").remove();
+				$("#uploadFiles").remove();
+			}
+		} else {
+			$("#tree-content").addClass("user-files");
+			$(".content-header>h1").html("User Files<small>Here you can find your uploaded files and the execution outputs of your workflows.</small>");
+		}
+		
+		// Get files
+		$.when(refreshTree()).done(function () {});
+		
+		// Get server configuration for upload max file size
+		$.ajax({
+			url: baseRestApiURL + "files/config?filter=spring",
+			type: "GET",
+			dataType: 'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("X-Auth-Token", tokenKey);
+				xhr.setRequestHeader("Content-Type", "application/json");
+			},
+			success: function(response) {
+				if (response.status == responseStatus.success) {
+					var configMaxFileSize = response.data["spring.servlet.multipart.max-file-size"] || response.data["spring.http.multipart.max-file-size"];
+					maxFileSizeUnits = formatSizeUnits(bytesFromSizeUnits(configMaxFileSize)) || maxFileSizeUnits;
+				}
+			}
+		});
+	});
 
 //# sourceURL=my-auxfiles.js
 </script>
-
-<!-- /Main content -->

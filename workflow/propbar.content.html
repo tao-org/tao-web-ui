@@ -51,29 +51,24 @@
                 <div class="app-card-header">
                     Custom values
                 </div>
-                <div class="app-card-divider"></div>
-                <div style="padding: 20px;">
-                    <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-sysvar">
-                        <thead>
-                        <tr>
-                            <th>Key</th>
-                            <th>Value</th>
-                        </tr>
-                        </thead>
+                <div style="padding:0 15px;color:#555">
+					<table class="table tbl-edt" id="tbl-edt-sysvar">
                         <tbody>
-                        <tr class="tpl-sample-row">
-                            <td>
-                                <span class="var-id hidden"></span><span class="var-name hidden"></span>
-                                Label:&nbsp;<strong><span class="var-label"></span></strong>&nbsp;(<span class="var-dataType"></span>)
-                                <br>description:&nbsp;<span class="var-description"></span>
-                            </td>
-                            <td style="width: 70%;">
-                                <input type="hidden" class="var-value" value="" placeholder="input variable's value">
-                                <input type="text" class="var-value-string collapse" value="" placeholder="input variable's value">
-                                <select class="var-value-list collapse"></select>
-                                <br>default:&nbsp;<span class="var-default"></span>
-                            </td>
-                        </tr>
+							<tr class="tpl-sample-row">
+								<td style="border:0">
+									<span class="var-id hidden"></span><span class="var-name hidden"></span>
+									<span class="var-label" style="font-weight:700;color:#286080"></span>&nbsp;(<span class="var-dataType" style="font-size:0.9em"></span>)<br/>
+									<div style="border-left:10px solid #f1f1f1;padding-left:15px;font-size:0.9em">
+										<span class="var-description" style="color:#aaa;font-size:0.9em;font-style:italic"></span>
+										
+										<input type="hidden" class="var-value" value="" placeholder="input variable's value">
+										<input type="text" class="var-value-string collapse" value="" placeholder="input variable's value">
+										<select class="var-value-list collapse"></select>
+										
+										<span style="font-size:0.9em;font-weight:700">Default value:</span>&nbsp;<span class="var-default" style="font-size:0.9em;color:#286080"></span>
+									</div>
+								</td>
+							</tr>
                         </tbody>
                     </table>
                 </div>

@@ -80,6 +80,16 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
+                            <label for="inputType" class="col-sm-2 col-md-2 control-label">Node type </label>
+                            <div class="col-sm-10 col-md-10">
+                                <select id="inputType" name="inputType" class="form-control"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
                             <label for="inputDescription" class="col-sm-2 col-md-2 control-label">Description </label>
                             <div class="col-sm-10 col-md-10">
                                 <textarea class="form-control" rows="3" id="inputDescription" name="inputDescription" placeholder="Description"></textarea>
@@ -145,7 +155,20 @@
 <link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.css" type="text/css" />
 <script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
 <script>
-    function getHostNameData(){
+    var nodeTypeEnum = [
+		{ key: "S" , value: "Small"   },
+		{ key: "M" , value: "Medium"  },
+		{ key: "L" , value: "Large"   },
+		{ key: "XL", value: "X-Large" }
+	];
+	
+	function removeAllNodeTypeTags () {
+		$.each(nodeTypeEnum, function (index, element) {
+			$('#formTags').removeTag(element.value);
+		});
+	}
+	
+	function getHostNameData(){
         //window.userOpStack
         var editHostmane = window.userOpStack[0].dna.id;
         $.ajax({
@@ -167,8 +190,8 @@
                 }
             },
             success: function(r) {
-                console.log(response);
                 var response = chkTSRF(r);
+                console.log(response);
                 try {
                     var $el = $('#frmExecNodeEdit');
                     $('.val-hostname', $el).html(response.id);
@@ -178,13 +201,31 @@
                     $('input[name=inputProcessorcount]', $el).val(response.processorCount);
                     $('input[name=inputMemorysize]', $el).val(response.memorySizeGB);
                     $('input[name=inputDiskspacesize]', $el).val(response.diskSpaceSizeGB);
-                    $('textarea[name=inputDescription]', $el).val(response.description);
-                    $('select[name=inputActive] option', $el).removeAttr("selected");
-                    $('select[name=inputActive] option[value="'+response.active+'"]', $el).attr("selected", "selected");
-                    if(response.tags != null && response.tags !==""){
-						$('#formTags').importTags( response.tags.join());
-					}
+					$('textarea[name=inputDescription]', $el).val(response.description);
+                    $('select[name=inputActive] option', $el).removeAttr("selected").filter('[value="' + response.active   + '"]').attr("selected", true);
                     
+					// Get node types
+					$.ajax({
+						cache: false,
+						url: baseRestApiURL + "config/enums",
+						dataType : 'json',
+						type: 'GET',
+						async: false,
+						headers: { "Accept": "application/json", "Content-Type": "application/json", "X-Auth-Token": window.tokenKey },
+						error : function (jqXHR, textStatus, errorThrown) { },
+						success: function (result) {
+							if (result.status == responseStatus.success) {
+								nodeTypeEnum = (typeof result.data["ro.cs.tao.topology.NodeType"] === "undefined") ? nodeTypeEnum : result.data["ro.cs.tao.topology.NodeType"];
+							}
+						}
+					});
+					$('select[name=inputType]', $el).html("");
+					$.each(nodeTypeEnum, function (index, element) { $('select[name=inputType]', $el).append("<option value='" + element.key + "'>" + element.value + "</option>"); });
+					$('select[name=inputType] option', $el).removeAttr("selected").filter('[value="' + response.nodeType + '"]').attr("selected", true);
+					
+					if (response.tags != null && response.tags !== "") {
+						$('#formTags').importTags(response.tags.join());
+					}
                 }
                 catch(e) {
                     alert('E001, An error has occurred, please try again or contact app admin.');
@@ -193,13 +234,11 @@
         });
         return true;
     }
-
-
+	
     $(document).ready( function(){
         getHostNameData();
 
-        $("input","form#frmExecNodeEdit")
-        .on("keypress change", function(){
+        $("input", "form#frmExecNodeEdit").on("keypress change", function () {
             if($(this).data("errorspan")) {
                 $(".error-" + $(this).data("errorspan"), ".modal-error").css('display', 'none');
                 if($(".modal-error").find("span:visible").length == 0) {
@@ -207,10 +246,16 @@
                 }
             }
         });
+		$("select", "form#frmExecNodeEdit").on("change", function (e) {
+			if (this.id == "inputType") {
+				removeAllNodeTypeTags();
+				$('#formTags').addTag($("option:selected", e.target).text());
+			}
+		});
         $("form#frmExecNodeEdit").submit(function (event) {
             event.preventDefault();
             var tags = $('input[name=formTags]', this).val();
-
+			
             var formData = {
                 "id":$('input[name=inputHostname]', this).val(),
                 "userName":$('input[name=inputUsername]', this).val(),
@@ -218,7 +263,8 @@
                 "processorCount":$('input[name=inputProcessorcount]', this).val(),
                 "memorySizeGB":$('input[name=inputMemorysize]', this).val(),
                 "diskSpaceSizeGB":$('input[name=inputDiskspacesize]', this).val(),
-                "description":$('textarea[name=inputDescription]', this).val(),
+                "nodeType":$('select[name=inputType]', this).val(),
+				"description":$('textarea[name=inputDescription]', this).val(),
                 "active":$('select[name=inputActive]', this).val(),
                 "tags": tags.split(",") 
             };
@@ -259,39 +305,40 @@
                     }
                     showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
                 },
-                success: function(response, textStatus, jqXHR) {
-                	  var r = chkTSRF(response);
-                	  if(response.status === "FAILED"){
-                          if(response.message){
-                              showMsg("Error adding execution node. Please check your data, one or more values for the attributes was not in the acceptable range.", "ERROR");
-                              //handle error messages
-
-                              var objResponse = JSON.parse(jqXHR.responseText);
-                              objResponse = objResponse.message.split(';');
-                              if(objResponse[0] !== "Entity has validation errors"){
-                                  return;
-                              }
-                              for(i=0;i<objResponse.length;i++) {
-                                  var matches = objResponse[i].match(/\[(.*?)\]/);
-                                  if (matches) {
-                                      $(".error-"+matches[1],".modal-error").css('display', 'inline-block');
-                                  }
-                              }
-                              $(".modal-error ").fadeIn("slow");
-                              $('#myModalNodes').animate({scrollTop: 0}, 250);
-                              return;
-                          }
-                          showMsg("Error adding execution node. Please check your data and try again.", "ERROR");
-                      }
-                	
-                    showMsg("Execution node successfully updated.", "SUCCESS");
-                    $("#myModalNodes").modal('hide');
-                    panelComp.refreshData();
-                }
+				success: function(response, textStatus, jqXHR) {
+					var r = chkTSRF(response);
+					if (response.status === "FAILED") {
+						if (response.message) {
+							showMsg("Error adding execution node. Please check your data, one or more values for the attributes was not in the acceptable range.", "ERROR");
+							//handle error messages
+							
+							var objResponse = JSON.parse(jqXHR.responseText);
+							objResponse = objResponse.message.split(';');
+							if (objResponse[0] !== "Entity has validation errors") {
+								return;
+							}
+							for (i = 0; i < objResponse.length; i ++) {
+								var matches = objResponse[i].match(/\[(.*?)\]/);
+								if (matches) {
+									$(".error-"+matches[1],".modal-error").css('display', 'inline-block');
+								}
+							}
+							$(".modal-error ").fadeIn("slow");
+							$('#myModalNodes').animate({scrollTop: 0}, 250);
+							return;
+						}
+						showMsg("Error adding execution node. Please check your data and try again.", "ERROR");
+					}
+					
+					showMsg("Execution node successfully updated.", "SUCCESS");
+					$("#myModalNodes").modal('hide');
+					panelComp.refreshData();
+				}
             });
             return false;
         });
         
         initializeTagsInputAutocomplete("#formTags", "topology");
     });
+	//# sourceURL=topology-edit.fragment.js
 </script>

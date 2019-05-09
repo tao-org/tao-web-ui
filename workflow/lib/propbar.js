@@ -97,7 +97,10 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 "parameterName":$(".var-name",$(this)).html(),
                 "parameterValue":$(".var-value",$(this)).val()
             };
-            cV.push(onePair);
+			var defaultVal = $(".var-default",$(this)).html();
+            if (onePair.parameterValue != defaultVal) {
+				cV.push(onePair);
+			}
         });
         $propbar.nodeData.customValues = cV;
         var putOneComponent = $.ajax({
@@ -283,15 +286,33 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 obj.value = obj.defaultValue;
             }
             if(obj.dataType === "java.lang.Boolean"){
-                helper_putValue($el, obj.id, obj.dataType, obj.value, ["true","false"]);
+                helper_putValue($el, obj.name, obj.dataType, obj.value, ["true","false"]);
             }else{
-                helper_putValue($el, obj.id, obj.dataType, obj.value, obj.valueSet);
+                helper_putValue($el, obj.name, obj.dataType, obj.value, obj.valueSet);
             }
             $tblEdt.append($el);
         };
-        $.each(componentTemplate.parameterDescriptors, function(i, value) {
+		
+        // Parse parameters
+		$.each(componentTemplate.parameterDescriptors, function(i, value) {
             helper_addSTblEdtRow($("#tbl-edt-sysvar"),value);
         });
+		
+        // Parse targets
+		$.each(componentTemplate.targets, function(i, target) {
+			if (typeof target.dataDescriptor !== "undefined") {
+				var value = {
+					id          : target.id,
+					name        : target.name,
+					label       : target.name,
+					defaultValue: target.dataDescriptor.location,
+					description : "Output parameter",
+					valueSet    : [ "null" ]
+				}
+				helper_addSTblEdtRow($("#tbl-edt-sysvar"), value);
+			}
+        });
+		
         if(componentTemplate.parameterDescriptors.length > 0) $tblEdt.closest(".app-card").show();
 
 	    return 1;

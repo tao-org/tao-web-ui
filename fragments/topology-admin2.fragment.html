@@ -1,3 +1,27 @@
+<style>
+.node-root .nodes-item-core-box .box-top-tags span.status{
+    font-weight: 700;
+    color: white;
+	background-color: #00ce00;
+	border-color: #009600;
+}
+
+.node-root.offline .nodes-item-core-box .box-stats .box-stats-gfx,
+.node-root.offline .nodes-item-core-box .square-box,
+.node-root.offline .nodes-item-core-box .box-top-tags span.status{
+    background-color: #ff7b7b;
+	border-color: red;
+    color: white;
+}
+.node-root.tristate .nodes-item-core-box .box-stats .box-stats-gfx,
+.node-root.tristate .nodes-item-core-box .square-box,
+.node-root.tristate .nodes-item-core-box .box-top-tags span.status{
+    background-color: #e2e2e2;
+    border-color: #929292;
+    color: #5d5d5d;
+}
+</style>
+
 <!-- modal nodes op -->
 <div id="myModalNodes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -154,15 +178,17 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
                     <li class="role-dropdown active">
-                        <select id="selectUserPanel" name="selectUserPanel" class="form-control form-changepane" title="Select desired node view.">
-                            <option class="role role-admin" value="all_nodes">All nodes </option>
+                        <select id="selectNodePanel" name="selectNodePanel" class="form-control form-changepane" title="Select desired node view.">
+                            <option class="role role-admin" value="active_nodes">Active nodes</option>
+                            <option class="role role-admin" value="inactive_nodes">Inactive nodes</option>
                         </select>
                     </li>
                 </ul>
                 <ul class="nav nav-tabs hidden-xs">
-                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_nodes" aria-expanded="true">All nodes</a></li>
+                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="active_nodes" aria-expanded="true">Active nodes</a></li>
+                    <li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="inactive_nodes" aria-expanded="true">Inactive nodes</a></li>
                 </ul>
-
+				
                 <div class="tab-content">
                     <div class="tab-pane active" id="panel-nodes">
                         <div class="row">
@@ -204,7 +230,7 @@
                                         <div class="box-tools pull-right nppaginatedcells-order collapse" data-toggle="tooltip" title="Change order"></div>
                                     </div>
                                     <div class="nppaginatedcells-empty callout callout-empty">
-                                        <p>Component list is empty. <span class="results-empty">You do not have any components.</span><span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
+                                        <p>Nodes list is empty. <span class="results-empty">You do not have any node.</span><span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
                                     </div>
                                     <div class="box-body chat users-box">
                                         <div class="nppaginatedcells-panel-body">
@@ -341,8 +367,7 @@
     </div>
 </section><!-- /.content -->
 <script>
-
-    var monitorNode = function(id){
+    var monitorNode = function (id) {
             var $sshModal = $("#myModalMonitor");
             $(".val-sshHost",$sshModal).text(id);
             var sshURL = './nodemonitor.html?node='+id;
@@ -364,7 +389,8 @@
                     $sshModal.modal('hide');
                 });
     };
-    var sshNode = function(nodeDNA){
+	
+    var sshNode = function (nodeDNA) {
             var $sshModal = $("#myModalSSH");
             $(".val-sshHost",$sshModal).text(nodeDNA.id);
             var sshURL = 'http://masterslurm.tao.c-s.ro:4200/?node='+nodeDNA.id+'&user='+nodeDNA.userName+'&passwd='+nodeDNA.userPass;
@@ -387,15 +413,17 @@
                 });
             return 1;
     };
-    var statusNode = function(nodeDNA){
+	
+    var statusNode = function (nodeDNA) {
         var $sshModal = $("#myModalSatus");
         $(".val-sshHost",$sshModal).text(nodeDNA.id);
 
         var html = "";
         for (var i = 0; i < nodeDNA.servicesStatus.length; i++){
             html += '<p class="pull-right"><span class="label label-success">' + nodeDNA.servicesStatus[i].status + '</span></p>' +
-                '<strong><i class="fa fa-check-circle fa-fw"></i>' + nodeDNA.servicesStatus[i].serviceDescription.name + '</strong>, version: ' + nodeDNA.servicesStatus[i].serviceDescription.version + '<br>' + nodeDNA.servicesStatus[i].serviceDescription.description +
-                '<hr>\n';
+                '<strong><i class="fa fa-check-circle fa-fw"></i>' + nodeDNA.servicesStatus[i].serviceDescription.name + '</strong>, ' +
+				'version: ' + nodeDNA.servicesStatus[i].serviceDescription.version +
+				'<br>' + nodeDNA.servicesStatus[i].serviceDescription.description + '<hr>\n';
         }
         if(html === ""){
             html = '<strong><i class="fa fa-exclamation-triangle fa-fw"></i> No installed services reported</strong>';
@@ -403,7 +431,8 @@
         $("#servicesStatusWrapper .box-body").html(html);
         $sshModal.modal('show');
     };
-    deleteNodeById = function(id){
+	
+    var deleteNodeById = function (id) {
         $.ajax({
             cache: false,
             url: baseRestApiURL + "topology/"+id+"/",
@@ -429,13 +458,69 @@
         });
     };
 
+	var manageNodeStatus = function (dna, status) {
+		if (!(dna && typeof dna.active === "boolean")) return;
+		
+		var formData = {
+			id             : dna.id,
+			userName       : dna.userName,
+			userPass       : dna.userPass,
+			processorCount : dna.processorCount.replace("X", ""),
+			memorySizeGB   : dna.memorySizeGB.replace("GB", ""),
+			diskSpaceSizeGB: dna.diskSpaceSizeGB.replace("GB", ""),
+			nodeType       : dna.nodeType,
+			description    : dna.description,
+			active         : status == "enable" ? true : false,
+			tags           : dna.tags
+		};
+		if ($.inArray("ONLINE", formData.tags) >= 0) {
+			formData.tags.splice( $.inArray("ONLINE", formData.tags), 1 );
+		} else if ($.inArray("OFFLINE", formData.tags) >= 0) {
+			formData.tags.splice( $.inArray("OFFLINE", formData.tags), 1 );
+		} else if ($.inArray("INACTIVE", formData.tags) >= 0) {
+			formData.tags.splice( $.inArray("INACTIVE", formData.tags), 1 );
+		} else if ($.inArray("UNDEFINED", formData.tags) >= 0) {
+			formData.tags.splice( $.inArray("UNDEFINED", formData.tags), 1 );
+		}
+		if (formData.tags.length == 0)
+			delete formData.tags;
+		
+		$.ajax({
+			cache: false,
+			url: baseRestApiURL + "topology/" + dna.id + "/",
+			dataType : 'json',
+			type: 'PUT',
+			data: JSON.stringify(formData),
+			headers: { "Accept": "application/json", "Content-Type": "application/json", "X-Auth-Token": window.tokenKey },
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status === 500 ) {
+					showMsg("Unable to update execution name. Please try again.", "ERROR");
+					return;
+				}
+				if (jqXHR.status === 406) {
+					showMsg("Error adding execution node. Please check your data, one or more values for the attributes was not in the acceptable range.", "ERROR");
+					return;
+				}
+				showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
+			},
+			success: function(response, textStatus, jqXHR) {
+				if (response.status == responseStatus.success) {
+					showMsg("Execution node successfully updated.", "SUCCESS");
+					panelComp.refreshData();
+				} else if (response.status == responseStatus.fail) {
+					showMsg(response.message, "FAILED");
+				}
+			}
+		});
+	};
+
     myModalNodesOpShow = function(operationid, args){
         var $modal = $("#myModalNodes");
         $(".modal-dialog",$modal).removeClass("modal-lg");
         var rm_contentUrl = '';
         var rmContent = '';
         window.userOpStack = [];
-
+		
         if(operationid === "op-plus"){
             //$(".modal-dialog",$modal).addClass("modal-lg");
             rm_contentUrl="./fragments/topology-plus.fragment.html?" + Math.random();
@@ -469,17 +554,33 @@
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    $( document ).ready(function() {
-        var urls = [
-                baseRestApiURL + "topology/"
-            ];
+    $(document).ready(function () {
+        var nodeType = "active";
+        var urls = [ baseRestApiURL + "topology/" + nodeType ];
+		
+        $("#selectNodePanel").on("change", function (event) {
+            var current_pane = $(this).val() || 0;
+            $("a[data-action='" + current_pane +"']", '#panel-topo-wrapper').trigger("click");
+        });
+        $('a[data-toggle="tab"]', '#panel-topo-wrapper').on('shown.bs.tab', function (e) {
+            var action = $(this).data("action");
+            if (action === "active_nodes") {
+                nodeType = "active";
+            } else if (action === "inactive_nodes") {
+                nodeType = "inactive";
+            }
+            window.panelComp.refreshData([ baseRestApiURL + "topology/" + nodeType ]);
+			
+			$("#selectNodePanel option").removeAttr('selected').filter("option[value='" + action + "']").attr("selected", true);
+        });		
+		
         window.panelComp = $('#panel-nodes').npPaginatedCells({
             headerUser: taoUserProfile.username,
             url: urls,
             viewMode: prefferences.viewMode,
             filterAttribute: "id",
             order:[
-                {
+				{
                     "label":"Name ascending",
                     "objAttributeName":"id",
                     "direction":"ASC"
@@ -490,40 +591,111 @@
                     "direction":"DSC"
                 }
             ],
-            doDataPreprocessing: function(data){
-                for (var i = 0; i < data.length; i++){
-                    data[i].memorySizeGB = data[i].memorySizeGB+"GB";
+            doDataPreprocessing: function (data) {
+				// Get nodes availability
+				var onlineNodes = [];
+				$.ajax({
+					cache: false,
+					url: baseRestApiURL + "monitor/",
+					dataType : 'json',
+					type: 'GET',
+					async: false,
+					headers: {
+						"Accept": "application/json",
+						"Content-Type": "application/json",
+						"X-Auth-Token": window.tokenKey
+					},
+					error : function (jqXHR, textStatus, errorThrown) { },
+					success: function (result) {
+						onlineNodes = result.data;
+					}
+				});
+				for (var i = 0; i < data.length; i++) {
+					data[i].memorySizeGB = data[i].memorySizeGB+"GB";
                     data[i].processorCount = data[i].processorCount+"X";
                     data[i].diskSpaceSizeGB = data[i].diskSpaceSizeGB+"GB";
+					
+					//data[i].active = false;
+					if (!data[i].tags) data[i].tags = [];
+					if (data[i].active) {
+						if (typeof onlineNodes[data[i].id] !== "undefined") {
+							var resSum = parseInt(onlineNodes[data[i].id].availableMemory + onlineNodes[data[i].id].cpuTotal  + onlineNodes[data[i].id].diskUsed);
+							if (resSum == -3) {
+								data[i].tags.push("OFFLINE");
+							} else if (resSum == 0) {
+								data[i].tags.push("UNDEFINED");
+							} else {
+								data[i].tags.push("ONLINE");
+							}
+						} else {
+							data[i].tags.push("UNDEFINED");
+						}
+					} else {
+						data[i].tags.push("INACTIVE");
+					}
                 }
                 return data;
             },
-            doAction: function(action, args){
-                if(action === "op-plus"){
-                    if( taoUserProfile.userRole !== "ADMIN"){
+            doAction: function (action, args) {
+                if (action === "op-plus") {
+                    if (taoUserProfile.userRole !== "ADMIN") {
                         showMsg("Only admin roles can ad components to the shared workspace. You should try adding components to your own workspace", "ERROR");
                         return;
                     }
                     myModalNodesOpShow(action, args);
                 }
-                if(action==="monitor") monitorNode(args.dna.id);
-                if(action==="ssh") sshNode(args.dna);
-                if(action==="status") statusNode(args.dna);
-                if(action === "edit") myModalNodesOpShow(action, args);
-                if(action === "delete"){
-                    if( taoUserProfile.userRole !== "ADMIN"){
+                if (action === "monitor") monitorNode(args.dna.id);
+                if (action === "ssh"    ) sshNode(args.dna);
+                if (action === "status" ) statusNode(args.dna);
+                if (action === "edit"   ) myModalNodesOpShow(action, args);
+                if (action === "delete" ) {
+                    if (taoUserProfile.userRole !== "ADMIN") {
                         alert("not allowed");
                         return;
                     }
-                    $('#confirm-dialog').modal('confirm',{
-                        msg:"Are you sure you want to delete processing component: <strong>"+args.dna.label+"</strong>?",
-                        callbackConfirm: function() {
+                    $('#confirm-dialog').modal('confirm', {
+                        msg:"Are you sure you want to delete processing component: <strong>" + args.dna.id + "</strong>?",
+                        callbackConfirm: function () {
                             deleteNodeById(args.dna.id);
                         },
-                        callbackCancel:function(){}
+                        callbackCancel: function () {}
                     });
                 }
-            }
+                if (action === "enable" || action == "disable") {
+                    if (taoUserProfile.userRole !== "ADMIN") {
+                        alert("not allowed");
+                        return;
+                    }
+                    $('#confirm-dialog').modal('confirm', {
+                        msg:"Are you sure you want to " + action + " processing component: <strong>" + args.dna.id + "</strong>?",
+                        callbackConfirm: function () {
+                            manageNodeStatus(args.dna, action);
+                        },
+                        callbackCancel: function () {}
+                    });
+				}
+            },
+			doCustomRender: function($elClone, elX) {
+				var action = $("a[data-toggle='tab'][aria-expanded='true']", "#panel-topo-wrapper").data("action");
+				// set online/offline/tristate node status
+				$(".box-top-tags span:last-child", $elClone).addClass("status");
+				if (elX.tags[elX.tags.length - 1] == "ONLINE") {
+					$elClone.addClass("online");
+				} else if (elX.tags[elX.tags.length - 1] == "OFFLINE") {
+					$elClone.addClass("offline");
+				} else if (elX.tags[elX.tags.length - 1] == "UNDEFINED" || elX.tags[elX.tags.length - 1] == "INACTIVE") {
+					$elClone.addClass("tristate");
+				}
+				if (action == "active_nodes") {
+					// show "Disable" node action
+					$("button[data-action='disable']", $elClone).removeClass("collapse");
+					$("button[data-action='enable']" , $elClone).addClass("collapse");
+				} else {
+					// show "Enable" node action
+					$("button[data-action='disable']", $elClone).addClass("collapse");
+					$("button[data-action='enable']" , $elClone).removeClass("collapse");
+				}
+			}
         });
         //remove iframe on modal hide end event
         $('#myModalSSH, #myModalMonitor').on('hidden.bs.modal', function () {

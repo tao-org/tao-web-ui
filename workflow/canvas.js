@@ -609,7 +609,7 @@ var canvasRenderer = {
         jsPlumb.fire("jsPlumbNodeAdded", d);
         return d;
     },
-    fitGroup(groupCanvasID){
+    fitGroup: function(groupCanvasID){
         var d = document.getElementById(groupCanvasID);
         console.log("fit group: "+groupCanvasID);
         var itemPos		    = {};

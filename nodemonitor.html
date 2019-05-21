@@ -50,21 +50,22 @@
         <div id="widget-master-monitor" class="box box-solid bg-navy">
             <div class="box-header" style="cursor: move;">
                 <i class="fa fa-area-chart"></i>
-                <h3 class="box-title">Node monitor</h3>
+                <h3 class="box-title">Node monitor: <span class="val-nodename"></span></h3>
             </div>
             <!-- /.box-header -->
             <div class="box-error collapse">
                 <p class="text-center">There was an error retrieving information about the requested node.</p>
             </div>
             <div class="box-body">
-                <dl class="dl-horizontal">
-                    <dt>CPU usage&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(220,220,220,0.5);"></i></dt>
-                    <dd><span class="val-mm-processors">-</span></dd>
-                    <dt>Memory&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(255,187,205,0.5);"></i></dt>
-                    <dd><span class="val-mm-memory" style="text-transform: lowercase;">-</span></dd>
-                    <dt>Storage&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(151,187,205,0.5);"></i></dt>
-                    <dd><span class="val-mm-storage" style="text-transform: lowercase;">-</span></dd>
-                </dl>
+                <p>
+                    <i class="fa fa-square" aria-hidden="true" style="color:rgba(220,220,220,0.5);"></i>&nbsp;CPU&nbsp;usage:&nbsp;<span class="val-mm-processors">-</span>
+                </p>
+                <p>
+                    <i class="fa fa-square" aria-hidden="true" style="color:rgba(255,187,205,0.5);"></i>&nbsp;Memory:&nbsp;<span class="val-mm-memory">-</span>
+                </p>
+                <p>
+                    <i class="fa fa-square" aria-hidden="true" style="color:rgba(151,187,205,0.5);"></i>&nbsp;Storage:&nbsp;<span class="val-mm-storage">-</span>
+                </p>
             </div>
             <div class="box-canvas">
                 <canvas id="myChart" width="400" height="200"></canvas>
@@ -210,9 +211,14 @@
                     $(".val-mm-memory").text("n/a");
                     $(".val-mm-storage").text("n/a");
                 }else{
-                    $(".val-mm-processors").text(percent.cpu+"%");
-                    $(".val-mm-memory").text(percent.memory+"% ("+(r.totalMemory-r.availableMemory)+"/"+r.totalMemory+", used/total, "+r.memoryUnit+")");
-                    $(".val-mm-storage").text(percent.storage+"% ("+r.diskUsed+"/"+r.diskTotal+", used/total, "+r.diskUnit+")");
+                    var lines = {
+                        cpu: percent.cpu+"%",
+                        memory: percent.memory+"% ("+humanFileSize((r.totalMemory-r.availableMemory)*r.memoryUnit)+"/"+humanFileSize(r.totalMemory*r.memoryUnit)+", used/total)",
+                        storage: percent.storage+"% ("+humanFileSize(r.diskUsed*r.diskUnit)+"/"+humanFileSize(r.diskTotal*r.diskUnit)+", used/total)"
+                    };
+                    $(".val-mm-processors").text(lines.cpu);
+                    $(".val-mm-memory").text(lines.memory);
+                    $(".val-mm-storage").text(lines.storage);
                 }
                 var chartCurrentTime = moment ().format("HH:mm:ss");
                 _loadChart.updateData(
@@ -228,7 +234,7 @@
                 $(".box-body, .box-canvas").hide();
             }
             if(window.parent.document.getElementsByTagName("iframe")[0]){
-                window.parent.document.getElementsByTagName("iframe")[0].style.height = document.body.scrollHeight + 'px';
+                //window.parent.document.getElementsByTagName("iframe")[0].style.height = document.body.scrollHeight + 'px';
             }
         }).fail(function (jqXHR, textStatus) {
             //alert("Retriving master monitor data failed.");
@@ -236,7 +242,7 @@
             if($("#widget-master-monitor").length && (misfireCounter < 10)){
                 setTimeout(function(){
                     updateMasterMonitorWidget();
-                },1000);
+                },monitorCheckInterval);
             }
         });
     }
@@ -248,6 +254,7 @@
         if( node === undefined || node == null || node.length === 0){
             alert("no node provided!");
         }else{
+            $(".val-nodename").html(node);
             _loadChart.node = node;
         }
         $( window )
@@ -255,6 +262,7 @@
                 if($("#widget-master-monitor").length) {
                     var w = parseInt($("#widget-master-monitor").width());
                     $("#myChart").attr("width", w);
+                    $("#myChart").attr("height", 200);
                     _loadChart.initChart();
                 }
             })

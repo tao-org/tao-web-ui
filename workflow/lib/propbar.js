@@ -28,11 +28,15 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         $(this).addClass("active");
         $(this).closest("tr").next().css({"display": "table-row"});
     })
-    .on("change",".var-value-string",function(e){
-        $(this).siblings(".var-value").val($(this).val());
-    })
-    .on("change",".var-value-list",function(e){
-        $(this).siblings(".var-value").val($(this).val());
+    .on("change",".var-value-string, .var-value-string2, .var-value-list",function(e){
+        if ($(".var-value-string2:visible", $(this).parent()).length > 0) {
+			var d1 = $(".var-value-string" , $(this).parent()).val();
+			var d2 = $(".var-value-string2", $(this).parent()).val();
+			var ds = (d1.length > 0 && d2.length > 0) ? "[" + d1 + "," + d2 + "]" : (d1.length > 0 ? d1 : d2);
+			$(this).siblings(".var-value").val(ds);
+		} else {
+			$(this).siblings(".var-value").val($(this).val());
+		}
     })
     .on("click", "#update-custum-values",function(e){
         e.preventDefault();
@@ -43,7 +47,22 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             saveQuery();
         }
         window.$propbar.menu("close");
-    });
+    })
+	.on("click", ".ol", function (e) {
+		// Load map poly
+		var $mapContainer   = $("#propbarMap");
+		var $footprintField = $(this).parent().find("input.var-value-string");
+		openPolygonMap($mapContainer, $footprintField);
+	})
+    .on("click", ".var-default",function(e){
+		if ($(".var-value-string:visible", $(this).parent()).length > 0) {
+			$(this).siblings(".var-value-string").val($(this).html());
+			$(this).siblings(".var-value-string").trigger("change");
+		} else if ($(".var-value-list:visible", $(this).parent()).length > 0) {
+			$(this).siblings(".var-value-list").val($(this).html());
+			$(this).siblings(".var-value-list").trigger("change");
+		}
+	});
 
     var saveQuery = function(){
         var cV = {};
@@ -78,7 +97,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         });
         $.when(putOneQuery)
             .done(function (putOneComponentResponse) {
-                if(putOneComponentResponse.hasOwnProperty('message')){
+                if(putOneComponentResponse.hasOwnProperty('message') && putOneComponentResponse.message !== null){
                     alert(putOneComponentResponse.message);
                 }else{
                     $(".v-lastaction","#infoband").html("query updated");
@@ -136,6 +155,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 							$('app-modal-overlay').addClass("on-screen");
 						}
 						if ( action === "close") {
+							closePolygonMap();
 							$('app-modal-overlay').removeClass("on-screen");
 							$('html, body').removeClass("app-noscroll");
                             widgetRootEl.find(".app-card-clean").hide();
@@ -171,11 +191,17 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             backgroundURL = './media/module-ds.png';
             if(wfTools.toolboxnodes.ds[lclTBOID]){
                 componentTemplate = wfTools.toolboxnodes.ds[lclTBOID].dna;
+            } else if (wfTools.toolboxnodes.uds[lclTBOID]) {
+                componentTemplate = wfTools.toolboxnodes.uds[lclTBOID].dna;
             }
             if(wfTools.toolboxnodes.q[lclTBOID]){
                 queryTemplate = wfTools.toolboxnodes.q[lclTBOID].dna;
             }
-            wf_loadModuleDatasource(nid,lcl_n,componentTemplate,queryTemplate);
+			if (componentTemplate || queryTemplate) {
+				wf_loadModuleDatasource(nid,lcl_n,componentTemplate, queryTemplate);
+			} else {
+				alert("Component template not found.");
+			}
         }
         $('.app-user-avatar-img',widgetRootEl).attr('src', backgroundURL);
 
@@ -211,7 +237,11 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         });
         $.when(getQBody)
             .done(function (getQBodyResponse) {
-                renderQForm(getQBodyResponse[0],queryTemplate);
+                if (getQBodyResponse.status === "SUCCEEDED") {
+					renderQForm(getQBodyResponse.data[0], queryTemplate);
+				} else {
+					alert("Could not retrive query for current datasource.");
+				}
             })
             .fail(function () {
                 alert("Could not retrive query for current datasource.");
@@ -320,7 +350,9 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 
 
 	var renderQForm = function(qBody,queryTemplate){
-	    $("#qbody").show();
+	    if (!queryTemplate) return;
+		
+		$("#qbody").show();
 	    if(!qBody){
 	        qBody = {
                 "id": null,
@@ -350,39 +382,69 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         $tblEdt = $("#tbl-edt-sysvar");
         $tblEdt.find(".val-row").remove();
 
+        var helper_putValue = function($el, name, type, value, valueset){
+			$('input.var-value', $el).val(value);
+            if ((valueset.length === 1) && (( valueset[0] === "") || ( valueset[0] === "null"))) {
+				if (humanJavaDataType(type) === "Date") {
+					$('input.var-value-string', $el).attr("type", "date").css({ "width": "30%", "margin-right": "2%" });
+					if (name.toLowerCase() === "startdate" || name.toLowerCase() === "enddate") {
+						// double field
+						$('input.var-value-string', $el).clone().toggleClass("var-value-string var-value-string2").insertAfter($('input.var-value-string', $el));
+						var date1 = "";
+						var date2 = "";
+						if (value !== null) {
+							var match = value.match(/^\[(.*),(.*)\]$/);
+							date1 = match ? match[1] : value;
+							date2 = match ? match[2] : "";
+						}
+						value = date1;
+						$('input.var-value-string2', $el).val(date2).show();
+					} else {
+						// single field
+						$('input.var-value-string', $el).attr("type", "date").css({ "width": "30%" });
+					}
+				} else if (humanJavaDataType(type) === "Double" || humanJavaDataType(type) === "Short" || humanJavaDataType(type) === "Float" || humanJavaDataType(type) === "Number") {
+					$('input.var-value-string', $el).attr("type", "number");
+                } else if (humanJavaDataType(type) === "Polygon2D") {
+					// Add button to open polygon map
+					$("<i class='fa fa-fw fa-globe ol' style='position:absolute;font-size:1.5em;vertical-align:bottom;color:#2677a7;cursor:pointer;margin-left:-25px;margin-top:2px;background-color:white;'></i>").insertAfter($('input.var-value-string', $el));
+				}
+				$('input.var-value-string', $el).val(value).show();
+            } else {
+                var html = "";
+				html += "<option value=''></option>";
+                $.each(valueset, function (i, v) {
+					html += "<option " + (v.toUpperCase() === value.toUpperCase() ? "selected " : "") + "value='" + v.toUpperCase() + "'>" + v + "</option>";
+                });
+                $('select.var-value-list', $el).html(html).show();
+            }
+        };
         var helper_addSTblEdtRow = function($tblEdt, payload){
             var obj = {
                 "name": null,
                 "type": "java.lang.String",
+                "dataType": "java.lang.String",
                 "defaultValue": null,
-                "required": false
+                "required": false,
+				"valueSet": [],
+				"value": null
             };
-            $.extend( obj, payload );
-            console.log(obj);
+            $.extend(obj, payload);
+			obj.dataType = obj.type;
+			obj.value = $propbar.qData.values[obj.name] || "";
+			obj.valueSet = obj.valueSet || [ "null" ];
+			
             var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
             $('span.var-id', $el).html(obj.name);
             $('span.var-label', $el).html(obj.name);
             $('span.var-description', $el).html( (obj.required?"required":"not required") );
-            $('span.var-dataType', $el).html(humanJavaDataType(obj.type));
+            $('span.var-dataType', $el).html(humanJavaDataType(obj.dataType).replace(";", "[]"));
             $('span.var-default', $el).html(obj.defaultValue);
-//            if((obj.value == null) || (obj.value === '') || (obj.value === undefined)){
-//                obj.value = obj.defaultValue;
-//            }
-            if(obj.dataType === "java.lang.Boolean"){
-            }else{
-                var value = "";
-                if($propbar.qData.values[obj.name]){
-                    value = $propbar.qData.values[obj.name];
-                }
-                $('input.var-value', $el).val(value);
-                if(humanJavaDataType(obj.type) === "Date"){
-                    $('input.var-value-string', $el).attr("type", "date");
-                }
-                if((humanJavaDataType(obj.type) === "Double") || (humanJavaDataType(obj.type) === "Short") || (humanJavaDataType(obj.type) === "Float")  || (humanJavaDataType(obj.type) === "Number")){
-                    $('input.var-value-string', $el).attr("type", "number");
-                }
-                $('input.var-value-string', $el).val(value).show();
-            }
+			
+            if (humanJavaDataType(obj.dataType) === "Boolean") {
+				obj.valueSet = [ "true", "false" ];
+			}
+			helper_putValue($el, obj.name, obj.dataType, obj.value, obj.valueSet);
             $tblEdt.append($el);
         };
         $.each(queryTemplate.parameters, function(i, value) {

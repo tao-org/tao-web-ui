@@ -1,5 +1,5 @@
 <app-modal-overlay>
-<app-modal role="dialog" tabindex="-1">
+<app-modal role="dialog" tabindex="-1" style="background-color:#f3f6f8">
 	<div class="app-title-line">
 		<button class="app-dismiss">
 			<svg viewBox="0 0 24 24" width="24px" height="24px" x="0" y="0" preserveAspectRatio="xMinYMin meet" class="" focusable="false"><path d="M20,5.32L13.32,12,20,18.68,18.66,20,12,13.33,5.34,20,4,18.68,10.68,12,4,5.32,5.32,4,12,10.69,18.68,4Z" class="" style="fill: currentColor"></path></svg>
@@ -32,16 +32,16 @@
 					Username:<br>
 					<input class="l-form__input" type="text" name="qusername" autocomplete="qusername" placeholder="" value="">
 					<br>
-					password:<br>
+					Password:<br>
 					<input class="l-form__input" type="password" name="qpassword" autocomplete="qpassword" placeholder="" value="">
 					<br>
-                    page number:<br>
+                    Page number:<br>
                     <input class="l-form__input" type="number" name="qpagenumber" placeholder="" value="">
                     <br>
-                    page zize:<br>
+                    Page size:<br>
                     <input class="l-form__input" type="number" name="qpagesize" placeholder="" value="">
                     <br>
-                    limit:<br>
+                    Limit:<br>
                     <input class="l-form__input" type="number" name="qlimit" placeholder="" value="">
                     <br>
 				</form>
@@ -60,12 +60,12 @@
 									<span class="var-label" style="font-weight:700;color:#286080"></span>&nbsp;(<span class="var-dataType" style="font-size:0.9em"></span>)<br/>
 									<div style="border-left:10px solid #f1f1f1;padding-left:15px;font-size:0.9em">
 										<span class="var-description" style="color:#aaa;font-size:0.9em;font-style:italic"></span>
-										
+										<br>
 										<input type="hidden" class="var-value" value="" placeholder="input variable's value">
 										<input type="text" class="var-value-string collapse" value="" placeholder="input variable's value">
 										<select class="var-value-list collapse"></select>
-										
-										<span style="font-size:0.9em;font-weight:700">Default value:</span>&nbsp;<span class="var-default" style="font-size:0.9em;color:#286080"></span>
+										<br>
+										<span style="font-size:0.9em;font-weight:700">Default value:</span>&nbsp;<span class="var-default" style="font-size:0.9em;color:#286080;cursor:pointer"></span>
 									</div>
 								</td>
 							</tr>
@@ -87,10 +87,12 @@
 			</div>
 
             <div class="app-debug"></div>
+		</div>
 	</app-modal-content>
 	<app-modal-footer>
 	</app-modal-footer>
 </app-modal>
+<div id="propbarMap" style="position:absolute"></div>
 </app-modal-overlay>
 <script>
     $( document ).ready(function() {

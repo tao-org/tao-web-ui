@@ -107,6 +107,13 @@ jsPlumb.bind("jsPlumbLoaded", function(instance) {
     toolboxSidebar.init();
 });
 
+
+jsPlumb.bind("tao_showConnMenu", function(params) {
+    alert("menu");
+    console.log(params);
+});
+
+
 jsPlumb.bind("tao_updateNodePosition", function(params) {
     var lcl_postdata = {};
     var groups = [];
@@ -269,10 +276,21 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
             "X-Auth-Token": window.tokenKey
         }
     });
+    var getConfigEnums = $.ajax({
+        cache: false,
+        url: baseRestApiURL + "config/enums",
+        dataType : 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
 
 
-    $.when(getAllComponents,getAllQueries,getAllDatasources,getAllUserDatasources,getAllSensors,getAllDockers)
-        .done(function (getAllComponentsResponse,getAllQueriesResponse,getAllDatasourcesResponse,getAllUserDatasourcesResponse,getAllSensorsResponse,getAllDockersResponse) {
+    $.when(getAllComponents,getAllQueries,getAllDatasources,getAllUserDatasources,getAllSensors,getAllDockers,getConfigEnums)
+        .done(function (getAllComponentsResponse,getAllQueriesResponse,getAllDatasourcesResponse,getAllUserDatasourcesResponse,getAllSensorsResponse,getAllDockersResponse,getConfigEnumsResponse) {
             console.log("Workspace components init start.");
             wfTools.components = getAllComponentsResponse[0]['data'];
             wfTools.queries = getAllQueriesResponse[0]['data'];
@@ -280,6 +298,7 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
             wfTools.udatasources = getAllUserDatasourcesResponse[0]['data'];
             wfTools.sensors = getAllSensorsResponse[0]['data'];
             wfTools.dockers = getAllDockersResponse[0]['data'];
+            wfTools.taoEnums = getConfigEnumsResponse[0]['data'];
 
             //parse components, try to detect orfan and collapsing data, recreate local IDs
             $.each(wfTools.components, function(i, item) {
@@ -306,6 +325,11 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
                         label: item.sensor+"-"+item.dataSourceName,
                         dna: item
                     };
+					$.each(item.parameters, function (index, param) {
+						if (wfTools.taoEnums[param.type] && param.valueSet === null) {
+							param.valueSet = $.map(wfTools.taoEnums[param.type], function(elm, idx) { return elm.value; } );
+						}
+					});
                 }
             });
             $.each(wfTools.datasources, function(i, item) {
@@ -583,8 +607,38 @@ jsPlumb.ready(function () {
         jsPlumb.fire("tao_updateNodePosition", [params.el.id, params.finalPos[0], params.finalPos[1]]);
         makeWFPreview();
     });
+    instance.bind("connection", function (info) {
+        console.log("info:");
+        console.log(info);
+        //info.connection.getOverlay("label").setLabel(info.connection.id);
+        //info.connection.setLabel("<div class='wf-link-body'><i class=\"fa fa-object-group wf-link-body_icon\" aria-hidden=\"true\"></i><p class='wf-link_title'>grouping:</p><p class='wf-link_content'>current criteria ...</p></div>");
+        info.connection.setLabel("<div style=\"float:left;\" data-connid=\""+info.connection.id+"\">\n" +
+            "<svg width=\"48\" height=\"50\">\n" +
+            "  <g transform=\"scale(4)\">\n" +
+            "    <path fill=\"#fff\" stroke=\"#3c8dbc\" stroke-width=\".3\" d=\"M5.9,1.2L0.7,6.5l5.2,5.4l5.2-5.4L5.9,1.2z\" />\n" +
+            "  </g>\n" +
+            "  <g transform=\"scale(0.03) translate(420 600)\">\n" +
+            "  <path fill=\"#3c8dbc\" d=\"M512.1 191l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0L552 6.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zm-10.5-58.8c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.7-82.4 14.3-52.8 52.8zM386.3 286.1l33.7 16.8c10.1 5.8 14.5 18.1 10.5 29.1-8.9 24.2-26.4 46.4-42.6 65.8-7.4 8.9-20.2 11.1-30.3 5.3l-29.1-16.8c-16 13.7-34.6 24.6-54.9 31.7v33.6c0 11.6-8.3 21.6-19.7 23.6-24.6 4.2-50.4 4.4-75.9 0-11.5-2-20-11.9-20-23.6V418c-20.3-7.2-38.9-18-54.9-31.7L74 403c-10 5.8-22.9 3.6-30.3-5.3-16.2-19.4-33.3-41.6-42.2-65.7-4-10.9.4-23.2 10.5-29.1l33.3-16.8c-3.9-20.9-3.9-42.4 0-63.4L12 205.8c-10.1-5.8-14.6-18.1-10.5-29 8.9-24.2 26-46.4 42.2-65.8 7.4-8.9 20.2-11.1 30.3-5.3l29.1 16.8c16-13.7 34.6-24.6 54.9-31.7V57.1c0-11.5 8.2-21.5 19.6-23.5 24.6-4.2 50.5-4.4 76-.1 11.5 2 20 11.9 20 23.6v33.6c20.3 7.2 38.9 18 54.9 31.7l29.1-16.8c10-5.8 22.9-3.6 30.3 5.3 16.2 19.4 33.2 41.6 42.1 65.8 4 10.9.1 23.2-10 29.1l-33.7 16.8c3.9 21 3.9 42.5 0 63.5zm-117.6 21.1c59.2-77-28.7-164.9-105.7-105.7-59.2 77 28.7 164.9 105.7 105.7zm243.4 182.7l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0l8.2-14.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zM501.6 431c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.6-82.4 14.3-52.8 52.8z\"/>\n" +
+            "  </g>\n" +
+            "</svg>\n" +
+            "<div>");
+    });
+
+//<div style="float:left;"><svg width="48" height="50"><g transform="scale(4)"><path fill="#fff" stroke="#3c8dbc" stroke-width=".3" d="M5.9,1.2L0.7,6.5l5.2,5.4l5.2-5.4L5.9,1.2z" /></g><text x="50%" y="50%" text-anchor="middle" fill="#3c8dbc" stroke="#3c8dbc" stroke-width=".5" font-size="20px" font-family="Arial" dy=".4em">G</text></svg><div>
     // bind a click listener to each connection; the connection is deleted
-    instance.bind("click", function (c) {
+    instance.bind("contextmenu", function(component, originalEvent) {
+        alert("context menu on component " + component.id);
+        originalEvent.preventDefault();
+        var connid = component.id;
+        alert("Connection ID " + connid);
+        return false;
+    });
+
+    instance.bind("click", function (c, e) {
+//        console.log(c);
+        alert("click: delete connection id:" +c.id);
+        jsPlumb.fire("tao_showConnMenu", [c, e]);
+        return;
         console.log("click: delete connection id:" +c.id);
         instance.deleteConnection(c); //this itself will trigger connectionDetached event
         //delete wfPlumbCanvasData.connectors[c.id];

@@ -131,26 +131,8 @@
             <section class="col-lg-5">
 
                 <!-- Monitor master -->
-                <div id="widget-master-monitor" class="box box-solid bg-navy">
-                    <div class="box-header" style="cursor: move;">
-                        <i class="fa fa-area-chart"></i>
-                        <h3 class="box-title">Master node monitor</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                            <dl class="dl-horizontal">
-                                <dt>CPU usage&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(220,220,220,0.5);"></i></dt>
-                                <dd><span class="val-mm-processors">n/a</span></dd>
-                                <dt>Memory&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(255,187,205,0.5);"></i></dt>
-                                <dd><span class="val-mm-memory" style="text-transform: lowercase;">n/a</span></dd>
-                                <dt>Storage&nbsp;<i class="fa fa-square" aria-hidden="true" style="color:rgba(151,187,205,0.5);"></i></dt>
-                                <dd><span class="val-mm-storage" style="text-transform: lowercase;">n/a</span></dd>
-                            </dl>
-                    </div>
-                    <div>
-                        <canvas id="myChart" width="400" height="200"></canvas>
-                    </div>
-                    <!-- /.box-body -->
+                <div id="widget-master-nodemonitor" class="box box-solid bg-navy">
+                    <iframe id="iframe-nodemonitor" src="./nodemonitor.html?node=master" style="width: 100%; height: 400px; border: 0px;"></iframe>
                 </div>
                 <!-- /.box -->
                 <!-- Load -->
@@ -247,104 +229,6 @@
         </div>
     </section><!-- /.content -->
 <script>
-    var _loadChart = {
-        myNewChart:null,
-        data:{
-            labels : ["","","","","","","","","","","","","","","","","","","",""],
-            datasets : [
-                {
-                    fillColor : "rgba(220,220,220,0.5)",
-                    strokeColor : "rgba(220,220,220,1)",
-                    pointColor : "rgba(220,220,220,1)",
-                    pointStrokeColor : "#fff",
-                    data : [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-                },
-                {
-                    fillColor : "rgba(255,187,205,0.5)",
-                    strokeColor : "rgba(255,187,205,1)",
-                    pointColor : "rgba(151,187,205,1)",
-                    pointStrokeColor : "#fff",
-                    data : [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-                },
-                {
-                    fillColor : "rgba(151,187,205,0.5)",
-                    strokeColor : "rgba(151,187,205,1)",
-                    pointColor : "rgba(151,187,205,1)",
-                    pointStrokeColor : "#fff",
-                    data : [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-                }
-            ]
-        },
-        optionsNoAnimation :{
-            animation : false,
-            scaleOverride : true,
-            scaleSteps : 100,
-            scaleStepWidth : 20,
-            scaleStartValue : 0
-        },
-        initChart: function(){
-            this.optionsNoAnimation = {animation : false};
-            this.myNewChart = new Chart(document.getElementById("myChart").getContext("2d"));
-            this.myNewChart.Line(_loadChart.data, _loadChart.optionsNoAnimation);
-        },
-        updateData: function(v1,v2,v3,l0){
-            if(this.myNewChart === null || typeof this.myNewChart !== 'object'){
-                this.initChart();
-            }
-            var l = this.data["labels"];
-            var ds0 = this.data["datasets"][0]["data"];
-            var ds1 = this.data["datasets"][1]["data"];
-            var ds2 = this.data["datasets"][2]["data"];
-            l.push(l0);
-            l.shift();
-            ds0.push(v1);
-            ds1.push(v2);
-            ds2.push(v3);
-            ds0.shift();
-            ds1.shift();
-            ds2.shift();
-            this.myNewChart.Line(_loadChart.data, _loadChart.optionsNoAnimation);
-        }
-    };
-
-    function updateMasterMonitorWidget(){
-        $.ajax({
-            cache: false,
-            url: baseRestApiURL + "monitor/master/",
-            dataType : 'json',
-            type: 'GET',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
-            }
-        }).done(function (getMasterMonitorResponse) {
-            var r = chkTSRF(getMasterMonitorResponse);
-            var percent = {
-                cpu: parseInt(r.cpuTotal),
-                memory: parseInt((r.totalMemory-r.availableMemory)/r.totalMemory*100),
-                storage: parseInt(r.diskUsed/r.diskTotal*100)
-            };
-            $(".val-mm-processors").text(percent.cpu+"%");
-            $(".val-mm-memory").text(percent.memory+"% ("+(r.totalMemory-r.availableMemory)+"/"+r.totalMemory+", used/total, "+r.memoryUnit+")");
-            $(".val-mm-storage").text(percent.storage+"% ("+r.diskUsed+"/"+r.diskTotal+", used/total, "+r.diskUnit+")");
-            var chartCurrentTime = moment ().format("HH:mm:ss");
-            _loadChart.updateData(
-                (percent.cpu),
-                (percent.memory),
-                (percent.storage),
-                (chartCurrentTime)
-            );
-        }).fail(function (jqXHR, textStatus) {
-        }).complete(function(){
-            if($("#widget-master-monitor").length){
-                setTimeout(function(){
-                    updateMasterMonitorWidget();
-                },monitorCheckInterval);
-            }
-        });
-    }
-	
 	function updateDownloadStatistics(once) {
 		$.ajax({
             cache    : false,
@@ -371,7 +255,7 @@
 				});
 				
 				$.each(res, function (index, resource) {
-					$bar = $('<div class="progress-bar progress-bar-success" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:"In progress",show:true});">' + resource.name + '</div>');
+					$bar = $('<div class="progress-bar progress-bar-success" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">' + resource.name + '</div>');
 					$bar.attr("title", parseInt(resource.progress*10000)/100 + "%");
 					$bar.css({ width: parseInt(resource.progress*10000)/100 + "%" });
 					$(".statistics .progress").append($bar);
@@ -379,11 +263,11 @@
 					totPrc += resource.progress;
 					cnt ++;
 				});
-				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:"In progress",show:true});">Overall progress</div>');
+				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">Overall progress</div>');
 				$bar.attr("title", parseInt(totPrc*10000/cnt)/100 + "%");
 				$bar.css({ width: parseInt(totPrc*10000/cnt)/100 + "%" });
 			} else {
-				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:"In progress",show:true});">No downloads in progress</div>');
+				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">No downloads in progress</div>');
 				$bar.attr("title", "");
 				$bar.css({ width: "100%" });
 			}
@@ -396,21 +280,8 @@
 			}
         });
 	}
-	
     $( document ).ready(function() {
-        $( window )
-            .resize(function() {
-                if($("#widget-master-monitor").length) {
-                    var w = parseInt($("#widget-master-monitor").width());
-                    $("#myChart").attr("width", w);
-                    _loadChart.initChart();
-                }
-            })
-            .trigger( "resize" );
-        updateMasterMonitorWidget();
 		updateDownloadStatistics();
-        //bind resize event
-
         $("#exec-list-panel").npExecPanels({
             msgEnd: "No more job to show.",
             msgEmpty: "Job pool is empty. No workflow is currently running.",

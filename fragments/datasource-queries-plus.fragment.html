@@ -891,7 +891,16 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 								qry.label = (qry.label === "") ? qry._dsLabelDefault : qry.label;
 								// Set geometry lat/lon precision to 6 decimals
 								if (myPolygonMap.mapActive && typeof qry.values !== "undefined" && typeof qry.values.footprint !== "undefined") {
-									qry.values.footprint = myPolygonMap.polygonTextFromArray(myPolygonMap.polygonArrayFromText(qry.values.footprint));
+									var polyArray = myPolygonMap.polygonArrayFromText(qry.values.footprint);
+									if (polyArray) {
+										qry.values.footprint = myPolygonMap.polygonTextFromArray(polyArray);
+									} else {
+										if (qry.values.footprint.length > 0) {
+											myPolygonMap.userText.val(qry.values.footprint);
+											myPolygonMap.userText.addClass("error");
+										}
+										qry.values.footprint = "";
+									}
 								}
 								registerQueryInCollection(qry);
 								if (index == qryList.length - 1) {
@@ -1709,37 +1718,36 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		if ($img.length > 0) {
 			if ($img.attr("src").indexOf("preview-not-available") == -1) {
 				var $floating = $img.closest(".floating");
-				if (typeof ratio === "undefined") {
-					ratio = $img.data("ratio");
-				}
-				var w = Math.max($img.get(0).naturalWidth, $img.get(0).naturalHeight);
-				var h = w*ratio;
-				
-				var maxW = 3/4*$("#floatingExtent").outerWidth();
-				var maxH = 3/4*$("#floatingExtent").outerHeight();
-				if (w > maxW) {
-					w = maxW;
-					h = w*ratio;
-				}
-				if (h > maxH) {
-					h = maxH;
-					w = h/ratio;
-				}
-				var rg = $floating.get(0).offsetLeft + w;
-				if (rg > $("#floatingExtent").outerWidth()) {
-					var lf = $("#floatingExtent").outerWidth() - w;
-					$floating.css({ right: "unset", left: lf + "px" });
-				}
-				var bt = $floating.get(0).offsetTop + h;
-				if (bt > $("#floatingExtent").outerHeight()) {
-					var tp = $("#floatingExtent").outerHeight() - h;
-					$floating.css({ bottom: "unset", top: tp + "px" });
-				}
-				$floating.css({ width: w + "px", height: h + "px" });
-				$img.data("ratio", ratio);
-				var id = $img.closest("div").attr("id");
-				//$(".thumbnails>div", "#thumbsExtent").removeClass("selected");
-				//$("div#" + id, "#thumbsExtent").addClass("selected");
+				$img.load(function () {
+					if (typeof ratio === "undefined") {
+						ratio = $img.data("ratio");
+					}
+					var w = Math.max(this.naturalWidth, this.naturalHeight);
+					var h = w*ratio;
+					
+					var maxW = 3/4*$("#floatingExtent").outerWidth();
+					var maxH = 3/4*$("#floatingExtent").outerHeight();
+					if (w > maxW) {
+						w = maxW;
+						h = w*ratio;
+					}
+					if (h > maxH) {
+						h = maxH;
+						w = h/ratio;
+					}
+					var rg = $floating.get(0).offsetLeft + w;
+					if (rg > $("#floatingExtent").outerWidth()) {
+						var lf = $("#floatingExtent").outerWidth() - w;
+						$floating.css({ right: "unset", left: lf + "px" });
+					}
+					var bt = $floating.get(0).offsetTop + h;
+					if (bt > $("#floatingExtent").outerHeight()) {
+						var tp = $("#floatingExtent").outerHeight() - h;
+						$floating.css({ bottom: "unset", top: tp + "px" });
+					}
+					$floating.css({ width: w + "px", height: h + "px" });
+					$img.data("ratio", ratio);
+				});
 			} else {
 				hideFloatingThumbnail();
 			}
@@ -1752,7 +1760,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		if ($thumbnail.length == 0) return;
 		
 		var $floating = $(".floating>div", "#floatingExtent");
-		if ($floating.length > 0 == 0 || ($floating.length > 0 && trId != $floating.get(0).id)) {
+		if ($floating.length == 0 || ($floating.length > 0 && trId != $floating.get(0).id)) {
 			// Show product large preview image
 			var ratio = 1;
 			if (myPolygonMap.mapActive) {

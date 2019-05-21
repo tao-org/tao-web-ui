@@ -518,6 +518,46 @@
     transition: all 0.5s;
 }
 
+.wf-link-symbol{
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+
+.wf-link-body{
+    background-color: white;
+    opacity: 0.8;
+    padding: 0.3em;
+    border-radius: 0.5em;
+    border: 1px solid #346789;
+    cursor: pointer;
+}
+
+.wf-link-body .wf-link-body_icon {
+    display: block;
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    border: 1px solid#588cae;
+    color: #588cae;
+    padding: 6px;
+    border-radius: 50%;
+    opacity: 1;
+    background: white;
+}
+
+.wf-link-body .wf-link_title {
+    margin: 0;
+    font-size: .8em;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding-left: 10px;
+}
+.wf-link-body .wf-link_content {
+    margin: 0;
+    font-size: .8em;
+}
+
 /*animation*/
 #development_icon{
   margin:0;

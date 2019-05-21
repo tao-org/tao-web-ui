@@ -13,6 +13,7 @@
 	border-color: red;
     color: white;
 }
+
 .node-root.tristate .nodes-item-core-box .box-stats .box-stats-gfx,
 .node-root.tristate .nodes-item-core-box .square-box,
 .node-root.tristate .nodes-item-core-box .box-top-tags span.status{
@@ -20,6 +21,13 @@
     border-color: #929292;
     color: #5d5d5d;
 }
+
+/* SVG */
+.node-root .nodes-item-core-box svg circle{stroke:#009600 !important}
+.node-root.offline .nodes-item-core-box svg circle{stroke:red !important;fill:#ff7b7b !important}
+.node-root.offline .nodes-item-core-box svg text{stroke:white;fill:white}
+.node-root.tristate .nodes-item-core-box svg circle{stroke:#929292 !important;fill:#e2e2e2 !important}
+.node-root.tristate .nodes-item-core-box svg text{stroke:#5d5d5d;fill:#5d5d5d}
 </style>
 
 <!-- modal nodes op -->
@@ -244,7 +252,7 @@
                                                         </div>
                                                         <div class="box-top">
                                                             <div class="box-title"><span class="val-id"> Lynx Node </span></div>
-                                                            <div class="box-subtitle"><span class="val-nnet">  //193.231.40.37  </span></div>
+                                                            <div class="box-subtitle"><span class="val-nnet"></span></div>
                                                             <div class="box-icon">
                                                                 <i class="fa fa-server"></i>
                                                             </div>
@@ -288,14 +296,14 @@
                                                 </div>
                                             </core-cell-list>
                                             <core-cell-grid>
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
                                                     <div class="nodes-item-core-box">
                                                         <div class="box-top-tags">
                                                             <span>Tag1</span><span>Tag2</span><span>Tag3</span>
                                                         </div>
                                                         <div class="box-top">
                                                             <div class="box-title"><span class="val-id"> Lynx Node </span></div>
-                                                            <div class="box-subtitle"><span class="val-nnet">  //193.231.40.37  </span></div>
+                                                            <div class="box-subtitle"><span class="val-nnet"></span></div>
                                                             <div class="box-icon">
                                                                 <i class="fa fa-server"></i>
                                                             </div>
@@ -303,22 +311,46 @@
                                                         <div class="box-description">
                                                             <p><span class="val-description"> Sample description text ... Sample description text ... Sample description text ... Sample description text ... Sample description text ... Sample description text ... </span></p>
                                                         </div>
+
                                                         <div class="box-stats">
                                                             <div class="row">
-                                                                <div class="col-sm-4 col-xs-4">
-                                                                    <div class="box-stats-gfx"><span class="val-processorCount">4x</span></div>
+                                                                <div class="col-sm-4 col-xs-4" style="padding:5px">
+                                                                    <div class="">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 500 500">
+<g>
+    <circle style="fill:#fff;stroke:#3c8dbc;stroke-width:10;" cx="250" cy="250" r="245"></circle>
+    <text class="val-processorCount" x="50%" y="50%" fill="#555" stroke="#555" text-anchor="middle" stroke-width="1px" dy=".3em" style="font-size: 100px;">###X</text>
+</g>
+</svg>
+
+                                                                    </div>
                                                                     <div class="box-stats-title">
                                                                         <span>PROCESSOR</span>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-sm-4 col-xs-4">
-                                                                    <div class="box-stats-gfx"><span class="val-memorySizeGB"> 16GB </span></div>
+                                                                <div class="col-sm-4 col-xs-4" style="padding:5px">
+                                                                    <div class="">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 500 500">
+<g>
+    <circle style="fill:#fff;stroke:#3c8dbc;stroke-width:10;" cx="250" cy="250" r="245"></circle>
+    <text class="val-memorySizeGB" x="50%" y="50%" fill="#555" stroke="#555" text-anchor="middle" stroke-width="1px" dy=".3em" style="font-size: 100px;">###GB</text>
+</g>
+</svg>
+
+                                                                    </div>
                                                                     <div class="box-stats-title">
                                                                         <span>MEMORY</span>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-sm-4 col-xs-4">
-                                                                    <div class="box-stats-gfx"><span class="val-diskSpaceSizeGB"> 500GB </span></div>
+                                                                <div class="col-sm-4 col-xs-4" style="padding:5px">
+                                                                    <div class="">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 500 500">
+<g>
+    <circle style="fill:#fff;stroke:#3c8dbc;stroke-width:10;" cx="250" cy="250" r="245"></circle>
+    <text class="val-diskSpaceSizeGB" x="50%" y="50%" fill="#555" stroke="#555" text-anchor="middle" stroke-width="1px" dy=".3em" style="font-size: 100px;">###GB</text>
+</g>
+</svg>
+                                                                    </div>
                                                                     <div class="box-stats-title">
                                                                         <span>STORAGE</span>
                                                                     </div>
@@ -377,7 +409,7 @@
             iframe.id = "randomid"+Math.floor(Math.random() * 10000000);
             iframe.src = sshURL;
             iframe.style.width = "100%";
-            iframe.style.height = "0";
+            iframe.style.height = "400px";
             iframe.style.border = "0";
             parentIframe.appendChild(iframe);
             $sshModal.modal('show');

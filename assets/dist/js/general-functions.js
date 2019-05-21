@@ -513,7 +513,7 @@ function openPolygonMap(mapContainer, footprintField) {
 	var $poly2D = $("<div class='for-poly2D' style='position:fixed;top:10%;left:10%;width:80%;height:80%;background-color:white;border:3px solid #3c8dbc;border-radius:10px;overflow:hidden'>" +
 					"	<div class='content-header' style='height:45px;padding:10px 15px;position:absolute;top:0;left:0;width:100%'>" +
 					"		<button type='button' class='close use-footprint'><span>&times;</span></button>" +
-					"		<h1 class='modal-title' style='line-height:1em'>Map<small>Select your <strong>Region of Interest</strong>.</small></h4>" +
+					"		<h1 class='modal-title' style='line-height:1em;font-size:24px;margin:0'>Map<small style='padding-left:4px'>Select your <strong>Region of Interest</strong>.</small></h4>" +
 					"	</div>" +
 					"	<div id='mapExtent' style='height:94%;height:calc(100% - 45px);position:relative;margin-top:45px'></div>" +
 					"	<div style='height:55px;padding:10px 15px;position:absolute;bottom:0;left:0'>" +
@@ -527,6 +527,15 @@ function openPolygonMap(mapContainer, footprintField) {
 	$.when(olPoly).done(function (result) {
 		window.myPolygonMap = result;
 		window.myPolygonMap.fitAllFeatures();
-		window.myPolygonMap.el.on("newfootprint", function (evt, footprint) { footprintField.val(footprint); });
+		window.myPolygonMap.el.on("newfootprint", function (evt, footprint) {
+			footprintField.val(footprint);
+			footprintField.trigger("change");
+		});
 	});
+}
+function closePolygonMap() {
+	if (typeof window.myPolygonMap !== "undefined") {
+		window.myPolygonMap.container.closest(".for-poly2D").remove();
+		delete window.myPolygonMap;
+	}
 }

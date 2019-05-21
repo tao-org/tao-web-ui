@@ -87,7 +87,7 @@
                                                             <tr class="tpl-sample-row">
                                                                 <td>
                                                                     <span class="var-id hidden"></span>
-                                                                    Label:&nbsp;<strong><span class="var-label"></span></strong>&nbsp;(<span class="var-dataType"></span>)
+                                                                    <strong><span class="var-label"></span></strong>&nbsp;(<span class="var-dataType"></span>)
                                                                 </td>
                                                                 <td style="width: 70%;">
                                                                     <input type="hidden" class="var-value" value="" placeholder="input variable's value">
@@ -140,18 +140,14 @@
                 openPolygonMap($("#myModalNodes"), $(this).parent().find("input"));
             })
             .on("change",".var-value-string, .var-value-string2, .var-value-list",function(e){
-                var n = $(this).closest( '.val-row' ).find(".var-id").text();
-                if(n === "acquisition_date"){
-                    var dstart = $(this).parent().children(".var-value-string").val();
-                    var dstop = $(this).parent().children(".var-value-string2").val();
-                    if( (dstart!=='') && (dstop!=='') ){
-                        $(this).siblings(".var-value").val("["+dstart+","+dstop+"]");
-                    } else{
-                        $(this).siblings(".var-value").val(dstart+dstop);
-                    }
-                    return;
-                }
-                $(this).siblings(".var-value").val($(this).val());
+				if ($(".var-value-string2:visible", $(this).parent()).length > 0) {
+					var d1 = $(".var-value-string" , $(this).parent()).val();
+					var d2 = $(".var-value-string2", $(this).parent()).val();
+					var ds = (d1.length > 0 && d2.length > 0) ? "[" + d1 + "," + d2 + "]" : (d1.length > 0 ? d1 : d2);
+					$(this).siblings(".var-value").val(ds);
+                } else {
+					$(this).siblings(".var-value").val($(this).val());
+				}
             })
             .submit(function (e) {
             e.preventDefault();
@@ -229,26 +225,18 @@
             var helper_EdtRowPutValue = function($el, name, type, value, valueset){
                 if(valueset === null){
                     $('input.var-value', $el).val(value);
-                    if(humanJavaDataType(type) === "Date"){
-                        $('input.var-value-string', $el).attr("type", "date");
-                        if( name==="acquisition_date" ){
-                            if(value === null){
-                                dstart = '';
-                                dstop = '';
-                            }else{
-                                var re = /([^=\[]+),([^=\]]+)/;
-                                var match = re.exec(value);
-                                if(match !== null){
-                                    dstart = match[1];
-                                    dstop = match[2];
-                                }else{
-                                    dstart = value;
-                                    dstop = "";
-                                }
+                    if (humanJavaDataType(type) === "Date") {
+                        $('input.var-value-string, input.var-value-string2', $el).attr("type", "date");
+                        if (name.toLowerCase() === "startdate" || name.toLowerCase() === "enddate") {
+                            var date1 = "";
+							var date2 = "";
+							if (value !== null) {
+								var match = value.match(/^\[(.*),(.*)\]$/);
+								date1 = match ? match[1] : value;
+								date2 = match ? match[2] : "";
                             }
-                            $('input.var-value-string2', $el).attr("type", "date");
-                            $('input.var-value-string', $el).val(dstart).show();
-                            $('input.var-value-string2', $el).val(dstop).show();
+                            $('input.var-value-string' , $el).val(date1).show();
+                            $('input.var-value-string2', $el).val(date2).show();
                             return;
                         }
                     }

@@ -2,35 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c4a0fa2-9b7b-43ac-844a-3599dd2066e2" name="Default" comment="minor fix">
-      <change afterPath="$PROJECT_DIR$/assets/libs/openlayers/ol-poly.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/libs/openlayers/ol-poly.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/dist/js/general-functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/dist/js/general-functions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/dist/js/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/dist/js/router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/dist/js/ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/dist/js/ui.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/libs/jQuery/paginathing.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/libs/jQuery/paginathing.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/libs/np/jquery.nppaginatedcells.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/libs/np/jquery.nppaginatedcells.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" beforeDir="false" afterPath="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fragments/datasource-queries-plus.fragment.html" beforeDir="false" afterPath="$PROJECT_DIR$/fragments/datasource-queries-plus.fragment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fragments/datasources-queries.fragment.html" beforeDir="false" afterPath="$PROJECT_DIR$/fragments/datasources-queries.fragment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fragments/map.poly.fragment.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fragments/my-auxfiles.fragment.html" beforeDir="false" afterPath="$PROJECT_DIR$/fragments/my-auxfiles.fragment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fragments/topology-admin2.fragment.html" beforeDir="false" afterPath="$PROJECT_DIR$/fragments/topology-admin2.fragment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fragments/topology-edit.fragment.html" beforeDir="false" afterPath="$PROJECT_DIR$/fragments/topology-edit.fragment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fragments/topology-plus.fragment.html" beforeDir="false" afterPath="$PROJECT_DIR$/fragments/topology-plus.fragment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fragments/workflow-start.fragment.html" beforeDir="false" afterPath="$PROJECT_DIR$/fragments/workflow-start.fragment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fragments/workflows-admin2.fragment.html" beforeDir="false" afterPath="$PROJECT_DIR$/fragments/workflows-admin2.fragment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sap.html" beforeDir="false" afterPath="$PROJECT_DIR$/sap.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/workflow/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/workflow/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/workflow/canvas.js" beforeDir="false" afterPath="$PROJECT_DIR$/workflow/canvas.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/workflow/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/workflow/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/workflow/lib/propbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/workflow/lib/propbar.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/workflow/propbar.content.html" beforeDir="false" afterPath="$PROJECT_DIR$/workflow/propbar.content.html" afterDir="false" />
     </list>
-    <list id="38bc8134-cfdb-48de-8e89-1f6b3fa37d50" name="minor fix" comment="">
-      <change beforePath="$PROJECT_DIR$/assets/dist/js/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/dist/js/config.js" afterDir="false" />
-    </list>
+    <list id="38bc8134-cfdb-48de-8e89-1f6b3fa37d50" name="minor fix" comment="" />
     <list id="0aa5ff7e-e709-4bc9-9dd1-d9b3a9d7b266" name="Revert &quot;minor fix&quot;" comment="Revert &quot;minor fix&quot;&#10;&#10;This reverts commit 8dc5194" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,11 +19,12 @@
     <session id="-1298493351">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="41" />
+          <entry key="project.closed" value="44" />
           <entry key="project.open.time.10" value="1" />
-          <entry key="project.open.time.17" value="1" />
+          <entry key="project.open.time.17" value="3" />
           <entry key="project.open.time.18" value="2" />
-          <entry key="project.open.time.23" value="4" />
+          <entry key="project.open.time.20" value="1" />
+          <entry key="project.open.time.23" value="5" />
           <entry key="project.open.time.24" value="3" />
           <entry key="project.open.time.25" value="7" />
           <entry key="project.open.time.26" value="10" />
@@ -57,6 +32,7 @@
           <entry key="project.open.time.28" value="3" />
           <entry key="project.open.time.29" value="2" />
           <entry key="project.open.time.31" value="1" />
+          <entry key="project.open.time.34" value="1" />
           <entry key="project.open.time.35" value="1" />
           <entry key="project.open.time.36" value="2" />
           <entry key="project.open.time.37" value="4" />
@@ -67,86 +43,193 @@
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.74" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="50" />
+          <entry key="project.opened" value="55" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="css" value="1104" />
-          <entry key="html" value="8561" />
-          <entry key="js" value="13809" />
-          <entry key="txt" value="9" />
+          <entry key="css" value="1105" />
+          <entry key="html" value="8633" />
+          <entry key="js" value="14680" />
+          <entry key="txt" value="33" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="CSS" value="1104" />
-          <entry key="HTML" value="8562" />
-          <entry key="JavaScript" value="13808" />
-          <entry key="PLAIN_TEXT" value="9" />
+          <entry key="CSS" value="1105" />
+          <entry key="HTML" value="8634" />
+          <entry key="JavaScript" value="14679" />
+          <entry key="PLAIN_TEXT" value="33" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="css" value="18" />
-          <entry key="html" value="90" />
-          <entry key="js" value="77" />
-          <entry key="json" value="1" />
+          <entry key="css" value="19" />
+          <entry key="html" value="100" />
+          <entry key="js" value="82" />
+          <entry key="json" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CSS" value="18" />
-          <entry key="HTML" value="90" />
-          <entry key="JSON" value="1" />
-          <entry key="JavaScript" value="77" />
+          <entry key="CSS" value="19" />
+          <entry key="HTML" value="100" />
+          <entry key="JSON" value="2" />
+          <entry key="JavaScript" value="82" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fragments/dashboard-admin.fragment.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4777">
+              <caret line="281" column="5" selection-start-line="281" selection-start-column="5" selection-end-line="281" selection-end-column="5" />
+              <folding>
+                <element signature="n#style#0;n#iframe#0;n#div#0;n#section#1;n#div#0;n#section#1;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workflow/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="13940">
+              <caret line="868" column="53" lean-forward="true" selection-start-line="868" selection-start-column="12" selection-end-line="868" selection-end-column="53" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fragments/users-admin2.fragment.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="595">
+              <caret line="35" column="21" selection-start-line="35" selection-start-column="21" selection-end-line="35" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sap.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="11033">
+              <caret line="649" column="21" selection-start-line="649" selection-start-column="21" selection-end-line="649" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workflow/lib/propbar.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="216" column="77" lean-forward="true" selection-start-line="216" selection-start-column="77" selection-end-line="216" selection-end-column="77" />
+              <folding>
+                <element signature="n#style#0;n#i#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/workflow/propbar.content.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="226">
+              <caret line="62" selection-start-line="62" selection-end-line="62" />
+              <folding>
+                <element signature="n#style#0;n#td#0;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#div#1;n#div#0;n#app-modal-content#0;n#app-modal#0;n#app-modal-overlay#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#2;n#td#0;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#div#1;n#div#0;n#app-modal-content#0;n#app-modal#0;n#app-modal-overlay#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workflow/css/npFileName.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="2" column="21" lean-forward="true" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workflow/lib/jquery.npFileName.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="226">
+              <caret line="398" column="53" lean-forward="true" selection-start-line="398" selection-start-column="53" selection-end-line="398" selection-end-column="53" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workflow/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2941">
+              <caret line="173" column="70" lean-forward="true" selection-start-line="173" selection-start-column="70" selection-end-line="173" selection-end-column="70" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/dist/js/router.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="119" column="66" selection-start-line="119" selection-start-column="66" selection-end-line="119" selection-end-column="66" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="HTML File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>.box-stats</find>
-      <find>node</find>
-      <find>jsGetUrlQueryValue</find>
-      <find>box-title</find>
-      <find>height</find>
-      <find>val-mm-memory</find>
-      <find>humanFileSize</find>
-      <find>val-mm-memor</find>
-      <find>myChart</find>
-      <find>moni</find>
-      <find>iframe</find>
-      <find>canvas</find>
-      <find>getMasterMonitorResponse</find>
-      <find>widget-master-monitor</find>
-      <find>monitorCheckInterval</find>
-      <find>updateMasterMonitorWidget</find>
-      <find>ConnectionOverlays</find>
-      <find>conn</find>
-      <find>jsPlumb.getInstance</find>
-      <find>.connection.setLabel</find>
-      <find>cucu</find>
-      <find>bind</find>
-      <find>info:</find>
-      <find>trigg</find>
-      <find>tao_updateNodePosition</find>
-      <find>human</find>
-      <find>tao_showConnMenu</find>
       <find>ajax</find>
-      <find>download-statistics-panel</find>
       <find>cV.push</find>
+      <find>download-statistics-panel</find>
+      <find>fill:#fff;stroke:#3c8dbc;stroke-width:10;</find>
+      <find>updateDownloadStatistics</find>
+      <find>#e2e2e2</find>
+      <find>offline</find>
+      <find>unknown query</find>
+      <find>nppaginatedcells-empty callout callout-empty</find>
+      <find>Unknown query for datasource</find>
+      <find>panel-nodes</find>
+      <find>aja</find>
+      <find>GET</find>
+      <find>'GET'</find>
+      <find>wf_loadModuleDatasource</find>
+      <find>propbar invocation</find>
+      <find>open</find>
+      <find>wf_loadModuleProcessing</find>
+      <find>helper_addSTblEdtRow</find>
+      <find>tpl-sample-row</find>
+      <find>https://web.whatsapp.com/</find>
+      <find>// Parse targets</find>
+      <find>settings</find>
+      <find>each</find>
+      <find>tpl</find>
+      <find>showAutocompleteDropdown</find>
+      <find>startAutocomplete</find>
+      <find>showA</find>
+      <find>var-default</find>
+      <find>nodeTokens</find>
     </findStrings>
     <dirStrings>
       <dir>D:\_work\tao\tao-web-ui\workflow</dir>
@@ -160,8 +243,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/workflow/w.content.php" />
-        <option value="$PROJECT_DIR$/assets/dist/js/app.js" />
         <option value="$PROJECT_DIR$/workflow/css/main.css" />
         <option value="$PROJECT_DIR$/fragments/workflow-all.fragment.html" />
         <option value="$PROJECT_DIR$/assets/bootstrap/css/bootstrap.css.map" />
@@ -172,8 +253,6 @@
         <option value="$PROJECT_DIR$/fragments/workflows-all.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/users-admin.fragment.html" />
         <option value="$PROJECT_DIR$/workflow/css/propbar.css" />
-        <option value="$PROJECT_DIR$/workflow/propbar.content.html" />
-        <option value="$PROJECT_DIR$/workflow/lib/propbar.js" />
         <option value="$PROJECT_DIR$/fragments/map.poly.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/datasources-queries.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
@@ -188,7 +267,6 @@
         <option value="$PROJECT_DIR$/fragments/topology-admin.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/topology-plus.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/topology-edit.fragment.html" />
-        <option value="$PROJECT_DIR$/sap.html" />
         <option value="$PROJECT_DIR$/fragments/users-edit.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/users-plus.fragment.html" />
         <option value="$PROJECT_DIR$/assets/libs/np/jquery.nppaginatedcells.js" />
@@ -204,13 +282,18 @@
         <option value="$PROJECT_DIR$/fragments/topology-admin2.fragment.html" />
         <option value="$PROJECT_DIR$/nodemonitor.html" />
         <option value="$PROJECT_DIR$/assets/dist/js/config.js" />
-        <option value="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" />
         <option value="$PROJECT_DIR$/fragments/workflows-admin2.fragment.html" />
         <option value="$PROJECT_DIR$/workflow/workspace.css" />
-        <option value="$PROJECT_DIR$/workflow/app.js" />
-        <option value="$PROJECT_DIR$/workflow/index.html" />
         <option value="$PROJECT_DIR$/workflow/lib/jquery.npContextMenu.js" />
         <option value="$PROJECT_DIR$/assets/dist/css/AdminLTEplus.css" />
+        <option value="$PROJECT_DIR$/fragments/dashboard-admin.fragment.html" />
+        <option value="$PROJECT_DIR$/workflow/app.js" />
+        <option value="$PROJECT_DIR$/sap.html" />
+        <option value="$PROJECT_DIR$/workflow/css/npFileName.css" />
+        <option value="$PROJECT_DIR$/workflow/index.html" />
+        <option value="$PROJECT_DIR$/workflow/lib/jquery.npFileName.js" />
+        <option value="$PROJECT_DIR$/workflow/lib/propbar.js" />
+        <option value="$PROJECT_DIR$/workflow/propbar.content.html" />
       </list>
     </option>
   </component>
@@ -247,12 +330,42 @@
             <path>
               <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
               <item name="tao-web-ui" type="462c0819:PsiDirectoryNode" />
-              <item name="fragments" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tao-web-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+              <item name="dist" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tao-web-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+              <item name="dist" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
               <item name="tao-web-ui" type="462c0819:PsiDirectoryNode" />
               <item name="media" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tao-web-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="workflow" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tao-web-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="workflow" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tao-web-ui" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tao-web-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="workflow" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -448,6 +561,11 @@
       <workItem from="1552654442727" duration="3970000" />
       <workItem from="1557411500160" duration="663000" />
       <workItem from="1557760970522" duration="3285000" />
+      <workItem from="1557842851273" duration="2151000" />
+      <workItem from="1557845274722" duration="2742000" />
+      <workItem from="1558350909149" duration="5539000" />
+      <workItem from="1559572057106" duration="1021000" />
+      <workItem from="1559574024901" duration="17055000" />
     </task>
     <task id="LOCAL-00001" summary="minor fix">
       <created>1557411944314</created>
@@ -491,11 +609,18 @@
       <option name="project" value="LOCAL" />
       <updated>1557412147980</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="fixed unclosed &lt;div&gt;">
+      <created>1557843422036</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1557843422036</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1639019000" />
+    <option name="totallyTimeSpent" value="1667527000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -508,8 +633,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1066" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26405868" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28056234" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -520,7 +646,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3290461" />
       <window_info anchor="bottom" id="PHP-CGI Server" order="7" />
-      <window_info anchor="bottom" id="Version Control" order="8" visible="true" weight="0.2540193" />
+      <window_info anchor="bottom" id="Version Control" order="8" visible="true" weight="0.19185424" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
@@ -579,13 +705,22 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="minor fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="minor fix" />
+    <MESSAGE value="fixed unclosed &lt;div&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed unclosed &lt;div&gt;" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/workflow/lib/propbar.js</url>
+          <line>360</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/assets/dist/js/notification.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/map.poly.fragment.html" />
     <entry file="file://$PROJECT_DIR$/assets/libs/np/jquery.npmodalconfirm.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
@@ -598,11 +733,6 @@
         <state relative-caret-position="94">
           <caret line="37" column="36" selection-start-line="37" selection-start-column="36" selection-end-line="37" selection-end-column="36" />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/howto.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/libs/jQuery.panzoom/jquery.panzoom.min.js" />
@@ -726,24 +856,10 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fragments/datasource-admin.fragment.html" />
-    <entry file="file://$PROJECT_DIR$/fragments/users-admin2.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="135" column="60" lean-forward="true" selection-start-line="135" selection-start-column="60" selection-end-line="135" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/assets/libs/np/jquery.nppaginatedcells.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="389">
           <caret line="202" column="40" selection-start-line="202" selection-start-column="32" selection-end-line="202" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/dist/js/router.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="144" column="3" lean-forward="true" selection-start-line="144" selection-start-column="3" selection-end-line="144" selection-end-column="3" />
         </state>
       </provider>
     </entry>
@@ -772,13 +888,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="541">
           <caret line="244" column="38" selection-start-line="244" selection-start-column="18" selection-end-line="244" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/topology-admin2.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="378" column="40" selection-start-line="378" selection-start-column="40" selection-end-line="378" selection-end-column="40" />
         </state>
       </provider>
     </entry>
@@ -817,43 +926,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fragments/dashboard-admin.fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="134" column="96" lean-forward="true" selection-start-line="134" selection-start-column="96" selection-end-line="134" selection-end-column="96" />
-          <folding>
-            <element signature="n#style#0;n#iframe#0;n#div#0;n#section#1;n#div#0;n#section#1;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/workflow/lib/propbar.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="120" column="23" selection-start-line="120" selection-start-column="16" selection-end-line="120" selection-end-column="23" />
-          <folding>
-            <element signature="n#style#0;n#i#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/workflow/propbar.content.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="82">
-          <caret line="30" column="39" lean-forward="true" selection-start-line="30" selection-start-column="39" selection-end-line="30" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/workflow/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="106" column="26" selection-start-line="106" selection-start-column="26" selection-end-line="106" selection-end-column="26" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/assets/dist/js/general-functions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="611">
@@ -861,20 +933,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sap.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/workflow/lib/jquery.npContextMenu.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -885,17 +947,106 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/workflow/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="611">
-          <caret line="174" column="82" selection-start-line="174" selection-start-column="82" selection-end-line="174" selection-end-column="82" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/workflow/workspace.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="611">
           <caret line="520" column="15" selection-start-line="520" selection-start-column="1" selection-end-line="520" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/howto.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/topology-admin2.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="557">
+          <caret line="653" column="61" selection-start-line="653" selection-start-column="50" selection-end-line="653" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/dashboard-admin.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4777">
+          <caret line="281" column="5" selection-start-line="281" selection-start-column="5" selection-end-line="281" selection-end-column="5" />
+          <folding>
+            <element signature="n#style#0;n#iframe#0;n#div#0;n#section#1;n#div#0;n#section#1;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fragments/users-admin2.fragment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="35" column="21" selection-start-line="35" selection-start-column="21" selection-end-line="35" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sap.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11033">
+          <caret line="649" column="21" selection-start-line="649" selection-start-column="21" selection-end-line="649" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="13940">
+          <caret line="868" column="53" lean-forward="true" selection-start-line="868" selection-start-column="12" selection-end-line="868" selection-end-column="53" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/dist/js/router.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="119" column="66" selection-start-line="119" selection-start-column="66" selection-end-line="119" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2941">
+          <caret line="173" column="70" lean-forward="true" selection-start-line="173" selection-start-column="70" selection-end-line="173" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/css/npFileName.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="21" lean-forward="true" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/lib/jquery.npFileName.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="398" column="53" lean-forward="true" selection-start-line="398" selection-start-column="53" selection-end-line="398" selection-end-column="53" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/lib/propbar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="216" column="77" lean-forward="true" selection-start-line="216" selection-start-column="77" selection-end-line="216" selection-end-column="77" />
+          <folding>
+            <element signature="n#style#0;n#i#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflow/propbar.content.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="62" selection-start-line="62" selection-end-line="62" />
+          <folding>
+            <element signature="n#style#0;n#td#0;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#div#1;n#div#0;n#app-modal-content#0;n#app-modal#0;n#app-modal-overlay#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#2;n#td#0;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#div#1;n#div#0;n#app-modal-content#0;n#app-modal#0;n#app-modal-overlay#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

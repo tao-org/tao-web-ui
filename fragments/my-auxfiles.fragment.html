@@ -310,7 +310,7 @@ font-weight:600
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<h4 class="modal-title">Import</h4>
 			</div>
-			<form id="frmImportProducts" class="form-horizontal" enctype="multipart/form-data" role="form">
+			<form id="frmImportProducts" class="form-horizontal" role="form">
 				<div class="modal-body">
 					<section class="upload-message collapse">
 						<h4>Products successfully imported.</h4>
@@ -1315,36 +1315,37 @@ font-weight:600
 		event.preventDefault();
 		if ($(this).valid()) {
 			routeLoading('show');
-			var form = new FormData();
-			form.append("sourceDir", $("input[name='path']").val());
-			form.append("linkOnly", $("input[name='symbolicLink']").val());
-			$.ajax({
-				cache      : false,
-				url        : baseRestApiURL + "product/import",
-				type       : "POST",
-				data       : form,
-				async      : true,
-				crossDomain: true,
-				headers    : { "cache-control": "no-cache", "X-Auth-Token": window.tokenKey },
-				processData: false,
-				contentType: false
-			})
-			.done(function (data) {	            	
-				routeLoading('hide');
-				if ($.type(data) === 'object' && data.status === "SUCCEEDED") {
-					$("#myImportProducts").modal('hide');
-					showMsg("The selected products were successfully imported.", "SUCCESS");		     
-					$.when(refreshTree()).done(function () { });
-				} else if ($.type(data) === 'object' && data.status === "FAILED") {
-					showMsg(data.message, "FAILED");
-				} else {
-					showMsg("The selected products were not imported.", "SUCCESS");
+			
+			var data = "sourceDir=" + encodeURI($("input[name='path']").val()) + "&linkOnly=" + $("input[name='symbolicLink']").val();
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", baseRestApiURL + "product/import");
+			xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+			xhr.setRequestHeader("X-Auth-Token", tokenKey);
+			xhr.responseType = "json";
+			
+			xhr.addEventListener("readystatechange", function () {
+				if (this.readyState === this.DONE) {
+					routeLoading('hide');
+					if ($.type(this.response) === 'object') {
+						if (this.response.status === "SUCCEEDED") {
+							$("#myImportProducts").modal('hide');
+							showMsg("Selected products were successfully imported.", "SUCCESS");		     
+							$.when(refreshTree()).done(function () { });
+						} else if (this.response.status === "FAILED") {
+							showMsg(this.response.message, "FAILED");
+						} else {
+							showMsg(this.response.error || "Failed to import selected products.", "FAILED");
+						}
+					} else {
+						showMsg("Failed to import selected products.", "FAILED");
+					}
 				}
-			})
-			.fail(function (jqXHR, textStatus) {
-				routeLoading('hide');
-				showMsg("Operation failed. Please try again or contact app admin.", "FAIL");		     
 			});
+			xhr.onerror = function (jqXHR, textStatus) {
+				routeLoading('hide');
+				showMsg("Operation failed. Please try again or contact app admin.", "FAIL");
+			}
+			xhr.send(data);			
 		}
 		return false; // To avoid actual submission of the form
 	});

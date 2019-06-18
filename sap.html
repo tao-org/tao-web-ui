@@ -655,7 +655,7 @@ Nothing to see!
  	}
     ///////////////////////////////////////
     $(document).ready( function(){
-    	if (taoUserProfile.userRole != "ADMIN") {
+    	if (taoUserProfile.userRole !== "ADMIN") {
     		$("li.routed-admin-topology.routed-admin-users").css("display","none");
     	}else{
     		$("li.routed-admin-topology.routed-admin-users").css("display","");

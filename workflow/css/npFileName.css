@@ -1,0 +1,194 @@
+.npsyntaxeditor{
+    user-select: text;
+    white-space: pre;
+    overflow-wrap: normal;
+    tab-size: 4;
+    cursor: auto;
+}
+.npsyntaxeditor.textarea {
+    -moz-appearance: textfield-multiline;
+    -webkit-appearance: textarea;
+    font: -webkit-small-control;
+    overflow: auto;
+    resize: both;
+    min-height:20em;
+}
+
+.npsyntaxeditor.input {
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+    background-color: white;
+    background-color: -moz-field;
+    overflow:hidden;
+}
+
+
+
+.npsyntaxeditor.has-focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+}
+
+
+.textviewWrapper{
+    position:relative;
+    /* 	color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        overflow-y: scroll;
+        overflow-x: auto;
+     */}
+
+.npsyntaxeditortooltip{
+    position: absolute;
+    left: 0px;
+    background: red;
+    text-align: center;
+    border-radius: 2em;
+    width: 12px;
+    height: 12px;
+    line-height: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    display:none;
+}
+.npsyntaxeditortooltip .tooltiptext {
+    visibility: hidden;
+    min-width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -20px;
+    font-size: 1rem;
+    line-height: 1.4rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.npsyntaxeditortooltip .tooltiptext p {
+    white-space: nowrap;
+    margin: 0;
+}
+.npsyntaxeditortooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 20px;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+.npsyntaxeditortooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+.token_keyword {
+    color: darkred;
+    font-weight: bold;
+}
+.token_number {
+    color: blue;
+}
+.comment {
+    color: green;
+}
+
+.sintaxLine {}
+.sintaxLine.has-focus {}
+
+.sintaxLine span {
+    outline: 1px solid transparent;
+}
+
+.sintaxLine .ltr{}
+.sintaxLine .vbsm{
+    color: darkred;
+    font-weight: bold;
+}
+.sintaxLine .leftcb, .sintaxLine .rightcb{
+    color: black;
+    font-weight: bold;
+}
+.sintaxLine .leftcb.hit-near, .sintaxLine .rightcb.hit-near{
+    color: red;
+}
+
+.sintaxLine .vbas{
+    color: #9C27B0;
+    font-weight: bold;
+}
+
+
+.sintaxLine .ltr.index {
+    color: blue;
+}
+.sintaxLine .ltr.tag {
+    color: green;
+}
+.sintaxLine .invalid {
+    border-bottom: 2px dotted red !important;
+}
+.sintaxLine span:hover {
+    outline: 1px solid #9C27B0;
+}
+.sintaxLine span.has-focus {
+    outline: 1px solid transparent;
+    background-color: yellow;
+}
+
+
+.text-dropdown{
+    max-height: 120px;
+    top: 2em;
+    display: none;
+    position: absolute;
+    z-index: 99;
+    background: blanchedalmond;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: .80em;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #9daccc;
+}
+
+.text-dropdown .text-list{
+    display: table;
+}
+
+.text-dropdown .text-suggestion {
+    cursor: pointer;
+    display: table-row;
+}
+.text-dropdown .text-suggestion:hover {
+    background: #c7d7f7;
+}
+.text-dropdown .text-suggestion.selected {
+    color: #fff;
+    background: #6d84b4;
+}
+.text-dropdown .key-label{
+    display: table-cell;
+    padding: 5px;
+    font-weight:bold;
+}
+.text-dropdown .desc-label{
+    display: table-cell;
+    white-space: nowrap;
+    font-style: oblique;
+    padding: 5px 20px 5px 5px;
+}

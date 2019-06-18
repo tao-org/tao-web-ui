@@ -337,3 +337,7 @@ float: right;
 }
 
 path, .jtk-endpoint { cursor:pointer; }
+
+.ui-tooltip-content .tooltip-paragraph{margin:0}
+.ui-tooltip-content .tooltip-paragraph label{font-size:12px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;color:#347fab;margin:0;display:block}
+.ui-tooltip-content .tooltip-paragraph span{font-weight:400;color:#555}

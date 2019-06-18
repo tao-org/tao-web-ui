@@ -117,7 +117,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 "parameterValue":$(".var-value",$(this)).val()
             };
 			var defaultVal = $(".var-default",$(this)).html();
-            if (onePair.parameterValue != defaultVal) {
+            if (onePair.parameterValue !== defaultVal) {
 				cV.push(onePair);
 			}
         });
@@ -177,14 +177,45 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         var queryTemplate = null;
 
         if(lcl_n.componentType === "PROCESSING"){
+            console.log(lcl_n);
             $propbar.ntype = "PROCESSING";
             backgroundURL = './media/module01.png';
 			if(wfTools.toolboxnodes.pc[lclTBOID]){
-				//componentTemplate = wfTools.toolboxnodes.pc[lclTBOID].dna;
                 componentTemplate = wfPlumbCanvasData.nodeTemplates.pc[lclTBOID].dna;
                 backgroundURL = "./media/"+componentTemplate.containerId+".png";
 			}
-            wf_loadModuleProcessing(nid,lcl_n,componentTemplate);
+
+
+            var getTokens = $.ajax({
+                cache: false,
+                url: baseRestApiURL + "component/naming/find?nodeId="+lcl_n.id,
+                dataType : 'json',
+                type: 'GET',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": window.tokenKey
+                }
+            });
+            $.when(getTokens)
+                .done(function (getTokensResponse) {
+                    function prepareTokens(dd){
+                        var tags = [];
+                        dd.forEach(function (d, idx) {
+                            if(d.tokens){
+                                Object.keys(d.tokens).sort().forEach(function (key) {
+                                    tags.push({"key": key, "desc": d.tokens[key]+" - "+d.sensor, "range":{"minIndex": d.minIndex,"maxIndex": d.maxIndex}});
+                                });
+                            }
+                        });
+                        return tags;
+                    }
+                    var nodeTokens = prepareTokens(getTokensResponse.data);
+                    wf_loadModuleProcessing(nid,lcl_n,componentTemplate,nodeTokens);
+                })
+                .fail(function () {
+                    alert("Could not retrive query for current datasource.");
+                });
         }
         if(lcl_n.componentType === "DATASOURCE"){
             $propbar.ntype = "DATASOURCE";
@@ -204,13 +235,9 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 			}
         }
         $('.app-user-avatar-img',widgetRootEl).attr('src', backgroundURL);
-
         if(componentTemplate === null){
             console.log("comp template not found!!!!!!!!!!!!!!!!!!");
         }
-        //console.log("Template:");
-        //$(".app-debug", widgetRootEl).html("<pre>"+JSON.stringify(componentTemplate, null, 4)+"</pre><pre>"+JSON.stringify(queryTemplate, null, 4)+"</pre>");
-
     };
 
 	var wf_loadModuleDatasource = function(nid,lcl_n,componentTemplate,queryTemplate){
@@ -247,7 +274,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 alert("Could not retrive query for current datasource.");
             });
     };
-	var wf_loadModuleProcessing = function(nid,lcl_n,componentTemplate){
+	var wf_loadModuleProcessing = function(nid,lcl_n,componentTemplate,nodeTokens){
         var html_details = "";
         var $tbl;
 
@@ -321,13 +348,14 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 helper_putValue($el, obj.name, obj.dataType, obj.value, obj.valueSet);
             }
             $tblEdt.append($el);
+            return $el;
         };
 		
         // Parse parameters
 		$.each(componentTemplate.parameterDescriptors, function(i, value) {
             helper_addSTblEdtRow($("#tbl-edt-sysvar"),value);
         });
-		
+
         // Parse targets
 		$.each(componentTemplate.targets, function(i, target) {
 			if (typeof target.dataDescriptor !== "undefined") {
@@ -338,13 +366,24 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 					defaultValue: target.dataDescriptor.location,
 					description : "Output parameter",
 					valueSet    : [ "null" ]
-				}
-				helper_addSTblEdtRow($("#tbl-edt-sysvar"), value);
+				};
+				var elTarget = helper_addSTblEdtRow($("#tbl-edt-sysvar"), value);
+                var elFilename = $('.var-value-string', elTarget)[0];
+                var elValue = $('.var-value', elTarget)[0];
+				console.log(nodeTokens);
+                //call filename plugin on element
+                $(elFilename).npFileName({
+                    tags: nodeTokens,
+                    output: elValue,
+                    submitOnEnter: false,
+                    debug: true
+                });
+
+
+
 			}
         });
-		
         if(componentTemplate.parameterDescriptors.length > 0) $tblEdt.closest(".app-card").show();
-
 	    return 1;
 	};
 

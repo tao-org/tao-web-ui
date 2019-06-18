@@ -896,19 +896,16 @@ $( document ).uitooltip({
         var element = $( this );
         var id = null;
         var renderPortTP = function(fd){
-            return "port data descriptor:"
-                +"<p class=\"tooltip-paragraph\">"
-                +"<span>format type: "+ fd.dataDescriptor.formatType +"</span>"
-                //+"<br><span>crs: "+ fd.dataDescriptor.crs +"</span>"
-                //+"<br><span>dimension: "+ fd.dataDescriptor.dimension +"</span>"
-                //+"<br><span>geometry: "+ fd.dataDescriptor.geometry +"</span>"
-                //+"<br><span>location: "+ fd.dataDescriptor.location +"</span>"
-                +"<br><span>sensorType: "+ fd.dataDescriptor.sensorType +"</span>"
-                +"</p>";
+			var nonNullValues = "";
+			$.each(fd.dataDescriptor, function (key, val) {
+				nonNullValues += (val ? "<label>" + key + ": <span>"+ val +"</span></label>" : "");
+			});
+			return "<p class='tooltip-paragraph'>" + nonNullValues + "</p>";
         };
-        if ( element.is( ".l-n-p-i" ) ) {
+        $(".ui-helper-hidden-accessible").html("");
+		if ( element.is( ".l-n-p-i" ) ) {
             id = $(this).closest(".n-p-i-wrapp").attr("id");
-            return renderPortTP(wfPlumbCanvasData.ports[id].fullData);
+			return renderPortTP(wfPlumbCanvasData.ports[id].fullData);
         }
         if ( element.is( ".l-n-p-o" ) ) {
             id = $(this).closest(".n-p-o-wrapp").attr("id");

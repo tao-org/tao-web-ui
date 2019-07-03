@@ -26,465 +26,449 @@
             <section>
                 <div class="row">
                     <div class="col-md-12">
-                            <p>Please check all the tabs before saving a new component.</p>
-                            <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#comp-tab-gd">General desc.</a></li>
-                                <li><a data-toggle="tab" href="#comp-tab-conf">Configuration</a></li>
-                                <li><a data-toggle="tab" href="#comp-tab-param">Parameters</a></li>
-                                <li><a data-toggle="tab" href="#comp-tab-sys">Sys. vars.</a></li>
-                                <li><a data-toggle="tab" href="#comp-tab-ports">Sources & Targets</a></li>
-                            </ul>
-                            <div class="tab-content">
-                                <div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group has-feedback">
-                                                <label for="inputCompID" class="col-sm-2 col-md-2 control-label">ID</label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <input type="text" class="form-control" id="inputCompID" name="inputCompID" placeholder="component ID" autocomplete="off" value=""/>
-                                                    <span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
-                                                    <span class="ckattr-ok sr-only collapse">(success)</span>
-                                                    <span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
-                                                    <span class="ckattr-error sr-only collapse">(error)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputCompLabel" class="col-sm-2 col-md-2 control-label">Label</label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <input type="text" class="form-control" id="inputCompLabel" name="inputCompLabel" placeholder="component label" autocomplete="off" value="" data-errorspan="label"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputCompVersion" class="col-sm-2 col-md-2 control-label">Version</label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <input type="text" class="form-control" id="inputCompVersion" name="inputCompVersion" placeholder="component version" autocomplete="off" value="" data-errorspan="version"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputCompDescription" class="col-sm-2 col-md-2 control-label">Description </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <textarea class="form-control" rows="3" id="inputCompDescription" name="inputCompDescription" placeholder="Description"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputCompAuthors" class="col-sm-2 col-md-2 control-label">Author </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <input type="text" class="form-control" id="inputCompAuthors" name="inputCompAuthors" placeholder="authors" autocomplete="off" value="" data-errorspan="memorySize"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputCompCopyright" class="col-sm-2 col-md-2 control-label">Copyright </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <input type="text" class="form-control" id="inputCompCopyright" name="inputCompCopyright" placeholder="copyright" autocomplete="off" value="" data-errorspan="memorySize"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputActive" class="col-sm-2 col-md-2 control-label">Status </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <select disabled="disabled" id="inputActive" name="inputActive" class="form-control">
-                                                        <option value="true" selected="">Active</option>
-                                                        <option value="false">Inactive</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputVisibility" class="col-sm-2 col-md-2 control-label">Visibility </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <select disabled="disabled" id="inputVisibility" name="inputVisibility" class="form-control">
-                                                        <option value="SYSTEM">System build-in component</option>
-                                                        <option value="USER">User defined component</option>
-                                                        <option value="CONTRIBUTOR" selected="selected">Contributor defined component</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputTemplateType" class="col-sm-2 col-md-2 control-label">Template Type </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <select id="inputTemplateType" name="inputTemplateType" class="form-control">
-                                                        <option value="VELOCITY" selected="selected">Apache Velocity template</option>
-                                                        <option value="JAVASCRIPT" >Javascript template</option>
-                                                        <option value="XSLT">XSLT template</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputComponentType" class="col-sm-2 col-md-2 control-label">Component Type </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <select id="inputComponentType" name="inputComponentType" class="form-control">
-                                                        <option value="EXECUTABLE" selected="selected">Executable</option>
-                                                        <option value="SCRIPT" >Script</option>                                                       
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="formTags" class="col-sm-2 col-md-2 control-label">Tags </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <input id="formTags" name="formTags" class="form-control" value="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="comp-tab-conf" class="tab-pane fade padding-top--20 padding-left--20 padding-bottom--20">
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Container Id </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <select id="inputContainerId" name="inputContainerId" class="form-control">
-                                                        <option value="DummyTestDockerContainer" selected="">Test Docker Container</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputFileLocation" class="col-sm-2 col-md-2 control-label">File location </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <input type="text" class="form-control" id="inputFileLocation" name="inputFileLocation" placeholder="file location" data-errorspan="fileLocation" autocomplete="off" value=".\mypath1"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="inputWorkingDirectory" class="col-sm-2 col-md-2 control-label">Working directory </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <input type="text" class="form-control" id="inputWorkingDirectory" name="inputWorkingDirectory" placeholder="working directory" autocomplete="off" value=".\mypath1"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- velocity template form-->
-                                    <div class="template-block-frm template-block-frm-velocity collapse">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="inputWorkingDirectory" class="col-sm-2 col-md-2 control-label">Template contents</label>
-                                                    <div class="col-sm-10 col-md-10">
-                                                        <textarea class="form-control" rows="6" id="inputTemplateContents" name="inputTemplateContents" placeholder="template contents" data-errorspan="template"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div id="comp-tab-param" class="tab-pane fade padding-top--20 padding-bottom--20">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <p>Parameter list:</p>
-                                            <div class="responsive">
-                                                <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-paramdesc">
-                                                    <thead>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th>Name</th>
-                                                        <th>Description</th>
-                                                        <th>Parameter Label</th>
-                                                        <th>Parameter Type</th>
-                                                        <th>Data Type</th>
-                                                        <th>Default value</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tfoot>
-                                                    <tr>
-                                                        <td colspan="3">
-                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewparam" data-action="comp-add-new-var">
-                                                                <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    </tfoot>
-
-
-                                                    <tbody class="tpl-sample-body">
-                                                    <tr class="tpl-sample-row">
-                                                        <th scope="row">
-                                                            <a href="#" class="text tbl-prop-expand-action"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></a>
-                                                            <i class="fa fa-plus fa-fw hidden" aria-hidden="true"></i>
-                                                            <a href="#" class="text tbl-prop-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
-                                                        </th>
-                                                        <td>
-                                                            <input type="hidden" class="var-id" value="">
-															<input type="text" class="var-name" value="" placeholder="parameter name">
-                                                        </td>
-                                                        <td><textarea rows="2" class="var-description"></textarea></td>
-                                                        <td>
-                                                            <input type="text" class="var-label" value="" placeholder="parameter label">
-                                                        </td>
-                                                        <td>
-                                                            <select class="var-type">
-                                                                <option value="REGULAR" selected="selected">Regular</option>
-                                                                <option value="TEMPLATE">Template</option>
-                                                            </select>
-                                                        </td>
-                                                        <td>
-                                                            <select class="var-datatype">
-                                                                <option value="java.lang.String" selected="selected">String</option>
-                                                                <option value="java.lang.Integer">Integer</option>
-                                                                <option value="java.lang.Boolean">Boolean</option>
-                                                                <option value="java.lang.Float">Float</option>
-                                                                <option value="java.lang.Double">Double</option>
-                                                                <option value="file">File</option>
-                                                            </select>
-                                                        </td>
-                                                        <td><input type="text" class="var-default" value="" placeholder="default value"></td>
-                                                    </tr>
-                                                    <tr style="display: none;" class="val-row-plus">
-                                                        <td colspan="7">
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <div class="form-group">
-                                                                        <label class="col-sm-2 col-md-2 control-label">Unit</label>
-                                                                        <div class="col-sm-10 col-md-10">
-                                                                            <input type="text" class="form-control var-unit" name="inputUnit" placeholder="unit" autocomplete="off" value=""/>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-12">
-                                                                    <div class="form-group">
-                                                                        <label class="col-sm-2 col-md-2 control-label">Value Set</label>
-                                                                        <div class="col-sm-10 col-md-10">
-                                                                            <input type="text" class="form-control var-valueset" name="inputValueSet" placeholder="value set" autocomplete="off" value=""/>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-12">
-                                                                    <div class="form-group">
-                                                                        <label class="col-sm-2 col-md-2 control-label">Format</label>
-                                                                        <div class="col-sm-10 col-md-10">
-                                                                            <input type="text" class="form-control var-format" name="inputFormat" placeholder="format" autocomplete="off" value=""/>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-12">
-                                                                    <div class="form-group">
-                                                                        <label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Not Null </label>
-                                                                        <div class="col-sm-10 col-md-10">
-                                                                            <div class="checkbox">
-                                                                                <input type="checkbox" name="inputNotNull" class="big var-notnull">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-12">
-                                                                    <div class="form-group">
-                                                                        <label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Validator </label>
-                                                                        <div class="col-sm-10 col-md-10">
-                                                                            <input type="text" class="form-control var-validator" name="inputValidator" placeholder="validator" autocomplete="off" value=""/>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="comp-tab-sys" class="tab-pane fade">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <p>Variables:</p>
-                                            <div class="responsive">
-                                                <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-sysvar">
-                                                    <thead>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th>Key</th>
-                                                        <th>Value</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tfoot>
-                                                    <tr>
-                                                        <td colspan="3">
-                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewvar" data-action="comp-add-new-var">
-                                                                <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    </tfoot>
-                                                    <tbody>
-                                                    <tr class="tpl-sample-row">
-                                                        <th class="del-col" scope="row">
-                                                            <a href="#" class="text tbl-sysvar-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
-                                                        </th>
-                                                        <td><input type="text" class="var-key" value="" placeholder="input variable's name"></td>
-                                                        <td><input type="text" class="var-value" value="" placeholder="input variable's value"></td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="comp-tab-ports" class="tab-pane fade">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="responsive">
-                                                <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-sources">
-                                                    <thead>
-                                                    <tr><th colspan="8" class="table-title">Sources:</th></tr>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th>Source Name</th>
-                                                        <th>Format Type</th>
-                                                        <th>Geometry</th>
-                                                        <th>CRS</th>
-                                                        <th>Sensor Type</th>
-                                                        <th>Dimension</th>
-														<th>Cardinality<br><i>(0 for list)</i></th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tfoot>
-                                                    <tr>
-                                                        <td colspan="2">
-                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewvar" data-action="comp-add-new-var">
-                                                                <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    </tfoot>
-                                                    <tbody class="tpl-sample-body">
-                                                    <tr class="tpl-sample-row">
-                                                        <th scope="row">
-                                                            <a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
-                                                        </th>
-                                                        <td>
-															<input type="hidden" class="var-id" value="">
-															<input type="text" class="var-name" value="" placeholder="Source name">
-														</td>
-                                                        <td>
-                                                            <select class="var-formatType">
-                                                                <option value="RASTER"  selected="selected">RASTER</option>
-                                                                <option value="VECTOR">VECTOR</option>
-                                                                <option value="OTHER">OTHER</option>
-                                                            </select>
-                                                        </td>
-                                                        <td><textarea rows="1" class="var-geometry"></textarea></td>
-                                                        <td><input type="text" class="var-crs" value=""></td>
-                                                        <td>
-                                                            <select class="var-sensorType">
-                                                                <option value="OPTICAL"  selected="selected">OPTICAL</option>
-                                                                <option value="RADAR">RADAR</option>
-                                                                <option value="ALTIMETRIC">ALTIMETRIC</option>
-                                                                <option value="ATMOSPHERIC">ATMOSPHERIC</option>
-                                                                <option value="UNKNOWN">UNKNOWN</option>
-                                                            </select>
-                                                        </td>
-                                                        <td><input type="text" class="var-dimension" value=""></td>
-                                                        <td><input type="number" class="var-cardinality" value="0" style="width:40px;text-align:left"></td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
+						<p>Please check all the tabs before saving a new component.</p>
+						<ul class="nav nav-tabs">
+							<li class="active"><a data-toggle="tab" href="#comp-tab-gd">General desc.</a></li>
+							<li><a data-toggle="tab" href="#comp-tab-conf">Configuration</a></li>
+							<li><a data-toggle="tab" href="#comp-tab-param">Parameters</a></li>
+							<li><a data-toggle="tab" href="#comp-tab-sys">Sys. vars.</a></li>
+							<li><a data-toggle="tab" href="#comp-tab-ports">Sources & Targets</a></li>
+						</ul>
+						<div class="tab-content">
+							<div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group has-feedback">
+											<label for="inputCompID" class="col-sm-2 col-md-2 control-label">ID</label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompID" name="inputCompID" placeholder="component ID" autocomplete="off" value=""/>
+												<span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
+												<span class="ckattr-ok sr-only collapse">(success)</span>
+												<span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
+												<span class="ckattr-error sr-only collapse">(error)</span>
 											</div>
-											<div class="responsive">
-												<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-targets">
-                                                    <thead>
-                                                    <tr><th colspan="8" class="table-title">Targets:</th></tr>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th>Target Name</th>
-                                                        <th>Format Type</th>
-                                                        <th>Geometry</th>
-                                                        <th>CRS</th>
-                                                        <th>Sensor Type</th>
-                                                        <th>Dimension</th>
-														<th>Cardinality<br><i>(0 for list)</i></th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tfoot>
-                                                    <tr>
-                                                        <td colspan="2">
-                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewvar" data-action="comp-add-new-var">
-                                                                <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    </tfoot>
-                                                    <tbody class="tpl-sample-body">
-                                                    <tr class="tpl-sample-row">
-                                                        <th scope="row">
-                                                            <a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
-                                                        </th>
-                                                       <td>
-															<input type="hidden" class="var-id" value="">
-															<input type="text" class="var-name" value="" placeholder="Target name">
-														</td>
-                                                        <td>
-                                                            <select class="var-formatType">
-                                                                <option value="RASTER"  selected="selected">RASTER</option>
-                                                                <option value="VECTOR">VECTOR</option>
-                                                                <option value="OTHER">OTHER</option>
-                                                            </select>
-                                                        </td>
-                                                        <td><textarea rows="1" class="var-geometry"></textarea></td>
-                                                        <td><input type="text" class="var-crs" value=""></td>
-                                                        <td>
-                                                            <select class="var-sensorType">
-                                                                <option value="OPTICAL"  selected="selected">OPTICAL</option>
-                                                                <option value="RADAR">RADAR</option>
-                                                                <option value="ALTIMETRIC">ALTIMETRIC</option>
-                                                                <option value="ATMOSPHERIC">ATMOSPHERIC</option>
-                                                                <option value="UNKNOWN">UNKNOWN</option>
-                                                            </select>
-                                                        </td>
-                                                        <td><input type="text" class="var-dimension" value=""></td>
-                                                        <td><input type="number" class="var-cardinality" value="0" style="width:40px;text-align:left"></td>
-                                                    </tr>
-                                                    </tbody>
-												</table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompLabel" class="col-sm-2 col-md-2 control-label">Label</label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompLabel" name="inputCompLabel" placeholder="component label" autocomplete="off" value="" data-errorspan="label"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompVersion" class="col-sm-2 col-md-2 control-label">Version</label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompVersion" name="inputCompVersion" placeholder="component version" autocomplete="off" value="" data-errorspan="version"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompDescription" class="col-sm-2 col-md-2 control-label">Description </label>
+											<div class="col-sm-10 col-md-10">
+												<textarea class="form-control" rows="3" id="inputCompDescription" name="inputCompDescription" placeholder="Description"></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompAuthors" class="col-sm-2 col-md-2 control-label">Author </label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompAuthors" name="inputCompAuthors" placeholder="authors" autocomplete="off" value="" data-errorspan="memorySize"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompCopyright" class="col-sm-2 col-md-2 control-label">Copyright </label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompCopyright" name="inputCompCopyright" placeholder="copyright" autocomplete="off" value="" data-errorspan="memorySize"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputActive" class="col-sm-2 col-md-2 control-label">Status </label>
+											<div class="col-sm-10 col-md-10">
+												<select disabled="disabled" id="inputActive" name="inputActive" class="form-control">
+													<option value="true" selected="">Active</option>
+													<option value="false">Inactive</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputVisibility" class="col-sm-2 col-md-2 control-label">Visibility </label>
+											<div class="col-sm-10 col-md-10">
+												<select disabled="disabled" id="inputVisibility" name="inputVisibility" class="form-control">
+													<option value="SYSTEM">System build-in component</option>
+													<option value="USER">User defined component</option>
+													<option value="CONTRIBUTOR" selected="selected">Contributor defined component</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputTemplateType" class="col-sm-2 col-md-2 control-label">Template Type </label>
+											<div class="col-sm-10 col-md-10">
+												<select id="inputTemplateType" name="inputTemplateType" class="form-control">
+													<option value="VELOCITY" selected="selected">Apache Velocity template</option>
+													<option value="JAVASCRIPT" >Javascript template</option>
+													<option value="XSLT">XSLT template</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div> <div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputComponentType" class="col-sm-2 col-md-2 control-label">Component Type </label>
+											<div class="col-sm-10 col-md-10">
+												<select id="inputComponentType" name="inputComponentType" class="form-control">
+													<option value="EXECUTABLE" selected="selected">Executable</option>
+													<option value="SCRIPT" >Script</option>                                                       
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompParallelism" class="col-sm-2 col-md-2 control-label">Parallelism </label>
+											<div class="col-sm-10 col-md-10">
+												<input type="number" min="1" step="1" class="form-control" id="inputCompParallelism" name="inputCompParallelism" placeholder="component parallelism" autocomplete="off" value="" data-errorspan="parallelism" />
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="formTags" class="col-sm-2 col-md-2 control-label">Tags </label>
+											<div class="col-sm-10 col-md-10">
+												<input id="formTags" name="formTags" class="form-control" value="">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="comp-tab-conf" class="tab-pane fade padding-top--20 padding-left--20 padding-bottom--20">
+
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Container Id </label>
+											<div class="col-sm-10 col-md-10">
+												<select id="inputContainerId" name="inputContainerId" class="form-control">
+													<option value="DummyTestDockerContainer" selected="">Test Docker Container</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputFileLocation" class="col-sm-2 col-md-2 control-label">File location </label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputFileLocation" name="inputFileLocation" placeholder="file location" data-errorspan="fileLocation" autocomplete="off" value=".\mypath1"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputWorkingDirectory" class="col-sm-2 col-md-2 control-label">Working directory </label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputWorkingDirectory" name="inputWorkingDirectory" placeholder="working directory" autocomplete="off" value=".\mypath1"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- velocity template form-->
+								<div class="template-block-frm template-block-frm-velocity collapse">
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="inputWorkingDirectory" class="col-sm-2 col-md-2 control-label">Template contents</label>
+												<div class="col-sm-10 col-md-10">
+													<textarea class="form-control" rows="6" id="inputTemplateContents" name="inputTemplateContents" placeholder="template contents" data-errorspan="template"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<div id="comp-tab-param" class="tab-pane fade padding-top--20 padding-bottom--20">
+								<div class="row">
+									<div class="col-md-12">
+										<p>Parameter list:</p>
+										<div class="responsive">
+											<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-paramdesc">
+												<thead>
+												<tr>
+													<th></th>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Parameter Label</th>
+													<th>Parameter Type</th>
+													<th>Data Type</th>
+													<th>Default value</th>
+												</tr>
+												</thead>
+												<tfoot>
+												<tr>
+													<td colspan="3">
+														<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewparam" data-action="comp-add-new-var">
+															<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+														</button>
+													</td>
+												</tr>
+												</tfoot>
+
+
+												<tbody class="tpl-sample-body">
+												<tr class="tpl-sample-row">
+													<th scope="row">
+														<a href="#" class="text tbl-prop-expand-action"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></a>
+														<i class="fa fa-plus fa-fw hidden" aria-hidden="true"></i>
+														<a href="#" class="text tbl-prop-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+													</th>
+													<td>
+														<input type="hidden" class="var-id" value="">
+														<input type="text" class="var-name" value="" placeholder="parameter name">
+													</td>
+													<td><textarea rows="2" class="var-description"></textarea></td>
+													<td>
+														<input type="text" class="var-label" value="" placeholder="parameter label">
+													</td>
+													<td>
+														<select class="var-type">
+															<option value="REGULAR" selected="selected">Regular</option>
+															<option value="TEMPLATE">Template</option>
+														</select>
+													</td>
+													<td>
+														<select class="var-datatype">
+															<option value="java.lang.String" selected="selected">String</option>
+															<option value="java.lang.Integer">Integer</option>
+															<option value="java.lang.Boolean">Boolean</option>
+															<option value="java.lang.Float">Float</option>
+															<option value="java.lang.Double">Double</option>
+															<option value="file">File</option>
+														</select>
+													</td>
+													<td><input type="text" class="var-default" value="" placeholder="default value"></td>
+												</tr>
+												<tr style="display: none;" class="val-row-plus">
+													<td colspan="7">
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label class="col-sm-2 col-md-2 control-label">Unit</label>
+																	<div class="col-sm-10 col-md-10">
+																		<input type="text" class="form-control var-unit" name="inputUnit" placeholder="unit" autocomplete="off" value=""/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label class="col-sm-2 col-md-2 control-label">Value Set</label>
+																	<div class="col-sm-10 col-md-10">
+																		<input type="text" class="form-control var-valueset" name="inputValueSet" placeholder="value set" autocomplete="off" value=""/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label class="col-sm-2 col-md-2 control-label">Format</label>
+																	<div class="col-sm-10 col-md-10">
+																		<input type="text" class="form-control var-format" name="inputFormat" placeholder="format" autocomplete="off" value=""/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Not Null </label>
+																	<div class="col-sm-10 col-md-10">
+																		<div class="checkbox">
+																			<input type="checkbox" name="inputNotNull" class="big var-notnull">
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Validator </label>
+																	<div class="col-sm-10 col-md-10">
+																		<input type="text" class="form-control var-validator" name="inputValidator" placeholder="validator" autocomplete="off" value=""/>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="comp-tab-sys" class="tab-pane fade">
+								<div class="row">
+									<div class="col-md-12">
+										<p>Variables:</p>
+										<div class="responsive">
+											<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-sysvar">
+												<thead>
+												<tr>
+													<th></th>
+													<th>Key</th>
+													<th>Value</th>
+												</tr>
+												</thead>
+												<tfoot>
+												<tr>
+													<td colspan="3">
+														<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewvar" data-action="comp-add-new-var">
+															<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+														</button>
+													</td>
+												</tr>
+												</tfoot>
+												<tbody>
+												<tr class="tpl-sample-row">
+													<th class="del-col" scope="row">
+														<a href="#" class="text tbl-sysvar-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+													</th>
+													<td><input type="text" class="var-key" value="" placeholder="input variable's name"></td>
+													<td><input type="text" class="var-value" value="" placeholder="input variable's value"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="comp-tab-ports" class="tab-pane fade">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="responsive box-shadow--6dp" style="margin-bottom:20px;overflow:auto">
+											<table class="table table-bordered tbl-edt" id="tbl-edt-sources" style="margin:0">
+												<thead>
+												<tr><th colspan="8" class="table-title">Sources:</th></tr>
+												<tr>
+													<th></th>
+													<th>Source Name</th>
+													<th>Format Type</th>
+													<th>Geometry</th>
+													<th>CRS</th>
+													<th>Sensor Type</th>
+													<th>Dimension</th>
+													<th>Cardinality<br><i>(0 for list)</i></th>
+												</tr>
+												</thead>
+												<tfoot>
+												<tr>
+													<td colspan="2">
+														<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewsrc" data-action="comp-add-new-var">
+															<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+														</button>
+													</td>
+												</tr>
+												</tfoot>
+												<tbody class="tpl-sample-body">
+												<tr class="tpl-sample-row">
+													<th scope="row">
+														<a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+													</th>
+													<td>
+														<input type="hidden" class="var-id" value="">
+														<input type="text" class="var-name" value="" placeholder="Source name">
+													</td>
+													<td><select class="var-formatType empty"></select></td>
+													<td><textarea rows="1" class="var-geometry"></textarea></td>
+													<td><input type="text" class="var-crs" value=""></td>
+													<td><select class="var-sensorType empty"></select></td>
+													<td><input type="text" class="var-dimension" value=""></td>
+													<td><input type="number" class="var-cardinality" value="0" style="width:40px;text-align:left"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="responsive box-shadow--6dp" style="margin-bottom:20px;overflow:auto">
+											<table class="table table-bordered tbl-edt" id="tbl-edt-targets" style="margin:0">
+												<thead>
+												<tr><th colspan="9" class="table-title">Targets:</th></tr>
+												<tr>
+													<th></th>
+													<th>Target Name</th>
+													<th>Format Type</th>
+													<th>Format Name</th>
+													<th>Geometry</th>
+													<th>CRS</th>
+													<th>Sensor Type</th>
+													<th>Dimension</th>
+													<th>Cardinality<br><i>(0 for list)</i></th>
+												</tr>
+												</thead>
+												<tfoot>
+												<tr>
+													<td colspan="2">
+														<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewtrgt" data-action="comp-add-new-var">
+															<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+														</button>
+													</td>
+												</tr>
+												</tfoot>
+												<tbody class="tpl-sample-body">
+												<tr class="tpl-sample-row">
+													<th scope="row">
+														<a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+													</th>
+													<td>
+														<input type="hidden" class="var-id" value="">
+														<input type="text" class="var-name" value="" placeholder="Target name">
+													</td>
+													<td><select class="var-formatType empty"></select></td>
+													<td><select class="var-formatName empty"></select></td>
+													<td><textarea rows="1" class="var-geometry"></textarea></td>
+													<td><input type="text" class="var-crs" value=""></td>
+													<td><select class="var-sensorType empty"></select></td>
+													<td><input type="text" class="var-dimension" value=""></td>
+													<td><input type="number" class="var-cardinality" value="0" style="width:40px;text-align:left"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
                     </div>
                 </div>
                 <div class="row">
@@ -533,6 +517,13 @@
 #comp-tab-ports .tbl-edt input[type="number"]:hover,
 #comp-tab-ports .tbl-edt textarea:hover,
 #comp-tab-ports .tbl-edt select:hover{border-color: #d0d0d0}
+.table>tbody+tbody{border:0}
+.table select.empty{color:#999;font-style:italic}
+.table select.empty>option{color:black;font-style:normal}
+.table select>option.ital{color:#999;font-style:italic}
+@media (min-width: 992px) {
+	.modal-lg { width: 60%; }
+}
 </style>
 
    <link rel="stylesheet" href="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.css" type="text/css" />
@@ -595,7 +586,27 @@
     }
 
 ////////////
-    function getComponentDataById(compID){
+	function getTaoEnumsArray(name) {
+		var retVal = [];
+		$.each(taoEnums.data, function (index, enm) {
+			if (index.toLowerCase().indexOf(name.toLowerCase()) >= 0) {
+				$.each(enm, function (idx, values) {
+					retVal.push(values.key);
+				});
+			}
+		});
+		return retVal;
+	}
+	// Get component specific values for enum type parameters
+	var sourceTargetSpecificFormats = {};
+	// get format type all possible values
+	sourceTargetSpecificFormats["formatType"] = getTaoEnumsArray("DataFormat");
+	// set format name list as empty
+	sourceTargetSpecificFormats["formatName"] = [];
+	// get sensor type all possible values
+	sourceTargetSpecificFormats["sensorType"] = getTaoEnumsArray("SensorType");
+    
+	function getComponentDataById(compID){
         $.ajax({
             cache: false,
             type: "get",
@@ -616,77 +627,86 @@
             },
             success: function(r) {
                 var response = chkTSRF(r);
-                console.log(response);
-                //try {
-                    //populate form with current values
-                    var $el = $('#frmExecNodeEdit');
-                    $('input[name=inputCompID]', $el).val(response.id);
-                    $('input[name=inputCompLabel]', $el).val(response.label);
-                    $('input[name=inputCompVersion]', $el).val(response.version);
-                    $('textarea[name=inputCompDescription]', $el).val(response.description);
-                    $('input[name=inputCompAuthors]', $el).val(response.authors);
-                    $('input[name=inputCompCopyright]', $el).val(response.copyright);
+				
+				//populate form with current values
+				var $el = $('#frmExecNodeEdit');
+				$('input[name=inputCompID]', $el).val(response.id);
+				$('input[name=inputCompLabel]', $el).val(response.label);
+				$('input[name=inputCompVersion]', $el).val(response.version);
+				$('textarea[name=inputCompDescription]', $el).val(response.description);
+				$('input[name=inputCompAuthors]', $el).val(response.authors);
+				$('input[name=inputCompCopyright]', $el).val(response.copyright);
 
-                    $('input[name=inputCompCopyright]', $el).val(response.copyright);
-                    $('input[name=inputCompLabel]', $el).val(response.label);
-                    $('input[name=inputCompLabel]', $el).val(response.label);
-                    $('input[name=inputCompLabel]', $el).val(response.label);
-                    $('input[name=inputCompLabel]', $el).val(response.label);
+				$('input[name=inputCompCopyright]', $el).val(response.copyright);
+				$('input[name=inputCompLabel]', $el).val(response.label);
+				$('input[name=inputCompLabel]', $el).val(response.label);
+				$('input[name=inputCompLabel]', $el).val(response.label);
+				$('input[name=inputCompLabel]', $el).val(response.label);
 
-                    $('select[name=inputActive] option', $el).removeAttr("selected");
-                    $('select[name=inputActive] option[value="'+response.active+'"]', $el).attr("selected", "selected");
+				$('select[name=inputActive] option', $el).removeAttr("selected");
+				$('select[name=inputActive] option[value="'+response.active+'"]', $el).attr("selected", "selected");
 
-                    $('select[name=inputVisibility] option', $el).removeAttr("selected");
-                    $('select[name=inputVisibility] option[value="'+response.visibility+'"]', $el).attr("selected", "selected");
+				$('select[name=inputVisibility] option', $el).removeAttr("selected");
+				$('select[name=inputVisibility] option[value="'+response.visibility+'"]', $el).attr("selected", "selected");
 
-                    $('select[name=inputTemplateType] option', $el).removeAttr("selected");
-                    $('select[name=inputTemplateType] option[value="'+response.templateType+'"]', $el).attr("selected", "selected");
+				$('select[name=inputTemplateType] option', $el).removeAttr("selected");
+				$('select[name=inputTemplateType] option[value="'+response.templateType+'"]', $el).attr("selected", "selected");
 
-                    $('select[name=inputContainerId] option', $el).removeAttr("selected");
-                    $('select[name=inputContainerId] option[value="'+response.containerId+'"]', $el).attr("selected", "selected");
+				$('select[name=inputContainerId] option', $el).removeAttr("selected");
+				$('select[name=inputContainerId] option[value="'+response.containerId+'"]', $el).attr("selected", "selected");
 
-                    $('input[name=inputFileLocation]', $el).val(response.fileLocation);
-                    $('input[name=inputWorkingDirectory]', $el).val(response.workingDirectory);
-                    //!!!!!!$('input[name=inputTemplateName]', $el).val(response.template.name);
-                    $('textarea[name=inputTemplateContents]', $el).val(response.templatecontents);
+				$('input[name=inputFileLocation]', $el).val(response.fileLocation);
+				$('input[name=inputWorkingDirectory]', $el).val(response.workingDirectory);
+				//!!!!!!$('input[name=inputTemplateName]', $el).val(response.template.name);
+				$('textarea[name=inputTemplateContents]', $el).val(response.templatecontents);
 
-                    $('select[name=inputComponentType] option', $el).removeAttr("selected");
-                    $('select[name=inputComponentType] option[value="'+response.componentType+'"]', $el).attr("selected", "selected");
-
-                    if(response.tags != null && response.tags !== ""){
-						$('#formTags').importTags( response.tags.join());
-					}
-                    
-                    $.each(response.variables, function(i, value) {
-                        helper_addSysVarRow($("#tbl-edt-sysvar"),value);
-                    });
-                try {
-                }
-                catch(e) {
-                    alert('E001 populate, An error has occurred, please try again or contact app admin.');
-                }
+				$('select[name=inputComponentType] option', $el).removeAttr("selected");
+				$('select[name=inputComponentType] option[value="'+response.componentType+'"]', $el).attr("selected", "selected");
+				
+				$('input[name=inputCompParallelism]', $el).val(response.parallelism);
+				
+				if(response.tags != null && response.tags !== ""){
+					$('#formTags').importTags( response.tags.join());
+				}
+				
+				$.each(response.variables, function(i, value) {
+					helper_addSysVarRow($("#tbl-edt-sysvar"), value);
+				});
                 $.each(response.parameterDescriptors, function(i, value) {
-                    helper_addParameterDescriptorsRow($("#tbl-edt-paramdesc"),value);
+                    helper_addParameterDescriptorsRow($("#tbl-edt-paramdesc"), value);
                 });
 				
-                $.each(response.sources, function(i, value) {
-                    helper_addSourceTargetDescriptorsRow($("#tbl-edt-sources"),value);
+				// get format name all possible values
+				$.ajax({
+					url        : baseRestApiURL + "docker/formats?containerId=" + response.containerId,
+					type       : "get",
+					dataType   : "json",
+					async      : false,
+					contentType: "application/json; charset=utf-8",
+					headers    : { "Accept": "application/json", "Content-Type": "application/json", "X-Auth-Token": window.tokenKey },
+					success: function(rsData) {
+						sourceTargetSpecificFormats["formatName"] = chkTSRF(rsData);
+					}
+				});
+				$.each(response.sources, function(i, value) {
+                    helper_addSourceTargetDescriptorsRow($("#tbl-edt-sources"), value, sourceTargetSpecificFormats);
                 });
                 $.each(response.targets, function(i, value) {
-                    helper_addSourceTargetDescriptorsRow($("#tbl-edt-targets"),value);
+					helper_addSourceTargetDescriptorsRow($("#tbl-edt-targets"), value, sourceTargetSpecificFormats);
                 });
             }
         });
         return true;
     }
 ////////////
-    function helper_addSourceTargetDescriptorsRow($tbl, payload){
+    function helper_addSourceTargetDescriptorsRow($tbl, payload, specificFormats){
         var obj = {
 			"id": null,
 			"parentId": null,
 			"name": null,
 			"dataDescriptor": {
 				"formatType": null,
+				"formatName": null,
 				"geometry": null,
 				"crs": null,
 				"sensorType": null,
@@ -697,17 +717,41 @@
 		};
         $.extend( obj, payload );
 		
+		// Populate all combo-boxes with descriptor formats
         var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
-        $el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+		var $sRow = $el.find(".tpl-sample-row");
+		if (typeof specificFormats !== "undefined") {
+			$.each(specificFormats, function (index, options) {
+				if ($(".var-"+index, $sRow).is("select")) {
+					if (options.length > 0) {
+						// formatType parameter is mandatory
+						if (index.toLowerCase() == "formattype") {
+							$(".var-"+index, $sRow).removeClass("empty");
+						} else {
+							$(".var-"+index, $sRow).html("<option class='ital' value><i>Select...</i></option>");
+						}
+						$.each(options, function (idx, option) {
+							$(".var-"+index, $sRow).append('<option value="'+option+'">'+option+'</option>');
+						});
+					} else {
+						$(".var-"+index, $sRow).parent().append('<div style="text-align: center">-</div>');
+						$(".var-"+index, $sRow).remove();
+					}
+				}
+			});
+		}
+		$el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
         
 		$('input.var-id', $el).val(obj.id);
 		$('input.var-name', $el).val(obj.name);
         $('select.var-formatType option', $el).removeAttr("selected");
-        $('select.var-formatType option[value="'+obj.dataDescriptor.formatType+'"]', $el).attr("selected", "selected");
+        $('select.var-formatType option[value="'+obj.dataDescriptor.formatType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
+        $('select.var-formatName option', $el).removeAttr("selected");
+        $('select.var-formatName option[value="'+obj.dataDescriptor.formatName+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
 		$('textarea.var-geometry', $el).val(obj.dataDescriptor.geometry);
         $('input.var-crs', $el).val(obj.dataDescriptor.crs);
         $('select.var-sensorType option', $el).removeAttr("selected");
-        $('select.var-sensorType option[value="'+obj.dataDescriptor.sensorType+'"]', $el).attr("selected", "selected");
+        $('select.var-sensorType option[value="'+obj.dataDescriptor.sensorType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
         $('input.var-dimension', $el).val(obj.dataDescriptor.dimension);
         $('input.var-cardinality', $el).val(obj.cardinality);
 
@@ -791,6 +835,7 @@
 			var port_id          = $(this).find(".var-id").val();
 			var port_name        = $(this).find(".var-name").val();
 			var port_formatType  = $(this).find(".var-formatType").val();
+			var port_formatName  = $(this).find(".var-formatName").val();
 			var port_geometry    = $(this).find(".var-geometry").val();
 			var port_crs         = $(this).find(".var-crs").val();
 			var port_sensorType  = $(this).find(".var-sensorType").val();
@@ -806,8 +851,9 @@
 						"geometry"   : port_geometry  === "" ? null : port_geometry,
 						"crs"        : port_crs       === "" ? null : port_crs,
 						"dimension"  : port_dimension === "" ? null : port_dimension,
-						"formatType" : port_formatType,
-						"sensorType" : port_sensorType,
+						"formatType" : port_formatType === "" ? null : port_formatType,
+						"formatName" : port_formatName === "" ? null : port_formatName,
+						"sensorType" : port_sensorType === "" ? null : port_sensorType,
 						"location"   : null
 					}
 				};
@@ -858,10 +904,11 @@
                     }
                 });
                 if(userOpStack[0] && userOpStack[0].action ==="comp_edit" && userOpStack[0] && userOpStack[0].dna.id){
-                    $(".modal-title").html("Edit processing component");
+                    $(".modal-title").html("Edit processing component: <span style='color:#3c8dbc'>" + userOpStack[0].dna.label.toUpperCase() + "</span>");
                     $("#saveExecNode").html("Save processing component");
                     $("#inputCompID").attr('disabled','disabled');
                     $("#inputComponentType").attr('disabled','disabled');
+					//$("#inputCompParallelism").attr('disabled','disabled');
                     getComponentDataById(userOpStack[0].dna.id);
                 }
             })
@@ -873,8 +920,8 @@
             var lclVal = $(this).val();
             $(".template-block-frm").hide();
             $(".template-block-frm-"+lclVal.toLowerCase()).show();
-            })
-            .trigger("change");
+		})
+		.trigger("change");
 
         $(".btn-comp-addnewvar").on("click", function(){
             var $tbl = $(this).closest(".tbl-edt");
@@ -884,7 +931,9 @@
             var $tbl = $(this).closest(".tbl-edt");
             helper_addParameterDescriptorsRow($tbl);
         });
-
+        $(".btn-comp-addnewsrc, .btn-comp-addnewtrgt").on("click", function () {
+            helper_addSourceTargetDescriptorsRow($(this).closest("table"), void 0, sourceTargetSpecificFormats)
+        });
         $(".tbl-edt")
             .on("click", ".tbl-sysvar-delete-action", function(e){
                 e.preventDefault();
@@ -931,7 +980,15 @@
                     }
                 }
             });*/
-
+		
+		$("table").on("change", "select[class^='var-']", function () {
+			if (this.value == "") {
+				$(this).addClass("empty");
+			} else {
+				$(this).removeClass("empty");
+			}
+		});
+		
         $("#inputCompname").focusout(function(e) {
             if($(this).val() === "")
                 return;
@@ -964,7 +1021,8 @@
                     "authors" : $('input[name=inputCompAuthors]', this).val(),
                     "copyright" : $('input[name=inputCompCopyright]', this).val(),
                     "nodeAffinity": "Any",
-                    "sources": [],
+                    "parallelism" : parseInt($('input[name=inputCompParallelism]', this).val()),
+					"sources": [],
                     "targets": [],
                     "containerId": $('select[name=inputContainerId]', this).val(),
                     "fileLocation" : $('input[name=inputFileLocation]', this).val(),

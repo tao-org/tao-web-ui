@@ -203,7 +203,10 @@ small.tag-input{
 	text-overflow: ellipsis;
 	max-width: 150px;
 }
-
+.progress-bar-graph {
+    margin: 0 !important;
+    height: 4px !important;
+}
 /*start WF*/
 .start-component-logo{
     font-size: 1em;

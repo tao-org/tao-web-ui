@@ -559,9 +559,15 @@
 }
 
 /*animation*/
-#development_icon{
+.development_icon{
   margin:0;
   -webkit-animation: pop 0.4s ease-in;
+}
+.icon-cog{}
+.icon-cog.spin{
+    -webkit-animation:spin 4s linear infinite;
+    -webkit-transform-origin: 50% 50%;
+    -webkit-animation-delay:0.6s;
 }
 
 /*Animate cogs*/

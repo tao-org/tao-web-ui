@@ -16,14 +16,12 @@
  * file details: core functions and general functionality, request router for single page app.
  *
  * functions:
- * taoUI_UpdateUserQuota()  //update user quota indications in UI
  * showMsg()                //show UI message in toast like notification
- *
  *
  **/
 
 
-//user idetity scripts
+//user identity scripts
 //create user profile variable
 var taoUserProfile = {};
 
@@ -88,9 +86,9 @@ $(function () {
     });
 
     $.when(ajax_getProfileSettings, ajax_getConfigEnums)
-        .done(function (response, enumsResponse) {
-            var r = chkTSRF(response[0]);
-            var enums = chkTSRF(enumsResponse[0]);
+        .done(function (responseProfile, responseEnums) {
+            var r = chkTSRF(responseProfile[0]);
+            var enums = chkTSRF(responseEnums[0]);
             taoEnums.data = enums;
             console.log("enums:"); console.log(enums);
 
@@ -254,6 +252,19 @@ $(function () {
 }());
 
 (function(){
+    var $elQuota = $("#wrapper-quota");
+    var $elQuotaSmall = $("#wrapper-quota-small");
+    var q = {
+        "input":-1,
+        "inputActual":-1,
+        "processing":-1,
+        "processingActual":-1,
+        "used":0,
+        "um":"GB",
+        "files":0,
+        "folders":0
+    };
+
     var getUserFiles = $.ajax({ cache: false,
         url: baseRestApiURL + "files/user/",
         dataType : 'json',
@@ -264,6 +275,39 @@ $(function () {
             "X-Auth-Token": window.tokenKey
         }
     });
+    function ui_update(v){
+        $.extend(q, v);
+        var qi = q.input, qia = q.inputActual, qp = q.processing , qpa = q.processingActual;
+        var lblInputQ = q.input+q.um;
+        var lblInputPercent = Math.ceil(q.inputActual/q.input*100)+"%";
+        if(q.input === -1){
+            lblInputQ = "unmetered";
+            lblInputPercent = "n/a";
+            qi = qia = 0;
+        }
+        var lblProcessingQ = q.processing+q.um;
+        var lblProcessingPercent = Math.ceil(q.processingActual/q.processing*100)+"%";
+        if(q.processing === -1){
+            lblProcessingQ = "unmetered";
+            lblProcessingPercent = "n/a";
+            qp = qpa = 0;
+        }
+
+        var pct = Math.ceil((qia+qpa)/(qi+qp)*100);
+        var quota_usage_details = "using: "+q.used+"GB<br>"+q.files+" Files, "+q.folders+" Folders";
+        if(pct>100){pct = 100;}
+        var usageHTML =
+            '        <h4 class="control-sidebar-subheading">User quota:</h4>' +
+            '        <h4 class="control-sidebar-subheading"><i class="fa fa-arrow-right fa-fw" aria-hidden="true"></i>input:&nbsp;<span>'+lblInputQ+'</span><span class="label label-danger pull-right">'+lblInputPercent+'</span></h4>' +
+            '        <h4 class="control-sidebar-subheading"><i class="fa fa-bolt fa-fw" aria-hidden="true"></i>processing:&nbsp;<span>'+lblProcessingQ+'</span><span class="label label-danger pull-right">'+lblProcessingPercent+'</span></h4>' +
+            '        <div class="progress progress-xxs"><div class="progress-bar progress-bar-danger progress-bar-graph" style="width: '+pct+'%;"></div></div>' +
+            '        <p style="color: #4b646f;"><small>'+quota_usage_details+'</small></p>';
+        $elQuota.find("a.holder").empty().html(usageHTML);
+        $elQuotaSmall.find("#arc1").attr("d",describeArc(20, 20, 12, 0, (pct>=100?99.99:pct)/100*360));
+        $elQuotaSmall.find(".quota-icon").attr("data-original-title", '<div class="quota-tool-tip">'+usageHTML+'</div>');
+        return true;
+    }
+
     function f(){
         $.when(getUserFiles)
             .done(function (getUserFilesResponse) {
@@ -280,8 +324,11 @@ $(function () {
                         }
                     }
                 });
-                taoUI_UpdateUserQuota({
-                    "total":parseFloat(taoUserProfile.quota),
+                ui_update({
+                    "input":parseFloat(taoUserProfile.inputQuota),
+                    "inputActual":parseFloat(taoUserProfile.actualInputQuota),
+                    "processing":parseFloat(taoUserProfile.processingQuota),
+                    "processingActual":parseFloat(taoUserProfile.actualProcessingQuota),
                     "used":getFileSizeAsGB(sumFiles),
                     "um":"GB",
                     "files":countFiles,
@@ -297,43 +344,6 @@ $(function () {
     });
 }());
 
-
-
-(function () {
-    var $elQuota = $("#wrapper-quota");
-    var $elQuotaSmall = $("#wrapper-quota-small");
-    var q = {
-        "total":100,
-        "used":0,
-        "um":"GB",
-        "files":0,
-        "folders":0
-    };
-    function f(v){
-        $.extend(q, v);
-        var pct = Math.ceil(q.used/q.total*100);
-        var quota = q.total+q.um;
-        var quota_usage_details = "using: "+q.used+"GB<br>"+q.files+" Files, "+q.folders+" Folders";
-        $elQuota.find(".val-quota").html(quota);
-        $elQuota.find(".val-quota-pct").html(pct+"%");
-        if(pct>100){pct = 100;}
-        $elQuota.find(".val-quota-pct-ui").width(pct+"%");
-        $elQuota.find(".val-quota-usage-details").html(quota_usage_details);
-        $elQuotaSmall.find("#arc1").attr("d",describeArc(20, 20, 12, 0, (pct>=100?99.99:pct)/100*360));
-        var toolTipHTML= '<div class="quota-tool-tip">' +
-            '        <h4 class="control-sidebar-subheading">' +
-            '            User quota:&nbsp;<span class="val-quota">'+quota+'</span><span class="label label-danger pull-right val-quota-pct">'+pct+'%</span>' +
-            '        </h4>' +
-            '        <div class="progress progress-xxs">' +
-            '            <div class="progress-bar progress-bar-danger val-quota-pct-ui" style="width: '+pct+'%;"></div>' +
-            '        </div>' +
-            '        <p style="color: #4b646f;"><small class="val-quota-usage-details">'+quota_usage_details+'</small></p>' +
-            '     </div>';
-        $elQuotaSmall.find(".quota-icon").attr("data-original-title", toolTipHTML);
-        return true;
-    }
-    window.taoUI_UpdateUserQuota = f;
-}());
 
 (function () {
     var version = '0.3',

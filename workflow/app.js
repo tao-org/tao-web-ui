@@ -106,14 +106,10 @@ jsPlumb.bind("jsPlumbLoaded", function(instance) {
     //show toolbox
     toolboxSidebar.init();
 });
-
-
 jsPlumb.bind("tao_showConnMenu", function(params) {
     alert("menu");
     console.log(params);
 });
-
-
 jsPlumb.bind("tao_updateNodePosition", function(params) {
     var lcl_postdata = {};
     var groups = [];
@@ -635,7 +631,7 @@ jsPlumb.ready(function () {
     });
 
     instance.bind("click", function (c, e) {
-//        console.log(c);
+//      console.log(c);
         alert("click: delete connection id:" +c.id);
         jsPlumb.fire("tao_showConnMenu", [c, e]);
         return;

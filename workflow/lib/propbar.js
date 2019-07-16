@@ -101,6 +101,8 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                     alert(putOneComponentResponse.message);
                 }else{
                     $(".v-lastaction","#infoband").html("query updated");
+					// Also update node information if changed. Custom Values won't be overwritten
+					saveProcessing();
                 }
             })
             .fail(function(){
@@ -122,6 +124,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 			}
         });
         $propbar.nodeData.customValues = cV;
+		$propbar.nodeData.name = $tblEdt.closest("app-modal").find(".val-propbar-name").html();
         var putOneComponent = $.ajax({
             cache: false,
             url: baseRestApiURL + "workflow/node?workflowId=" + currentWfID,
@@ -139,6 +142,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 if(putOneComponentResponse.status === "SUCCEEDED"){
                     $(".v-lastaction","#infoband").html("custom values updated");
                     wfPlumbCanvasData.nodes[$propbar.nid] = putOneComponentResponse.data;
+					canvasRenderer.updateNodeById($propbar.nid, putOneComponentResponse.data);
                 }else{
                     alert(putOneComponentResponse.message);
                 }

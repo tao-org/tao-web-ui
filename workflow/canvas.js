@@ -705,6 +705,21 @@ var canvasRenderer = {
         jsPlumb.fire("jsPlumbNodeAdded", d);
         return d;
     },
+	updateNodeById: function (id, dnaFullData) {
+		// Update canvas node information
+		var $node = $(window.jsp.getElement(id));
+		if ($node.length > 0 && typeof $node.data("dna") !== "undefined") {
+			// set node data info
+			$node.data("dna").fullData = dnaFullData;
+			$node.data("dna").mlabel   = dnaFullData.name;
+			// set node label
+			$(".module-title", $node).html(dnaFullData.name);
+			// adjust group size
+			if (typeof $node.data("group") !== "undefined") {
+				canvasRenderer.fitGroup($node.data("group"));
+			}
+		}
+	},
     fitGroup: function(groupCanvasID){
         var d = document.getElementById(groupCanvasID);
         console.log("fit group: "+groupCanvasID);

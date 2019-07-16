@@ -47,6 +47,7 @@ $(function () {
     hashRoutesMap["projects"] = '';
 
     hashRoutesMap["admin/users"] = "./fragments/users-admin2.fragment.html";
+    hashRoutesMap["admin/containers"] = "./fragments/containers-admin2.fragment.html";
     hashRoutesMap["admin/topology"] = "./fragments/topology-admin2.fragment.html";
     hashRoutesMap["documentation/intro"] = "./fragments/tao-documentation.fragment.html";
     hashRoutesMap["howto/intro"] = "./fragments/tao-howto.fragment.html";

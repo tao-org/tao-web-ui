@@ -37,12 +37,25 @@ var toolboxModules ={
 	rmSelected: function(){
 		if(toolboxModules.selected.length === 0) {return;}
 		jsp.clearDragSelection();
-		$.each(toolboxModules.selected, function(index, item) {
+		//highlight nodes to be deleted
+        $(".w.selected").addClass("node-to-be-deleted");
+        $('#confirm-dialog').modal('confirm',{
+            msg:"Are you sure you want to delete selected nodes?",
+            callbackConfirm: function() {
+                $.each(toolboxModules.selected, function(index, item) {
                     wf_removeNode(item);
-					$("#mti_" + item).remove();
+                    $("#mti_" + item).remove();
+                });
+                toolboxModules.selected = [];
+                $(".w").removeClass("node-to-be-deleted");
+                makeWFPreview();
+            },
+            callbackCancel:function(){
+                toolboxModules.selected = [];
+                $(".w").removeClass("node-to-be-deleted");
+                makeWFPreview();
+            }
         });
-		toolboxModules.selected = [];
-		makeWFPreview();
 	},
 	newModule: function(n){
 		$( "#selectable" ).append( '<li id="mti_'+n.blockid+'" class="ui-widget-content" data-dna='+JSON.stringify(n)+'>Item '+n.blockid+'</li>' );
@@ -130,19 +143,7 @@ jsPlumb.bind("tao_updateNodePosition", function(params) {
         }
     });
     makeWFPreview();
-    var postNodesPosition = $.ajax({
-        cache: false,
-        url: baseRestApiURL + "workflow/positions?workflowId=" + currentWfID,
-        dataType : 'json',
-        type: 'POST',
-        data: JSON.stringify(lcl_postdata),
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
-        }
-    });
-    $.when(postNodesPosition)
+    $.when(postNodesPosition(currentWfID,lcl_postdata))
         .done(function (putOneComponentResponse) {
             $(".v-lastaction","#infoband").html("position updated");
         })
@@ -154,19 +155,7 @@ jsPlumb.bind("tao_updateNodePosition", function(params) {
 jsPlumb.bind("tao_dropNewNode", function(params) {
     console.log("plumb:tao_dropNewNode");
     var lcl_postdata = params[0].fullData;
-    var postOneComponent = $.ajax({
-        cache: false,
-        url: baseRestApiURL + "workflow/node?workflowId=" + currentWfID,
-        dataType : 'json',
-        type: 'POST',
-        data: JSON.stringify(lcl_postdata),
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
-        }
-    });
-    $.when(postOneComponent)
+    $.when(postOneComponent(currentWfID,lcl_postdata))
         .done(function (putOneComponentResponse) {
             if(putOneComponentResponse.status === "SUCCEEDED"){
                 var r = chkTSRF(putOneComponentResponse);
@@ -200,159 +189,101 @@ jsPlumb.bind("tao_dropNewNode", function(params) {
         });
 });
 
-
-
-
 jsPlumb.bind("tao_loadWorkflowById", function() {
     tao_resetShadowData();
     tao_resetCanvasData();
-    var getAllComponents = $.ajax({
-        cache: false,
-        url: baseRestApiURL + "component/",
-        dataType : 'json',
-        type: 'GET',
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
-        }
-    });
-    var getAllQueries = $.ajax({
-        cache: false,
-        url: baseRestApiURL + "query/",
-        dataType : 'json',
-        type: 'GET',
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
-        }
-    });
-	var getAllDatasources = $.ajax({
-        cache: false,
-        url: baseRestApiURL + "datasource/",
-        dataType : 'json',
-        type: 'GET',
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
-        }
-    });
-    var getAllUserDatasources = $.ajax({
-        cache: false,
-        url: baseRestApiURL + "datasource/user/",
-        dataType : 'json',
-        type: 'GET',
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
-        }
-    });
-    var getAllSensors = $.ajax({
-        cache: false,
-        url: baseRestApiURL + "query/sensor/",
-        dataType : 'json',
-        type: 'GET',
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
-        }
-    });
-    var getAllDockers = $.ajax({
-        cache: false,
-        url: baseRestApiURL + "docker/",
-        dataType : 'json',
-        type: 'GET',
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
-        }
-    });
-    var getConfigEnums = $.ajax({
-        cache: false,
-        url: baseRestApiURL + "config/enums",
-        dataType : 'json',
-        type: 'GET',
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
-        }
-    });
+    retriveSorters();
 
+    //unusual serialization of requests to config/sorters and config/groupers, unknown issue with async calls to config endpoint
+    function retriveSorters(){
+        $.when(getConfigSorters()).then( function(r){
+            wfTools.configSorters = r['data'];
+            //retriveGroupers();
+            retriveToolboxData();
+        }).fail(function(){
+            alert("Could not retrive workspace environment data. Unable to proceed. Try again. (config/sorters)");
+        });
+    }
+    function retriveToolboxData() {
+        $.when(
+            getAllComponents(),
+            getAllQueries(),
+            getAllDatasources(),
+            getAllUserDatasources(),
+            getAllSensors(),
+            getAllDockers(),
+            getConfigEnums(),
+            getConfigGroupers()
+        ).done(function (getAllComponentsResponse, getAllQueriesResponse, getAllDatasourcesResponse, getAllUserDatasourcesResponse, getAllSensorsResponse, getAllDockersResponse, getConfigEnumsResponse, getConfigGroupersResponse) {
+                console.log("Workspace components init start.");
+                wfTools.components = getAllComponentsResponse[0]['data'];
+                wfTools.queries = getAllQueriesResponse[0]['data'];
+                wfTools.datasources = getAllDatasourcesResponse[0]['data'];
+                wfTools.udatasources = getAllUserDatasourcesResponse[0]['data'];
+                wfTools.sensors = getAllSensorsResponse[0]['data'];
+                wfTools.dockers = getAllDockersResponse[0]['data'];
+                wfTools.taoEnums = getConfigEnumsResponse[0]['data'];
+                wfTools.configGroupers = getConfigGroupersResponse[0]['data'];
 
-    $.when(getAllComponents,getAllQueries,getAllDatasources,getAllUserDatasources,getAllSensors,getAllDockers,getConfigEnums)
-        .done(function (getAllComponentsResponse,getAllQueriesResponse,getAllDatasourcesResponse,getAllUserDatasourcesResponse,getAllSensorsResponse,getAllDockersResponse,getConfigEnumsResponse) {
-            console.log("Workspace components init start.");
-            wfTools.components = getAllComponentsResponse[0]['data'];
-            wfTools.queries = getAllQueriesResponse[0]['data'];
-            wfTools.datasources = getAllDatasourcesResponse[0]['data'];
-            wfTools.udatasources = getAllUserDatasourcesResponse[0]['data'];
-            wfTools.sensors = getAllSensorsResponse[0]['data'];
-            wfTools.dockers = getAllDockersResponse[0]['data'];
-            wfTools.taoEnums = getConfigEnumsResponse[0]['data'];
-
-            //parse components, try to detect orfan and collapsing data, recreate local IDs
-            $.each(wfTools.components, function(i, item) {
-                var hash = "tboid"+jsHashCode(item.id);
-            	if(wfTools.toolboxnodes.pc[hash]){
-            		alert("Processing components collision. duplicate id detected");
-				}else{
-                    wfTools.toolboxnodes.pc[hash] = {
-                    	id: hash,
-						type: "component",
-						label: item.label,
-						dna: item
-                    };
-				}
-            });
-            $.each(wfTools.queries, function(i, item) {
-                var hash = "tboid"+jsHashCode(item.sensor+"-"+item.dataSourceName);
-                if(wfTools.toolboxnodes.q[hash]){
-                    alert("Sensors collision. duplicate id detected");
-                }else{
-                    wfTools.toolboxnodes.q[hash] = {
-                        id: hash,
-                        type: "query",
-                        label: item.sensor+"-"+item.dataSourceName,
-                        dna: item
-                    };
-					$.each(item.parameters, function (index, param) {
-						if (wfTools.taoEnums[param.type] && param.valueSet === null) {
-							param.valueSet = $.map(wfTools.taoEnums[param.type], function(elm, idx) { return elm.value; } );
-						}
-					});
-                }
-            });
-            $.each(wfTools.datasources, function(i, item) {
-                var hash = "tboid"+jsHashCode(item.id);
-                if(wfTools.toolboxnodes.q[hash]){
-                    if(wfTools.toolboxnodes.pc[hash]){
-                        alert("Datasource collision. duplicate id detected");
-                    }else{
-                        wfTools.toolboxnodes.ds[hash] = {
+                //parse components, try to detect orfan and collapsing data, recreate local IDs
+                $.each(wfTools.components, function (i, item) {
+                    var hash = "tboid" + jsHashCode(item.id);
+                    if (wfTools.toolboxnodes.pc[hash]) {
+                        alert("Processing components collision. duplicate id detected");
+                    } else {
+                        wfTools.toolboxnodes.pc[hash] = {
                             id: hash,
-                            type: "datasource",
+                            type: "component",
                             label: item.label,
                             dna: item
                         };
                     }
-                }else{
-                    console.log("Unknown query for datasource");
-                    alert("Unknown query for datasource id: "+item.id+"\nIgnoring datasource.");
-				}
-            });
-//user datasources
-            $.each(wfTools.udatasources, function(i, item) {
-                var hash = "tboid"+jsHashCode(item.id);
-                //if(wfTools.toolboxnodes.q[hash]){
-                    if(wfTools.toolboxnodes.pc[hash]){
+                });
+                $.each(wfTools.queries, function (i, item) {
+                    var hash = "tboid" + jsHashCode(item.sensor + "-" + item.dataSourceName);
+                    if (wfTools.toolboxnodes.q[hash]) {
+                        alert("Sensors collision. duplicate id detected");
+                    } else {
+                        wfTools.toolboxnodes.q[hash] = {
+                            id: hash,
+                            type: "query",
+                            label: item.sensor + "-" + item.dataSourceName,
+                            dna: item
+                        };
+                        $.each(item.parameters, function (index, param) {
+                            if (wfTools.taoEnums[param.type] && param.valueSet === null) {
+                                param.valueSet = $.map(wfTools.taoEnums[param.type], function (elm, idx) {
+                                    return elm.value;
+                                });
+                            }
+                        });
+                    }
+                });
+                $.each(wfTools.datasources, function (i, item) {
+                    var hash = "tboid" + jsHashCode(item.id);
+                    if (wfTools.toolboxnodes.q[hash]) {
+                        if (wfTools.toolboxnodes.pc[hash]) {
+                            alert("Datasource collision. duplicate id detected");
+                        } else {
+                            wfTools.toolboxnodes.ds[hash] = {
+                                id: hash,
+                                type: "datasource",
+                                label: item.label,
+                                dna: item
+                            };
+                        }
+                    } else {
+                        console.log("Unknown query for datasource");
+                        alert("Unknown query for datasource id: " + item.id + "\nIgnoring datasource.");
+                    }
+                });
+                //user datasources
+                $.each(wfTools.udatasources, function (i, item) {
+                    var hash = "tboid" + jsHashCode(item.id);
+                    //if(wfTools.toolboxnodes.q[hash]){
+                    if (wfTools.toolboxnodes.pc[hash]) {
                         alert("Datasource collision. duplicate id detected");
-                    }else{
+                    } else {
                         wfTools.toolboxnodes.uds[hash] = {
                             id: hash,
                             type: "udatasource",
@@ -360,20 +291,21 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
                             dna: item
                         };
                     }
-                //}else{
-//                    console.log("Unknown query for datasource");
-//                    alert("Unknown query for datasource id: "+item.id+"\nIgnoring datasource.");
-//                }
+                    //}else{
+                    //                    console.log("Unknown query for datasource");
+                    //                    alert("Unknown query for datasource id: "+item.id+"\nIgnoring datasource.");
+                    //                }
+                });
+
+                wf_renderComponentsToolBox();
+                wf_populateSortersAndGroupers();
+                console.log("Workspace components toolbox init done.");
+                wf_loadWorkflowById(currentWfID);
+            })
+            .fail(function () {
+                alert("Could not retrive workspace data. Unable to proceed");
             });
-
-
-            wf_renderComponentsToolBox();
-            console.log("Workspace components toolbox init done.");
-            wf_loadWorkflowById(currentWfID);
-        })
-        .fail(function(){
-            alert("Could not retrive workspace data. Unable to proceed");
-        });
+    }
 });
 
 /************************************************jsplumb******************************************/
@@ -608,14 +540,10 @@ jsPlumb.ready(function () {
         console.log(info);
         //info.connection.getOverlay("label").setLabel(info.connection.id);
         //info.connection.setLabel("<div class='wf-link-body'><i class=\"fa fa-object-group wf-link-body_icon\" aria-hidden=\"true\"></i><p class='wf-link_title'>grouping:</p><p class='wf-link_content'>current criteria ...</p></div>");
-        info.connection.setLabel("<div style=\"float:left;\" data-connid=\""+info.connection.id+"\">\n" +
+        info.connection.setLabel("<div class=\"btnSG\" style=\"float:left;\" data-connid=\""+info.connection.id+"\">\n" +
             "<svg width=\"48\" height=\"50\">\n" +
-            "  <g transform=\"scale(4)\">\n" +
-            "    <path fill=\"#fff\" stroke=\"#3c8dbc\" stroke-width=\".3\" d=\"M5.9,1.2L0.7,6.5l5.2,5.4l5.2-5.4L5.9,1.2z\" />\n" +
-            "  </g>\n" +
-            "  <g transform=\"scale(0.03) translate(420 600)\">\n" +
-            "  <path fill=\"#3c8dbc\" d=\"M512.1 191l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0L552 6.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zm-10.5-58.8c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.7-82.4 14.3-52.8 52.8zM386.3 286.1l33.7 16.8c10.1 5.8 14.5 18.1 10.5 29.1-8.9 24.2-26.4 46.4-42.6 65.8-7.4 8.9-20.2 11.1-30.3 5.3l-29.1-16.8c-16 13.7-34.6 24.6-54.9 31.7v33.6c0 11.6-8.3 21.6-19.7 23.6-24.6 4.2-50.4 4.4-75.9 0-11.5-2-20-11.9-20-23.6V418c-20.3-7.2-38.9-18-54.9-31.7L74 403c-10 5.8-22.9 3.6-30.3-5.3-16.2-19.4-33.3-41.6-42.2-65.7-4-10.9.4-23.2 10.5-29.1l33.3-16.8c-3.9-20.9-3.9-42.4 0-63.4L12 205.8c-10.1-5.8-14.6-18.1-10.5-29 8.9-24.2 26-46.4 42.2-65.8 7.4-8.9 20.2-11.1 30.3-5.3l29.1 16.8c16-13.7 34.6-24.6 54.9-31.7V57.1c0-11.5 8.2-21.5 19.6-23.5 24.6-4.2 50.5-4.4 76-.1 11.5 2 20 11.9 20 23.6v33.6c20.3 7.2 38.9 18 54.9 31.7l29.1-16.8c10-5.8 22.9-3.6 30.3 5.3 16.2 19.4 33.2 41.6 42.1 65.8 4 10.9.1 23.2-10 29.1l-33.7 16.8c3.9 21 3.9 42.5 0 63.5zm-117.6 21.1c59.2-77-28.7-164.9-105.7-105.7-59.2 77 28.7 164.9 105.7 105.7zm243.4 182.7l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0l8.2-14.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zM501.6 431c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.6-82.4 14.3-52.8 52.8z\"/>\n" +
-            "  </g>\n" +
+            "  <g transform=\"scale(4)\"><path fill=\"#fff\" stroke=\"#3c8dbc\" stroke-width=\".3\" d=\"M5.9,1.2L0.7,6.5l5.2,5.4l5.2-5.4L5.9,1.2z\" /></g>\n" +
+            "  <g transform=\"scale(0.03) translate(420 600)\"><path fill=\"#3c8dbc\" d=\"M512.1 191l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0L552 6.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zm-10.5-58.8c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.7-82.4 14.3-52.8 52.8zM386.3 286.1l33.7 16.8c10.1 5.8 14.5 18.1 10.5 29.1-8.9 24.2-26.4 46.4-42.6 65.8-7.4 8.9-20.2 11.1-30.3 5.3l-29.1-16.8c-16 13.7-34.6 24.6-54.9 31.7v33.6c0 11.6-8.3 21.6-19.7 23.6-24.6 4.2-50.4 4.4-75.9 0-11.5-2-20-11.9-20-23.6V418c-20.3-7.2-38.9-18-54.9-31.7L74 403c-10 5.8-22.9 3.6-30.3-5.3-16.2-19.4-33.3-41.6-42.2-65.7-4-10.9.4-23.2 10.5-29.1l33.3-16.8c-3.9-20.9-3.9-42.4 0-63.4L12 205.8c-10.1-5.8-14.6-18.1-10.5-29 8.9-24.2 26-46.4 42.2-65.8 7.4-8.9 20.2-11.1 30.3-5.3l29.1 16.8c16-13.7 34.6-24.6 54.9-31.7V57.1c0-11.5 8.2-21.5 19.6-23.5 24.6-4.2 50.5-4.4 76-.1 11.5 2 20 11.9 20 23.6v33.6c20.3 7.2 38.9 18 54.9 31.7l29.1-16.8c10-5.8 22.9-3.6 30.3 5.3 16.2 19.4 33.2 41.6 42.1 65.8 4 10.9.1 23.2-10 29.1l-33.7 16.8c3.9 21 3.9 42.5 0 63.5zm-117.6 21.1c59.2-77-28.7-164.9-105.7-105.7-59.2 77 28.7 164.9 105.7 105.7zm243.4 182.7l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0l8.2-14.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zM501.6 431c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.6-82.4 14.3-52.8 52.8z\"/></g>\n" +
             "</svg>\n" +
             "<div>");
     });
@@ -632,11 +560,22 @@ jsPlumb.ready(function () {
 
     instance.bind("click", function (c, e) {
 //      console.log(c);
-        alert("click: delete connection id:" +c.id);
-        jsPlumb.fire("tao_showConnMenu", [c, e]);
-        return;
-        console.log("click: delete connection id:" +c.id);
-        instance.deleteConnection(c); //this itself will trigger connectionDetached event
+        c.addClass("conn-to-be-deleted");
+
+        //alert("click: delete connection id:" +c.id);
+        //jsPlumb.fire("tao_showConnMenu", [c, e]);
+        //return;
+        $('#confirm-dialog').modal('confirm',{
+            msg:"Are you sure you want to delete selected connector?",
+            callbackConfirm: function() {
+                instance.deleteConnection(c); //this itself will trigger connectionDetached event
+                console.log("delete connection id:" +c.id);
+            },
+            callbackCancel:function(){
+                c.removeClass("conn-to-be-deleted");
+            }
+        });
+
         //delete wfPlumbCanvasData.connectors[c.id];
     });
     instance.bind("connectionDetached", function (info, originalEvent) {
@@ -647,19 +586,7 @@ jsPlumb.ready(function () {
         //check if link exists or is just a revert connection event.
         //check if parent node exists before calling delete
         if(_.invert(wfPlumbCanvasData.nodesMap)[lcl_nodeId]){
-            var delOneLink = $.ajax({
-                cache: false,
-                url: baseRestApiURL + "workflow/link?nodeId="+lcl_nodeId,
-                dataType : 'json',
-                data: JSON.stringify(lcl_payload),
-                type: 'DELETE',
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                    "X-Auth-Token": window.tokenKey
-                }
-            });
-            $.when(delOneLink)
+            $.when(delOneLink(lcl_nodeId, lcl_payload))
                 .done(function (delOneLinkResponse) {
                     var r = chkTSRF(delOneLinkResponse);
                     if((delOneLinkResponse.status === "SUCCEEDED") && (r.id === lcl_nodeId)){
@@ -699,19 +626,7 @@ jsPlumb.ready(function () {
 
         console.log("waw connection binded event, update model ...");
         if(wfPlumbCanvasData.loaded){
-            //put connection on server
-            var putOneConnection = $.ajax({
-                cache: false,
-                url: baseRestApiURL + "workflow/link?sourceNodeId="+s[1]+"&sourceTargetId="+s[2]+"&targetNodeId="+t[1]+"&targetSourceId=" + t[2],
-                dataType : 'json',
-                type: 'POST',
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                    "X-Auth-Token": window.tokenKey
-                }
-            });
-            $.when(putOneConnection)
+            $.when(putOneConnection(s,t))
                 .done(function (putOneConnectionResponse) {
                     var r = chkTSRF(putOneConnectionResponse);
                     if((putOneConnectionResponse.status === "SUCCEEDED") && r.id){
@@ -719,7 +634,9 @@ jsPlumb.ready(function () {
                         var linkData = (_.find(r.incomingLinks, function(item) {
                             return (item.output.id === t[2] && item.input.id === s[2]);
                         }));
-
+                        //update node definition
+                        wfPlumbCanvasData.setNode(putOneConnectionResponse.data);
+                        //register link
                         wfPlumbCanvasData.connectors[info.connection.id] = ({"from":info.sourceId, "to":info.targetId, "linkData":linkData});
                     } else {
                         alert("Incompatiple source and target. Reverting");
@@ -753,26 +670,12 @@ jsPlumb.ready(function () {
     jsPlumb.on(canvas, "dblclick", function(e) {
         console.log("canvas , dblclick");
     });
-	
 	var delNode = window.wf_removeNode = function(el){
 	    //delete node from server
         console.log("delete node id:"+el);
-
-        var delOneNode = $.ajax({
-            cache: false,
-            url: baseRestApiURL + "workflow/node?workflowId="+currentWfID,
-            //dataType : "text",
-            data: JSON.stringify(wfPlumbCanvasData.nodes[el]),
-            type: 'DELETE',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
-            }
-        });
-        $.when(delOneNode)
+        $.when(delOneNode(currentWfID, wfPlumbCanvasData.nodes[el]))
             .done(function (delOneNodeResponse) {
-                console.log(delOneNodeResponse);
+                //console.log(delOneNodeResponse);
                 if(delOneNodeResponse.status === "SUCCEEDED"){
                     $(".v-lastaction","#infoband").html("node removed");
                     removeOneNodeFromCanvas();
@@ -829,16 +732,9 @@ updateModuleStatus("", {"state":"completed", "progress":68});
 		e.stopPropagation();
         var id = $(this).closest(".w").attr("id");
         $(this).closest(".w").addClass("selected");
-
-        $('#confirm-dialog').modal('confirm',{
-            msg:"Are you sure you want to delete selected node?",
-            callbackConfirm: function() {
-                toolboxModules.rescanSelected();
-                toolboxModules.rmSelected();
-                console.log(id);
-            },
-            callbackCancel:function(){}
-        });
+        console.log("sterge modul: "+id);
+        toolboxModules.rescanSelected();
+        toolboxModules.rmSelected();
 	})
     .on( "click",".btn-action-groupmodule", function(e) { //group selected modules
         e.stopPropagation();
@@ -935,4 +831,381 @@ var tao_adGroupNodesToSelection = function(groupCanvasID){
     toolboxModules.rescanSelected();
 };
 
+//groupers and sorters ui
+(function(){
+    var $elModalSG = $("#modalSortAndGroup");
+    var $elSelectSortType = $("#selectSortType");
+    var $elSelectSortDirection = $("#selectSortDirection");
+    var $elselectGroupType = $("#selectGroupType");
+    var $elinputGroupingArg = $("#inputGroupingArg");
+    var $elFrmConnectorEdit = $("#frmConnectorEdit");
+    //populate sorter & groupers
+    window.wf_populateSortersAndGroupers = function(){
+        if((wfTools.configSorters) && (wfTools.configSorters.length>0)){
+            $.each(wfTools.configSorters, function (i, item) {
+                $elSelectSortType.append($('<option>', {
+                    value: item,
+                    text : item
+                }));
+            });
+        }
+        if((wfTools.configGroupers) && (wfTools.configGroupers.length>0)){
+            $.each(wfTools.configGroupers, function (i, item) {
+                $elselectGroupType.append($('<option>', {
+                    value: item[0],
+                    text : item[0]
+                }));
+            });
+        }
+    };
 
+    //attach handler for sorter and grouper modal
+    $($elCanvas)
+    .on("click",".btnSG", function(){
+        var connid = $(this).data("connid");
+        console.log("edit conn: "+connid);
+        var connData = wfPlumbCanvasData.getConnectorById(connid);
+
+        $elModalSG.data("connid", connid).modal("show");
+        $elSelectSortType.val("none").change();
+        $elselectGroupType.val("none").change();
+
+        if(connData.linkData.aggregator && connData.linkData.aggregator.sorter && connData.linkData.aggregator.sorter[0]){
+            $elSelectSortType.val(connData.linkData.aggregator.sorter[0]).trigger("change");
+        }
+        if(connData.linkData.aggregator && connData.linkData.aggregator.associator && connData.linkData.aggregator.associator[0]){
+            $elselectGroupType.val(connData.linkData.aggregator.associator[0]).trigger("change");
+            if(connData.linkData.aggregator.associator[1]){
+                $elinputGroupingArg.val(connData.linkData.aggregator.associator[1]).trigger("change");
+            }
+        }
+    });
+    $elSelectSortType
+    .on("change", function(){
+        var val = $(this).val();
+        if(val !== 'none'){
+            $elSelectSortDirection.closest(".sorting-direction").removeClass("collapse ");
+        }else{
+            $elSelectSortDirection.closest(".sorting-direction").addClass("collapse ");
+        }
+    });
+    $elselectGroupType
+    .on("change", function(){
+        var val = $(this).val();
+        var currentGrouper = jQuery.grep(wfTools.configGroupers, function( a ) {
+            return a[0]=== val;
+        });
+        if(currentGrouper && currentGrouper[0] && currentGrouper[0][1] && (currentGrouper[0][1] === "java.lang.Integer")){
+            $elinputGroupingArg.closest(".grouping-params").removeClass("collapse ");
+        }else{
+            $elinputGroupingArg.closest(".grouping-params").addClass("collapse ");
+        }
+    });
+    $elFrmConnectorEdit
+    .on("submit", function(e){
+        e.preventDefault();
+        var connid = $elModalSG.data("connid");
+        var sorter = [$elSelectSortType.val(), $elSelectSortDirection.val()];
+        var associator = [$elselectGroupType.val()];
+        if(!$elinputGroupingArg.closest(".grouping-params").hasClass( "collapse" )){
+            associator[1] = $elinputGroupingArg.val();
+        }
+        if(sorter[0] === 'none') sorter = null;
+        if(associator[0] === 'none') associator = null;
+        var aggregator = {
+            "sorter": sorter,
+            "associator": associator
+        };
+        if((sorter === null) && (associator === null)) aggregator = null;
+
+        console.log("agregator"); console.log(aggregator);
+
+        var connData = wfPlumbCanvasData.getConnectorById(connid);
+        var targetNodeId = connData.to.split("_")[1];
+        var linkToUpdate;
+        var linkFound = 0;
+
+        console.log(targetNodeId);
+        var nodeData = wfPlumbCanvasData.getNodeById(targetNodeId);
+        if(nodeData.incomingLinks){
+            nodeData.incomingLinks.forEach(function(link) {
+                if(link === connData.linkData){
+                    linkToUpdate = link;
+                    linkFound++;
+                }
+            });
+        }
+        if(linkFound !== 1){
+            alert("Unbable to identify link in node definition. Please reload workflow and try again.");
+            return;
+        }
+        alert("update connector "+connid);
+
+        $.when(putOneNode(currentWfID, nodeData))
+            .done(function (putOneNodeResponse) {
+                if(putOneNodeResponse.status === "SUCCEEDED"){
+                    linkToUpdate.aggregator = aggregator;
+                    $(".v-lastaction","#infoband").html("link updated");
+                    //wfPlumbCanvasData.nodes[$propbar.nid] = putOneComponentResponse.data;
+                    //canvasRenderer.updateNodeById($propbar.nid, putOneComponentResponse.data);
+                    $elModalSG.data("connid", 0).modal("hide");
+                }else{
+                    alert("Could not update link." + putOneComponentResponse.message);
+                }
+            })
+            .fail(function(){
+                alert("Could udate link", "ERROR");
+            });
+    });
+
+    function f(){
+        $.ajax({ cache: false,
+            url: "./fragments/profile.fragment.html"
+        })
+            .done(function (data) {
+                $(".modal-dialog",$elModalProfile).html(data);
+                $(".val-user-email",$elModalProfile).html(taoUserProfile.email);
+                $("[contenteditable]").css({"word-wrap":"break-word", "white-space": "pre-wrap"});
+                        //save
+                        var formData = {
+                            "id" : taoUserProfile.id,
+                            "username" : taoUserProfile.username,
+                            "password" : $("div.val-user-pwd[contenteditable='true']").text(),
+                            "email" : $("div.val-user-email[contenteditable='true']").text(),
+                            "alternativeEmail" : $("div.val-user-email2[contenteditable='true']").text(),
+                            "lastName" : $("div.val-user-lname[contenteditable='true']").text(),
+                            "firstName" : $("div.val-user-fname[contenteditable='true']").text(),
+                            "phone" : $("div.val-user-phone[contenteditable='true']").text(),
+                            "quota" : $("div.val-user-quota[contenteditable='true']").text(),
+                            "organization" : $("div.val-user-org[contenteditable='true']").text(),
+                            "external" : taoUserProfile.external,
+                            "groups" : taoUserProfile.groups,
+                            "preferences" : taoUserProfile.preferences
+                        };
+                        updateProfile(formData);
+            })
+            .fail(function (jqXHR, textStatus) {
+                alert("Could not load user profile... Try later.");
+            });
+    }
+    $(".do-editprofile").on("click", function(e){
+        e.preventDefault();
+        f();
+    });
+}());
+
+//ajax functions
+//put node on server (update)
+function putOneNode(wfID, payload){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "workflow/node?workflowId=" + wfID,
+        dataType : 'json',
+        type: 'PUT',
+        data: JSON.stringify(payload),
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//put connection on server
+function putOneConnection(s,t){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "workflow/link?sourceNodeId="+s[1]+"&sourceTargetId="+s[2]+"&targetNodeId="+t[1]+"&targetSourceId=" + t[2],
+        dataType : 'json',
+        type: 'POST',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//post node position on server
+function postNodesPosition(wfID,payload){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "workflow/positions?workflowId=" + wfID,
+        dataType : 'json',
+        type: 'POST',
+        data: JSON.stringify(payload),
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//post a new component (node) on server
+function postOneComponent(wfID,payload){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "workflow/node?workflowId=" + wfID,
+        dataType : 'json',
+        type: 'POST',
+        data: JSON.stringify(payload),
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//delete one component (node) on server
+function delOneNode(wfID, node){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "workflow/node?workflowId="+wfID,
+        data: JSON.stringify(node),
+        type: 'DELETE',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//delete one connection (link) on server
+function delOneLink(nodeId, payload){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "workflow/link?nodeId="+nodeId,
+        dataType : 'json',
+        data: JSON.stringify(payload),
+        type: 'DELETE',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//get all config sorters
+function getConfigSorters(){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "config/sorters",
+        dataType : 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//get all config groupers
+function getConfigGroupers(){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "config/groupers",
+        dataType : 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//get all components for toolbox
+function getAllComponents(){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "component/",
+        dataType: 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//get all queries for toolbox
+function getAllQueries(){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "query/",
+        dataType: 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//get all datasources for toolbox
+function getAllDatasources(){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "datasource/",
+        dataType: 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//get all user datasources for toolbox
+function getAllUserDatasources(){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "datasource/user/",
+        dataType: 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//
+function getAllSensors(){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "query/sensor/",
+        dataType: 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//
+function getAllDockers(){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "docker/",
+        dataType: 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}
+//
+function getConfigEnums(){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "config/enums",
+        dataType: 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        }
+    });
+}

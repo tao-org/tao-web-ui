@@ -1,0 +1,345 @@
+<style>
+.modal-error{background-color:red}
+.modal-error span{background:#a63f3f}
+
+.docker-files   {position:relative;border-left:10px solid #79bde4;background-image: linear-gradient(to right, #eff9ff, transparent);}
+.auxiliary-files{position:relative;border-left:10px solid #8fcc97;background-image: linear-gradient(to right, #effff1, transparent);}
+.docker-files    .info-text{font-style:italic;display:inline-block;color:#79bde4}
+.auxiliary-files .info-text{font-style:italic;display:inline-block;color:#8fcc97}
+
+.add-extra-file{position:absolute;top:0;right:14px;color:#146b9c;font:normal normal normal 20px/1 FontAwesome;padding:5px;margin:5px;cursor:pointer}
+.add-extra-file::after{content:"\f067"}
+
+.extra-files-container>input[type="file"]{width:92%;margin-bottom:2px}
+.extra-files-container>input[type="file"]::after{content:"\f014";font:normal normal normal 16px/1 FontAwesome;display:inline-block;cursor:pointer;padding:2px;position:absolute;left:91%;color:red}
+</style>
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add new toolbox container</h4>
+    </div>
+
+    <form id="frmUploadContainer" class="form-horizontal" enctype="multipart/form-data" role="form">
+		<input type="hidden" name="system" value="true" />
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error adding toolbox container!</h4>
+            <p id="modal-error-msg">Please check your data.</p>
+            <p>
+                <span class="error-container collapse"><i class="fa fa-exclamation-triangle fa-fw"></i>Error.</span>
+            </p>
+        </div>
+        <div class="modal-body">
+            <section>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="name" class="col-sm-2 col-md-2 control-label">Name</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="name" autocomplete="off" value="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="description" class="col-sm-2 col-md-2 control-label">Description</label>
+                            <div class="col-sm-10 col-md-10">
+                                <textarea class="form-control" rows="2" id="description" name="description" placeholder="description" autocomplete="off"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="dockerFile" class="col-sm-2 col-md-2 control-label">Docker file</label>
+                            <div class="col-sm-10 col-md-10">
+								<input type="file" id="dockerFile" class="form-control for-validation" name="dockerFiles" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group docker-files">
+							<label class="col-sm-3 col-md-3 control-label">Docker files</label>
+                            <div class="col-sm-9 col-md-9 extra-files-container">
+								<span class="info-text">Select one or more extra installation files.<br/>Click [+] to add a new set of files.</span>
+                            </div>
+							<div class="add-extra-file"></div>
+                        </div>
+                        <div class="form-group auxiliary-files">
+							<label class="col-sm-3 col-md-3 control-label">Auxiliary files</label>
+                            <div class="col-sm-9 col-md-9 extra-files-container">
+								<span class="info-text">Select one or more auxiliary files.<br/>Click [+] to add a new set of files.</span>
+                            </div>
+							<div class="add-extra-file"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="jsonContainerDescriptor" class="col-sm-2 col-md-2 control-label">Container descriptor</label>
+                            <div class="col-sm-10 col-md-10">
+								<input type="file" id="jsonContainerDescriptor" class="form-control json-file for-validation" name="jsonContainerDescriptor" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="jsonComponentDescriptor" class="col-sm-2 col-md-2 control-label">Component descriptor</label>
+                            <div class="col-sm-10 col-md-10">
+								<input type="file" id="jsonComponentDescriptor" class="form-control json-file for-validation" name="jsonComponentDescriptor" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="containerLogo" class="col-sm-2 col-md-2 control-label">Logo image</label>
+                            <div class="col-sm-9 col-md-9">
+								<input type="file" id="containerLogo" class="form-control for-validation" name="containerLogo" />
+                            </div>
+							<div class="col-sm-1 col-md-1" style="padding:0;margin-left:-15px">
+								<img id="previewLogo" src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" width="64" height="64" onerror="devalidateLogoFile(event)" />
+							</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                                <button id="saveContainer" type="submit" class="btn btn-primary btn-submit" name="btnSave">Add new container</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- /.modal-body -->
+    </form>
+    <div class="modal-note">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                        <h4>Help filling in</h4>
+                        <p>Please fill in all needed information. Container name must be unique and it can contain small caps letters (a-z), numbers (0-9) and dashes (-)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div><!-- /.modal-content -->
+
+<script>
+	function detectIE() {
+		var ua = window.navigator.userAgent;
+		
+		// IE 10 or older => return version number
+		var msie = ua.indexOf('MSIE ');
+		if (msie > 0) {
+			return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+		}
+		
+		// IE 11 => return version number
+		var trident = ua.indexOf('Trident/');
+		if (trident > 0) {
+			var rv = ua.indexOf('rv:');
+			return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+		}
+		
+		// Edge (IE 12+) => return version number
+		var edge = ua.indexOf('Edge/');
+		if (edge > 0) {
+		   return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+		}
+		
+		// other browser
+		return false;
+	}
+	// Signal error when logo file is a broken image file
+	var devalidateLogoFile = function(event) {
+		if (event.type == "error") {
+			var $previewLogo = $("#previewLogo");
+			$previewLogo.addClass("invalid");
+			$("#containerLogo").valid();
+		}
+	}
+	// Validate Logo file
+	var validateLogoFile = function(element, validTypes) {
+		var $previewLogo = $("#previewLogo");
+		var emptyGif = "data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=";
+		
+		if ($previewLogo.hasClass("invalid")) {
+			if ($previewLogo.attr("src") != emptyGif) {
+				$previewLogo.attr("src", emptyGif);
+				return false;
+			} else {
+				$previewLogo.removeClass("invalid");
+				return false;
+			}
+		}
+		
+		var reader = new FileReader();
+		reader.onload = function() {
+			$previewLogo.attr("src", reader.result);
+		};
+		
+		if (element.files.length > 0) {
+			var file = element.files[0];
+			if ($.inArray(file["type"], validTypes) >= 0) {
+				$previewLogo.removeClass("invalid");
+				reader.readAsDataURL(file);
+				return true;
+			} else {
+				$previewLogo.attr("src", emptyGif);
+				return false;
+			}
+		} else {
+			$previewLogo.removeClass("invalid");
+			$previewLogo.attr("src", emptyGif);
+			return true;
+		}
+		return false;
+	};
+	//////////////////////////////////////////////////////////////////////////////////////
+    $(document).ready( function() {
+		// Add extra installation or auxiliary files
+		$("form#frmUploadContainer").on("click", ".add-extra-file", function (e) {
+			var $elX = $(this).closest(".form-group");
+			var fName = $elX.hasClass("docker-files") ? 'dockerFiles' : 'auxiliaryFiles';
+			$elX.find(".extra-files-container").append('<input type="file" multiple name="' + fName + '" class="form-control">');
+		});
+		// Remove selected file from form
+		$("form#frmUploadContainer").on("click", ".extra-files-container>input[type='file']", function (e) {
+			if (e.offsetX > e.target.offsetWidth) {
+				e.preventDefault();
+				$(this).remove();
+			}
+		});
+		
+		// Custom validation for container name
+		$.validator.addMethod('containerName', function (value, element, params) {
+			var pattern = new RegExp(params.regEx, "g");
+			var match = value.match(pattern);
+			return value.length == 0 || match;
+		}, 'Remove invalid characters (only allowed small caps letters, numbers and dashes).');
+		// Custom validation for various file types
+		$.validator.addMethod('isValidFileType',
+			function (value, element, params) {
+				var validFileType = false;
+				switch (params.fileType) {
+					case "docker": validFileType = (value.length == 0 || element.id != "dockerFile" || value == params.typesList[0]); break;
+					case "json"  : validFileType = (value.length == 0 || $.inArray(element.files[0]["type"], params.typesList) >= 0); break;
+					case "image" : validFileType = validateLogoFile(element, params.typesList); break;
+				}
+				return validFileType;
+			},
+			function (params) {
+				switch (params.fileType) {
+					case "docker": return "Invalid configuration Dockerfile."; break;
+					case "json"  : return "Invalid configuration Json file." ; break;
+					case "image" : return "Invalid image file."              ; break;
+					default      : return "Invalid file.";
+				}
+			}
+		);
+		// Validate form before submit
+		$("form#frmUploadContainer").validate({
+			rules: {
+				name: {
+					required: true,
+					containerName: { regEx: "^[a-z0-9-]+$" }
+				},
+				description: {
+					required: true
+				},
+				containerLogo: {
+					required: true,
+					isValidFileType: { fileType: "image" , typesList: [ "image/gif", "image/jpeg", "image/png" ] }
+				},
+				dockerFiles: {
+					required: function (element) {
+						return element.id == "dockerFile";
+					},
+					isValidFileType: { fileType: "docker", typesList: [ "Dockerfile" ]}
+				},
+				jsonContainerDescriptor: {
+					required: true,
+					isValidFileType: { fileType: "json"  , typesList: [ "application/json" ] }
+				},
+				jsonComponentDescriptor: {
+					required: true,
+					isValidFileType: { fileType: "json"  , typesList: [ "application/json" ] }
+				},
+			},
+			highlight: function(element, errorClass) {
+				$(element).parent().addClass("has-error");
+			},
+			unhighlight: function(element, errorClass) {
+				$(element).parent().removeClass("has-error");
+			},
+			messages: {
+			},
+			errorPlacement: function(error, element) {
+				error.appendTo(element.parent());
+			},
+			success: function(label) {
+				label.remove();
+			}
+		});
+		// Trigger validation when selected file changed
+		$("form#frmUploadContainer").on("change", "input[type='file'].for-validation", function (e) {
+			$(this).trigger("blur");
+		});
+		
+        // Submit form
+		$("form#frmUploadContainer").submit(function (event) {
+			event.preventDefault();
+			
+			if ($(this).valid()) {
+				$(".modal-error ").fadeOut();
+				
+				var formData = new FormData(this);
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST", baseRestApiURL + "docker/upload", true);
+				xhr.responseType = "json";
+				xhr.setRequestHeader("X-Auth-Token", tokenKey);
+				xhr.onload = function (e) {
+					if (this.status == 200) {
+						var data = this.response;
+						
+						// Fix for IE not honoring responseType 'json' when the requested data is not of 'json' type
+						if (detectIE()) {
+							if (data.status == undefined && typeof(data) === "string") {
+								// Force JSON parse in IE
+								data = JSON.parse(data);
+							}
+						}
+						if (!data || typeof data.status === "undefined") {
+							// Inconclusive response from server
+							showMsg("Operation failed. Please try again or contact app admin.", "ERROR");
+						} else if (data.status == responseStatus.success) {
+							$("#myModalNodes").modal('hide');
+							showMsg(data.message, "SUCCESS");
+						} else {
+							$(".error-container", ".modal-error").html('<i class="fa fa-exclamation-triangle fa-fw"></i>' + data.message);
+							$(".error-container", ".modal-error").css('display', 'inline-block');
+							$(".modal-error ").fadeIn("slow");
+							$('#myModalNodes').animate({scrollTop: 0}, 250);
+						}
+					} else {
+						// Failed to connect to server
+						showMsg("Operation failed.<br/>" + this.response.error, "ERROR");
+					}
+				}
+				xhr.onerror = function (e, x, y) {
+					// Failed to connect to server
+					showMsg("Operation failed. Please try again or contact app admin.", "ERROR");
+				}
+				xhr.send(formData);
+			}
+            return false; // To avoid actual submission of the form
+        });
+    });
+	//# sourceURL=containers-plus.js
+</script>

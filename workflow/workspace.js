@@ -472,12 +472,12 @@ $( function() {
 												toolboxModules.rescanSelected();
 											}
 									});
-		$('html').keyup(function(e){
-							    		if(e.which === 46) {
-								    		toolboxModules.rmSelected();
-										}
-						    		});
         $(document)
+        .on('keyup', function(e){
+            if(e.which === 46) {
+                toolboxModules.rmSelected();
+            }
+        })
         .on('keyup keydown', function(e){
             keyboardShifted = e.shiftKey;
             shifted = e.shiftKey; ////???? xxx

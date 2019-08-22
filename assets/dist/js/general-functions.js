@@ -141,19 +141,19 @@ function  passwordSHA(plaintextPass){
         //Append one bit and seven 0s (byte 80 in base 16)
         message.push(0x80);
         //Append the minimum number of bytes 0 until the length of the message modulo 64 is equal 56
-        while (message.length % 64 != 56) {
+        while (message.length % 64 !== 56) {
             message.push(0x0);
         }
         //Append the length in bits of the original message as a 8 byte long intager
         message = message.concat(Utilities.intToBytes(messageLength * 8, 8));
         return message;
-    }
+    };
     Sha256.extendBlock = function(words) {
         for (var i = 16; i < 64; i++) {
             words[i] = (words[i - 16] + Sha256.σ0(words[i - 15]) + words[i - 7] + Sha256.σ1(words[i - 2])) & 0xffffffff;
         }
         return words;
-    }
+    };
     Sha256.mainLoop = function(words) {
         //Initialize variables
         var a = Sha256.H[0],
@@ -187,28 +187,28 @@ function  passwordSHA(plaintextPass){
         Sha256.H[5] = (Sha256.H[5] + f) & 0xffffffff;
         Sha256.H[6] = (Sha256.H[6] + g) & 0xffffffff;
         Sha256.H[7] = (Sha256.H[7] + h) & 0xffffffff;
-    }
+    };
     Sha256.RotR = function(input, places) {
         return (input >>> places) | (input << (32 - places));
-    }
+    };
     Sha256.Σ0 = function(x) {
         return Sha256.RotR(x, 2) ^ Sha256.RotR(x, 13) ^ Sha256.RotR(x, 22);
-    }
+    };
     Sha256.Σ1 = function(x) {
         return Sha256.RotR(x, 6) ^ Sha256.RotR(x, 11) ^ Sha256.RotR(x, 25);
-    }
+    };
     Sha256.σ0 = function(x) {
         return Sha256.RotR(x, 7) ^ Sha256.RotR(x, 18) ^ (x >>> 3);
-    }
+    };
     Sha256.σ1 = function(x) {
         return Sha256.RotR(x, 17) ^ Sha256.RotR(x, 19) ^ (x >>> 10);
-    }
+    };
     Sha256.Ch = function(x, y, z) {
         return (x & y) ^ (~x & z);
-    }
+    };
     Sha256.Maj = function(x, y, z) {
         return (x & y) ^ (x & z) ^ (y & z);
-    }
+    };
 
     var Utilities = {};
     Utilities.split = function(input, size) {
@@ -217,14 +217,14 @@ function  passwordSHA(plaintextPass){
             output.push(input.splice(0, size));
         }
         return output;
-    }
+    };
     Utilities.join = function(input) {
         var output = [];
         for (var i = 0; i < input.length; i++) {
             output = output.concat(input[i]);
         }
         return output;
-    }
+    };
     Utilities.intToBytes = function(int, size) {
         var bytes = [];
         for (var i = size - 1; i >= 0; i--) {
@@ -232,7 +232,7 @@ function  passwordSHA(plaintextPass){
             int = int >> 8;
         }
         return bytes;
-    }
+    };
     Utilities.bytesToInt = function(bytes) {
         var int = 0;
         for (var i = 0; i < bytes.length; i++) {
@@ -240,13 +240,13 @@ function  passwordSHA(plaintextPass){
             int += bytes[i];
         }
         return int;
-    }
+    };
     Utilities.xorBytes = function(a, b) {
         for (var i = 0; i < a.length; i++) {
             a ^= b;
         }
         return a;
-    }
+    };
 
 return Hex.encode(Sha256.hash(ASCII.decode(plaintextPass)));
 }
@@ -365,6 +365,10 @@ function humanJavaDataType(str){
     return "";
 }
 
+function humanFileSizeFromMB(size) {
+    var i = Math.floor( Math.log(size) / Math.log(1024) );
+    return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['MB', 'GB', 'TB'][i];
+}
 function humanFileSize(size) {
     var i = Math.floor( Math.log(size) / Math.log(1024) );
     return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];

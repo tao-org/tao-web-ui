@@ -345,6 +345,16 @@ body.sidebar-collapse #wrapper-quota{
     display:none;
 }
 
+
+#wrapper-quota .control-sidebar-subheading{
+    margin-bottom: 5px;
+}
+#wrapper-quota .progress {
+    margin-bottom: 10px;
+}
+
+
+
 #wrapper-quota-small{
     display:none;
     padding: 5px 5px;

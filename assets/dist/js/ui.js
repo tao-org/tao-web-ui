@@ -139,8 +139,8 @@ $(function () {
              chkXHR(jqXHR.status);
          },
          success: function(r,textStatus, jqXHR) {
-           	  console.log(r)
-    		  var r = chkTSRF(r);
+           	  console.log(r);
+    		  r = chkTSRF(r);
     		  //inject additional elements into user profile data.
               if(r.id){
                   taoUserProfile = r;
@@ -189,7 +189,7 @@ $(function () {
                 $("[contenteditable]").css({"word-wrap":"break-word", "white-space": "pre-wrap"});
                 
                 $(".btn-edit-profile").on("click", function(){
-                	if($(this).attr("data-action") == "edit"){//make divs available to edit
+                	if($(this).attr("data-action") === "edit"){//make divs available to edit
                 		$(this).text('Save').attr("data-action","save");
                     	$.each($(".card-body div[contenteditable]"),function(){
                     		$(this).attr("contenteditable","true").css({"background":"#fff"});
@@ -264,57 +264,80 @@ $(function () {
         "files":0,
         "folders":0
     };
-
-    var getUserFiles = $.ajax({ cache: false,
-        url: baseRestApiURL + "files/user/",
-        dataType : 'json',
-        type: 'GET',
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
-        }
-    });
     function ui_update(v){
         $.extend(q, v);
-        var qi = q.input, qia = q.inputActual, qp = q.processing , qpa = q.processingActual;
-        var lblInputQ = q.input+q.um;
-        var lblInputPercent = Math.ceil(q.inputActual/q.input*100)+"%";
+        var lblInputQ = humanFileSizeFromMB(q.input);
+        var pctI = Math.ceil(q.inputActual/q.input*100);
+        if(pctI>100){pctI = 100;}
+        var lblInputPercent = pctI+"%";
         if(q.input === -1){
             lblInputQ = "unmetered";
             lblInputPercent = "n/a";
-            qi = qia = 0;
+            pctI = 0;
         }
-        var lblProcessingQ = q.processing+q.um;
-        var lblProcessingPercent = Math.ceil(q.processingActual/q.processing*100)+"%";
+        var lblProcessingQ = humanFileSizeFromMB(q.processing);
+        var pctP = Math.ceil(q.processingActual/q.processing*100);
+        if(pctP>100){pctP = 100;}
+        var lblProcessingPercent = pctP+"%";
         if(q.processing === -1){
             lblProcessingQ = "unmetered";
             lblProcessingPercent = "n/a";
-            qp = qpa = 0;
+            pctP = 0;
         }
 
-        var pct = Math.ceil((qia+qpa)/(qi+qp)*100);
-        var quota_usage_details = "using: "+q.used+"GB<br>"+q.files+" Files, "+q.folders+" Folders";
-        if(pct>100){pct = 100;}
+//      var quota_usage_details = "using: "+q.used+"GB<br>"+q.files+" Files, "+q.folders+" Folders";
+
         var usageHTML =
             '        <h4 class="control-sidebar-subheading">User quota:</h4>' +
             '        <h4 class="control-sidebar-subheading"><i class="fa fa-arrow-right fa-fw" aria-hidden="true"></i>input:&nbsp;<span>'+lblInputQ+'</span><span class="label label-danger pull-right">'+lblInputPercent+'</span></h4>' +
+            '        <div class="progress progress-xxs"><div class="progress-bar progress-bar-danger progress-bar-graph" style="width: '+pctI+'%;"></div></div>' +
             '        <h4 class="control-sidebar-subheading"><i class="fa fa-bolt fa-fw" aria-hidden="true"></i>processing:&nbsp;<span>'+lblProcessingQ+'</span><span class="label label-danger pull-right">'+lblProcessingPercent+'</span></h4>' +
-            '        <div class="progress progress-xxs"><div class="progress-bar progress-bar-danger progress-bar-graph" style="width: '+pct+'%;"></div></div>' +
-            '        <p style="color: #4b646f;"><small>'+quota_usage_details+'</small></p>';
+            '        <div class="progress progress-xxs"><div class="progress-bar progress-bar-danger progress-bar-graph" style="width: '+pctP+'%;"></div></div>';
+//            '        <p style="color: #4b646f;"><small>'+quota_usage_details+'</small></p>';
         $elQuota.find("a.holder").empty().html(usageHTML);
-        $elQuotaSmall.find("#arc1").attr("d",describeArc(20, 20, 12, 0, (pct>=100?99.99:pct)/100*360));
+        $elQuotaSmall.find(".arc1").attr("d",describeArc(20, 20, 16, 0, (pctI>=100?99.99:pctI)/100*360));
+        $elQuotaSmall.find(".arc2").attr("d",describeArc(20, 20, 9, 0, (pctP>=100?99.99:pctP)/100*360));
         $elQuotaSmall.find(".quota-icon").attr("data-original-title", '<div class="quota-tool-tip">'+usageHTML+'</div>');
         return true;
     }
 
     function f(){
-        $.when(getUserFiles)
-            .done(function (getUserFilesResponse) {
+        var headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        };
+        function getUserFiles(){
+            return $.ajax({ cache: false,
+                url: baseRestApiURL + "files/user/",
+                dataType : 'json',
+                type: 'GET',
+                headers: headers
+            });
+        }
+        function getProfileSettings(){
+            return $.ajax({
+                cache: false,
+                url: baseRestApiURL + "user/"+taoUserProfile.username,
+                dataType : 'json',
+                type: 'GET',
+                async: false,
+                headers: headers
+            });
+        }
+
+        $.when(getProfileSettings(), getUserFiles())
+            .done(function (getProfileSettingsResponse, getUserFilesResponse) {
+                //update user profile
+                taoUserProfile.inputQuota = getProfileSettingsResponse[0].data.inputQuota;
+                taoUserProfile.actualInputQuota = getProfileSettingsResponse[0].data.actualInputQuota;
+                taoUserProfile.processingQuota = getProfileSettingsResponse[0].data.processingQuota;
+                taoUserProfile.actualProcessingQuota = getProfileSettingsResponse[0].data.actualProcessingQuota;
+
                 var sumFiles = 0;
                 var countFolders = 0;
                 var countFiles = 0;
-                $.each( getUserFilesResponse.data, function( key, value ) {
+                $.each( getUserFilesResponse[0].data, function( key, value ) {
                     if(value.relativePath !== ""){
                         if(value.folder){
                             countFolders ++;

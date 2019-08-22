@@ -58,7 +58,8 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 		if ($(".var-value-string:visible", $(this).parent()).length > 0) {
 			$(this).siblings(".var-value-string").val($(this).html());
 			$(this).siblings(".var-value-string").trigger("change");
-		} else if ($(".var-value-list:visible", $(this).parent()).length > 0) {
+		}
+		if ($(".var-value-list:visible", $(this).parent()).length > 0) {
 			$(this).siblings(".var-value-list").val($(this).html());
 			$(this).siblings(".var-value-list").trigger("change");
 		}
@@ -190,18 +191,20 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 			}
 
 
-            var getTokens = $.ajax({
-                cache: false,
-                url: baseRestApiURL + "component/naming/find?nodeId="+lcl_n.id,
-                dataType : 'json',
-                type: 'GET',
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                    "X-Auth-Token": window.tokenKey
-                }
-            });
-            $.when(getTokens)
+            var getTokens = function(id){
+                return $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + "component/naming/find?nodeId="+id,
+                    dataType : 'json',
+                    type: 'GET',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "X-Auth-Token": window.tokenKey
+                    }
+                });
+            };
+            $.when(getTokens(lcl_n.id))
                 .done(function (getTokensResponse) {
                     function prepareTokens(dd){
                         var tags = [];

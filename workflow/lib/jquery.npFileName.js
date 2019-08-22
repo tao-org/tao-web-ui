@@ -735,6 +735,11 @@ var npDOMhelper = {
             $(settings.info.el.dropdown)
                 .off("npmenu:hide");
             $(settings.info.el.editable)
+                .on("npfilename:val", function(e, arg) {
+                    if(arg){
+                        parseOnce(settings, arg, true);
+                    }
+                })
                 .bind("keydown", userKeyDown)
                 .bind("keyup", userKeyUp)
                 .bind("focus", function(){

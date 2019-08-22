@@ -31,15 +31,41 @@ var tao_resetCanvasData = function() {
         prefs: {
             conn_style: 0
         },
-        loaded: false
+        loaded: false,
+        getConnectorById: function(id){
+            if(this.connectors[id]){
+                return this.connectors[id];
+            }
+            return null;
+        },
+        getNodeById: function(id){
+            var nodeHash = this.getCanvasIdByNodeId(id);
+            if(this.nodes[nodeHash]){
+                return this.nodes[nodeHash];
+            }else{
+                return null;
+            }
+        },
+        getCanvasIdByNodeId(id){
+            return (_.invert(this.nodesMap))[id];
+        },
+        setNode(nodeData, canvasId){
+            if (!nodeData || (nodeData === undefined) || (nodeData.id === undefined)) {
+                return false;
+            }
+            //check if id already in collection
+            var lclCanvasId = this.getCanvasIdByNodeId(nodeData.id);
+            //lclCanvasId
+            if(lclCanvasId && (lclCanvasId !== undefined)){
+                //update node data
+                this.nodes[lclCanvasId] = nodeData;
+                return nodeData;
+            }
+
+        }
     };
 };
 tao_resetCanvasData();
-
-var tao_getCanvasIdByNodeId = function(nodeID){
-    var map = _.invert(wfPlumbCanvasData.nodesMap);
-    return map[nodeID];
-};
 
 var tao_setWF2CanvasData = function(currentWfData){
     wfPlumbCanvasData._remote = currentWfData;
@@ -588,7 +614,30 @@ var canvasRenderer = {
                 };
                 dna.ntype = "unknown";
         }
+        var nodeIcon = "";
+        switch(dna.ntype) {
+            case "ds":
+                nodeIcon = "./media/module-ds.png";
+                break;
+            case "dsg":
+                nodeIcon = "./media/module-ds.png";
+                break;
+            case "pc":
+                nodeIcon = "./media/"+componentTemplate.containerId+".png";
+                break;
+            default:
+                nodeIcon = "./media/module-ds.png";
+        }
 
+//        if(dna.ntype === "ds"){
+//            nodeIcon = "./media/module-ds.png";
+//        }else{
+//            nodeIcon = "./media/"+componentTemplate.containerId+".png";
+//        }
+        var parallelism = '';
+        if(componentTemplate.parallelism && parseInt(componentTemplate.parallelism)>0){
+            parallelism = "parallelism: " + componentTemplate.parallelism;
+        }
         var completeness = 0;
         var maxPorts = Math.max(componentTemplate.sources.length, componentTemplate.targets.length);
         var d = document.createElement("div");
@@ -629,12 +678,13 @@ var canvasRenderer = {
             if(componentTemplate.sources[i]) innerHTML += "<div id=\"p_"+dna.fullData.id+"_"+componentTemplate.sources[i].id+"\" class=\"n-p-i-wrapp\"><div class=\"n-p-i\"></div><div class=\"l-n-p-i\"><i class=\"fa fa-sign-in\" aria-hidden=\"true\"></i>&nbsp;"+componentTemplate.sources[i].name+"</div></div>";
             innerHTML += "</div>";
         }
-        innerHTML += "<div class=\"module-status\">"+completeness+"% Completed</div>";
+        innerHTML += "<div class=\"module-status\">"+parallelism+"</div>";
         innerHTML += "</div>";
-        innerHTML += "<div class=\"module-middle\" title=\"RES\"><div class=\"module-icon csvType\">";
-        innerHTML += "<svg width=\"40\" height=\"40\">";
-        innerHTML += "<path id=\"arc1\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"12\" d=\""+describeArc(20, 20, 12, 0, completeness/100*360)+"\" />";
-        innerHTML += "</svg>";
+        innerHTML += "<div class=\"module-middle\"><div class=\"module-icon csvType\">";
+        innerHTML += "<img class=\"node-avatar-img\" src=\""+nodeIcon+"\" alt=\"component logo\">";
+//        innerHTML += "<svg width=\"40\" height=\"40\">";
+//        innerHTML += "<path id=\"arc1\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"12\" d=\""+describeArc(20, 20, 12, 0, completeness/100*360)+"\" />";
+//        innerHTML += "</svg>";
         innerHTML += "</div></div>";
         innerHTML += "<footer class=\"module-footer\">";
         innerHTML += "<div class=\"meta\"><button class=\"btn-transparent btn-action-erasemodule\"><i class=\"fa fa-trash\"></i><span class=\"sr-only\">Erase module</span></button></div>";
@@ -714,10 +764,12 @@ var canvasRenderer = {
 			$node.data("dna").mlabel   = dnaFullData.name;
 			// set node label
 			$(".module-title", $node).html(dnaFullData.name);
-			// adjust group size
+			// adjust group size or node
 			if (typeof $node.data("group") !== "undefined") {
 				canvasRenderer.fitGroup($node.data("group"));
-			}
+			}else{
+                jsp.revalidate(id);
+            }
 		}
 	},
     fitGroup: function(groupCanvasID){
@@ -762,10 +814,10 @@ var canvasRenderer = {
         jsp.revalidate(d.id);
     },
     markGroupMembers: function(fullData){
-        var groupCanvasID = tao_getCanvasIdByNodeId(fullData.id);
+        var groupCanvasID = wfPlumbCanvasData.getCanvasIdByNodeId(fullData.id);
         if(fullData && fullData.nodes){
             $.each(fullData.nodes, function(i, oneNode) {
-                var canvasID = tao_getCanvasIdByNodeId(oneNode.id);
+                var canvasID = wfPlumbCanvasData.getCanvasIdByNodeId(oneNode.id);
                 $("#"+canvasID).addClass('g_' + groupCanvasID).data('group', groupCanvasID);
                 $(".meta.meta-group","#"+canvasID).hide();
             });

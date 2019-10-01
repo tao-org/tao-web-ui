@@ -104,7 +104,10 @@
                                                                     <span class="u-i-span">Status: <strong><span class="val-status">###</span></strong></span>
                                                                     <span class="u-i-span">Phone: <strong><span class="val-phone">###</span></strong></span>
                                                                     <span class="u-i-span">Organization: <strong><span class="val-organization">###</span></strong></span>
-                                                                    <span class="u-i-span">Quota: <strong><span class="val-quota">###</span>GB</strong></span>
+                                                                    <span class="u-i-span">CPU quota: <strong><span class="val-cpuQuota">###</span></strong></span>
+                                                                    <span class="u-i-span">Memory quota: <strong><span class="val-memoryQuota">###</span></strong></span>
+                                                                    <span class="u-i-span">Input quota: <strong><span class="val-inputQuota">###</span></strong><span class="val-usageInputQuota"></span></span>
+                                                                    <span class="u-i-span">Processing quota: <strong><span class="val-processingQuota">###</span></strong><span class="val-usageProcessingQuota"></span></span>
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -142,7 +145,10 @@
                                                             <span class="u-i-span">Status: <strong><span class="val-status">###</span></strong></span>
                                                             <span class="u-i-span">Phone: <strong><span class="val-phone">###</span></strong></span>
                                                             <span class="u-i-span">Organization: <strong><span class="val-organization">###</span></strong></span>
-                                                            <span class="u-i-span">Quota: <strong><span class="val-quota">###</span>GB</strong></span>
+                                                            <span class="u-i-span">CPU quota: <strong><span class="val-cpuQuota">###</span></strong></span>
+                                                            <span class="u-i-span">Memory quota: <strong><span class="val-memoryQuota">###</span></strong></span>
+                                                            <span class="u-i-span">Input quota: <strong><span class="val-inputQuota">###</span></strong><span class="val-usageInputQuota"></span></span>
+                                                            <span class="u-i-span">Processing quota: <strong><span class="val-processingQuota">###</span></strong><span class="val-usageProcessingQuota"></span></span>
                                                         </p>
                                                         <div class="box-bottom">
                                                             <div class="">
@@ -296,6 +302,30 @@
                         data[i].labelUserType = "external user (LDAP)";
                     } else{
                         data[i].labelUserType = "TAO local user";
+                    }
+                    if(data[i].cpuQuota === -1){
+                        data[i].cpuQuota = "unmitered";
+                    }else{
+                        data[i].cpuQuota += "X";
+                    }
+                    if(data[i].inputQuota === -1){
+                        data[i].inputQuota = "unmitered";
+                        data[i].usageInputQuota = "";
+                    }else{
+                        data[i].inputQuota += "GB";
+                        data[i].usageInputQuota = ", using: "+data[i].actualInputQuota + "GB";
+                    }
+                    if(data[i].memoryQuota === -1){
+                        data[i].memoryQuota = "unmitered";
+                    }else{
+                        data[i].memoryQuota += "GB";
+                    }
+                    if(data[i].processingQuota === -1){
+                        data[i].processingQuota = "unmitered";
+                        data[i].usageProcessingQuota = "";
+                    }else{
+                        data[i].processingQuota += "GB";
+                        data[i].usageProcessingQuota = ", using: "+data[i].actualProcessingQuota + "GB";
                     }
                 }
                 return data;

@@ -47,6 +47,19 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="selectUserGroup" class="col-sm-2 col-md-2 control-label">Group membership</label>
+                            <div class="col-sm-10 col-md-10">
+                                <select id="selectUserGroup" name="selectUserType" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -118,9 +131,14 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputQuota" class="col-sm-2 col-md-2 control-label">Quota (GB)</label>
+                            <label for="inputCpuQuota" class="col-sm-2 col-md-2 control-label">CPU quota</label>
                             <div class="col-sm-10 col-md-10">
-                                <input type="number" class="form-control" id="inputQuota" name="inputQuota" placeholder="quota" min="0" autocomplete="off" value="1000"/>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <input class="val-toggle-unmetered" type="checkbox" checked="checked"> Unmetered
+                                </div>
+                                <input type="number" class="form-control val-togglable" id="inputCpuQuota" name="inputCpuQuota" placeholder="CPU quota" min="0" autocomplete="off" value="" disabled="disabled"/>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -128,11 +146,44 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Group membership</label>
-                            <div class="col-sm-10">
-                                <div class="checkbox" id="inputGroupHolder">
-                                    <input type="checkbox" id="inputGroup_1" name="group[]" value="1" data-role="ADMIN">ADMIN
-                                    <br /><input type="checkbox" id="inputGroup_2" name="group[]" value="2" data-role="PUBLIC_USER">PUBLIC_USER
+                            <label for="inputMemoryQuota" class="col-sm-2 col-md-2 control-label">Memory Quota</label>
+                            <div class="col-sm-10 col-md-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <input class="val-toggle-unmetered" type="checkbox" checked="checked"> Unmetered
+                                    </div>
+                                    <input type="number" class="form-control val-togglable" id="inputMemoryQuota" name="inputMemoryQuota" placeholder="Memory Quota" min="0" autocomplete="off" value="" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputQuota" class="col-sm-2 col-md-2 control-label">Input Quota</label>
+                            <div class="col-sm-10 col-md-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <input class="val-toggle-unmetered" type="checkbox" checked="checked"> Unmetered
+                                    </div>
+                                    <input type="number" class="form-control val-togglable" id="inputQuota" name="inputQuota" placeholder="Input Quota" min="0" autocomplete="off" value="" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputProcessingQuota" class="col-sm-2 col-md-2 control-label">Processing Quota</label>
+                            <div class="col-sm-10 col-md-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <input class="val-toggle-unmetered" type="checkbox" checked="checked"> Unmetered
+                                    </div>
+                                    <input type="number" class="form-control val-togglable" id="inputProcessingQuota" name="inputProcessingQuota" placeholder="Processing Quota" min="0" autocomplete="off" value="" disabled="disabled"/>
                                 </div>
                             </div>
                         </div>
@@ -238,32 +289,49 @@
         return true;
     }
 
-
-    $("#inputUsername, #inputEmail, #inputEmail2").focusout(function(e) {
-        var attrId = $(this).attr("id");
-        if(attrId) {
-            validateUserUnique(attrId);
-        }
-    });
-
     $(document).ready( function(){
-        var settings = {
-            url: baseRestApiURL + "admin/users/groups",
-            "method": "GET",
-            "headers": {
-                "Cache-Control": "no-cache",
-                "Accept": "application/json",
-                "X-Auth-Token": window.tokenKey
+        (function(data){
+            var $elSel = $("#selectUserGroup");
+            $elSel.empty();
+            if((data) && (data.length>0)){
+                $.each(data, function (i, item) {
+                    $elSel.append($('<option>', {
+                        value: item.id,
+                        text : item.name
+                    }));
+                });
             }
-        };
-        $.ajax(settings).done(function (r) {
-            var response = chkTSRF(r);
-            var arrHTML = _.map(response, function(item){
-                return '<input type="checkbox" id="inputGroup_'+item.id+'" name="group[]" value="'+item.id+'" data-role="'+item.name+'">'+item.name;
-            });
-            $("#inputGroupHolder").empty().html(arrHTML.join("<br>"));
-        });
+        })(taoUserGroups.data);
 
+        //validate user input on focusout
+        $("#inputUsername, #inputEmail, #inputEmail2").focusout(function(e) {
+                validateUserUnique($(this).attr("id"));
+        });
+        //toggle unmetered fields on click
+
+        $(".val-togglable").on("check:togglebyval", function( event ) {
+            var v = $(this).val();
+            if(v==="-1"){
+                $(this).closest(".input-group").find(".val-toggle-unmetered").prop('checked', true);
+                $(this).val("").attr("disabled", "disabled");
+            }else{
+                $(this).closest(".input-group").find(".val-toggle-unmetered").prop('checked', false);
+                $(this).removeAttr("disabled");
+            }
+        });
+        $("#frmUserEdit")
+        .on("change", ".val-toggle-unmetered", function(event){
+            if ($(this).is(':checked')) {
+                $(this).closest(".input-group").find(".val-togglable").val("").attr("disabled", "disabled");
+            }else{
+                $(this).closest(".input-group").find(".val-togglable").removeAttr("disabled");
+            }
+        })
+        .on("change", "#selectUserGroup", function(e){
+            var selectedUserGroup = taoUserGroups.getById($("#selectUserGroup").val());
+            $('#frmUserEdit input[name=inputQuota]').val(selectedUserGroup.inputQuota).trigger("check:togglebyval");
+            $('#frmUserEdit input[name=inputProcessingQuota]').val(selectedUserGroup.processingQuota).trigger("check:togglebyval");
+        });
 
         $("form#frmUserEdit").submit(function (event) {
             event.preventDefault();
@@ -278,22 +346,28 @@
                 "firstName" : $('input[name=inputFirstName]', this).val(),
                 "phone" : $('input[name=inputPhone]', this).val(),
                 "lastLoginDate" : null,
-                "quota" : $('input[name=inputQuota]', this).val(),
+                "inputQuota" : -1,
+                "processingQuota" : -1,
+                "cpuQuota": -1,
+                "memoryQuota":-1,
                 "organization" : $('input[name=inputOrg]', this).val(),
                 "status" : "PENDING",
-                "external" : false,
-                "groups" : null,
+                "external" : ($('select[name=selectUserType]').val()==="1"),
+                "groups" : [],
                 "preferences" : null
             };
-            if($('select[name=selectUserType]').val()==="1"){
-                formData.external=true
-            }
-            var membership = [];
-            $("input[name='group[]']:checked").each(function ()
-            {
-                membership.push({"id":parseInt($(this).val()), "name":$(this).data("role")});
-            });
-            formData.groups = membership;
+            //set quota limits if needed
+            if($('input[name=inputQuota]', this).is(":not(:disabled)"))
+                formData.inputQuota = $('input[name=inputQuota]', this).val();
+            if($('input[name=inputProcessingQuota]', this).is(":not(:disabled)"))
+                formData.processingQuota = $('input[name=inputProcessingQuota]', this).val();
+            if($('input[name=inputCpuQuota]', this).is(":not(:disabled)"))
+                formData.cpuQuota = $('input[name=inputCpuQuota]', this).val();
+            if($('input[name=inputMemoryQuota]', this).is(":not(:disabled)"))
+                formData.memoryQuota = $('input[name=inputMemoryQuota]', this).val();
+            formData.groups.push(taoUserGroups.getById($("#selectUserGroup").val()));
+
+console.log(formData);
 
             if((formData.username === '')||(formData.email === '')){
                 showMsg("Username and email can not be empty. Please check your entries and try again.", "ERROR");
@@ -344,4 +418,5 @@
             return false;
         });
     });
+    //# sourceURL=users-plus.js
 </script>

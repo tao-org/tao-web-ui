@@ -128,12 +128,15 @@
 <script type="text/javascript" src="./assets/libs/openlayers/ol-poly.js"></script>
 <script>
     $(document).ready( function(){
-        if(window.userOpStack[0].dna && window.userOpStack[0].dna.id){
+		closePolygonMap();
+		if(window.userOpStack[0].dna && window.userOpStack[0].dna.id){
             getWFDataById(window.userOpStack[0].dna.id);
         }else{
             alert("Error determining workflow ID.");
         }
         //remove error for some input elements
+		$("#frmStartWF").off("click", ".ol");
+		$("#frmStartWF").off("change",".var-value-string, .var-value-string2, .var-value-list");
         $("#frmStartWF")
             .on("click", ".ol", function (e) {
                 // Load map poly
@@ -207,7 +210,7 @@
 
     function getWFParametersById(wfID){
         var settings = {
-            "async": true,
+            "async": false,
             "crossDomain": true,
             "url": baseRestApiURL + "orchestrator/parameters/"+wfID,
             "method": "GET",
@@ -308,7 +311,8 @@
 
     function getWFDataById (wfID){
         $.ajax({
-            cache: false,
+            async: false,
+			cache: false,
             type: "get",
             url: baseRestApiURL + "workflow/"+wfID+"/",
             dataType: "json",

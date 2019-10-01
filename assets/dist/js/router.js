@@ -45,22 +45,25 @@ $(function () {
     var hashRoutesMap = [];
     hashRoutesMap["admin/dashboard"] = "./fragments/dashboard-admin.fragment.html";
     hashRoutesMap["projects"] = '';
-
-    hashRoutesMap["admin/users"] = "./fragments/users-admin2.fragment.html";
-    hashRoutesMap["admin/containers"] = "./fragments/containers-admin2.fragment.html";
-    hashRoutesMap["admin/topology"] = "./fragments/topology-admin2.fragment.html";
-    hashRoutesMap["documentation/intro"] = "./fragments/tao-documentation.fragment.html";
-    hashRoutesMap["howto/intro"] = "./fragments/tao-howto.fragment.html";
-    hashRoutesMap["my/workflows"] = "./fragments/workflows-admin2.fragment.html";
-    hashRoutesMap["my/components"] = "./fragments/component-admin2.fragment.html";
-    hashRoutesMap["my/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
-    //hashRoutesMap["my/scripts"] = "./fragments/my-scripts.fragment.html";
+	
+    // User section
     hashRoutesMap["my/queries"] = "./fragments/datasources-queries.fragment.html";
-    hashRoutesMap["shared/workflows"] = "./fragments/workflows-all.fragment.html";
-    hashRoutesMap["shared/workflows"] = "./fragments/workflows-admin2.fragment.html";
-    hashRoutesMap["shared/components"] = "./fragments/component-admin2.fragment.html";
-    hashRoutesMap["shared/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
+    hashRoutesMap["my/components"] = "./fragments/component-admin2.fragment.html";
+	hashRoutesMap["my/workflows"] = "./fragments/workflows-admin2.fragment.html";
+    hashRoutesMap["my/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
+    hashRoutesMap["my/scheduling"] = "./fragments/scheduling-admin2.fragment.html";
+    // Shared section
     hashRoutesMap["shared/datasources"] = "./fragments/datasource-admin2.fragment.html";
+    hashRoutesMap["shared/components"] = "./fragments/component-admin2.fragment.html";
+	hashRoutesMap["shared/workflows"] = "./fragments/workflows-admin2.fragment.html";
+    hashRoutesMap["shared/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
+	// Resources
+    hashRoutesMap["admin/topology"] = "./fragments/topology-admin2.fragment.html";
+    hashRoutesMap["admin/containers"] = "./fragments/containers-admin2.fragment.html";
+    hashRoutesMap["admin/users"] = "./fragments/users-admin2.fragment.html";
+	// Documentation
+    hashRoutesMap["howto/intro"] = "./fragments/tao-howto.fragment.html";
+    hashRoutesMap["documentation/intro"] = "./fragments/tao-documentation.fragment.html";
     hashRoutesMap["undefined/page"] = "./fragments/tao-howto.fragment.html";
 
     // Event handlers for frontend navigation

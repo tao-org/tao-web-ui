@@ -1,0 +1,306 @@
+<style>
+	#accordion{max-height:500px;overflow-y:auto}
+</style>
+<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		<h4 class="modal-title" id="myModalLabel">Schedule workflow execution</h4>
+	</div>
+	<form id="frmExecNodeEdit" class="form-horizontal form-newpc" role="form">
+		<div class="modal-error collapse">
+			<h4 class="modal-title">Error schedulig execution workflow!</h4>
+			<p id="modal-error-msg">Please check your data, one or more values for the attributes is not in the acceptable range.</p>
+			<p>
+				<span class="error-workflow collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Could not retrieve the list of workflows.</span>
+			</p>
+		</div>
+		<div class="modal-body">
+			<section>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="workflowId" class="col-sm-2 col-md-2 control-label">Workflow</label>
+								<div class="col-sm-10 col-md-10">
+							<select id="workflowId" name="workflowId" class="form-control"></select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="workflowId" class="col-sm-2 col-md-2 control-label">Execution parameters</label>
+							<div class="col-sm-10 col-md-10">
+								<div class="form-group">
+									<div class="col-sm-6 col-md-6">
+										<label for="inputStartTime" class="control-label">Start time</label>
+										<div>
+											<input type="date" class="form-control" id="inputStartDate" name="inputStartDate" placeholder="input start time" autocomplete="off" value="" style="width:65%;display:inline;padding:6px" />
+											<input type="time" class="form-control" id="inputStartTime" name="inputStartTime" placeholder="input start time" autocomplete="off" value="" style="width:30%;display:inline;padding:6px" />
+										</div>
+									</div>
+									<div class="col-sm-3 col-md-3">
+										<label for="inputRepeatInterval" class="control-label">Repeat interval</label>
+										<input type="number" class="form-control" id="inputRepeatInterval" name="inputRepeatInterval" placeholder="repeat interval" min="0" autocomplete="off" value="1440"/>
+									</div>
+									<div class="col-sm-3 col-md-3">
+										<label for="inputMode" class="control-label">Scheduling type</label>
+										<select id="inputMode" name="inputMode" class="form-control">
+											<option value="INCREMENTAL" selected="">Incremental</option>
+											<option value="NORMAL">Normal</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section>
+				<div class="row collapse">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="inputWorkflowInstanceName" class="col-sm-2 col-md-2 control-label">Execution name</label>
+							<div class="col-sm-10 col-md-10">
+								<input type="text" class="form-control" id="inputWorkflowInstanceName" name="inputWorkflowInstanceName" placeholder="workflow execution name" autocomplete="off" value="">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="workflowParams" class="col-sm-2 col-md-2 control-label">Workflow parameters</label>
+							<div id="workflowParams" class="col-sm-10 col-md-10"></div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+								<button id="scheduleWorkflowExecution" type="button" class="btn btn-primary btn-submit" name="btnSave">Schedule workflow execution</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div><!-- /.modal-body -->
+	</form>
+	<div class="modal-note collapse">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+						<h4>Help filling in</h4>
+						<p>Select the workflow from the dropdown list and customize the parameters before scheduling the execution.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	</div>
+</div><!-- /.modal-content -->
+<script>
+	var editedWorkflow = window.userOpStack[0].dna;
+	var currentAction = window.userOpStack[0].action;
+	var setParameterValues = function (nodeName, cvalues) {
+		$panel = null;
+		// Find nodeName panel
+		$("#accordion>div.panel", "#workflowParams").each(function () {
+			if ($(this).data("dna") && $(this).data("dna").name == nodeName) {
+				$panel = $(this);
+				return false; // exit each loop
+			}
+		});
+		if ($panel && $panel.length == 1) {
+			$.each(cvalues, function (pName, pVal) {
+				// Find parameter table entry
+				var $parameter = null;
+				$.each($(".var-id", $panel), function () {
+					if ($(this).text() == pName) {
+						$parameter = $(this).closest(".val-row");
+						return false; // exit each loop
+					}
+				});
+				if ($parameter && $parameter.length == 1) {
+					//$(".var-value", $parameter).val(pVal);
+					var $st1 = $(".var-value-string" , $parameter);
+					var $st2 = $(".var-value-string2", $parameter);
+					var $lst = $(".var-value-list"   , $parameter);
+					if ($st1.length == 1 && $st2.length == 1 && $lst.length == 1) {
+						$(".var-value", $parameter).val(pVal);
+						if ($lst.css("display") !== "none") {
+							// Set list value
+							$(".var-value-list", $parameter).val(pVal);
+						} else if ($st2.css("display") !== "none") {
+							// Set date value
+							if (pVal.indexOf("[") == -1) {
+								$(".var-value-string" , $parameter).val(pVal);
+								$(".var-value-string2", $parameter).val(pVal);
+							} else {
+								var dt = pVal.replace(/(\[|\]| )/g, "").split(",");
+								$(".var-value-string" , $parameter).val(dt[0]);
+								$(".var-value-string2", $parameter).val(dt[1]);
+							}
+						} else {
+							// Set text/number value
+							$(".var-value-string", $parameter).val(pVal);
+						}
+					}
+				}
+			});
+		}
+	}
+	var getWorkflowParameters = function (dna, action) {
+		if (dna) {
+			$.ajax({
+				url: "./fragments/workflow-start.fragment.html?" + Math.random(),
+				success: function (result) {
+					// Change the form's name throughout the loaded code to match the scheduler's form name
+					var $rmContent = $("<div>" + result.replace(/#frmStartWF/g, "#frmExecNodeEdit") + "</div>");
+					// Extract only the workflow parameters section and add it to the scheduler's form
+					$("#accordion", $rmContent).detach().prependTo($rmContent);
+					$(".modal-content", $rmContent).remove();
+					$("#workflowParams").html($rmContent.html());
+					
+					// Restore scheduling parameters
+					if (action == "op-edit") {
+						$("#inputWorkflowInstanceName", "form#frmExecNodeEdit").val(editedWorkflow.friendlyName);
+						$("#inputStartDate"           , "form#frmExecNodeEdit").val(moment.utc(editedWorkflow.startTime).format("YYYY-MM-DD"));
+						$("#inputStartTime"           , "form#frmExecNodeEdit").val(moment.utc(editedWorkflow.startTime).format("HH:mm"));
+						$("#inputRepeatInterval"      , "form#frmExecNodeEdit").val(editedWorkflow.repeatInterval);
+						$("#inputMode"                , "form#frmExecNodeEdit").val(editedWorkflow.mode);
+						$.each(editedWorkflow.parameters, function (nodeName, cvalues) {
+							setParameterValues(nodeName, cvalues)
+						});
+					}
+					
+					// Show parameters section
+					$("#workflowParams").closest(".row").show();
+				}
+			});
+		} else {
+			$("#workflowParams").html("");
+			$("#workflowParams").closest(".row").hide();
+		}
+	}
+	$(document).ready(function () {
+		// Set dialog size to wide
+		$(".modal-dialog", "#myModalNodes").addClass("modal-lg");
+		
+		// Make sure the map which was opened in a previous instance is closed
+		closePolygonMap();
+		
+		// Get the list with all workflows
+		$.ajax({
+			cache: false,
+			url: baseRestApiURL + "workflow/",
+			dataType : 'json',
+			type: 'GET',
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"X-Auth-Token": window.tokenKey
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				$(".error-workflow", ".modal-error").css('display', 'inline-block');
+				$(".modal-error ").fadeIn("slow");
+				$('#myModalNodes').animate({scrollTop: 0}, 250);
+				$("#workflowId").prop("disabled", true);
+			},
+			success: function (response, textStatus, jqXHR) {
+				var r = chkTSRF(response);
+				if (response.status === responseStatus.success) {
+					if (currentAction == "op-edit") {
+						// Edit workflow
+						$("#workflowId").html("");
+						$("#workflowId").prop({ "disabled": true });
+						$.each(r, function (index, workflow) {
+							if (editedWorkflow.workflowId == workflow.id) {
+								$option = $('<option value="' + workflow.id + '" selected>' + workflow.name + '</option>');
+								$option.data("dna", workflow);
+								$("#workflowId").append($option);
+								return false;
+							}
+						});
+						$("#workflowId").trigger("change");
+					} else {
+						// Add new workflow
+						$("#workflowId").html('<option value="default" selected="selected">Select</option>');
+						$("#workflowId").prop({ "disabled": false });
+						$.each(r, function (index, workflow) {
+							$option = $('<option value="' + workflow.id + '">' + workflow.name + '</option>');
+							$option.data("dna", workflow);
+							$("#workflowId").append($option);
+						});
+					}
+				}
+			}
+		});
+		// Get workflow parameters for execution
+		$("form#frmExecNodeEdit").on("change", "#workflowId", function (e) {
+			window.userOpStack[0] = { "dna": $("option:selected", e.target).data("dna") };
+			getWorkflowParameters($("option:selected", e.target).data("dna"), currentAction);
+		});
+		$("form#frmExecNodeEdit").on("click", "#scheduleWorkflowExecution", function (event) {
+			event.preventDefault();
+			var formData = {};
+			if (currentAction == "op-edit") formData['id'] = editedWorkflow.id;
+			formData['workflowId']     = window.userOpStack[0].dna.id;
+			formData['repeatInterval'] = $("#inputRepeatInterval"      , "form#frmExecNodeEdit").val();
+			formData['mode']           = $("#inputMode"                , "form#frmExecNodeEdit").val();
+			formData['name']           = $("#inputWorkflowInstanceName", "form#frmExecNodeEdit").val();
+			formData['parameters']     = {};
+			if ($("#inputStartDate", "form#frmExecNodeEdit").val() !== "" &&
+				$("#inputStartTime", "form#frmExecNodeEdit").val() !== "") {
+				var dt = $("#inputStartDate", "form#frmExecNodeEdit").get(0).valueAsNumber + $("#inputStartTime", "form#frmExecNodeEdit").get(0).valueAsNumber;
+				formData['startTime'] = moment(dt);
+			} else {
+				formData['startTime'] = "";
+			}
+			$('#accordion>div.panel').each(function () {
+				var dna = $(this).data("dna");
+				if (dna) {
+					formData['parameters'][dna.name] = {};
+					var $tableValRows = $(".tbl-edt-sysvar", $(this)).find(".val-row");
+					$.each($tableValRows, function (i, $tableValRow) {
+						var n = $(".var-id", $tableValRow).text();
+						var v = $(".var-value", $tableValRow).val();
+						if (v !== '') {
+							formData['parameters'][dna.name][n] = v;
+						}
+					});
+				}
+			});
+			console.log(formData);
+			$.ajax({
+				cache   : false,
+				url     : baseRestApiURL + "scheduling/" + (currentAction == "op-edit" ? "update" : "add"),
+				dataType: 'json',
+				type    : 'POST',
+				data    : JSON.stringify(formData),
+				headers : {"Accept": "application/json","Content-Type": "application/json", "X-Auth-Token": window.tokenKey},
+				error: function (jqXHR, textStatus, errorThrown) {
+					if(jqXHR.status === 500) {
+						showMsg("Error scheduling workflow execution. Please check your data and try again.", "ERROR");
+						return;
+					}
+					showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
+				},
+				success: function (response, textStatus, jqXHR) {
+					if (response.status === "FAILED") {
+						if (response.message) {
+							showMsg(response.message, "ERROR");
+							return;
+						}
+						showMsg("Error scheduling workflow execution. Please check your data and try again.", "ERROR");
+					}
+					showMsg(response.message, "SUCCESS");
+					$("#myModalNodes").modal('hide');
+					panelComp.refreshData();
+				}
+			});
+			return false;
+		});
+	});
+	//# sourceURL=scheduling-plus.fragment.js
+</script>

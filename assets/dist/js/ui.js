@@ -24,7 +24,17 @@
 //user identity scripts
 //create user profile variable
 var taoUserProfile = {};
-
+var taoUserGroups = {
+    data: {},
+    getById: function(id){
+        id = parseInt(id);
+        if (this.data) {
+            r = _.where(this.data, {id: id});
+                if(r[0]) return r[0];
+            }
+        return undefined;
+    }
+};
 var taoEnums = {
     data: {},
     getEntity: function(e){
@@ -60,37 +70,56 @@ var enums = {
 
 $(function () {
     var username = _settings.readCookie("TaoUserName");
-    var ajax_getProfileSettings = $.ajax({
-        cache: false,
-        url: baseRestApiURL + "user/"+username,
-        dataType : 'json',
-        type: 'GET',
-		async: false,
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
-        }
-    });
-    var ajax_getConfigEnums = $.ajax({
-        cache: false,
-        url: baseRestApiURL + "config/enums",
-        dataType : 'json',
-        type: 'GET',
-		async: false,
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
-        }
-    });
 
-    $.when(ajax_getProfileSettings, ajax_getConfigEnums)
-        .done(function (responseProfile, responseEnums) {
+    function getUserProfile(username){
+        return $.ajax({
+            cache: false,
+            url: baseRestApiURL + "user/"+username,
+            dataType : 'json',
+            type: 'GET',
+            async: false,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+    }
+    function getConfigEnums(){
+        return $.ajax({
+            cache: false,
+            url: baseRestApiURL + "config/enums",
+            dataType : 'json',
+            type: 'GET',
+            async: false,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+    }
+    function getUserGroups(){
+        return $.ajax({
+            cache: false,
+            async: false,
+            crossDomain: true,
+            url: baseRestApiURL + "admin/users/groups",
+            dataType : 'json',
+            method: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+    }
+
+    $.when(getUserProfile(username), getConfigEnums(),getUserGroups())
+        .done(function (responseProfile, responseEnums, responseUserGroups) {
             var r = chkTSRF(responseProfile[0]);
-            var enums = chkTSRF(responseEnums[0]);
-            taoEnums.data = enums;
-            console.log("enums:"); console.log(enums);
+            taoEnums.data = chkTSRF(responseEnums[0]);
+            taoUserGroups.data = chkTSRF(responseUserGroups[0]);
 
             //inject additional elements into user profile data.
             if(r.id){
@@ -122,13 +151,25 @@ $(function () {
 
 (function(){
     var $elModalProfile = $("#myModalWorkFlow");
-    function updateProfile(form){
+    function updateProfile(formData){
+        var userData = {
+            "id": 0,
+            "username": "",
+            "email": "",
+            "alternativeEmail": "",
+            "lastName": "",
+            "firstName": "",
+            "phone": "",
+            "organization": ""
+        };
+        $.extend( userData, formData );
+
     	$.ajax({
     		 cache: false,
-             url: baseRestApiURL + "user/"+form.username,
+             url: baseRestApiURL + "user/"+userData.username,
              dataType : 'json',
              type: 'PUT',
-             data: JSON.stringify(form),
+             data: JSON.stringify(userData),
      		 async: false,
              headers: {
                  "Accept": "application/json",
@@ -185,7 +226,6 @@ $(function () {
                 $(".val-user-org",$elModalProfile).html(taoUserProfile.organization);
                 $(".val-user-name",$elModalProfile).html(taoUserProfile.username);
                 $(".val-user-phone",$elModalProfile).html(taoUserProfile.phone);
-                $(".val-user-quota",$elModalProfile).html(taoUserProfile.quota);
                 $("[contenteditable]").css({"word-wrap":"break-word", "white-space": "pre-wrap"});
                 
                 $(".btn-edit-profile").on("click", function(){
@@ -199,21 +239,15 @@ $(function () {
                 	    var formData = {
                                 "id" : taoUserProfile.id,
                                 "username" : taoUserProfile.username,
-                                "password" : $("div.val-user-pwd[contenteditable='true']").text(),
                                 "email" : $("div.val-user-email[contenteditable='true']").text(),
                                 "alternativeEmail" : $("div.val-user-email2[contenteditable='true']").text(),
                                 "lastName" : $("div.val-user-lname[contenteditable='true']").text(),
                                 "firstName" : $("div.val-user-fname[contenteditable='true']").text(),
                                 "phone" : $("div.val-user-phone[contenteditable='true']").text(),
-                                "quota" : $("div.val-user-quota[contenteditable='true']").text(),
-                                "organization" : $("div.val-user-org[contenteditable='true']").text(),
-                                "external" : taoUserProfile.external,
-                                "groups" : taoUserProfile.groups,
-                                "preferences" : taoUserProfile.preferences
+                                "organization" : $("div.val-user-org[contenteditable='true']").text()
                             };
                 		updateProfile(formData);
                 	}
-                	
             	});
                 $elModalProfile.modal("show");
             })

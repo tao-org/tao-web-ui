@@ -432,6 +432,11 @@ ul.timeline.current_route:before{
     border: 5px solid #FFF;
 }
 
+/*fix padding for .input-group*/
+.fix-input-group-padding{
+    padding-right: 15px;
+    padding-left: 15px;
+}
 /*bootstrap readonly form fix*/
 .form-control[readonly]{
     background-color: inherit;
@@ -1063,7 +1068,7 @@ input[type=checkbox].big{
 /* user profile */
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    max-width: 300px;
+    max-width: 440px;
     margin: auto;
     margin-top: 50px;
     text-align: center;

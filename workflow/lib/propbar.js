@@ -12,8 +12,16 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 	.on("click", ".app-dismiss" ,function(){
 		$propbar.menu("close");
 	})
+	.on("mousedown", ".on-screen" ,function(e){
+		// Save mouse coordinates
+		$('#div-propbar-widget-app').data("targetCoord", { offsetX: e.offsetX, offsetY: e.offsetY });
+	})
 	.on("click", ".on-screen" ,function(e){
-		if (event.target !== this) return;
+		if (e.target !== this) return;
+		// Prevent closing propbar when false click is triggered while selecting a text
+		var targetCoord = $('#div-propbar-widget-app').data("targetCoord");
+		if (targetCoord.offsetX !== e.offsetX || targetCoord.offsetY !== e.offsetY) return;
+		
 		$propbar.menu("close");
 	})
     .on("click", ".tbl-prop-expand-action", function(e){
@@ -120,7 +128,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 "parameterValue":$(".var-value",$(this)).val()
             };
 			var defaultVal = $(".var-default",$(this)).html();
-            if (onePair.parameterValue !== defaultVal) {
+            if (onePair.parameterValue !== defaultVal && onePair.parameterValue !== "") {
 				cV.push(onePair);
 			}
         });
@@ -482,6 +490,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 			
             var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
             $('span.var-id', $el).html(obj.name);
+            $('span.var-name', $el).html(obj.name);
             $('span.var-label', $el).html(obj.name);
             $('span.var-description', $el).html( (obj.required?"required":"not required") );
             $('span.var-dataType', $el).html(humanJavaDataType(obj.dataType).replace(";", "[]"));

@@ -49,6 +49,17 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
+                            <label for="selectUserGroup" class="col-sm-2 col-md-2 control-label">Group membership</label>
+                            <div class="col-sm-10 col-md-10">
+                                <select id="selectUserGroup" name="selectUserGroup" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
                             <label for="inputFirstName" class="col-sm-2 col-md-2 control-label">First name</label>
                             <div class="col-sm-10 col-md-10">
                                 <input type="text" class="form-control" id="inputFirstName" name="inputFirstName" placeholder="First name" autocomplete="off" value=""/>
@@ -117,9 +128,14 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputQuota" class="col-sm-2 col-md-2 control-label">Quota (GB)</label>
+                            <label for="inputCpuQuota" class="col-sm-2 col-md-2 control-label">CPU quota</label>
                             <div class="col-sm-10 col-md-10">
-                                <input type="number" class="form-control" id="inputQuota" name="inputQuota" placeholder="quota" min="0" autocomplete="off" value="1000"/>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <input class="val-toggle-unmetered" type="checkbox" checked="checked"> Unmetered
+                                    </div>
+                                    <input type="number" class="form-control val-togglable" id="inputCpuQuota" name="inputCpuQuota" placeholder="CPU quota" min="0" autocomplete="off" value="" disabled="disabled"/>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -127,11 +143,43 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Group membership</label>
-                            <div class="col-sm-10">
-                                <div class="checkbox" id="inputGroupHolder">
-                                    <input type="checkbox" id="inputGroup_1" name="group[]" value="1" data-role="ADMIN">ADMIN
-                                    <br /><input type="checkbox" id="inputGroup_2" name="group[]" value="2" data-role="PUBLIC_USER">PUBLIC_USER
+                            <label for="inputMemoryQuota" class="col-sm-2 col-md-2 control-label">Memory Quota</label>
+                            <div class="col-sm-10 col-md-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <input class="val-toggle-unmetered" type="checkbox" checked="checked"> Unmetered
+                                    </div>
+                                    <input type="number" class="form-control val-togglable" id="inputMemoryQuota" name="inputMemoryQuota" placeholder="Memory Quota" min="0" autocomplete="off" value="" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputQuota" class="col-sm-2 col-md-2 control-label">Input Quota</label>
+                            <div class="col-sm-10 col-md-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <input class="val-toggle-unmetered" type="checkbox" checked="checked"> Unmetered
+                                    </div>
+                                    <input type="number" class="form-control val-togglable" id="inputQuota" name="inputQuota" placeholder="Input Quota" min="0" autocomplete="off" value="" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputProcessingQuota" class="col-sm-2 col-md-2 control-label">Processing Quota</label>
+                            <div class="col-sm-10 col-md-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <input class="val-toggle-unmetered" type="checkbox" checked="checked"> Unmetered
+                                    </div>
+                                    <input type="number" class="form-control val-togglable" id="inputProcessingQuota" name="inputProcessingQuota" placeholder="Processing Quota" min="0" autocomplete="off" value="" disabled="disabled"/>
                                 </div>
                             </div>
                         </div>
@@ -235,6 +283,46 @@
     });
 
     $(document).ready( function(){
+        (function(data){
+            var $elSel = $("#selectUserGroup");
+            $elSel.empty();
+            if((data) && (data.length>0)){
+                $.each(data, function (i, item) {
+                    var $opt = $('<option>', {
+                        value: item.id,
+                        text : item.name
+                        //checked: "checked",
+                    });
+                    $elSel.append($opt);
+                });
+            }
+        })(taoUserGroups.data);
+        $(".val-togglable").on("check:togglebyval", function( event ) {
+            var v = $(this).val();
+            if(v==="-1"){
+                $(this).closest(".input-group").find(".val-toggle-unmetered").prop('checked', true);
+                $(this).val("").attr("disabled", "disabled");
+            }else{
+                $(this).closest(".input-group").find(".val-toggle-unmetered").prop('checked', false);
+                $(this).removeAttr("disabled");
+            }
+        });
+        $("#frmUserEdit")
+            .on("change", ".val-toggle-unmetered", function(event){
+                if ($(this).is(':checked')) {
+                    $(this).closest(".input-group").find(".val-togglable").val("").attr("disabled", "disabled");
+                }else{
+                    $(this).closest(".input-group").find(".val-togglable").removeAttr("disabled");
+                }
+            })
+            .on("change", "#selectUserGroup", function(e){
+                var selectedUserGroup = taoUserGroups.getById($("#selectUserGroup").val());
+                $('#frmUserEdit input[name=inputQuota]').val(selectedUserGroup.inputQuota).trigger("check:togglebyval");
+                $('#frmUserEdit input[name=inputProcessingQuota]').val(selectedUserGroup.processingQuota).trigger("check:togglebyval");
+            });
+
+
+
         var currentUserName = userOpStack[0].dna.username;
         //populate data with fresh, just in time values
         function populateCurrentUser(){
@@ -255,12 +343,17 @@
                 $('input[name=inputLastName]', $frm).val(response.lastName);
                 $('input[name=inputFirstName]', $frm).val(response.firstName);
                 $('input[name=inputPhone]', $frm).val(response.phone);
-                $('input[name=inputQuota]', $frm).val(response.quota);
+                $('input[name=inputCpuQuota]', $frm).val(response.cpuQuota).trigger("check:togglebyval");
+                $('input[name=inputMemoryQuota]', $frm).val(response.memoryQuota).trigger("check:togglebyval");
+                $('input[name=inputQuota]', $frm).val(response.inputQuota).trigger("check:togglebyval");
+                $('input[name=inputProcessingQuota]', $frm).val(response.processingQuota).trigger("check:togglebyval");
                 $('input[name=inputOrg]', $frm).val(response.organization);
-                _.each(response.groups, function(item){
-                    console.log(item);
-                    $("#inputGroup_"+item.id, $frm).prop('checked', true);
-                });
+
+                if(response && response.groups && response.groups[0] &&response.groups[0]['id']){
+                    var gm = response.groups[0]['id'];
+                    $("select[name=selectUserGroup]").val(gm);
+                }
+
                 if(response.external){
                     $('select[name=selectUserType]').val(1);
                 } else{
@@ -268,25 +361,8 @@
                 }
             });
         }
+        populateCurrentUser();
 
-        var settings = {
-            url: baseRestApiURL + "admin/users/groups",
-            "method": "GET",
-            "headers": {
-                "Cache-Control": "no-cache",
-                "Accept": "application/json",
-                "X-Auth-Token": window.tokenKey
-            }
-        };
-        $.ajax(settings)
-            .done(function (r) {
-                var response = chkTSRF(r);
-                var arrHTML = _.map(response, function(item){
-                    return '<input type="checkbox" id="inputGroup_'+item.id+'" name="group[]" value="'+item.id+'" data-role="'+item.name+'">'+item.name;
-                });
-                $("#inputGroupHolder").empty().html(arrHTML.join("<br>"));
-                populateCurrentUser();
-            });
 
 
 
@@ -302,22 +378,30 @@
                 "lastName" : $('input[name=inputLastName]', this).val(),
                 "firstName" : $('input[name=inputFirstName]', this).val(),
                 "phone" : $('input[name=inputPhone]', this).val(),
-                "quota" : $('input[name=inputQuota]', this).val(),
                 "organization" : $('input[name=inputOrg]', this).val(),
                 "external" : false,
-                "groups" : null,
-                "preferences" : null
+                "groups" : [],
+                "preferences" : null,
+                "inputQuota" : -1,
+                "processingQuota" : -1,
+                "cpuQuota": -1,
+                "memoryQuota":-1
             };
+            if($('input[name=inputQuota]', this).is(":not(:disabled)"))
+                formData.inputQuota = $('input[name=inputQuota]', this).val();
+            if($('input[name=inputProcessingQuota]', this).is(":not(:disabled)"))
+                formData.processingQuota = $('input[name=inputProcessingQuota]', this).val();
+            if($('input[name=inputCpuQuota]', this).is(":not(:disabled)"))
+                formData.cpuQuota = $('input[name=inputCpuQuota]', this).val();
+            if($('input[name=inputMemoryQuota]', this).is(":not(:disabled)"))
+                formData.memoryQuota = $('input[name=inputMemoryQuota]', this).val();
+            formData.groups.push(taoUserGroups.getById($("#selectUserGroup").val()));
+
+            formData.cpuQuota = parseInt(formData.cpuQuota);
 
             if($('select[name=selectUserType]').val()==="1"){
                 formData.external=true
             }
-            var membership = [];
-            $("input[name='group[]']:checked").each(function ()
-            {
-                membership.push({"id":parseInt($(this).val()), "name":$(this).data("role")});
-            });
-            formData.groups = membership;
 
             if((formData.username === '')||(formData.email === '')){
                 showMsg("Username and email can not be empty. Please check your entries and try again.", "ERROR");
@@ -358,4 +442,5 @@
             return false;
         });
     });
+    //# sourceURL=users-edit.js
 </script>

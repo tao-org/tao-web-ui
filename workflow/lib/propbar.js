@@ -101,7 +101,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
+                "X-Auth-Token": window.parent.tokenKey
             }
         });
         $.when(putOneQuery)
@@ -143,7 +143,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
+                "X-Auth-Token": window.parent.tokenKey
             }
         });
         $.when(putOneComponent)
@@ -174,6 +174,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                             widgetRootEl.find(".app-card-clean").hide();
 						}
 	};
+    var topologyList;
 	var propbar_remderNodeForm = function(nid){
         widgetRootEl.find(".tbl-edt").closest(".app-card").hide();
 	    widgetRootEl.find(".val-row").remove();
@@ -189,6 +190,26 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         var componentTemplate = null;
         var queryTemplate = null;
 
+        var getTopologyList = function(id){
+            return $.ajax({
+                cache: false,
+                url: baseRestApiURL + "topology/available",
+                dataType : 'json',
+                type: 'GET',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": window.parent.tokenKey
+                }
+            });
+        }
+        
+        $.when(getTopologyList(lcl_n.id))
+            .done(function(getTopologyResponse){
+                console.log(getTopologyResponse);
+                topologyList = getTopologyResponse.data;
+            });
+
         if(lcl_n.componentType === "PROCESSING"){
             console.log(lcl_n);
             $propbar.ntype = "PROCESSING";
@@ -198,7 +219,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 backgroundURL = "./media/"+componentTemplate.containerId+".png";
 			}
 
-
+            
             var getTokens = function(id){
                 return $.ajax({
                     cache: false,
@@ -208,16 +229,19 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                     headers: {
                         "Accept": "application/json",
                         "Content-Type": "application/json",
-                        "X-Auth-Token": window.tokenKey
+                        "X-Auth-Token": window.parent.tokenKey
                     }
                 });
             };
             $.when(getTokens(lcl_n.id))
                 .done(function (getTokensResponse) {
+					var sourcesIndex = [];
                     function prepareTokens(dd){
                         var tags = [];
-                        dd.forEach(function (d, idx) {
-                            if(d.tokens){
+						var ddUniqueBySensor = dd.filter((v,i,a)=>a.findIndex(t=>(t.sensor === v.sensor))===i)
+                        ddUniqueBySensor.forEach(function (d, idx) {
+                            if(!jQuery.isEmptyObject(d.tokens)){
+								sourcesIndex.push({"index":d.minIndex, "sensor":d.sensor})
                                 Object.keys(d.tokens).sort().forEach(function (key) {
                                     tags.push({"key": key, "desc": d.tokens[key]+" - "+d.sensor, "range":{"minIndex": d.minIndex,"maxIndex": d.maxIndex}});
                                 });
@@ -226,7 +250,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                         return tags;
                     }
                     var nodeTokens = prepareTokens(getTokensResponse.data);
-                    wf_loadModuleProcessing(nid,lcl_n,componentTemplate,nodeTokens);
+                    wf_loadModuleProcessing(nid,lcl_n,componentTemplate,nodeTokens,sourcesIndex);
                 })
                 .fail(function () {
                     alert("Could not retrive query for current datasource.");
@@ -235,9 +259,10 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         if(lcl_n.componentType === "DATASOURCE"){
             $propbar.ntype = "DATASOURCE";
             backgroundURL = './media/module-ds.png';
-            if(wfTools.toolboxnodes.ds[lclTBOID]){
+			// data source component category is removed from toolbox (is linked with workspace.js wfTools.toolboxnodes.ds, app.js wfTools.datasources commented zones)
+           /* if(wfTools.toolboxnodes.ds[lclTBOID]){
                 componentTemplate = wfTools.toolboxnodes.ds[lclTBOID].dna;
-            } else if (wfTools.toolboxnodes.uds[lclTBOID]) {
+            } else */if (wfTools.toolboxnodes.uds[lclTBOID]) {
                 componentTemplate = wfTools.toolboxnodes.uds[lclTBOID].dna;
             }
             if(wfTools.toolboxnodes.q[lclTBOID]){
@@ -274,7 +299,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
+                "X-Auth-Token": window.parent.tokenKey
             }
         });
         $.when(getQBody)
@@ -289,7 +314,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 alert("Could not retrive query for current datasource.");
             });
     };
-	var wf_loadModuleProcessing = function(nid,lcl_n,componentTemplate,nodeTokens){
+	var wf_loadModuleProcessing = function(nid,lcl_n,componentTemplate,nodeTokens,sourcesIndex){
         var html_details = "";
         var $tbl;
 
@@ -297,6 +322,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         html_details +="<span>description: "+componentTemplate.description+"</span><br>";
         html_details +="<span>authors: "+componentTemplate.authors+"</span><br>";
         html_details +="<span>copyright: "+componentTemplate.copyright+"</span><br>";
+        html_details +="<span>affinity: "+componentTemplate.nodeAffinity+"</span><br>";
         $(".val-propbar-details", widgetRootEl).html(html_details);
 
         //load system vars
@@ -315,10 +341,10 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 
             if((valueset.length === 1) && (( valueset[0] === "") || ( valueset[0] === "null"))){
                 $('input.var-value', $el).val(value);
-                if(humanJavaDataType(type) === "Date"){
+                if(type === "date"){
                     $('input.var-value-string', $el).attr("type", "date");
                 }
-                if((humanJavaDataType(type) === "Double") || (humanJavaDataType(type) === "Short") || (humanJavaDataType(type) === "Float") || (humanJavaDataType(type) === "Number")){
+                if((type === "double") || (type === "short") || (type === "float") || (type === "number")){
                     $('input.var-value-string', $el).attr("type", "number");
                 }
                 $('input.var-value-string', $el).val(value).show();
@@ -333,7 +359,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         };
         var helper_addSTblEdtRow = function($tblEdt, payload){
             var obj = {
-                "dataType": "java.lang.String",
+                "dataType": "string",
                 "defaultValue": "",
                 "description": "",
                 "format": null,
@@ -352,12 +378,12 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             $('span.var-name', $el).html(obj.name);
             $('span.var-label', $el).html(obj.label);
             $('span.var-description', $el).html(obj.description);
-            $('span.var-dataType', $el).html(humanJavaDataType(obj.dataType));
+            $('span.var-dataType', $el).html(obj.dataType);
             $('span.var-default', $el).html(obj.defaultValue);
             if((obj.value == null) || (obj.value === '') || (obj.value === undefined)){
                 obj.value = obj.defaultValue;
             }
-            if(obj.dataType === "java.lang.Boolean"){
+            if(obj.dataType === "bool"){
                 helper_putValue($el, obj.name, obj.dataType, obj.value, ["true","false"]);
             }else{
                 helper_putValue($el, obj.name, obj.dataType, obj.value, obj.valueSet);
@@ -365,10 +391,57 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             $tblEdt.append($el);
             return $el;
         };
+        /////////////////////////////////
+        if (typeof lcl_n.additionalInfo != 'undefined') {
+            lcl_n.additionalInfo.forEach(element => {
+                var obj = {
+                    "label": element.parameterName,
+                    "description": element.parameterName,
+                    "dataType": "string",
+                    "defaultValue": element.parameterValue,
+                    "required": true,
+                    "valueSet": topologyList,
+                    "value": element.parameterValue,
+                    "name": element.parameterName
+                };
+                helper_addSTblEdtRow($("#tbl-edt-sysvar"), obj);
+            });
+        }
 		
         // Parse parameters
-		$.each(componentTemplate.parameterDescriptors, function(i, value) {
+		/*$.each(componentTemplate.parameterDescriptors, function(i, value) {
             helper_addSTblEdtRow($("#tbl-edt-sysvar"),value);
+        });*/
+        $.each(componentTemplate.parameterDescriptors, function(i, parameter) {
+            if(parameter.dataType === "string" && parameter.valueSet[0] === "null"){
+                var value = {
+					id          : parameter.id,
+                    dataType    : parameter.dataType,
+                    defaultValue: "",
+                    description : parameter.description,
+					name        : parameter.name,
+					label       : parameter.label,
+                    notNull     : parameter.notNull,
+					type        : parameter.type,
+					valueSet    : parameter.valueSet
+                    
+				};
+                var elValue = helper_addSTblEdtRow($("#tbl-edt-sysvar"), value);
+                var elFilename = $('.var-value-string', elValue)[0];
+                var elValueVal = $('.var-value', elValue)[0];
+                console.log(nodeTokens);
+                //call filename plugin on element
+                $(elFilename).npFileName({
+                    tags: nodeTokens,
+                    output: elValueVal,
+                    submitOnEnter: false,
+                    debug: true,
+					sourcesIndex: sourcesIndex
+                });
+                
+            } else {
+                helper_addSTblEdtRow($("#tbl-edt-sysvar"),parameter);
+            }
         });
 
         // Parse targets
@@ -391,14 +464,12 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                     tags: nodeTokens,
                     output: elValue,
                     submitOnEnter: false,
-                    debug: true
+                    debug: true,
+					sourcesIndex: sourcesIndex
                 });
-
-
-
 			}
         });
-        if(componentTemplate.parameterDescriptors.length > 0) $tblEdt.closest(".app-card").show();
+        if(componentTemplate.parameterDescriptors.length > 0 || lcl_n.additionalInfo.length > 0) $tblEdt.closest(".app-card").show();
 	    return 1;
 	};
 
@@ -439,7 +510,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         var helper_putValue = function($el, name, type, value, valueset){
 			$('input.var-value', $el).val(value);
             if ((valueset.length === 1) && (( valueset[0] === "") || ( valueset[0] === "null"))) {
-				if (humanJavaDataType(type) === "Date") {
+				if (type === "date") {
 					$('input.var-value-string', $el).attr("type", "date").css({ "width": "30%", "margin-right": "2%" });
 					if (name.toLowerCase() === "startdate" || name.toLowerCase() === "enddate") {
 						// double field
@@ -457,9 +528,9 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 						// single field
 						$('input.var-value-string', $el).attr("type", "date").css({ "width": "30%" });
 					}
-				} else if (humanJavaDataType(type) === "Double" || humanJavaDataType(type) === "Short" || humanJavaDataType(type) === "Float" || humanJavaDataType(type) === "Number") {
+				} else if (type === "double" || type === "short" || type === "float" || type === "number") {
 					$('input.var-value-string', $el).attr("type", "number");
-                } else if (humanJavaDataType(type) === "Polygon2D") {
+                } else if (type === "polygon") {
 					// Add button to open polygon map
 					$("<i class='fa fa-fw fa-globe ol' style='position:absolute;font-size:1.5em;vertical-align:bottom;color:#2677a7;cursor:pointer;margin-left:-25px;margin-top:2px;background-color:white;'></i>").insertAfter($('input.var-value-string', $el));
 				}
@@ -476,8 +547,8 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         var helper_addSTblEdtRow = function($tblEdt, payload){
             var obj = {
                 "name": null,
-                "type": "java.lang.String",
-                "dataType": "java.lang.String",
+                "type": "REGULAR",
+                "dataType": "string",
                 "defaultValue": null,
                 "required": false,
 				"valueSet": [],
@@ -493,10 +564,10 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             $('span.var-name', $el).html(obj.name);
             $('span.var-label', $el).html(obj.name);
             $('span.var-description', $el).html( (obj.required?"required":"not required") );
-            $('span.var-dataType', $el).html(humanJavaDataType(obj.dataType).replace(";", "[]"));
+            $('span.var-dataType', $el).html(obj.dataType);
             $('span.var-default', $el).html(obj.defaultValue);
 			
-            if (humanJavaDataType(obj.dataType) === "Boolean") {
+            if (obj.dataType === "bool") {
 				obj.valueSet = [ "true", "false" ];
 			}
 			helper_putValue($el, obj.name, obj.dataType, obj.value, obj.valueSet);

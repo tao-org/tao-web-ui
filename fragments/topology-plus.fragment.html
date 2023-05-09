@@ -3,8 +3,6 @@
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" id="myModalLabel">Add new execution node</h4>
     </div>
-
-
     <form id="frmExecNodeEdit" class="form-horizontal form-newpc" role="form">
         <input type="hidden" id="op" name="op" class="op" value="op-plus" />
         <input type="hidden" id="id_u" name="id_u" value="0" />
@@ -24,6 +22,14 @@
 
         <div class="modal-body">
             <section>
+				<div class="row node_type">
+					<div class="col-md-12">
+						<div class="radio_group">
+							<label class="radio-inline"><input type="radio" name="node_type" value="new" checked />New local</label>
+							<label class="radio-inline"><input type="radio" name="node_type" value="openstack" disabled />OpenStack</label>
+						</div>
+					</div>
+				</div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group has-feedback">
@@ -61,9 +67,13 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputProcessorcount" class="col-sm-2 col-md-2 control-label">Processor count</label>
+                            <label for="inputFlavor" class="col-sm-2 col-md-2 control-label">Node flavor </label>
                             <div class="col-sm-10 col-md-10">
-                                <input type="number" class="form-control" id="inputProcessorcount" name="inputProcessorcount" placeholder="processor count" min="0" autocomplete="off" value="1"/>
+                                <div class="ui-front">
+                                    <select id="inputFlavor" name="inputFlavor" class="form-control">
+									</select>
+                                </div>
+                                <p id="inputFlovorMsg" class="collapse"></p>
                             </div>
                         </div>
                     </div>
@@ -71,9 +81,19 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputMemorysize" class="col-sm-2 col-md-2 control-label">Memory size (GB) </label>
+                            <label for="inputProcessorcount" class="col-sm-2 col-md-2 control-label">Processor count</label>
                             <div class="col-sm-10 col-md-10">
-                                <input type="number" class="form-control" id="inputMemorysize" name="inputMemorysize" placeholder="memory size GB" min="0" autocomplete="off" value="0" data-errorspan="memorySize"/>
+                                <input type="number" class="form-control flavor-edit" id="inputProcessorcount" name="inputProcessorcount" placeholder="processor count" min="0" autocomplete="off" value="1"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputMemorysize" class="col-sm-2 col-md-2 control-label">Memory size (MB) </label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="number" class="form-control flavor-edit" id="inputMemorysize" name="inputMemorysize" placeholder="memory size GB" min="0" autocomplete="off" value="0" data-errorspan="memorySize"/>
                             </div>
                         </div>
                     </div>
@@ -83,7 +103,7 @@
                         <div class="form-group">
                             <label for="inputDiskspacesize" class="col-sm-2 col-md-2 control-label">Storage space (GB) </label>
                             <div class="col-sm-10 col-md-10">
-                                <input type="number" class="form-control" id="inputDiskspacesize" name="inputDiskspacesize" placeholder="storage size GB" min="0" autocomplete="off" value="0" data-errorspan="diskSpace"/>
+                                <input type="number" class="form-control flavor-edit" id="inputDiskspacesize" name="inputDiskspacesize" placeholder="storage size GB" min="0" autocomplete="off" value="0" data-errorspan="diskSpace"/>
                             </div>
                         </div>
                     </div>
@@ -91,14 +111,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputActive" class="col-sm-2 col-md-2 control-label">Node type </label>
+                            <label for="inputSwapspacesize" class="col-sm-2 col-md-2 control-label">Swap space (GB) </label>
                             <div class="col-sm-10 col-md-10">
-                                <select id="inputType" name="inputType" class="form-control">
-                                    <option data-value="Small" value="S" selected="">Small (2-4 processors, 4-8GB RAM)</option>
-                                    <option data-value="Medium" value="M">Medium (5-8 processors, 8-16GB RAM)</option>
-                                    <option data-value="Large" value="L">Large (5-8 processors, 8-16GB RAM)</option>
-                                    <option data-value="Extra Large" value="XL">Extra Large (9-16 processors, 32-64GB RAM)</option>
-                                </select>
+                                <input type="number" class="form-control flavor-edit" id="inputSwapspacesize" name="inputSwapspacesize" placeholder="storage size GB" min="0" autocomplete="off" value="0" data-errorspan="diskSpace"/>
                             </div>
                         </div>
                     </div>
@@ -126,8 +141,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -156,9 +169,39 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
 </div><!-- /.modal-content -->
-
+<link rel="stylesheet" href="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.css" type="text/css" />
+<script src="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.js" type="text/javascript"></script>
+<!-- 1.12.1/jquery-ui.min.js for autocomplete -->
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.css" type="text/css" />
+<script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
 <script>
     var action = 'op-plus';
+    var $frmEl = $('#frmExecNodeEdit');
+	
+	var openStackAvailable = function() {
+		return $.ajax({
+			cache: false,
+			url: baseRestApiURL + "topology/external",
+			type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            },
+			success: function (response) {
+				if (response.status == responseStatus.success) {
+					$("input[name='node_type'][value='openstack']").prop("disabled", !response.data);
+				} else {
+					$("input[name='node_type'][value='openstack']").prop("disabled", true);
+				}
+			},
+			error: function (jqXHR, textStatus) {
+				console.log("unable to retrive open stack status");
+				$("input[name='node_type'][value='openstack']").prop("disabled", true);
+			}
+		});
+	};
+	
     function validateHostName(attrId){
         var $eL = $("#"+attrId);
         var $pEL = $eL.parent();
@@ -206,9 +249,9 @@
                         return 1;
                     }else{
                         if(response.data.active){
-                            showMsg("Hostname already exist. You will be editing an existing node.", "ERROR");
+                            showMsg("Hostname already exists. You will be editing an existing node.", "ERROR");
                         }else{
-                            showMsg("Hostname already exist, but current state is disabled. Saving your data will activate this execution node.", "ERROR");
+                            showMsg("Hostname already exists, but current state is disabled. Saving your data will activate this execution node.", "ERROR");
                         }
                         $(".ckattr-ok", $pEL).fadeOut();
                         $(".ckattr-error", $pEL).fadeIn();
@@ -222,9 +265,66 @@
         });
         return true;
     }
+    function renderMultilineSelect(normalNode, flavorID) {
+        var $sO = $("#inputFlavor");
+        var $sOMsg = $("#inputFlovorMsg");
+        $sO.hide().empty();
+        if(!taoFlavors || (taoFlavors.length < 1) || normalNode){
+            $sOMsg.html('flavor service unaivable').removeClass('collapse');
+			if($("#inputFlavor-button").length > 0) {
+				$sO.npMultilineSelect("destroy");
+				$sO.hide();
+			}
+            return;
+        } else {
+			$sOMsg.html("").addClass("collapse");
+		}
+        /*if(!flavorID){
+            flavorID = taoFlavors[0]['id'];
+        }*/
+		
+        //disable flavor edit ???
+        //$("input.flavor-edit").prop('disabled', true);
+        $.each(taoFlavors, function() {
+            $sO.append($("<option />").val(this.id).text(this.id).data( "payload", this ));
+        });
+		if(flavorID){
+			$sO.val(flavorID).change();
+        }
+       
+        var $ms = $sO.npMultilineSelect();
+        $ms.npMultilineSelect( "menuWidget" ).addClass( "overflow-npmultilineselect" ).parent().css("z-index", "9999");
+        $sO.npMultilineSelect("refresh");
+        if(flavorID === 'master'){
+            $sO.npMultilineSelect("disable");
+            $sOMsg.html('you can not change flavor for node master').removeClass('collapse');
+        }
+        $sO.on( "selectmenuchange", function( event, ui ) {
+            var payload = ui.item.element.data('payload');
+            console.log(payload);
+            $("#inputProcessorcount").val(payload.cpu);
+            $("#inputMemorysize").val(payload.memory);
+            $("#inputDiskspacesize").val(payload.disk);
+            $("#inputSwapspacesize").val(payload.swap);
+        });
+        //put init value if any
+/*
+        var currentFlavourID = $('select[name=inputFlavor]', this).val();
+        var matchingFlavour = _.filter(taoFlavors, function(item) {
+            return item.id === currentFlavourID;
+        });
+        $("#inputProcessorcount").val(matchingFlavour.cpu);
+        $("#inputMemorysize").val(matchingFlavour.memory);
+        $("#inputDiskspacesize").val(matchingFlavour.disk);
+        $("#inputSwapspacesize").val(matchingFlavour.swap);
+*/
 
 
+    }
     $(document).ready( function(){
+	
+		openStackAvailable();
+		
         //remove error for some input elements
         $("input","form#frmExecNodeEdit")
         .on("keypress change", function(){
@@ -235,8 +335,23 @@
                     $("#saveExecNode").removeAttr('disabled');
                 }
             }
+			if ($(this).hasClass("flavor-edit") && typeof $("#inputFlavor").find("option:selected").val() !== "undefined" && $("#inputFlavor").find("option:selected").val() !== "") {
+				renderMultilineSelect();
+			}
         });
-        $("form#frmExecNodeEdit")
+		
+        renderMultilineSelect(true);
+		
+		$("input:radio[name='node_type']").on("change", function(e) {
+			console.log();
+			if (this.value === "openstack") {
+				 renderMultilineSelect(false);
+			} else {
+				 renderMultilineSelect(true);
+			}
+		})
+		
+        $frmEl
         .on("focusout","#inputHostname",function(e) {
             if($(this).val() === "")
                 return;
@@ -244,19 +359,26 @@
                 validateHostName($(this).attr("id"));
             }
         });
-        $("form#frmExecNodeEdit").submit(function (event) {
+        $frmEl.submit(function (event) {
             event.preventDefault();
             var formData = {
                 "id":$('input[name=inputHostname]', this).val().toLowerCase(),
                 "userName":$('input[name=inputUsername]', this).val(),
                 "userPass":$('input[name=inputPassword]', this).val(),
-                "processorCount":$('input[name=inputProcessorcount]', this).val(),
-                "memorySizeGB":$('input[name=inputMemorysize]', this).val(),
-                "diskSpaceSizeGB":$('input[name=inputDiskspacesize]', this).val(),
+				"flavor":{
+					"id":$('input[name=inputHostname]', this).val().toLowerCase(),
+					"cpu":$('input[name=inputProcessorcount]', this).val(),
+					"memory":$('input[name=inputMemorysize]', this).val(),
+					"disk":$('input[name=inputDiskspacesize]', this).val(),
+					"swap":$('input[name=inputSwapspacesize]', this).val(),
+					"rxtxFactor": 1.0
+				},
 				"nodeType":$('select[name=inputType]', this).val(),
 				"description":$('textarea[name=inputDescription]', this).val(),
                 "active":$('select[name=inputActive]', this).val(),
-				"tags": [ $("select[name=inputType] option:selected", this).attr("data-value") ]
+                "volatile":false,
+				// "tags": [ $("select[name=inputType] option:selected", this).attr("data-value") ]
+				"tags": [ $("select[name=inputType] option:selected", this).attr("data-value") != null ? $("select[name=inputType] option:selected", this).attr("data-value") : $('input[name=inputHostname]', this).val().toLowerCase() ]
             };
             console.log(formData);
             if(formData.id === ''){
@@ -331,4 +453,5 @@
             return false;
         });
     });
+    //# sourceURL=topology-plus.fragment.js
 </script>

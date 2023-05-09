@@ -1,10 +1,30 @@
-    <!-- Content Header (Page header) -->
+	<!-- modal -->
+	<div id="myModalNodes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<!-- task command line modal -->
+	<div id="vmCommandModalNode" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="myModalLabel">Command Line</h4>
+				</div>
+				<div class="modal-body">
+					<h5 class="title" id="myModalLabel"></h5>
+					<textarea class="content_area" disabled ></textarea>
+				</div>
+			</div>
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<!-- Content Header (Page header) -->
     <section class="content-header tao-async-ph">
         <!--
         <div class="row">
             <div class="col-md-12">
         -->
-        <h1>Dashboard <small>Overview of TAO activity.</small></h1>
+        <h1>Dashboard <small>Overview of my activity.</small></h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
             <li class="active">Dashboard</li>
@@ -16,14 +36,140 @@
     <!-- /Content Header (Page header) -->
     <!-- Main content -->
     <section class="content tao-async-mc">
-        <div class="row">
-            <!-- Left col -->
-            <section class="col-lg-7">
 
+        <div class="row" id="panel-user-wrapper" style="display:none">
+            <!-- Left col -->
+            
+            <!-- /.Left col -->
+            <section class="col-lg-6 user-dashboard" id="left-section">
+
+				<!-- /.box -->
+				<div id="exec-list-panel" class="box box-warning dashboard-display" style="flex-grow: 1; min-height: 200px;">
+                    <div class="box-header">
+                        <i class="ion ion-clipboard"></i>
+                        <h3 class="box-title">Running Jobs</h3>
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
+                                <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
+                                <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
+                                <li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+					<div class="panel-filter">
+					</div>
+					<div class="col-md-12 like collapse">
+					</div>
+                    <div class="box-body running-jobs">
+                        <div class="panel-list">
+                        </div>
+                        <div class="panel-list-empty callout callout-empty collapse">
+                            <p>Results history is empty. It looks you did not run any workflows yet.</p>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix no-border">
+						<div class="box-tools pull-right">
+							<ul class="pagination pagination-sm inline">
+								<li class="prev"><a href="#" data-page="prev" title="See newer notifications">«</a></li>
+								<li class="active"><a href="#" data-page="0">1</a></li>
+								<li><a href="#" data-page="1">2</a></li>
+								<li><a href="#" data-page="2">3</a></li>
+								<li class="next"><a href="#" data-page="next" title="See older notifications">»</a></li>
+							</ul>
+							<ul class="pagination pagination-sm actions inline">
+								<li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+							</ul>
+						</div>
+					</div>
+                    <div class="box-notification"><p><span>List updated</span></p></div>
+                </div>
+				
+
+                <div id="download-statistics-panel" class="box box-primary statistics dashboard-display" style="min-height: 200px; height: 30%; flex-grow: 0;">
+                    <div class="box-header" style="flex-grow: 0;">
+                        <i class="ion ion-clipboard"></i>
+                        <h3 class="box-title">Download statistics</h3>
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li class="refresh"><a href="#refresh" class="refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+					<div class="box-body" style="flex-grow: 1; overflow-y: auto;">
+						<div class="progress">
+							<div class="progress-bar progress-bar-success" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:'In progress',show:true});"></div>
+							<div class="progress-bar progress-bar-warning" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip();"></div>
+							<div class="progress-bar progress-bar-info"    role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip();"></div>
+							<div class="progress-bar progress-bar-danger"  role="progressbar" data-toggle="tooltip" title="" data-original-title="Failed downloads" data-placement="bottom" onmouseover="$(this).tooltip();"></div>
+						</div>
+						<div><label>Active downloads: <span id="estimated_downloads"></span> </label></div>
+                    </div>
+				  
+				</div>
+
+				
+				<style>
+					.progress.history{width:fit-content;max-width:4em;background-color:#eaeaea !important;display:inline-flex;float:right;margin-top:5px}
+					.progress.history .progress-bar{margin:0;line-height:1em;}
+				</style>
+                
+            </section>
+
+			<section class="col-lg-6 user-dashboard" id="right-section">
+
+				<!-- TO DO List -->
+                <div id="exec-history-panel" class="box box-primary dashboard-display" style="flex-grow: 1; min-height: 200px;">
+                    <div class="box-header">
+                        <i class="ion ion-clipboard"></i>
+                        <h3 class="box-title">Executions History</h3>
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
+                                <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
+                                <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
+                                <li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+                                <li class="clear"><a href="#clear" data-action="go-clear" title="Clear list"><i class="fa fa-eraser" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+					<div class="panel-filter">
+					</div>
+					<div class="col-md-12 like collapse">
+					</div>
+                    <div class="box-body execution-history">
+                        <div class="panel-list">
+                        </div>
+                        <div class="panel-list-empty callout callout-empty collapse">
+                            <p>Results history is empty. It looks you did not run any workflows yet.</p>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix no-border">
+						<div class="box-tools pull-right">
+							<ul class="pagination pagination-sm inline">
+								<li class="prev"><a href="#" data-page="prev" title="See newer notifications">«</a></li>
+								<li class="active"><a href="#" data-page="0">1</a></li>
+								<li><a href="#" data-page="1">2</a></li>
+								<li class="disabled"><span>...</span></li>
+								<li><a href="#" data-page="10">10</a></li>
+								<li class="next"><a href="#" data-page="next" title="See older notifications">»</a></li>
+							</ul>
+							<ul class="pagination pagination-sm actions inline">
+								<li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+								<li class="clear"><a href="#clear" data-action="go-clear" title="Clear list"><i class="fa fa-eraser" aria-hidden="true"></i></a></li>
+							</ul>
+						</div>
+					</div>
+                    <div class="box-notification"><p><span>List updated</span></p></div>
+                </div>
 
                 <!-- TO DO List -->
-                <div id="notification-history-panel" class="box box-primary">
-                    <div class="box-header" style="cursor: move;">
+                <div id="notification-history-panel" class="box box-primary dashboard-display" style="flex-grow: 0; min-height: 200px; max-height: 545px; height: 40%;">
+                    <div class="box-header" >
                         <i class="ion ion-clipboard"></i>
                         <h3 class="box-title">Notifications History</h3>
                         <div class="box-tools pull-right">
@@ -32,6 +178,7 @@
                                 <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
                                 <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
                                 <li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+								<li class="clear"><a href="#clear" data-action="go-clear" title="Clear list"><i class="fa fa-eraser" aria-hidden="true"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -43,7 +190,7 @@
                                 <span class="text">Sample notification line.</span>
                                 <small class="label label-danger"><i class="fa fa-clock-o"></i> 2017.05.02</small>
                                 <div class="tools">
-                                    cucuc<i class="fa fa-trash-o"></i>
+                                    <i class="fa fa-trash-o"></i>
                                 </div>
                             </li>
                         </ul>
@@ -65,174 +212,89 @@
                     </div>
                     <div class="box-notification"><p><span>List updated</span></p></div>
                 </div>
-                <!-- /.box -->
-                <!-- TO DO List -->
-                <div id="exec-history-panel" class="box box-primary">
-                    <div class="box-header" style="cursor: move;">
-                        <i class="ion ion-clipboard"></i>
-                        <h3 class="box-title">Executions History</h3>
-                        <div class="box-tools pull-right">
-                            <ul class="pagination pagination-sm inline">
-                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
-                                <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
-                                <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
-                                <li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <div class="panel-list">
-                        </div>
-                        <div class="panel-list-empty callout callout-empty collapse">
-                            <p>Results history is empty. It looks you did not run any workflows yet.</p>
-                        </div>
-                    </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer clearfix no-border">
-                        <div class="box-tools pull-right">
-                            <ul class="pagination pagination-sm inline">
-                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
-                                <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
-                                <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="box-notification"><p><span>List updated</span></p></div>
-                </div>
-                <!-- /.box -->
-				
-                <div id="download-statistics-panel" class="box box-primary statistics">
-                    <div class="box-header" style="cursor: move;">
-                        <i class="ion ion-clipboard"></i>
-                        <h3 class="box-title">Download statistics</h3>
-                        <div class="box-tools pull-right">
-                            <ul class="pagination pagination-sm inline">
-                                <li class="refresh"><a href="#refresh" class="refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-					<div class="box-body">
-						<div class="progress">
-							<div class="progress-bar progress-bar-success" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:'In progress',show:true});"></div>
-							<div class="progress-bar progress-bar-warning" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip();"></div>
-							<div class="progress-bar progress-bar-info"    role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip();"></div>
-							<div class="progress-bar progress-bar-danger"  role="progressbar" data-toggle="tooltip" title="" data-original-title="Failed downloads" data-placement="bottom" onmouseover="$(this).tooltip();"></div>
-						</div>
-						<div><label>Number of products to download: <span id="estimated_downloads"></span> </label></div>
-					</div>
-				</div>
-				<style>
-					.progress{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-					.progress,.progress>.progress-bar{clear:both;height:auto;margin-bottom:5px;text-align:left;text-shadow:1px 1px 1px black;text-indent:5px;line-height:2em;white-space:nowrap}
-				</style>
+                
             </section>
-            <!-- /.Left col -->
-            <section class="col-lg-5">
 
-                <!-- Monitor master -->
-                <div id="widget-master-nodemonitor" class="box box-solid bg-navy">
-                    <iframe id="iframe-nodemonitor" src="./nodemonitor.html?node=master" style="width: 100%; height: 400px; border: 0px;"></iframe>
-                </div>
-                <!-- /.box -->
-                <!-- Load -->
-                <div class="box box-solid bg-green-gradient collapse">
-                    <div class="box-header" style="cursor: move;">
-                        <i class="fa fa-calendar"></i>
-                        <h3 class="box-title">Load</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body no-padding">
 
-                    </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer text-black">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <!-- Progress bars -->
-                                <div class="clearfix">
-                                    <span class="pull-left">Node #1</span>
-                                    <small class="pull-right">90%</small>
-                                </div>
-                                <div class="progress xs">
-                                    <div class="progress-bar progress-bar-green" style="width: 90%;"></div>
-                                </div>
-
-                                <div class="clearfix">
-                                    <span class="pull-left">Node #2</span>
-                                    <small class="pull-right">70%</small>
-                                </div>
-                                <div class="progress xs">
-                                    <div class="progress-bar progress-bar-green" style="width: 70%;"></div>
-                                </div>
-
-                                <div class="clearfix">
-                                    <span class="pull-left">Node #3</span>
-                                    <small class="pull-right">0%</small>
-                                </div>
-                                <div class="progress xs">
-                                    <div class="progress-bar progress-bar-green" style="width: 0;"></div>
-                                </div>
-
-                                <div class="clearfix">
-                                    <span class="pull-left">Node #4</span>
-                                    <small class="pull-right">30%</small>
-                                </div>
-                                <div class="progress xs">
-                                    <div class="progress-bar progress-bar-green" style="width: 30%;"></div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <!-- /.row -->
-                    </div>
-                </div>
-                <!-- /.box -->
-
-                <!-- TO DO List -->
-                <div id="exec-list-panel" class="box box-warning">
-                    <div class="box-header" style="cursor: move;">
-                        <i class="ion ion-clipboard"></i>
-                        <h3 class="box-title">Running Jobs</h3>
-                        <div class="box-tools pull-right">
-                            <ul class="pagination pagination-sm inline">
-                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
-                                <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
-                                <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
-                                <li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <div class="panel-list">
-                        </div>
-                        <div class="panel-list-empty callout callout-empty collapse">
-                            <p>Results history is empty. It looks you did not run any workflows yet.</p>
-                        </div>
-                    </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer clearfix no-border">
-                        <div class="box-tools pull-right">
-                            <ul class="pagination pagination-sm inline">
-                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
-                                <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
-                                <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="box-notification"><p><span>List updated</span></p></div>
-                </div>
-                <!-- /.box -->
-            </section>
             <!-- right col -->
         </div>
     </section><!-- /.content -->
+	<style>
+		#exec-user-history-panel .box-body,#exec-user-list-panel .box-body,#user_download_list .box-body{height:calc(100vh - 37em)!important;overflow:auto;}
+		#exec-user-history-panel .box-footer .pagination,#exec-user-list-panel .box-footer .pagination{margin:0}
+		/*#exec-history-panel .box-body{height:794px;overflow:auto}
+		#exec-list-panel .box-body{height:240px;overflow:auto}*/
+		#exec-history-panel .box-body{overflow:auto}
+		#exec-list-panel .box-body{overflow:auto;}
+		/*#exec-list-panel .running-jobs{height: 453px; max-height: 453px;}
+		.execution-history{height: 270px; max-height: 270px;}*/
+		#exec-user-list-panel .tasks .one-task{display:inline-flex;flex-wrap:wrap;width:100%;}
+		#exec-user-list-panel .progress.history{max-width:none;width:20%;margin:0 15px;min-width:fit-content;}
+		/*#notification-history-panel .box-body{min-height:300px;}*/
+		.user-dashboard {display: flex; height: calc(100vh - 178px); overflow-y: unset; flex-direction: column;}
+		.dashboard-display{display: flex; flex-direction: column; overflow-y: hidden;}
+		#exec-list-panel .box-footer {flex-grow: 0;}
+		#exec-history-panel .box-footer {flex-grow: 0;}
+		#notification-history-panel .box-footer {flex-grow: 0;}
+
+		#download-statistics-panel.box-header {flex-grow: 0;}
+		#exec-list-panel .box-header {flex-grow: 0;}
+		#exec-history-panel .box-header {flex-grow: 0;}
+		#notification-history-panel .box-header {flex-grow: 0;}
+
+		#download-statistics-panel .box-body{overflow-y:auto; flex-grow: 1;}
+		#exec-list-panel .box-body{overflow-y:auto; flex-grow: 1;}
+		#exec-history-panel .box-body{overflow-y:auto; flex-grow: 1;}
+		#notification-history-panel .box-body{overflow-y:auto; flex-grow: 1;}
+		h4{margin-bottom: 5px;}
+		
+
+		.progress{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+		.progress,.progress>.progress-bar{clear:both;height:auto;margin-bottom:5px;text-align:left;text-shadow:1px 1px 1px black;text-indent:5px;line-height:2em;white-space:nowrap}
+		.progress-bar{max-width:100%;}
+		.user_download_info .progress{height:2rem;padding:0;margin:0;}
+		
+		.memory-progress-bar.unavailable,.cpu-progress-bar.unavailable,.disk-progress-bar.unavailable{background-color:grey}
+		.memory-progress-bar,.cpu-progress-bar,.disk-progress-bar,.used-ram-progress-bar,.used-cpu-progress-bar{background-color:#cadce7;height:20px;padding:0;}
+		
+		#panel-user-wrapper .panel-filter input,#user_info_accordion .panel-filter input,#vm_running_tasks .panel-filter input{width:14rem;margin-right:4rem;}
+		.panel-filter .box-tools .filter-inputs,.like{font-size:1rem;}
+		.panel-filter,.like{font-size:1rem;padding-left:1rem;}
+		.panel-filter .box-tools>i{font-size:2rem;left:0;}
+		.panel-filter .box-tools{width:100%;display:inline-flex;height:2rem;}
+		.like span{margin:5px 5px 5px 0;}
+		
+		.panel-filter .box-tools .filter-inputs .search-box{height:2rem;}
+		#panel-user-wrapper .search-icon,#user_info_accordion .search-icon,#vm_running_tasks .search-icon{color:black;}
+		#panel-user-wrapper .search-box,#user_info_accordion .search-box,#vm_running_tasks .search-box{text-indent:initial;color:red;border:none;outline:none;box-shadow:none;padding-left:15px;cursor:text;border-radius:2px;background:#ecf0f5;color:black;-webkit-transition:width 0.6s cubic-bezier(0, 1.22, 0.66, 1.39),border-radius 0.6s,background 0.6s;transition:width 0.6s cubic-bezier(0, 1.22, 0.66, 1.39),border-radius 0.6s, background 0.6s;}
+		#panel-user-wrapper .search-box::placeholder,#user_info_accordion .search-box::placeholder,#vm_running_tasks .search-box::placeholder{font-family:"Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;color:#black}
+		.ui-widget.ui-widget-content{font-size:1rem;}
+
+		/* Task log info */
+		.log-info{color: #00c0ef;background: 0 0; border: 0; }
+		.log-modal{display: none; position: fixed; overflow: auto; z-index: 3; padding-top: 10em; width: 100%; height: 100%;background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4);left: 0; top: 0;}
+		.log-modal-content{ background-color:#fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 65%;}
+		.log-close {color: #aaaaaa; float: right; font-size: 28px; font-weight: bold; padding: 0; background: 0 0; border: 0;}
+		.log-close:hover,.log-close:focus{color: #000;text-decoration: none;cursor: pointer;}
+		.log-title-button{background-color: white;display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between;}
+		.log-title{background-color: white;}
+		
+	</style>
 <script>
-	function updateDownloadStatistics(once) {
+	var downloadStatisticsTimeout;
+	var runJobs;
+	var histJobs;
+	function updateDownloadStatistics(username, options, once) {
+		var parentTree = $.extend({"id": "#panel-user-wrapper",
+						  "estimatedID": "#estimated_downloads",
+						  "accordionID": ""
+						 }, options);
+		if (typeof username === "undefined") {
+			username = taoUserProfile.username;
+		}
 		$.ajax({
             cache    : false,
-			url      : baseRestApiURL + "progress/",
+			url      : baseRestApiURL + "progress?category=product.progress&userName=" + username,
             dataType : 'json',
             type     : 'GET',
             headers  : {
@@ -245,7 +307,7 @@
 			
 			var totPrc = 0
 			var cnt = 0;
-			$(".statistics .progress").html("");
+			$(".statistics .progress", parentTree.id).html("");
 			var $bar = "";
 			if (res.length > 0) {
 				res.sort(function (a, b){
@@ -254,57 +316,165 @@
 					return 0;
 				});
 				
+				var parentID = parentTree.accordionID !== "" ? parentTree.accordionID : parentTree.id;
 				$.each(res, function (index, resource) {
 					$bar = $('<div class="progress-bar progress-bar-success" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">' + resource.name + '</div>');
-					$bar.attr("title", parseInt(resource.progress*10000)/100 + "%");
-					$bar.css({ width: parseInt(resource.progress*10000)/100 + "%" });
-					$(".statistics .progress").append($bar);
+					$bar.attr("title", parseInt(resource.progress*100) + "%" + (typeof resource.info.speed === "undefined" ? "" : " [" + resource.info.speed + "]"));
+					$bar.css({ width: parseInt(resource.progress*100) + "%" });
+					$(".statistics .progress", parentID).append($bar);
 					
 					totPrc += resource.progress;
 					cnt ++;
 				});
-				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">Overall progress</div>');
-				$bar.attr("title", parseInt(totPrc*10000/cnt)/100 + "%");
-				$bar.css({ width: parseInt(totPrc*10000/cnt)/100 + "%" });
+				
+				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">Overall progress (' + Math.ceil(totPrc) + ' of ' + cnt + ')</div>');
+				$bar.attr("title", parseInt(totPrc*100/cnt) + "%");
+				$bar.css({ width: parseInt(totPrc*100/cnt) + "%" });
 			} else {
 				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">No downloads in progress</div>');
 				$bar.attr("title", "");
 				$bar.css({ width: "100%" });
 			}
-			$(".statistics .progress").prepend($bar);
-			$(".statistics #estimated_downloads").html(cnt);
+			$(".statistics .progress", parentTree.id).prepend($bar);
+			$(".statistics " + parentTree.estimatedID, parentTree.id).html(cnt);
 		}).fail(function (jqXHR, textStatus) {
 		}).complete(function () {
 			if (!once) {
-				setTimeout(function () { updateDownloadStatistics(); }, 20000);
+				downloadStatisticsTimeout = setTimeout(function () { updateDownloadStatistics(username, options); $(document).trigger("quota:update")}, 20000);
 			}
         });
 	}
-    $( document ).ready(function() {
-		updateDownloadStatistics();
-        $("#exec-list-panel").npExecPanels({
+	
+	function getUserQuotaInfo(username) {
+		return $.ajax({
+			cache: false,
+			url: baseRestApiURL + "user/"+username,
+			dataType : 'json',
+			type: 'GET',
+			async: false,
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"X-Auth-Token": window.tokenKey
+			}
+		}); 
+	}
+	
+	myModalOpShow = function(operationid, args) {
+        var $modal = $("#myModalNodes");
+        var rmContent = '';
+        window.userOpStack = [];
+		if (operationid === "view_user_info") {
+			rmContent = viewUserInfo(args.dna);
+		}
+		if (operationid === "view_vm_info") {
+			rmContent = viewVMInfo(args.dna);
+		}
+		if (rmContent !== "") {
+			$modal.find('.modal-dialog').html(rmContent);
+			$modal.modal('show');
+		} else {
+			alert("Could not retrive needed data from server.");
+			return;
+		}
+    };
+
+	function viewUserInfo(usrData) {
+		var $userInfo = $("#info-content").clone().removeAttr("style id");
+		$(".modal-title", $userInfo).html(usrData.fullName);
+		$("input[name='username']", $userInfo).val(usrData.username);				
+																							  
+		$("#exec-user-list-panel", $userInfo).npExecPanels({
             msgEnd: "No more job to show.",
-            msgEmpty: "Job pool is empty. No workflow is currently running.",
+            msgEmpty: "No job is currently running.",
             theme: '',
-            url: baseRestApiURL + "orchestrator/running/jobs/"
+            url: baseRestApiURL + "orchestrator/running/jobs/" + usrData.username,
+			cancelURL:  baseRestApiURL + "orchestrator/stop"
         });
-        $("#exec-history-panel").npExecPanels({
+		$("#exec-user-history-panel", $userInfo).npExecPanels({
             msgEnd: "You reached the end of execution list. Nothing more to show.",
             msgEmpty: "Results history is empty. It looks you did not run any workflows yet.",
             theme: '',
-            url: baseRestApiURL + "orchestrator/history/"
+			itemsOnPage: 8,
+            url: baseRestApiURL + "orchestrator/history/" + usrData.username
         });
-        $("#notification-history-panel").npNotificationsPanels({
-            msgEnd: "You reached the end of notification list. Nothing more to show.",
-            msgEmpty: "Notification history is empty. You do not have any notifications yet.",
-            theme: '',
-            headerUser: taoUserProfile.username,
-            url: baseRestApiURL + "monitor/notification/"
-        });
+		var options = { "id": "#user_download_list",
+						"estimatedID": "#user_estimated_downloads_accordion",
+						"accordionID": "#user_download_list"
+					  }
+		updateDownloadStatistics(usrData.username, options);
+		return $userInfo;
+	}
+	
+	function numberOfJobs($element){
+		var elHeight = $element.height();
+		if(elHeight < 58){
+			return 1;
+		} else {
+			return Math.floor(elHeight/58);
+		}
+	}
+
+
+	function createUserDashboard() {
+		$("#panel-user-wrapper").show();
+		updateDownloadStatistics();
+
+		runJobs = numberOfJobs($(".box-body.running-jobs"));
+		histJobs = numberOfJobs($(".box-body.execution-history"));
+
+		// IMPORTANT: pauseURL must be uncommented if the action should appear i UI
+		$("#exec-list-panel").npExecPanels({
+			msgEnd: "No more job to show.",
+			msgEmpty: "No job is currently running.",
+			itemsOnPage: runJobs,
+			theme: '',
+			url: baseRestApiURL + "orchestrator/running/jobs/" + taoUserProfile.username,
+			cancelURL:  baseRestApiURL + "orchestrator/stop"
+			//pauseURL: baseRestApiURL + "orchestrator/pause",
+		});
+		// IMPORTANT: resumeURL must be uncommented if the action should appear i UI
+		$("#exec-history-panel").npExecPanels({
+			msgEnd: "You reached the end of execution list. Nothing more to show.",
+			msgEmpty: "Results history is empty. User did not run any workflows yet.",
+			itemsOnPage: histJobs,
+			theme: '',
+			url: baseRestApiURL + "orchestrator/history/" + taoUserProfile.username
+			//resumeURL: baseRestApiURL + "orchestrator/resume"
+		});
+		$("#notification-history-panel").npNotificationsPanels({
+			msgEnd: "You reached the end of notification list. Nothing more to show.",
+			msgEmpty: "Notification history is empty. You do not have any notifications yet.",
+			theme: '',
+			headerUser: taoUserProfile.username,
+			url: baseRestApiURL + "monitor/notification/"
+		});
 		$("#download-statistics-panel").on("click", "a.refresh", function (e) {
 			e.preventDefault();
-			updateDownloadStatistics(true);
+			updateDownloadStatistics(taoUserProfile.username, null, true);
+			$(document).trigger("quota:update");
+		})
+		.on("panel:refresh", function(e) {
+			e.preventDefault();
+			updateDownloadStatistics(taoUserProfile.username, null, true);
+			$(document).trigger("quota:update");
 		});
+	}
+
+	$( document ).ready(function() {
+		createUserDashboard();
+
+		$(window).resize(function(){
+			runJobs = numberOfJobs($(".box-body.running-jobs"));
+			histJobs = numberOfJobs($(".box-body.execution-history"));
+
+			$("#exec-list-panel").trigger("panel:resize", runJobs);
+			$("#exec-history-panel").trigger("panel:resize", histJobs);
+			
+		});
+
+		$.AdminLTE.layout.fix();
+
     });
 	
 //# sourceURL=dashboard-admin.js

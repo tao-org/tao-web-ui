@@ -7,7 +7,6 @@
 	var delimiter = [];
 	var inputSettings = [];
 	var callbacks = [];
-	  console.log('4_:'+$.fn.jquery);
 	$.fn.addTag = function(value, options) {
 		options = jQuery.extend({
 			focus: false,
@@ -304,6 +303,15 @@
 			var f = callbacks[id]['onChange'];
 			f.call(obj, obj, tags);
 		}
+	};
+	
+	$.fn.destroyTagsInput = function () {
+		$(this).next('.tagsinput').remove();
+		$(this).removeAttr("id");
+		$(this).removeAttr("style");
+		$(this).val('');
+		$(this).show();
+		$(this).removeData('tagsinput-init');
 	};
 	
 	var _getDelimiter = function(delimiter) {

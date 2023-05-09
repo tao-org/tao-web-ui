@@ -1,4 +1,5 @@
 var groupGutter = {"l":20,"t":20,"r":20,"b":20};
+var gridSize = { "x": 20, "y": 20 };
 
 var wfPlumbCanvasData = {};
 var tao_resetCanvasData = function() {
@@ -131,7 +132,7 @@ var tao_setWF2CanvasData = function(currentWfData){
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
+                "X-Auth-Token": window.parent.tokenKey
             }
         });
         $.when(putWorkflowById)
@@ -155,7 +156,7 @@ var tao_setWF2CanvasData = function(currentWfData){
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
+                "X-Auth-Token": window.parent.tokenKey
             }
         });
         $.when(getWorkflowById)
@@ -176,7 +177,7 @@ var tao_setWF2CanvasData = function(currentWfData){
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "X-Auth-Token": window.tokenKey
+                    "X-Auth-Token": window.parent.tokenKey
                 }
             });
             var getDatasourcesList = $.ajax({
@@ -187,7 +188,7 @@ var tao_setWF2CanvasData = function(currentWfData){
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "X-Auth-Token": window.tokenKey
+                    "X-Auth-Token": window.parent.tokenKey
                 }
             });
             //get component templates for all groups in workflow
@@ -200,7 +201,7 @@ var tao_setWF2CanvasData = function(currentWfData){
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "X-Auth-Token": window.tokenKey
+                    "X-Auth-Token": window.parent.tokenKey
                 }
             });
             if(wfPlumbCanvasData.usedDSGroups.length > 1){
@@ -216,7 +217,7 @@ var tao_setWF2CanvasData = function(currentWfData){
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    "X-Auth-Token": window.tokenKey
+                    "X-Auth-Token": window.parent.tokenKey
                 }
             });
 
@@ -249,7 +250,7 @@ var tao_setWF2CanvasData = function(currentWfData){
                     $.each(currentWfComponentsList, function(i, item) {
                         var hash = "tboid"+jsHashCode(item.id);
                         if(wfPlumbCanvasData.nodeTemplates.pc[hash]){
-                            alert("Processing components collision. duplicate id detected");
+                            alert("Processing module collision. duplicate id detected");
                         }else{
                             wfPlumbCanvasData.nodeTemplates.pc[hash] = {
                                 id: hash,
@@ -409,7 +410,7 @@ var tao_setWF2CanvasData = function(currentWfData){
                     headers: {
                         "Accept": "application/json",
                         "Content-Type": "application/json",
-                        "X-Auth-Token": window.tokenKey
+                        "X-Auth-Token": window.parent.tokenKey
                     }
                 });
                 $.when(getDatasourceGroupById)
@@ -449,7 +450,7 @@ var tao_setWF2CanvasData = function(currentWfData){
                     headers: {
                         "Accept": "application/json",
                         "Content-Type": "application/json",
-                        "X-Auth-Token": window.tokenKey
+                        "X-Auth-Token": window.parent.tokenKey
                     }
                 });
                 $.when(getProcessingComponentById)
@@ -486,7 +487,7 @@ var tao_setWF2CanvasData = function(currentWfData){
                     headers: {
                         "Accept": "application/json",
                         "Content-Type": "application/json",
-                        "X-Auth-Token": window.tokenKey
+                        "X-Auth-Token": window.parent.tokenKey
                     }
                 });
                 $.when(getDatasourceById)
@@ -523,7 +524,7 @@ var tao_setWF2CanvasData = function(currentWfData){
                     headers: {
                         "Accept": "application/json",
                         "Content-Type": "application/json",
-                        "X-Auth-Token": window.tokenKey
+                        "X-Auth-Token": window.parent.tokenKey
                     }
                 });
                 $.when(getGroupById)
@@ -662,14 +663,18 @@ var canvasRenderer = {
         }
         innerHTML += "</div>";
 
-        innerHTML += "<div class=\"module-new\"></div>";
+       // innerHTML += "<div class=\"module-new\"></div>";
         if(dna.ntype === "unknown"){
             innerHTML += "<div class=\"module-title\">Component&nbsp;unavailable:<br>"+dna.mlabel+"</div>";
         }else{
             innerHTML += "<div class=\"module-title\">"+dna.mlabel+"</div>";
         }
         innerHTML += "<div class=\"module-subtitle\">"+dna.fullData.componentId+"</div>";
-        innerHTML += "<div class=\"module-subtitle\">"+niceIsoTime(dna.fullData.created)+"</div>";
+        if (dna.ntype === "pc" && typeof dna.fullData.additionalInfo != 'undefined'){
+            var affinity = 'affinity: ' + dna.fullData.additionalInfo[0].parameterValue;
+            innerHTML += "<div class=\"module-subtitle\">"+affinity+"</div>";
+        }
+        //innerHTML += "<div class=\"module-subtitle\">"+niceIsoTime(dna.fullData.created)+"</div>";
         innerHTML += "</div>";
         innerHTML += "<div class=\"module-ports\">";
         for (i = 0; i < maxPorts; i++) {
@@ -681,18 +686,19 @@ var canvasRenderer = {
         innerHTML += "<div class=\"module-status\">"+parallelism+"</div>";
         innerHTML += "</div>";
         innerHTML += "<div class=\"module-middle\"><div class=\"module-icon csvType\">";
-        innerHTML += "<img class=\"node-avatar-img\" src=\""+nodeIcon+"\" alt=\"component logo\">";
+        innerHTML += "<img class=\"node-avatar-img\" src=\""+nodeIcon+"\" alt=\"\">";
 //        innerHTML += "<svg width=\"40\" height=\"40\">";
 //        innerHTML += "<path id=\"arc1\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"12\" d=\""+describeArc(20, 20, 12, 0, completeness/100*360)+"\" />";
 //        innerHTML += "</svg>";
         innerHTML += "</div></div>";
         innerHTML += "<footer class=\"module-footer\">";
         innerHTML += "<div class=\"meta\"><button class=\"btn-transparent btn-action-erasemodule\"><i class=\"fa fa-trash\"></i><span class=\"sr-only\">Erase module</span></button></div>";
-        if(dna.ntype !== "unknown") {
+        if(dna.ntype !== "unknown" && dna.ntype !== "ds") {
             innerHTML += "<div class=\"meta\"><button class=\"btn-transparent btn-action-editmodule\"><i class=\"fa fa-pencil\"></i><span class=\"sr-only\">Edit module</span></button></div>";
         }
         if(dna.ntype === "pc") {
             innerHTML += "<div class=\"meta meta-group\"><button class=\"btn-transparent btn-action-groupmodule\"><i class=\"fa fa-object-group\"></i><span class=\"sr-only\">Group module</span></button></div>";
+            innerHTML += "<div class=\"meta meta-ungroup collapse\"><button class=\"btn-transparent btn-action-ungroupmodule\"><i class=\"fa fa-object-ungroup\"></i><span class=\"sr-only\">Ungroup</span></button></div>";
         }
         innerHTML += "</footer>";
 //
@@ -744,7 +750,8 @@ var canvasRenderer = {
             constrain:true,
             anchor:"Continuous",
             endpoint:"Blank",
-            droppable:false
+            droppable: false,
+            dragOptions: { grid: [20, 20], snapThreshold: 1 }
         });
 
         //var elPort = document.getElementById("p-in-1-"+dna.nodeID); window.jsp.addToGroup("ng_"+dna.nodeID, elPort);
@@ -810,6 +817,33 @@ var canvasRenderer = {
         spanX += groupGutter.l + groupGutter.r;
         spanY += groupGutter.t + groupGutter.b;
 
+        //fit group to grid
+        var modTop = groupBounds.top % gridSize.y;
+        if (modTop != 0) {
+            var intTop = Math.trunc(groupBounds.top / gridSize.y);
+            if (modTop <= 10)
+                groupBounds.top = intTop * gridSize.y;
+            else groupBounds.top = (intTop + 1) * gridSize.y;
+        }
+        var modLeft = groupBounds.left % gridSize.x;
+        if (modLeft != 0) {
+            var intLeft = Math.trunc(groupBounds.left / gridSize.x);
+            if (modLeft <= 10)
+                groupBounds.left = intLeft * gridSize.x;
+            else groupBounds.left = (intLeft + 1) * gridSize.x;
+        }
+
+        var gridX = Math.trunc(spanX / gridSize.x);
+        var gridXMod = spanX % gridSize.x;
+        if (gridXMod > 0) {
+            spanX = (gridX + 1) * gridSize.x;
+        }
+        var gridY = Math.trunc(spanY / gridSize.y);
+        var gridYMod = spanY % gridSize.y;
+        if (gridYMod > 0) {
+            spanY = (gridY + 1) * gridSize.y;
+        }
+
         d.setAttribute("style","top:"+groupBounds.top+"px;left:"+groupBounds.left+"px;width:"+spanX+"px;height:"+spanY+"px;");
         jsp.revalidate(d.id);
     },
@@ -819,7 +853,8 @@ var canvasRenderer = {
             $.each(fullData.nodes, function(i, oneNode) {
                 var canvasID = wfPlumbCanvasData.getCanvasIdByNodeId(oneNode.id);
                 $("#"+canvasID).addClass('g_' + groupCanvasID).data('group', groupCanvasID);
-                $(".meta.meta-group","#"+canvasID).hide();
+                $(".meta.meta-group", "#" + canvasID).hide();
+                $(".meta.meta-ungroup", "#" + canvasID).show();
             });
         }
     },

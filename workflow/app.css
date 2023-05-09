@@ -285,7 +285,7 @@ float: right;
     color: #fff;
 
 }
-.w.selected .l-n-p-o{
+.w.selected .l-n-p-o, .l-n-p-o.show {
     opacity: 1;
     transform: none;
 }
@@ -306,7 +306,7 @@ float: right;
     border-radius: 10px;
     color: #fff;
 }
-.w.selected .l-n-p-i{
+.w.selected .l-n-p-i, .l-n-p-i.show {
     opacity: 1;
     transform: none;
 }
@@ -366,4 +366,13 @@ path, .jtk-endpoint { cursor:pointer; }
 }
 .w.node-to-be-deleted{
     border: 4px solid red !important;
+}
+
+.canvas-grid {
+    
+    border: 1px solid gray;
+    background-image: url(media/grid.png);
+    background-repeat: repeat;
+    overflow: scroll;
+    z-index: -1;
 }

@@ -1,0 +1,432 @@
+<style>
+.modal-error{background-color:red}
+.modal-error span{background:#a63f3f}
+
+.docker-files   {position:relative;border-left:10px solid #79bde4;background-image: linear-gradient(to right, #eff9ff, transparent);}
+.auxiliary-files{position:relative;border-left:10px solid #8fcc97;background-image: linear-gradient(to right, #effff1, transparent);}
+.docker-files    .info-text{font-style:italic;display:inline-block;color:#79bde4}
+.auxiliary-files .info-text{font-style:italic;display:inline-block;color:#8fcc97}
+
+.add-extra-file{position:absolute;top:0;right:14px;color:#146b9c;font:normal normal normal 20px/1 FontAwesome;padding:5px;margin:5px;cursor:pointer}
+.add-extra-file::after{content:"\f067"}
+
+.extra-files-container>input[type="file"]{width:92%;margin-bottom:2px}
+.extra-files-container>input[type="file"]::after{content:"\f014";font:normal normal normal 16px/1 FontAwesome;display:inline-block;cursor:pointer;padding:2px;position:absolute;left:91%;color:red}
+
+
+/*------MAP------*/
+/*#myModalNodes #myFlatMap .ol-zoom{top:100px}*/
+#myModalNodes #myFlatMap .poly-map-title{padding-left:30%;/*top:55px*/}
+/*#myModalNodes #myFlatMap .poly-shape-type{top:60px}*/
+#myModalNodes #myFlatMap .poly-actions-panel{width:45rem;height:13rem;right:0;max-width:100%}
+
+#myModalNodes.full-map-view .main-panel{display:inline-block;width:40px;height:40px;cursor:pointer;border-radius:5px;padding:5px;text-align:center;border:0}
+#myModalNodes.full-map-view .main-panel>*{display:none}
+#myModalNodes.full-map-view .main-panel::after{content:"\f2d2";font-family:"FontAwesome";font-size:22px;color:#286080}
+
+#myModalNodes #collectionExtent.no-map{opacity:1}
+#myModalNodes #collectionExtent.no-map .minimize{display:none}
+#myModalNodes #queryExtent.no-map, #myModalNodes #queryExtentParameters.no-map, #myModalNodes #processingParameters.no-map{left:18%}
+
+/*#myModalNodes #mapExtent{display:block;width:100%;height:100%;position:fixed;top:0;right:0;background-color:white;overflow:auto}*/
+
+#myModalNodes #mapExtent{display:block;height:600px;width: 830px ;top:0;right:0;background-color:white;overflow:auto}
+#myModalNodes.full-map-view #detailsExtent{left:3%;width:37%}
+#myModalNodes.full-map-view #thumbsExtent .ui-resizable-handle{border-radius:5px 5px 0 0}
+#myFlatMap .sliderscontainer{display:none}
+
+</style>
+
+<div class="modal-content" style="padding-bottom: 15px;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add new site</h4>
+    </div>
+
+    <form id="frmUploadContainer" class="form-horizontal" enctype="multipart/form-data" role="form">
+		<input type="hidden" id ="idsystem" name="system" value="false" />
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error adding the site!</h4>
+            <p id="modal-error-msg">Please check your data.</p>
+            <p>
+                <span class="error-container collapse"><i class="fa fa-exclamation-triangle fa-fw"></i>Error.</span>
+            </p>
+        </div>
+
+
+        <div class="modal-body">
+			<div class="row">
+				<div class="col-md-12 col-sm-12" >
+					<!-- FORM -->
+
+					<div class="col-md-4 col-sm-4">
+
+						<label for="name" class="col-sm-12 col-md-12" style="font-size: large;">Define your area of interest</label>
+
+						<div class="col-md-12">
+							<div class="form-group has-feedback">
+								<label for="name" class="col-sm-2 col-md-2">Name</label>
+								<div class="col-sm-12 col-md-12">
+									<input type="text" class="form-control" id="name" name="name" placeholder="name" autocomplete="off" value="" />
+								</div>
+							</div>
+						</div>
+								
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="description" class="col-sm-2 col-md-2 ">Description</label>
+								<div class="col-sm-12 col-md-12">
+									<textarea class="form-control" rows="3" id="description" name="description" placeholder="description" autocomplete="off"></textarea>
+								</div>
+							</div>
+						</div>
+
+						<!--
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="tag" class="col-sm-2 col-md-2 ">Tags</label>
+								<div class="col-sm-12 col-md-12">
+									<textarea class="form-control" rows="1" id="tag" name="tag" placeholder="tag" autocomplete="off"></textarea>
+								</div>
+							</div>
+						</div>
+
+						-->
+
+						<label for="name" class="col-sm-12 col-md-12" style="font-size: large;">Choose your time period</label>
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="col-sm-4 col-md-4 ">Start date</label>
+								<div class="col-sm-12 col-md-12">
+									<input type="text" autocomplete="off" id="startDate" name="startDate" class="datepicker form-control" >
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="col-sm-4 col-md-4">End date</label>
+								<div class="col-sm-12 col-md-12">
+									<input type="text" autocomplete="off" id="endDate" name="endDate" class="datepicker form-control" >
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<div class="col-md-10 col-sm-10">
+									<button id="saveContainer" type="submit" class="btn btn-primary btn-submit" name="btnSave">Add site</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- MAP -->
+					<div>
+						<div class="col-md-8 col-sm-8" style="height: 600px;">
+							<div id="mapExtent" class="hidden"></div>
+							
+						</div>
+					</div>
+
+				</div>
+			</div>
+        </div><!-- /.modal-body -->
+    </form>
+
+<!--
+    <div class="modal-note">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                        <h4>Help filling in</h4>
+                        <p>Please fill in all needed information. Site's name must be unique and it can contain small caps letters (a-z), numbers (0-9) and dashes (-)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+
+-->
+
+</div><!-- /.modal-content -->
+
+<script>
+
+	var $myModalNodes    = $("#myModalNodes");
+	var myPolygonMap = { mapActive: false };
+
+	function handlePolygonMapEvents(olPoly) {
+		olPoly.el.on("newfootprint", function (evt, footprint) {
+			$("#tbDatasourceParams input[name='footprint']").val(footprint);
+			defaultFootprint = footprint;
+		});
+		olPoly.el.on("clickextrafeature dblclickextrafeature", function (evt, feature, modifier) {
+			evt.stopPropagation();
+			var tableName = $("#executionExtent").hasClass("shifted") ? "tbSelectedProducts" : "tbDatasourceProducts";
+			if (feature) {
+				$.each($("#" + tableName + " tbody tr:not(.datasource)"), function () {
+					var $tr = $(this);
+					if ($tr.data("id") == feature.getId()) {
+						var $chk = $(".checkbox input[name='product']", $tr);
+						if ($chk.length > 0) {
+							if (evt.type == "dblclickextrafeature") {
+								$chk.prop({ "checked": false });
+							}
+							
+							$chk.trigger("click");
+							showTopInfo();
+							if ($chk.is(":checked")) {
+								highlightProduct($tr, true, true);
+								highlightThumbnail($tr, true);
+								setTimeout(function () { 
+									if (evt.type == "dblclickextrafeature") {
+										showDetailsPanel($tr);
+									} else {
+										updateDetailsPanel($tr);
+										updateFloatingThumbnail($tr);
+									}
+								}, 100);
+								setTimeout(function () { showTopInfo($tr); }, 500);
+								
+								return false;
+							}
+						} else {
+							return false;
+						}
+					}
+				});
+			}
+		});
+	}
+
+	function autoPanMap(dialogId) {
+		if (typeof dialogId === "undefined") {
+			dialogId = "collectionExtent";
+		}
+		if (myPolygonMap.mapActive) {
+			var mapW = $("#mapExtent").outerWidth();
+			if (mapW > 0) {
+				var panelW = $(".main-sidebar").outerWidth() + ($myModalNodes.hasClass("full-map-view") ? 0 : $("#" + dialogId).outerWidth() - 10);
+				var prc = parseInt(100*panelW/mapW);
+				if (prc != myPolygonMap.options.panPrc) {
+					setTimeout(function () { myPolygonMap.setPanPercentage(prc); }, 100);
+				}
+			}
+		}
+	}
+
+	function detectIE() {
+		var ua = window.navigator.userAgent;
+		
+		// IE 10 or older => return version number
+		var msie = ua.indexOf('MSIE ');
+		if (msie > 0) {
+			return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+		}
+		
+		// IE 11 => return version number
+		var trident = ua.indexOf('Trident/');
+		if (trident > 0) {
+			var rv = ua.indexOf('rv:');
+			return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+		}
+		
+		// Edge (IE 12+) => return version number
+		var edge = ua.indexOf('Edge/');
+		if (edge > 0) {
+		   return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+		}
+		
+		// other browser
+		return false;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////
+    $(document).ready( function() {
+		//Remove old datepickers
+		$("#" + $.datepicker.dpDiv.attr("id")).remove();
+
+		$("#startDate").datepicker({
+			dateFormat: "yy-mm-dd",
+            onSelect: function (date) {
+                var date2 = $('#startDate').datepicker('getDate');
+				if( $('#endDate').datepicker('getDate') <= $('#startDate').datepicker('getDate') ){ 
+                	date2.setDate(date2.getDate() + 1);
+                	$('#endDate').datepicker('setDate', date2);
+                	//sets minDate to dt1 date + 1
+                	$('#endDate').datepicker('option', 'minDate', date2);
+				}
+            }
+		});
+
+		$('#endDate').datepicker({
+            dateFormat: "yy-mm-dd",
+            onClose: function () {
+                var dt1 = $('#startDate').datepicker('getDate');
+                var dt2 = $('#endDate').datepicker('getDate');
+                if (dt2 <= dt1) {
+                    var minDate = $('#endDate').datepicker('option', 'minDate');
+                    $('#endDate').datepicker('setDate', minDate);
+                }
+            }
+        });
+
+ 	 
+		// Custom validation for container name
+		$.validator.addMethod('sitesName', function (value, element, params) {
+			var pattern = new RegExp(params.regEx, "g");
+			var match = value.match(pattern);
+			return value.length == 0 || match;
+		}, 'Remove invalid characters (only allowed small caps letters, numbers and dashes).');
+		$.validator.addMethod( "isUnique", function(value,element,params){
+			var isUni = true;
+			if($.inArray(value, nameList) >= 0){
+				isUni = false;
+			}
+			return isUni;
+		}, "Site's name must be unique.");
+
+		// Initialize map and query
+		var olPoly = $("#mapExtent").poly2D({ startLat: 47, startLon: 14, zoom: 5, maxFeaturesNo: 1, extraFeatureDescription: "preview" });
+		$.when(olPoly).done(function (result) {
+				//*
+			if (typeof result.readOnly === "boolean") {
+				$(".extent", "#myModalNodes").removeClass("no-map");
+				$("#mapExtent").removeClass("hidden");
+				myPolygonMap = result;
+				handlePolygonMapEvents(myPolygonMap);
+					
+				autoPanMap();
+			}
+		});
+
+		// Validate form before submit
+		$("form#frmUploadContainer").validate({
+			rules: {
+				name: {
+					required: true,
+					sitesName: { regEx: "^[a-z0-9-]+$" },
+					isUnique: true
+				},
+				description: {
+					required: true
+				},
+				startDate: {
+					required: true
+				},
+				endDate: {
+					required: true
+				},
+				userText: {
+					required: true
+				}
+
+			},
+			highlight: function(element, errorClass) {
+				$(element).parent().addClass("has-error");
+			},
+			unhighlight: function(element, errorClass) {
+				$(element).parent().removeClass("has-error");
+			},
+			messages: {
+			},
+			errorPlacement: function(error, element) {
+				error.appendTo(element.parent());
+			},
+			success: function(label) {
+				label.remove();
+			}
+		});
+		// Trigger validation when selected file changed
+		$("form#frmUploadContainer").on("change", "input[type='file'].for-validation", function (e) {
+			$(this).trigger("blur");
+		});
+		
+        // Submit form
+		$("form#frmUploadContainer").submit(function (event) {
+			event.preventDefault();
+
+			if ($(this).valid()) {
+					$(".modal-error ").fadeOut();
+					var formData = {
+						name				: $("input[name=name]", this).val(),
+						description			: $("textarea[name=description]", this).val(),
+						/*tags				: [],*/
+						startDate 			: moment($("input[name=startDate]", this).val()).format("YYYY-MM-DDTHH:mm:ss"),
+						endDate 			: moment($("input[name=endDate]", this).val()).format("YYYY-MM-DDTHH:mm:ss"),
+						footprint			: $("[name='userText']").val()
+					};
+					
+					$.ajax({
+						cache: false,
+						url: baseRestApiURL + "site/",
+						dataType: 'json',
+						type: "POST",
+						data: JSON.stringify(formData),
+						headers: {
+							"Accept": "application/json",
+							"Content-Type": "application/json",
+							"X-Auth-Token": window.tokenKey
+						},
+						error : function (jqXHR, textStatus, errorThrown) {
+							if (jqXHR.status === 500) {
+								showMsg("Error updating site. Please check your data and try again.", "ERROR");
+								return;
+							}
+							showMsg("Unknown error. Unable to update site. Please try again.", "ERROR");
+						},
+						success: function(response,textStatus, jqXHR) {
+							var r = chkTSRF(response);
+							if (response.status === "FAILED") {
+								if (response.message) {
+									showMsg("Error updating site. Please check your data, one or more values for the attributes were not correct.", "ERROR");
+									//handle error messages
+									
+									var objResponse = JSON.parse(jqXHR.responseText);
+									objResponse = objResponse.message.split(';');
+									if (objResponse[0] !== "Entity has validation errors") {
+										return;
+									}
+									for (i = 0; i < objResponse.length; i ++) {
+										var matches = objResponse[i].match(/\[(.*?)\]/);
+										if (matches) {
+											//$(".error-"+matches[1],".modal-error").show();
+											$(".error-"+matches[1],".modal-error").css('display', 'inline-block');
+										}
+									}
+									$(".modal-error ").fadeIn("slow");
+									$('#myModalNodes').animate({scrollTop: 0}, 250);
+									return;
+								}
+								showMsg("Error updating site. Please check your data and try again.", "ERROR");
+							}
+							showMsg("Site successfully saved.", "SUCCESS");
+							$("#myModalNodes").modal('hide');
+							panelComp.refreshData();
+						}
+					});
+				}
+
+
+
+            return false; // To avoid actual submission of the form
+		});
+		
+			
+
+	});	
+ 
+	//var pathPlusApplNamesList=[]; 
+
+	//# sourceURL=sites-plus.js
+
+	
+</script>

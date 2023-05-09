@@ -10,7 +10,7 @@
         <input type="hidden" name="clickedon" value="">
 
         <div class="modal-error collapse">
-            <h4 class="modal-title">Error adding processing component!</h4>
+            <h4 class="modal-title">Error creating workflow!</h4>
             <p id="modal-error-msg">Please check you data, one or more values for the attributes is not in the acceptable range.</p>
             <p>
                 <span class="error-name collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Workflow name cannot be empty.</span>
@@ -245,15 +245,18 @@
                 formData.visibility = $('select[name=inputVisibility]', this).val();
                 formData.status = $('select[name=inputStatus]', this).val();
                 formData.active = $('select[name=inputActive]', this).val();
-                var tags = $('input[name=formTags]', this).val();
-                formData.tags = tags.split(",");
+                var tags = null;
+				if ($('input[name=formTags]', this).val() !== "" ) {
+					tags = $('input[name=formTags]', this).val();
+					formData.tags = tags.split(",");
+				}
             }else{
                 ajaxType = 'POST';
                 ajaxURL = '';
                 formData = {
                     "name" : $('input[name=inputWorkflowName]', this).val(),
                     "created":arrayFromDatetime(),
-                    "userName":"admin",
+                    "userName": taoUserProfile.username,
                     "path" : $('input[name=inputPath]', this).val(),
                     "visibility": $('select[name=inputVisibility]', this).val(),
                     "status": $('select[name=inputStatus]', this).val(),
@@ -279,7 +282,6 @@
                 }
             });
 
-console.log(JSON.stringify(formData));
             $.ajax({
                 cache: false,
                 url: baseRestApiURL + "workflow/"+ajaxURL,
@@ -316,10 +318,11 @@ console.log(JSON.stringify(formData));
                     }
                     showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
                 },
-                success: function(data) {
+                success: function(response) {
                     showMsg("Workflow successfully saved.", "SUCCESS");
                     $("#myModalNodes").modal('hide');
                     panelComp.refreshData();
+                    tao_showWorkflow(response.data.id);
                 }
             });
             return false;
@@ -349,8 +352,6 @@ console.log(JSON.stringify(formData));
                 }
             },
             success: function(r) {
-                console.log("aici");
-                console.log(response);
                 var response = chkTSRF(r);
                 try {
                     //populate form with current values

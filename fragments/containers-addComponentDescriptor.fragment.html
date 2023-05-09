@@ -1,0 +1,1196 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add processing module</h4>
+    </div>
+
+    <form id="frmExecNodeEdit" class="form-horizontal form-newpc" role="form">
+        <input type="hidden" id="op" name="op" class="op" value="op-plus" />
+        <input type="hidden" id="id_u" name="id_u" value="0" />
+        <input type="hidden" name="clickedon" value="">
+
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error adding processing module!</h4>
+            <p id="modal-error-msg">Please check your data, one or more values for the attributes is not in the acceptable range.</p>
+            <p>
+                <span class="error-inputCompID collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
+                <span class="error-label collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
+                <span class="error-version collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Version cannot be empty.</span>
+                <span class="error-template collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Template cannot be empty.</span>
+                <span class="error-fileLocation collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> File location has an invalid value.</span>
+            </p>
+            <p id="modal-error-msg-server"></p>
+        </div>
+
+        <div class="modal-body">
+            <section>
+                <div class="row">
+                    <div class="col-md-12">
+						<p>Please check all the tabs before saving a new module.</p>
+						<ul class="nav nav-tabs">
+							<li class="active"><a data-toggle="tab" href="#comp-tab-gd">General desc.</a></li>
+							<li><a data-toggle="tab" href="#comp-tab-conf">Configuration</a></li>
+							<li><a data-toggle="tab" href="#comp-tab-param">Parameters</a></li>
+							<li><a data-toggle="tab" href="#comp-tab-sys">Sys. vars.</a></li>
+							<li><a data-toggle="tab" href="#comp-tab-ports">Sources & Targets</a></li>
+						</ul>
+						<div class="tab-content">
+							<div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group has-feedback">
+											<label for="inputCompID" class="col-sm-2 col-md-2 control-label">ID</label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompID" name="inputCompID" placeholder="component ID" autocomplete="off" value=""/>
+												<span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
+												<span class="ckattr-ok sr-only collapse">(success)</span>
+												<span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
+												<span class="ckattr-error sr-only collapse">(error)</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompLabel" class="col-sm-2 col-md-2 control-label">Label</label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompLabel" name="inputCompLabel" placeholder="component label" autocomplete="off" value="" data-errorspan="label"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompVersion" class="col-sm-2 col-md-2 control-label">Version</label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompVersion" name="inputCompVersion" placeholder="component version" autocomplete="off" value="" data-errorspan="version"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompDescription" class="col-sm-2 col-md-2 control-label">Description </label>
+											<div class="col-sm-10 col-md-10">
+												<textarea class="form-control" rows="3" id="inputCompDescription" name="inputCompDescription" placeholder="Description"></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompAuthors" class="col-sm-2 col-md-2 control-label">Author </label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompAuthors" name="inputCompAuthors" placeholder="authors" autocomplete="off" value="" data-errorspan="memorySize"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompCopyright" class="col-sm-2 col-md-2 control-label">Copyright </label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompCopyright" name="inputCompCopyright" placeholder="copyright" autocomplete="off" value="" data-errorspan="memorySize"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputActive" class="col-sm-2 col-md-2 control-label">Status </label>
+											<div class="col-sm-10 col-md-10">
+												<select disabled="disabled" id="inputActive" name="inputActive" class="form-control">
+													<option value="true" selected="">Active</option>
+													<option value="false">Inactive</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputVisibility" class="col-sm-2 col-md-2 control-label">Visibility </label>
+											<div class="col-sm-10 col-md-10">
+												<select disabled="disabled" id="inputVisibility" name="inputVisibility" class="form-control">
+													<option value="SYSTEM">System build-in component</option>
+													<option value="USER">User defined component</option>
+													<option value="CONTRIBUTOR" selected="selected">Contributor defined component</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputTemplateType" class="col-sm-2 col-md-2 control-label">Template Type </label>
+											<div class="col-sm-10 col-md-10">
+												<select id="inputTemplateType" name="inputTemplateType" class="form-control">
+													<option value="VELOCITY" selected="selected">Apache Velocity template</option>
+													<option value="JAVASCRIPT" >Javascript template</option>
+													<option value="XSLT">XSLT template</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div> <div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputComponentType" class="col-sm-2 col-md-2 control-label">Component Type </label>
+											<div class="col-sm-10 col-md-10">
+												<select id="inputComponentType" name="inputComponentType" class="form-control">
+													<option value="EXECUTABLE" selected="selected">Executable</option>
+													<option value="SCRIPT" >Script</option>                                                       
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompParallelism" class="col-sm-2 col-md-2 control-label">Parallelism </label>
+											<div class="col-sm-10 col-md-10">
+												<input type="number" min="1" step="1" class="form-control" id="inputCompParallelism" name="inputCompParallelism" placeholder="component parallelism" autocomplete="off" value="" data-errorspan="parallelism" />
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="formTags" class="col-sm-2 col-md-2 control-label">Tags </label>
+											<div class="col-sm-10 col-md-10">
+												<input id="formTags" name="formTags" class="form-control" value="">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="comp-tab-conf" class="tab-pane fade padding-top--20 padding-left--20 padding-bottom--20">
+
+								<!--<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Container Id </label>
+											<div class="col-sm-10 col-md-10">
+												<select id="inputContainerId" name="inputContainerId" class="form-control">
+													<option value="DummyTestDockerContainer" selected="">Test Docker Container</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>-->
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputFileLocation" class="col-sm-2 col-md-2 control-label">File location </label>
+											<div class="col-sm-10 col-md-10">
+											<!--	<input type="text" class="form-control" id="inputFileLocation" name="inputFileLocation" placeholder="file location" data-errorspan="fileLocation" autocomplete="off" value=".\mypath1"/>
+											 --><select class="form-control" id="inputfilePathId"  name="inputfilePathId"></select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputWorkingDirectory" class="col-sm-2 col-md-2 control-label">Working directory </label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputWorkingDirectory" name="inputWorkingDirectory" placeholder="working directory" autocomplete="off" value="."/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- velocity template form-->
+								<div class="template-block-frm template-block-frm-velocity collapse">
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="inputWorkingDirectory" class="col-sm-2 col-md-2 control-label">Template contents</label>
+												<div class="col-sm-10 col-md-10">
+													<textarea class="form-control" rows="6" id="inputTemplateContents" name="inputTemplateContents" placeholder="template contents" data-errorspan="template"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<div id="comp-tab-param" class="tab-pane fade padding-top--20 padding-bottom--20">
+								<div class="row">
+									<div class="col-md-12">
+										<p>Parameter list:</p>
+										<div class="responsive">
+											<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-paramdesc">
+												<thead>
+												<tr>
+													<th></th>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Parameter Label</th>
+													<th>Parameter Type</th>
+													<th>Data Type</th>
+													<th>Default value</th>
+												</tr>
+												</thead>
+												<tfoot>
+												<tr>
+													<td colspan="3">
+														<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewparam" data-action="comp-add-new-var">
+															<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+														</button>
+													</td>
+												</tr>
+												</tfoot>
+
+
+												<tbody class="tpl-sample-body">
+												<tr class="tpl-sample-row">
+													<th scope="row">
+														<a href="#" class="text tbl-prop-expand-action"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></a>
+														<i class="fa fa-plus fa-fw hidden" aria-hidden="true"></i>
+														<a href="#" class="text tbl-prop-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+													</th>
+													<td>
+														<input type="hidden" class="var-id" value="">
+														<input type="text" class="var-name" value="" placeholder="parameter name">
+													</td>
+													<td><textarea rows="2" class="var-description"></textarea></td>
+													<td>
+														<input type="text" class="var-label" value="" placeholder="parameter label">
+													</td>
+													<td>
+														<select class="var-type">
+															<option value="REGULAR" selected="selected">Regular</option>
+															<option value="TEMPLATE">Template</option>
+														</select>
+													</td>
+													<td>
+														<select class="var-datatype select-datatypes">
+															<!--<option value="string" selected="selected">String</option>
+															<option value="int">Integer</option>
+															<option value="bool">Boolean</option>
+															<option value="float">Float</option>
+															<option value="double">Double</option>
+															<option value="file">File</option>-->
+														</select>
+													</td>
+													<td><input type="text" class="var-default" value="" placeholder="default value"></td>
+												</tr>
+												<tr style="display: none;" class="val-row-plus">
+													<td colspan="7">
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label class="col-sm-2 col-md-2 control-label">Unit</label>
+																	<div class="col-sm-10 col-md-10">
+																		<input type="text" class="form-control var-unit" name="inputUnit" placeholder="unit" autocomplete="off" value=""/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label class="col-sm-2 col-md-2 control-label">Value Set</label>
+																	<div class="col-sm-10 col-md-10">
+																		<input type="text" class="form-control var-valueset" name="inputValueSet" placeholder="value set" autocomplete="off" value=""/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label class="col-sm-2 col-md-2 control-label">Format</label>
+																	<div class="col-sm-10 col-md-10">
+																		<input type="text" class="form-control var-format" name="inputFormat" placeholder="format" autocomplete="off" value=""/>
+																	</div>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label class="col-sm-2 col-md-2 control-label">Not Null </label>
+																	<div class="col-sm-10 col-md-10">
+																		<div class="checkbox">
+																			<input type="checkbox" name="inputNotNull" class="big var-notnull">
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="form-group">
+																	<label class="col-sm-2 col-md-2 control-label">Validator </label>
+																	<div class="col-sm-10 col-md-10">
+																		<input type="text" class="form-control var-validator" name="inputValidator" placeholder="validator" autocomplete="off" value=""/>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="comp-tab-sys" class="tab-pane fade">
+								<div class="row">
+									<div class="col-md-12">
+										<p>Variables:</p>
+										<div class="responsive">
+											<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-sysvar">
+												<thead>
+												<tr>
+													<th></th>
+													<th>Key</th>
+													<th>Value</th>
+												</tr>
+												</thead>
+												<tfoot>
+												<tr>
+													<td colspan="3">
+														<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewvar" data-action="comp-add-new-var">
+															<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+														</button>
+													</td>
+												</tr>
+												</tfoot>
+												<tbody>
+												<tr class="tpl-sample-row">
+													<th class="del-col" scope="row">
+														<a href="#" class="text tbl-sysvar-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+													</th>
+													<td><input type="text" class="var-key" value="" placeholder="input variable's name"></td>
+													<td><input type="text" class="var-value" value="" placeholder="input variable's value"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="comp-tab-ports" class="tab-pane fade">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="responsive box-shadow--6dp" style="margin-bottom:20px;overflow:auto">
+											<table class="table table-bordered tbl-edt" id="tbl-edt-sources" style="margin:0">
+												<thead>
+												<tr><th colspan="8" class="table-title">Sources:</th></tr>
+												<tr>
+													<th></th>
+													<th>Source Name</th>
+													<th>Format Type</th>
+													<th>Geometry</th>
+													<th>CRS</th>
+													<th>Sensor Type</th>
+													<th>Dimension</th>
+													<th>Cardinality<br><i>(0 for list)</i></th>
+												</tr>
+												</thead>
+												<tfoot>
+												<tr>
+													<td colspan="2">
+														<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewsrc" data-action="comp-add-new-var">
+															<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+														</button>
+													</td>
+												</tr>
+												</tfoot>
+												<tbody class="tpl-sample-body">
+												<tr class="tpl-sample-row">
+													<th scope="row">
+														<a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+													</th>
+													<td>
+														<input type="hidden" class="var-id" value="">
+														<input type="text" class="var-name" value="" placeholder="Source name">
+													</td>
+													<td><select class="var-formatType empty"></select></td>
+													<td><textarea rows="1" class="var-geometry"></textarea></td>
+													<td><input type="text" class="var-crs" value=""></td>
+													<td><select class="var-sensorType empty"></select></td>
+													<td><input type="text" class="var-dimension" value=""></td>
+													<td><input type="number" class="var-cardinality" value="0" style="width:40px;text-align:left"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="responsive box-shadow--6dp" style="margin-bottom:20px;overflow:auto">
+											<table class="table table-bordered tbl-edt" id="tbl-edt-targets" style="margin:0">
+												<thead>
+												<tr><th colspan="9" class="table-title">Targets:</th></tr>
+												<tr>
+													<th></th>
+													<th>Target Name</th>
+													<th>Format Type</th>
+													<th>Format Name</th>
+													<th>Geometry</th>
+													<th>CRS</th>
+													<th>Sensor Type</th>
+													<th>Dimension</th>
+													<th>Cardinality<br><i>(0 for list)</i></th>
+												</tr>
+												</thead>
+												<tfoot>
+												<tr>
+													<td colspan="2">
+														<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewtrgt" data-action="comp-add-new-var">
+															<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+														</button>
+													</td>
+												</tr>
+												</tfoot>
+												<tbody class="tpl-sample-body">
+												<tr class="tpl-sample-row">
+													<th scope="row">
+														<a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+													</th>
+													<td>
+														<input type="hidden" class="var-id" value="">
+														<input type="text" class="var-name" value="" placeholder="Target name">
+													</td>
+													<td><select class="var-formatType empty"></select></td>
+													<td><select class="var-formatName empty"></select></td>
+													<td><textarea rows="1" class="var-geometry"></textarea></td>
+													<td><input type="text" class="var-crs" value=""></td>
+													<td><select class="var-sensorType empty"></select></td>
+													<td><input type="text" class="var-dimension" value=""></td>
+													<td><input type="number" class="var-cardinality" value="0" style="width:40px;text-align:left"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+								<button id="btnConfirmComponentDescriptor" class="btn btn-default" name="btnConfirmComponentDescriptor">Confirm</button>
+
+								<h4>Help filling in</h4>
+								<p>Please fill in all needed information. Component ID must be unique. Component ID can contain letters (a-z), numbers (0-9) and periods (.).</p>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- /.modal-body -->
+    </form>
+
+</div><!-- /.modal-content -->
+
+<!-- Specific styles -->
+<style>
+#comp-tab-ports thead th{vertical-align:middle}
+#comp-tab-ports .table-title{background-color:#3c8dbc;color:white;font-size:1.2em;line-height:1.2em}
+#comp-tab-ports .tbl-edt input[type="number"]{
+	width: 100%;
+	padding-left: 0.3em;
+	border: 1px solid #FFF;
+	-webkit-transition: .18s ease-out;
+	-moz-transition: .18s ease-out;
+	-o-transition: .18s ease-out;
+	transition: .18s ease-out;
+}
+#comp-tab-ports .tbl-edt input[type="text"]:hover,
+#comp-tab-ports .tbl-edt input[type="number"]:hover,
+#comp-tab-ports .tbl-edt textarea:hover,
+#comp-tab-ports .tbl-edt select:hover{border-color: #d0d0d0}
+.table>tbody+tbody{border:0}
+.table select.empty{color:#999;font-style:italic}
+.table select.empty>option{color:black;font-style:normal}
+.table select>option.ital{color:#999;font-style:italic}
+@media (min-width: 992px) {
+	.modal-lg { width: 60%; }
+}
+</style>
+
+   <link rel="stylesheet" href="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.css" type="text/css" />
+   <script src="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.js" type="text/javascript"></script>
+   <!-- 1.12.1/jquery-ui.min.js for autocomplete -->
+   <link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.css" type="text/css" />
+   <script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
+
+<script>
+    var action = 'op-plus';
+    function validateHostName(attrId){
+        var $eL = $("#"+attrId);
+        var $pEL = $eL.parent();
+        var val = $eL.val();
+        //var rgx = /^[0-9A-Za-z.-_]*$/;
+        //if (val.match(rgx) === null){
+        var regexp = /^[a-zA-Z0-9-_.]+$/;
+        if (val.search(regexp) === -1)
+        {
+            showMsg("The hostname contains invalid characters.", "ERROR");
+            $(".ckattr-ok", $pEL).fadeOut();
+            $(".ckattr-error", $pEL).fadeIn();
+            return;
+        }else{
+            $(".ckattr-error", $pEL).fadeOut();
+            $(".ckattr-ok", $pEL).fadeIn();
+        }
+        $.ajax({
+            cache: false,
+            type: "get",
+            url: baseRestApiURL + "topology/"+val+"/",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            },
+            error : function (jqXHR, textStatus, errorThrown) {
+                if( jqXHR.status === 500 ){
+                    $(".ckattr-error", $pEL).fadeOut();
+                    $(".ckattr-ok", $pEL).fadeIn();
+                } else {
+                    alert('E001 c+, An error has occurred, please try again or contact app admin.');
+                }
+            },
+            success: function(response) {
+                try {
+                    showMsg("Name already in use. Please try a different name.", "ERROR");
+                    $(".ckattr-ok", $pEL).fadeOut();
+                    $(".ckattr-error", $pEL).fadeIn();
+                }
+                catch(e) {
+                    $(".ckattr-ok", $pEL).fadeOut();
+                    $(".ckattr-error", $pEL).fadeIn();
+                }
+            }
+        });
+        return true;
+    }
+
+	function fieldFormat(){
+		$(".tag-format", "#tbl-edt-paramdesc").tagsInput({
+			minChars	: 0,
+			maxChars	: null,
+			limit		: null,
+			interactive	: true,
+			autocomplete: null,
+			unique		: true,
+			placeholder	: 'Add an element',
+			delimiter	: ','
+		});
+
+		var datepickTagInput = $(".datepicker").siblings(".tagsinput").find("input");
+		$("#" + $.datepicker.dpDiv.attr("id")).remove();
+		$(".datepicker:not(.tag-format)").datepicker({
+			dateFormat: "yy-mm-dd",
+
+		});
+		datepickTagInput.datepicker({
+			dateFormat: "yy-mm-dd",
+			onSelect: function (date){
+				$(this).closest("td").find(".tag-format").addTag(date);
+			}
+		});
+	}	
+
+////////////
+	function getTaoEnumsArray(name) {
+		var retVal = [];
+		$.each(taoEnums.data, function (index, enm) {
+			if (index.toLowerCase().indexOf(name.toLowerCase()) >= 0) {
+				$.each(enm, function (idx, values) {
+					retVal.push(values.key);
+				});
+			}
+		});
+		return retVal;
+	}
+	// Get component specific values for enum type parameters
+	var sourceTargetSpecificFormats = {};
+	// get format type all possible values
+	sourceTargetSpecificFormats["formatType"] = getTaoEnumsArray("DataFormat");
+	// set format name list as empty
+	sourceTargetSpecificFormats["formatName"] = [];
+	// get sensor type all possible values
+	sourceTargetSpecificFormats["sensorType"] = getTaoEnumsArray("SensorType");
+    
+////////////
+    function helper_addSourceTargetDescriptorsRow($tbl, payload, specificFormats){
+        var obj = {
+			"id": null,
+			"parentId": null,
+			"name": null,
+			"dataDescriptor": {
+				"formatType": null,
+				"formatName": null,
+				"geometry": null,
+				"crs": null,
+				"sensorType": null,
+				"dimension": null,
+				"location": null
+			},
+			"constraints": null
+		};
+        $.extend( obj, payload );
+		
+		// Populate all combo-boxes with descriptor formats
+        var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
+		var $sRow = $el.find(".tpl-sample-row");
+		if (typeof specificFormats !== "undefined") {
+			$.each(specificFormats, function (index, options) {
+				if ($(".var-"+index, $sRow).is("select")) {
+					if (options.length > 0) {
+						// formatType parameter is mandatory
+						if (index.toLowerCase() == "formattype") {
+							$(".var-"+index, $sRow).removeClass("empty");
+						} else {
+							$(".var-"+index, $sRow).html("<option class='ital' value><i>Select...</i></option>");
+						}
+						$.each(options, function (idx, option) {
+							$(".var-"+index, $sRow).append('<option value="'+option+'">'+option+'</option>');
+						});
+					} else {
+						$(".var-"+index, $sRow).parent().append('<div style="text-align: center">-</div>');
+						$(".var-"+index, $sRow).remove();
+					}
+				}
+			});
+		}
+		$el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+        
+		$('input.var-id', $el).val(obj.id);
+		$('input.var-name', $el).val(obj.name);
+        $('select.var-formatType option', $el).removeAttr("selected");
+        $('select.var-formatType option[value="'+obj.dataDescriptor.formatType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
+        $('select.var-formatName option', $el).removeAttr("selected");
+        $('select.var-formatName option[value="'+obj.dataDescriptor.formatName+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
+		$('textarea.var-geometry', $el).val(obj.dataDescriptor.geometry);
+        $('input.var-crs', $el).val(obj.dataDescriptor.crs);
+        $('select.var-sensorType option', $el).removeAttr("selected");
+        $('select.var-sensorType option[value="'+obj.dataDescriptor.sensorType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
+        $('input.var-dimension', $el).val(obj.dataDescriptor.dimension);
+        $('input.var-cardinality', $el).val(obj.cardinality);
+
+		$tbl.append($el);
+    }
+	
+    function helper_addParameterDescriptorsRow($tbl, payload){
+        var obj = {
+            "dataType": "string",
+            "defaultValue": "",
+            "description": "",
+            "format": null,
+            "id": "",
+            "label": "",
+            "notNull": false,
+            "type": "REGULAR",
+            "unit":null,
+            "validator":null,
+            "valueSet": []
+        };
+        $.extend( obj, payload );
+
+        var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
+        $el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+        $('input.var-id', $el).val(obj.id);
+		$('input.var-name', $el).val(obj.name);
+        $('textarea.var-description', $el).val(obj.description);
+        $('input.var-label', $el).val(obj.label);
+
+		var td = $('.var-default', $el).parent();
+		$('.var-default', $el).remove();
+		
+		if(obj.valueSet !== null && obj.valueSet.filter(function(item){ return item!='null' && item!=''}).length >0){							
+			td.append('<select class=\'var-default\'></select>');
+			
+			if(obj.defaultValue == "" || obj.defaultValue == null){
+				$(".var-default", $el).append('<option value=\'\' selected>Select</option>');
+			}
+			
+			$.each(obj.valueSet, function(index, value){
+				if(value == "null"){return true; }
+				if(value == obj.defaultValue){				
+					$(".var-default", $el).append('<option value=\''+value+'\' selected>'+value+'</option>');
+				}else{
+					$(".var-default", $el).append('<option value=\''+value+'\'>'+value+'</option>');
+				}
+			});	
+			
+		}else{
+			//td.append('<input type=\'text\' class=\'var-default\' value=\''+obj.defaultValue+'\'>');
+			var inputHtml = $('<input type=\'text\' class=\'var-default \' value=\''+obj.defaultValue+'\'>');
+			if (obj.dataType.indexOf("[]") > -1) {
+				inputHtml.addClass("tag-format");
+			}
+			if(obj.dataType === "date" || obj.dataType === "date[]"){
+				inputHtml.addClass("datepicker");
+			}else{
+				inputHtml.removeClass("datepicker");
+			}
+			td.append(inputHtml);
+		}
+
+        $('select.var-type option', $el).removeAttr("selected");
+        $('select.var-type option[value="'+obj.type+'"]', $el).attr("selected", "selected");
+		
+        $('select.var-datatype option', $el).removeAttr("selected");
+        $('select.var-datatype option[value="'+obj.dataType+'"]', $el).attr("selected", "selected");
+		
+        $('input.var-unit', $el).val(obj.unit);
+        if(obj.format) $('input.var-format', $el).val(obj.format);
+        if(obj.validator) $('input.var-validator', $el).val(obj.validator);
+
+            $tbl.append($el);
+    }
+
+
+    function helper_addSysVarRow($tbl, payload){
+        var obj = {"key":"","value":""};
+        $.extend( obj, payload );
+        var $el = $tbl.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
+        $('input.var-key', $el).val(obj.key);
+        $('input.var-value', $el).val(obj.value);
+        $tbl.append($el);
+    }
+
+
+	function helper_getFormPorts(contextTable) {
+		var newPorts = [];
+		var parentId = $('#frmExecNodeEdit input[name=inputCompID]').val();
+		$(".val-row", contextTable).each(function () {
+			var port_id          = $(this).find(".var-id").val();
+			var port_name        = $(this).find(".var-name").val();
+			var port_formatType  = $(this).find(".var-formatType").val();
+			var port_formatName  = $(this).find(".var-formatName").val();
+			var port_geometry    = $(this).find(".var-geometry").val();
+			var port_crs         = $(this).find(".var-crs").val();
+			var port_sensorType  = $(this).find(".var-sensorType").val();
+			var port_dimension   = $(this).find(".var-dimension").val();
+			var port_cardinality = $(this).find(".var-cardinality").val();
+			if( ((typeof port_name !== "undefined") && (typeof port_name.valueOf() === "string") && (port_name.length > 0)) ) {
+				var newPort = {
+					"parentId"       : parentId,
+					"name"           : port_name,
+					"cardinality"    : port_cardinality,
+					"id"             : port_id        === "" ? null : port_id,
+					"dataDescriptor" : {
+						"geometry"   : port_geometry  === "" ? null : port_geometry,
+						"crs"        : port_crs       === "" ? null : port_crs,
+						"dimension"  : port_dimension === "" ? null : port_dimension,
+						"formatType" : port_formatType === "" ? null : port_formatType,
+						"formatName" : port_formatName === "" ? null : port_formatName,
+						"sensorType" : port_sensorType === "" ? null : port_sensorType,
+						"location"   : null
+					}
+				};
+				newPorts.push(newPort);
+			}
+		});
+		return newPorts;
+	}
+	
+    $(document).ready( function(){
+
+		$("#" + $.datepicker.dpDiv.attr("id")).remove();
+        //populate data type select element from sample table
+		populateDataTypeSelect($("select.var-datatype", ".tpl-sample-body"));
+		
+        initializeTagsInputAutocomplete("#formTags", "component"); 
+        //no edit in shared workspace
+        //$("#frmExecNodeEdit").on("keypress change","*", function(e){
+            if((routeTags[0] === "shared") && (taoUserProfile.userRole !== "ADMIN")){
+                $("#frmExecNodeEdit :input").prop("disabled", true);
+                $("#frmExecNodeEdit input#formTags").css('display','');
+                $("#frmExecNodeEdit div#formTags_tagsinput").hide();              
+                $("#frmExecNodeEdit button[type=\"submit\"]").hide();
+                $("#myModalNodes .modal-note h4").html("Warrning");
+                $("#myModalNodes .modal-note p").html(SHARED_EDIT_RESTRICTED);
+            }
+        //});
+
+
+        //get all availlable dockers
+       /* var getAllDocker = $.ajax({
+            cache: false,
+            url: baseRestApiURL + "docker/",
+            dataType : 'json',
+            type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+        $.when(getAllDocker)
+            .done(function (getAllDockerResponse) {
+                var r = chkTSRF(getAllDockerResponse);
+                var selectedid = 0;//$('#department').data("selectedid");
+                $('#inputContainerId').empty();
+                $.each(r, function(i, value) {
+                    if(value.id === selectedid){
+                        $('#inputContainerId').append($('<option>').text(value.name).attr('value', value.id).prop('selected', true));
+                    } else{
+                        $('#inputContainerId').append($('<option>').text(value.name).attr('value', value.id));
+                    }
+                });
+            })
+            .fail(function () {
+                showMsg("Could not retrive dockers list.", "ERROR");
+            });*/
+
+
+		$('#inputfilePathId').html("<option class='ital' value><i>Select...</i></option>");
+			//$('#inputfilePathId').append('<option value=\'\' selected>Select</option>');
+			var applPath;
+			var applName;
+			var arrSplitApl = [];
+			for (var i = 0; i < pathPlusApplNamesList.length; i++)
+			{
+				arrSplitApl = pathPlusApplNamesList[i].split("_");
+				applPath= arrSplitApl[0];
+				applName= arrSplitApl[1];
+			     $('#inputfilePathId').append($('<option>').text(pathPlusApplNamesList[i]).attr('value',applPath));
+			}
+
+
+        $("#inputTemplateType").on("change", function(){
+            var lclVal = $(this).val();
+            $(".template-block-frm").hide();
+            $(".template-block-frm-"+lclVal.toLowerCase()).show();
+		})
+		.trigger("change");
+
+        $(".btn-comp-addnewvar").on("click", function(){
+            var $tbl = $(this).closest(".tbl-edt");
+            helper_addSysVarRow($tbl);
+        });
+        $(".btn-comp-addnewparam").on("click", function(){
+            var $tbl = $(this).closest(".tbl-edt");
+            helper_addParameterDescriptorsRow($tbl);
+			fieldFormat();
+        });
+        $(".btn-comp-addnewsrc, .btn-comp-addnewtrgt").on("click", function () {
+            helper_addSourceTargetDescriptorsRow($(this).closest("table"), void 0, sourceTargetSpecificFormats)
+        });
+        $(".tbl-edt")
+			.on('focusin', 'select', function(){
+				$(this).data('val', $(this).val());
+			})
+			.on("change", ".select-datatypes", function(){
+				var previousVal = $(this).data('val');
+				var selVal = $(this).val();
+
+				if($('.var-default', $(this).closest("tr")).is("input")) {
+					if( previousVal.indexOf(selVal) < 0 && selVal.indexOf(previousVal) < 0 ) {
+						$('.var-default', $(this).closest("tr")).val('');
+					}
+					if(selVal.indexOf('[]') > -1 ) {
+						$('.var-default', $(this).closest("tr")).addClass("tag-format");
+					} else {
+						$('.var-default', $(this).closest("tr")).removeClass("tag-format");
+						$('.var-default', $(this).closest("tr")).destroyTagsInput();
+					}
+					if(selVal === "date" || selVal ==="date[]") {
+						$('.var-default', $(this).closest("tr")).addClass("datepicker");
+					} else {
+						$('.var-default', $(this).closest("tr")).removeClass("datepicker");
+					}
+
+				}
+				fieldFormat();
+			}).trigger("change")
+            .on("click", ".tbl-sysvar-delete-action", function(e){
+                e.preventDefault();
+                $(this).closest(".val-row").remove();
+            })
+            .on("click", ".tbl-prop-expand-action", function(e){
+                e.preventDefault();
+                if($(this).hasClass("active")){
+                    $(".val-row-plus").css({"display": "none"});
+                    $(this).removeClass("active");
+                    return;
+                }
+                $(".val-row-plus").css({"display": "none"});
+                $(".tbl-prop-expand-action").removeClass("active");
+                $(this).addClass("active");
+                $(this).closest("tr").next().css({"display": "table-row"});
+            })
+            .on("click", ".tbl-prop-delete-action", function(e){
+                e.preventDefault();
+                $(this).closest("tbody").remove();
+            })
+            .on("click", ".tbl-port-delete-action", function(e){
+                e.preventDefault();
+                $(this).closest(".val-row").remove();
+            });
+
+		$("#" + $.datepicker.dpDiv.attr("id")).remove();
+		$(".datepicker").datepicker({
+			dateFormat: "yy-mm-dd"
+		});
+		
+		fieldFormat();
+
+        //remove error for some input elements
+        $("input, textarea","form#frmExecNodeEdit")
+            .on("keypress change", function(){
+                if($(this).data("errorspan")) {
+                    $(".error-" + $(this).data("errorspan"), ".modal-error").css('display', 'none');
+                    if($(".modal-error").find("span:visible").length == 0) {
+                        $(".modal-error").hide();
+                        $("#saveExecNode").removeAttr('disabled');
+                    }
+                }
+            });
+            /*.on("focusout", function(){
+                if($(this).data("errorspan")){
+                    if (($(this).val() === "")||($(this).val() === 0)||($(this).val() === "0")){
+                        $(".error-"+$(this).data("errorspan"),".modal-error").css('display', 'inline-block');
+                        $(".modal-error").fadeIn("slow");
+                        $("#saveExecNode").attr('disabled','disabled');
+                    }
+                }
+            });*/
+		
+		$("table").on("change", "select[class^='var-']", function () {
+			if (this.value == "") {
+				$(this).addClass("empty");
+			} else {
+				$(this).removeClass("empty");
+			}
+		});
+		
+        $("#inputCompname").focusout(function(e) {
+            if($(this).val() === "")
+                return;
+            if($(this).attr("id")) {
+                validateHostName($(this).attr("id"));
+            }
+        });
+		
+		function guid() {
+		  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+		}
+		function s4() {
+		  return Math.floor((1 + Math.random()) * 0x10000)
+			.toString(16)
+			.substring(1);
+		}
+		
+	$("form#frmExecNodeEdit").on("click", "#btnConfirmComponentDescriptor", function (e)  {
+
+            e.preventDefault();
+            if((routeTags[0] === "shared") && (taoUserProfile.userRole !== "ADMIN")){
+                showMsg(SHARED_EDIT_RESTRICTED, "ERROR");
+                return -1;
+            }
+		
+			var $el = $('#frmExecNodeEdit');
+            var component = {
+                    "id": $('input[name=inputCompID]', $el).val(),
+                    "label" : $('input[name=inputCompLabel]', $el).val(),
+                    "version" : $('input[name=inputCompVersion]', $el).val(),
+                    "description" : $('textarea[name=inputCompDescription]', $el).val(),
+                    "authors" : $('input[name=inputCompAuthors]', $el).val(),
+                    "copyright" : $('input[name=inputCompCopyright]', $el).val(),
+                    "nodeAffinity": "Any",
+                    "parallelism" : parseInt($('input[name=inputCompParallelism]', $el).val()),
+					"sources": [],
+                    "targets": [],
+                   // "containerId": $('select[name=inputContainerId]', $el).val(),
+					"fileLocation" : $('select[name=inputfilePathId]', $el).val(), //$('input[name=inputFileLocation]', $el).val(),
+                    "workingDirectory" : $('input[name=inputWorkingDirectory]', $el).val(),
+                    "templateType" : $('select[name=inputTemplateType]', $el).val(),
+                    "templateEngine": {
+                        "type": "ro.cs.tao.component.template.engine.VelocityTemplateEngine",
+                        "templateType": "VELOCITY"
+                    },
+                    "template": {
+//                        "type": "ro.cs.tao.component.template.BasicTemplate",
+//                        "name": "segmentation-cc-template.vm",
+//                        "templateType": "VELOCITY",
+//                        "contents": "-in $sourceProductFile -filter.cc.expr $expr_string -mode.vector.out $out_str -mode.vector.outmode $outmode_string -mode.vector.neighbor $neighbor_bool -mode.vector.stitch $stitch_bool -mode.vector.minsize $minsize_int -mode.vector.simplify $simplify_float -mode.vector.layername $layername_string -mode.vector.fieldname $fieldname_string -mode.vector.tilesize $tilesize_int -mode.vector.startlabel $startlabel_int"
+                    },
+                    "variables": [{
+                        "key": "ITK_AUTOLOAD_PATH",
+                        "value": "E:\\OTB\bin"
+                    }],
+                    "multiThread": false,
+                    "visibility": $('select[name=inputVisibility]', $el).val(),
+                    "active": $('select[name=inputActive]', $el).val(),
+                    "parameterDescriptors": [
+                        {
+                        "id": "outmode_string",
+						"name": "",
+                        "type": 1,
+                        "dataType": "string",
+                        "defaultValue": "ulco",
+                        "description": "This allows setting the writing behaviour for the output vector file. Please note that the actual behaviour depends on the file format.",
+                        "label": "outmode_string",
+                        "unit": null,
+                        "valueSet": null,
+                        "format": null,
+                        "notNull": false,
+                        "validator": null
+                         }, {
+                        "id": "neighbor_bool",
+                        "type": 1,
+                        "dataType": "bool",
+                        "defaultValue": "true",
+                        "description": "Activate 8-Neighborhood connectivity (default is 4).",
+                        "label": "neighbor_bool",
+                        "unit": null,
+                        "valueSet": null,
+                        "format": null,
+                        "notNull": false,
+                        "validator": null
+                        }
+                    ]
+                };
+            component.templatecontents = $('textarea[name=inputTemplateContents]', $el).val();
+            //add template to payload for template type VELOCITY
+//            if(component.templateType === "VELOCITY"){
+//                component.template={
+//                    "type": "ro.cs.tao.component.template.BasicTemplate",
+//                    "name" : $('input[name=inputTemplateName]', $el).val(),
+//                    "templateType": "VELOCITY",
+//                    "contents" : $('textarea[name=inputTemplateContents]', $el).val()
+//                };
+//            }
+
+            // add system variable to payload parsing user defined system vars table
+            component.variables = [];
+            var $tblCompSysVar = $("#comp-tab-sys table");
+            $(".val-row", $tblCompSysVar).each(function() {
+                var k = $(this).find("input.var-key").val();
+                var v = $(this).find("input.var-value").val();
+                var newSysVar = {};
+                if( ((typeof k !== "undefined") && (typeof k.valueOf() === "string") && (k.length > 0)) && ((typeof v !== "undefined") && (typeof v.valueOf() === "string"))) {
+                    newSysVar.key = k;
+                    newSysVar.value = v;
+                    component.variables.push(newSysVar);
+                }else{
+                    showMsg("Invalid system variables. Please choose valid names or values to continue.", "ERROR");
+                    return false;
+                }
+            });
+            //add parameterDescriptors to payload parsing user defined parameterDescriptors table
+            component.parameterDescriptors = [];
+            var $tblParameterDescriptors = $("#comp-tab-param table");
+            $("tbody:not(.tpl-sample-body)", $tblParameterDescriptors).each(function(){
+                var id = $(this).find(".val-row input.var-id").val();
+                var name = $(this).find(".val-row input.var-name").val();
+                var label = $(this).find(".val-row input.var-label").val();
+                var description = $(this).find(".val-row .var-description").val();
+                var type = $(this).find(".val-row .var-type").val();
+                var datatype = $(this).find(".val-row .var-datatype").val();
+                var defaultval = $(this).find(".val-row .var-default").val();
+
+                var format = $(this).find(".val-row-plus input.var-format").val();
+                var unit = $(this).find(".val-row-plus input.var-unit").val();
+                var validator = $(this).find(".val-row-plus input.var-validator").val();
+                var notnull = $(this).find(".val-row-plus .var-notnull").is(":checked");
+
+                if( !((typeof id !== "undefined") && (typeof id.valueOf() === "string") && (id.length > 0)) ) {
+					id = guid();
+				}
+				
+				if (format.trim()=== ''){format = null;}
+				if (unit.trim()=== ''){unit = null;}
+				if (validator.trim()=== ''){validator = null;}
+				
+				var newParameterDescriptor = {
+					"id": id,
+					"name": name,
+					"type": type,
+					"dataType": datatype,
+					"defaultValue": defaultval,
+					"description": description,
+					"label": label,
+					"unit": unit,
+					"valueSet": null,
+					"format": format,
+					"notNull": notnull,
+					"validator": validator
+				};
+				component.parameterDescriptors.push(newParameterDescriptor);
+            });
+			
+            //add sources and targets to payload parsing user defined port tables
+            component.sources = helper_getFormPorts($("#tbl-edt-sources"));
+            component.targets = helper_getFormPorts($("#tbl-edt-targets"));
+			
+            if(component.id === ''){
+                showMsg("Component ID can not be empty. Please choose valid values to continue.", "ERROR");
+                return;
+            }
+            var regexp = /^[a-zA-Z0-9-_.]+$/;
+            if (component.id.search(regexp) === -1)
+            {
+                showMsg("The component id contains invalid characters.", "ERROR");
+                return;
+            }
+			
+            var tags = $('input[name=formTags]', $el).val();
+            component.tags = tags.split(",");
+			
+			
+			var fileLocationText =  $('select[name=inputfilePathId]', $el).find(":selected").text();
+			if (fileLocationText=="Select...")
+					fileLocationText="";
+
+			//alert(component);
+			
+            var componentIDsArr=[];
+			for (var i = 0; i < componentlist.length; i++)
+			{
+				componentIDsArr.push(componentlist[i].id)
+			}
+
+			if( componentIDsArr.includes($('input[name=inputCompID]', $el).val()))
+			{
+				showMsg("ID already added.Please choose unique values to continue.", "ERROR");
+				return;  
+			}
+	
+			componentlist.push(component);
+			//$('input[name=componentsDescriptor]', "#frmUploadContainer").val( JSON.stringify(componentlist));
+			var $modal = $("#myModalNodesCompDesc");
+			$modal.modal('hide');
+
+			showAddedComponents(componentlist,fileLocationText)
+
+		});
+		
+    });
+
+	function showAddedComponents(componentlist,fileLocationText){
+		var $tbl = $("#tbl-components")
+
+		var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
+		$el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+		
+		for (var i = 0; i < componentlist.length; i++) {
+					console.log(componentlist[i]);
+
+					$('input.comp-path', $el).val(fileLocationText);
+					$('input.comp-id', $el).val(componentlist[i].id);
+					$tbl.append($el);
+    
+         }
+       
+	}
+
+    //# sourceURL=containers-addComponentDescriptor.js
+</script>

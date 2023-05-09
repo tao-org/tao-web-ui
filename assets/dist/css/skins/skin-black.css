@@ -2,6 +2,9 @@
  * Skin: Black
  * -----------
  */
+ .skin-black a {
+	color: #333;
+}
 /* skin-black navbar */
 .skin-black .main-header {
   -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
@@ -15,10 +18,11 @@
   border-right: 1px solid #eee;
 }
 .skin-black .main-header > .navbar {
-  background-color: #ffffff;
+  background-color: #000000;
+  opacity: unset;
 }
 .skin-black .main-header > .navbar .nav > li > a {
-  color: #333333;
+  color: #ffffff;
 }
 .skin-black .main-header > .navbar .nav > li > a:hover,
 .skin-black .main-header > .navbar .nav > li > a:active,
@@ -26,36 +30,33 @@
 .skin-black .main-header > .navbar .nav .open > a,
 .skin-black .main-header > .navbar .nav .open > a:hover,
 .skin-black .main-header > .navbar .nav .open > a:focus {
-  background: #ffffff;
-  color: #999999;
+  background: #374850;
+  color: #ffffff;
 }
 .skin-black .main-header > .navbar .sidebar-toggle {
   color: #333333;
 }
 .skin-black .main-header > .navbar .sidebar-toggle:hover {
-  color: #999999;
-  background: #ffffff;
+  color: #ffffff;
+  background: #374850;
 }
 .skin-black .main-header > .navbar > .sidebar-toggle {
-  color: #333;
-  border-right: 1px solid #eee;
+  color: rgb(255, 255, 255);
 }
 .skin-black .main-header > .navbar .navbar-nav > li > a {
   border-right: 1px solid #eee;
 }
 .skin-black .main-header > .navbar .navbar-custom-menu .navbar-nav > li > a,
 .skin-black .main-header > .navbar .navbar-right > li > a {
-  border-left: 1px solid #eee;
   border-right-width: 0;
 }
 .skin-black .main-header > .logo {
-  background-color: #ffffff;
-  color: #333333;
+  background-color: #000000;
+  color: #ffffff;
   border-bottom: 0px solid transparent;
-  border-right: 1px solid #eee;
 }
 .skin-black .main-header > .logo:hover {
-  background-color: #fcfcfc;
+  background-color: #374850;
 }
 @media (max-width: 767px) {
   .skin-black .main-header > .logo {
@@ -150,4 +151,271 @@
   border-top-right-radius: 2px !important;
   border-bottom-right-radius: 2px !important;
   border-bottom-left-radius: 0 !important;
+}
+.skin-black .callout.callout-empty,
+.skin-black .box.box-primary {
+	border-color: #000000;
+}
+.skin-black .main-footer {
+	background: #000000;
+	color: #d2d6de;
+	border-top: none;
+}
+.skin-black .progress-bar.progress-bar-info,
+.skin-black .nodes-item-core-box .box-description {
+	background-color: #dfdfdf;
+}
+.skin-black .bg-aqua,
+.skin-black .callout.callout-info,
+.skin-black .alert-info,
+.skin-black .label-info,
+.skin-black .modal-info .modal-body {
+	background-color: #333 !important;
+}
+.skin-black .nodes-item-core-box .box-top .box-title,
+.skin-black .nodes-item-core-box .box-top .box-text,
+.skin-black .nodes-item-core-box .box-top .box-icon {
+	 color: #333;
+}
+.skin-black .box.box-success,
+.skin-black .nodes-item-core-box,
+.skin-black .nav-tabs-custom>.nav-tabs>li.active {
+	border-color: #adadad;
+	border-top-color: #444;
+}
+.skin-black .nodes-item-core-box .box-top-tags span {
+	border-color: #444;
+}
+.skin-black #myModalNodes .modal-header {
+    background-color: #333;
+    color: white;
+}
+.skin-black #myModalNodes .modal-header.ui-draggable-handle::before {
+	background-color: #333;
+	border-color: #444;
+}
+.skin-black #myFlatMap .poly-action-tools {
+	border-color: #444;
+	background-color: #333;
+    color: white;
+}
+.skin-black #myFlatMap .poly-switch>label::after {
+	border-color: #333;
+	background-color: #525252;
+    color: white;
+}
+.skin-black #myFlatMap .poly-map-title {
+	color: #525252;
+}
+.skin-black .btn-primary:not(.login-box *),
+.skin-black #myFlatMap .poly-shape-type select,
+.skin-black #myFlatMap .ol-zoom button {
+	background-color: #333333;
+    border-color: #1a1a1a;
+}
+.skin-black #myFlatMap .btn-poly {
+	color: white;
+}
+.skin-black #myFlatMap .drawer-content .btn-poly {
+	color: #333;
+}
+.skin-black #myFlatMap .drawer-panel {
+	border-right: 20px solid #333333;
+}
+.skin-black #myFlatMap .drawer-panel .drawer-content {
+	border: 1px solid #333333;
+}
+.skin-black #myFlatMap .drawer-panel.closed .drawer-content::after {
+	color: #333333;
+}
+.skin-black #queryExtentParameters .sensor-name {
+    background-color: #333333;
+    color: #ffffff;
+}
+.skin-black #myModalNodes table.ds-params::before{
+    background-color: #333333;
+}
+.skin-black #myModalNodes table.ds-params tbody td:first-child {
+  color: #333333 !important;
+}
+.skin-black #myModalNodes .vertical-container {
+    border-top: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    background-color: #ffffff;
+}
+.skin-black #listDatasources a.selected {
+  color: #000000;
+  background-color: #eaeaea;
+}
+.skin-black #listDatasources a:hover {
+  color: #797979;
+}
+.skin-black #coverage{
+    color: #333333;
+}
+.skin-black .ui-slider-range-min{
+    background-color: #333333;
+}
+.skin-black #myFlatMap .btn-poly:hover,
+.skin-black #queryExtent .modal-header .panel-control:hover {
+	color: #999;
+}
+.skin-black #myFlatMap .btn-poly:disabled{
+    background-color: #333333;
+    color: #a2a3a3;
+    border-color: #333333;
+}
+.skin-black #myFlatMap .poly-shape-type select.disabled {
+    color: #a2a3a3;
+}
+.skin-black #queryExtent .modal-header .panel-control{
+	color: #fff;
+    text-shadow: none;
+    opacity: unset;
+}
+.skin-black .val-gravatar {
+	border-bottom-color: #444;
+}
+.skin-black .progress-bar.progress-bar-info{
+	background-color: #333333;
+}
+
+.skin-black .nodes-item-core-box .box-description{
+    background-color: #eaeaea;
+}
+
+.skin-black .nodes-item-core-box .box-top .box-title,
+.skin-black .nodes-item-core-box .box-top .box-text,
+.skin-black .nodes-item-core-box .box-top .box-icon {
+	 color: #000000;
+}
+.skin-black .box.box-solid.box-success>.box-header {
+    background-color: #000000;
+    background: #000000;
+}
+
+.skin-black .box.box-solid.box-success{
+    border: none;
+}
+
+.skin-black .box.box-warning {
+    border-top-color: #000000;
+}
+
+.skin-black .foldercontent .foldercontent-item.selected,
+.skin-black .tree-content .treeview a.selected{
+    background-color: #e2e2e2;
+    color: #000000;
+    border: 1px solid #333333;
+}
+
+.skin-black .tree-content .treeview a:hover,
+.skin-black .foldercontent .foldercontent-item:hover{
+    background-color: #eaeaea;
+    border-color: #cccccc;
+    color: #333333
+}
+.skin-black .foldercontent .foldercontent-item.selected a {
+    color: #333333;
+}
+
+.skin-black #comp-tab-ports .table-title {
+    background-color: #000000;
+    color: #fff;
+}
+
+.skin-black .pagination>.active>a, .pagination>.active>a:focus, 
+.pagination>.active>a:hover, .pagination>.active>span, 
+.pagination>.active>span:focus, .pagination>.active>span:hover{
+    color: #fff;
+    background-color: #333;
+    border-color: #000000;
+}
+
+.skin-black .tbl-edt thead tr:nth-child(1) th{
+    background: #505050;
+    color: white;
+}
+.skin-black .job-history-one.running {
+    border-left: 5px solid #000000;
+}
+/*** pop-up close ***/
+.skin-black .close {
+  color: #ffffff;
+  text-shadow: none;
+  opacity: unset;
+}
+/*** User profile card ***/
+.skin-black .card .card-profile {
+  background: #818188;
+  color: #ffffff;
+}
+.skin-black .card .card-profile::after {
+  background: #000000;
+  color: #ffffff;
+}
+/*** Components parameters edit ***/
+.skin-black .val-row-plus {
+  background: #bbbbbb;
+}
+/*** Workflow toolbox ***/
+.skin-black .toolbox-sidebar .toolbox-bar {
+  color: #fff!important;
+  background-color: #000000!important;
+  margin-top: 1px;
+}
+.skin-black .toolboxAccordion .ui-accordion-header{
+  background-color: #888888;
+  color: #ffffff;
+}
+.skin-black .item-info{
+  border: 1px solid #000000;
+}
+.skin-black .modulesholder .item {
+  border: 1px solid #000000;
+}
+.skin-black .ui-widget-content{
+  color: #000000;
+}
+.skin-black .toolbox-header .toolbox-footer {
+  color: #bbbbbb;
+}
+/*** Node monitor model ***/
+.skin-black .modal-header {
+  background-color: #000000;
+  color: white;
+}
+ 
+/*** Repositories modals windows ***/
+.skin-black #properties h4, .skin-black #properties .action-name, .skin-black #view_on_map h4, .skin-black #view_file_content h4, 
+.skin-black #view_on_map button.close, .skin-black #view_file_content button.close, 
+.skin-black #view_file_content .content_prev, .skin-black #view_file_content .content_next {
+  color:#333;
+}
+.skin-black #view_on_map button.close:hover, 
+.skin-black #view_file_content button.close:hover {
+  color:#ccc;
+}
+.skin-black #properties.folder .callout-title, .skin-black #properties .callout-title,
+.skin-black #view_on_map.map .callout-title, .skin-black #view_file_content .callout-title {
+  border-top: 5px solid rgb(51 51 51);
+  background-color: rgb(51 51 51 / 10%);
+}
+
+.skin-black .panel-info > .panel-heading{
+  background-color: rgb(51 51 51 / 10%);
+  border-color: #333;
+}
+.skin-black .panel-info{
+    border-color: #333;
+}
+
+.skin-black .select-repository li {
+  color: #000;
+}
+.skin-black .repo-parameters .fa-info-circle{
+  color: #000;
+}
+.skin-black .select-repository li.selected{
+  background-color: #000;
 }

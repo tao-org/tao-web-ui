@@ -117,22 +117,22 @@ font-weight:600
 </style>
 
 <section class="content-header tao-async-ph">
-    <h1>Files<small>Full list of <strong>files</strong>.</small></h1>
-    <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">My Files</li>
-    </ol>
+	<h1>Files<small>Full list of <strong>files</strong>.</small></h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+		<li class="active">Common Files</li>
+	</ol>
 </section>
 
 <section id="tree-content" class="content">
-    <div class="row">
-        <div class="col-md-12">
+	<div class="row">
+		<div class="col-md-12">
 			<div class="box">
 				<div class="box-header">
 					<div class="treeview-header">
-						<h4>My Files:</h4>
+						<h4>Common Files:</h4>
 						<button id="importProducts" class="btn bg-green btn-flat" style="display:none"><i class="fa fa-upload fa-fw"></i>Import Products</button>
-						<button id="uploadFiles" class="btn bg-green btn-flat" disabled><i class="fa fa-upload fa-fw"></i>Upload Files</button>
+						<button id="uploadFiles" class="btn bg-green btn-flat"><i class="fa fa-upload fa-fw"></i>Upload Files</button>
 						<button id="createQuery" class="btn bg-green btn-flat" disabled><i class="fa fa-square-o fa-fw"></i>Create Query</button>
 						<div class="col-md-12 loading hidden">
 							<img src="./assets/dist/img/loading.gif" />
@@ -190,8 +190,8 @@ font-weight:600
 					</div>
 				</div>
 			</div>
-        </div>
-    </div>
+		</div>
+	</div>
 </section>
 
 <div id="myModalUpload" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -330,7 +330,7 @@ font-weight:600
 										<input type="radio" name="symbolicLink" value="true"> Yes
 									</div>
 									<div class="col-sm-2 col-md-2">
-  										<input type="radio" name="symbolicLink" value="false" checked> No
+										<input type="radio" name="symbolicLink" value="false" checked> No
 									</div>
 								</div>
 							</div>
@@ -395,7 +395,10 @@ font-weight:600
 		var root = (typeof attributes === "undefined") || (typeof attributes.fileInfo === "undefined") || (typeof attributes.fileInfo.relativePath === "undefined");
 		var deferred = $.Deferred();
 		if (root) $("#tree-content .loading").removeClass("hidden");
-		var url = baseRestApiURL + "files/" + (sharedFiles ? "public" : "user") + (root ? "/" : "?folder=" + attributes.fileInfo.relativePath)
+		var remote = (typeof attributes != "undefined") && (typeof attributes.remotePath != "undefined");
+		var url = remote
+					? baseRestApiURL + "files/remote?protocol=" + attributes.fileInfo.protocol + "&folder=" + attributes.fileInfo.relativePath
+					: baseRestApiURL + "files/" + (sharedFiles ? "public" : "user") + (root ? "/" : "?folder=" + attributes.fileInfo.relativePath);
 		$.ajax({
 			url: url,
 			type: "GET",
@@ -424,21 +427,23 @@ font-weight:600
 		});
 		return deferred.promise();
 	}
-	
+
 	function getParentFolder(relativePath) {
 		var parentId = relativePath.substring(0, relativePath.lastIndexOf("/"));
 		var parent = $("input[id='" + parentId + "']").parent().find(">.sub");
 		if (parent.length == 0) { parent = $compsTree; }
 		return parent;
 	}
-	
+
 	function renderFolder(relPath, file) {
 		var attributes = (file != null ? file.attributes : null);
 		var relativePath = relPath.replace(/\\/g, "/");
-		
+		if (relativePath.endsWith("/")) {
+			relativePath = relativePath.substring(0, relativePath.length - 1);
+		}
 		// get parent, render if null
 		var parent = getParentFolder(relativePath);
-		if (parent == $compsTree && relativePath.indexOf("/") >= 0 ) {
+		if (parent == $compsTree && relativePath.indexOf("/") >= 0) {
 			parent = renderFolder(relativePath.substring(0, relativePath.lastIndexOf("/")), null);
 		}
 		
@@ -448,13 +453,17 @@ font-weight:600
 		attributes.fileInfo.fileSize     = 0;
 		attributes.fileInfo.fileName     = relativePath.substring(relativePath.lastIndexOf("/") + 1);
 		attributes.fileInfo.fileType     = "folder";
+		if (file != null) {
+			attributes.fileInfo.protocol     = file.protocol;
+		}
 		attributes.fileInfo.uri          = "";
 		
 		// render folder if not found
 		var chk = parent.find("input[id='" + relativePath + "']");
 		if (chk.length == 0) {
 			var faPublic = attributes.visibility === "PUBLIC";
-			var selectable = sharedFiles && file != null && file.productName != undefined;
+			//var selectable = sharedFiles && file != null && file.productName != undefined;
+			var selectable = file != null && file.productName != undefined;
 			var element = $('<div' + (relativePath == 'files' ? ' class="files-folder"' : '') + ">" +
 								'<input type="checkbox" id="' + relativePath + '">' +
 								'<label for="' + relativePath + '">' +
@@ -524,7 +533,10 @@ font-weight:600
 				
 				// add "public/" prefix to filePath for all shared files in /public/files/
 				var addPublicPrefix = (sharedFiles && relPath.substr(0, 6) == "files/") ? "public/" : "";
-				var href = baseRestApiURL + 'files/download?fileName=' + addPublicPrefix + relPath;
+				var href = baseRestApiURL +
+							(typeof file.attributes.remotePath != "undefined" && file.attributes.remotePath.startsWith("s3")
+								? 'files/download/s3?fileName=' + file.attributes.remotePath
+								: 'files/download?fileName=' + addPublicPrefix + relPath);
 				
 				var fafile = "fa-file-o";
 				switch (type) {
@@ -549,6 +561,7 @@ font-weight:600
 				file.attributes.fileInfo.fileName = name;
 				file.attributes.fileInfo.fileType = type;
 				file.attributes.fileInfo.uri = href;
+				file.attributes.fileInfo.protocol = file.protocol;
 				
 				element.data("attributes", file.attributes);
 				folder.append(element);
@@ -682,11 +695,6 @@ font-weight:600
 		if (attributes.fileInfo.fileType == "folder") {
 			$("#properties").addClass("folder");
 			$("#properties").removeClass("file");
-			
-			// Activate upload button
-			if ($(".files-folder input[id='" + attributes.fileInfo.relativePath + "']", $compsTree).length > 0) {
-				$("#uploadFiles").prop("disabled", false);
-			}
 		} else {
 			$("#properties").removeClass("folder");
 			$("#properties").addClass("file");
@@ -737,9 +745,6 @@ font-weight:600
 		// Hide properties window and clear data
 		$("#properties").removeClass("file folder").addClass("hidden").removeData("attributes");
 		$compsTree.removeClass("compact");
-		
-		// Disable upload button
-		$("#uploadFiles").prop("disabled", true);
 	}
 	
 	$("#tree-content .treeview").on("click", "a", function (e) {
@@ -1003,7 +1008,7 @@ font-weight:600
 		$("#frmUploadFile").validate().resetForm();
 		$("#frmUploadFile .form-control").parent().removeClass("has-error");
 		
-		var $folder = $("#tree-content .treeview a.selected");
+		var $folder = $("label>a","#tree-content .treeview .files-folder");
 		if ($folder.length > 0 && typeof $folder.data("attributes").fileInfo.relativePath !== "undefined") {
 			var fileInfo = $folder.data("attributes").fileInfo;
 			if (fileInfo.fileType == "folder" && fileInfo.relativePath.indexOf("files") == 0) {
@@ -1316,7 +1321,7 @@ font-weight:600
 		if ($(this).valid()) {
 			routeLoading('show');
 			
-			var data = "sourceDir=" + encodeURI($("input[name='path']").val()) + "&linkOnly=" + $("input[name='symbolicLink']").val();
+			var data = "sourceDir=" + encodeURI($("input[name='path']").val()) + "&linkOnly=" + $("input[name='symbolicLink']:checked").val();
 			var xhr = new XMLHttpRequest();
 			xhr.open("POST", baseRestApiURL + "product/import");
 			xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
@@ -1365,7 +1370,7 @@ font-weight:600
 			}
 		} else {
 			$("#tree-content").addClass("user-files");
-			$(".content-header>h1").html("User Files<small>Here you can find your uploaded files and the execution outputs of your workflows.</small>");
+			$(".content-header>h1").html("Files<small>Here you can find your uploaded files and the execution outputs of your workflows.</small>");
 		}
 		
 		// Get files

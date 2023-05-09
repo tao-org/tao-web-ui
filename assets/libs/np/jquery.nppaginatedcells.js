@@ -40,6 +40,7 @@ jQuery.fn.npPaginatedCells = function(options){
     var $searchForm = $("form.search-container",$selectedEl);
     var $orderEl =  $(".nppaginatedcells-order",$selectedEl);
 
+	
 
     var settings = $.extend({
         itemsOnPage: 8,
@@ -49,12 +50,12 @@ jQuery.fn.npPaginatedCells = function(options){
         viewMode: "list",
         doAction: function (actionName) {},
         doDataPreprocessing: function(data){return data;},
-        doCustomRender: function($el, data){return;}
+        doCustomRender: function($el, data){return;},
+		doDataPostprocessing : function(){return;}
     }, options );
 
 
     var dataPagination = {
-        active: true,
         directPagesNo: 3,
         itemsOnPage: settings.itemsOnPage,
         currentPage: 0
@@ -68,7 +69,7 @@ jQuery.fn.npPaginatedCells = function(options){
 
     var data = [];
     var dataFull = [];
-
+	
     var getFromEndpoint = function(){
         var req = [];
         for (var j = 0; j < settings.url.length; j++){
@@ -85,6 +86,7 @@ jQuery.fn.npPaginatedCells = function(options){
             });
             req.push(getDataAjax);
         }
+		contentLoading("show");
         $.when.apply($, req).done(function(){
             var retData = [];
             if(req.length === 1){
@@ -97,9 +99,37 @@ jQuery.fn.npPaginatedCells = function(options){
                 }
                 retData = response;
             }
-            retData = settings.doDataPreprocessing(retData)
-            data = retData;
-            dataFull = retData;
+            retData = settings.doDataPreprocessing(retData);
+			
+			var currentPage = $("section.content-header").find("li.active")[0].textContent.toLowerCase();
+			if (currentPage.indexOf("workflows") >= 0) {
+				var action = $("a[data-toggle='tab'][aria-expanded='true']", ".nav-tabs-custom").attr("data-action");
+				var active = false;
+				var system = false;
+				if (action === "active_nodes" || action === "system_nodes") {
+					active = true;
+				}
+				
+				if (action === "system_nodes"){
+					system = true;
+				}
+				
+				dataFull = retData.filter(function(item){
+					if (system && item.visibility.toLowerCase() === "system") {
+							return item;
+					} else if (!system && item.visibility.toLowerCase() !== "system") {
+						if(typeof item.active !== "undefined" && item.active === active) {
+							return item;
+						} else if (typeof item.active === "undefined") {
+							return item;
+						}
+					}
+				});
+			} else {
+				dataFull = retData;
+			}
+			
+			
             if( (orderIndex === -1) && (settings.order.length>0) ){
                 orderIndex = 0;
             }
@@ -116,11 +146,11 @@ jQuery.fn.npPaginatedCells = function(options){
             dataAllTags.sort();
             repaintTags();
             repaintSearchBox();
-            console.log("data loaded");
+            //console.log("data loaded");
             repaint();
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            alert("Plugin: Could not retrive data.");
-            console.log(textStatus + ': ' + errorThrown);
+			routeLoading('hide');
+			chkXHR(jqXHR.status);
         });
 
 /*
@@ -162,15 +192,16 @@ jQuery.fn.npPaginatedCells = function(options){
             last: dataPagination.currentPage* dataPagination.itemsOnPage+dataPagination.itemsOnPage
         };
         $valItemFrom.html( ((visibleRange.first+1 < data.length))? visibleRange.first+1 : data.length);
-        $valItemTo.html( ((visibleRange.last<data.length))? visibleRange.last : data.length);
+        $valItemTo.html( ((visibleRange.last < data.length))? visibleRange.last : data.length);
         $valItemCount.html(data.length);
-
+		
         $.each(data, function( index, value ) {
             if((index >= visibleRange.first) && (index < visibleRange.last)){
                 drawCell(index, value);
             }
         });
-        console.log("rendered");
+        //console.log("rendered");
+		settings.doDataPostprocessing();
     };
     var drawCell = function(index, elX) {
         var elID = guid();
@@ -181,11 +212,22 @@ jQuery.fn.npPaginatedCells = function(options){
         }else{
             $elClone = $cellTemplateList.clone();
         }
+		
+		// for system workflow keep only clone and execute buttons
+		if (routeTags[1] === "workflows" && $("a[data-action='system_nodes']").length && $("a[data-action='system_nodes']").parent().hasClass("active")) {
+			$("button",$elClone).not("[data-action='wf-clone'], [data-action='wf-start']").remove();
+		}
         //iterate values and populate all inner html of val-propname with value of propname.
         //call custom cell alterations
         for (var property in elX) {
             if (elX.hasOwnProperty(property)) {
                 $(".val-"+property, $elClone).html(elX[property]);
+                if(property === 'description'){
+                    $(".val-"+property, $elClone).prop('title',''+elX[property]+'');
+                }
+				if (property === "online") {
+					$(".fa.fa-circle", $elClone).addClass(elX[property] ? "online": "offline");
+				}
             }
         }
         if(elX.tags != null){
@@ -195,8 +237,9 @@ jQuery.fn.npPaginatedCells = function(options){
         }
         $(".box-top-tags", $elClone).html(tags);
         $elClone.addClass("node-root").hide();
-        $elClone.prop("id", "node-"+elID ).appendTo( $body ).data("dna", elX);
-        if(elX.active === false){
+		$elClone.prop("id", "node-"+elID ).appendTo( $body ).data("dna", elX);
+		var currentPage = $("section.content-header").find("li.active")[0].textContent.toLowerCase();//workaround for inherited active property
+        if(elX.active === false && currentPage.toLowerCase() !== "remote services"){
             $elClone.addClass("disabled");
         }
         //render custom
@@ -317,6 +360,7 @@ jQuery.fn.npPaginatedCells = function(options){
         }
     };
     var repaint = function(){
+		contentLoading('hide');
         ui_showRefreshNotification();
         filterData();
         clearCells();
@@ -358,7 +402,10 @@ jQuery.fn.npPaginatedCells = function(options){
         .on("change", 'select' ,function(){
             orderIndex = parseInt(this.value);
             dataPagination.currentPage = 0;
-            getFromEndpoint();
+           // getFromEndpoint();
+		   repaintOrder();
+		   changeOrder();
+		   repaint();
         });
 
     $selectedEl
@@ -373,13 +420,71 @@ jQuery.fn.npPaginatedCells = function(options){
                 }
             }
             if(action === "view-list"){
-                settings.viewMode="list";
-                _settings.createCookie("prefferences_viewMode","list");
+        
+                var username = _settings.readCookie("TaoUserName");
+                var pageName = routeTags[0] +'-'+ routeTags[1];
+                $.when(_userPref.getUserPreferences(username))
+                .done(function(responseProfile){
+                    var r = responseProfile.data;
+                    currentPref = r.preferences;
+                });
+                var changed = false;
+                $.each(currentPref, function(index,value){
+                    keyValue = value.key;
+                    if(keyValue.includes(pageName) === true){
+                        if(value.value !== "list"){
+                            //update the value with "list" 
+                            value.value = "list";
+                            changed = true;
+
+                        } else if(value.value === "list"){
+                            changed = true;
+                        } 
+                    }
+                });
+                if(!changed){
+                    //add to preferences the new page with the value list
+                    currentPref.push({"key": "view_mode_"+pageName, "value": "list"});
+                }
+                var updatePref = JSON.stringify(currentPref);
+                _userPref.updateUserPreferences(updatePref);
+            
+                prefferences.viewMode = "list";
+                settings.viewMode = "list";
                 repaint();
             }
             if(action === "view-table"){
-                settings.viewMode="grid";
-                _settings.createCookie("prefferences_viewMode","grid");
+                
+                var username = _settings.readCookie("TaoUserName");
+                var pageName = routeTags[0] +'-'+ routeTags[1];
+                $.when(_userPref.getUserPreferences(username))
+                .done(function(responseProfile){
+                    var r = responseProfile.data;
+                    currentPref = r.preferences;
+                });
+                var changed = false;
+                $.each(currentPref, function(index,value){
+                    keyValue = value.key;
+                    if(keyValue.includes(pageName) === true){
+                        if(value.value !== "grid"){
+                            //update the value with "list" 
+                            value.value = "grid";
+                            changed = true;
+                            
+                        } else if(value.value === "grid"){
+                            changed = true;
+                        } 
+                    }
+                });
+                if(!changed){
+                    //add to preferences the new page with the value grid
+                    currentPref.push({"key": "view_mode_"+pageName, "value": "grid"});
+                }
+                var updatePref = JSON.stringify(currentPref);
+                _userPref.updateUserPreferences(updatePref);
+                
+                prefferences.viewMode = "grid";
+                settings.viewMode = "grid";
                 repaint();
             }
             if(action === "refresh-list"){

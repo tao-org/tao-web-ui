@@ -6,7 +6,7 @@
 <!-- modal nodes op -->
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-    <h1>Processing Components<small>Processing components are the ones that will be executed in workflows.</small></h1>
+    <h1>Processing Modules<small>Processing modules are executables that constitute the building block of workflows.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Components</li>
@@ -23,14 +23,12 @@
                 <ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
                     <li class="role-dropdown active">
                         <select id="selectUserPanel" name="selectUserPanel" class="form-control form-changepane" title="Select desired node view.">
-                            <option class="role role-admin" value="all_nodes">All components </option>
-                            <option class="role role-admin" value="disabled_nodes">Disabled components</option>
+                            <option class="role role-admin" value="active_nodes">Components</option>
                         </select>
                     </li>
                 </ul>
                 <ul class="nav nav-tabs hidden-xs">
-                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_nodes" aria-expanded="true">All components</a></li>
-                    <li class="role role-admin"><a href="#panel-nodesX" data-toggle="tab" data-action="disabled_nodes" aria-expanded="false">Disabled components</a></li>
+                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="active_nodes" aria-expanded="true">Components</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -70,11 +68,11 @@
                                 <div class="box box-success">
                                     <div class="box-header">
                                         <i class="fa fa-server"></i>
-                                        <h3 class="box-title">Processing components -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
+                                        <h3 class="box-title">Processing modules -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
                                         <div class="box-tools pull-right nppaginatedcells-order collapse" data-toggle="tooltip" title="Change order"></div>
                                     </div>
                                     <div class="nppaginatedcells-empty callout callout-empty">
-                                        <p>Component list is empty. <span class="results-empty">You do not have any components.</span><span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
+                                        <p>List is empty. <span class="results-empty">You do not have any processing modules.</span><span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
                                     </div>
                                     <div class="box-body chat users-box">
                                         <div class="nppaginatedcells-panel-body">
@@ -88,21 +86,21 @@
                                                         <div class="box-top">
                                                             <div class="box-title"><span class="val-label"></span></div>
                                                             <div class="box-subtitle"><span class="val-id"></span></div>
-                                                            <div class="box-text">Version: <span class="val-version"></span></div>
-                                                            <div class="box-text">Authors: <span class="val-authors"></span></div>
-                                                            <div class="box-text">Copyright: <span class="val-copyright"></span></div>
+                                                            <div class="box-text">
+																Version: <strong><span class="val-version"></span></strong> | 
+																Authors: <strong><span class="val-authors"></span></strong> | 
+                                                                Copyright: <strong><span class="val-copyright"></span></strong> 
+                                                            </div>
+                                                            <div class="box-desc">
+                                                                <span class="val-description "></span>
+                                                            </div>
                                                             <div class="box-icon">
                                                                 <i class="fa fa-plug"></i>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                                                <p><span class="val-description"></span></p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
+                                                        <div class="row" >
                                                             <div class="col-sm-12 col-xs-12">
-                                                                <div class="text-right" style="padding-top: 30px;">
+                                                                <div class="text-right" style="padding-top: 5px;">
                                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
                                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
                                                                 </div>
@@ -119,16 +117,15 @@
                                                         <div class="box-top">
                                                             <div class="box-title"><span class="val-label"></span></div>
                                                             <div class="box-subtitle"><span class="val-id"></span></div>
-                                                            <div class="box-text">Version: <span class="val-version"></span></div>
-                                                            <div class="box-text">Authors: <span class="val-authors"></span></div>
-                                                            <div class="box-text space-after-10">Copyright: <span class="val-copyright"></span></div>
+                                                            <div class="box-text">Version:<strong> <span class="val-version"></span></strong></div>
+                                                            <div class="box-text">Authors: <strong><span class="val-authors"></span></strong></div>
+                                                            <div class="box-text">Copyright: <strong><span class="val-copyright"></span></strong></div>
+                                                            <div class="box-desc"><span class="val-description"></span></div>
                                                             <div class="box-icon">
                                                                 <i class="fa fa-plug"></i>
                                                             </div>
                                                         </div>
-                                                        <div class="box-description">
-                                                            <p><span class="val-description"></span></p>
-                                                        </div>
+                                                      
                                                         <div class="box-bottom with-line">
                                                             <div class="">
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
@@ -232,70 +229,72 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     $( document ).ready(function() {
-        var urls = [];
-        if (routeTags[0]!=="shared") {
-            urls = [
+        var urls =  urls = [
+				baseRestApiURL + "component/",
                 baseRestApiURL + "component/user/?type=SCRIPT",
                 baseRestApiURL + "component/user/?type=EXECUTABLE"
             ];
-        }else{
-            urls = [
-                baseRestApiURL + "component/"
-            ];
-        }
-
-
-
-        window.panelComp = $('#panel-nodes').npPaginatedCells({
-            headerUser: taoUserProfile.username,
-            url: urls,
-            viewMode: prefferences.viewMode,
-            filterAttribute: "label",
-            order:[
-                {
-                    "label":"Name ascending",
-                    "objAttributeName":"label",
-                    "direction":"ASC"
-                },
-                {
-                    "label":"Name descending",
-                    "objAttributeName":"label",
-                    "direction":"DSC"
-                }
-            ],
-            doAction: function(action, args){
-                if(action === "op-plus"){
-                    if( taoUserProfile.userRole !== "ADMIN"){
-                        showMsg("Only admin roles can ad components to the shared workspace. You should try adding components to your own workspace", "ERROR");
-                        return;
-                    }
-                    myModalNodesOpShow(action, args);
-                }
-                if(action === "edit") myModalNodesOpShow(action, args);
-                if(action === "delete"){
-                    if( taoUserProfile.userRole !== "ADMIN"){
-                        alert("not allowed");
-                        return;
-                    }
-                    $('#confirm-dialog').modal('confirm',{
-                        msg:"Are you sure you want to delete processing component: <strong>"+args.dna.label+"</strong>?",
-                        callbackConfirm: function() {
-                            deleteProcessingComponentById(args.dna.id);
-                        },
-                        callbackCancel:function(){}
-                    });
-                }
-            }
-        });
-        //contextual location based variations
-        if(routeTags[0]==="shared"){
-            $el=$("section.tao-async-ph");
-            $el.find("h1").html("Shared Processing Components<small>System or user-published processing components.</small>");
-            $el.find("li.active").html("Shared components");
-            if(taoUserProfile.userRole !== "ADMIN"){
-                $('#panel-nodes').find("button[data-action='delete']").hide();
-            }
-        }
+		
+		window.panelComp = $("#panel-nodes").npPaginatedCells({
+			headerUser: taoUserProfile.username,
+			url: urls,
+			viewMode: prefferences.viewMode,
+			filterAttribute: "label",
+			order:[
+				{
+					"label":"Name ascending",
+					"objAttributeName":"label",
+					"direction":"ASC"
+				},
+				{
+					"label":"Name descending",
+					"objAttributeName":"label",
+					"direction":"DSC"
+				}
+			],
+			doAction: function(action, args){
+				if(action === "op-plus"){
+					if( taoUserProfile.userRole !== "ADMIN"){
+						showMsg("Only admin roles can ad components to the shared workspace. You should try adding components to your own workspace", "ERROR");
+						return;
+					}
+					myModalNodesOpShow(action, args);
+				}
+				if(action === "edit") myModalNodesOpShow(action, args);
+				if(action === "delete"){
+					if( taoUserProfile.userRole !== "ADMIN"){
+						alert("not allowed");
+						return;
+					}
+					$('#confirm-dialog').modal('confirm',{
+						msg:"Are you sure you want to delete the processing module: <strong>"+args.dna.label+"</strong>?",
+						callbackConfirm: function() {
+							deleteProcessingComponentById(args.dna.id);
+						},
+						callbackCancel:function(){}
+					});
+				}
+			}
+		});
+		//contextual location based variations
+		if(routeTags[0]==="shared"){
+			$el=$("section.tao-async-ph");
+			$el.find("h1").html("Shared Processing Modules<small>System or user-published processing modules.</small>");
+			$el.find("li.active").html("Shared components");
+			if(taoUserProfile.userRole !== "ADMIN"){
+				$(selectedTabContentId).find("button[data-action='delete']").hide();
+			}
+		}
+		
+		
+		$("#selectUserPanel").on("change", function () {
+			var current_pane = $(this).val() || 0;
+            $("a[data-action='" + current_pane +"']",'.nav-tabs-custom').trigger( "click" );
+		});
+		
+		$("a[data-toggle='tab']", ".nav-tabs-custom").on("click", function () {
+			window.panelComp.refreshData(baseRestApiURL);
+		});
     });
     //# sourceURL=filename.js
 </script>

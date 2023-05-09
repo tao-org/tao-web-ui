@@ -44,7 +44,7 @@ $.AdminLTE.options = {
   //General animation speed for JS animated elements such as box collapse/expand and 
   //sidebar treeview slide up/down. This options accepts an integer as milliseconds,
   //'fast', 'normal', or 'slow'
-  animationSpeed: 500,
+  animationSpeed: 100,
   //Sidebar push menu toggle button selector
   sidebarToggleSelector: "[data-toggle='offcanvas']",
   //Activate sidebar push menu
@@ -129,6 +129,21 @@ $.AdminLTE.options = {
     sm: 768,
     md: 992,
     lg: 1200
+  },
+  // when a new style is available it must be added here
+  styles:{
+	"dark-blue":"skin-blue",
+	"dark-black":"skin-black",
+	"dark-red":"skin-red",
+	"dark-yellow":"skin-yellow",
+	"dark-purple":"skin-purple",
+	"dark-green":"skin-green",
+	"light-blue":"skin-blue-light",
+	"light-black":"skin-black-light",
+	"light-red":"skin-red-light",
+	"light-yellow":"skin-yellow-light",
+	"light-purple":"skin-purple-light",
+	"light-green":"skin-green-light"
   }
 };
 
@@ -240,10 +255,14 @@ function _init() {
       _this.fix();
       _this.fixSidebar();
       _this.fixWFframe();
+	  var resizeId;
       $(window, ".wrapper").resize(function () {
-        _this.fix();
-        _this.fixSidebar();
-        _this.fixWFframe();
+		clearTimeout(resizeId);
+		resizeId = window.setTimeout(function(){
+			_this.fix();
+			_this.fixSidebar();
+			_this.fixWFframe();
+		}, 130);
       });
     },
     fix: function () {

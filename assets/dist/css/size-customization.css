@@ -1,0 +1,246 @@
+/**/
+body.size-small{font-size:12px} 
+body.size-normal{font-size:14px} 
+body.size-large{font-size:16px} 
+body.size-larger{font-size:18px}
+/* Dashboard title */
+.content-header>h1{font-size:24px}
+body.size-small .content-header>h1{font-size:20px}
+body.size-normal .content-header>h1{font-size:24px}
+body.size-large .content-header>h1{font-size:28px}
+body.size-larger .content-header>h1{font-size:30px}
+/* Dashboard subtitle */
+.content-header>h1>small{font-size:15px}
+body.size-small .content-header>h1>small{font-size:12px}
+body.size-normal .content-header>h1>small{font-size:15px}
+body.size-large .content-header>h1>small{font-size:17px}
+body.size-larger .content-header>h1>small{font-size:19px}
+/*Chat*/
+.direct-chat-info{font-size:12px}
+body.size-small .direct-chat-info{font-size:10px}
+body.size-normal .direct-chat-info{font-size:12px}
+body.size-large .direct-chat-info{font-size:14px}
+body.size-larger .direct-chat-info{font-size:16px}
+
+/*Logo*/
+.main-header .logo{font-size:18px}
+body.size-small .main-header .logo{font-size:16px}
+body.size-normal .main-header .logo{font-size:18px}
+body.size-large .main-header .logo{font-size:18px}
+body.size-larger .main-header .logo{font-size:20px}
+
+/*User name*/
+.val-user-fullname{font-size:16px}
+body.size-small .val-user-fullname{font-size:14px}
+body.size-normal .val-user-fullname{font-size:16px}
+body.size-large .val-user-fullname{font-size:18px}
+body.size-larger .val-user-fullname{font-size:20px}
+
+/*Sidebar submenu*/
+.sidebar-menu .treeview-menu>li>a{font-size:14px}
+body.size-small .sidebar-menu .treeview-menu>li>a{font-size:10px}
+body.size-normal .sidebar-menu .treeview-menu>li>a{font-size:14px}
+body.size-large .sidebar-menu .treeview-menu>li>a{font-size:16px}
+body.size-larger .sidebar-menu .treeview-menu>li>a{font-size:18px}
+/*Sidebar documentation*/
+.sidebar-menu li.header{font-size:12px}
+body.size-small .sidebar-menu li.header{font-size:10px}
+body.size-normal .sidebar-menu li.header{font-size:12px}
+body.size-large .sidebar-menu li.header{font-size:14px}
+body.size-larger .sidebar-menu li.header{font-size:16px}
+/*Sidebar user quota*/
+.control-sidebar-subheading{font-size:14px}
+body.size-small .control-sidebar-subheading{font-size:10px}
+body.size-normal .control-sidebar-subheading{font-size:14px}
+body.size-large .control-sidebar-subheading{font-size:16px}
+body.size-larger .control-sidebar-subheading{font-size:18px}
+
+/*Box titles*/
+.box-header .box-title{font-size:18px}
+body.size-small  .box-header .box-title {font-size:14px}
+body.size-normal .box-header .box-title {font-size:18px}
+body.size-large  .box-header .box-title {font-size:20px}
+body.size-larger .box-header .box-title {font-size:22px}
+
+
+/*Download progress bar*/
+.progress-bar{font-size:12px}
+body.size-small .progress-bar{font-size:10px}
+body.size-normal .progress-bar{font-size:12px}
+body.size-large .progress-bar{font-size:14px}
+body.size-larger .progress-bar{font-size:16px}
+
+
+/*Node monitor---------------------------------------------------------------*/
+.box-header .box-title{font-size:18px}
+body.size-small .box-header .box-title{font-size:14px}
+body.size-normal .box-header .box-title{font-size:18px}
+body.size-large .box-header .box-title{font-size:20px}
+body.size-larger .box-header .box-title{font-size:22px}
+
+/*Modal titles*/
+.modal-title{font-size:18px}
+body.size-small .modal-title{font-size:14px}
+body.size-normal .modal-title{font-size:18px}
+body.size-large .modal-title{font-size:20px}
+body.size-larger .modal-title{font-size:22px}
+
+/*Map button*/
+.btn-poly{font-size:14px}
+body.size-small .btn-poly{font-size:10px}
+body.size-normal .btn-poly{font-size:14px}
+body.size-large .btn-poly{font-size:16px}
+body.size-larger .btn-poly{font-size:18px}
+
+/*Map button*/
+#myFlatMap .poly-switch>label{font-size:14px}
+body.size-small #myFlatMap .poly-switch>label{font-size:10px}
+body.size-normal #myFlatMap .poly-switch>label{font-size:14px}
+body.size-large #myFlatMap .poly-switch>label{font-size:16px}
+body.size-larger #myFlatMap .poly-switch>label{font-size:18px}
+/*Map panel*/
+.poly-actions-panel{font-size:16px}
+body.size-small .poly-actions-panel{font-size:10px}
+body.size-normal .poly-actions-panel{font-size:14px}
+body.size-large .poly-actions-panel{font-size:16px}
+body.size-larger  .poly-actions-panel{font-size:18px}
+
+/*Select*/
+.select{font-size:16px}
+body.size-small select{font-size:14px}
+body.size-normal select{font-size:16px}
+body.size-large select{font-size:18px}
+body.size-larger select{font-size:20px}
+
+/*Icons*/
+.btn-master-tool{font-size:24px}
+body.size-small .btn-master-tool{font-size:20px}
+body.size-normal .btn-master-tool{font-size:24px}
+body.size-large .btn-master-tool{font-size:26px}
+body.size-larger .btn-master-tool{font-size:28px}
+
+/*Search icon*/
+.search-icon {font-size:24px}
+body.size-small .search-icon {font-size:20px; bottom: 0px;}
+body.size-normal .search-icon {font-size:24px}
+body.size-large .search-icon {font-size:26px}
+body.size-larger .search-icon {font-size:27px}
+/*Buttons*/
+.btn-sm{font-size:12px}
+body.size-small .btn-sm{font-size:10px}
+body.size-normal .btn-sm{font-size:12px}
+body.size-large .btn-sm{font-size:14px}
+body.size-larger .btn-sm{font-size:16px}
+/*.fa*/
+.fa-th-large{font-size:16px}
+body.size-small .fa-th-large{font-size:14px}
+body.size-normal .fa-th-large{font-size:16px}
+body.size-large .ffa-th-largea{font-size:18px}
+body.size-larger .fa-th-large{font-size:20px}
+
+/*Map panel*/
+.poly-actions-panel{font-size:16px}
+body.size-small .poly-actions-panel{font-size:10px}
+body.size-normal .poly-actions-panel{font-size:14px}
+body.size-large .poly-actions-panel{font-size:16px}
+body.size-larger  .poly-actions-panel{font-size:18px}
+
+/*Buttons*/
+.btn-primary, .btn-submit{font-size:14px}
+body.size-small .btn-primary, .btn-submit{font-size:12px}
+body.size-normal .btn-primary, .btn-submit{font-size:14px}
+body.size-large .btn-primary, .btn-submit{font-size:16px}
+body.size-larger .btn-primary, .btn-submit{font-size:18px}
+/*Buttons*/
+.btn-default, .right-btn{font-size:14px}
+body.size-small .btn-default, .right-btn{font-size:12px}
+body.size-normal .btn-default, .right-btn{font-size:14px}
+body.size-large .btn-default, .right-btn{font-size:16px}
+body.size-larger .btn-default, .right-btn{font-size:18px}
+
+/*Form fields*/
+.form-control{font-size:14px}
+body.size-small .form-control{font-size:12px}
+body.size-normal .form-control{font-size:14px}
+body.size-large .form-control{font-size:16px}
+body.size-larger .form-control{font-size:18px}
+
+/*User role*/
+.user-panel>.info>a{font-size:12px}
+body.size-small .user-panel>.info>a{font-size:10px}
+body.size-normal .user-panel>.info>a{font-size:12px}
+body.size-large .user-panel>.info>a{font-size:14px}
+body.size-larger .user-panel>.info>a{font-size:16px}
+
+/*Tags*/
+.tagsinput{font-size:14px}
+body.size-small .tagsinput{font-size:12px}
+body.size-normal .tagsinput{font-size:14px}
+body.size-large .tagsinput{font-size:16px}
+body.size-larger .tagsinput{font-size:18px}
+
+/*Logo*/
+.main-header .logo{height:56px}
+body.size-small .main-header .logo{height:51px}
+body.size-normal .main-header .logo{height:51px}
+body.size-large .main-header .logo{height:53px}
+body.size-larger .main-header .logo{height:56px}
+/*Navbar background*/
+.navbar-nav>li>a{padding-top: 15px;padding-bottom: 15px;}
+body.size-small .navbar-nav>li>a{padding-top: 15px;padding-bottom: 15px;}
+body.size-normal .navbar-nav>li>a{padding-top: 15px;padding-bottom: 15px;}
+body.size-large .navbar-nav>li>a{padding-top: 15px;padding-bottom: 18px;}
+body.size-larger .navbar-nav>li>a{padding-top: 15px;padding-bottom: 20px;}
+
+/*Repositories*/
+.foldercontent-item{font-size:14px}
+body.size-small .foldercontent-item{font-size:12px}
+body.size-normal .foldercontent-item{font-size:14px}
+body.size-large .foldercontent-item{font-size:16px}
+body.size-larger .foldercontent-item{font-size:18px}
+
+/*Components*/
+.larger-text-size{font-size:16px}
+body.size-small .larger-text-size{font-size:14px}
+body.size-normal .larger-text-size{font-size:16px}
+body.size-large .larger-text-size{font-size:18px}
+body.size-larger .larger-text-size{font-size:20px}
+
+/*Notifications panel*/
+#notifications-panel-list li .text{font-size: 12px;}
+body.size-small #notifications-panel-list li .text{font-size: 10px;}
+body.size-normal #notifications-panel-list li .text{font-size: 12px;}
+body.size-large #notifications-panel-list li .text{font-size: 14px;}
+body.size-larger #notifications-panel-list li .text{font-size: 16px;}
+
+#notifications-panel-list .label{font-size: 10px;}
+body.size-small #notifications-panel-list .label{font-size: 8px;}
+body.size-normal #notifications-panel-list .label{font-size: 10px;}
+body.size-large #notifications-panel-list .label{font-size: 12px;}
+body.size-larger #notifications-panel-list .label{font-size: 14px;}
+
+/*Running jobs*/
+h4{font-size: 18px;}
+body.size-small h4{font-size: 16px;}
+body.size-normal h4{font-size: 18px;}
+body.size-large h4{font-size: 20px;}
+body.size-larger h4{font-size: 22px;}
+
+/*Workflows Toolbox*/
+.toolbox-sidebar .toolbox-bar span{ font-size: 14px;}
+body.size-small .toolbox-sidebar .toolbox-bar span{ font-size: 12px;}
+body.size-normal .toolbox-sidebar .toolbox-bar span{ font-size: 14px;}
+body.size-large .toolbox-sidebar .toolbox-bar span{ font-size: 16px;}
+body.size-larger .toolbox-sidebar .toolbox-bar span{ font-size: 18px;}
+
+.item-label {font-size: 12px;}
+body.size-small .item-label{font-size: 10px;}
+body.size-normal .item-label4{font-size: 12px;}
+body.size-large .item-label{font-size: 14px;}
+body.size-larger .item-label{font-size: 16px;}
+
+.toolbox-sidebar .toolbox-search input{ font-size: 14px;}
+body.size-small .toolbox-sidebar .toolbox-search input{ font-size: 12px;}
+body.size-normal .toolbox-sidebar .toolbox-search input{ font-size: 14px;}
+body.size-large .toolbox-sidebar .toolbox-search input{ font-size: 16px;}
+body.size-larger .toolbox-sidebar .toolbox-search input{ font-size: 18px;}

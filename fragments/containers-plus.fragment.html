@@ -13,14 +13,16 @@
 .extra-files-container>input[type="file"]{width:92%;margin-bottom:2px}
 .extra-files-container>input[type="file"]::after{content:"\f014";font:normal normal normal 16px/1 FontAwesome;display:inline-block;cursor:pointer;padding:2px;position:absolute;left:91%;color:red}
 </style>
-<div class="modal-content">
+
+
+<div class="modal-content" style="padding-bottom: 15px;">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" id="myModalLabel">Add new toolbox container</h4>
     </div>
 
     <form id="frmUploadContainer" class="form-horizontal" enctype="multipart/form-data" role="form">
-		<input type="hidden" name="system" value="true" />
+		<input type="hidden" id ="idsystem" name="system" value="false" />
         <div class="modal-error collapse">
             <h4 class="modal-title">Error adding toolbox container!</h4>
             <p id="modal-error-msg">Please check your data.</p>
@@ -75,20 +77,66 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group has-feedback">
-                            <label for="jsonContainerDescriptor" class="col-sm-2 col-md-2 control-label">Container descriptor</label>
-                            <div class="col-sm-10 col-md-10">
-								<input type="file" id="jsonContainerDescriptor" class="form-control json-file for-validation" name="jsonContainerDescriptor" />
-                            </div>
+							<label for="jsonContainerDescriptor" class="col-sm-2 col-md-2 control-label">Add Descriptors</label>
+                            <div class="col-sm-6 col-md-6">
+							
+							</div>
+							<div class="col-sm-4 col-md-4">
+								<input type="checkbox" class="js-switch" id="switchContainerDescriptors"  />
+						
+							</div>
                         </div>
-                    </div>
+					</div>
+					
+					<div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="jsonContainerDescriptor" class="col-sm-2 col-md-2 control-label">Container descriptor</label>
+                            <div class="col-sm-6 col-md-6">
+								<input type="file" id="jsonContainerDescriptor" class="form-control json-file for-validation" name="jsonContainerDescriptor"  />
+							</div>
+							<div class="col-sm-4 col-md-4">
+							
+								<button disabled  id="btnAddContainerDescriptor" name="btnAddContainerDescriptor" class="btn btn-primary btn-submit">Add container descriptor</button>
+								<input type="hidden" id="containerDescriptor" name="containerDescriptor"  value="" />
+							</div>
+                        </div>
+					</div>
+					
                     <div class="col-md-12">
                         <div class="form-group has-feedback">
                             <label for="jsonComponentDescriptor" class="col-sm-2 col-md-2 control-label">Component descriptor</label>
-                            <div class="col-sm-10 col-md-10">
+                           <div class="col-sm-6 col-md-6">
 								<input type="file" id="jsonComponentDescriptor" class="form-control json-file for-validation" name="jsonComponentDescriptor" />
-                            </div>
+							</div>
+							<div class="col-sm-4 col-md-4">
+								<button disabled id="btnAddComponentDescriptor" name="btnAddComponentDescriptor" class="btn btn-primary btn-submit btn-cont-addnewcomp">Add component descriptor</button>
+								<input type="hidden" id="componentsDescriptor" name="componentsDescriptor"  value="" />
+							</div>
                         </div>
-                    </div>
+					</div>
+					
+				    <div class="col-md-12">
+						<div class="form-group has-feedback">
+							<div class="col-sm-2 col-md-2 ">
+							</div>
+                           <div class="col-sm-6 col-md-6 ">
+							<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-components">
+								<tbody class="tpl-sample-body">
+									<tr class="tpl-sample-row">
+										<th class="del-col" scope="row">
+											<a href="#" class="text tbl-app-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+										</th>
+										<td><input type="text" class="comp-id " value="" readonly ></td>
+										<td><input type="text" class="comp-path" value="" readonly ></td>
+									</tr>
+							    </tbody>
+							</table>
+							</div>
+							<div class="col-sm-2 col-md-2 ">
+							</div>
+                        </div>
+						</div>
+
                     <div class="col-md-12">
                         <div class="form-group has-feedback">
                             <label for="containerLogo" class="col-sm-2 col-md-2 control-label">Logo image</label>
@@ -113,7 +161,7 @@
             </section>
         </div><!-- /.modal-body -->
     </form>
-    <div class="modal-note">
+    <!--<div class="modal-note">
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
@@ -127,10 +175,16 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    </div>
+    </div>-->
 </div><!-- /.modal-content -->
 
 <script>
+
+
+  var elem = document.querySelector('.js-switch');
+  var init = new Switchery(elem,{ color: '#3c8dbc', });
+
+
 	function detectIE() {
 		var ua = window.navigator.userAgent;
 		
@@ -216,6 +270,78 @@
 				$(this).remove();
 			}
 		});
+
+		$("form#frmUploadContainer").on("click", "#btnAddContainerDescriptor", function (e)  {
+			e.preventDefault();
+			var $modal = $("#myModalNodesContDesc");
+			$(".modal-dialog", $modal).removeClass("modal-lg");
+			var rm_contentUrl = '';
+			var rmContent = '';
+			window.userOpStack = [];
+
+				$(".modal-dialog", $modal).addClass("modal-lg");
+				rm_contentUrl="./fragments/containers-addContainerDescriptor.fragment.html?" + Math.random();
+		
+			if (rm_contentUrl === '') {
+				alert("TAO - Operation mismatch");
+				return;
+			}
+			$.ajax({
+				url: rm_contentUrl,
+				success: function(result) {
+					rmContent = result;
+					if (rmContent !== '') {
+						$modal.find('.modal-dialog').html(rmContent);
+					} else {
+						alert("Could not retrive needed data from server.");
+						return e.preventDefault();
+					}
+					$modal.modal('show');
+				}
+			});
+
+			pathPlusApplNamesList=[];
+		});
+
+		$("form#frmUploadContainer").on("click", "#btnAddComponentDescriptor", function (e)  {
+			e.preventDefault();
+			pathPlusApplNamesList=[];
+			if (container.applications !==undefined){
+				for (var i = 0; i < container.applications.length; i++)
+				{
+					pathPlusApplNamesList.push(container.applications[i].path  + '_' + container.applications[i].name )
+				}
+			}
+
+			var $modal = $("#myModalNodesCompDesc");
+			$(".modal-dialog", $modal).removeClass("modal-lg");
+			var rm_contentUrl = '';
+			var rmContent = '';
+			window.userOpStack = [];
+
+				$(".modal-dialog", $modal).addClass("modal-lg");
+				rm_contentUrl="./fragments/containers-addComponentDescriptor.fragment.html?" + Math.random();
+		
+			if (rm_contentUrl === '') {
+				alert("TAO - Operation mismatch");
+				return;
+			}
+			$.ajax({
+				url: rm_contentUrl,
+				success: function(result) {
+					rmContent = result;
+					if (rmContent !== '') {
+						$modal.find('.modal-dialog').html(rmContent);
+					} else {
+						alert("Could not retrive needed data from server.");
+						return e.preventDefault();
+					}
+					$modal.modal('show');
+				}
+			});
+
+		});
+
 		
 		// Custom validation for container name
 		$.validator.addMethod('containerName', function (value, element, params) {
@@ -243,12 +369,22 @@
 				}
 			}
 		);
+
+		$.validator.addMethod( "isUnique", function(value,element,params){
+			var isUni = true;
+			if($.inArray(value, nameListTC) >= 0 ){
+				isUni = false;
+			}
+			return isUni;
+		}, "Container's name must be unique.");
+
 		// Validate form before submit
 		$("form#frmUploadContainer").validate({
 			rules: {
 				name: {
 					required: true,
-					containerName: { regEx: "^[a-z0-9-]+$" }
+					containerName: { regEx: "^[a-z0-9-]+$" },
+					isUnique: true
 				},
 				description: {
 					required: true
@@ -257,20 +393,20 @@
 					required: true,
 					isValidFileType: { fileType: "image" , typesList: [ "image/gif", "image/jpeg", "image/png" ] }
 				},
-				dockerFiles: {
+			dockerFiles: {
 					required: function (element) {
 						return element.id == "dockerFile";
 					},
 					isValidFileType: { fileType: "docker", typesList: [ "Dockerfile" ]}
 				},
-				jsonContainerDescriptor: {
+				/*jsonContainerDescriptor: {
 					required: true,
 					isValidFileType: { fileType: "json"  , typesList: [ "application/json" ] }
 				},
 				jsonComponentDescriptor: {
 					required: true,
 					isValidFileType: { fileType: "json"  , typesList: [ "application/json" ] }
-				},
+				},*/
 			},
 			highlight: function(element, errorClass) {
 				$(element).parent().addClass("has-error");
@@ -296,12 +432,23 @@
 		$("form#frmUploadContainer").submit(function (event) {
 			event.preventDefault();
 			
+			$('input[name=componentsDescriptor]', "#frmUploadContainer").val( JSON.stringify(componentlist));
+			$('input[name=containerDescriptor]', "#frmUploadContainer").val(JSON.stringify(container));
+
 			if ($(this).valid()) {
 				$(".modal-error ").fadeOut();
 				
 				var formData = new FormData(this);
 				var xhr = new XMLHttpRequest();
-				xhr.open("POST", baseRestApiURL + "docker/upload", true);
+				
+				if($('#switchContainerDescriptors').is(':checked'))
+					{
+						xhr.open("POST", baseRestApiURL + "docker/register", true);
+					}
+					else{
+						xhr.open("POST", baseRestApiURL + "docker/upload", true);
+					}
+
 				xhr.responseType = "json";
 				xhr.setRequestHeader("X-Auth-Token", tokenKey);
 				xhr.onload = function (e) {
@@ -339,7 +486,57 @@
 				xhr.send(formData);
 			}
             return false; // To avoid actual submission of the form
-        });
-    });
+		});
+		
+
+		$('#switchContainerDescriptors').on('change', function(){
+					if($('#switchContainerDescriptors').is(':checked'))
+					{
+						$('#btnAddContainerDescriptor').prop('disabled', false); 
+						$('#jsonContainerDescriptor').prop('disabled',true);
+						$("#jsonContainerDescriptor").val(null);
+
+						$('#btnAddComponentDescriptor').prop('disabled', false); 
+						$('#jsonComponentDescriptor').prop('disabled',true);
+						$('#jsonComponentDescriptor').val(null);
+
+					//	$('#idsystem').val("false");
+
+					}
+					else
+					{
+						$('#btnAddContainerDescriptor').prop('disabled', true); 
+						$('#jsonContainerDescriptor').prop('disabled',false);
+						$("#containerDescriptor").val(null);
+
+						$('#btnAddComponentDescriptor').prop('disabled', true); 
+						$('#jsonComponentDescriptor').prop('disabled',false);
+						$("#componentsDescriptor").val(null);
+					//	$('#idsystem').val("true");
+					}
+ 		 });
+						
+		  $(".tbl-edt")
+            .on("click", ".tbl-app-delete-action", function(e){
+                e.preventDefault();
+
+			    var idToDelete = $(this).closest(".val-row").find("input.comp-id").val();
+				var indx = componentlist.findIndex(v => v.id === idToDelete);
+				componentlist.splice(indx, indx >= 0 ? 1 : 0);
+
+				$(this).closest(".val-row").remove();
+				
+			});
+			
+
+	});
+	
+	var container = {};
+	var componentlist=[]; 
+	var pathPlusApplNamesList=[]; 
+
+
 	//# sourceURL=containers-plus.js
+
+	
 </script>

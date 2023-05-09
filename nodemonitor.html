@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>TAO Node Monitor</title>
+    <title>Node Monitor</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.4 -->
@@ -12,7 +12,8 @@
     <!-- Theme style -->
     <link href="./assets/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
     <link href="./assets/dist/css/AdminLTEplus.css" rel="stylesheet" type="text/css" />
-    <link href="./assets/dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/dist/css/size-customization.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css" id="style_css_file"/>
 
     <link rel="apple-touch-icon-precomposed" sizes="57x57" href="./apple-touch-icon-57x57.png" />
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./apple-touch-icon-114x114.png" />
@@ -45,10 +46,10 @@
     <script src="./assets/dist/js/config.js" type="text/javascript"></script>
 </head>
 
-<body class="skin-blue sidebar-mini size-normal noselect bg-navy">
+<body class="sidebar-mini size-normal noselect bg-navy">
         <!-- Monitor master -->
         <div id="widget-master-monitor" class="box box-solid bg-navy">
-            <div class="box-header" style="cursor: move;">
+            <div class="box-header">
                 <i class="fa fa-area-chart"></i>
                 <h3 class="box-title">Node monitor: <span class="val-nodename"></span></h3>
             </div>
@@ -106,8 +107,9 @@
 <script type="text/javascript" src="./assets/libs/momentjs/moment.min.js"></script>
 <!-- chart.js -->
 <script type="text/javascript" src="./assets/libs/chartjs/chartjs.min.js"></script>
+<script src="./assets/dist/js/app.js" type="text/javascript"></script>
 
-<script>
+<script type="text/javascript">
     function jsGetUrlQueryValue (sVar) {
         return decodeURI(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURI(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
     }
@@ -183,7 +185,7 @@
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
+                "X-Auth-Token": window.parent.tokenKey
             }
         }).done(function (getMasterMonitorResponse) {
             var r = chkTSRF(getMasterMonitorResponse);
@@ -192,65 +194,79 @@
                 getMasterMonitorResponse.status = "FAILED";
             }
 
-            if(misfireCounter >= 5){
-                $("#msgModal").modal("show");
-            }
-            if(getMasterMonitorResponse.status === "FAILED"){
-                misfireCounter++;
-            }else{
-                misfireCounter = 0;
-            }
-            var percent = {
-                cpu: parseInt(r.cpuTotal) || 0,
-                memory: parseInt((r.totalMemory-r.availableMemory)/r.totalMemory*100) || 0,
-                storage: parseInt(r.diskUsed/r.diskTotal*100) || 0
-            };
-            try {
-                if(getMasterMonitorResponse.status === "FAILED"){
-                    $(".val-mm-processors").text("n/a");
-                    $(".val-mm-memory").text("n/a");
-                    $(".val-mm-storage").text("n/a");
-                }else{
-                    var lines = {
-                        cpu: percent.cpu+"%",
-                        memory: percent.memory+"% ("+humanFileSize((r.totalMemory-r.availableMemory)*r.memoryUnit)+"/"+humanFileSize(r.totalMemory*r.memoryUnit)+", used/total)",
-                        storage: percent.storage+"% ("+humanFileSize(r.diskUsed*r.diskUnit)+"/"+humanFileSize(r.diskTotal*r.diskUnit)+", used/total)"
-                    };
-                    $(".val-mm-processors").text(lines.cpu);
-                    $(".val-mm-memory").text(lines.memory);
-                    $(".val-mm-storage").text(lines.storage);
-                }
-                var chartCurrentTime = moment ().format("HH:mm:ss");
-                _loadChart.updateData(
-                    (percent.cpu),
-                    (percent.memory),
-                    (percent.storage),
-                    (chartCurrentTime)
-                );
-            }
-            catch(error) {
-                console.log(error);
-                $(".box-error").show();
-                $(".box-body, .box-canvas").hide();
-            }
-            if(window.parent.document.getElementsByTagName("iframe")[0]){
-                //window.parent.document.getElementsByTagName("iframe")[0].style.height = document.body.scrollHeight + 'px';
-            }
+            if(misfireCounter < 5) {
+				if(getMasterMonitorResponse.status === "FAILED"){
+					misfireCounter++;
+				}else{
+					misfireCounter = 0;
+				}
+				var percent = {
+					cpu: parseInt(r.cpuTotal) || 0,
+					memory: parseInt((r.totalMemory-r.availableMemory)/r.totalMemory*100) || 0,
+					storage: parseInt(r.diskUsed/r.diskTotal*100) || 0
+				};
+				try {
+					if(getMasterMonitorResponse.status === "FAILED"){
+						$(".val-mm-processors").text("n/a");
+						$(".val-mm-memory").text("n/a");
+						$(".val-mm-storage").text("n/a");
+					}else{
+						var lines = {
+							cpu: percent.cpu+"%",
+							memory: percent.memory+"% ("+humanFileSize((r.totalMemory-r.availableMemory)*r.memoryUnit)+"/"+humanFileSize(r.totalMemory*r.memoryUnit)+", used/total)",
+							storage: percent.storage+"% ("+humanFileSize(r.diskUsed*r.diskUnit)+"/"+humanFileSize(r.diskTotal*r.diskUnit)+", used/total)"
+						};
+						$(".val-mm-processors").text(lines.cpu);
+						$(".val-mm-memory").text(lines.memory);
+						$(".val-mm-storage").text(lines.storage);
+					}
+					var chartCurrentTime = moment ().format("HH:mm:ss");
+					_loadChart.updateData(
+						(percent.cpu),
+						(percent.memory),
+						(percent.storage),
+						(chartCurrentTime)
+					);
+				}
+				catch(error) {
+					console.log(error);
+					$(".box-error").show();
+					$(".box-body, .box-canvas").hide();
+				}
+				if(window.parent.document.getElementsByTagName("iframe")[0]){
+					//window.parent.document.getElementsByTagName("iframe")[0].style.height = document.body.scrollHeight + 'px';
+				}
+			} else if (misfireCounter == 5) {
+				$("#msgModal").modal("show");
+				misfireCounter++;
+			}
         }).fail(function (jqXHR, textStatus) {
             //alert("Retriving master monitor data failed.");
         }).complete(function(){
-            if($("#widget-master-monitor").length && (misfireCounter < 10)){
+            if($("#widget-master-monitor").length && (misfireCounter < 6)){
                 setTimeout(function(){
                     updateMasterMonitorWidget();
                 },monitorCheckInterval);
             }
         });
     }
+	
+	$('#msgModal button').on('click', function(event) {
+		var $button = $(event.target);
+		if (!$button.hasClass("close")) {
+			misfireCounter = 0;
+		}
+		$('#msgModal').on('hidden.bs.modal', function () {
+			updateMasterMonitorWidget();
+		});
+	});
 
     $(document).ready( function(){
-        console.log("document ready!!!");
-        var node = jsGetUrlQueryValue("node");
-
+		$("#style_css_file").attr("href", "./assets/dist/css/skins/"+$.AdminLTE.options.styles[defaultStyle]+".min.css");
+		$("body").addClass($.AdminLTE.options.styles[defaultStyle]);
+	
+        var node = jsGetUrlQueryValue("node");      
+          
         if( node === undefined || node == null || node.length === 0){
             alert("no node provided!");
         }else{
@@ -268,9 +284,6 @@
             })
             .trigger( "resize" );
         updateMasterMonitorWidget();
-        $('#msgModal').on('hidden.bs.modal', function () {
-            updateMasterMonitorWidget();
-            misfireCounter = 0;
-        })
     });
+//# sourceURL=my-nodemonitor.js
 </script>

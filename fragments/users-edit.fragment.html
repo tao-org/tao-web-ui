@@ -25,8 +25,6 @@
                             <label for="selectUserType" class="col-sm-2 col-md-2 control-label">User Type</label>
                             <div class="col-sm-10 col-md-10">
                                 <select id="selectUserType" name="selectUserType" class="form-control">
-                                    <option value="0" selected="">TAO local user</option>
-                                    <option value="1">External user (LDAP)</option>
                                 </select>
                             </div>
                         </div>
@@ -158,7 +156,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputQuota" class="col-sm-2 col-md-2 control-label">Input Quota</label>
+                            <label for="inputQuota" class="col-sm-2 col-md-2 control-label">Input Quota (GB)</label>
                             <div class="col-sm-10 col-md-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -173,7 +171,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputProcessingQuota" class="col-sm-2 col-md-2 control-label">Processing Quota</label>
+                            <label for="inputProcessingQuota" class="col-sm-2 col-md-2 control-label">Processing Quota (GB)</label>
                             <div class="col-sm-10 col-md-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -283,6 +281,10 @@
     });
 
     $(document).ready( function(){
+
+        //getUserTypesOptions();
+		populateSelectElem($("#selectUserType"), "UserType");
+
         (function(data){
             var $elSel = $("#selectUserGroup");
             $elSel.empty();
@@ -328,8 +330,8 @@
         function populateCurrentUser(){
             $.ajax({
                 url: baseRestApiURL + "admin/users/"+currentUserName,
-                "method": "GET",
-                "headers": {
+                method: "GET",
+                headers: {
                     "Cache-Control": "no-cache",
                     "Accept": "application/json",
                     "X-Auth-Token": window.tokenKey
@@ -348,17 +350,13 @@
                 $('input[name=inputQuota]', $frm).val(response.inputQuota).trigger("check:togglebyval");
                 $('input[name=inputProcessingQuota]', $frm).val(response.processingQuota).trigger("check:togglebyval");
                 $('input[name=inputOrg]', $frm).val(response.organization);
+                $('select[name=selectUserType]', $frm).val(response.userType);
 
                 if(response && response.groups && response.groups[0] &&response.groups[0]['id']){
                     var gm = response.groups[0]['id'];
                     $("select[name=selectUserGroup]").val(gm);
                 }
 
-                if(response.external){
-                    $('select[name=selectUserType]').val(1);
-                } else{
-                    $('select[name=selectUserType]').val(0);
-                }
             });
         }
         populateCurrentUser();
@@ -379,8 +377,8 @@
                 "firstName" : $('input[name=inputFirstName]', this).val(),
                 "phone" : $('input[name=inputPhone]', this).val(),
                 "organization" : $('input[name=inputOrg]', this).val(),
-                "external" : false,
                 "groups" : [],
+                "userType" : $("#selectUserType", this).val(),
                 "preferences" : null,
                 "inputQuota" : -1,
                 "processingQuota" : -1,
@@ -412,7 +410,7 @@
                 cache: false,
                 url: baseRestApiURL + "admin/users/"+currentUserName,
                 dataType : 'json',
-                type: 'POST',
+                type: 'PUT',
                 data: JSON.stringify(formData),
                 headers: {
                     "Accept": "application/json",
@@ -421,20 +419,20 @@
                 },
                 error : function (jqXHR, textStatus, errorThrown) {
                     if(jqXHR.status === 500){
-                        showMsg("Error adding user. Please check you data and try again.", "ERROR");
+                        showMsg("Error updating user. Please check you data and try again.", "ERROR");
                         return;
                     }
                     if(jqXHR.status === 400){
-                        showMsg("Error adding user. Please check you data, one or more values for the attributes was not in the acceptable range.", "ERROR");
+                        showMsg("Error updating user. Please check you data, one or more values for the attributes was not in the acceptable range.", "ERROR");
                         //handle error messages
                         $(".modal-error ").html(jqXHR.responseText).fadeIn("slow");
                         $('#myModalNodes').animate({scrollTop: 0}, 250);
                         return;
                     }
-                    showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
+                    showMsg("Unknown error. Unable to update user. Please try again.", "ERROR");
                 },
                 success: function(data) {
-                    showMsg("New user successfully added.", "SUCCESS");
+                    showMsg("User successfully updated.", "SUCCESS");
                     $("#myModalNodes").modal('hide');
                     panelComp.refreshData();
                 }

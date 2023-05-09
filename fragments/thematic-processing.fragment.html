@@ -1,0 +1,291 @@
+<style>
+.content-wrapper{position:relative}
+
+.processingName{display:inline}
+</style>
+
+
+<div id="myModalNodes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+
+<!-- Content Header (Page header) -->
+<section class="content-header tao-async-ph">
+    <h1>Thematic Processing<p class="processingName"></p><small>Here you can find the list of saved parameterized thematic processing.</small></h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active"><p class="processingName"></p></li>
+    </ol>
+</section><!-- /Content Header (Page header) -->
+
+<!-- Main content -->
+<section class="content">
+	<div id="panel-topo-wrapper" class="row">
+		<div class="col-md-12">
+			<!-- Custom Tabs -->
+			<div class="nav-tabs-custom">
+				<ul class="nav nav-tabs hidden-xs">
+					<li class="role role-admin active"><a href="#panel-queries" data-toggle="tab" data-action="all_queries" aria-expanded="true"><p class="processingName"></p></a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="panel-nodes">
+						<div class="row">
+							<div class="col-md-12" id="list-master-controls">
+								<div class="box-tools pull-left">
+									<button class="btn btn-master-tool text-black" data-action="op-plus" data-toggle="tooltip" data-original-title="Add processing"><i class="fa fa-plus"></i></button>
+								</div>
+                                <div class="box-tools pull-left">
+                                    <button class="btn btn-master-tool text-black" data-action="op-filter" data-toggle="tooltip" data-original-title="Filter by tags"><i class="fa fa-filter"></i><span class="label label-warning val-count-filters" style="display:none;">0</span></button>
+                                </div>
+								<div class="box-tools pull-left">
+									<form class="search-container" action="">
+										<input id="search-box" type="text" class="search-box" name="q" placeholder="Search by name" />
+										<label for="search-box"><i class="fa fa-search search-icon" aria-hidden="true"></i></label>
+										<input type="submit" id="search-submit" />
+									</form>
+								</div>
+								<div class="box-tools pull-right">
+                                    <button class="btn btn-master-tool text-black" data-action="refresh-list" data-toggle="tooltip" data-original-title="Refresh"><i class="fa fa-refresh fa-spin-hover"></i></button>
+									<button class="btn btn-master-tool text-black" data-action="view-list" data-toggle="tooltip" data-original-title="List view"><i class="fa fa-list"></i></button>
+									<button class="btn btn-master-tool text-black" data-action="view-table" data-toggle="tooltip" data-original-title="Table view"><i class="fa fa-table"></i></button>
+								</div>
+							</div>
+						</div>
+                        <div class="row">
+                            <div class="col-md-12 like collapse">
+                                <span data-tag="tag">Label like: <strong class="val-q"></strong>&nbsp;<i class="fa fa-times fa-fw clear-search" aria-hidden="true"></i></span>
+                            </div>
+                            <div class="col-md-12 tags collapse">
+                                <span class="collapse" data-tag="tag">tag<i class="fa fa-check fa-fw" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+						<div class="row" id="panel-processing">
+							<div class="col-sm-12">
+								<div class="box box-success">
+									<div class="box-header">
+										<i class="fa fa-cubes"></i>
+										<h3 class="box-title"><p class="processingName"></p> -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
+										<div class="box-tools pull-right nppaginatedcells-order collapse" data-toggle="tooltip" title="Change order"></div>
+									</div>
+									<div class="nppaginatedcells-empty callout callout-empty">
+										<p><p class="processingName"></p> list is empty. <span class="results-empty">You do not have any processing.</span><span class="filter-results-empty collapse">Your current selection did not return any result.</span></p>
+									</div>
+									<div class="box-body chat users-box" id="nodes-box">
+										<div class="nppaginatedcells-panel-body">
+										</div>
+										<div class="cell-templates collapse">
+											<core-cell-grid id="node-master-template" class="collapse core-cell-box">
+												<div class="col-md-3 col-sm-6">
+													<div class="nodes-item-core-box">
+														<div class="box-top-tags"></div>
+														<div class="box-top" style="min-height:120px;border-bottom:4px double rgba(0, 100, 160, 0.1)">
+															<div class="box-title"><span class="val-_dsLabel"></span></div>
+															<div class="box-subtitle"><span class="val-_dsSubtitle"></span></div>
+															<div class="box-text" style="height:48px"><span class="val-_dsContents"></span></div>
+															<div class="box-icon"><i class="fa fa-cube"></i></div>
+														</div>
+														<div class="box-bottom with-line">
+															<div class="pocket">
+																<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop btn-start" data-action="start" data-toggle="tooltip" data-original-title="Start"><i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
+																<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop btn-edit" data-action="edit" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
+																<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete</span></button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</core-cell-grid>
+											<core-cell-list id="node-master-template-list" class="collapse core-cell-box">
+												<div class="col-md-12 col-sm-12">
+													<div class="nodes-item-core-box">
+														<div class="box-top-tags"></div>
+														<div class="box-top">
+															<div class="box-title"><span class="val-_dsLabel"></span></div>
+															<div class="box-subtitle"><span class="val-_dsSubtitle"></span></div>
+															<div class="box-text"><span class="val-_dsContents"></span></div>
+															<div class="box-icon"><i class="fa fa-cube"></i></div>
+														</div>
+														<div class="row">
+															<div class="col-sm-12 col-xs-12">
+																<div class="text-right">
+																	<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
+																	<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</core-cell-list>
+										</div>
+									</div>
+									<div class="box-footer clearfix no-border">
+										<div class="box-tools pull-right"><ul class="nppaginatedcells-panel-pagination pagination pagination-sm inline"></ul></div>
+										<div class="box-notification"><p><span>List updated</span></p></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div><!-- /.tab-pane -->
+				</div><!-- /.tab-content -->
+			</div><!-- /.nav-tabs-custom -->
+		</div>
+	</div>
+</section><!-- /.content -->
+
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.theme.css" type="text/css" />
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.structure.css" type="text/css" />
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.css" type="text/css" />
+
+<script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
+<script src="./assets/libs/jQuery/paginathing.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="./assets/libs/openlayers/ol-poly.js"></script>
+
+<script type="text/javascript">
+	var urls = [
+			baseRestApiURL + "datasource/user/group/",
+			baseRestApiURL + "datasource/query/"
+		];
+		
+	var panelComp = $('#panel-nodes').npPaginatedCells({
+		headerUser : taoUserProfile.username,
+		url        : urls,
+		viewMode   : prefferences.viewMode,
+		itemsOnPage: 12,
+		order      :[
+						{ "label": "Name ascending" , "objAttributeName": "_dsOrderBy", "direction": "ASC", "default": true },
+						{ "label": "Name descending", "objAttributeName": "_dsOrderBy", "direction": "DSC" },
+						{ "label": "Date ascending" , "objAttributeName": "modified", "direction": "ASC" },
+						{ "label": "Date descending", "objAttributeName": "modified", "direction": "DSC" }
+					],
+		filterAttribute: "_dsFilterBy",
+		doDataPreprocessing: function (data) {
+			var trimmed = [];
+			$.each(data, function (index, item) {
+				var isCollection   = typeof item.dataSourceComponents !== "undefined";
+				var isInCollection = typeof item.groupId === "string";
+				
+				var subComponents = "";
+				$.each(item.dataSourceComponents, function (idx, cmp) {
+					subComponents += (subComponents == "" ? "" : "<br/>") + "#" + (idx + 1) + ". " + cmp.label + " - " + cmp.sensorName;
+				});
+				
+				// Get time interval for different components
+				var interval = "";
+				if (typeof item.values !== "undefined") {
+					if (typeof item.values.acquisition_date !== "undefined") {
+						interval = item.values.acquisition_date;
+					} else if (typeof item.values.startDate !== "undefined") {
+						interval = item.values.startDate;
+					} else if (typeof item.values.beginPosition !== "undefined" && typeof item.values.endPosition !== "undefined") {
+						interval = "[" + item.values.beginPosition + "," + item.values.endPosition + "]";
+					}
+				}
+				
+				// Save element
+				if (isInCollection) {
+					trimmed.push(item);
+				} else {
+					trimmed.push(item);
+				}
+			});
+			return trimmed;
+		},
+		doAction: function(action, args){
+			myModalNodesOpShow(action, (typeof args === "undefined") ? args : args.dna);
+		},
+		doCustomRender: function($elClone, elX){
+			var title = $(".val-_dsSubtitle", $elClone).html();			
+				$elClone.addClass("query-component");
+				$("button[data-action='delete']", $elClone).prop({ disabled: true });
+				title = $(".val-_dsLabel", $elClone).html() + "\n" + title;
+			
+		}
+	});
+	
+	function myModalNodesOpShow(action, dna) {
+		var isCollection = action.indexOf("collection") >= 0 || (dna && dna.tags[0] === "collection");
+		
+		// Open add/edit page
+		if (action.indexOf("plus") >= 0 || action === "edit") {
+			$.ajax({
+				url: "./fragments/thematic-processing-plus.fragment.html?" + Math.random(),
+				async: false,
+				success: function(result) {
+					if (result !== "") {
+						// Prepare data
+						var oAction = (action === "edit") ? "edit" : "add";
+						var oDna = $.extend(true, {}, dna);
+						// Remove all extra custom fields added in data preprocessing stage (tags, ds...)
+						delete oDna["tags"];
+						$.each(Object.keys(oDna), function (index, key) {
+							if (key.indexOf("_ds") >= 0) delete oDna[key];
+						});
+						// Modal stuff
+						var $modal = $("#myModalNodes");
+						$modal.data({ isCollection: isCollection, action: oAction, dna: oDna });
+						$modal.html(result);
+						$modal.modal({ backdrop: false, keyboard: false });
+						$modal.off('hidden.bs.modal');
+						$modal.on('hidden.bs.modal', function () {
+							// Kill all datepicker controls when parent window is closed
+							$("#" + $.datepicker.dpDiv.attr("id")).remove();
+							$(this).html("");
+							// Refresh data
+							panelComp.refreshData();
+						});
+						$modal.modal("show");
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					alert("Could not open the add/edit page. An error occurred while retrieving data from server.");
+				}
+			});
+		// Remove query/collection
+		} else if (action === "delete") {
+			if (typeof dna.id === "undefined") {
+				showMsg("Unable to perform requested action. Please try again later.", "ERROR");
+			} else {
+				$('#confirm-dialog').modal("confirm", {
+					msg: "Are you sure you want to delete this element: " + dna.label + "?",
+					callbackConfirm: function () {
+						$.ajax({
+							cache   : false,
+							url     : isCollection ? (baseRestApiURL + "datasource/user/group/remove?groupId=" + dna.id) : (baseRestApiURL + "datasource/query/" + dna.id + "/"),
+							dataType: 'json',
+							type    : 'DELETE',
+							headers : {
+								"Accept": "application/json",
+								"Content-Type": "application/json",
+								"X-Auth-Token": window.tokenKey
+							},
+							error: function (jqXHR, textStatus, errorThrown) {
+								if(jqXHR.status === 500 ) {
+									showMsg("Unable to perform requested action. Please try again later.", "ERROR");
+								} else {
+									alert('An error has occurred, please try again or contact app admin.');
+								}
+							},
+							success: function (data) {
+								showMsg("Object successfully deleted.", "SUCCESS");
+								panelComp.refreshData();
+							}
+						});
+					},
+					callbackCancel : function () {}
+				});
+			}
+		}
+	};
+	
+	$(document).ready(function() {
+		if (decodeURI(window.location.hash).indexOf("/sen2agri") >= 0) {
+			$(".processingName").html("Sen2Agri");
+			$("#myModalNodes").data("processingModule", "sen2agri");
+		} else if (decodeURI(window.location.hash).indexOf("/sen4cap") >= 0) {
+			$(".processingName").html("Sen4Cap");
+			$("#myModalNodes").data("processingModule", "sen4cap");
+		} else if (decodeURI(window.location.hash).indexOf("/sen4stat") >= 0) {
+			$(".processingName").html("Sen4Stat");
+			$("#myModalNodes").data("processingModule", "sen4stat");
+		}
+	});
+//# sourceURL=thematic-processing.js	
+</script>

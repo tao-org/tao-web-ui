@@ -55,7 +55,7 @@
 							<tr class="tpl-sample-row">
 								<td style="border:0">
 									<span class="var-id hidden"></span><span class="var-name hidden"></span>
-									<span class="var-label" style="font-weight:700;color:#286080"></span>&nbsp;(<span class="var-dataType" style="font-size:0.9em"></span>)<br/>
+									<span class="var-label" style="font-weight:700;"></span>&nbsp;(<span class="var-dataType" style="font-size:0.9em"></span>)<br/>
 									<div style="border-left:10px solid #f1f1f1;padding-left:15px;font-size:0.9em">
 										<span class="var-description" style="color:#aaa;font-size:0.9em;font-style:italic"></span>
 										<br>
@@ -73,14 +73,14 @@
             <div id="app-card-head-lines" class="app-card">
                 <input id="update-custum-values" class="l-form__submit" type="submit" value="Apply">
             </div>
-			<div class="app-card">
+			<!--<div class="app-card">
 				<div class="app-card-header">
 					Help
 				</div>
 				<div class="app-card-note-item">
 					<p class="">Please edit values as necessary. After reviewing you changes please click APPLY to save your work. Closing this panel without explicitly saving your work will result in all changes made to this panel to be discarded.</p>
 				</div>
-			</div>
+			</div>-->
 
             <div class="app-debug"></div>
 		</div>
@@ -90,6 +90,10 @@
 </app-modal>
 <div id="propbarMap" style="position:absolute"></div>
 </app-modal-overlay>
+<style>
+	table#tbl-edt-sysvar>tbody>tr>td{padding:0;}
+	table#tbl-edt-sysvar input{height:25px;font-size:12px;}
+</style>
 <script>
     $( document ).ready(function() {
         //prevent keyup to bubble outside the propbar and trigger events

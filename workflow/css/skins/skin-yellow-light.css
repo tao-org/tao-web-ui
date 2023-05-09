@@ -1,0 +1,66 @@
+/*
+ * Skin: Yellow
+ * ------------
+ */
+ 
+/*** Workflow toolbox ***/
+.skin-yellow-light .toolbox-sidebar{
+  background: #ffffff;
+}
+.skin-yellow-light .toolbox-sidebar .toolbox-bar {
+  color: #fff!important;
+  background-color: #f39c12!important;
+  margin-top: 2px;
+}
+.skin-yellow-light .toolboxAccordion{
+  background: #ffffff;
+}
+
+.skin-yellow-light .toolboxAccordion .ui-accordion-content{
+  background: #ffffff;
+}
+
+.skin-yellow-light .toolboxAccordion .ui-accordion-header{
+  background-color: #ffb138;
+  color: #ffffff;
+}
+
+.skin-yellow-light .item-info{
+  background: #ffffff;
+  border: 1px solid #f39c12;
+  color: #333333;
+}
+.skin-yellow-light .modulesholder .item {
+  background: #ffffff;
+  border: 1px solid #f39c12;
+}
+
+.skin-yellow-light .toolbox-sidebar .toolbox-search input {
+  background: #eee;
+}
+
+.skin-yellow-light .ui-widget-content{
+  color: #f39c12;
+}
+.skin-yellow-light .toolbox-header .toolbox-footer {
+  color: #f39c12;
+}
+
+  /*** Node editor CTRL + SPACE border ***/
+ .skin-yellow-light .npsyntaxeditor{
+    border:3px dotted #f39c12; 
+  } 
+
+  .skin-yellow-light .form-control:focus {
+    border-color: #f39c12;
+    outline: 0;
+    box-shadow: inset 0 1px 1px #f39d12c4, 0 0 8px #ffaf38b9;
+  }
+  
+  .skin-yellow-light .l-form__submit:hover {
+    background-color: #ffb138;
+  }
+  
+  .skin-yellow-light .l-form__submit{
+    background-color: #f39c12;
+  }

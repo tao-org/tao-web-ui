@@ -2,7 +2,7 @@
  * Skin: Red
  * ---------
  */
-.skin-red .main-header .navbar {
+ .skin-red .main-header .navbar {
   background-color: #dd4b39;
 }
 .skin-red .main-header .navbar .nav > li > a {
@@ -130,4 +130,299 @@
   border-top-right-radius: 2px !important;
   border-bottom-right-radius: 2px !important;
   border-bottom-left-radius: 0 !important;
+}
+
+/**** Navigation bar ****/
+.skin-red .main-header .navbar {
+  opacity: unset;
+}
+/**** Dashboard ****/
+.skin-red .box.box-primary {
+  border-top-color: #dd4b39;
+}
+.skin-red .box.box-warning {
+  border-top-color: #dd4b39;
+}
+.skin-red .progress-bar-info {
+  background-color: #dd4b39;
+}
+.skin-red .callout.callout-empty {
+  background-color: #eaeaea !important;
+  border-color: #dd4b39;
+}
+.skin-red .job-history-one.running {
+  border-left: 5px solid #f39c12;
+}
+/**** Footer ****/
+.skin-red .main-footer {
+  background: #dd4b39;
+  color: #fff;
+  border-top: 1px solid #dd4b39;
+}
+.skin-red .main-footer>b>a.text-black {
+  color: #ffffff !important;
+}
+
+/*** Remote Datasets MAP ***/
+.skin-red #myModalNodes .modal-header {
+  background-color: #dd4b39;
+  color: white;
+}
+.skin-red #myModalNodes .modal-header.ui-draggable-handle::before {
+background-color: #dd4b39;
+border-color: #dd4b39;
+}
+.skin-red #queryExtent .modal-header .panel-control {
+  color: #fff;
+  text-shadow: none;
+  opacity: unset;
+}
+.skin-red #listDatasources a.selected {
+  color: #dd4b39;
+  background-color: #ffffff;
+}
+.skin-red #listDatasources a:hover {
+  color: #911102;
+}
+.skin-red .ui-slider-range-min {
+  background-color: #911102;
+}
+.skin-red #coverage{
+  color: #911102;
+}
+.skin-red #queryExtentParameters .sensor-name {
+  background-color: #dd4b39;
+  color: #ffffff;
+}
+.skin-red #myModalNodes table.ds-params::before{
+  background-color: #911102;
+}
+.skin-red #myModalNodes table.ds-params tbody td:first-child {
+  color: #911102;
+}
+.skin-red #myModalNodes .vertical-container {
+  border-top: 1px solid #911102;
+  border-bottom: 1px solid #911102;
+  background-color: #ffffff;
+}
+.skin-red #myFlatMap .poly-action-tools {
+  border-color: #ffa194;
+  background-color: #ffa194;
+  color: white;
+}
+.skin-red #myFlatMap .poly-switch>label::after {
+  border-color: #911102;
+  background-color: #911102;
+  color: white;
+}
+.skin-red .btn-primary:not(.login-box *),
+.skin-red #myFlatMap .poly-shape-type select,
+.skin-red #myFlatMap .ol-zoom button {
+background-color: #911102;
+  border-color: #911102;
+}
+.skin-red #myFlatMap .btn-poly:disabled {
+  background-color: #911102;
+  color: #a2a3a3;
+  border-color: #911102;
+}
+.skin-red #myFlatMap .poly-shape-type select.disabled {
+  color: #a2a3a3;
+}
+.skin-red #myFlatMap .drawer-pin .btn-poly {
+  color: white;
+}
+.skin-red #myFlatMap .btn-poly,
+.skin-red #myFlatMap .poly-map-title {
+  color: #d73925;
+}
+.skin-red #myFlatMap .drawer-panel {
+  border-right: 20px solid #911102;
+}
+.skin-red #myFlatMap .drawer-panel .drawer-content {
+  border: 1px solid #911102;
+}
+.skin-red #myFlatMap .drawer-panel.closed .drawer-content::after {
+  color: #911102;
+}
+.skin-red #myFlatMap .btn-poly:hover,
+.skin-red #queryExtent .modal-header .panel-control:hover {
+  color: #911102;
+}
+.skin-red #queryExtentParameters .sensor-name {
+  background-color: #eaeaea;
+  color: #000000;
+}
+.skin-red #myFlatMap .poly-switch>label::before {
+background: #ffffff;
+border: 1px solid #ffffff;
+}
+
+/*** Bot chat ***/
+.skin-red .box.box-solid.box-success {
+  border: 1px solid #dd4b39;
+}
+.skin-red .box.box-solid.box-success>.box-header {
+  color: #fff;
+  background: #dd4b39;
+  background-color: #dd4b39;
+}
+/*** Text boxes ***/
+.skin-red .nodes-item-core-box .box-top .box-text {
+  color: #911102;
+}
+.skin-red .nodes-item-core-box .box-top .box-icon {
+  color: #911102;
+}
+.skin-red .box.box-success {
+  border-top-color: #911102;
+}
+.skin-red .nodes-item-core-box .box-top .box-title {
+  color: #911102;
+} 
+.skin-red .nodes-item-core-box {
+  background: #FFFFFF;
+  border: 1px solid #dd4b39;
+  border-top: 2px solid #911102;
+  box-shadow: 1px 1px 3px 0 rgb(51 51 51 / 12%);
+}
+.skin-red .nodes-item-core-box .box-top .box-subtitle {
+  color: #911102;
+}
+.skin-red .nodes-item-core-box .box-top-tags span {
+  background-color: #f7f7f7;
+  color: #000;
+  border: 2px solid #911102;
+}
+.skin-red .nodes-item-core-box .box-description {
+  background: #e7e7e7;
+  padding: 5px 15px;
+  margin: 10px -15px 10px -15px;
+  line-height: 1.2em;
+  color: #000000;
+}
+
+/*** Pagination ***/
+.skin-red .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+
+  color: #fff;
+  background-color: #911102;
+  border-color: #911102;
+}
+
+/*** Tables ***/
+.skin-red .tbl-edt thead tr:nth-child(1) th {
+  background: #911102;
+  color: white;
+}
+.skin-red .val-gravatar {
+  border-bottom: 2px solid #911102;
+}
+.skin-red a {
+  color: #911102;
+}
+.skin-red .nav-tabs-custom>.nav-tabs>li.active {
+  border-top-color: #911102;
+}
+/*** Repositories view ***/
+.skin-red .tree-content .treeview a.selected {
+background-color: #ffbdb56e;
+color: #911102;
+border: 1px solid #dd4b39;
+}
+.skin-red .tree-content .treeview a:hover{
+background-color: #ffbcb54b;
+border-color: #dd4c3970;
+color: #911102;
+}
+.skin-red .foldercontent .foldercontent-item:hover {
+background-color: #ffbcb54b;
+border-color: #dd4c3970;
+color: #911102;
+}
+.skin-red .foldercontent .foldercontent-item.selected {
+background-color: #ffbdb56e;
+color: #911102;
+border: 1px solid #dd4b39;
+}
+.skin-red .foldercontent .foldercontent-item.selected a {
+color: #911102;
+}
+/*** pop-up close ***/
+.skin-red .close {
+color: #ffffff;
+text-shadow: none;
+opacity: unset;
+}
+/*** User profile card ***/
+.skin-red .card .card-profile {
+  background: #dd4b39;
+  color: #ffffff;
+}
+.skin-red .card .card-profile::after {
+  background: #911102;
+  color: #ffffff;
+}
+/*** Components parameters edit ***/
+.skin-red .val-row-plus {
+  background: #ffa59a;
+}
+/*** Workflow toolbox ***/
+.skin-red .toolbox-sidebar .toolbox-bar {
+  color: #fff!important;
+  background-color: #dd4b39!important;
+  margin-top: 1px;
+  }
+.skin-red .toolboxAccordion .ui-accordion-header{
+  background-color: #911102;
+  color: #ffffff;
+  }
+.skin-red .item-info{
+  border: 1px solid #dd4b39;
+}
+  .skin-red .modulesholder .item {
+  border: 1px solid #dd4b39;
+  }
+  .skin-red .ui-widget-content{
+  color: #911102;
+  }
+  .skin-red .toolbox-header .toolbox-footer {
+  color: #dd4b39;
+  }
+  
+/*** Repositories modals windows ***/
+.skin-red #properties h4, .skin-red #properties .action-name, .skin-red #view_on_map h4, .skin-red #view_file_content h4, 
+.skin-red #view_on_map button.close, .skin-red #view_file_content button.close, 
+.skin-red #view_file_content .content_prev, .skin-red #view_file_content .content_next {
+  color:#dd4b39;
+}
+.skin-red #view_on_map button.close:hover, 
+.skin-red #view_file_content button.close:hover {
+  color:#e98b80;
+}
+.skin-red #properties.folder .callout-title, .skin-red #properties .callout-title,
+.skin-red #view_on_map.map .callout-title, .skin-red #view_file_content .callout-title {
+	border-top: 5px solid rgb(221 75 57);
+	background-color: rgb(221 75 57 / 10%);
+}
+.skin-red .panel-info > .panel-heading{
+  background-color:rgb(221 75 57 / 10%);
+  border-color: #911102;
+}
+.skin-red .panel-info{
+    border-color: #911102;
+}
+
+.skin-red .select-repository li {
+  color: #911102;
+}
+.skin-red .repo-parameters .fa-info-circle{
+  color: #911102;
+}
+.skin-red .select-repository li.selected{
+  background-color: #911102;
+}
+
+.skin-red #comp-tab-ports .table-title{
+  background-color: #911102;
 }

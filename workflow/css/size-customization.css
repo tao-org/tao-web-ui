@@ -1,0 +1,24 @@
+/**/
+body.size-small{font-size:12px} 
+body.size-normal{font-size:14px} 
+body.size-large{font-size:16px} 
+body.size-larger{font-size:18px}
+
+/*Workflows Toolbox*/
+.toolbox-sidebar .toolbox-bar span{ font-size: 14px;}
+body.size-small .toolbox-sidebar .toolbox-bar span{ font-size: 12px;}
+body.size-normal .toolbox-sidebar .toolbox-bar span{ font-size: 14px;}
+body.size-large .toolbox-sidebar .toolbox-bar span{ font-size: 16px;}
+body.size-larger .toolbox-sidebar .toolbox-bar span{ font-size: 18px;}
+
+.item-label {font-size: 12px;}
+body.size-small .item-label{font-size: 10px;}
+body.size-normal .item-label4{font-size: 12px;}
+body.size-large .item-label{font-size: 14px;}
+body.size-larger .item-label{font-size: 16px;}
+
+.toolbox-sidebar .toolbox-search input{ font-size: 14px;}
+body.size-small .toolbox-sidebar .toolbox-search input{ font-size: 12px;}
+body.size-normal .toolbox-sidebar .toolbox-search input{ font-size: 14px;}
+body.size-large .toolbox-sidebar .toolbox-search input{ font-size: 16px;}
+body.size-larger .toolbox-sidebar .toolbox-search input{ font-size: 18px;}

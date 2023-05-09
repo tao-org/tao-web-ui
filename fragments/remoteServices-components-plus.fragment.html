@@ -1,0 +1,1114 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create a remote service</h4>
+    </div>
+
+    <form id="frmExecNodeEdit" class="form-horizontal form-newpc" role="form">
+        <input type="hidden" id="op" name="op" class="op" value="op-plus" />
+        <input type="hidden" id="id_u" name="id_u" value="0" />
+        <input type="hidden" name="clickedon" value="">
+        <input type="hidden" id= "remoteAddress" name="remoteAddress" value="">
+        <input type="hidden" id= "owner" name="owner" value="">
+        <input type="hidden" id= "inputActive" name="inputActive" value="">
+
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error adding WPS component!</h4>
+            <p id="modal-error-msg">Please check your data, one or more values for the attributes is not in the acceptable range.</p>
+            <p>
+                <span class="error-inputCompID collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
+                <span class="error-label collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Label cannot be empty.</span>
+                <span class="error-version collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Version cannot be empty.</span>
+                <span class="error-template collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Template cannot be empty.</span>
+                <span class="error-fileLocation collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> File location has an invalid value.</span>
+            </p>
+            <p id="modal-error-msg-server"></p>
+        </div>
+
+        <div class="modal-body">
+            <section>
+                <div class="row">
+                    <div class="col-md-12">
+						<p>Please check all the tabs before saving a new remote service.</p>
+						<ul class="nav nav-tabs">
+							<li class="active"><a data-toggle="tab" href="#comp-tab-gd">General desc.</a></li>
+							<li><a data-toggle="tab" href="#comp-tab-conf">Configuration</a></li>
+							<li><a data-toggle="tab" href="#comp-tab-param">Parameters</a></li>
+							<li><a data-toggle="tab" href="#comp-tab-ports">Sources & Targets</a></li>
+						</ul>
+						<div class="tab-content">
+							<div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group has-feedback">
+											<label for="inputCompID" class="col-sm-2 col-md-2 control-label">ID</label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompID" name="inputCompID" placeholder="component ID" autocomplete="off" value=""/>
+												<span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
+												<span class="ckattr-ok sr-only collapse">(success)</span>
+												<span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
+												<span class="ckattr-error sr-only collapse">(error)</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompLabel" class="col-sm-2 col-md-2 control-label">Label</label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompLabel" name="inputCompLabel" placeholder="component label" autocomplete="off" value="" data-errorspan="label"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompVersion" class="col-sm-2 col-md-2 control-label">Version</label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompVersion" name="inputCompVersion" placeholder="component version" autocomplete="off" value="" data-errorspan="version"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompDescription" class="col-sm-2 col-md-2 control-label">Description </label>
+											<div class="col-sm-10 col-md-10">
+												<textarea class="form-control" rows="3" id="inputCompDescription" name="inputCompDescription" placeholder="Description"></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompAuthors" class="col-sm-2 col-md-2 control-label">Author </label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompAuthors" name="inputCompAuthors" placeholder="authors" autocomplete="off" value="" data-errorspan="memorySize"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompCopyright" class="col-sm-2 col-md-2 control-label">Copyright </label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputCompCopyright" name="inputCompCopyright" placeholder="copyright" autocomplete="off" value="" data-errorspan="memorySize"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputActive" class="col-sm-2 col-md-2 control-label">Status </label>
+											<div class="col-sm-10 col-md-10">
+												<select disabled="disabled" id="inputActive" name="inputActive" class="form-control">
+													<option value="true" selected="">Active</option>
+													<option value="false">Inactive</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>-->
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputVisibility" class="col-sm-2 col-md-2 control-label">Visibility </label>
+											<div class="col-sm-10 col-md-10">
+												<select disabled="disabled" id="inputVisibility" name="inputVisibility" class="form-control">
+													<option value="SYSTEM">System build-in component</option>
+													<option value="USER">User defined component</option>
+													<option value="CONTRIBUTOR" selected="selected">Contributor defined component</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="formTags" class="col-sm-2 col-md-2 control-label">Tags </label>
+											<div class="col-sm-10 col-md-10">
+												<input id="formTags" name="formTags" class="form-control" value="">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="comp-tab-conf" class="tab-pane fade padding-top--20 padding-left--20 padding-bottom--20">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Service Id </label>
+											<div class="col-sm-10 col-md-10">
+												<select id="inputContainerId" name="inputContainerId" class="form-control">
+													<option value="" selected disabled >-- Select WPS --</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCapabilityId" class="col-sm-2 col-md-2 control-label">Application </label>
+											<div class="col-sm-10 col-md-10">
+												<select id="inputCapabilityId" name="inputCapabilityId" class="form-control" disabled>
+													<option value="" selected disabled >-- Select application --</option>
+												</select>											
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="text-center">
+										<button id="inspectExec" type="button" class="btn btn-primary btn-submit" name="btnInspect" disabled>Inspect</button>
+									</div>
+								</div>
+							</div>
+							<div id="comp-tab-param" class="tab-pane fade padding-top--20 padding-bottom--20">
+								<div class="row">
+									<div class="col-md-12">
+										<p>Parameter list:</p>
+										<div class="responsive">
+											<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-paramdesc">
+												<thead>
+												<tr>
+													<!--<th></th>-->
+													<th>Name</th>
+													<th>Description</th>
+													<th>Parameter Label</th>
+													<th>Parameter Type</th>
+													<th>Data Type</th>
+													<th>Default value</th>
+												</tr>
+												</thead>
+												<tfoot>
+												<tr>
+													<td colspan="3">
+														<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewparam" data-action="comp-add-new-var">
+															<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+														</button>
+													</td>
+												</tr>
+												</tfoot>
+												
+												<tbody class="tpl-sample-body">
+													<tr class="tpl-sample-row">
+														<!--<th scope="row">
+															<a href="#" class="text tbl-prop-expand-action"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></a>
+															<i class="fa fa-plus fa-fw hidden" aria-hidden="true"></i>
+															<a href="#" class="text tbl-prop-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+														</th>-->
+														<td>
+															<input type="hidden" class="var-id" value="">
+															<input type="text" class="var-name" value="" placeholder="parameter name">
+														</td>
+														<td><textarea rows="2" class="var-description"></textarea></td>
+														<td>
+															<input type="text" class="var-label" value="" placeholder="parameter label">
+														</td>
+														<td>
+															<select class="var-type">
+																<option value="REGULAR" selected="selected">Regular</option>
+																<option value="TEMPLATE">Template</option>
+															</select>
+														</td>
+														<td>
+															<select class="var-datatype select-datatypes">	
+															</select>
+														</td>
+														<td><input type="text" class="var-default" value="" placeholder="default value"></td>
+													</tr>
+													<!--<tr style="display: none;" class="val-row-plus">
+														<td colspan="7">
+															<div class="row">
+																<div class="col-md-12">
+																	<div class="form-group">
+																		<label class="col-sm-2 col-md-2 control-label">Unit</label>
+																		<div class="col-sm-10 col-md-10">
+																			<input type="text" class="form-control var-unit" name="inputUnit" placeholder="unit" autocomplete="off" value=""/>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-12">
+																	<div class="form-group">
+																		<label class="col-sm-2 col-md-2 control-label">Value Set</label>
+																		<div class="col-sm-10 col-md-10">
+																			<input type="text" class="form-control var-valueset" name="inputValueSet" placeholder="value set" autocomplete="off" value=""/>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-12">
+																	<div class="form-group">
+																		<label class="col-sm-2 col-md-2 control-label">Format</label>
+																		<div class="col-sm-10 col-md-10">
+																			<input type="text" class="form-control var-format" name="inputFormat" placeholder="format" autocomplete="off" value=""/>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-12">
+																	<div class="form-group">
+																		<label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Not Null </label>
+																		<div class="col-sm-10 col-md-10">
+																			<div class="checkbox">
+																				<input type="checkbox" name="inputNotNull" class="big var-notnull">
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-12">
+																	<div class="form-group">
+																		<label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Validator </label>
+																		<div class="col-sm-10 col-md-10">
+																			<input type="text" class="form-control var-validator" name="inputValidator" placeholder="validator" autocomplete="off" value=""/>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</td>
+													</tr>-->
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="comp-tab-ports" class="tab-pane fade">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="responsive box-shadow--6dp" style="margin-bottom:20px;overflow:auto">
+											<table class="table table-bordered tbl-edt" id="tbl-edt-sources" style="margin:0">
+												<thead>
+												<tr><th colspan="8" class="table-title">Sources:</th></tr>
+												<tr>
+													<th></th>
+													<th>Source Name</th>
+													<th>Format Type</th>
+													<th>Geometry</th>
+													<th>CRS</th>
+													<th>Sensor Type</th>
+													<th>Dimension</th>
+													<th>Cardinality<br><i>(0 for list)</i></th>
+												</tr>
+												</thead>
+												<tfoot>
+												<tr>
+													<td colspan="2">
+														<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewsrc" data-action="comp-add-new-var">
+															<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+														</button>
+													</td>
+												</tr>
+												</tfoot>
+												<tbody class="tpl-sample-body">
+												<tr class="tpl-sample-row">
+													<th scope="row">
+														<a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+													</th>
+													<td>
+														<input type="hidden" class="var-id" value="">
+														<input type="text" class="var-name" value="" placeholder="Source name">
+													</td>
+													<td><select class="var-formatType empty"></select></td>
+													<td><textarea rows="1" class="var-geometry"></textarea></td>
+													<td><input type="text" class="var-crs" value=""></td>
+													<td><select class="var-sensorType empty"></select></td>
+													<td><input type="text" class="var-dimension" value=""></td>
+													<td><input type="number" class="var-cardinality" value="0" style="width:40px;text-align:left"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="responsive box-shadow--6dp" style="margin-bottom:20px;overflow:auto">
+											<table class="table table-bordered tbl-edt" id="tbl-edt-targets" style="margin:0">
+												<thead>
+												<tr><th colspan="9" class="table-title">Targets:</th></tr>
+												<tr>
+													<th></th>
+													<th>Target Name</th>
+													<th>Format Type</th>
+													<th>Format Name</th>
+													<th>Location</th>
+													<th>Cardinality<br><i>(0 for list)</i></th>
+												</tr>
+												</thead>
+												<tfoot>
+												<tr>
+													<td colspan="2">
+														<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewtrgt" data-action="comp-add-new-var">
+															<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+														</button>
+													</td>
+												</tr>
+												</tfoot>
+												<tbody class="tpl-sample-body">
+												<tr class="tpl-sample-row">
+													<th scope="row">
+														<a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+													</th>
+													<td>
+														<input type="hidden" class="var-id" value="">
+														<input type="text" class="var-name" value="" placeholder="Target name">
+													</td>
+													<td><select class="var-formatType empty"></select></td>
+													<td><select class="var-formatName empty"></select></td>
+													<td>
+														<input type="text" class="var-location">
+														<button type="button" class="var-location" ><i class="fa fa-pencil-square-o"></i><span></span></button>
+													</td>
+													<td><input type="number" class="var-cardinality" value="0" style="width:40px;text-align:left"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11">
+								<!--<button id="saveExecNode" type="submit" class="btn btn-primary btn-submit" name="btnSave">Create a remote service</button>
+								<h4>Help filling in</h4>
+								<p>Please fill in all needed information. Module ID must be unique. Module ID can contain letters (a-z), numbers (0-9) and periods (.).</p>-->
+								<div class="modal-footer">
+									<button id="saveExecNode" type="submit" class="btn btn-primary btn-submit left-btn" name="btnSave">Create a remote service</button>
+									<button type="button" class="btn btn-default right-btn" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- /.modal-body -->
+    </form>
+	<div id="jsonLocationDialog">
+		<textarea readonly></textarea>
+	</div>
+</div><!-- /.modal-content -->
+
+<!-- Specific styles -->
+<style>
+#comp-tab-ports thead th{vertical-align:middle}
+#comp-tab-ports .table-title{background-color:#3c8dbc;color:white;font-size:1.2em;line-height:1.2em}
+#comp-tab-ports .tbl-edt input[type="number"]{
+	width: 100%;
+	padding-left: 0.3em;
+	border: 1px solid #FFF;
+	-webkit-transition: .18s ease-out;
+	-moz-transition: .18s ease-out;
+	-o-transition: .18s ease-out;
+	transition: .18s ease-out;
+}
+#comp-tab-ports .tbl-edt input[type="text"]:hover,
+#comp-tab-ports .tbl-edt input[type="number"]:hover,
+#comp-tab-ports .tbl-edt textarea:hover,
+#comp-tab-ports .tbl-edt select:hover{border-color: #d0d0d0}
+#comp-tab-ports button.var-location{background-color:#3c8dbc82;border-color:#367fa991;}
+
+.table>tbody+tbody{border:0}
+.table select.empty{color:#999;font-style:italic}
+.table select.empty>option{color:black;font-style:normal}
+.table select>option.ital{color:#999;font-style:italic}
+
+#jsonLocationDialog textarea {resize:none;width:100%;}
+#jsonLocationDialog>textarea {height:50vh}
+#jsonLocationDialog>textarea, #jsonLocationDialog>textarea:focus-visible{border:1px solid #dddddd;outline:0;}
+
+.ui-dialog-titlebar button.ui-button.ui-corner-all.ui-widget.ui-button-icon-only.ui-dialog-titlebar-close{-webkit-appearance:none;padding:0;cursor:pointer;background:0 0;border:0;}
+.ui-dialog .ui-dialog-titlebar{background:none;border-width:0 0 1px 0;}
+
+@media (min-width: 992px) {
+	.modal-lg { width: 60%; }
+}
+</style>
+
+   <link rel="stylesheet" href="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.css" type="text/css" />
+   <script src="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.js" type="text/javascript"></script>
+   <!-- 1.12.1/jquery-ui.min.js for autocomplete -->
+   <link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.css" type="text/css" />
+   <script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
+
+<script>
+    var action = 'op-plus';
+
+	function arrayOption(){
+		$(".tag-format", "#tbl-edt-paramdesc").tagsInput({
+			minChars	: 0,
+			maxChars	: null,
+			limit		: null,
+			interactive	: false,
+			autocomplete: null,
+			unique		: true,
+			placeholder	: 'Add an element',
+			delimiter	: ','
+
+		});
+		
+		$(".tagsinput", "#tbl-edt-paramdesc").find(".tag-remove").remove();
+	}
+
+	function getTaoEnumsArray(name) {
+		var retVal = [];
+		$.each(taoEnums.data, function (index, enm) {
+			if (index.toLowerCase().indexOf(name.toLowerCase()) >= 0) {
+				$.each(enm, function (idx, values) {
+					retVal.push(values.key);
+				});
+			}
+		});
+		return retVal;
+	}
+	
+	// Get component specific values for enum type parameters
+	var sourceTargetSpecificFormats = {};
+	// get format type all possible values
+	sourceTargetSpecificFormats["formatType"] = getTaoEnumsArray("DataFormat");
+	// set format name list as empty
+	sourceTargetSpecificFormats["formatName"] = [];
+	// get sensor type all possible values
+	sourceTargetSpecificFormats["sensorType"] = getTaoEnumsArray("SensorType");
+	
+	function populateComponentData(data) {
+		var disableField = false;
+		// is user make edit read only
+		if (taoUserProfile.userRole !== "ADMIN") {
+			disableField = true;
+		}
+
+		var $el = $('#frmExecNodeEdit');
+		// general desc section
+		
+		if ($("input[name=inputCompLabel]", $el).val() === "") {
+			$("input[name=inputCompLabel]", $el).val(data.label).prop("disabled",disableField);
+		}
+		if ($("input[name=inputCompVersion]", $el).val() === "") {
+			$("input[name=inputCompVersion]", $el).val(data.version).prop("disabled",disableField);
+		}
+		$("textarea[name=inputCompDescription]", $el).val(data.description).prop("disabled",disableField);
+		$("input[name=inputCompAuthors]", $el).val(data.authors).prop("disabled",disableField);
+		$("input[name=inputCompCopyright]", $el).val(data.copyright).prop("disabled",disableField);
+
+		/*$("select[name=inputActive] option", $el).removeAttr("selected");
+		$("select[name=inputActive] option[value='"+data.active+"']", $el).attr("selected", "selected");*/
+	
+		$("select[name=inputVisibility] option", $el).removeAttr("selected");
+		$("select[name=inputVisibility] option[value='"+data.visibility+"']", $el).attr("selected", "selected");
+
+		if(data.tags != null && data.tags !== ""){
+			$('#formTags').importTags( data.tags.join());
+		}
+		$("input#remoteAddress").val(data.remoteAddress);
+		// populate fields only in edit mode
+		if (userOpStack[0] && userOpStack[0].action ==="wps_edit") {
+			// general desc section
+			$("input[name=inputCompID]", $el).val(data.id).prop("disabled",true); //always disabled on edit
+			// configuration section
+			$("select#inputContainerId").prop("disabled", true); //always disabled on edit
+			$("select[name=inputContainerId] option", $el).removeAttr("selected");
+			$("select[name=inputContainerId] option[value='"+data.serviceId+"']", $el).attr("selected", "selected");
+			
+			$("select#inputCapabilityId").prop("disabled", true); //always disabled on edit
+			$("select[name=inputCapabilityId] option", $el).removeAttr("selected");
+			$("select[name=inputCapabilityId] option[value='"+parseInt(data.capabilityName)+"']", $el).attr("selected", "selected");
+		}
+		//parameters section
+		
+		// disable all input, textarea and select fields, add new parameters button, remove and edit paramater form template, if user. Otherwise enable it
+		$("button[data-action='comp-add-new-var'], input, select, textarea", "#tbl-edt-paramdesc", "#tbl-edt-paramdesc .tpl-sample-body").prop("disabled",disableField);
+		/*if (disableField) {
+			$("a.tbl-prop-expand-action", "#tbl-edt-paramdesc .tpl-sample-body").hide();
+			$("a.tbl-prop-delete-action", "#tbl-edt-paramdesc .tpl-sample-body").hide();
+		}*/
+		
+		$.each(data.parameters, function(i, value) {
+			helper_addParameterDescriptorsRow($("#tbl-edt-paramdesc"), value);
+			$("#tbl-edt-paramdesc").find("*[class^='var-']").prop("disabled", true);
+		});
+		
+		// get format name all possible values
+		
+		// sources & targets
+		$.each(data.sources, function(i, value) {
+			helper_addSourceTargetDescriptorsRow($("#tbl-edt-sources"), value, sourceTargetSpecificFormats);
+		});
+		$.each(data.targets, function(i, value) {
+			helper_addSourceTargetDescriptorsRow($("#tbl-edt-targets"), value, sourceTargetSpecificFormats);
+		});
+
+		arrayOption();
+		// the user can not add a new parameter (hide the button)
+		$(".btn-comp-addnewparam","#tbl-edt-paramdesc").hide();
+	}
+////////////
+    function helper_addSourceTargetDescriptorsRow($tbl, payload, specificFormats){
+        var obj = {
+			"id": null,
+			"parentId": null,
+			"name": null,
+			"dataDescriptor": {
+				"formatType": null,
+				"formatName": null,
+				//"geometry": null,
+				//"crs": null,
+				//"sensorType": null,
+				//"dimension": null,
+				"location": null
+			},
+			"constraints": null
+		};
+        $.extend( obj, payload );
+		
+		// Populate all combo-boxes with descriptor formats
+        var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
+		var $sRow = $el.find(".tpl-sample-row");
+		if (typeof specificFormats !== "undefined") {
+			$.each(specificFormats, function (index, options) {
+				if ($(".var-"+index, $sRow).is("select")) {
+					if (options.length > 0) {
+						// formatType parameter is mandatory
+						if (index.toLowerCase() == "formattype") {
+							$(".var-"+index, $sRow).removeClass("empty");
+						} else {
+							$(".var-"+index, $sRow).html("<option class='ital' value><i>Select...</i></option>");
+						}
+						$.each(options, function (idx, option) {
+							$(".var-"+index, $sRow).append('<option value="'+option+'">'+option+'</option>');
+						});
+					} else {
+						$(".var-"+index, $sRow).parent().append('<div style="text-align: center">-</div>');
+						$(".var-"+index, $sRow).remove();
+					}
+				}
+			});
+		}
+		$el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+        
+		$('input.var-id', $el).val(obj.id);
+		$('input.var-name', $el).val(obj.name);
+        $('select.var-formatType option', $el).removeAttr("selected");
+        $('select.var-formatType option[value="'+obj.dataDescriptor.formatType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
+        $('select.var-formatName option', $el).removeAttr("selected");
+        $('select.var-formatName option[value="'+obj.dataDescriptor.formatName+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
+		
+		// show location based on format type name
+		$(".var-location", $el).hide();
+		if (obj.dataDescriptor.formatType.toLowerCase() === "application/octet-stream") {
+			// prettify location JSON
+			var jsonStr = obj.dataDescriptor.location;
+			var jsonObj = JSON.parse(jsonStr);
+			var jsonPretty = JSON.stringify(jsonObj, null, '\t');
+			$("button.var-location", $el).show();
+			$("button.var-location", $el).data("dnaLocation", jsonPretty);
+			$("button.var-location span", $el).html(" " + obj.dataDescriptor.location.length + " bytes");
+		} else {
+			$("input.var-location", $el).show();
+			$("input.var-location", $el).val(obj.dataDescriptor.location);
+		}
+        $('input.var-cardinality', $el).val(obj.cardinality);
+
+		$tbl.append($el);
+    }
+	
+    function helper_addParameterDescriptorsRow($tbl, payload){
+		var regex = /\w+~/i;
+        var obj = {
+            "dataType": "string",
+            "defaultValue": "",
+            "description": "",
+            "format": null,
+            "id": "",
+            "label": "",
+            "notNull": false,
+            "type": "REGULAR",
+            "unit":null,
+            "validator":null,
+            "valueSet": []
+        };
+        $.extend( obj, payload );
+
+        var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
+		// hide all site parameters
+		if (obj.id !== "" && obj.id.startsWith("service~")) {
+			$el.prop("hidden", true);
+		}
+        $el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+        $('input.var-id', $el).val(obj.id);
+		$('input.var-name', $el).val(obj.name.replace(regex,""));
+        $('textarea.var-description', $el).val(obj.description.replace(regex,""));
+        $('input.var-label', $el).val(obj.label);
+
+		var td = $('.var-default', $el).parent();
+		$('.var-default', $el).remove();
+		
+		if(obj.valueSet !== null && obj.valueSet.filter(function(item){ return item!='null' && item!=''}).length >0){							
+			td.append('<select class=\'var-default\'></select>');
+			
+			if(obj.defaultValue == "" || obj.defaultValue == null){
+				$(".var-default", $el).append('<option value=\'\' selected>Select</option>');
+			}
+			
+			$.each(obj.valueSet, function(index, value){
+				if(value == "null"){return true; }
+				if(value == obj.defaultValue){				
+					$(".var-default", $el).append('<option value=\''+value+'\' selected>'+value+'</option>');
+				}else{
+					$(".var-default", $el).append('<option value=\''+value+'\'>'+value+'</option>');
+				}
+			});	
+			
+		}else{
+			///td.append('<input type=\'text\' class=\'var-default\' value=\''+obj.defaultValue+'\'>');
+			var inputHtml = $('<input type=\'text\' class=\'var-default \' style=\'width:auto; max-width:88%;\' value=\''+obj.defaultValue+'\'>');
+			if (obj.dataType.indexOf("[]") > -1) {
+				inputHtml.addClass("tag-format");
+			}
+			td.append(inputHtml);
+		}
+
+        $('select.var-type option', $el).removeAttr("selected");
+        $('select.var-type option[value="'+obj.type+'"]', $el).attr("selected", "selected");
+		
+        $('select.var-datatype option', $el).removeAttr("selected");
+        $('select.var-datatype option[value="'+obj.dataType+'"]', $el).attr("selected", "selected");
+		
+        $('input.var-unit', $el).val(obj.unit);
+        if(obj.format) $('input.var-format', $el).val(obj.format);
+        if(obj.validator) $('input.var-validator', $el).val(obj.validator);
+
+		$tbl.append($el);
+    }
+
+
+    function helper_addSysVarRow($tbl, payload){
+        var obj = {"key":"","value":""};
+        $.extend( obj, payload );
+        var $el = $tbl.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
+        $('input.var-key', $el).val(obj.key);
+        $('input.var-value', $el).val(obj.value);
+        $tbl.append($el);
+    }
+
+
+	function helper_getFormPorts(contextTable) {
+		var newPorts = [];
+		var parentId = $('#frmExecNodeEdit input[name=inputCompID]').val();
+		$(".val-row", contextTable).each(function () {
+			var port_id          = $(this).find(".var-id").val();
+			var port_name        = $(this).find(".var-name").val();
+			var port_formatType  = $(this).find(".var-formatType").val();
+			var port_formatName  = $(this).find(".var-formatName").val();
+			var port_location	 = null;
+			if ($(this).find("input.var-location:not([style*='display: none'])").length > 0) {
+				port_location = $(this).find("input.var-location").val();
+			}
+			if ($(this).find("button.var-location:not([style*='display: none'])").length > 0) {
+				port_location = $(this).find("button.var-location").data("dnaLocation");
+			}
+			var port_cardinality = $(this).find(".var-cardinality").val();
+			if( ((typeof port_name !== "undefined") && (typeof port_name.valueOf() === "string") && (port_name.length > 0)) ) {
+				var newPort = {
+					"parentId"       : parentId,
+					"name"           : port_name,
+					"cardinality"    : port_cardinality,
+					"id"             : port_id        === "" ? null : port_id,
+					"dataDescriptor" : {
+						"formatType" : port_formatType === "" ? null : port_formatType,
+						"formatName" : port_formatName === "" ? null : port_formatName,
+						"location"   : port_location
+					}
+				};
+				newPorts.push(newPort);
+			}
+		});
+		return newPorts;
+	}
+    
+	function purgeUiDialog(dialogId) {
+		var _this = $("#" + dialogId + ".ui-dialog-content");
+		if (_this.length > 0) { _this.dialog('destroy').parent().remove(); }
+	}
+	
+	$(document).ready( function() {
+		//populate data type select element from sample table
+		populateDataTypeSelect($("select.var-datatype", ".tpl-sample-body"));
+
+		// purge dialog used for format name
+		purgeUiDialog("jsonLocationDialog");
+		// inspect remote service
+		var describeProcess = function(inspectData) {
+			return $.ajax({
+				cache: false,
+				url: baseRestApiURL + "wps/inspect",
+				data: inspectData,
+				type: 'POST',
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Auth-Token": window.tokenKey
+				}
+			});
+		}
+		//define dialog used for format type JSON and format name application/octet-stream
+		$("#jsonLocationDialog")
+		.dialog({
+			title: "Location content",
+			width: "500px",
+			position:  {my: "center", at: "center", of: $("#myModalNodes")},
+			draggable: false,
+			resizable: false,
+			closeOnEscape: true,
+			appendTo: "#myModalNodes",
+			modal: true,
+			autoOpen: false,
+			open: function() {
+				$('.ui-widget-overlay').bind('click',function(){
+					$("#jsonLocationDialog").dialog("close");
+				})
+			},
+			close: function () {
+				$("#jsonLocationDialog").dialog("close");
+			}
+		});
+		
+		
+		// used  on add new, to disable parameters and sources&targets tabs and hide create button
+		function disableTabsAndSave(){
+			$('.nav-tabs a[href="#comp-tab-conf"]').tab('show');
+			$('.nav-tabs a[href="#comp-tab-param"]').closest("li").addClass("disabled");
+			$('.nav-tabs a[href="#comp-tab-ports"]').closest("li").addClass("disabled");
+			
+			//hide save button, this will be available only after inspect
+			$("#saveExecNode").hide()
+		}
+		
+        if (!userOpStack[0]) {
+			disableTabsAndSave();
+		} else {
+			$("#inspectExec").hide();
+		}
+		
+        //get all available remote services
+        var getAllRemoteServices = $.ajax({
+            cache: false,
+            url: baseRestApiURL + "wps/list/",
+            dataType : 'json',
+            type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+        $.when(getAllRemoteServices)
+            .done(function (getAllRemoteServicesResponse) {
+                var r = chkTSRF(getAllRemoteServicesResponse);
+                $.each(r, function(i, v) {
+					if (typeof v.applications !== "undefined" && v.applications !== null && v.applications.length > 0) {
+						var auth = {
+							"type":v.authType,
+							"user":v.user,
+							"password":v.password,
+							"loginUrl":v.loginUrl,
+							"authHeader":v.authHeader
+						}
+						$('#inputContainerId').append($('<option>').text(v.name).attr('value', v.id)
+															.data("remoteAddress", v.applicationPath)
+															.data("authentication",JSON.stringify(auth))
+															.data("formatName",v.format)
+													 );
+						
+						$.each(v.applications, function(idx, value) {
+							$('#inputCapabilityId').append($('<option>').text(value.name).attr({'value': value.path,"data-parent":v.id}));
+						});
+					}
+                });
+                if(userOpStack[0] && userOpStack[0].action ==="wps_edit" && userOpStack[0] && userOpStack[0].dna.id){
+                    $(".modal-title").html("Edit processing module: <span>" + userOpStack[0].dna.label.toUpperCase() + "</span>");
+                    $("#saveExecNode").html("Save processing module");
+					if (taoUserProfile.userRole !== "ADMIN") {
+						$("#saveExecNode").hide();
+					}
+                    $("#inputCompID").attr('disabled','disabled');
+					// populate format type
+					sourceTargetSpecificFormats["formatName"] = r.find(obj => obj.id === userOpStack[0].dna.serviceId).format;
+					// populate hidden fields remote address and owner
+					$("#remoteAddress").val(r.find(obj => obj.id === userOpStack[0].dna.serviceId).applicationPath);//TODO: delete this line if remoteAddress will remain on Component response
+					$("#owner").val(userOpStack[0].dna.owner);
+					if (typeof userOpStack[0].dna.active !== "undefined") {
+						$("#inputActive").val(userOpStack[0].dna.active);
+					}
+					populateComponentData(userOpStack[0].dna);
+                }
+            })
+            .fail(function () {
+                showMsg("Could not retrive remote services list.", "ERROR");
+            });
+
+        $(".btn-comp-addnewvar").on("click", function(){
+            var $tbl = $(this).closest(".tbl-edt");
+            helper_addSysVarRow($tbl);
+        });
+        $(".btn-comp-addnewparam").on("click", function(){
+            var $tbl = $(this).closest(".tbl-edt");
+            helper_addParameterDescriptorsRow($tbl);
+			arrayOption();
+        });
+        $(".btn-comp-addnewsrc, .btn-comp-addnewtrgt").on("click", function () {
+            helper_addSourceTargetDescriptorsRow($(this).closest("table"), void 0, sourceTargetSpecificFormats)
+        });
+        $(".tbl-edt")
+            .on("click", ".tbl-sysvar-delete-action", function(e){
+                e.preventDefault();
+                $(this).closest(".val-row").remove();
+            })
+            /*.on("click", ".tbl-prop-expand-action", function(e){
+                e.preventDefault();
+                if($(this).hasClass("active")){
+                    $(".val-row-plus").css({"display": "none"});
+                    $(this).removeClass("active");
+                    return;
+                }
+                $(".val-row-plus").css({"display": "none"});
+                $(".tbl-prop-expand-action").removeClass("active");
+                $(this).addClass("active");
+                $(this).closest("tr").next().css({"display": "table-row"});
+            })*/
+            .on("click", ".tbl-prop-delete-action", function(e){
+                e.preventDefault();
+                $(this).closest("tbody").remove();
+            })
+            .on("click", ".tbl-port-delete-action", function(e){
+                e.preventDefault();
+                $(this).closest(".val-row").remove();
+            });
+
+        //remove error for some input elements
+        $("input, textarea","form#frmExecNodeEdit")
+            .on("keypress change", function(){
+                if($(this).data("errorspan")) {
+                    $(".error-" + $(this).data("errorspan"), ".modal-error").css('display', 'none');
+                    if($(".modal-error").find("span:visible").length == 0) {
+                        $(".modal-error").hide();
+                        $("#saveExecNode").removeAttr('disabled');
+                    }
+                }
+            });
+            /*.on("focusout", function(){
+                if($(this).data("errorspan")){
+                    if (($(this).val() === "")||($(this).val() === 0)||($(this).val() === "0")){
+                        $(".error-"+$(this).data("errorspan"),".modal-error").css('display', 'inline-block');
+                        $(".modal-error").fadeIn("slow");
+                        $("#saveExecNode").attr('disabled','disabled');
+                    }
+                }
+            });*/
+		
+		$("table").on("change", "select[class^='var-']", function () {
+			if (this.value == "") {
+				$(this).addClass("empty");
+			} else {
+				$(this).removeClass("empty");
+			}
+		});
+		
+        $("#inputContainerId").on("change", function() {
+			disableTabsAndSave();
+            if($(this).val() !== "") {
+				$("#inputCapabilityId").prop("disabled", false);
+				$("option", "#inputCapabilityId").show();
+				$("option[value='']", "#inputCapabilityId").prop('selected', true);
+				$("option[data-parent!='"+$(this).val()+"'][value!='']", "#inputCapabilityId").hide();
+				$("#inspectExec").prop("disabled", true);
+            }
+        });
+		
+		$("#inputCapabilityId").on("change", function() {
+			disableTabsAndSave();
+			if ($(this).val !== "") {
+				$("#inspectExec").prop("disabled", false);
+			} else {
+				$("#inspectExec").prop("disabled", true);
+			}
+		});
+		
+		$("#comp-tab-ports").on("click", "button.var-location" ,function () {
+			$("textarea", "#jsonLocationDialog").html($(this).data("dnaLocation"));
+			$("#jsonLocationDialog").dialog( "open" );
+		});
+		
+		//used to disable tabs on create
+		$("a[data-toggle='tab']").on("click", function(){
+		  if ($(this).parent("li").hasClass("disabled")) {
+			return false;
+		  };
+		});
+
+		function guid() {
+		  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+		}
+		function s4() {
+		  return Math.floor((1 + Math.random()) * 0x10000)
+			.toString(16)
+			.substring(1);
+		}
+		
+		$("button#inspectExec").on("click", function() {
+			var inspectData = {
+				"request": "DescribeProcess",
+				"remoteAddress": $("option:selected","#inputContainerId").data("remoteAddress"),
+				"capability": $("#inputCapabilityId").val(),
+				"authentication": $("option:selected","#inputContainerId").data("authentication")
+			};
+			sourceTargetSpecificFormats["formatName"] = $("option:selected","#inputContainerId").data("formatName");
+			$.when(describeProcess(inspectData)).done(function(response) {
+				if (response.status !== responseStatus.success) {
+					showMsg ("No information available. Please select another service!", "WARNING");
+				} else {
+					var data = chkTSRF(response);
+					//remove previous information
+					$("tbody:not(.tpl-sample-body)", "#tbl-edt-paramdesc").remove();
+					$("tbody:not(.tpl-sample-body)", "#tbl-edt-targets").remove();
+					$("tbody:not(.tpl-sample-body)", "#tbl-edt-sources").remove();
+					populateComponentData(data);
+					$('.nav-tabs a[href="#comp-tab-param"]').closest("li").removeClass("disabled");
+					$('.nav-tabs a[href="#comp-tab-ports"]').closest("li").removeClass("disabled");
+					
+					//show save button, this will be available only after inspect
+					$("#saveExecNode").show();
+				}
+			});
+		});
+		
+        $("form#frmExecNodeEdit").submit(function (e) {
+            e.preventDefault();
+            if(taoUserProfile.userRole !== "ADMIN"){
+                showMsg(SHARED_EDIT_RESTRICTED, "ERROR");
+                return -1;
+            }
+            var formData = {
+				"id": $('input[name=inputCompID]', this).val(),
+				"label" : $('input[name=inputCompLabel]', this).val(),
+				"version" : $('input[name=inputCompVersion]', this).val(),
+				"description" : $('textarea[name=inputCompDescription]', this).val(),
+				"authors" : $('input[name=inputCompAuthors]', this).val(),
+				"copyright" : $('input[name=inputCompCopyright]', this).val(),
+				"sources": [],
+				"targets": [],
+				"remoteAddress": $('input#remoteAddress').val(),
+				"capabilityName": $('select[name=inputCapabilityId]', this).val(),
+				"visibility": $('select[name=inputVisibility]', this).val(),
+				//"active": $('select[name=inputActive]', this).val(),
+				"active": $('#inputActive').val(),
+				"owner": $("#owner").val(),
+				"serviceId": $('select[name=inputContainerId]', this).val()
+			};
+				
+            //add parameterDescriptors to payload parsing user defined parameterDescriptors table
+            formData.parameters = [];
+            var $tblParameterDescriptors = $("#comp-tab-param table");
+            $("tbody:not(.tpl-sample-body)", $tblParameterDescriptors).each(function(){
+                var id = $(this).find(".val-row input.var-id").val();
+                var name = $(this).find(".val-row input.var-name").val();
+                var label = $(this).find(".val-row input.var-label").val();
+                var description = $(this).find(".val-row .var-description").val();
+                var type = $(this).find(".val-row .var-type").val();
+                var datatype = $(this).find(".val-row .var-datatype").val();
+                var defaultval = $(this).find(".val-row .var-default").val();
+				
+                if( !((typeof id !== "undefined") && (typeof id.valueOf() === "string") && (id.length > 0)) ) {
+					id = guid();
+				}
+				
+				var newParameterDescriptor = {
+					"id": id,
+					"name": name,
+					"type": type,
+					"dataType": datatype,
+					"defaultValue": defaultval,
+					"description": description,
+					"label": label
+				};
+				formData.parameters.push(newParameterDescriptor);
+            });
+			
+            //add sources and targets to payload parsing user defined port tables
+            formData.sources = helper_getFormPorts($("#tbl-edt-sources"));
+            formData.targets = helper_getFormPorts($("#tbl-edt-targets"));
+            
+			
+            //if(formData.id === ''){
+            //    showMsg("Remote Service ID can not be empty. Please choose valid values to continue.", "ERROR");
+            //    return false;
+            //}
+            var regexp = /^[a-zA-Z0-9-_.\/~:]+$/;
+            if (formData.id.search(regexp) === -1)
+            {
+                showMsg("The remote service id contains invalid characters.", "ERROR");
+                return;
+            }
+			
+           // var tags = $('input[name=formTags]', this).val();
+           // formData.tags = tags.split(",");
+			
+			var callType = (userOpStack[0] && userOpStack[0].action ==="wps_edit") ? "PUT" : "POST";
+            $.ajax({
+                cache: false,
+                url: baseRestApiURL + "wpscomponent/",
+                type: callType,
+                data: JSON.stringify(formData),
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": window.tokenKey
+                },
+                error : function (jqXHR, textStatus, errorThrown) {
+                    if(jqXHR.status === 500){
+                        showMsg("Error adding execution node. Please check your data and try again.", "ERROR");
+                        return;
+                    }
+                    showMsg("Unknown error. Unable to update remote service. Please try again.", "ERROR");
+                },
+                success: function(response,textStatus, jqXHR) {
+                    var r = chkTSRF(response);
+                    if(response.status === "FAILED"){
+                        if(response.message){
+                            showMsg(response.message, "ERROR");
+                            //handle error messages
+
+                            var objResponse = JSON.parse(jqXHR.responseText);
+                            objResponse = objResponse.message.split(';');
+                            if(objResponse[0] !== "Entity has validation errors"){
+                                return;
+                            }
+                            for(i=0;i<objResponse.length;i++) {
+                                var matches = objResponse[i].match(/\[(.*?)\]/);
+                                if (matches) {
+                                    //$(".error-"+matches[1],".modal-error").show();
+                                    $(".error-"+matches[1],".modal-error").css('display', 'inline-block');
+                                }
+                            }
+                            $(".modal-error ").fadeIn("slow");
+                            $('#myModalNodes').animate({scrollTop: 0}, 250);
+                            return;
+                        }
+                        showMsg("Creation of remote service component failed.\nPlease check your data and try again.", "ERROR");
+                    } else {
+						showMsg("Remote service component saved.\nIf supported by it, a repository was also mounted.", "SUCCESS");
+						$("#myModalNodes").modal('hide');
+						panelRemoteServices.refreshData();
+					}
+                }
+            });
+            return false;
+        });
+    });
+    //# sourceURL=remoteServices-components-plus.js
+</script>

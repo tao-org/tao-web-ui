@@ -35,3 +35,45 @@
 #myFlatMap .poly-switch>input[type="checkbox"]:checked+label::after{background:#e16f00;content:'\f053\00A0\00A0 Reshape';left:20px;right:10px;text-align:right}
 #myFlatMap .poly-switch>input[type="checkbox"]:disabled+label::after{content:'\f057\00A0\00A0 Disabled';text-align:center;color:#54767f;opacity:0.65;left:15px;right:15px;cursor:default;border-color:transparent;background:transparent}
 #myFlatMap .poly-switch>input[type="checkbox"]:disabled~span{display:none}
+/* ===== SLIDERS ===== */
+#myFlatMap .sliderscontainer .title{height:32px;line-height:32px;background-color:#aad3df;color:#2e6da4;padding:0 10px}
+#myFlatMap .sliderscontainer .slidercontainer{position:relative;height:15px;margin:20px 0;white-space:nowrap}
+#myFlatMap .sliderscontainer .slidercontainer:first-child{margin-top:10px}
+#myFlatMap .sliderscontainer .slidercontainer:last-child{margin-bottom:10px}
+#myFlatMap .sliderscontainer .slider{display:inline;width:83%;background:#d3d3d3;outline:none;opacity:0.7;-webkit-transition:.2s;transition:opacity .2s}
+#myFlatMap .sliderscontainer .slider:hover{opacity:1}
+#myFlatMap .sliderscontainer p{font-size:11px;top:-10px;position:absolute;left:2px;text-shadow:1px 1px 0 white;pointer-events:none}
+#myFlatMap .sliderscontainer .slidercontainer button{display:inline;line-height:1.3em;margin-left:5px}
+/* -- Slider -- */
+#myFlatMap .sliderscontainer .slider                               {-webkit-appearance:none;appearance:none;height:22px;background:none}
+#myFlatMap .sliderscontainer .slider::-webkit-slider-runnable-track{-webkit-appearance:none;border:none;background:#d3d3d3;height:7px;border-radius:5px}
+#myFlatMap .sliderscontainer .slider::-moz-range-track             {        appearance:none;border:none;background:#d3d3d3;height:7px;border-radius:5px}
+#myFlatMap .sliderscontainer .slider::-ms-track                    {        appearance:none;border:none;background:#d3d3d3;height:7px;border-radius:5px;color:transparent}
+#myFlatMap .sliderscontainer .slider::-webkit-slider-thumb         {-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#2e6da4;cursor:pointer;margin-top:-7px}
+#myFlatMap .sliderscontainer .slider::-moz-range-thumb             {        appearance:none;width:20px;height:20px;border-radius:50%;background:#2e6da4;cursor:pointer;margin-top:-7px}
+#myFlatMap .sliderscontainer .slider::-ms-thumb                    {        appearance:none;width:18px;height:20px;border-radius:50%;background:#2e6da4;border-color:#6690b9}
+#myFlatMap .sliderscontainer .slider::-ms-fill-lower,#myFlatMap .sliderscontainer .slider::-ms-fill-upper{background:none}
+/* ===== DRAWERS ===== */
+#myFlatMap .drawer-panel{position:absolute;width:auto;padding:1px;box-shadow:0 0 4px 3pxrgba(0,0,0,.2);background-color:rgba(255,255,255,0.9);border-right:20px solid #ffb732;margin:0 10px 10px 0;z-index:1;pointer-events:all}
+#myFlatMap .drawer-panel .drawer-title{position:absolute;bottom:-20px;right:-20px;transform:rotate(90deg);transform-origin:right top;padding:0 10px;height:20px;line-height:20px;font-size:12px;text-align:center;color:white;white-space:nowrap;text-transform:capitalize}
+#myFlatMap .drawer-panel .drawer-content-title{width:100%;margin-top:0;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+#myFlatMap .drawer-panel .drawer-content{overflow:hidden;padding:10px;margin:1px;border:1px solid #f1d193;transition:width 0.5s}
+#myFlatMap .drawer-panel .drawer-pin{position:absolute;top:2px;right:-20px;transform:rotate(45deg);width:20px;height:20px;text-align:center}
+#myFlatMap .drawer-panel .drawer-pin button{padding:0;width:20px;height:20px;line-height:20px}
+#myFlatMap .drawer-panel .drawer-pin:hover,#myFlatMap .drawer-panel.pinned .drawer-pin{font-size:20px}
+#myFlatMap .drawer-panel.pinned .drawer-pin{transform:none}
+#myFlatMap .drawer-panel.hovering{z-index:2}
+#myFlatMap .drawer-panel.closed{background-color:rgba(0,0,0,0.6);z-index:0}
+/*
+#myFlatMap .drawer-panel.closed .drawer-content{width:55px !important;height:0!important;padding:0!important;border-width:0;margin:0}
+#myFlatMap .drawer-panel.closed .drawer-content:last-child{padding:10px!important;height:auto!important;border-width:1px;margin:1px}
+#myFlatMap .drawer-panel.closed .drawer-content::after{content:"\f0ae";color:rgba(255, 183, 50, 0.5);line-height:60px;font-family:FontAwesome;font-size:32px}	
+#myFlatMap .drawer-panel.closed .drawer-content>*{display:none}
+*/
+#myFlatMap .drawer-panel.closed .drawer-content{width:0 !important;height:0!important;padding:0!important;border-width:0;margin:0}
+#myFlatMap .drawer-panel.closed .drawer-content:last-child{padding:10px 5px !important;height:auto!important;border-width:1px;margin:1px}
+#myFlatMap .drawer-panel.closed .drawer-content>*{visibility:hidden}
+
+#myFlatMap .sliderscontainer.drawer-panel {bottom:0px;right:0px;}
+#myFlatMap .sliderscontainer.drawer-panel .drawer-content{width:220px}
+#myFlatMap .poly-actions-panel.drawer-panel .drawer-content{width:640px}

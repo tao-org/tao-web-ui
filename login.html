@@ -91,21 +91,21 @@
             $('#submit-form').prop('disabled', true); //TO DISABLED
             var user = $("#field_email").val();
             var pass = $("#field_password").val();
-            var authHeader = "Basic " + btoa(user+":"+pass);
             $.ajax({
                 cache: false,
-                url: baseRestApiURL +"auth/login",
+                url: baseRestApiURL + "auth/login",
                 method: "POST",
-                headers: {
-                    "Authorization": authHeader
-                }
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                data: { "username": user, "password": pass }
             })
                 .done(function (r) {
                     var apiData = chkTSRF(r);
                     if(apiData.authenticated && apiData.authToken){
                         $('#submit-form').prop('disabled', false); //TO DISABLED
-                        _settings.createCookie("tokenKey",apiData.authToken);
-                        _settings.createCookie("TaoUserName",user);
+                        _settings.createCookie("tokenKey", apiData.authToken, apiData.expiration/60/60/24);
+                        _settings.createCookie("refreshToken", apiData.refreshToken);
+                        _settings.createCookie("TaoUserName", user);
+                        _settings.createCookie("userRole", apiData.profiles[0]);
                         window.location.href = "./sap.html";
                     }else{
                         $("#frmSignInMsg").show("slow");

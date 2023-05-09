@@ -1,0 +1,188 @@
+body{padding-right:0 !important}
+::placeholder{font-style:italic}
+.main-header .navbar{opacity:0.8}
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn{opacity:0.4 !important}
+.filter-hidden{display: none!important;}
+.info-message{text-align:left;margin:0;}
+/* ======== CUSTOM SPIN BUTTON FOR INPUT TYPE NUMBER ======== */
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:inner-spin-button !important;width:25px;position:absolute;top:0;right:0;height:100%;}
+
+/* ======== #myModalNodes ======== */
+#myModalNodes{position:absolute;width:100%;height:auto;z-index:800;padding:0 !important}
+#myModalNodes #myFlatMap .ol-zoom{top:100px}
+#myModalNodes #myFlatMap .poly-map-title{padding-left:30%;top:55px}
+#myModalNodes #myFlatMap .poly-shape-type{top:60px}
+#myModalNodes #myFlatMap .poly-actions-panel{width:45rem;height:13rem;right:0;max-width:100%}
+#myModalNodes #topInfo{position:fixed;background-color:#fff4d6;border:1px solid #ffd154;top:60px;padding:0 4px;font-weight:700;color:#a71f16;border-radius:5px;pointer-events:none;min-height:1.6em;z-index:800}
+/* ======== MODAL CONTROLS AND PANELS ======== */
+#myModalNodes .modal-body .form-control:not(select){height:2em;line-height:2em;padding:0 5px}
+#myModalNodes .modal-body .form-control-feedback{height:2em;line-height:2em;}
+#myModalNodes #tbDatasourceParams .form-control-feedback{height:2em;line-height:3em;right:0.3em;}
+#myModalNodes .box-shadow--6dp{box-shadow:0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2) !important;border-radius:5px}
+#myModalNodes .modal-header{background-color:#79bde4;color:white;padding:10px 15px;border-radius:5px 5px 0 0}
+#myModalNodes .modal-header.ui-draggable-handle{position:relative;cursor:ew-resize}
+#myModalNodes .modal-header.ui-draggable-handle::before{font:normal normal normal 20px/1 FontAwesome;content:"\f07e";background-color:#79bde4;position:absolute;left:15px;top:-10px;padding:0 10px;border-radius:10px;border:1px solid #56b0e4}
+#myModalNodes .modal-title{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+#myModalNodes .modal-content .close{margin-left:10px;font-size:25px;outline:none;opacity:1;color:white}
+#myModalNodes .modal-content .close:hover{color:#c9e5f4}
+#myModalNodes .modal-content .close.custom{position:absolute;color:#286080;top:0px;right:14px;font-size:30px}
+#myModalNodes .modal-content .close.custom:hover{color:#e92f2f}
+#myModalNodes .modal-body{overflow-x:hidden;overflow-y:auto}
+#myModalNodes .modal-body .row .last{width:100%;float:left;padding-top:15px}
+#myModalNodes .modal-note{background-color:#ffffd2;border-top:1px solid #eac9a5}
+#myModalNodes .modal-note strong{display:inline-block;width:40px;color:#a71f16}
+#myModalNodes .modal-note p{margin:0}
+#myModalNodes .modal-note p+p{margin:5px 0 0 42px}
+#myModalNodes .modal-note p i{font-weight:700;color:#3d6f8a}
+/* ======== MODAL EXTENTS ======== */
+/*#myModalNodes .modal-content,*/
+#myModalNodes .extent{-webkit-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-o-transition:all 0.5s ease;-ms-transition:all 0.5s ease;transition:all 0.5s ease}
+#myModalNodes .extent.no-transitions,
+#myModalNodes .extent.ui-draggable-dragging{-webkit-transition:none;-moz-transition:none;-o-transition:none;-ms-transition:none;transition:none}
+#myModalNodes .extent{position:absolute !important;top:0;left:0;margin:0;padding:10px;width:50rem;max-width:100%;z-index:800}
+/*#myModalNodes #queryExtent.extent{width:40rem}*/
+#myModalNodes #processingParameters.extent{width:47rem}
+#myModalNodes .extent.shifted{left:-100rem !important}
+#myModalNodes.full-map-view .main-panel{display:inline-block;width:40px;height:40px;cursor:pointer;border-radius:5px;padding:5px;text-align:center;border:0}
+#myModalNodes.full-map-view .main-panel>*{display:none}
+#myModalNodes.full-map-view .main-panel::after{content:"\f2d2";font-family:"FontAwesome";font-size:22px;color:#286080}
+#myModalNodes .extent.locked div.locked{pointer-events:none}
+#myModalNodes .extent.locked div.locked::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(255, 255, 255, 0.6);z-index:810;border-radius:5px}
+#myModalNodes .extent.locked div.locked button{opacity:0.4}
+#myModalNodes .extent.locked .ui-resizable-handle{pointer-events:none;background-color:lightgray !important}
+#myModalNodes #collectionExtent.no-map{opacity:1}
+#myModalNodes #collectionExtent.no-map .minimize{display:none}
+#myModalNodes #queryExtent.no-map, #myModalNodes #queryExtentParameters.no-map, #myModalNodes #processingParameters.no-map{left:18%}
+#myModalNodes #mapExtent{display:block;width:100%;height:100%;position:fixed;top:0;right:0;background-color:white;overflow:auto}
+#myModalNodes #collectionExtent{opacity:0.9}
+#myModalNodes #detailsExtent{left:33%;width:30%}
+#myModalNodes.full-map-view #detailsExtent{left:3%;width:37%}
+/* ======== TABLE CONTENTS ======== */
+#myModalNodes .vertical-container{position:relative;clear:both;border-top:1px solid #79bde4;overflow-x:hidden;overflow-y:auto;scroll-behavior:smooth;border-bottom:1px solid #79bde4;height:100%;background-color:white}
+#myModalNodes .sticky{position:relative;position:sticky;top:0;background-color:#cee9f9;padding:7px 50px 7px 15px;z-index:801;border-bottom:1px solid #93c2da;line-height:2em}
+#myModalNodes table{position:relative;table-layout:fixed;margin:0}
+#myModalNodes table tr>*{vertical-align:middle;position:relative}
+#myModalNodes table td{word-break:break-all}
+#myModalNodes table>tbody+tbody{border-top:1px solid #93c2da}
+#myModalNodes table.ds-params{table-layout:auto}
+#myModalNodes table.ds-params::before{content:" ";position:absolute;width:15px;height:100%;top:0;left:0;background-color:#79bde4}
+#myModalNodes table.ds-params td{padding:2px 10px}
+#myModalNodes table.ds-params tbody tr:first-child td{padding-top:10px}
+#myModalNodes table.ds-params tbody tr:last-child td{padding-bottom:10px}
+#myModalNodes table.ds-params tbody td:first-child{font-weight:700;text-align:right;color:#455c80;line-height:1.2em}
+#myModalNodes table.ds-params tbody td span:not([class^="select2"], .selection){font-style:normal;font-size:0.8em;color:#c0c0c0;font-weight:400}
+#myModalNodes table.ds-params tbody td:last-child{width:66.666667%}
+#myModalNodes table.ds-params td{border:0}
+#myModalNodes table.ds-params input,
+#myModalNodes table.ds-params select:not([class^="select2"]),
+#myModalNodes table.ds-params textarea:not([class^="select2"]){width:100%;border:1px solid #d2d6de;height:2em;padding:0 4px;outline:0;border-radius:2px}
+#myModalNodes table.ds-params input.datepicker{max-width:48%}
+#myModalNodes #processingParameters table.ds-params input.datepicker{max-width:100%}
+#myModalNodes table.ds-params input.datepicker:last-child{float:right}
+#myModalNodes table.ds-products tr{background-color:white;-webkit-transition:all 0.2s ease;-moz-transition:all 0.2s ease;-o-transition:all 0.2s ease;-ms-transition:all 0.2s ease;transition:all 0.2s ease}
+#myModalNodes table.ds-products td{padding:6px;color:#737373;border-top-color:#ccc}
+#myModalNodes table.ds-products tbody tr:first-child td{border-top:0}
+#myModalNodes table.ds-products tr.selected{background-color:#ffedbd}
+#myModalNodes table.ds-products tr:hover{background-color:#fff4d6}
+#myModalNodes table.ds-products img{position:relative;margin:5px 0;float:left;cursor:pointer}
+#myModalNodes table.ds-products img:hover{border:3px solid red}
+#myModalNodes table.ds-products span.highlight{background-color:#ffc188;color:#a71f16}
+#myModalNodes table.ds-products span.name{color:#a71f16;font-weight:700}
+#myModalNodes table.ds-products span.info{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;font-size:0.9em;font-weight:700;display:inline-block;width:90%;width:calc(100% - 48px);margin:0;padding:0 8px 0 25px}
+#myModalNodes table.ds-products span.info.top{width:100%;padding:0;font-size:1em}
+#myModalNodes table.ds-products span.info span{padding:2px 5px;margin-right:5px}
+#myModalNodes table.ds-products span.info i{color:#0068c1;font-weight:400;margin-right:10px;line-height:1.3em;max-height:2.6em;display:inline-block;vertical-align:bottom;overflow-y:hidden;border-bottom:1px dashed #a6cddc}
+#myModalNodes table.ds-products span p{white-space:normal;word-break:break-word;padding:2px 5px;margin:0}
+#myModalNodes table.ds-products tr.datasource{font-weight:700;background-color:#cee9f9}
+#myModalNodes table.ds-products tr.datasource td{border:0;padding:8px 5px 8px 15px;color:#286080}
+#myModalNodes table.ds-products tr.datasource:hover{background-color:#cee9f9}
+#myModalNodes table.ds-products tr.datasource span.title{width:90%;display:inline-block}
+#myModalNodes table.ds-products tr.datasource span.info{width:96%;width:calc(100% - 32px)}
+#myModalNodes table.ds-products tr.datasource.disabled{opacity:0.3}
+#myModalNodes table.ds-products tr.datasource.deprecated{background-color:#ffd1d1}
+#myModalNodes table.ds-products tr.flash{background-color:#ffccbd}
+#myModalNodes table.ds-products label.deprecated{font-style:italic;color:red;font-size:1.1em;white-space:normal;word-break:break-word;text-align:justify;padding:2px 5px}
+#myModalNodes table.ds-products label.deprecated ul{position:relative;margin:0;font-weight:400}
+#myModalNodes table.ds-products label.deprecated ul li button{padding:0;text-decoration:underline;font-weight:700}
+#myModalNodes table.ds-products label.deprecated ul li button:hover{color:#286080}
+#myModalNodes table.pd-details{table-layout:auto}
+#myModalNodes table.pd-details td{vertical-align:top;border:0;padding:10px}
+#myModalNodes table.pd-details label{color:#286080;line-height:1.2em;display:block;text-align:justify;max-height:4.8em;overflow-x:hidden;overflow-y:auto;padding-bottom:2px;margin-bottom:5px;font-size:13px}
+#myModalNodes table.pd-details span{padding:0 5px;font-weight:400;color:#555}
+#myModalNodes table.pd-details .summary{margin-bottom:10px}
+#myModalNodes table.pd-details .summary-header{border-bottom:1px solid #cfe6f6}
+#myModalNodes table.pd-details .summary-header label{font-size:16px;margin:0;padding:2px 0 2px 5px;line-height:1.9em;cursor:pointer;background-color:#f0f8fc}
+#myModalNodes table.pd-details .summary-header button{font-size:20px;padding-right:15px}
+#myModalNodes table.pd-details .summary-content{padding:5px 10px;user-select:text}
+/* ======== TABLE ACTION CONTROLS ======== */
+#myModalNodes table.ds-products .qry-ac-group{position:absolute;left:0;width:100%;padding:2px 10px;color:#286080}
+#myModalNodes table.ds-products .top-group{top:0;font-size:16px}
+#myModalNodes table.ds-products .bottom-group{bottom:0;font-size:16px;opacity:0.1;-webkit-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-o-transition:all 0.5s ease;-ms-transition:all 0.5s ease;transition:all 0.5s ease}
+#myModalNodes table.ds-products tr.datasource .qry-ac-group .pull-right{background-color:rgba(206,233,249,0.6)}
+#myModalNodes table.ds-products tr.datasource.deprecated .qry-ac-group .pull-right{background-color:rgba(255, 209, 209, 0.6)}
+#myModalNodes table.ds-products tr.datasource .top-group{font-size:20px}
+#myModalNodes table.ds-products tr.datasource .bottom-group{opacity:0.5;font-size:20px}
+#myModalNodes table.ds-products tr:hover .bottom-group{opacity:1}
+#myModalNodes table.ds-products tr.selected .bottom-group{opacity:1;padding-right:35px}
+#myModalNodes .btn-action{float:left;background-color:transparent;border:0;outline:none}
+#myModalNodes .btn-action:hover{color:#e92f2f}
+#myModalNodes .btn-action[disabled]{color:#286080;opacity:0.3}
+#myModalNodes .btn-ul-action{float:none;font-size:1em}
+#myModalNodes .modal-content .btn-movable{float:right;font-size:14px;text-shadow:none;line-height:1.9em}
+/* ======== OTHER CONTROLS ======== */
+#myModalNodes .dataset-label{padding:0 15px;display:table;width:100%;margin-bottom:10px;background:white}
+#myModalNodes .dataset-label>*{display:table-cell;width:1px;vertical-align:middle}
+#myModalNodes .dataset-label input{width:100%;border:0;background-color:transparent;color:#3d6f8a}
+#myModalNodes .checkbox{margin:0;padding:0;position:absolute;right:7px;bottom:0}
+#myModalNodes .checkbox label{margin:0;padding:4px 10px}
+#myModalNodes .checkbox input{margin:0;padding:0;position:relative;cursor:pointer}
+#myModalNodes .checkbox input{margin:0;padding:0;position:relative}
+#myModalNodes .checkbox input[name='allproducts']{margin-top:7px}
+#myModalNodes .pagination{margin:10px 15px 0 15px}
+#myModalNodes .pagination>li>a,.pagination>li>span{padding:4px 10px}
+#myModalNodes .btn-primary+.btn-primary{margin-left:10px}
+#myModalNodes .btn-primary.btn-red{background-color:red;border-color:#c50000}
+#myModalNodes .btn-primary.btn-red:hover{background-color:#e20000;border-color:#a90000}
+#myModalNodes .btn-primary label{font-size:0.7em;font-weight:400;margin:0;line-height:1em;vertical-align:top}
+#myModalNodes .btn-primary label:hover{text-shadow:0px 0px 4px white}
+#myModalNodes .btn-primary input{margin-right:5px;float:left}
+/* ======== THUMBNAILS ======== */
+#myModalNodes #thumbsExtent{bottom:0;padding:10px;height:auto !important;opacity:0.9}
+#myModalNodes.full-map-view #thumbsExtent .ui-resizable-handle{border-radius:5px 5px 0 0}
+#myModalNodes #thumbsExtent .ui-resizable-handle{background-color:#79bde4;cursor:ns-resize;text-align:center;width:97%;width:calc(100% - 20px);margin:0 10px;top:0;height:10px}
+#myModalNodes #thumbsExtent .ui-resizable-handle::after{content:"\f0c9";color:white;font:normal normal normal 11px/1 FontAwesome}
+#myModalNodes #thumbsExtent .vertical-container{padding:5px;border-radius:0 0 5px 5px;overflow-y:scroll;border:0}
+#myModalNodes #thumbsExtent.locked .vertical-container{overflow-y:auto}
+#myModalNodes #thumbsExtent .thumbnails{width:100%;display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:flex-end;overflow-x:hidden;overflow-y:auto;clear:both;scroll-behavior:smooth}
+#myModalNodes #thumbsExtent .thumbnails>div{display:inline-block;width:15.5%;min-width:80px;margin:2px 1% 2px 0;position:relative;text-align:right;border-radius:5px}
+#myModalNodes #thumbsExtent .thumbnails>div::after{content:"";display:block;padding-bottom:100%}
+#myModalNodes #thumbsExtent .thumbnails>div img{position:absolute;top:0;bottom:0;left:0;right:0;width:100%;max-height:100%;object-fit:fill;object-position:center;cursor:pointer;border:4px solid transparent;border-radius:5px;box-shadow:0px 0px 4px 0 rgba(0, 0, 0, .14), 0px 0px 4px 0 rgba(0, 0, 0, .14)}
+#myModalNodes #thumbsExtent .thumbnails>div:hover::before{content:"\f00e";color:white;font:normal normal normal 16px/1 FontAwesome;position:absolute;right:5px;top:5px;background-color:rgba(13, 134, 204, 0.5);padding:5px;border-radius:12px;pointer-events:none;z-index:1}
+#myModalNodes #thumbsExtent .thumbnails>div.selected img,
+#myModalNodes #thumbsExtent .thumbnails>div img:hover{border-color:#f23b3b}
+#myModalNodes #thumbsExtent .thumbnails>div .op-exclude .fa::before{content:"\f096"}
+#myModalNodes #thumbsExtent .thumbnails>div.selected .op-exclude .fa::before{content:"\f046"}
+#myModalNodes #thumbsExtent .thumbnails>div img{-webkit-transition:all 0.3s ease;-moz-transition:all 0.3s ease;-o-transition:all 0.3s ease;-ms-transition:all 0.3s ease;transition:all 0.3s ease}
+#myModalNodes #thumbsExtent .thumbnails>div.flash{background-color:red}
+#myModalNodes #thumbsExtent .thumbnails>div.flash img{border-color:#f23b3b;opacity:0.75}
+#myModalNodes #thumbsExtent .thumbnails>div ul.controls{display:none;position:absolute;bottom:7px;right:7px;margin:0;padding:0}
+#myModalNodes #thumbsExtent .thumbnails>div:hover ul.controls{display:block}
+#myModalNodes #thumbsExtent .thumbnails>div ul.controls>li{display:block;width:20px;padding:2px 5px;margin:2px 0 0 0;background-color:red;color:white;text-shadow:2px 2px 5px black;border-radius:3px;line-height:1.3em;cursor:pointer;text-align:center;float:none;font-size:0.9em;font-weight:700}
+#myModalNodes #thumbsExtent .thumbnails>div ul.controls>li:hover{color:red;text-shadow:1px 1px 3px #ffabab;background-color:white}
+#myModalNodes #floatingExtent{position:absolute;width:98%;height:98%;top:1%;left:1%;pointer-events:none;z-index:800}
+#myModalNodes #floatingExtent .floating{width:75%;height:75%;position:absolute;bottom:0;right:0;width:auto;min-width:150px}
+#myModalNodes #floatingExtent .floating>div{width:100%;height:100%;pointer-events:all}
+#myModalNodes #floatingExtent .floating>div:hover::after{content:"\f010";color:white;font:normal normal normal 16px/1 FontAwesome;position:absolute;right:5px;top:5px;background-color:rgba(13, 134, 204, 0.5);padding:5px;border-radius:12px;pointer-events:none}
+#myModalNodes #floatingExtent .floating>div img{width:100%;height:100%;cursor:pointer;box-shadow:0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2);border-radius:10px;border:3px solid rgba(255, 255, 255, 0.4)}
+
+#myModalNodes #choosedDatasource{margin-bottom:10px;}
+#myModalNodes .info-message>span:first-child{padding-right:5px;font-style:italic}
+
+@media (max-width: 767px) {
+.sidebar-open #myModalNodes{width:70%;width: calc(100% - 230px)}
+#queryExtent .modal-body {min-height:45vh;max-height:calc(100vh - 22em)!important;}
+}
+
+@media (max-width: 900px) {
+  #myModalNodes #filtersDialog:not(.shifted){max-width:100%;left:0 !important;}
+}

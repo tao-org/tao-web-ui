@@ -139,3 +139,92 @@
 .skin-blue.layout-top-nav .main-header > .logo:hover {
   background-color: #3b8ab8;
 }
+.skin-blue .callout.callout-empty,
+.skin-blue .box.box-primary {
+	border-color: #3c8dbc;
+}
+.skin-blue .main-footer {
+	background: #222d32;
+	color: #d2d6de;
+	border-top-color: #3c8dbc;
+}
+.skin-blue .box.box-solid.box-success{
+  border: 1px solid #3c8dbc;
+}
+.skin-blue .box.box-solid.box-success>.box-header{
+  color: #fff;
+  background: #3c8dbc;
+  background-color: #3c8dbc;
+}
+.skin-blue .box.box-warning {
+  border-top-color: #3c8dbc;
+}
+.skin-blue .modal-header {
+  background-color: #3c8dbc;
+  color: white;
+}
+/*** pop-up close ***/
+.skin-blue .close {
+  color: #ffffff;
+  text-shadow: none;
+  opacity: unset;
+}
+  /*** Workflow toolbox ***/
+.skin-blue .toolbox-sidebar .toolbox-bar {
+  color: #fff!important;
+  background-color: #3c8dbc!important;
+  margin-top: 1px;
+}
+.skin-blue .toolboxAccordion .ui-accordion-header{
+  background-color: #21526e;
+  color: #ffffff;
+}
+.skin-blue .item-info{
+  border: 1px solid #3c8dbc;
+}
+.skin-blue .modulesholder .item {
+  border: 1px solid #3c8dbc;
+}
+.skin-blue .ui-widget-content{
+  color: #21526e;
+}
+.skin-blue .toolbox-header .toolbox-footer {
+  color: #3c8dbc;
+}
+/*** Node monitor model ***/
+.skin-blue .modal-header {
+  background-color: #3c8dbc;
+  color: white;
+}
+
+/*** Repositories modals windows ***/
+.skin-blue #properties h4, .skin-blue #properties .action-name, .skin-blue #view_on_map h4, .skin-blue #view_file_content h4, 
+.skin-blue #view_on_map button.close, .skin-blue #view_file_content button.close, 
+.skin-blue #view_file_content .content_prev, .skin-blue #view_file_content .content_next {
+  color:#3c8dbc;
+}
+.skin-blue #view_on_map button.close:hover, 
+.skin-blue #view_file_content button.close:hover {
+  color:#8bccf3;
+}
+
+.skin-blue #properties.folder .callout-title, .skin-blue #properties .callout-title,
+.skin-blue #view_on_map.map .callout-title, .skin-blue #view_file_content .callout-title {
+  border-top: 5px solid rgb(60 141 188);
+  background-color: rgb(60 141 188 / 10%);
+}
+.skin-blue #myFlatMap .drawer-pin .btn-poly {
+	color: white;
+}
+.skin-blue #myFlatMap .drawer-content .btn-poly {
+	color: #3c8dbc;
+}
+.skin-blue #myFlatMap .drawer-panel {
+	border-right: 20px solid #3c8dbc;
+}
+.skin-blue #myFlatMap .drawer-panel .drawer-content {
+	border: 1px solid #3c8dbc;
+}
+.skin-blue #myFlatMap .drawer-panel.closed .drawer-content::after {
+	color: #3c8dbc;
+}

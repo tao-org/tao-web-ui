@@ -1,3 +1,10 @@
+<style>
+#myModalEditTags .form-group{margin-right:0;}
+#myModalEditTags .form-group>*{padding-left:0px;}
+
+/* Table style */
+.tbl-edt thead tr:nth-child(1) th{position:sticky;background:#556270;color:white;top:0px;z-index:10;white-space:normal;word-break:break-all;vertical-align:middle;padding:3px 8px;}
+</style>
 <!-- modal nodes op -->
 <div id="myModalNodes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -11,7 +18,7 @@
         <div class="modal-content modal-edit-tags">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Edit tags</h4>
+                <h4 class="modal-title" id="myModalLabel">Edit</h4>
             </div>
             <form id="frmEditDatasourceTags" class="form-horizontal" role="form">
                 <div class="modal-body">
@@ -26,6 +33,73 @@
                                 </div>
                             </div>
                         </div>
+						<div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="fetch_mode" class="col-sm-2 col-md-2 control-label">Fetch mode </label>
+                                    <div class="col-sm-10 col-md-10">
+                                       <select class="form-control" id="fetch_mode" name="fetch_mode" aria-invalid="false">
+											<option value="OVERWRITE">Overwrite</option>
+											<option value="RESUME">Resume</option>
+											<option value="COPY">Copy</option>
+											<option value="SYMLINK">Symbolic link</option>
+											<option value="CHECK">Direct link to product</option>
+										</select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="local_root" class="col-sm-2 col-md-2 control-label">Local root </label>
+                                    <div class="col-sm-10 col-md-10">
+                                        <input type="text" id="local_root" name="local_root" class="form-control" value="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="local_root" class="col-sm-2 col-md-2 control-label">Parameters </label>
+									<div class="col-sm-10 col-md-10">
+										<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-parameters">
+											<thead>
+												<tr>
+													<th class="col-sm-1 col-md-1"></th>
+													<th>Key</th>
+													<th>Value</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<td colspan="3">
+														<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-addnewparam" data-action="add-new-var">
+															<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new parameter</span>
+														</button>
+													</td>
+												</tr>
+											</tfoot>
+											<tbody class="tpl-sample-body">
+												<tr class="tpl-sample-row">
+													<th scope="row">
+														<i class="fa fa-plus fa-fw hidden" aria-hidden="true"></i>
+														<a href="#" class="text tbl-param-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+													</th>
+													<td>
+														<input type="text" class="var-key" value="" placeholder="parameter name">
+													</td>
+													<td>
+														<input type="text" class="var-value" value="" placeholder="parameter value">
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -50,7 +124,7 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-    <h1>Data Sources <small>Data sources are components that can query (and retrieve) products from remote sources.</small></h1>
+    <h1>Data Sources <small>Data sources are components that can query (and retrieve) products from remote repositories.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Datasources</li>
@@ -67,7 +141,7 @@
                 <ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
                     <li class="role-dropdown active">
                         <select id="selectUserPanel" name="selectUserPanel" class="form-control form-changepane" title="Select desired node view.">
-                            <option class="role role-admin" value="all_nodes">All datasources </option>
+                            <option class="role role-admin" value="all_nodes">All data sources </option>
                         </select>
                     </li>
                 </ul>
@@ -109,11 +183,11 @@
                                 <div class="box box-success">
                                     <div class="box-header">
                                         <i class="fa fa-database"></i>
-                                        <h3 class="box-title">Datasources -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
+                                        <h3 class="box-title">Data sources -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
                                         <div class="box-tools pull-right nppaginatedcells-order collapse" data-toggle="tooltip" title="Change order"></div>
                                     </div>
                                     <div class="nppaginatedcells-empty callout callout-empty">
-                                        <p>Datasources list is empty. <span class="results-empty">You do not have any datasources.</span><span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
+                                        <p>List is empty. <span class="results-empty">You do not have any data sources.</span><span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
                                     </div>
                                     <div class="box-body chat users-box">
                                         <div class="nppaginatedcells-panel-body">
@@ -125,26 +199,21 @@
                                                         <div class="box-top-tags">
                                                         </div>
                                                         <div class="box-top">
-                                                            <div class="box-title"><span class="val-label"></span></div>
-                                                            <div class="box-subtitle"><span class="val-id"></span></div>
-                                                            <div class="box-text">Version: <span class="val-version"></span></div>
-                                                            <div class="box-text">Authors: <span class="val-authors"></span></div>
-                                                            <div class="box-text">Copyright: <span class="val-copyright"></span></div>
-                                                            <div class="box-text">Node affinity: <span class="val-nodeAffinity"></span></div>
-                                                            <div class="box-text">Datasource name: <span class="val-dataSourceName"></span></div>
-                                                            <div class="box-text">Sensor name: <span class="val-sensorName"></span></div>
+                                                            <div class="box-title"><span class="val-sensorName"></span></div>
+                                                            <div class="box-subtitle" style="font-size: 18px;"><span class="val-dataSourceName"></span></div>
+                                                            <div class="box-text">
+																Version: <strong><span class="val-version"></span></strong> | 
+																Authors: <strong><span class="val-authors"></span></strong> | 
+                                                                Copyright: <strong><span class="val-copyright"></span></strong> 
+                                                            </div>
                                                             <div class="box-icon">
                                                                 <i class="fa fa-database"></i>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                                                <p><span class="val-description"></span></p>
-                                                            </div>
-                                                        </div>
+                                                     
                                                         <div class="row">
                                                             <div class="col-sm-12 col-xs-12">
-                                                                <div class="text-right" style="padding-top: 30px;">
+                                                                <div class="text-right" style="padding-top: 5px;">
                                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
                                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view"><i class="fa fa-eye fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;View parameters</span></button>
                                                                 </div>
@@ -159,21 +228,16 @@
                                                         <div class="box-top-tags">
                                                         </div>
                                                         <div class="box-top">
-                                                            <div class="box-title"><span class="val-label"></span></div>
-                                                            <div class="box-subtitle"><span class="val-id"></span></div>
-                                                            <div class="box-text">Version: <span class="val-version"></span></div>
-                                                            <div class="box-text">Authors: <span class="val-authors"></span></div>
-                                                            <div class="box-text space-after-10">Copyright: <span class="val-copyright"></span></div>
-                                                            <div class="box-text">Node affinity: <span class="val-nodeAffinity"></span></div>
-                                                            <div class="box-text">Datasource name: <span class="val-dataSourceName"></span></div>
-                                                            <div class="box-text">Sensor name: <span class="val-sensorName"></span></div>
+                                                            <div class="box-title"><span class="val-sensorName"></span></div>
+                                                            <div class="box-subtitle" style="font-size: 18px;"><span class="val-dataSourceName"></span></div>
+                                                            <div class="box-text">Version:<strong> <span class="val-version"></span></strong></div>
+                                                            <div class="box-text">Authors: <strong><span class="val-authors"></span></strong></div>
+                                                            <div class="box-text">Copyright: <strong><span class="val-copyright"></span></strong></div>
                                                             <div class="box-icon">
                                                                 <i class="fa fa-database"></i>
                                                             </div>
                                                         </div>
-                                                        <div class="box-description">
-                                                            <p><span class="val-description"></span></p>
-                                                        </div>
+                                            
                                                         <div class="box-bottom with-line">
                                                             <div class="">
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
@@ -236,7 +300,6 @@
             "                                    </p>\n" +
             "                                </div>\n" +
             "                                <div class=\"icon\"><i class=\"fa fa-database\"></i></div>\n" +
-            "                                <a href=\"#\" class=\"small-box-footer\">See note <i class=\"fa fa-arrow-circle-right\"></i></a>\n" +
             "                            </div>\n" +
             "                        </div>\n" +
             "             </div>"+
@@ -271,26 +334,13 @@
         html += "      </tbody>\n" +
             "    </table>\n" +
             "  </div>";
-        html += "                    </div>\n" +
-            "                </div>\n" +
-            "            </section>\n" +
-            "        </div><!-- /.modal-body -->\n" +
-            "    <div class=\"modal-note\">\n" +
-            "        <div class=\"row\">\n" +
-            "            <div class=\"col-md-12\">\n" +
-            "                <div class=\"form-group\">\n" +
-            "                    <div class=\"col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10\">\n" +
-            "                        <h4>Notice</h4>\n" +
-            "                        <p>Parameters will be populated with specific values only in the workflow definition stage.</p>\n" +
-            "                    </div>\n" +
-            "                </div>\n" +
-            "            </div>\n" +
-            "        </div>\n" +
-            "    </div>\n" +
+        html +=" <h4>Notice</h4>\n" +
+            "    <p>Parameters will be populated with specific values only in the workflow definition stage.</p>\n" +
             "    <div class=\"modal-footer\">\n" +
             "        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n" +
             "    </div>\n" +
             "</div><!-- /.modal-content -->";
+
         return html;
     }
 
@@ -319,15 +369,57 @@
             });
     };
 
+	function helper_addParameterRow($tbl, payload){
+		var obj = {"key":"","value":""};
+		$.extend( obj, payload );
+		
+		var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
+		$el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+
+		$('input.var-key', $el).val(obj.key);
+		$('input.var-value', $el).val(obj.value);
+		$tbl.append($el);
+	}
+	
     var showModalTagsEdit = function(action, args){
-        window.userOpStack = [{
-            "dna": args.dna,
-            "action": "comp_edit"
-        }];
-        if(args.dna.hasOwnProperty('tags') && args.dna['tags']!= null){
-            $('#formTags').importTags( args.dna['tags'].join());
-        }
-        $("#myModalEditTags").modal('show');
+		$("#tbl-parameters").find("tbody:not(.tpl-sample-body)").remove();
+		$.ajax({
+			url: baseRestApiURL + "datasource/config?dataSourceId=" + args.dna.id,
+			async: false,
+			headers : {
+				"X-Auth-Token": window.tokenKey
+			},
+			success: function(result) {
+				if (result.status === "SUCCEEDED") {
+					var oDna = $.extend(true, args.dna, result.data);
+					
+					window.editAction = typeof result.data !== "undefined";
+					window.userOpStack = [{
+						"dna": oDna,
+						"action": "comp_edit"
+					}];
+					if(oDna.hasOwnProperty('tags') && oDna['tags']!= null){
+						$('#formTags').importTags( args.dna['tags'].join());
+					}
+					if(oDna.hasOwnProperty('fetchMode') && oDna['fetchMode']!= null){
+						$("#fetch_mode").find("option[value='" + oDna.fetchMode + "']").prop("selected",true);
+					}
+					if(oDna.hasOwnProperty('localRepositoryPath') && oDna['localRepositoryPath']!= null){
+						$("#local_root").val(oDna.localRepositoryPath);
+					}
+					if(oDna.hasOwnProperty('parameters') && oDna['parameters'] != null) {
+						$.each(oDna['parameters'], function (key, value) {
+							helper_addParameterRow($("#tbl-parameters"),{"key":key,"value":value});
+						});
+					}
+					$("#myModalEditTags").modal('show');
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				alert("Could not open the add/edit page. An error occurred while retrieving data from server.");
+			}
+		});
+        
     };
 
 
@@ -359,46 +451,99 @@
                 if(action === "view") myModalViewDatasource(action, args);
             }
         });
-
-
+		
         $("#frmEditDatasourceTags").on("submit", function(e){
             e.preventDefault(e);
             var id =  window.userOpStack[0]['dna']['sensorName'] + '-' + window.userOpStack[0]['dna']['dataSourceName'];
             var tags = $('input[name=formTags]', this).val();
             tags = tags.split(",");
 
-            $.ajax({
-                cache: false,
-                type: "PUT",
-                url: baseRestApiURL + "datasource/"+id+"/tag",
-                data: JSON.stringify(tags),
-                contentType: "application/json; charset=utf-8",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                    "X-Auth-Token": window.tokenKey
-                },
-                error : function (jqXHR, textStatus, errorThrown) {
-                    showMsg("Unknown error. Unable to update tags name. Please try again.", "ERROR");
-                },
-                success: function(r) {
-                    var response = chkTSRF(r);
-                    console.log(response);
-                    if(response !== {}){
-                        showMsg("Datasources tags successfully saved.", "SUCCESS");
-                    }else{
-                        showMsg("Datasources tags were not saved.", "FAILED");
-                    }
-
-                    $("#myModalEditTags").modal('hide');
-                    panelComp.refreshData();
+			var $tblParameters = $("#tbl-parameters");
+			var haserror = 0;
+			var paramDuplicates = 0;
+			var parameters = {};
+			var paramKeysArr=[]; 
+			
+            $(".val-row", $tblParameters).each(function() {
+				var key = $(this).find("input.var-key").val();
+				var val = $(this).find("input.var-value").val();
+               if((typeof key !== "undefined") && (typeof key.valueOf() === "string") && (key.length > 0) && (typeof val !== "undefined") && (typeof val.valueOf() === "string") && (val.length > 0) ) {
+					parameters[key] = val;
+					
+					paramKeysArr.push(key);
+                } else {
+					haserror = 1;
                 }
-            });
-            return false;
+			});
+			if(paramKeysArr.length !== new Set(paramKeysArr).size) {
+				paramDuplicates = 1;
+			}
+			if(haserror==1) {
+				showMsg("Invalid parameter. Please add key and value to continue.", "ERROR");
+			}
+			else if(paramDuplicates==1) {
+				showMsg("Invalid parameter. Please choose unique keys to continue.", "ERROR");
+			}
+			else {
+				$(".modal-error ").fadeOut();
+				var updateTags = $.ajax({
+					cache: false,
+					type: "PUT",
+					url: baseRestApiURL + "datasource/"+id+"/tag",
+					data: JSON.stringify(tags),
+					contentType: "application/json; charset=utf-8",
+					headers: {
+						"Accept": "application/json",
+						"Content-Type": "application/json",
+						"X-Auth-Token": window.tokenKey
+					}
+				});
+				if ($.isEmptyObject(parameters)) parameters = null;
+				var payload = {"id":id,"fetchMode":$("#fetch_mode").val(),"localRepositoryPath":$("#local_root").val(),"parameters":parameters};
+				var requestType = window.editAction ? "PUT" : "POST";
+				var updateConfig = $.ajax({
+					cache: false,
+					type: requestType,
+					url: baseRestApiURL + "datasource/config",
+					data: JSON.stringify(payload),
+					contentType: "application/json; charset=utf-8",
+					headers: {
+						"Accept": "application/json",
+						"Content-Type": "application/json",
+						"X-Auth-Token": window.tokenKey
+					}
+				});
+				$.when(updateTags, updateConfig).done(function (r1, r2) {
+					var responseTags = chkTSRF(r1);
+					var responseConfig = chkTSRF(r2);
+					
+					if(responseTags !== {} && responseConfig !== {}) {
+						showMsg("Datasources successfully saved.", "SUCCESS");
+					} else {
+						showMsg("Datasources was not saved.", "FAILED");
+					}
+
+					$("#myModalEditTags").modal('hide');
+					panelComp.refreshData();
+				}).fail(function () {
+					showMsg("Unknown error. Unable to update datasource. Please try again.", "ERROR");
+				});
+			}
+			return false;
         });
 
         initializeTagsInputAutocomplete("#formTags", "datasource");
-
+		
+		$(".tbl-edt")
+		.on("click", ".tbl-param-delete-action", function(e){
+			e.preventDefault();
+			$(this).closest(".val-row").remove();
+		});
+			
+		$(".btn-addnewparam").on("click", function(){
+			var $tbl = $(this).closest(".tbl-edt");
+			helper_addParameterRow($tbl);
+		});
     });
     //# sourceURL=datasource-admin2.js
 </script>

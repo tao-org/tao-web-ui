@@ -1,0 +1,408 @@
+<style>
+	#manageRepository .modal-body{padding-left:30px;padding-right:30px}
+	
+	label.error{display:block;font-size:0.9em}
+	
+	.select-repository{list-style:none;font-size:1.2em;padding-left:0}
+	.select-repository li{padding:0 0.5em;color:#3c8dbc;cursor:pointer;margin:5px -0.5em}
+	.select-repository li:hover{text-decoration:underline}
+	.select-repository li.selected{background-color:#3c8dbc;color:white}
+	.select-repository li.selected::marker{color:#3c8dbc}
+	.select-repository li.disabled{pointer-events:none;color:gray}
+	
+	.repo-parameters{position:relative;padding:10px 0}
+	.repo-parameters::before{content:"";display:block;position:absolute;left:0;top:0;width:5px;background-color:rgba(0,0,0,0.1);height:100%}
+	.repo-parameters .fa-info-circle{color:#3c8dbc}
+	.repo-parameters input{margin-bottom:5px}
+	.repo-parameters label.error{margin-top:-5px;margin-bottom:5px}
+	
+	.form-group{margin-bottom:0}
+	.form-group+.form-group{margin-top:10px}
+	/*.btn-primary[disabled]{background-color:rgba(0,0,0,0.1);border-color:rgba(0,0,0,0.2);color:rgba(0,0,0,0.3)}*/
+</style>
+
+<div id="manageRepository" class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		<h4 class="modal-title" id="myModalLabel">Add new repository</h4>
+	</div>
+	<form role="form">
+		<div class="modal-error collapse">
+			<h4 class="modal-title">Error adding execution node!</h4>
+			<p id="modal-error-msg">Please check your data, one or more values for the attributes is not in the acceptable range.</p>
+			<p><span class="error-hostName collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> </span></p>
+		</div>
+		<div class="modal-body">
+			<div class="form-group">
+				<div class="row" id="repoCategory">
+					<label for="category" class="col-md-4 control-label" >Repository category</label>
+
+					<label class="radio-inline">
+						<input type="radio" name="repOpt" id="newOpt" value="new" checked>New
+					</label>
+
+					<label class="radio-inline">
+						<input type="radio" name="repOpt" id="templateOpt" value="template" >Public Repository
+					</label>
+
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="row" id="repoChooseTemplate">
+					<label for="inputName" class="col-md-4 control-label">Choose public repository</label>
+					<div class="col-md-8">
+						<select type="text" class="form-control" id="templateList" name="templateList" autocomplete="off" value="" placeholder="Template list..." disabled>
+								
+						</select>
+
+					</div>
+				</div>
+			</div>
+
+			
+			<div class="form-group">
+				<div class="row">
+					<label for="inputName" class="col-md-4 control-label">Name</label>
+					<div class="col-md-8">
+						<input type="text" class="form-control" id="inputName" name="inputName" autocomplete="off" value="" placeholder="Name your repository..." />
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<label for="inputDescription" class="col-md-4 control-label">Description</label>
+					<div class="col-md-8">
+						<input type="text" class="form-control" id="inputDescription" name="inputDescription" autocomplete="off" value="" placeholder="Describe your repository..." />
+					</div>
+				</div>
+			</div>
+			<hr />
+			<div class="form-group repo-types">
+				<div class="row">
+					<label for="inputName" class="col-md-4 control-label">Repository type</label>
+					<div class="col-md-8">
+						<ul class="select-repository"><li class="disabled">-</li></ul>
+					</div>
+				</div>
+			</div>
+			<div class="form-group repo-parameters">
+				<div class="row">
+					<div class="col-md-offset-4 col-md-8">
+						<p><i class="fa fa-info-circle fa-fw"></i> Please select a repository type from the list above.</p>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-md-offset-4 col-md-8">
+						<button id="saveExecNode" type="submit" class="btn btn-primary btn-submit" name="btnSave" disabled>Add new repository</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="modal-note">
+		<div class="row">
+			<div class="form-group">
+				<div class="col-md-12">
+					<h4>Help filling in</h4>
+					<p>All parameters are required. Please fill in all the fields.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready( function(){
+		var $form   = $("form", "#manageRepository");
+		var rp_plus = window.userOpStack[0].action == "rp-plus";
+		var rp_edit = window.userOpStack[0].action == "rp-edit";
+		var repo    = rp_edit ? window.userOpStack[0].dna : false;
+		
+		function getRepositoryTypes($form) {
+			$.ajax({
+				cache: false,
+				url: baseRestApiURL + "workspace/types/",
+				dataType: 'json',
+				type: 'GET',
+				headers: {
+					"Accept": "application/json",
+					"Content-Type": "application/json",
+					"X-Auth-Token": window.tokenKey
+				},
+				success: function(response) {
+					if (response.status === responseStatus.success) {
+						$(".select-repository", $form).html("");
+						$.each(response.data, function (idx, repoD) {
+							if (!repoD.singleton) {
+								var $li = $('<li data-name="'+repoD.name+'">' + repoD.description + ' </li>');
+								$li.data({ "definition": repoD });
+								if (rp_plus) {
+									$(".select-repository", $form).append($li);
+								} else if (rp_edit && repo.type == repoD.name) {
+									$(".select-repository", $form).append($li.addClass("selected"));
+									return false;
+								}
+							}
+						});
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log("error");
+				}
+			});
+		}
+
+		var repoTepmlatesNames = [];
+		function getTemplates($form) {
+			$.ajax({
+				cache: false,
+				url: baseRestApiURL + "repository/",
+				dataType: 'json',
+				type: 'GET',
+				headers: {
+					"Accept": "application/json",
+					"Content-Type": "application/json",
+					"X-Auth-Token": window.tokenKey
+				},
+				success: function(response) {
+					if (response.status === responseStatus.success) {
+						$("#templateList", $form).html("");
+						var $option = $('<option class="defaultTemplate" value="" disabled selected>Choose an existing public repository...</option>');
+						$("#templateList", $form).append($option);
+						$.each(response.data, function (idx, repoT) {
+							if (!repoT.singleton) {
+								var $option = $('<option title="'+repoT.description+'">' + repoT.name + '</option>');
+								$option.data({ "definition": repoT });
+								if (rp_plus) {
+									$("#templateList", $form).append($option);
+								} else if (rp_edit) {
+									//$("#templateList", $form).append($option.addClass("selected"));
+									repoTepmlatesNames.push(repoT.name);
+								}
+							}
+						});
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log("error");
+				}
+			});
+		}
+		
+		$form.on("click", ".select-repository li:not(.selected):not(.template)", function (e) {
+			var repoD = $(e.target).data("definition");
+			$(e.target).siblings("li").removeClass("selected");
+			$(e.target).addClass("selected");
+			if (typeof repoD === "undefined") {
+				$(".repo-parameters", e.delegateTarget).html('<div class="row"><div class="col-md-12"><p><i class="fa fa-exclamation-triangle fa-fw"></i> Please select from the above list, the type of repository you want to add.</p></div></div>');
+				$("#saveExecNode", e.delegateTarget).prop("disabled", true);
+			} else {
+				$(".repo-parameters", e.delegateTarget).html('');
+				$.each(typeof repoD.parameters === "object" ? repoD.parameters : {}, function (key, value) {
+					var $div = $(
+						'<div class="row">' +
+							'<label for="'+key+'" class="col-md-offset-1 col-md-3 control-label">'+key+'</label>' +
+							'<div class="col-md-7">' +
+								'<input type="'+(key.indexOf(".key") >= 0 || key.indexOf(".password") >= 0 ? 'password' : 'text')+'" class="form-control' + (value ? ' control-required' : '') + '" name="'+key+'" autocomplete="off" value="" />' +
+							'</div>' +
+						'</div>'
+					);
+					$(".repo-parameters", e.delegateTarget).append($div);
+				});
+				$("#saveExecNode", e.delegateTarget).prop("disabled", false);
+			}
+		});
+		
+		$.validator.addClassRules("control-required", { required: true });
+		$form.validate({
+			ignore: ":hidden:not(.validate)",
+			rules : {
+				"inputName"       : { required: true },
+				"inputDescription": { required: true }
+			},
+			messages      : { },
+			success       : function(label) { label.remove(); },
+			highlight     : function(element, errorClass) { $(element).closest(".row").addClass("has-error"); },
+			unhighlight   : function(element, errorClass) { $(element).closest(".row").removeClass("has-error"); },
+			errorPlacement: function(error, element) { error.insertAfter($(element)); }
+		});
+		
+		$form.submit(function (e) {
+			e.preventDefault();
+			
+			if ($(this).valid()) {
+				var repoD = rp_plus ? $(".select-repository li.selected", e.delegateTarget).data("definition") : repo;
+				if (typeof repoD !== "undefined") {
+					var formData = {
+						"name"       : $("[name='inputName']"       , e.delegateTarget).val(),
+						"description": $("[name='inputDescription']", e.delegateTarget).val(),
+						"urlPrefix"  : repoD.urlPrefix,
+						"type"       : rp_plus ? repoD.name : repo.type,
+						"userName"   : window.taoUserProfile.username,
+						"parameters" : rp_plus ? {} : $.extend(true, {}, repo.parameters),
+						
+					}
+					if (rp_edit) {
+						formData.id = repoD.id;
+						formData.editable = repoD.editable;
+					}else if (rp_plus){
+						formData.editable = repoEdit;	
+					}
+					$.each($(".repo-parameters input", e.delegateTarget), function () {
+						formData.parameters[$(this).attr("name")] = $(this).val();
+					});
+					
+					$.ajax({
+						cache   : false,
+						url     : baseRestApiURL + "workspace/" + (rp_plus ? "" : repoD.id),
+						dataType: 'json',
+						type    : rp_plus ? 'POST' : 'PUT',
+						data    : JSON.stringify(formData),
+						headers : {
+							"Content-Type": "application/json",
+							"X-Auth-Token": window.tokenKey
+						},
+						error: function (jqXHR, textStatus, errorThrown) {
+							showMsg("Error saving your repository. Please check your data and try again.", "ERROR");
+							return false;
+						},
+						success: function(response, textStatus, jqXHR) {
+							 var r = chkTSRF(response);
+							 if (response.status === responseStatus.success) {
+								showMsg("Repository saved successfully.", "SUCCESS");
+								if (rp_edit && typeof deleteRepositoryTab === "function") {
+									deleteRepositoryTab(repoD);
+								}
+								window.panelComp.refreshData();
+							 } else {
+								 showMsg("Error saving repository. Please check your data, one or more attribute values were not correct.", "ERROR");
+							 }
+							$(e.delegateTarget).closest(".modal").modal('hide');
+							return false;
+						}
+					});
+				}
+			}
+		});
+		
+		getRepositoryTypes($form);
+		getTemplates($form);
+
+
+		/////////Functon to open options for repository type for templates
+		function repoTypeSelected(selectedTemplate){
+			var repoT = $(selectedTemplate).data("definition");
+			$(".select-repository").find("li[data-name ="+selectedTemplate.data("definition").type+"]").siblings("li").removeClass("selected");
+			$(".select-repository").find("li[data-name ="+selectedTemplate.data("definition").type+"]").addClass("selected");
+			if (typeof repoT === "undefined") {
+				$(".repo-parameters").html('<div class="row"><div class="col-md-12"><p><i class="fa fa-exclamation-triangle fa-fw"></i> Please select from the above list, the type of repository you want to add.</p></div></div>');
+				$("#saveExecNode").prop("disabled", true);
+			} else {
+				$(".repo-parameters").html('');
+				$.each(typeof repoT.parameters === "object" ? repoT.parameters : {}, function (key, value) {
+					var $div = $(
+						'<div class="row">' +
+							'<label for="'+key+'" class="col-md-offset-1 col-md-3 control-label">'+key+'</label>' +
+							'<div class="col-md-7">' +
+								'<input type="'+(key.indexOf(".key") >= 0 || key.indexOf(".password") >= 0 ? 'password' : 'text')+'" class="form-control' + (value ? ' control-required' : '') + '" name="'+key+'" autocomplete="off" value="" />' +
+							'</div>' +
+						'</div>'
+					);
+					$(".repo-parameters").append($div);
+					$("input[name='"+key+"']").val(value);
+					$("input[name='"+key+"']").prop("disabled",true);
+
+				});
+				$("#saveExecNode").prop("disabled", false);
+			}
+		}
+
+		$('select[name="templateList"]').change(function(){
+			var selectedTemplate = $("option:selected",this).data("definition");
+			//update values for name, description, repository type and the parameters.
+			$("#inputName").val(selectedTemplate.name);
+			$("#inputDescription").val(selectedTemplate.description);
+			repoTypeSelected($("option:selected",this));
+			//$(".select-repository").find("input[]").prop("disabled", true);
+		 });
+
+
+		if (rp_edit) {
+			$("#repoCategory").remove();
+			$("#repoChooseTemplate").remove();
+
+			$("#myModalLabel").text("Edit Repository")
+			$("[name='inputName']"       , $form).val(repo.name);
+			$("[name='inputDescription']", $form).val(repo.description);
+			$(".repo-parameters", $form).html('');
+			$.each(repo.parameters, function (key, val) {
+				var $div = $(
+					'<div class="row">' +
+						'<label for="'+key+'" class="col-md-offset-1 col-md-3 control-label">'+key+'</label>' +
+						'<div class="col-md-7">' +
+							'<input type="'+(key.indexOf(".key") >= 0 || key.indexOf(".password") >= 0 ? 'password' : 'text')+'" class="form-control control-required" name="'+key+'" autocomplete="off" value="'+val+'" />' +
+						'</div>' +
+					'</div>'
+				);
+				$(".repo-parameters", $form).append($div);
+			});
+	
+			if (!repo.editable){
+				$("#inputName").prop('disabled', true);
+				$("#inputDescription").prop('disabled', true);
+				$(".repo-parameters").find("input").prop('disabled', true);
+				$("#saveExecNode", $form).prop("disabled", true).html("Save repository");
+			} else{
+				$("#saveExecNode", $form).prop("disabled", false).html("Save repository");
+			}
+			$("li.selected",".select-repository").removeClass("selected");
+		}
+
+		//delete var
+	});
+	var repoEdit = true;
+	$('input[name="repOpt"]').change(function(){
+		var repChoice = document.querySelector('input[name="repOpt"]:checked').value;
+		if(repChoice === "template"){
+			$("#inputName").val("");
+			$("#inputName").prop('disabled', true);
+			$("#inputDescription").val("");
+			$("#inputDescription").prop('disabled', true);
+			$("#templateList").prop('disabled', false);
+			$("li",".select-repository").addClass("template");
+			$("li.selected",".select-repository").removeClass("selected");
+			$(".repo-parameters").find("input").val("");
+			$(".repo-parameters").find("input").remove();
+			$(".repo-parameters").find("label").remove();
+			$(".repo-parameters").html('<div class="row"><div class="col-md-offset-4 col-md-8"><p><i class="fa fa-info-circle fa-fw"></i> Please select a repository template from the template list above.</p></div></div>');
+			repoEdit = false;
+		}
+		else{
+			$("#inputName").prop('disabled', false);
+			$("#inputName").val("");
+			$("#inputDescription").prop('disabled', false);
+			$("#inputDescription").val("");
+			$("#templateList").find("selected");
+			$("#templateList").find(".defaultTemplate").prop('selected',true);
+			$("#templateList").prop('disabled', true);
+			$("li",".select-repository").removeClass("template");
+			$("li.selected",".select-repository").removeClass("selected");
+			$(".repo-parameters").find("input").val("");
+			$(".repo-parameters").find("input").remove();
+			$(".repo-parameters").find("label").remove();
+			$(".repo-parameters").html('<div class="row"><div class="col-md-offset-4 col-md-8"><p><i class="fa fa-info-circle fa-fw"></i> Please select a repository type from the list above.</p></div></div>');
+			repoEdit = true;
+		}
+
+    } );
+
+
+
+	
+//# sourceURL=repositories-plus.js
+</script>

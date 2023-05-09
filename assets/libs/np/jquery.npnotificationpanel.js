@@ -47,7 +47,7 @@ jQuery.fn.npNotificationsPanels = function(options){
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                //"X-Auth-Token": window.tokenKey
+                "X-Auth-Token": window.tokenKey,
                 "user": settings.headerUser
             }
         }).done(function (response) {
@@ -67,7 +67,7 @@ jQuery.fn.npNotificationsPanels = function(options){
                 var ts = niceIsoTime(notification["timestamp"]);
                 try {
                     var lclData = JSON.parse(notification["data"]);
-                    var lclMsg = lclData.Payload;
+                    var lclMsg = typeof lclData.Message === 'undefined' ? lclData.Payload : lclData.Message;
                 } catch(e) {
                     console.log(e); // error in the above string (in this case, yes)!
                 }
@@ -106,6 +106,25 @@ jQuery.fn.npNotificationsPanels = function(options){
         }
     };
 
+	var ui_clearNotifications = function(){
+		$.ajax({
+            cache: false,
+            url: settings.url + "clear",
+            type: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        }).done(function (response) {
+            console.log("notification history cleared");
+			ui_showExecNotification();
+			getData(currentPage);
+        }).fail(function (jqXHR, status, textStatus) {
+            console.log("fail to clear the notification history");
+        });
+	}
+	
     var ui_showExecNotification = function(){
         $notification.addClass("show");
         setTimeout(function(){
@@ -121,23 +140,28 @@ jQuery.fn.npNotificationsPanels = function(options){
                 return;
             }
             var action = $(this).data("action");
-            if(action === 'go-next'){
+            if (action !== "go-clear") {
+				if(action === 'go-next'){
                 currentPage++;
-                ui_showExecNotification();
-            }
-            if(action === 'go-prev'){
-                currentPage--;
-                ui_showExecNotification();
-            }
-            if(action === 'go-refresh'){
-                currentPage = 0;
-                ui_showExecNotification();
-            }
-            getData(currentPage);
+					ui_showExecNotification();
+				}
+				if(action === 'go-prev'){
+					currentPage--;
+					ui_showExecNotification();
+				}
+				if(action === 'go-refresh'){
+					currentPage = 0;
+					ui_showExecNotification();
+				}
+				getData(currentPage);
+			} else {
+				currentPage = 0;
+				ui_clearNotifications();
+			}
         })
         .on("panel:refresh", function(e) {
             currentPage = 0;
-            ui_showExecNotification();
+            //ui_showExecNotification();
             getData(currentPage);
         });
 

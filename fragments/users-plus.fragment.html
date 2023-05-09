@@ -26,8 +26,6 @@
                             <label for="selectUserType" class="col-sm-2 col-md-2 control-label">User Type</label>
                             <div class="col-sm-10 col-md-10">
                                 <select id="selectUserType" name="selectUserType" class="form-control">
-                                    <option value="0" selected="">TAO local user</option>
-                                    <option value="1">External user (LDAP)</option>
                                 </select>
                             </div>
                         </div>
@@ -290,6 +288,10 @@
     }
 
     $(document).ready( function(){
+
+        //getUserTypesOptions();
+		populateSelectElem($("#selectUserType"), "UserType");
+
         (function(data){
             var $elSel = $("#selectUserGroup");
             $elSel.empty();
@@ -352,7 +354,7 @@
                 "memoryQuota":-1,
                 "organization" : $('input[name=inputOrg]', this).val(),
                 "status" : "PENDING",
-                "external" : ($('select[name=selectUserType]').val()==="1"),
+                "userType" : $("#selectUserType", this).val(),
                 "groups" : [],
                 "preferences" : null
             };

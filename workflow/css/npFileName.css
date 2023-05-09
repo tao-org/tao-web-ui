@@ -106,11 +106,16 @@
     color: green;
 }
 
-.sintaxLine {}
+.sintaxLine {font-size:12px;}
 .sintaxLine.has-focus {}
 
 .sintaxLine span {
     outline: 1px solid transparent;
+}
+
+.npsyntaxeditor{
+    display: block;
+    width: 40rem;
 }
 
 .sintaxLine .ltr{}

@@ -11,6 +11,20 @@ function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
         y: centerY + (radius * Math.sin(angleInRadians))
     };
 }
+
+// get enums based on enum name
+function getTaoEnums(name) {
+	var retVal = [];
+	$.each(wfTools.taoEnums, function (index, enm) {
+		if (index.toLowerCase().indexOf(name.toLowerCase()) >= 0) {
+			$.each(enm, function (idx, value) {
+				retVal.push(value);
+			});
+		}
+	});
+	return retVal;
+}
+
 function describeArc(x, y, radius, startAngle, endAngle){
     var start = polarToCartesian(x, y, radius, endAngle);
     var end = polarToCartesian(x, y, radius, startAngle);
@@ -25,6 +39,7 @@ function describeArc(x, y, radius, startAngle, endAngle){
 
 
     var prefferences = {};
+	var componentCategories;
 
     var toolboxHeader = {
         elTBH: $("#toolboxHeader"),
@@ -73,11 +88,19 @@ function describeArc(x, y, radius, startAngle, endAngle){
                     a.open();
                 }
             });
-            //init accordion
+            componentCategories = getTaoEnums("ComponentCategory");
+			$.each(componentCategories, function(index, category) {
+				var $componentHeader = $("h3","#componentTemplate").clone().append(category.value).css('textTransform', 'capitalize');
+				var $componentContent = $("#componentTemplateBody","#componentTemplate").clone().attr("id", category.key);
+				$( ".toolboxAccordion", a.elTBS).append($componentHeader).append($componentContent);
+			});
+			
+			
+			//init accordion
             $( ".toolboxAccordion", a.elTBS).accordion({
                 heightStyle: "fill",
                 collapsible: true,
-                active: 2,
+                active: componentCategories.length + 1,
                 animate: 500
             });
             //add resize handler
@@ -121,6 +144,9 @@ function describeArc(x, y, radius, startAngle, endAngle){
         },
         close: function () {
             this.elTBS.addClass("outside");
+		},
+		refresh: function() {
+			$( ".toolboxAccordion",this.elTBS).accordion( "refresh" );
 		}
     };
 
@@ -134,53 +160,62 @@ function describeArc(x, y, radius, startAngle, endAngle){
 		_settings.createCookie("prefferences_workFlowConnectors","F");
 	}
 
-
-
     function wf_renderComponentsToolBox(){
-        var $elComponentsList = $("#moduleslist");
         var $elDatasurcesList = $("#datasourceslist");
-        var $elUDatasurcesList = $("#udatasourceslist");
-        $elComponentsList.empty();
+        var $elUDatasurcesList = $("#udatasourceslist");		
         $elDatasurcesList.empty();
         $elUDatasurcesList.empty();
-        $.each(wfTools.toolboxnodes.pc, function(i, item) {
-            item.image = "./media/"+item.dna.containerId+".png";
-            var html ='<sortable_item class="item selected" id="'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="pc" data-toolboxid="'+item.id+'">\n' +
-                '\t\t\t\t\t<div class="item-preview">\n' +
-                '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
-                '\t\t\t\t\t\t<img src="'+item.image+'" style="width: 100%; height: 100%;">\n' +
-                '\t\t\t\t\t  </vectr_img>\n' +
-                '\t\t\t\t\t</div>\n' +
-                '\t\t\t\t\t<div class="item-info">\n' +
-                '\t\t\t\t\t  <div class="item-label text-left">'+item.label+'</div>\n' +
-                '\t\t\t\t\t</div>\n' +
-                '\t\t\t\t</sortable_item>';
-            $elComponentsList.append(html);
-        });
-        $.each(wfTools.toolboxnodes.ds, function(i, item) {
+		$.each(componentCategories, function (index, tag) {
+			var $elComponentsList = $("#moduleslist", "#" + tag.key);
+			
+			$elComponentsList.empty();
+				
+			$.each(wfTools.toolboxnodes.pc, function(i, item) {
+				if ($elComponentsList.length !== 0 && (jQuery.inArray(tag.key, item.dna.tags) !== -1 || (typeof item.dna.category !== "undefined" && tag.key === item.dna.category))) {
+					item.image = "./media/"+item.dna.containerId+".png";
+					var html ='<sortable_item class="item selected" id="'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="pc" data-toolboxid="'+item.id+'">\n' +
+						'\t\t\t\t\t<div class="item-info">\n' +
+						'\t\t\t\t\t  <div class="item-label text-left"> \n' +
+						'\t\t\t\t\t\t<img src="'+item.image+'" style="width: 15%; height: 15%;">\n' +item.label+
+						'\t\t\t\t\t</div>\n' +
+						'\t\t\t\t\t</div>\n' +
+						'\t\t\t\t</sortable_item>';
+					$elComponentsList.append(html);
+				} /*else if (typeof item.dna.category === "undefined" || jQuery.inArray(item.dna.category.toLowerCase(),componentCategories) < 0) {
+					item.image = "./media/"+item.dna.containerId+".png";
+					var html ='<sortable_item class="item selected" id="'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="pc" data-toolboxid="'+item.id+'">\n' +
+						'\t\t\t\t\t<div class="item-info">\n' +
+						'\t\t\t\t\t  <div class="item-label text-left"> \n' +
+						'\t\t\t\t\t\t<img src="'+item.image+'" style="width: 20%; height: 20%;">\n' +item.label+
+						'\t\t\t\t\t</div>\n' +
+						'\t\t\t\t\t</div>\n' +
+						'\t\t\t\t</sortable_item>';
+					$("#moduleslist", "#other").append(html); //default tag for all components marked as Other or have no tags from the predefined toolboxTagsList or no category defined
+				}*/
+			});
+			if ($elComponentsList.children().length > 0) {
+				$("h3[aria-controls='" + tag.key + "']").removeClass("hidden");
+			}
+		});
+		// data source component category is removed from toolbox (is linked with app.js wfTools.datasources commented zones)
+        /*$.each(wfTools.toolboxnodes.ds, function(i, item) {
             item.image = "./media/module-ds.png";
         	var html ='<sortable_item class="item selected" id = "'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="ds" data-toolboxid="'+item.id+'">\n' +
-                '\t\t\t\t\t<div class="item-preview">\n' +
-                '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
-                '\t\t\t\t\t\t<img src="'+item.image+'" style="width: 100%; height: 100%;">\n' +
-                '\t\t\t\t\t  </vectr_img>\n' +
-                '\t\t\t\t\t</div>\n' +
                 '\t\t\t\t\t<div class="item-info">\n' +
-                '\t\t\t\t\t  <div class="item-label text-left">'+item.label+'</div>\n' +
+                '\t\t\t\t\t  <div class="item-label text-left"> \n' +
+                '\t\t\t\t\t\t<img src="'+item.image+'" style="width: 15%; height: 15%;">\n' +item.label+
+                '\t\t\t\t\t</div>\n' +
                 '\t\t\t\t\t</div>\n' +
                 '\t\t\t\t</sortable_item>';
             $elDatasurcesList.append(html);
-        });
+        });*/
         $.each(wfTools.toolboxnodes.uds, function(i, item) {
             item.image = "./media/module-ds.png";
             var html ='<sortable_item class="item selected" id = "'+item.id+'" data-componentid="'+item.dna.id+'" data-componenttype="uds" data-toolboxid="'+item.id+'">\n' +
-                '\t\t\t\t\t<div class="item-preview">\n' +
-                '\t\t\t\t\t  <vectr_img page="0" src="" paused="true" style="display: block; width: 100%; height: 100%;">\n' +
-                '\t\t\t\t\t\t<img src="'+item.image+'" style="width: 100%; height: 100%;">\n' +
-                '\t\t\t\t\t  </vectr_img>\n' +
-                '\t\t\t\t\t</div>\n' +
                 '\t\t\t\t\t<div class="item-info">\n' +
-                '\t\t\t\t\t  <div class="item-label text-left">'+item.label+'</div>\n' +
+                '\t\t\t\t\t  <div class="item-label text-left"> \n' +
+                '\t\t\t\t\t\t<img src="'+item.image+'" style="width: 15%; height: 15%;">\n' +item.label+
+                '\t\t\t\t\t</div>\n' +
                 '\t\t\t\t\t</div>\n' +
                 '\t\t\t\t</sortable_item>';
             $elUDatasurcesList.append(html);
@@ -195,17 +230,36 @@ function describeArc(x, y, radius, startAngle, endAngle){
                 $(ui.helper).css('opacity', '0.5');
             }
         });
-        $elCanvas.droppable({
-            accept: "#moduleslist .item, #datasourceslist .item, #udatasourceslist .item",
-            drop: function (event, ui) {
-                if (event.which !== 1 || event.originalEvent.isTrigger){
-                    console.log("node creation canceled by user");
-                    return;
+		$elCanvas.droppable({
+			accept: "#moduleslist .item, #datasourceslist .item, #udatasourceslist .item",
+			drop: function (event, ui) {
+				if (event.which !== 1 || event.originalEvent.isTrigger) {
+					console.log("node creation canceled by user");
+					return;
+				}
+				var btop = (this.offsetHeight - this.scrollHeight) / 2 * wfZoom;
+				var bleft = (this.offsetWidth - this.scrollWidth) / 2 * wfZoom;
+				var top = (ui.offset.top - $(this).offset().top - btop) / wfZoom;
+				var left = (ui.offset.left - $(this).offset().left - bleft) / wfZoom;
+
+				//snap to grid (TODO: get defined grid size?)
+				var xGrid = 20;//horizontal grid size
+				var yGrid = 20;//vertical grid size
+				var leftGridSpaces = Math.floor(left / xGrid);
+				if (left % xGrid <= Math.floor(xGrid/2)) {
+					left = leftGridSpaces * xGrid;
+				}
+				else {
+					left = (leftGridSpaces + 1) * xGrid;
                 }
-                var btop   = (this.offsetHeight - this.scrollHeight)/2*wfZoom;
-                var bleft  = (this.offsetWidth  - this.scrollWidth )/2*wfZoom;
-                var top    = (ui.offset.top  - $(this).offset().top  - btop)/wfZoom;
-                var left   = (ui.offset.left - $(this).offset().left - bleft)/wfZoom;
+				var topGridSpaces = Math.floor(top / 20);
+				if (top % xGrid <= Math.floor(yGrid / 2)) {
+					top = topGridSpaces * yGrid;
+				}
+				else {
+					top = (topGridSpaces + 1) * yGrid;
+				}			
+
                 var toolboxId = $(ui.helper).data("toolboxid");
                 var compType = $(ui.helper).data("componenttype");
                 var initialName = wfTools.toolboxnodes[compType][toolboxId].label;
@@ -238,9 +292,7 @@ function describeArc(x, y, radius, startAngle, endAngle){
         });
     }
 
-
-
-    function tao_ZoomFitAllNodes() {
+      function tao_ZoomFitAllNodes() {
         pz.panzoom('reset', { animate: false });
         wfZoom = 1;
 			console.log("f:fitCanvasToWindow");
@@ -476,7 +528,19 @@ $( function() {
         .on('keyup', function(e){
             if(e.which === 46) {
                 toolboxModules.rmSelected();
-            }
+			}
+			if (e.ctrlKey && (e.which == 37 || e.which == 100)) {//CTRL + left arrow
+				toolboxModules.leftAlignSelected();
+			}
+			if (e.ctrlKey && (e.which == 38 || e.which == 104)) {//CTRL + up arrow
+				toolboxModules.topAlignSelected();
+			}
+			if (e.ctrlKey && (e.which == 39 || e.which == 102)) {//CTRL + right arrow
+				toolboxModules.rightAlignSelected();
+			}
+			if (e.ctrlKey && (e.which == 40 || e.which == 98)) {//CTRL + down arrow
+				toolboxModules.bottomAlignSelected();
+			}
         })
         .on('keyup keydown', function(e){
             keyboardShifted = e.shiftKey;

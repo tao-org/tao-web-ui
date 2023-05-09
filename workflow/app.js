@@ -31,9 +31,193 @@ var $elCanvas = $("#canvas");
 var $elZoom = $(".zoom-percent span", "#preview-toolbar");
 var currentWfID = jsGetUrlQueryValue("_wf");
 
-var toolboxModules ={
+var toolboxModules = {
+    firstSelectedId: 0,
 	selected: [],
-	count: 0,
+    count: 0,
+    leftAlignSelected: function () {
+        if (toolboxModules.selected.length < 2) { return; }
+        jsp.clearDragSelection();
+
+        //align with first selected
+        var minX = wfPlumbCanvasData.nodes[toolboxModules.firstSelectedId].xCoord;
+        //$(".w.selected", $elCanvas).each(function () {
+        //    var canvasID = $(this).attr('id');
+
+        //    if (wfPlumbCanvasData.nodes[canvasID].xCoord < minX) {
+        //        minX = wfPlumbCanvasData.nodes[canvasID].xCoord;
+        //    }
+        //});
+
+        var lcl_postdata = {};
+        var groups = [];
+        $(".w.selected", $elCanvas).each(function () {
+            var canvasID = $(this).attr('id');
+            var nodeId = wfPlumbCanvasData.nodesMap[canvasID];
+            if (wfPlumbCanvasData.nodes[canvasID]) {
+                wfPlumbCanvasData.nodes[canvasID].xCoord = minX;
+                lcl_postdata[nodeId] = [minX, wfPlumbCanvasData.nodes[canvasID].yCoord];
+            }
+            var groupID = $(this).data("group");
+            if (groupID && $.inArray(groupID, groups)) {
+                canvasRenderer.fitGroup(groupID);
+                groups.push(groupID);
+            }
+            $(this).css('left', minX);
+        });
+        
+        $.when(postNodesPosition(currentWfID, lcl_postdata))
+            .done(function (putOneComponentResponse) {
+                $(".v-lastaction", "#infoband").html("elements left aligned");
+                $(".w", $elCanvas).removeClass("selected");
+                toolboxModules.rescanSelected();
+                window.jsp.repaintEverything();
+                makeWFPreview();
+            })
+            .fail(function (jqXHR) {
+                chkXHR(jqXHR.status);
+                alert("Could not update position", "ERROR");
+            });   
+    },
+    rightAlignSelected: function () {
+        if (toolboxModules.selected.length < 2) { return; }
+        jsp.clearDragSelection();
+
+        //align with first selected
+        var maxX = wfPlumbCanvasData.nodes[toolboxModules.firstSelectedId].xCoord + $("#" + toolboxModules.firstSelectedId).width();
+        //var maxX = Number.MIN_VALUE;
+        //$(".w.selected", $elCanvas).each(function () {
+        //    var canvasID = $(this).attr('id');
+
+        //    var rightX = wfPlumbCanvasData.nodes[canvasID].xCoord + $(this).width();
+        //    if (rightX > maxX) {
+        //        maxX = rightX;
+        //    }
+        //});
+
+        var lcl_postdata = {};
+        var groups = [];
+        $(".w.selected", $elCanvas).each(function () {
+            var canvasID = $(this).attr('id');
+            var nodeId = wfPlumbCanvasData.nodesMap[canvasID];
+            var nodeX = maxX - $(this).width();
+            if (wfPlumbCanvasData.nodes[canvasID]) {
+                wfPlumbCanvasData.nodes[canvasID].xCoord = nodeX;
+                lcl_postdata[nodeId] = [nodeX, wfPlumbCanvasData.nodes[canvasID].yCoord];
+            }
+            var groupID = $(this).data("group");
+            if (groupID && $.inArray(groupID, groups)) {
+                canvasRenderer.fitGroup(groupID);
+                groups.push(groupID);
+            }
+            $(this).css('left', nodeX);
+        });
+
+        $.when(postNodesPosition(currentWfID, lcl_postdata))
+            .done(function (putOneComponentResponse) {
+                $(".v-lastaction", "#infoband").html("elements right aligned");
+                $(".w", $elCanvas).removeClass("selected");
+                toolboxModules.rescanSelected();
+                window.jsp.repaintEverything();
+                makeWFPreview();
+            })
+            .fail(function (jqXHR) {
+                chkXHR(jqXHR.status);
+                alert("Could not update position", "ERROR");
+            });
+    },
+    topAlignSelected: function () {
+        if (toolboxModules.selected.length < 2) { return; }
+        jsp.clearDragSelection();
+
+        //align with first selected
+        var minY = wfPlumbCanvasData.nodes[toolboxModules.firstSelectedId].yCoord;
+        //var minY = Number.MAX_VALUE;
+        //$(".w.selected", $elCanvas).each(function () {
+        //    var canvasID = $(this).attr('id');
+
+        //    if (wfPlumbCanvasData.nodes[canvasID].yCoord < minY) {
+        //        minY = wfPlumbCanvasData.nodes[canvasID].yCoord;
+        //    }
+        //});
+
+        var lcl_postdata = {};
+        var groups = [];
+        $(".w.selected", $elCanvas).each(function () {
+            var canvasID = $(this).attr('id');
+            var nodeId = wfPlumbCanvasData.nodesMap[canvasID];
+            if (wfPlumbCanvasData.nodes[canvasID]) {
+                wfPlumbCanvasData.nodes[canvasID].yCoord = minY;
+                lcl_postdata[nodeId] = [wfPlumbCanvasData.nodes[canvasID].xCoord, minY];
+            }
+            var groupID = $(this).data("group");
+            if (groupID && $.inArray(groupID, groups)) {
+                canvasRenderer.fitGroup(groupID);
+                groups.push(groupID);
+            }
+            $(this).css('top', minY);
+        });
+
+        $.when(postNodesPosition(currentWfID, lcl_postdata))
+            .done(function (putOneComponentResponse) {
+                $(".v-lastaction", "#infoband").html("elements top aligned");
+                $(".w", $elCanvas).removeClass("selected");
+                toolboxModules.rescanSelected();
+                window.jsp.repaintEverything();
+                makeWFPreview();
+            })
+            .fail(function (jqXHR) {
+                chkXHR(jqXHR.status);
+                alert("Could not update position", "ERROR");
+            });
+    },
+    bottomAlignSelected: function () {
+        if (toolboxModules.selected.length < 2) { return; }
+        jsp.clearDragSelection();
+
+        //align with first selected
+        var maxY = wfPlumbCanvasData.nodes[toolboxModules.firstSelectedId].yCoord + $("#" + toolboxModules.firstSelectedId).height();
+        //var maxY = Number.MIN_VALUE;
+        //$(".w.selected", $elCanvas).each(function () {
+        //    var canvasID = $(this).attr('id');
+
+        //    var bottomY = wfPlumbCanvasData.nodes[canvasID].yCoord + $(this).height();
+        //    if (bottomY > maxY) {
+        //        maxY = bottomY;
+        //    }
+        //});
+
+        var lcl_postdata = {};
+        var groups = [];
+        $(".w.selected", $elCanvas).each(function () {
+            var canvasID = $(this).attr('id');
+            var nodeId = wfPlumbCanvasData.nodesMap[canvasID];
+            var nodeY = maxY - $(this).height();
+            if (wfPlumbCanvasData.nodes[canvasID]) {
+                wfPlumbCanvasData.nodes[canvasID].yCoord = nodeY;
+                lcl_postdata[nodeId] = [wfPlumbCanvasData.nodes[canvasID].xCoord, nodeY];
+            }
+            var groupID = $(this).data("group");
+            if (groupID && $.inArray(groupID, groups)) {
+                canvasRenderer.fitGroup(groupID);
+                groups.push(groupID);
+            }
+            $(this).css('top', nodeY);
+        });
+
+        $.when(postNodesPosition(currentWfID, lcl_postdata))
+            .done(function (putOneComponentResponse) {
+                $(".v-lastaction", "#infoband").html("elements bottom aligned");
+                $(".w", $elCanvas).removeClass("selected");
+                toolboxModules.rescanSelected();
+                window.jsp.repaintEverything();
+                makeWFPreview();
+            })
+            .fail(function (jqXHR) {
+                chkXHR(jqXHR.status);
+                alert("Could not update position", "ERROR");
+            });
+    },
 	rmSelected: function(){
 		if(toolboxModules.selected.length === 0) {return;}
 		jsp.clearDragSelection();
@@ -70,12 +254,18 @@ var toolboxModules ={
         });
 		if(toolboxModules.selected.length === 1){
 			//to do
+            //VPA hide align buttons
+            $(".align").addClass("hidden");
 		}
 		if(toolboxModules.selected.length > 1){
             //to do
+            //VPA show align buttons
+            $(".align").removeClass("hidden");
 		}
 		if(toolboxModules.selected.length === 0){
             //to do
+            //VPA hide align buttons
+            $(".align").addClass("hidden");
 		}
 		makeWFPreview();
 	},
@@ -117,7 +307,10 @@ jsPlumb.bind("jsPlumbPortAdded", function() {
 
 jsPlumb.bind("jsPlumbLoaded", function(instance) {
     //show toolbox
-    toolboxSidebar.init();
+	$.when(getConfigEnums()).done(function (getConfigEnumsResponse) {
+		wfTools.taoEnums = getConfigEnumsResponse['data'];
+		toolboxSidebar.init();
+	});
 });
 jsPlumb.bind("tao_showConnMenu", function(params) {
     alert("menu");
@@ -132,6 +325,9 @@ jsPlumb.bind("tao_updateNodePosition", function(params) {
         var top = this.offsetTop;
         var left = this.offsetLeft;
         if(wfPlumbCanvasData.nodes[canvasID]){
+            var snapResult = jsPlumb.snapToGrid($(this), 0, 0);// 2022.04 VPA: (0,0) => map on closest grid intersection
+            top = snapResult[0][1][1];
+            left = snapResult[0][1][0];
             wfPlumbCanvasData.nodes[canvasID].xCoord = left;
             wfPlumbCanvasData.nodes[canvasID].yCoord = top;
         }
@@ -147,8 +343,9 @@ jsPlumb.bind("tao_updateNodePosition", function(params) {
         .done(function (putOneComponentResponse) {
             $(".v-lastaction","#infoband").html("position updated");
         })
-        .fail(function(){
-            alert("Could not udate position", "ERROR");
+        .fail(function(jqXHR){
+			chkXHR(jqXHR.status);
+            alert("Could not update position", "ERROR");
         });
 });
 
@@ -184,7 +381,8 @@ jsPlumb.bind("tao_dropNewNode", function(params) {
                 alert("Could not add node", "ERROR");
             }
         })
-        .fail(function(){
+        .fail(function(jqXHR){
+			chkXHR(jqXHR.status);
             alert("Could not add node", "ERROR");
         });
 });
@@ -193,14 +391,16 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
     tao_resetShadowData();
     tao_resetCanvasData();
     retriveSorters();
-
+	
     //unusual serialization of requests to config/sorters and config/groupers, unknown issue with async calls to config endpoint
     function retriveSorters(){
-        $.when(getConfigSorters()).then( function(r){
-            wfTools.configSorters = r['data'];
+        $.when(getConfigSorters(), getConfigFilters()).then( function(rSorters, rFilters){
+            wfTools.configSorters = rSorters[0]['data'];
+            wfTools.configFilters = rFilters[0]['data'];
             //retriveGroupers();
             retriveToolboxData();
-        }).fail(function(){
+        }).fail(function(jqXHR){
+			chkXHR(jqXHR.status);
             alert("Could not retrive workspace environment data. Unable to proceed. Try again. (config/sorters)");
         });
     }
@@ -212,104 +412,100 @@ jsPlumb.bind("tao_loadWorkflowById", function() {
             getAllUserDatasources(),
             getAllSensors(),
             getAllDockers(),
-            getConfigEnums(),
+            /*getConfigEnums(),*/
             getConfigGroupers()
-        ).done(function (getAllComponentsResponse, getAllQueriesResponse, getAllDatasourcesResponse, getAllUserDatasourcesResponse, getAllSensorsResponse, getAllDockersResponse, getConfigEnumsResponse, getConfigGroupersResponse) {
-                console.log("Workspace components init start.");
-                wfTools.components = getAllComponentsResponse[0]['data'];
-                wfTools.queries = getAllQueriesResponse[0]['data'];
-                wfTools.datasources = getAllDatasourcesResponse[0]['data'];
-                wfTools.udatasources = getAllUserDatasourcesResponse[0]['data'];
-                wfTools.sensors = getAllSensorsResponse[0]['data'];
-                wfTools.dockers = getAllDockersResponse[0]['data'];
-                wfTools.taoEnums = getConfigEnumsResponse[0]['data'];
-                wfTools.configGroupers = getConfigGroupersResponse[0]['data'];
+        ).done(function (getAllComponentsResponse, getAllQueriesResponse, getAllDatasourcesResponse, getAllUserDatasourcesResponse, getAllSensorsResponse, getAllDockersResponse, /*getConfigEnumsResponse,*/ getConfigGroupersResponse) {
+			console.log("Workspace components init start.");
+			wfTools.components = getAllComponentsResponse[0]['data'];
+			wfTools.queries = getAllQueriesResponse[0]['data'];
+			//wfTools.datasources = getAllDatasourcesResponse[0]['data'];
+			wfTools.udatasources = getAllUserDatasourcesResponse[0]['data'];
+			wfTools.sensors = getAllSensorsResponse[0]['data'];
+			wfTools.dockers = getAllDockersResponse[0]['data'];
+			//wfTools.taoEnums = getConfigEnumsResponse[0]['data'];
+			wfTools.configGroupers = getConfigGroupersResponse[0]['data'];
 
-                //parse components, try to detect orfan and collapsing data, recreate local IDs
-                $.each(wfTools.components, function (i, item) {
-                    var hash = "tboid" + jsHashCode(item.id);
-                    if (wfTools.toolboxnodes.pc[hash]) {
-                        alert("Processing components collision. duplicate id detected");
-                    } else {
-                        wfTools.toolboxnodes.pc[hash] = {
-                            id: hash,
-                            type: "component",
-                            label: item.label,
-                            dna: item
-                        };
-                    }
-                });
-                $.each(wfTools.queries, function (i, item) {
-                    var hash = "tboid" + jsHashCode(item.sensor + "-" + item.dataSourceName);
-                    if (wfTools.toolboxnodes.q[hash]) {
-                        alert("Sensors collision. duplicate id detected");
-                    } else {
-                        wfTools.toolboxnodes.q[hash] = {
-                            id: hash,
-                            type: "query",
-                            label: item.sensor + "-" + item.dataSourceName,
-                            dna: item
-                        };
-                        $.each(item.parameters, function (index, param) {
-                            if (wfTools.taoEnums[param.type] && param.valueSet === null) {
-                                param.valueSet = $.map(wfTools.taoEnums[param.type], function (elm, idx) {
-                                    return elm.value;
-                                });
-                            }
-                        });
-                    }
-                });
-                $.each(wfTools.datasources, function (i, item) {
-                    var hash = "tboid" + jsHashCode(item.id);
-                    if (wfTools.toolboxnodes.q[hash]) {
-                        if (wfTools.toolboxnodes.pc[hash]) {
-                            alert("Datasource collision. duplicate id detected");
-                        } else {
-                            wfTools.toolboxnodes.ds[hash] = {
-                                id: hash,
-                                type: "datasource",
-                                label: item.label,
-                                dna: item
-                            };
-                        }
-                    } else {
-                        console.log("Unknown query for datasource");
-                        alert("Unknown query for datasource id: " + item.id + "\nIgnoring datasource.");
-                    }
-                });
-                //user datasources
-                $.each(wfTools.udatasources, function (i, item) {
-                    var hash = "tboid" + jsHashCode(item.id);
-                    //if(wfTools.toolboxnodes.q[hash]){
-                    if (wfTools.toolboxnodes.pc[hash]) {
-                        alert("Datasource collision. duplicate id detected");
-                    } else {
-                        wfTools.toolboxnodes.uds[hash] = {
-                            id: hash,
-                            type: "udatasource",
-                            label: item.label,
-                            dna: item
-                        };
-                    }
-                    //}else{
-                    //                    console.log("Unknown query for datasource");
-                    //                    alert("Unknown query for datasource id: "+item.id+"\nIgnoring datasource.");
-                    //                }
-                });
+			//parse components, try to detect orphan and collapsing data, recreate local IDs
+			$.each(wfTools.components, function (i, item) {
+				var hash = "tboid" + jsHashCode(item.id);
+				if (wfTools.toolboxnodes.pc[hash]) {
+					alert("Processing module collision. Duplicate id detected");
+				} else {
+					wfTools.toolboxnodes.pc[hash] = {
+						id: hash,
+						type: "component",
+						label: item.label,
+						dna: item
+					};
+				}
+			});
+			$.each(wfTools.queries, function (i, item) {
+				var hash = "tboid" + jsHashCode(item.sensor + "-" + item.dataSourceName);
+				if (wfTools.toolboxnodes.q[hash]) {
+					alert("Query collision. Duplicate id detected");
+				} else {
+					wfTools.toolboxnodes.q[hash] = {
+						id: hash,
+						type: "query",
+						label: item.sensor + "-" + item.dataSourceName,
+						dna: item
+					};
+					$.each(item.parameters, function (index, param) {
+						if (wfTools.taoEnums[param.type] && param.valueSet === null) {
+							param.valueSet = $.map(wfTools.taoEnums[param.type], function (elm, idx) {
+								return elm.value;
+							});
+						}
+					});
+				}
+			});
+			// data source component category is removed from toolbox (is linked with workspace.js wfTools.toolboxnodes.ds commented zones)
+			/*$.each(wfTools.datasources, function (i, item) {
+				var hash = "tboid" + jsHashCode(item.id);
+				if (wfTools.toolboxnodes.ds[hash]) {
+					alert("Datasource collision. Duplicate id detected");
+				} else {
+					wfTools.toolboxnodes.ds[hash] = {
+						id: hash,
+						type: "datasource",
+						label: item.label,
+						dna: item
+					};
+				}
+			});*/
+			//user datasources
+			$.each(wfTools.udatasources, function (i, item) {
+				var hash = "tboid" + jsHashCode(item.id);
+				if (wfTools.toolboxnodes.uds[hash]) {
+					alert("Datasource collision. Duplicate id detected");
+				} else {
+					wfTools.toolboxnodes.uds[hash] = {
+						id: hash,
+						type: "udatasource",
+						label: item.label,
+						dna: item
+					};
+				}
+			});
 
-                wf_renderComponentsToolBox();
-                wf_populateSortersAndGroupers();
-                console.log("Workspace components toolbox init done.");
-                wf_loadWorkflowById(currentWfID);
-            })
-            .fail(function () {
-                alert("Could not retrive workspace data. Unable to proceed");
-            });
+			wf_renderComponentsToolBox();
+			wf_populateSortersAndGroupers();
+			console.log("Workspace components toolbox init done.");
+			$.when(wf_loadWorkflowById(currentWfID)).done(function(){
+				toolboxSidebar.refresh();
+				contentLoading("hide");
+			});
+		}).fail(function (jqXHR) {
+			contentLoading("hide");
+			chkXHR(jqXHR.status);
+			alert("Could not retrive workspace data. Unable to proceed");
+		});
     }
 });
 
 /************************************************jsplumb******************************************/
 jsPlumb.ready(function () {
+	contentLoading("show");
     //panZoom
     // Define Pan / Zoom actions
     window.pz = $elCanvas.panzoom({
@@ -331,7 +527,7 @@ jsPlumb.ready(function () {
 	pz.parent()
         .on('mousewheel.focal', function(e) {
             // Zoom canvas when CTRL + MouseWheel
-            if (e.ctrlKey || e.originalEvent.ctrlKey) {
+          //  if (e.ctrlKey || e.originalEvent.ctrlKey) {
                 e.preventDefault();
                 var delta = e.delta || e.originalEvent.wheelDelta;
                 var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
@@ -345,7 +541,7 @@ jsPlumb.ready(function () {
                 wfZoom = parseFloat(matrix[0]);
                 jsPlumb.fire("jsPlumbSetZoom", wfZoom);
 				makeWFPreview();
-            }
+         //   }
         })
         .on("mousedown touchstart", function(e) {
             if (e.which !== 1) return;
@@ -403,7 +599,8 @@ jsPlumb.ready(function () {
 			matrix[0] = v;
 			matrix[3] = v;
 			pz.panzoom("setMatrix", matrix);
-		}
+        }
+        
 		function panPZ(v){
 			var matrix = pz.panzoom('getMatrix');
 			panStep = 40*wfZoom;
@@ -414,7 +611,8 @@ jsPlumb.ready(function () {
 			pz.panzoom('option', 'disablePan', true);
 			//pz.panzoom("setMatrix", matrix);
             wf_updateWorkflowById(matrix[4],matrix[5],null);
-		}
+        }
+        
 		var tao_PanCanvas = window.doWFPan = function(direction){
 			panDirection = {top:0, left:0};
 			if(direction === "pan-left"){
@@ -431,7 +629,8 @@ jsPlumb.ready(function () {
 			}
 			panPZ(panDirection);
 			makeWFPreview();
-		};
+        };
+        
 		var tao_ZoomCanvas = window.doWFZoom = function(zoom){
 			if(zoom === "zoom-plus"){
 				wfZoom += 0.1;
@@ -447,8 +646,7 @@ jsPlumb.ready(function () {
 			zoomPZ(wfZoom);
             jsPlumb.fire("jsPlumbSetZoom", wfZoom);
 			makeWFPreview();
-		};
-		
+        };
 
 		$("#preview-toolbar").on("click", ".preview-toolbar-action", function(){
 			var action = $(this).data("action");
@@ -467,16 +665,33 @@ jsPlumb.ready(function () {
 				tao_ZoomFitAllNodes();
 			}
 			
-		});
+        });
+        
 		$("#control-toolbar").on("click", ".toolbar-action", function(){
 			var action = $(this).data("action");
 			if(action === "back-home"){
 				console.log("back-home");
-				window.parent.tao_closeWorkflow();
+                window.parent.tao_closeWorkflow();
 			}
             if(action === "show-info"){
                 console.log("show-info");
                 toolboxHeader.open();
+            }
+            if (action === "align-left") {
+                console.log("align-left");
+                toolboxModules.leftAlignSelected();
+            }
+            if (action === "align-right") {
+                console.log("align-right");
+                toolboxModules.rightAlignSelected();
+            }
+            if (action === "align-top") {
+                console.log("align-top");
+                toolboxModules.topAlignSelected();
+            }
+            if (action === "align-bottom") {
+                console.log("align-bottom");
+                toolboxModules.bottomAlignSelected();
             }
         });
 
@@ -485,7 +700,20 @@ jsPlumb.ready(function () {
 			if( (action === "pan-left") || (action === "pan-right") || (action === "pan-up") || (action === "pan-down") ){
 				tao_PanCanvas(action);
 			}
-		});
+        });
+        
+        $("#img-wf-preview").on("click", function(e){
+          var panX = e.clientX - $(".viewfinder", this).offset().left - $(".viewfinder", this).width()/2;
+          var panY = e.clientY - $(".viewfinder", this).offset().top - $(".viewfinder", this).height()/2;
+
+          var zm   = this.offsetWidth/$(".viewfinder", this).outerWidth();
+
+          panDirection = {left:parseInt((-1)*panX*zm/wfZoom/4), top:parseInt((-1)*panY*zm/wfZoom/4)};
+          
+          panPZ(panDirection);
+          makeWFPreview();
+        });
+
 ////////////////////////////////////
 
     // setup some defaults for jsPlumb.
@@ -535,31 +763,11 @@ jsPlumb.ready(function () {
         jsPlumb.fire("tao_updateNodePosition", [params.el.id, params.finalPos[0], params.finalPos[1]]);
         makeWFPreview();
     });
-    instance.bind("connection", function (info) {
-        console.log("info:");
-        console.log(info);
-        //info.connection.getOverlay("label").setLabel(info.connection.id);
-        //info.connection.setLabel("<div class='wf-link-body'><i class=\"fa fa-object-group wf-link-body_icon\" aria-hidden=\"true\"></i><p class='wf-link_title'>grouping:</p><p class='wf-link_content'>current criteria ...</p></div>");
-        info.connection.setLabel("<div class=\"btnSG\" style=\"float:left;\" data-connid=\""+info.connection.id+"\">\n" +
-            "<svg width=\"48\" height=\"50\">\n" +
-            "  <g transform=\"scale(4)\"><path fill=\"#fff\" stroke=\"#3c8dbc\" stroke-width=\".3\" d=\"M5.9,1.2L0.7,6.5l5.2,5.4l5.2-5.4L5.9,1.2z\" /></g>\n" +
-            "  <g transform=\"scale(0.03) translate(420 600)\"><path fill=\"#3c8dbc\" d=\"M512.1 191l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0L552 6.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zm-10.5-58.8c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.7-82.4 14.3-52.8 52.8zM386.3 286.1l33.7 16.8c10.1 5.8 14.5 18.1 10.5 29.1-8.9 24.2-26.4 46.4-42.6 65.8-7.4 8.9-20.2 11.1-30.3 5.3l-29.1-16.8c-16 13.7-34.6 24.6-54.9 31.7v33.6c0 11.6-8.3 21.6-19.7 23.6-24.6 4.2-50.4 4.4-75.9 0-11.5-2-20-11.9-20-23.6V418c-20.3-7.2-38.9-18-54.9-31.7L74 403c-10 5.8-22.9 3.6-30.3-5.3-16.2-19.4-33.3-41.6-42.2-65.7-4-10.9.4-23.2 10.5-29.1l33.3-16.8c-3.9-20.9-3.9-42.4 0-63.4L12 205.8c-10.1-5.8-14.6-18.1-10.5-29 8.9-24.2 26-46.4 42.2-65.8 7.4-8.9 20.2-11.1 30.3-5.3l29.1 16.8c16-13.7 34.6-24.6 54.9-31.7V57.1c0-11.5 8.2-21.5 19.6-23.5 24.6-4.2 50.5-4.4 76-.1 11.5 2 20 11.9 20 23.6v33.6c20.3 7.2 38.9 18 54.9 31.7l29.1-16.8c10-5.8 22.9-3.6 30.3 5.3 16.2 19.4 33.2 41.6 42.1 65.8 4 10.9.1 23.2-10 29.1l-33.7 16.8c3.9 21 3.9 42.5 0 63.5zm-117.6 21.1c59.2-77-28.7-164.9-105.7-105.7-59.2 77 28.7 164.9 105.7 105.7zm243.4 182.7l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0l8.2-14.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zM501.6 431c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.6-82.4 14.3-52.8 52.8z\"/></g>\n" +
-            "</svg>\n" +
-            "<div>");
-    });
-
+    
 //<div style="float:left;"><svg width="48" height="50"><g transform="scale(4)"><path fill="#fff" stroke="#3c8dbc" stroke-width=".3" d="M5.9,1.2L0.7,6.5l5.2,5.4l5.2-5.4L5.9,1.2z" /></g><text x="50%" y="50%" text-anchor="middle" fill="#3c8dbc" stroke="#3c8dbc" stroke-width=".5" font-size="20px" font-family="Arial" dy=".4em">G</text></svg><div>
-    // bind a click listener to each connection; the connection is deleted
-    instance.bind("contextmenu", function(component, originalEvent) {
-        alert("context menu on component " + component.id);
-        originalEvent.preventDefault();
-        var connid = component.id;
-        alert("Connection ID " + connid);
-        return false;
-    });
-
-    instance.bind("click", function (c, e) {
-//      console.log(c);
+    // bind a click listener to each connection; on click the connection is deleted
+    /*instance.bind("click", function(c, e) {
+        //console.log(c);
         c.addClass("conn-to-be-deleted");
 
         //alert("click: delete connection id:" +c.id);
@@ -575,9 +783,132 @@ jsPlumb.ready(function () {
                 c.removeClass("conn-to-be-deleted");
             }
         });
-
         //delete wfPlumbCanvasData.connectors[c.id];
+    });*/
+
+    // cma:on right click the connection, we can add sorting/grpuping options
+    instance.bind("click", function (c, e) {
+        e.preventDefault();
+		c.addClass("conn-to-be-deleted");
+        //find the modal
+        var $elModalSG = $("#modalSortAndGroup");
+
+        var $elSelectSortType = $("#selectSortType");
+        var $elSelectSortDirection = $("#selectSortDirection");
+        var $elselectGroupType = $("#selectGroupType");
+        var $elinputGroupingArg = $("#inputGroupingArg");
+		var $elSelectFilterType = $("#selectFilterType");
+		var $elinputFilteringArg = $("#inputFilteringArg");
+
+        if($("#" + c.id).length == 0) //if div doesn't exists
+        {   
+            //add only the div with id= connid; (see  $elFrmConnectorEdit.on("submit"), if aggregator added(and <> none) => add the svg image )
+            c.setLabel("<div id=\""+c.id+"\" class=\"btnSG\" style=\"float:left;\" data-connid=\""+c.id+"\">\n" +
+            //  "<svg width=\"48\" height=\"50\">\n" +
+            //  "  <g transform=\"scale(4)\"><path fill=\"#fff\" stroke=\"#3c8dbc\" stroke-width=\".3\" d=\"M5.9,1.2L0.7,6.5l5.2,5.4l5.2-5.4L5.9,1.2z\" /></g>\n" +
+            //  "  <g transform=\"scale(0.03) translate(420 600)\"><path fill=\"#3c8dbc\" d=\"M512.1 191l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0L552 6.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zm-10.5-58.8c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.7-82.4 14.3-52.8 52.8zM386.3 286.1l33.7 16.8c10.1 5.8 14.5 18.1 10.5 29.1-8.9 24.2-26.4 46.4-42.6 65.8-7.4 8.9-20.2 11.1-30.3 5.3l-29.1-16.8c-16 13.7-34.6 24.6-54.9 31.7v33.6c0 11.6-8.3 21.6-19.7 23.6-24.6 4.2-50.4 4.4-75.9 0-11.5-2-20-11.9-20-23.6V418c-20.3-7.2-38.9-18-54.9-31.7L74 403c-10 5.8-22.9 3.6-30.3-5.3-16.2-19.4-33.3-41.6-42.2-65.7-4-10.9.4-23.2 10.5-29.1l33.3-16.8c-3.9-20.9-3.9-42.4 0-63.4L12 205.8c-10.1-5.8-14.6-18.1-10.5-29 8.9-24.2 26-46.4 42.2-65.8 7.4-8.9 20.2-11.1 30.3-5.3l29.1 16.8c16-13.7 34.6-24.6 54.9-31.7V57.1c0-11.5 8.2-21.5 19.6-23.5 24.6-4.2 50.5-4.4 76-.1 11.5 2 20 11.9 20 23.6v33.6c20.3 7.2 38.9 18 54.9 31.7l29.1-16.8c10-5.8 22.9-3.6 30.3 5.3 16.2 19.4 33.2 41.6 42.1 65.8 4 10.9.1 23.2-10 29.1l-33.7 16.8c3.9 21 3.9 42.5 0 63.5zm-117.6 21.1c59.2-77-28.7-164.9-105.7-105.7-59.2 77 28.7 164.9 105.7 105.7zm243.4 182.7l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0l8.2-14.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zM501.6 431c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.6-82.4 14.3-52.8 52.8z\"/></g>\n" +
+            //  "</svg>\n" +
+                "<div>");
+                
+    
+            var connid = c.id;
+            var connData = wfPlumbCanvasData.getConnectorById(connid);
+
+            $elSelectSortType.val("none").change();
+            $elselectGroupType.val("none").change();
+			$elSelectFilterType.val("").change();
+
+            if(connData.linkData.aggregator && connData.linkData.aggregator.sorter && connData.linkData.aggregator.sorter[0]){
+                $elSelectSortType.val(connData.linkData.aggregator.sorter[0]).trigger("change");
+            }
+
+            var sourceNodeId = connData.from.split("_")[1];
+            var targetNodeId = connData.to.split("_")[1];
+            var sourceNodeData = wfPlumbCanvasData.getNodeById(sourceNodeId);
+            var targetNodeData = wfPlumbCanvasData.getNodeById(targetNodeId);
+            if (sourceNodeData.componentType == "DATASOURCE" && (targetNodeData.componentType == "DATASOURCE" || targetNodeData.componentType == "PROCESSING")) {
+				//grouping is allowed only between two Datasource components
+				if (targetNodeData.componentType == "DATASOURCE") {
+					$(".grouping", "#modalSortAndGroup").show();
+
+					if (connData.linkData.aggregator && connData.linkData.aggregator.associator && connData.linkData.aggregator.associator[0]) {
+						$elselectGroupType.val(connData.linkData.aggregator.associator[0]).trigger("change");
+						if (connData.linkData.aggregator.associator[1]) {
+							$elinputGroupingArg.val(connData.linkData.aggregator.associator[1]).trigger("change");
+						}
+					}
+				} else {
+					$(".grouping", "#modalSortAndGroup").hide();
+				}
+				//filtering is allowed between Datasource and processing component too
+				$(".filtering", "#modalSortAndGroup").show();
+				$elinputFilteringArg.val("").trigger("change");
+				if (connData.linkData.aggregator && connData.linkData.aggregator.filter && connData.linkData.aggregator.filter[0]) {
+					$elSelectFilterType.val(connData.linkData.aggregator.filter[0]).trigger("change");
+					if (connData.linkData.aggregator.filter[1]) {
+						$elinputFilteringArg.val(connData.linkData.aggregator.filter[1]).trigger("change");
+					}
+				}
+            }
+            else {
+                $(".grouping", "#modalSortAndGroup").hide();
+				$(".filtering", "#modalSortAndGroup").hide();
+            }
+            
+            //show the modal
+            $elModalSG.data("connid", c.id).modal("show");
+        }
+
+        else{
+            var connid = c.id;
+            var connData = wfPlumbCanvasData.getConnectorById(connid);
+
+            $elSelectSortType.val("none").change();
+            $elselectGroupType.val("none").change();
+			$elSelectFilterType.val("").change();
+    
+            if(connData.linkData.aggregator && connData.linkData.aggregator.sorter && connData.linkData.aggregator.sorter[0]){
+                $elSelectSortType.val(connData.linkData.aggregator.sorter[0]).trigger("change");
+            }
+
+            var sourceNodeId = connData.from.split("_")[1];
+            var targetNodeId = connData.to.split("_")[1];
+            var sourceNodeData = wfPlumbCanvasData.getNodeById(sourceNodeId);
+            var targetNodeData = wfPlumbCanvasData.getNodeById(targetNodeId);
+            if (sourceNodeData.componentType == "DATASOURCE" && (targetNodeData.componentType == "DATASOURCE" || targetNodeData.componentType == "PROCESSING")) {
+				//grouping is allowed only between two Datasource components
+                if (targetNodeData.componentType == "DATASOURCE") {
+					$(".grouping", "#modalSortAndGroup").show();
+
+					if (connData.linkData.aggregator && connData.linkData.aggregator.associator && connData.linkData.aggregator.associator[0]) {
+						$elselectGroupType.val(connData.linkData.aggregator.associator[0]).trigger("change");
+						if (connData.linkData.aggregator.associator[1]) {
+							$elinputGroupingArg.val(connData.linkData.aggregator.associator[1]).trigger("change");
+						}
+					}
+				} else {
+					$(".grouping", "#modalSortAndGroup").hide();
+				}
+				//filtering is allowed between Datasource and processing component too
+				$(".filtering", "#modalSortAndGroup").show();
+				$elinputFilteringArg.val("").trigger("change");
+				if (connData.linkData.aggregator && connData.linkData.aggregator.filter && connData.linkData.aggregator.filter[0]) {
+					$elSelectFilterType.val(connData.linkData.aggregator.filter[0]).trigger("change");
+					if (connData.linkData.aggregator.filter[1]) {
+						$elinputFilteringArg.val(connData.linkData.aggregator.filter[1]).trigger("change");
+					}
+				}
+            }
+            else {
+                $(".grouping", "#modalSortAndGroup").hide();
+				$(".filtering", "#modalSortAndGroup").hide();
+            }
+
+            //show the modal
+            $elModalSG.data("connid", connid).modal("show");
+        }
     });
+
     instance.bind("connectionDetached", function (info, originalEvent) {
         console.log("connectionDetached: delete connection id:" + info.connection.id);
         var lcl_payload = wfPlumbCanvasData.connectors[info.connection.id].linkData;
@@ -585,19 +916,21 @@ jsPlumb.ready(function () {
         var lcl_nodeId = parseInt(lcl_to.split("_")[1]);
         //check if link exists or is just a revert connection event.
         //check if parent node exists before calling delete
-        if(_.invert(wfPlumbCanvasData.nodesMap)[lcl_nodeId]){
+        if(_.invert(wfPlumbCanvasData.nodesMap)[lcl_nodeId] && typeof lcl_payload !== "undefined"){
             $.when(delOneLink(lcl_nodeId, lcl_payload))
                 .done(function (delOneLinkResponse) {
                     var r = chkTSRF(delOneLinkResponse);
                     if((delOneLinkResponse.status === "SUCCEEDED") && (r.id === lcl_nodeId)){
                         delete wfPlumbCanvasData.connectors[info.connection.id];
                         $(".v-lastaction","#infoband").html("link removed");
+                        wfPlumbCanvasData.setNode(delOneLinkResponse.data); // cma:update node after deleting link
                     } else {
                         alert("Could not delete link");
                         //to do revert link on canvas
                     }
                 })
-                .fail(function(){
+                .fail(function(jqXHR){
+					chkXHR(jqXHR.status);
                     //to do fix revert
                     //alert("Delete link failed. Reload product.");
                 });
@@ -607,7 +940,6 @@ jsPlumb.ready(function () {
         }
     });
 
-
     // bind a connection listener. note that the parameter passed to this function contains more than just the new connection
     instance.bind("connection", function (info) {
         info.connection.getOverlay("label").setLabel(info.connection.id);
@@ -615,11 +947,21 @@ jsPlumb.ready(function () {
         var t = info.targetId.split('_');
 
         //find connection in workflow based on internal id of the "to" node
-        var toID = _.invert(wfPlumbCanvasData.nodesMap)[t[1]];
+        var toID =  _.invert(wfPlumbCanvasData.nodesMap)[t[1]];
         var linkData = (_.find(wfPlumbCanvasData.nodes[toID].incomingLinks, function(item) {
-            return (item.output.id === t[2] && item.input.id === s[2]);
+            return (item.sourceNodeId === parseInt(s[1]) && item.output.id === t[2] && item.input.id === s[2]); // new condition added: item.sourceNodeId === parseInt(s[1])
         }));
         //console.log("TO id:"+toID);console.log(linkData);
+
+        //cma: if aggregator exists, add icon
+         if (linkData && linkData.aggregator){
+           info.connection.setLabel("<div  id=\""+info.connection.id+"\"  class=\"btnSG\" style=\"float:left;\" data-connid=\""+info.connection.id+"\">\n" +
+                "<svg width=\"48\" height=\"50\">\n" +
+                "  <g transform=\"scale(4)\"><path fill=\"#fff\" stroke=\"#3c8dbc\" stroke-width=\".3\" d=\"M5.9,1.2L0.7,6.5l5.2,5.4l5.2-5.4L5.9,1.2z\" /></g>\n" +
+                "  <g transform=\"scale(0.03) translate(420 600)\"><path fill=\"#3c8dbc\" d=\"M512.1 191l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0L552 6.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zm-10.5-58.8c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.7-82.4 14.3-52.8 52.8zM386.3 286.1l33.7 16.8c10.1 5.8 14.5 18.1 10.5 29.1-8.9 24.2-26.4 46.4-42.6 65.8-7.4 8.9-20.2 11.1-30.3 5.3l-29.1-16.8c-16 13.7-34.6 24.6-54.9 31.7v33.6c0 11.6-8.3 21.6-19.7 23.6-24.6 4.2-50.4 4.4-75.9 0-11.5-2-20-11.9-20-23.6V418c-20.3-7.2-38.9-18-54.9-31.7L74 403c-10 5.8-22.9 3.6-30.3-5.3-16.2-19.4-33.3-41.6-42.2-65.7-4-10.9.4-23.2 10.5-29.1l33.3-16.8c-3.9-20.9-3.9-42.4 0-63.4L12 205.8c-10.1-5.8-14.6-18.1-10.5-29 8.9-24.2 26-46.4 42.2-65.8 7.4-8.9 20.2-11.1 30.3-5.3l29.1 16.8c16-13.7 34.6-24.6 54.9-31.7V57.1c0-11.5 8.2-21.5 19.6-23.5 24.6-4.2 50.5-4.4 76-.1 11.5 2 20 11.9 20 23.6v33.6c20.3 7.2 38.9 18 54.9 31.7l29.1-16.8c10-5.8 22.9-3.6 30.3 5.3 16.2 19.4 33.2 41.6 42.1 65.8 4 10.9.1 23.2-10 29.1l-33.7 16.8c3.9 21 3.9 42.5 0 63.5zm-117.6 21.1c59.2-77-28.7-164.9-105.7-105.7-59.2 77 28.7 164.9 105.7 105.7zm243.4 182.7l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0l8.2-14.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zM501.6 431c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.6-82.4 14.3-52.8 52.8z\"/></g>\n" +
+                "</svg>\n" +
+                "<div>");
+            }
 
         //register connection to canvasdata
         wfPlumbCanvasData.connectors[info.connection.id] = ({"from":info.sourceId, "to":info.targetId, "linkData":linkData});
@@ -632,7 +974,7 @@ jsPlumb.ready(function () {
                     if((putOneConnectionResponse.status === "SUCCEEDED") && r.id){
                         $(".v-lastaction","#infoband").html("connection added");
                         var linkData = (_.find(r.incomingLinks, function(item) {
-                            return (item.output.id === t[2] && item.input.id === s[2]);
+                            return (item.sourceNodeId === parseInt(s[1]) && item.output.id === t[2] && item.input.id === s[2]); /// new condition added: item.sourceNodeId === parseInt(s[1])
                         }));
                         //update node definition
                         wfPlumbCanvasData.setNode(putOneConnectionResponse.data);
@@ -640,11 +982,12 @@ jsPlumb.ready(function () {
                         wfPlumbCanvasData.connectors[info.connection.id] = ({"from":info.sourceId, "to":info.targetId, "linkData":linkData});
                     } else {
                         alert("Incompatiple source and target. Reverting");
-                        jsp.deleteConnection(info.connection);
-                        delete wfPlumbCanvasData.connectors[info.connection.id];
+						jsp.deleteConnection(info.connection);
+                        //delete wfPlumbCanvasData.connectors[info.connection.id];
                     }
                 })
-                .fail(function(){
+                .fail(function(jqXHR){
+					chkXHR(jqXHR.status);
                     alert("Could not save connection", "ERROR");
                 });
 ///
@@ -708,7 +1051,7 @@ jsPlumb.ready(function () {
 	jsPlumb.setContainer("canvas");
 	jsPlumb.fire("jsPlumbLoaded", instance);
     //loadWorkflow;
-	jsPlumb.fire("tao_loadWorkflowById");
+    jsPlumb.fire("tao_loadWorkflowById");
 });
 
 
@@ -743,16 +1086,88 @@ updateModuleStatus("", {"state":"completed", "progress":68});
         toolboxModules.rescanSelected();
         if (toolboxModules.selected.length<2){
             alert("You need to select at least 2 components in order to create a group.");
+            return;
         }
 
+        $('#confirm-dialog').modal('confirm',{
+        msg:"Are you sure you want to group the selected modules?",
+            callbackConfirm: function () {
 
-            $('#confirm-dialog').modal('confirm',{
-            msg:"Are you sure you want to group the selected modules?",
-            callbackConfirm: function() {
-                //toolboxModules.rmSelected();
-                //console.log(id);
+                var groupNodeIds = [];
+                $(".w.selected", $elCanvas).each(function () {
+                    var canvasID = $(this).attr('id');
+                    var nodeId = wfPlumbCanvasData.nodesMap[canvasID];
+
+                    groupNodeIds.push(nodeId);                        
+                });
+
+                var groupData = {
+                    "workflowId": currentWfID,
+                    "groupNodeIds": groupNodeIds
+                }
+
+                var groupNodes = $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + "workflow/group",
+                    data: JSON.stringify(groupData),
+                    type: 'POST',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "X-Auth-Token": window.tokenKey
+                    }
+                });
+                $.when(groupNodes)
+                    .done(function (groupNodesResponse) {
+                        if (groupNodesResponse.status === "SUCCEEDED") {
+                            window.parent.tao_showWorkflow(currentWfID);
+                        }
+                        else {
+                            alert("Group creation failed. " + groupNodesResponse.message);
+                        }
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        alert("Group creation failed. " + errorThrown);
+                    });
+        },
+        callbackCancel:function(){}
+        });
+    })
+    .on("click", ".btn-action-ungroupmodule", function (e) { //ungroup 
+        e.stopPropagation();
+
+        var groupCanvasId = $(this).closest(".w").data("group");
+        var groupDna = $("#" + groupCanvasId).data("dna");
+
+        $('#confirm-dialog').modal('confirm', {
+            msg: "Are you sure you want to ungroup nodes in this group?",
+            callbackConfirm: function () {
+
+                var ungroupNodes = $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + "workflow/ungroup",
+                    data: { "groupId": groupDna.fullData.id },
+                    type: 'POST',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-Auth-Token": window.tokenKey
+                    }
+                });
+                $.when(ungroupNodes)
+                    .done(function (ungroupNodesResponse) {
+                        if (ungroupNodesResponse.status === "SUCCEEDED") {
+                            window.parent.tao_showWorkflow(currentWfID);
+                        }
+                        else {
+                            alert("Ungroup nodes failed. " + ungroupNodesResponse.message);
+                        }
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        alert("Ungroup nodes failed. " + errorThrown);
+                    });
             },
-            callbackCancel:function(){}
+            callbackCancel: function () { }
         });
     })
     .on( "click",".btn-action-editmodule", function(e) { //erase module on trash icon click
@@ -779,7 +1194,15 @@ updateModuleStatus("", {"state":"completed", "progress":68});
     })
     .on("click",".l-n-p-i", function(e){
         var id = $(this).closest(".n-p-i-wrapp").attr("id");
-    });
+    })
+	.on("mouseover",".n-p-i-wrapp, .n-p-o-wrapp", function (e){
+		if ($(this).hasClass("n-p-i-wrapp")) $(this).find(".l-n-p-i").addClass("show");
+		if ($(this).hasClass("n-p-o-wrapp")) $(this).find(".l-n-p-o").addClass("show");
+	})
+	.on("mouseout",".n-p-i-wrapp, .n-p-o-wrapp", function (e){
+		if ($(this).hasClass("n-p-i-wrapp")) $(this).find(".l-n-p-i").removeClass("show");
+		if ($(this).hasClass("n-p-o-wrapp")) $(this).find(".l-n-p-o").removeClass("show");
+	});
 
 //tooltip
 $( document ).uitooltip({
@@ -814,10 +1237,13 @@ var tao_adModuleToSelection = function(id){
 	
 	if(!keyboardShifted){ //if keyboard is shifted keep current selection else unselect al modules on workspace
 		$(".w",$elCanvas).removeClass("selected");
-	} 
-	$("#"+id).addClass("selected");
+    }
+    $("#" + id).addClass("selected");
+    if ($(".w.selected").length === 1) {
+        toolboxModules.firstSelectedId = id;
+    }
 	toolboxModules.rescanSelected();
-	console.log("mousedown on "+id);
+    console.log("mousedown on " + id);
 };
 var tao_adGroupNodesToSelection = function(groupCanvasID){
     console.log("add group to selection");
@@ -835,10 +1261,13 @@ var tao_adGroupNodesToSelection = function(groupCanvasID){
 (function(){
     var $elModalSG = $("#modalSortAndGroup");
     var $elSelectSortType = $("#selectSortType");
+	var $elSelectFilterType = $("#selectFilterType");
     var $elSelectSortDirection = $("#selectSortDirection");
     var $elselectGroupType = $("#selectGroupType");
     var $elinputGroupingArg = $("#inputGroupingArg");
+	var $elinputFilteringArg = $("#inputFilteringArg");
     var $elFrmConnectorEdit = $("#frmConnectorEdit");
+   
     //populate sorter & groupers
     window.wf_populateSortersAndGroupers = function(){
         if((wfTools.configSorters) && (wfTools.configSorters.length>0)){
@@ -846,6 +1275,14 @@ var tao_adGroupNodesToSelection = function(groupCanvasID){
                 $elSelectSortType.append($('<option>', {
                     value: item,
                     text : item
+                }));
+            });
+        }
+		if((wfTools.configFilters) && (wfTools.configFilters.length>0)){
+            $.each(wfTools.configFilters, function (i, item) {
+                $elSelectFilterType.append($('<option>', {
+                    value: item[0],
+                    text : item[0]
                 }));
             });
         }
@@ -866,19 +1303,46 @@ var tao_adGroupNodesToSelection = function(groupCanvasID){
         console.log("edit conn: "+connid);
         var connData = wfPlumbCanvasData.getConnectorById(connid);
 
+		var sourceNodeId = connData.from.split("_")[1];
+		var targetNodeId = connData.to.split("_")[1];
+		var sourceNodeData = wfPlumbCanvasData.getNodeById(sourceNodeId);
+		var targetNodeData = wfPlumbCanvasData.getNodeById(targetNodeId);
+
         $elModalSG.data("connid", connid).modal("show");
         $elSelectSortType.val("none").change();
         $elselectGroupType.val("none").change();
+        $elSelectFilterType.val("").change();
 
         if(connData.linkData.aggregator && connData.linkData.aggregator.sorter && connData.linkData.aggregator.sorter[0]){
             $elSelectSortType.val(connData.linkData.aggregator.sorter[0]).trigger("change");
         }
-        if(connData.linkData.aggregator && connData.linkData.aggregator.associator && connData.linkData.aggregator.associator[0]){
-            $elselectGroupType.val(connData.linkData.aggregator.associator[0]).trigger("change");
-            if(connData.linkData.aggregator.associator[1]){
-                $elinputGroupingArg.val(connData.linkData.aggregator.associator[1]).trigger("change");
-            }
-        }
+		
+		if (sourceNodeData.componentType == "DATASOURCE" && (targetNodeData.componentType == "DATASOURCE" || targetNodeData.componentType == "PROCESSING")) {
+			//grouping is allowed only between two Datasource components
+			if (targetNodeData.componentType == "DATASOURCE") {
+				$(".grouping", "#modalSortAndGroup").show();
+				if (connData.linkData.aggregator && connData.linkData.aggregator.associator && connData.linkData.aggregator.associator[0]) {
+					$elselectGroupType.val(connData.linkData.aggregator.associator[0]).trigger("change");
+					if (connData.linkData.aggregator.associator[1]) {
+						$elinputGroupingArg.val(connData.linkData.aggregator.associator[1]).trigger("change");
+					}
+				}
+			} else {
+				$(".grouping", "#modalSortAndGroup").hide();
+			}
+			//filtering is allowed between Datasource and processing component too
+			$(".filtering", "#modalSortAndGroup").show();
+			$elinputFilteringArg.val("").trigger("change");
+			if (connData.linkData.aggregator && connData.linkData.aggregator.filter && connData.linkData.aggregator.filter[0]) {
+				$elSelectFilterType.val(connData.linkData.aggregator.filter[0]).trigger("change");
+				if (connData.linkData.aggregator.filter[1]) {
+					$elinputFilteringArg.val(connData.linkData.aggregator.filter[1]).trigger("change");
+				}
+			}
+		} else {
+			$(".grouping", "#modalSortAndGroup").hide();
+			$(".filtering", "#modalSortAndGroup").hide();
+		}
     });
     $elSelectSortType
     .on("change", function(){
@@ -895,103 +1359,139 @@ var tao_adGroupNodesToSelection = function(groupCanvasID){
         var currentGrouper = jQuery.grep(wfTools.configGroupers, function( a ) {
             return a[0]=== val;
         });
-        if(currentGrouper && currentGrouper[0] && currentGrouper[0][1] && (currentGrouper[0][1] === "java.lang.Integer")){
-            $elinputGroupingArg.closest(".grouping-params").removeClass("collapse ");
-        }else{
-            $elinputGroupingArg.closest(".grouping-params").addClass("collapse ");
-        }
+        if (currentGrouper && currentGrouper[0] && currentGrouper[0][1]) {
+			addExtraField(currentGrouper[0][1], $elinputGroupingArg, "Quota");
+			$elinputGroupingArg.closest(".grouping-params").removeClass("collapse");
+		} else {
+			 $elinputGroupingArg.closest(".grouping-params").addClass("collapse");
+		}
+    });
+	$elSelectFilterType
+    .on("change", function(){
+        var val = $(this).val();
+        var currentFilter = jQuery.grep(wfTools.configFilters, function( a ) {
+            return a[0]=== val;
+        });
+        if (currentFilter && currentFilter[0] && currentFilter[0][1]) {
+			addExtraField(currentFilter[0][1], $elinputFilteringArg, "H:ss");
+			$elinputFilteringArg.closest(".filtering-params").removeClass("collapse");
+		} else {
+			 $elinputFilteringArg.closest(".filtering-params").addClass("collapse");
+		}
     });
     $elFrmConnectorEdit
     .on("submit", function(e){
         e.preventDefault();
-        var connid = $elModalSG.data("connid");
-        var sorter = [$elSelectSortType.val(), $elSelectSortDirection.val()];
-        var associator = [$elselectGroupType.val()];
-        if(!$elinputGroupingArg.closest(".grouping-params").hasClass( "collapse" )){
-            associator[1] = $elinputGroupingArg.val();
-        }
-        if(sorter[0] === 'none') sorter = null;
-        if(associator[0] === 'none') associator = null;
-        var aggregator = {
-            "sorter": sorter,
-            "associator": associator
-        };
-        if((sorter === null) && (associator === null)) aggregator = null;
+		var clickedButtonId = $(document.activeElement).attr('id');
+		var connid = $elModalSG.data("connid");
+		
+		if ( clickedButtonId === "btnSave") {
+			
+			var sorter = [$elSelectSortType.val(), $elSelectSortDirection.val()];
+			var associator = [$elselectGroupType.val()];
+			if(!$elinputGroupingArg.closest(".grouping-params").hasClass( "collapse" )){
+				associator[1] = $elinputGroupingArg.val();
+			}
+			var filter = [$elSelectFilterType.val()];
+			if(!$elinputFilteringArg.closest(".filtering-params").hasClass( "collapse" )){
+				filter[1] = $elinputFilteringArg.val();
+			}
+			if(sorter[0] === 'none') sorter = null;
+			if(associator[0] === 'none') associator = null;
+			if(filter[0] === '') filter = null;
+			var aggregator = {
+				"sorter": sorter,
+				"associator": associator,
+				"filter": filter
+			};
+			if((sorter === null) && (associator === null) && (filter === null)) aggregator = null;
 
-        console.log("agregator"); console.log(aggregator);
+			console.log("agregator"); console.log(aggregator);
 
-        var connData = wfPlumbCanvasData.getConnectorById(connid);
-        var targetNodeId = connData.to.split("_")[1];
-        var linkToUpdate;
-        var linkFound = 0;
+			var connData = wfPlumbCanvasData.getConnectorById(connid);
+			var targetNodeId = connData.to.split("_")[1];
+			var linkToUpdate;
+			var linkFound = 0;
 
-        console.log(targetNodeId);
-        var nodeData = wfPlumbCanvasData.getNodeById(targetNodeId);
-        if(nodeData.incomingLinks){
-            nodeData.incomingLinks.forEach(function(link) {
-                if(link === connData.linkData){
-                    linkToUpdate = link;
-                    linkFound++;
-                }
-            });
-        }
-        if(linkFound !== 1){
-            alert("Unbable to identify link in node definition. Please reload workflow and try again.");
-            return;
-        }
-        alert("update connector "+connid);
+			console.log(targetNodeId);
+			var nodeData = wfPlumbCanvasData.getNodeById(targetNodeId);
+			if(nodeData.incomingLinks){
+				nodeData.incomingLinks.forEach(function(link) {
+					if(link === connData.linkData){
+						linkToUpdate = link;
+						linkFound++;
+					}
+				});
+			}
+			if(linkFound !== 1){
+				alert("Unbable to identify link in node definition. Please reload workflow and try again.");
+				return;
+			}
+			else{
+				linkToUpdate.aggregator = aggregator;
+			}
+		  //  alert("update connector "+connid);
 
-        $.when(putOneNode(currentWfID, nodeData))
-            .done(function (putOneNodeResponse) {
-                if(putOneNodeResponse.status === "SUCCEEDED"){
-                    linkToUpdate.aggregator = aggregator;
-                    $(".v-lastaction","#infoband").html("link updated");
-                    //wfPlumbCanvasData.nodes[$propbar.nid] = putOneComponentResponse.data;
-                    //canvasRenderer.updateNodeById($propbar.nid, putOneComponentResponse.data);
-                    $elModalSG.data("connid", 0).modal("hide");
-                }else{
-                    alert("Could not update link." + putOneComponentResponse.message);
-                }
-            })
-            .fail(function(){
-                alert("Could udate link", "ERROR");
-            });
+			$.when(putOneNode(currentWfID, nodeData))
+				.done(function (putOneNodeResponse) {
+					if(putOneNodeResponse.status === "SUCCEEDED"){
+					  //  linkToUpdate.aggregator = aggregator;
+						$(".v-lastaction","#infoband").html("link updated");
+						//wfPlumbCanvasData.nodes[$propbar.nid] = putOneComponentResponse.data;
+						//canvasRenderer.updateNodeById($propbar.nid, putOneComponentResponse.data);
+
+						//cma:if agregator added, append icon to div with id=$('#' + connid)
+					   if ( aggregator )
+						{
+							$('#' + connid).empty();
+							$('#' + connid).append(
+								"<svg width=\"48\" height=\"50\">\n" +
+								"  <g transform=\"scale(4)\"><path fill=\"#fff\" stroke=\"#3c8dbc\" stroke-width=\".3\" d=\"M5.9,1.2L0.7,6.5l5.2,5.4l5.2-5.4L5.9,1.2z\" /></g>\n" +
+								"  <g transform=\"scale(0.03) translate(420 600)\"><path fill=\"#3c8dbc\" d=\"M512.1 191l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0L552 6.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zm-10.5-58.8c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.7-82.4 14.3-52.8 52.8zM386.3 286.1l33.7 16.8c10.1 5.8 14.5 18.1 10.5 29.1-8.9 24.2-26.4 46.4-42.6 65.8-7.4 8.9-20.2 11.1-30.3 5.3l-29.1-16.8c-16 13.7-34.6 24.6-54.9 31.7v33.6c0 11.6-8.3 21.6-19.7 23.6-24.6 4.2-50.4 4.4-75.9 0-11.5-2-20-11.9-20-23.6V418c-20.3-7.2-38.9-18-54.9-31.7L74 403c-10 5.8-22.9 3.6-30.3-5.3-16.2-19.4-33.3-41.6-42.2-65.7-4-10.9.4-23.2 10.5-29.1l33.3-16.8c-3.9-20.9-3.9-42.4 0-63.4L12 205.8c-10.1-5.8-14.6-18.1-10.5-29 8.9-24.2 26-46.4 42.2-65.8 7.4-8.9 20.2-11.1 30.3-5.3l29.1 16.8c16-13.7 34.6-24.6 54.9-31.7V57.1c0-11.5 8.2-21.5 19.6-23.5 24.6-4.2 50.5-4.4 76-.1 11.5 2 20 11.9 20 23.6v33.6c20.3 7.2 38.9 18 54.9 31.7l29.1-16.8c10-5.8 22.9-3.6 30.3 5.3 16.2 19.4 33.2 41.6 42.1 65.8 4 10.9.1 23.2-10 29.1l-33.7 16.8c3.9 21 3.9 42.5 0 63.5zm-117.6 21.1c59.2-77-28.7-164.9-105.7-105.7-59.2 77 28.7 164.9 105.7 105.7zm243.4 182.7l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0l8.2-14.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zM501.6 431c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.6-82.4 14.3-52.8 52.8z\"/></g>\n" +
+								"</svg>\n" 
+							);            
+						  }
+						else //cma:if agregator deleted(select <none> on sorting and grouping options), delete the icon
+						{
+							$('#' + connid).empty();
+						}
+
+						$elModalSG.modal("hide");
+					}else{
+						alert("Could not update link." + putOneComponentResponse.message);
+					}
+				})
+				.fail(function(jqXHR){
+					chkXHR(jqXHR.status);
+					alert("Could udate link", "ERROR");
+				});
+		}
+		
+		if (clickedButtonId === "btnDelete") {
+			$('#confirm-dialog').modal('confirm',{
+				msg:"Are you sure you want to delete selected connector?",
+				callbackConfirm: function() {
+					var connection = window.jsp.getConnections().filter(function(item){if(item.id === connid) {return item;}});
+					window.jsp.deleteConnection(connection[0]); //this itself will trigger connectionDetached event
+					console.log("delete connection id:" +connection.id);
+					$elModalSG.modal("hide");
+				},
+				callbackCancel:function(){
+					var connection = window.jsp.getConnections().filter(function(item){if(item.id === connid) {return item;}});
+					connection[0].removeClass("conn-to-be-deleted");
+				}
+			});
+		}
     });
-
-    function f(){
-        $.ajax({ cache: false,
-            url: "./fragments/profile.fragment.html"
-        })
-            .done(function (data) {
-                $(".modal-dialog",$elModalProfile).html(data);
-                $(".val-user-email",$elModalProfile).html(taoUserProfile.email);
-                $("[contenteditable]").css({"word-wrap":"break-word", "white-space": "pre-wrap"});
-                        //save
-                        var formData = {
-                            "id" : taoUserProfile.id,
-                            "username" : taoUserProfile.username,
-                            "password" : $("div.val-user-pwd[contenteditable='true']").text(),
-                            "email" : $("div.val-user-email[contenteditable='true']").text(),
-                            "alternativeEmail" : $("div.val-user-email2[contenteditable='true']").text(),
-                            "lastName" : $("div.val-user-lname[contenteditable='true']").text(),
-                            "firstName" : $("div.val-user-fname[contenteditable='true']").text(),
-                            "phone" : $("div.val-user-phone[contenteditable='true']").text(),
-                            "quota" : $("div.val-user-quota[contenteditable='true']").text(),
-                            "organization" : $("div.val-user-org[contenteditable='true']").text(),
-                            "external" : taoUserProfile.external,
-                            "groups" : taoUserProfile.groups,
-                            "preferences" : taoUserProfile.preferences
-                        };
-                        updateProfile(formData);
-            })
-            .fail(function (jqXHR, textStatus) {
-                alert("Could not load user profile... Try later.");
-            });
-    }
-    $(".do-editprofile").on("click", function(e){
-        e.preventDefault();
-        f();
-    });
+	
+	$elModalSG.on("hide.bs.modal", function () {
+		var connid = $(this).data("connid");
+		var connection = window.jsp.getConnections().filter(function(item){if(item.id === connid) {return item;}});
+		if (connection.length > 0) {
+			connection[0].removeClass("conn-to-be-deleted");
+		}
+		$elModalSG.data("connid", 0);
+	});
 }());
 
 //ajax functions
@@ -1006,7 +1506,7 @@ function putOneNode(wfID, payload){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1020,7 +1520,7 @@ function putOneConnection(s,t){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1035,7 +1535,7 @@ function postNodesPosition(wfID,payload){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1050,7 +1550,7 @@ function postOneComponent(wfID,payload){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1064,7 +1564,7 @@ function delOneNode(wfID, node){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1079,7 +1579,7 @@ function delOneLink(nodeId, payload){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1093,7 +1593,21 @@ function getConfigSorters(){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
+        }
+    });
+}
+//get all config filters
+function getConfigFilters(){
+    return $.ajax({
+        cache: false,
+        url: baseRestApiURL + "config/filters",
+        dataType : 'json',
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1107,7 +1621,7 @@ function getConfigGroupers(){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1121,7 +1635,7 @@ function getAllComponents(){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1135,7 +1649,7 @@ function getAllQueries(){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1149,7 +1663,7 @@ function getAllDatasources(){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1163,7 +1677,7 @@ function getAllUserDatasources(){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1177,7 +1691,7 @@ function getAllSensors(){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1191,7 +1705,7 @@ function getAllDockers(){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
 }
@@ -1205,7 +1719,80 @@ function getConfigEnums(){
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
+            "X-Auth-Token": window.parent.tokenKey
         }
     });
+}
+
+function addExtraField(fieldType, elem, placeholderVal){
+	// remove info message added on default case
+	elem.parent().find("p").remove();
+	// show element hidden on default case
+	elem.show();
+	// show element label hidden on default case
+	elem.parent().siblings("label").show();
+	//workaround
+	if(fieldType.toLowerCase() === "date" && placeholderVal === "H:ss") fieldType = "time";
+	switch(fieldType.toLowerCase()) {
+		case "int":
+			elem.attr({
+				"type": "number",
+				"step": "1",
+				"placeholder": placeholderVal,
+			});
+			break;
+		case "double": case "float":
+			elem.attr({
+				"type": "number",
+				"step": "1",
+				"placeholder": placeholderVal,
+			});
+			break;
+		case "string":
+			elem.attr({
+				"type": "text",
+				"step": "1",
+				"placeholder": placeholderVal,
+			});
+			break;
+		case "date":
+			elem.attr({
+				"type": "text",
+				"placeholder": placeholderVal,
+			});
+			if(!elem.hasClass("datepicker")) elem.addClass("datepicker");
+			//remove old datepickers
+			$("#" + $.datepicker.dpDiv.attr("id")).remove();
+			elem.datepicker({
+				changeYear	: true,
+				changeMonth : true,
+				dateFormat  : "yyyy-mm-dd",
+				yearRange   : "1990:c+10"
+			});
+			break;
+			case "time":
+				elem.attr({
+					"type": "text",
+					"placeholder": placeholderVal,
+				});
+				if(!elem.hasClass("timepicker")) elem.addClass("timepicker");
+				elem.timepicker({
+					timeFormat: 'H:mm',
+					interval: 30,
+					minTime: '00:00',
+					maxTime: '23:59',
+					dynamic: false,
+					dropdown: true,
+					scrollbar: true,
+					zindex: 1151
+				});
+				break;
+		default:
+			//hide element and label
+			elem.hide();
+			elem.parent().siblings("label").hide();
+			//show info massage
+			elem.parent().append("<p>Type ["+fieldType+"] unknown for this option.</p>");
+			break;
+	};
 }

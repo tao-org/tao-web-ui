@@ -1,0 +1,590 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Script workflow</h4>
+    </div>
+
+    <form id="frmStartWF" class="form-horizontal form-newpc" role="form">
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error processing workflow!</h4>
+            <p id="modal-error-msg">Please check you data, one or more values for the attributes is not in the acceptable range.</p>
+            <p>
+                <span class="error-name collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Workflow name cannot be empty.</span>
+                <span class="error-fileLocation collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> File location has an invalid value.</span>
+            </p>
+            <p id="modal-error-msg-server"></p>
+        </div>
+
+        <div class="modal-body">
+            <section>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="wf-header" class="padding-left--20 padding-bottom--20">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="info-box bg-aqua">
+                                        <span class="info-box-icon"><i class="fa fa-rocket"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Selected workflow for scripting</span>
+                                            <span class="info-box-number val-start-wf-name"></span>
+                                            <div class="progress">
+                                                <div class="progress-bar" style="width: 100%"></div>
+                                            </div>
+                                            <span class="progress-description">
+                                                user: <small class="label bg-white val-start-wf-username">###</small>
+                                                 ,visibility: <small class="label bg-white val-start-wf-visibility">###</small>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+				<div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputWorkflowLabel" class="col-sm-2 col-md-2 control-label">Label</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputWorkflowLabel" name="inputWorkflowLabel" placeholder="workflow execution label" autocomplete="off" value="" maxlength="24">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputWorkflowInstanceName" class="col-sm-2 col-md-2 control-label">Execution name</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputWorkflowInstanceName" name="inputWorkflowInstanceName" placeholder="workflow execution name" autocomplete="off" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				
+				<div id="chooseScriptType" class="row">
+					<div class="col-md-12">
+						<div class="row form-group">
+							<label for="jobType" class="col-md-2 control-label">Choose script type</label>
+							<div class="col-md-10">
+								<select type="text" class="form-control" id="jobType" name="jobType" autocomplete="off">
+									<option value="" selected disabled>-- Please select a type --</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12">
+                            <p>You can customize workflow parameters before run. Values will only affect current workflow processing call.</p>
+                        </div>
+                        <div  id="chooseInput">
+                            <!--<div class="row form-group">
+                                <label for="inputName" class="col-md-2 control-label">Choose input</label>
+					            <div class="col-md-10">
+						            <select type="text" class="form-control" id="datasetList" name="datasetList" autocomplete="off" value="" placeholder="Dataset list...">
+								
+						            </select>
+					            </div>
+                            </div>-->
+
+                        </div>
+                        <div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="box-group" id="accordion">
+                                        <!-- node -->
+                                        <div id="acc-panel-tpl" class="panel box box-primary hidden">
+                                            <div class="box-header with-border">
+                                                <h4 class="box-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse-one-body-tpl" aria-expanded="true" class="">
+                                                        Collapsible Item
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse-one-body-tpl" class="panel-collapse collapse" aria-expanded="false">
+                                                <div class="box-body">
+                                                    <div>
+                                                        <table class="table table-bordered box-shadow--6dp tbl-edt tbl-edt-sysvar">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>Key</th>
+                                                                <th>Value</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr class="tpl-sample-row">
+                                                                <td>
+                                                                    <span class="var-id hidden"></span>
+                                                                    <strong><span class="var-label"></span></strong>&nbsp;(<span class="var-dataType"></span>)
+                                                                </td>
+                                                                <td style="width: 70%;">
+                                                                    <input type="hidden" class="var-value" value="" placeholder="input variable's value">
+                                                                    <input type="text" class="var-value-string collapse" value="" placeholder="input variable's value">
+                                                                    <input type="text" class="var-value-string2 collapse" value="" placeholder="input variable's value">
+                                                                    <select class="var-value-list collapse"></select>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                                <button id="saveExecNode" type="submit" class="btn btn-primary btn-submit">Process workflow</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- /.modal-body -->
+    </form>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div><!-- /.modal-content -->
+<script type="text/javascript" src="./assets/libs/openlayers/ol-poly.js"></script>
+<style>
+.chosen-input{margin-left: 10px;font-weight: bold;}
+</style>
+<script>
+function createProductSetList(selectId){
+    $.ajax({
+        cache: false,
+        url: baseRestApiURL + "datasource/productset/",
+        type: 'GET',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Auth-Token": window.tokenKey
+        },
+        success: function(response) {
+					if (response.status === responseStatus.success) {
+			
+                        $(selectId).html("");
+						var $option = $('<option class="defaultDataset" disabled selected>Choose an input...</option>');
+                        $(selectId).append($option);
+                        $option = $('<option class="defaultDataset">Input example</option>');
+                        $(selectId).append($option);
+						$.each(response.data, function (idx, productSet ) {
+							if (!productSet.singleton) {
+                                if( productSet.type !== "n/a"){
+                                    var $option = $('<option title="'+productSet.description+'">' + productSet.label+"-"+ productSet.type + '</option>');
+                                }else{
+								    var $option = $('<option title="'+productSet.description+'">' + productSet.label + '</option>');
+                                }
+                                
+								$option.data({ "definition": productSet });
+                                $(selectId).append($option);
+								
+							}
+						});
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log("error");
+				}
+    }).fail(function (jqXHR, textStatus) {
+        chkXHR(jqXHR.status);
+    });
+}
+
+
+    $(document).ready( function(){
+		closePolygonMap();
+		if(window.userOpStack[0].dna && window.userOpStack[0].dna.id){
+            getWFDataById(window.userOpStack[0].dna.id);
+        }else{
+            alert("Error determining workflow ID.");
+        }
+		
+		pupulateJobTypes();
+		
+		$("#frmStartWF").validate({
+			ignore: ":hidden",
+			rules : {
+				"jobType" : { required: true }
+			},
+			messages      : { },
+			success       : function(label) { label.remove(); },
+			highlight     : function(element, errorClass) { $(element).closest(".row").addClass("has-error"); },
+			unhighlight   : function(element, errorClass) { $(element).closest(".row").removeClass("has-error"); },
+			errorPlacement: function(error, element) { error.insertAfter($(element)); }
+		});
+		
+        //remove error for some input elements
+		$("#frmStartWF").off("click", ".ol");
+		$("#frmStartWF").off("change",".var-value-string, .var-value-string2, .var-value-list");
+        $("#frmStartWF")
+            .on("click", ".ol", function (e) {
+                // Load map poly
+                openPolygonMap($("#myModalNodes"), $(this).parent().find("input"));
+            })
+            .on("change",".var-value-string, .var-value-string2, .var-value-list",function(e){
+				if ($(".var-value-string2:visible", $(this).parent()).length > 0) {
+					var d1 = $(".var-value-string" , $(this).parent()).val();
+					var d2 = $(".var-value-string2", $(this).parent()).val();
+					var ds = (d1.length > 0 && d2.length > 0) ? "[" + d1 + "," + d2 + "]" : (d1.length > 0 ? d1 : d2);
+					$(this).siblings(".var-value").val(ds);
+                } else {
+					$(this).siblings(".var-value").val($(this).val());
+				}
+            })
+            .submit(function (e) {
+                e.preventDefault();
+				if ($(this).valid()) {
+					if ($("#inputWorkflowLabel",$(this)).val() === "") {
+						$("#inputWorkflowLabel",$(this)).val($("#inputWorkflowLabel",$(this)).attr("placeholder"));
+					}
+					var formData = {};
+					formData['name'] = $("#inputWorkflowInstanceName",$(this)).val();
+					formData['label'] = $("#inputWorkflowLabel",$(this)).val();
+					formData['workflowId'] = window.userOpStack[0].dna.id;
+					formData['jobType'] = $("select", "#chooseScriptType").val();
+					formData['parameters'] = {};
+					formData['inputs'] = {};
+
+					$('#accordion>div.panel').each(function(){
+						var dna = $(this).data("dna");
+						if (dna){
+							if(dna.name !== undefined){
+								formData['parameters'][dna.name] = {};
+								var $tableValRows = $(".tbl-edt-sysvar",$(this)).find(".val-row");
+								$.each($tableValRows, function(i, $tableValRow) {
+									var n = $(".var-id",$tableValRow).text();
+									var v = $(".var-value",$tableValRow).val();
+									if(v !== ''){
+										formData['parameters'][dna.name][n] = v;
+									}
+								});
+							}else if(dna.label !== undefined){
+								formData['parameters'][dna.label] = {};
+								var $tableValRows = $(".tbl-edt-sysvar",$(this)).find(".val-row");
+								$.each($tableValRows, function(i, $tableValRow) {
+									var n = $(".var-id",$tableValRow).text();
+									var v = $(".var-value",$tableValRow).val();
+									if(v !== ''){
+										formData['parameters'][dna.label][n] = v;
+									}
+								});
+							}
+						}
+					});
+
+					$('select[id^=inputList]').each(function(){
+						data = $(this).data();
+						var value = data.lastInput;
+						var key = data.processingUnit.id;
+						if(value !== ""){
+							formData['inputs'][key] = value;
+						}
+					});
+
+					
+					var settings = {
+						"async": true,
+						"url": baseRestApiURL + "orchestrator/script",
+						"method": "POST",
+						"headers": {
+							"Content-Type": "application/json",
+							"Cache-Control": "no-cache",
+							"X-Auth-Token": window.tokenKey
+						},
+						"data": JSON.stringify(formData)
+					};
+					$.ajax(settings)
+						.done(function (response) {
+							console.log("START POST");
+							console.log(response);
+							if(response.status === "SUCCEEDED"){
+								showMsg("Workflow processing successfully started. Orchestrator returned job ID "+response.data, "SUCCESS");
+								$("#myModalNodes").modal('hide');
+							}else{
+								showMsg("Workflow processing could not be started. Orchestrator returned message: "+response.message, "SUCCESS");
+							}
+						})
+						.fail(function (response) {
+						alert("could not start execution. endpoint failure.");
+						});
+				}
+                //SUBMIT TO SERVER
+                return false;
+            });
+    });
+
+    function getWFParametersById(wfID){
+        var settings = {
+            "async": false,
+            "crossDomain": true,
+            "url": baseRestApiURL + "orchestrator/parameters/"+wfID,
+            "method": "GET",
+            "headers": {
+                "x-auth-token": "84656a7f-827a-429c-a21a-fcf9500e3bce",
+                "Cache-Control": "no-cache",
+                "X-Auth-Token": window.tokenKey
+            }
+        };
+
+        $.ajax(settings).done(function (r) {
+            var response = chkTSRF(r);
+            console.log("response parameters for WF: "+wfID);
+            console.log(response);
+            var helper_EdtRowPutValue = function($el, name, type, value, valueset){
+                if(valueset === null){
+                    $('input.var-value', $el).val(value);
+                    if (type === "Date") {
+                        $('input.var-value-string, input.var-value-string2', $el).attr("type", "date");
+                        if (name.toLowerCase() === "startdate" || name.toLowerCase() === "enddate") {
+                            var date1 = "";
+							var date2 = "";
+							if (value !== null) {
+								var match = value.match(/^\[(.*),(.*)\]$/);
+								date1 = match ? match[1] : value;
+								date2 = match ? match[2] : "";
+                            }
+                            $('input.var-value-string' , $el).val(date1).show();
+                            $('input.var-value-string2', $el).val(date2).show();
+                            return;
+                        }
+                    }
+                    if((type === "Double") || (type === "Float") || (type === "Number")){
+                        $('input.var-value-string', $el).attr("type", "number").attr("step", "any");
+                    }
+                    if((type === "Integer") || (type === "Short")){
+                        $('input.var-value-string', $el).attr("type", "number");
+                    }
+                    if(type === "polygon"){
+                        $('input.var-value-string', $el).attr("geotype", "Polygon2D");
+                    }
+                    $('input.var-value-string', $el).val(value).show();
+                }else{
+                    $('input.var-value', $el).val(value);
+                    var html = "";
+                    $.each(valueset, function(i, v) {
+                        html +="<option "+(v === value && 'selected ')+"value=\""+v+"\">"+v+"</option>";
+                    });
+                    $('select.var-value-list', $el).html(html).show();
+                }
+            };
+            var helper_addSTblEdtRow = function($tblEdt, payload){
+                // Default valueSet value must be null (required for helper_EdtRowPutValue function)
+				var obj = {
+                    "type": "string",
+                    "name": "",
+                    "valueSet": null,
+                    "value": null
+                };
+                $.extend( obj, payload );
+                var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
+                $('span.var-id', $el).html(obj.name);
+                $('span.var-label', $el).html(obj.name);
+//                $('span.var-description', $el).html(obj.description);
+                $('span.var-dataType', $el).html(obj.type);
+//                $('span.var-default', $el).html(obj.defaultValue);
+                if((obj.value == null) || (obj.value === '') || (obj.value === undefined)){
+//                    obj.value = obj.defaultValue;
+                }
+                if(obj.type === "bool"){
+                    helper_EdtRowPutValue($el, obj.name, obj.type, obj.value, ["true","false"]);
+                }else{
+                    helper_EdtRowPutValue($el, obj.name, obj.type, obj.value, obj.valueSet);
+                }
+                $tblEdt.append($el);
+            };
+            $('#accordion>div.panel').each(function(){
+                var dna = $(this).data("dna");
+                if (dna){
+                    console.log("ho:"); console.log(response[dna.name]);
+                    var $tableEL = $(".tbl-edt-sysvar",$(this));
+                    //check for empty paremeter set or undefined???
+                    if( (response[dna.name] === undefined) || ($.isArray(response[dna.name]) !== true) || (response[dna.name].length === 0) ){
+                        $tableEL.hide();
+                        $("<p>No configurable parameters for this node.</p>").insertAfter($tableEL);
+                    }else{
+                        $.each(response[dna.name], function(i, value) {
+                            helper_addSTblEdtRow($($tableEL[0]), value);
+                        });
+                    }
+                }
+            });
+            //append globe after Polygon2D
+            $( "<i class=\"fa fa-fw fa-globe ol\" style=\"font-size:1.5em;vertical-align:bottom;color:#2677a7;cursor:pointer;margin-left: -27px;\"></i>" ).insertAfter( "input.var-value-string[geotype='Polygon2D']");
+        }).fail(function () {
+            console.log("error retriving workflow parameters");
+        });
+    }
+
+    function getWFDataById (wfID){
+        $.ajax({
+            async: false,
+			cache: false,
+            type: "get",
+            url: baseRestApiURL + "workflow/"+wfID+"/",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            },
+            error : function (jqXHR, textStatus, errorThrown) {
+                if( jqXHR.status === 500 ){
+                    alert('E001, Exec node nolonger found.');
+                } else {
+                    alert('E001, An error has occurred, please try again or contact app admin.');
+                }
+            },
+            success: function(r) {
+				
+                var response = chkTSRF(r);
+                console.log(response);
+                $("#chooseInput").html("");
+                //create select for every processing component without an input
+                $.each(response.nodes, function(index, value){
+
+                    if(value.incomingLinks[0] === undefined && value.componentType === "PROCESSING"){
+
+                        var $row = $('<div id="row-'+value.id+'"class="row form-group"></div>');
+                        $("#chooseInput").append($row);
+
+                        var $label = $('<label class="col-md-3 control-label"> Choose input for '+value.name+'</label>');
+                        $("#row-"+value.id).append($label);
+
+                        var $select = $('<div class="col-md-9"><select type="text" class="form-control" id="inputList-'+value.id+'" value="" autocomplete="off" ></select></div>');
+                        $("#row-"+value.id).append($select);
+
+                        $("#inputList-"+value.id).data("processingUnit", value);
+                        //$("#chooseInput").append('');
+                        var selectId = "#inputList-"+value.id;
+                        createProductSetList(selectId);
+
+                    }
+                });
+                //populate wf header
+                var $el = $('#wf-header');
+                $el.data("payload", response);
+                $('.val-start-wf-name', $el).html(response.name);
+                $('.val-start-wf-username', $el).html(response.userName);
+                $('.val-start-wf-visibility', $el).html(response.visibility);
+                //init exec name with name + timestamp
+                $('#inputWorkflowInstanceName').val(response.name+", "+moment().format('DD/MM/YYYY HH:mm:ss'));
+				
+				if ($("#inputWorkflowLabel").val() == "") {
+					$("#inputWorkflowLabel").attr({ "placeholder": response.name.substr(0,8) + "_" + moment().format("DD-MM-YYYY_HH-mm").toString()});
+				}
+                var $elClone;
+                _.each(response.nodes, function(node){
+                    
+                    var faIcon ="fa-cog";
+                    if(node.componentType === "DATASOURCE"){
+                        faIcon ="fa-database";
+                    }
+                    $elClone = $( "#acc-panel-tpl" ).clone();
+                    $elClone.prop("id", "acc-panel-node-"+node.id );
+                    $elClone.find(".box-title a").html('<span class="fa-stack fa-lg start-component-logo"><i class="fa fa-circle fa-stack-2x"></i><i class="fa '+faIcon+' fa-stack-1x fa-inverse"></i></span>&nbsp;'+node.name+" <i>(component ID: "+node.componentId+")</i>" ).attr("href", "#collapse-one-body-"+node.id);
+                    $elClone.find(".panel-collapse").prop("id", "collapse-one-body-"+node.id);
+                    $elClone.appendTo( "#accordion" ).data("dna", node).removeClass("hidden");
+                });
+                getWFParametersById(wfID);
+            }
+        });
+        return true;
+    }
+    //create table entry along with table rows for selected product sets
+    function addEntryForInput(selectedInput,processingUnit){
+        var createElClone;
+        createElClone = $( "#acc-panel-tpl" ).clone();
+        createElClone.prop("id", "acc-panel-productSet-"+selectedInput.id+ processingUnit.id );
+        createElClone.find(".box-title a").html('<span class="fa-stack fa-lg start-component-logo"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-database fa-stack-1x fa-inverse"></i></span>&nbsp;'+selectedInput.label+" <i>(component ID: "+selectedInput.id+")</i>" ).attr("href", "#collapse-one-body-"+selectedInput.id);
+        createElClone.find(".panel-collapse").prop("id", "collapse-one-body-"+selectedInput.id);
+        createElClone.appendTo("#accordion").data("dna", selectedInput).removeClass("hidden");
+
+        $("#acc-panel-productSet-"+selectedInput.id+processingUnit.id).data("data", selectedInput);
+            
+        $inputFor = $("<div class='chosen-input'>Chosen input for "+processingUnit.name+"</div>");
+        $("#acc-panel-productSet-"+selectedInput.id+processingUnit.id).prepend($inputFor);
+
+        $("#acc-panel-productSet-"+selectedInput.id+processingUnit.id).each(function(){
+            var dna = $(this).data("dna");
+
+            var helper_RowPutValue = function($el, name, type, value){
+                $('input.var-value', $el).val(value);
+                $('input.var-value-string', $el).val(value).show();
+                    
+            };
+
+            var helper_addProdRow = function($tableEl, product){
+                var obj = {
+                    "type": "string[]",
+                    "name": "query",
+                    "value": null
+                };
+                //$.extend( obj, payload );
+                obj.value = product;
+                var $el = $tableEl.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
+                $('span.var-id', $el).html(obj.name);
+                $('span.var-label', $el).html(obj.name);
+                $('span.var-dataType', $el).html(obj.type);
+                helper_RowPutValue($el, obj.name, obj.type, obj.value);
+                    
+                $tableEl.append($el);
+            };
+                
+            if(dna){
+                var $tableEL = $(".tbl-edt-sysvar",$(this));
+                $.each(dna.products, function(i, product) {
+                    helper_addProdRow($($tableEL[0]), product);
+                });
+            }
+        });
+    }
+
+    $("select[id^=inputList]").change( function(){
+        var selectedInput = $("option:selected",this).data("definition");
+        var processingUnit = $("#"+this.id).data("processingUnit");
+        var lastInput = $("#"+this.id).data("lastInput");
+
+        if( lastInput !== selectedInput.id && lastInput !== undefined){
+            $("#acc-panel-productSet-"+lastInput+processingUnit.id).remove();
+            $("#"+this.id).data("lastInput", selectedInput.id);
+            addEntryForInput(selectedInput, processingUnit);
+
+        }else{
+            $("#"+this.id).data("lastInput", selectedInput.id);
+            addEntryForInput(selectedInput, processingUnit);
+            
+        }
+        //$("#acc-panel-productSet-"+selectedInput.id).remove();
+    });
+	
+	function pupulateJobTypes() {
+		var jobTypeList = getTaoEnumsMap("JobType");
+		var $selectElem = $("select", "#chooseScriptType");
+		$selectElem.removeClass("hidden");
+		$("option[value!='']", $selectElem).remove();
+		jobTypeList.forEach(function(jobType) {
+			if (jobType.key.endsWith("_EXPORT")) {
+				$selectElem.append("<option value='" + jobType.key + "'>" + jobType.value + "</option>");
+			}
+		});
+		$("#chooseScriptType").removeClass("hidden");
+	}
+
+    //# sourceURL=start-wf.js
+</script>

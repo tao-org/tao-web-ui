@@ -44,9 +44,9 @@
 			'		</div>\n' +
 			'		<div class="poly-actions-panel">\n' +
 			'			<div class="poly-action-tools">\n' +
-			'				<button class="btn-poly" name="addNewShape"><i class="fa fa-plus fa-fw"></i>Add new</button>\n' +
-			'				<button class="btn-poly" name="removeSelectedShapes"><i class="fa fa-trash-o fa-fw"></i>Remove selected</button>\n' +
-			'				<button class="btn-poly" name="removeAllShapes"><i class="fa fa-times fa-fw"></i>Remove all</button>\n' +
+			'				<button class="btn-poly" type="button" name="addNewShape"><i class="fa fa-plus fa-fw"></i>Add new</button>\n' +
+			'				<button class="btn-poly" type="button" name="removeSelectedShapes"><i class="fa fa-trash-o fa-fw"></i>Remove selected</button>\n' +
+			'				<button class="btn-poly" type="button" name="removeAllShapes"><i class="fa fa-times fa-fw"></i>Remove all</button>\n' +
 			'				<div class="poly-switch"><input id="adjustFeature" name="adjustFeature" type="checkbox"/><label for="adjustFeature"></label></div>\n' +
 			'			</div>\n' +
 			'			<textarea rows="3" name="userText" placeholder="Please select a polygon"></textarea></span>\n' +
@@ -54,6 +54,11 @@
 			'				<button class="btn-poly" name="parseUserText"><i class="fa fa-align-left fa-fw"></i>Parse modified text</button>\n' +
 			'			</div>\n' +
 			'		</div>\n' +
+			'	</div>\n' +
+			'	<div class="sliderscontainer drawer-panel pinned">\n' +
+			'		<div class="drawer-pin"><button type="button" class="btn-poly"><i class="fa fa-thumb-tack"></i></button></div>\n' +
+			'		<div class="drawer-title">Layers</div>\n' +
+			'		<div class="drawer-content"></div>\n' +
 			'	</div>\n' +
 			'</div>'
 		);
@@ -89,8 +94,8 @@
 		_self.map = new ol.Map({
 			interactions: ol.interaction.defaults({ mouseWheelZoom: true, doubleClickZoom: false, shiftDragZoom: false }),
 			layers: [
-				new ol.layer.Tile({ source: new ol.source.OSM() }), 						//raster
-				new ol.layer.Vector({ source: _self.source, style: _self.defaultStyle })	//vector
+				new ol.layer.Tile({ name: "Map"   , source: new ol.source.OSM() }), 						//raster
+				new ol.layer.Vector({ name: "Features" , source: _self.source, style: _self.defaultStyle })	//vector
 			],
 			target: 'map',
 			view  : new ol.View({
@@ -137,6 +142,10 @@
 				_self.map.updateSize();
 			}, 300);
 		},
+		toggleReadOnly: function () {
+			var _self = this;
+			_self.setReadOnly(!_self.readOnly);
+		},
 		setReadOnly: function (readonly) {
 			var _self = this;
 			if (_self.transform) {
@@ -156,6 +165,66 @@
 				}
 				_self.readOnly = readonly;
 			}
+		},
+		togglePinDrawer: function ($drawer) {
+			$drawer.toggleClass("pinned");
+			//if (!$drawer.hasClass("hovering")) {
+				if ($drawer.hasClass("pinned")) {
+					$drawer.removeClass("closed");
+				} else {
+					$drawer.addClass("closed");
+				}
+			//}
+		},
+		focusOnMap: function () {
+			var _self = this;
+			$(_self.map.getViewport()).closest(".map").focus();
+		},
+		refreshLayerOpacity: function () {
+			var _self = this;
+			$(".slidercontainer", _self.container).remove();
+			_self.map.getLayers().forEach(function (layer) {
+				var name = layer.get("name");
+				var opacity = layer.getOpacity()*100;
+				var $slider = $('<div class="slidercontainer">' +
+									'<input type="range" min="1" max="100" value="' + opacity + '" class="slider" data-name="' + name + '" />' +
+									'<p><span>' + name + ': ' + opacity + '</span></p>' +
+								'</div>');
+				var $fit = {};
+				if (name == 'Map') {
+					// Set read-only button
+					//$fit = $('<button class="btn-poly" title="Toggle read only"><i class="fa fa-eye-slash fa-fw"></i></button>').on("click", function () { _self.toggleReadOnly(); });
+					//$slider.append($fit);
+				} else {
+					// Set fit button
+					$fit = $('<button class="btn-poly" title="Fit"><i class="fa fa-expand fa-fw"></i></button>').on("click", function () { _self.fitAll(name); });
+					$slider.append($fit);
+				}
+				$slider.on("input change", 'input.slider', function () {
+					$(this).closest(".slidercontainer").find("span").html($(this).data("name") + ": " + parseInt(this.value));
+					_self.setLayerOpacity(name, this.value/100);
+				});
+				$(".sliderscontainer .drawer-content", _self.container).append($slider);
+			});
+		},
+		getLayerOpacity: function (layerName) {
+			var _self = this;
+			var opacity = 1;
+			_self.map.getLayers().forEach(function (layer) {
+				if (layer.get("name") == layerName) {
+					opacity = layer.getOpacity();
+				}
+			});
+			return opacity;
+		},
+		setLayerOpacity: function (layerName, opacity) {
+			var _self = this;
+			_self.map.getLayers().forEach(function (layer) {
+				if (layer.get("name") == layerName) {
+					layer.setOpacity(opacity);
+					_self.el.trigger("layerOpacityChange", [layer]);
+				}
+			});
 		},
 		setFeaturesStyleById: function (id, style) {
 			var _self = this;
@@ -544,6 +613,35 @@
 			  duration: 0
 			});
 		},
+		fitAll: function (layerName) {
+			var _self = this;
+			if (layerName === "Features") {
+				_self.fitAllFeatures();
+			} else {
+				_self.map.getLayers().forEach(function (layer) {
+					if (layer.get("name") == layerName) {
+						var extent = false;
+						if (typeof layer.get("extent") !== "undefined") {
+							extent = layer.get("extent");
+						} else if (typeof layer.getSource().getExtent !== "undefined") {
+							extent = layer.getSource().getExtent();
+						} else if (typeof layer.extent !== "undefined") {
+							extent = layer.extent;
+						} else if (typeof layer.getSource().getImage === "function") {
+							extent = layer.getSource().getImageExtent();
+							extent = ol.proj.transformExtent(extent, layer.getSource().getProjection().getCode(), 'EPSG:3857');
+						}
+						if (extent) {
+							_self.map.getView().fit(extent, _self.map.getSize());
+							var crtZoom = _self.map.getView().getZoom();
+							if (crtZoom >= _self.options.minZoom) _self.map.getView().setZoom(crtZoom);
+							_self.panToFit();
+						}
+						return false;
+					}
+				});
+			}
+		},
 		fitAllFeatures: function () {
 			var _self = this;
 			var xsi = [];
@@ -821,6 +919,20 @@
 				}
 			});
 			/**/
+			/* Map tools section */
+			_self.refreshLayerOpacity();
+			_self.container.on("click", ".drawer-pin", function () {
+				_self.togglePinDrawer($(this).closest(".drawer-panel"));
+			});
+			_self.container.on("mouseover", ".drawer-panel", function () {
+				$(this).removeClass("closed").addClass("hovering");
+			});
+			_self.container.on("mouseout", ".drawer-panel", function () {
+				$(this).removeClass("hovering");
+				if (!$(this).hasClass("pinned")) {
+					$(this).addClass("closed");
+				}
+			});
 		}
 	}
 	

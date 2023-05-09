@@ -2,7 +2,7 @@
  * Skin: Yellow
  * ------------
  */
-.skin-yellow .main-header .navbar {
+ .skin-yellow .main-header .navbar {
   background-color: #f39c12;
 }
 .skin-yellow .main-header .navbar .nav > li > a {
@@ -130,4 +130,341 @@
   border-top-right-radius: 2px !important;
   border-bottom-right-radius: 2px !important;
   border-bottom-left-radius: 0 !important;
+}
+/**** Navigation bar ****/
+.skin-yellow .main-header .navbar {
+  opacity: unset;
+}
+.nav-tabs-custom>.tab-content {
+  background: #ffffff;
+}
+/**** Dashboard ****/
+.skin-yellow .box.box-primary {
+  border-top-color: #f39c12;
+}
+.skin-yellow .box.box-warning {
+  border-top-color: #f39c12;
+}
+.skin-yellow .progress-bar-info {
+  background-color: #f39c12;
+}
+.skin-yellow .callout.callout-empty {
+  background-color: #eaeaea !important;
+  border-color: #f39c12;
+}
+.skin-yellow .job-history-one.running {
+  border-left: 5px solid #f39c12;
+}
+/**** Footer ****/
+.skin-yellow .main-footer {
+  background: #f39c12;
+  color: #fff;
+  border-top: 1px solid #f39c12;
+}
+.skin-yellow .main-footer>b>a.text-black {
+  color: #ffffff !important;
+}
+
+/*** Remote Datasets MAP ***/
+.skin-yellow #myModalNodes .modal-header {
+  background-color: #f39c12;
+  color: white;
+}
+.skin-yellow #myModalNodes .modal-header.ui-draggable-handle::before {
+background-color: #f39c12;
+border-color: #f39c12;
+}
+.skin-yellow #queryExtent .modal-header .panel-control {
+  color: #fff;
+  text-shadow: none;
+  opacity: unset;
+}
+.skin-yellow #listDatasources a.selected {
+  color: #f39c12;
+  background-color: #ffffff;
+}
+.skin-yellow #listDatasources a:hover {
+  color: #f39c12;
+}
+.skin-yellow .ui-slider-range-min {
+  background-color: #f39c12;
+}
+.skin-yellow #coverage{
+  color: #f39c12;
+}
+.skin-yellow #queryExtentParameters .sensor-name {
+  background-color: #f39c12;
+  color: #ffffff;
+}
+.skin-yellow #myModalNodes table.ds-params::before{
+  background-color: #f39c12;
+}
+.skin-yellow #myModalNodes table.ds-params tbody td:first-child {
+  color: #f39c12;
+}
+.skin-yellow #myModalNodes .vertical-container {
+  border-top: 1px solid #f39c12;
+  border-bottom: 1px solid #f39c12;
+  background-color: #ffffff;
+}
+.skin-yellow #myFlatMap .poly-action-tools{
+border-color: #ffc464;
+background-color: #ffc464;
+color: white;
+}
+.skin-yellow #myFlatMap .poly-switch>label::before {
+background: #ffffff;
+border: 1px solid #ffffff;
+}
+.skin-yellow #myFlatMap .poly-switch>label::after {
+border-color: #f39c12;
+background-color: #f39c12;
+  color: white;
+}
+.skin-yellow .btn-primary:not(.login-box *),
+.skin-yellow #myFlatMap .poly-shape-type select,
+.skin-yellow #myFlatMap .ol-zoom button {
+background-color: #f39c12;
+  border-color: #f39c12;
+}
+.skin-yellow #myFlatMap .btn-poly:disabled {
+  background-color: #ffc464;
+  color: #a96903;
+  border-color: #ffc464;
+}
+.skin-yellow #myFlatMap .poly-shape-type select.disabled {
+  color: #a96903;
+}
+.skin-yellow #myFlatMap .drawer-pin .btn-poly {
+  color: white;
+}
+.skin-yellow #myFlatMap .btn-poly,
+.skin-yellow #myFlatMap .poly-map-title {
+  color: #e08e0b;
+}
+.skin-yellow #myFlatMap .drawer-panel {
+  border-right: 20px solid #f39c12;
+}
+.skin-yellow #myFlatMap .drawer-panel .drawer-content {
+  border: 1px solid #f39c12;
+}
+.skin-yellow #myFlatMap .drawer-panel.closed .drawer-content::after {
+  color: #f39c12;
+}
+.skin-yellow #myFlatMap .btn-poly:hover,
+.skin-yellow #queryExtent .modal-header .panel-control:hover {
+color: #b77205;
+}
+.skin-yellow #queryExtentParameters .sensor-name {
+  background-color: #eaeaea;
+  color: #000000;
+}
+.skin-yellow #myModalNodes .modal-content .close {
+color: #ffffff;
+}
+.skin-yellow #myModalNodes .modal-content .close:hover {
+color: #b77205;
+}
+.skin-yellow #myFlatMap .poly-actions-panel {
+border: 1px solid #f39c12;
+}
+
+/*** Bot chat ***/
+.skin-yellow .box.box-solid.box-success {
+  border: 1px solid #f39c12;
+}
+.skin-yellow .box.box-solid.box-success>.box-header {
+  color: #fff;
+  background: #f39c12;
+  background-color: #f39c12;
+}
+/*** Text boxes ***/
+.skin-yellow .nodes-item-core-box .box-top .box-text {
+  color: #f39c12;
+}
+.skin-yellow .nodes-item-core-box .box-top .box-icon {
+  color: #f39c12;
+}
+.skin-yellow .box.box-success {
+  border-top-color: #f39c12;
+}
+.skin-yellow .nodes-item-core-box .box-top .box-title {
+  color: #f39c12;
+} 
+.skin-yellow .nodes-item-core-box {
+  background: #FFFFFF;
+  border: 1px solid #f39c12;
+  border-top: 2px solid #f39c12;
+  box-shadow: 1px 1px 3px 0 #3333331f;
+}
+.skin-yellow .nodes-item-core-box .box-top .box-subtitle {
+  color: #f39c12;
+}
+.skin-yellow .nodes-item-core-box .box-top-tags span {
+  background-color: #f7f7f7;
+  color: #000;
+  border: 2px solid #f39c12;
+}
+.skin-yellow .nodes-item-core-box .box-description {
+  background: #e7e7e7;
+  padding: 5px 15px;
+  margin: 10px -15px 10px -15px;
+  line-height: 1.2em;
+  color: #000000;
+}
+
+/*** Pagination ***/
+.skin-yellow .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+
+  color: #fff;
+  background-color: #f39c12;
+  border-color: #f39c12;
+}
+
+/*** Tables ***/
+.skin-yellow .tbl-edt thead tr:nth-child(1) th {
+  background: #f39c12;
+  color: white;
+}
+.skin-yellow .val-gravatar {
+  border-bottom: 2px solid #f39c12;
+}
+.skin-yellow a {
+  color: #f39c12;
+}
+.skin-yellow .nav-tabs-custom>.nav-tabs>li.active {
+  border-top-color: #f39c12;
+}
+.skin-yellow #comp-tab-ports .table-title {
+  background-color: #f39c12;
+  color: white;
+}
+/*** Sidebars - left & right ***/
+.skin-yellow .main-sidebar {
+  background-color: #222d32;
+  border-right: none ;
+}
+.skin-yellow .control-sidebar-bg{
+    position: absolute;
+}
+.skin-yellow .control-sidebar-dark, .control-sidebar-dark+.control-sidebar-bg {
+    background: #222d32;
+    border-left: none;
+}
+.skin-yellow .control-sidebar-dark {
+    color: #ffffff;
+}
+.skin-yellow .control-sidebar-dark .control-sidebar-heading, 
+.skin-yellow .control-sidebar-dark .control-sidebar-subheading {
+    color: #ffffff;
+}
+.skin-yellow .control-sidebar-dark .control-sidebar-tabs>li.active>a, 
+.skin-yellow .control-sidebar-dark .control-sidebar-tabs>li.active>a:hover,
+.skin-yellow .control-sidebar-dark .control-sidebar-tabs>li.active>a:focus,
+.skin-yellow .control-sidebar-dark .control-sidebar-tabs>li.active>a:active {
+    background: #222d32;
+    color: #f39c12;
+}
+
+/*** Repositories view ***/
+.skin-yellow .tree-content .treeview a.selected {
+background-color: #ffd490a6;
+color: #a96903;
+border: 1px solid #ffad2c;
+}
+.skin-yellow .tree-content .treeview a:hover{
+background-color: #ffe3b7bf;
+border-color: #ffd490a6;
+color: #a96903;
+}
+.skin-yellow .foldercontent .foldercontent-item:hover {
+background-color: #ffe3b7bf;
+border-color: #ffd490a6;
+color: #a96903;
+}
+.skin-yellow .foldercontent .foldercontent-item.selected {
+background-color: #ffd490a6;
+color: #a96903;
+border: 1px solid #ffad2c;
+}
+.skin-yellow .foldercontent .foldercontent-item.selected a {
+color: #a96903;
+}
+/*** pop-up close ***/
+.skin-yellow .close {
+color: #ffffff;
+text-shadow: none;
+opacity: unset;
+}
+/*** User profile card ***/
+.skin-yellow .card .card-profile {
+  background: #ffc464;
+  color: #ffffff;
+}
+.skin-yellow .card .card-profile::after {
+  background: #ffad2c;
+  color: #ffffff;
+}/*** Components parameters edit ***/
+.skin-yellow .val-row-plus {
+  background: #ffcd7b;
+}
+/*** Workflow toolbox ***/
+.skin-yellow .toolbox-sidebar .toolbox-bar {
+  color: #fff!important;
+  background-color: #f39c12!important;
+  margin-top: 1px;
+  }
+.skin-yellow .toolboxAccordion .ui-accordion-header{
+  background-color: #9b6612;
+  color: #ffffff;
+  }
+.skin-yellow .item-info{
+  border: 1px solid #f39c12;
+}
+.skin-yellow .modulesholder .item {
+  border: 1px solid #f39c12;
+  }
+.skin-yellow .ui-widget-content{
+  color: #f39c12;
+  }
+.skin-yellow .toolbox-header .toolbox-footer {
+  color: #f39c12;
+  }
+   /*** Node monitor model ***/
+ .skin-yellow .modal-header {
+  background-color: #f39c12;
+  color: white;
+}
+
+/*** Repositories modals windows ***/
+.skin-yellow #properties h4, .skin-yellow #properties .action-name, .skin-yellow #view_on_map h4, .skin-yellow #view_file_content h4, 
+.skin-yellow #view_on_map button.close, .skin-yellow #view_file_content button.close, 
+.skin-yellow #view_file_content .content_prev, .skin-yellow #view_file_content .content_next {
+  color:#f39c12;
+}
+.skin-yellow #view_on_map button.close:hover, 
+.skin-yellow #view_file_content button.close:hover {
+  color:#e7cea6;
+}
+.skin-yellow #properties.folder .callout-title, .skin-yellow #properties .callout-title,
+.skin-yellow #view_on_map.map .callout-title, .skin-yellow #view_file_content .callout-title {
+	border-top: 5px solid rgb(243 156 18);
+	background-color: rgb(243 156 18 / 10%);
+}
+.skin-yellow .panel-info > .panel-heading{
+  background-color: rgb(243 156 18 / 10%);
+  border-color: #f39c12;
+}
+.skin-yellow .panel-info{
+    border-color: #f39c12;
+}
+
+.skin-yellow .select-repository li {
+  color: #f39c12;
+}
+.skin-yellow .repo-parameters .fa-info-circle{
+  color: #f39c12;
+}
+.skin-yellow .select-repository li.selected{
+  background-color: #f39c12;
 }

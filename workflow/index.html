@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width">
     <title>Workflow</title>
+    <link href="./css/size-customization.css" rel="stylesheet" type="text/css" />
+    <link href="./css/skins/skin-black-light.css" rel="stylesheet" type="text/css" id="style_css_file_workflows"/>
     <link href="//fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
     <link href="./css/nanoscroller.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -15,6 +17,9 @@
     <link rel="stylesheet" href="./workspace.css">
     <link rel="stylesheet" href="./css/propbar.css">
     <link rel="stylesheet" href="./css/npFileName.css">
+	
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+
 </head>
 <body class="jtk-bootstrap jtk-bootstrap-wide noselect">
 
@@ -26,12 +31,16 @@
     </div>
     <div class="toolbox-bar">
         <span class="">ToolBox</span>
-        <button class="toolbox-bar-close" title="close Toolbox">×</button>
+        <button class="toolbox-bar-close" title="Close Toolbox">×</button>
     </div>
 <!--
 -->
         <div class="toolboxAccordion">
-            <h3><i class="fa fa-angle-right"></i>&nbsp;Datasources</h3>
+			<!--  data source component category is removed from toolbox (is linked with
+				workspace.js wfTools.toolboxnodes.ds, 
+				app.js wfTools.datasources
+				propbar.js wfTools.toolboxnodes.ds[lclTBOID] commented zones) -->
+            <!--<h3><i class="fa fa-angle-right"></i>&nbsp;Datasources</h3>
             <div>
             <div class="nano">
 
@@ -44,10 +53,9 @@
                 <div id="datasourceslist" class="modulesholder nano-content">
                 </div>
             </div>
-            </div>
-
-
-            <h3><i class="fa fa-angle-right"></i>&nbsp;User queries</h3>
+            </div>-->
+			
+            <h3><i class="fa fa-angle-right"></i>&nbsp;Product sets / queries</h3>
             <div>
                 <div class="nano">
 
@@ -61,23 +69,6 @@
                     </div>
                 </div>
             </div>
-
-
-
-            <h3><i class="fa fa-angle-right"></i>&nbsp;Components</h3>
-            <div>
-            <div class="nano">
-
-                <div id="modules-search" class="toolbox-search modules-search">
-                    <input type="text" placeholder="search">
-                    <i class="fa fa-search"></i>
-                    <i class="fa fa-times"></i>
-                </div>
-
-                <div id="moduleslist" class="modulesholder nano-content">
-                </div>
-            </div>
-            </div>
         </div>
 </div>
 
@@ -85,20 +76,32 @@
 	<span class="v-lastaction"></span>
 </div>
     <div id="control-toolbar" class="control-toolbar">
-                    <div class="back-home" rel="timeline-tooltip" data-original-title="Return to Workflows List">
+                    <div class="align hidden" rel="timeline-tooltip" data-placement="bottom" data-original-title="Align left">
+					    <div class="icon toolbar-action" data-action="align-left"><i class="fa fa-align-left fa-fw" aria-hidden="true"></i></div>
+					</div>
+                    <div class="align hidden" rel="timeline-tooltip" data-placement="bottom" data-original-title="Align right">
+					    <div class="icon toolbar-action" data-action="align-right"><i class="fa fa-align-right fa-fw" aria-hidden="true"></i></div>
+					</div>
+                    <div class="align hidden" rel="timeline-tooltip" data-placement="bottom" data-original-title="Align top">
+					    <div class="icon toolbar-action" data-action="align-top"><i class="fa fa-align-left fa-rotate-90 fa-fw" aria-hidden="true"></i></div>
+					</div>
+                    <div class="align hidden" rel="timeline-tooltip" data-placement="bottom" data-original-title="Align bottom">
+					    <div class="icon toolbar-action" data-action="align-bottom"><i class="fa fa-align-right fa-rotate-90 fa-fw" aria-hidden="true"></i></div>
+					</div>
+                    <div class="back-home" rel="timeline-tooltip" data-placement="bottom" data-original-title="Return to Workflows List">
                         <div class="icon toolbar-action" data-action="back-home"><i class="fa fa-reply-all fa-fw" aria-hidden="true"></i></div>
                     </div>
-					<div class="save-current hidden" rel="timeline-tooltip" data-original-title="Save current now">
+					<div class="save-current hidden" rel="timeline-tooltip" data-placement="bottom" data-original-title="Save current now">
 						<div class="icon toolbar-action" data-action="save-current"><i class="fa fa-cloud-upload fa-fw" aria-hidden="true"></i></div>
 					</div>
-                    <div class="show-info" rel="timeline-tooltip" data-original-title="Show WF info.">
+                    <div class="show-info" rel="timeline-tooltip" data-placement="bottom" data-original-title="Show WF info.">
                         <div class="icon toolbar-action" data-action="show-info"><i class="fa fa-info-circle fa-fw" aria-hidden="true"></i></div>
                     </div>
     </div>
     <div class="jtk-page-container">
         <div class="jtk-container">
             <div class="jtk-demo-main">
-                <div class="panzoom statemachine-demo noselect" id="canvas"></div>
+                <div class="panzoom statemachine-demo noselect canvas-grid" id="canvas"></div>
             </div>
         </div>
     </div>
@@ -118,8 +121,15 @@
 
 </div>
 <div id="draggable-toolbox-preview" class="ui-widget-content">
+    <div class="header">
 	<p class="ui-widget-header">Workflow preview</p>
-	<div id="img-wf-preview"></div>
+        <a data-toggle="collapse" href="#collapsePreview" role="button" aria-expanded="true" aria-controls="collapsePreview">
+            <i class="fa fa-chevron-down pull-right"></i>
+            <i class="fa fa-chevron-left pull-right"></i>
+        </a>
+    </div>
+    <div id="collapsePreview" class="collapse in">
+    <div id="img-wf-preview"></div>
 	<div id="preview-zoom-toolbar">
 				<div class="pan-up" rel="timeline-tooltip" data-original-title="Move Up">
 					<div class="icon preview-toolbar-action" data-action="pan-up" data-repeateonhold="on"><i class="fa fa fa-chevron-up fa-fw" aria-hidden="true"></i></div>
@@ -133,7 +143,7 @@
 				<div class="pan-down" rel="timeline-tooltip" data-original-title="Move Down">
 					<div class="icon preview-toolbar-action" data-action="pan-down" data-repeateonhold="on"><i class="fa fa fa-chevron-down fa-fw" aria-hidden="true"></i></div>
 				</div>
-	</div>
+    </div>
 	<div id="preview-toolbar">
 				<div class="zoom-in" rel="timeline-tooltip" data-original-title="Zoom In">
 					<div class="icon preview-toolbar-action" data-action="zoom-plus" data-repeateonhold="on"><i class="fa fa-search-plus fa-fw" aria-hidden="true"></i></div>
@@ -154,6 +164,7 @@
 					<div class="icon preview-toolbar-action" data-action="empty-wf" data-selectable="on"><i class="fa fa-trash fa-fw" aria-hidden="true"></i></div>
 				</div>
 	</div>
+</div>
 </div>
 
 <div class="toolbox-header outside" id="toolboxHeader">
@@ -215,8 +226,29 @@
                                 </div>
                             </div>
                         </div>
-                        <p>Grouping</p>
-                        <div class="row row--form-block">
+						<p>Filtering</p>
+                        <div class="row row--form-block filtering">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="selectFilterType" class="col-sm-2 col-md-2 control-label">Options</label>
+                                    <div class="col-sm-10 col-md-10">
+                                        <select id="selectFilterType" name="selectFilterType" class="form-control">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 collapse filtering-params">
+                                <div class="form-group">
+                                    <label for="inputFilteringArg" class="col-sm-2 col-md-2 control-label">Time</label>
+                                    <div class="col-sm-10 col-md-10">
+                                        <input id="inputFilteringArg" name="inputFilteringArg" class="form-control" autocomplete="off"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="grouping">Grouping</p>
+                        <div class="row row--form-block grouping">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="selectGroupType" class="col-sm-2 col-md-2 control-label">Options</label>
@@ -238,9 +270,12 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group">
-                                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
-                                        <button id="saveUser" type="submit" class="btn btn-primary btn-submit" name="btnSave">Save changes</button>
+                                <div class="form-group form-buttons">
+                                    <div class="col-md-offset-3 col-md-5 col-sm-offset-2 col-sm-10">
+                                        <button id="btnSave" type="submit" class="btn btn-primary btn-submit" name="btnSave">Save changes</button>
+                                    </div>
+									<div class="col-md-offset-7 col-md-5 col-sm-offset-2 col-sm-10">
+                                        <button id="btnDelete" type="submit" class="btn btn-danger btn-submit" name="btnDelete">Delete connector</button>
                                     </div>
                                 </div>
                             </div>
@@ -256,7 +291,24 @@
 </div><!-- /.modal -->
 <!-- modal SortAndGroup -->
 
+<!-- Template accordeon for components -->
+<div id="componentTemplate" style="display:none">
+	<h3 class="hidden"><i class="fa fa-angle-right"></i>&nbsp;</h3>
+	<div id="componentTemplateBody">
+		<div class="nano">
 
+			<div id="modules-search" class="toolbox-search modules-search">
+				<input type="text" placeholder="search">
+				<i class="fa fa-search"></i>
+				<i class="fa fa-times"></i>
+			</div>
+
+			<div id="moduleslist" class="modulesholder nano-content">
+			</div>
+		</div>
+	</div>
+</div>
+	
 <script type="text/javascript" src="./lib/overthrow.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -269,7 +321,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="./lib/jquery.mousewheel.min.js"></script>
 <script src="./lib/jquery.panzoom.min.js"></script>
-<script src="./lib/jsplumb.min.2.8.4.js"></script>
+<!--<script src="./lib/jsplumb.min.2.8.4.js"></script>-->
+<script src="./lib/jsplumb.js"></script>
 <script src="./lib/underscore-min.js"></script>
 <script src="./lib/jquery.npContextMenu.js"></script>
 <script src="./lib/jquery.npFileName.js"></script>
@@ -280,11 +333,55 @@
 <script src="../assets/dist/js/config.js"></script>
 <script src="../assets/libs/np/jquery.npmodalconfirm.js" type="text/javascript"></script>
 
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <script src="./workspace.js"></script>
 <script src="./lib/propbar.js"></script>
 <script src="./app.js"></script>
 <script src="./canvas.js"></script>
 <script type="text/javascript" src="../assets/libs/openlayers/ol-poly.js"></script>
+    <script>
+        var myParent = window.parent;
+
+        function refreshSettingsWorkflow() {
+            //size
+            /*$("body").removeClass(function (index, className) {
+                return (className.match (/\bsize-\S+/g) || []).join(' ');
+            });*/
+            removeClassStartingWith($("body"),"size-");
+            $("body").addClass(myParent.themeParameters.size);
+
+            //color
+            removeClassStartingWith($("body"),"skin-");
+            $("#style_css_file_workflows").attr("href", "./css/skins/"+myParent.themeParameters.color+".min.css");
+            $("body").addClass(myParent.themeParameters.color);
+        }
+
+        $(document).ready(function () { 
+            refreshSettingsWorkflow();
+
+            myParent.$(myParent.document).on("settings-change", function(e, args){
+               refreshSettingsWorkflow();
+            });
+
+           /* window.parent.$(window.parent.document).on("size-change", function(e, args){
+                $("body").removeClass(function (index, className) {
+                    return (className.match (/\bsize-\S+/g) || []).join(' ');
+                });
+                $("body").addClass(args.size);
+            });*/
+
+            /*window.parent.$(window.parent.document).on("theme-change", function(e, args){
+                $("body").removeClass(function (index, className) {
+                    return (className.match (/\bsize-\S+/g) || []).join(' ');
+                });
+                $("body").addClass(args.theme);
+            });*/
+
+            $('div[rel="timeline-tooltip"]').tooltip({ container: 'body' });//VPA
+         });
+</script>
+<style>
+#frmConnectorEdit .form-buttons {display:inline-flex;}
+</style>
 </body>
 </html>

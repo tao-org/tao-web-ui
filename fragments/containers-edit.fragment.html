@@ -25,6 +25,7 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 	
     <form id="frmEditContainer" class="form-horizontal" action="" role="form">
 		<input type="hidden" name="system" value="true" />
+		<input type="hidden" name="type" value="" />
         <div class="modal-error collapse">
             <h4 class="modal-title">Error updating toolbox container!</h4>
             <p id="modal-error-msg">Please check your data.</p>
@@ -65,14 +66,47 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
                         <div class="form-group">
                             <label class="col-sm-2 col-md-2 control-label">Applications</label>
                             <div class="col-sm-10 col-md-10" style="overflow:auto;max-height:350px">
-								<table class="table table-bordered tbl-edt" id="tbl-applications">
+							<!--	<table class="table table-bordered tbl-edt" id="tbl-applications">
 									<thead style="position:sticky">
 										<tr><th>Name</th><th>Path</th><th>Memory<br/>Requirements</th><th>Parralel Flag<br/>Template</th></tr>
 									</thead>
 									<tbody>
 										<tr><td></td><td></td><td></td><td></td></tr>
 									</tbody>
+								</table> -->
+
+								<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-applications">
+									<thead>
+										<tr>
+											<th></th>
+											<th>Name</th>
+											<th>Path</th>
+											<th>Memory<br/>Requirements</th>
+											<th>Parralel Flag<br/>Template</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<td colspan="5">
+												<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-cont-addnewapp" data-action="cont-add-new-app">
+													<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new application</span>
+												</button>
+											</td>
+										</tr>
+									</tfoot>
+									<tbody class="tpl-sample-body">
+										<tr class="tpl-sample-row">
+											<th class="del-col" scope="row">
+												<a href="#" class="text tbl-app-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+											</th>
+											<td><input type="text" class="app-name" value="" placeholder="name"></td>
+											<td><input type="text" class="app-path" value="" placeholder="path"></td>
+											<td><input type="text" class="app-memoryRequirements" value="" placeholder="memory requirements"></td>
+											<td><input type="text" class="app-parallelFlagTemplate" value="" placeholder="parallel flag template"></td>
+										</tr>
+										</tbody>
 								</table>
+
                             </div>
                         </div>
                         <div class="form-group">
@@ -171,6 +205,22 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 		}
 		return false;
 	};
+
+	function helper_addApplicationRow($tbl, payload){
+        var obj = {"name":"","path":"","memoryRequirements":"","parallelFlagTemplate":""};
+        $.extend( obj, payload );
+		
+		var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
+		$el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+		
+        $('input.app-name', $el).val(obj.name);
+		$('input.app-path', $el).val(obj.path);
+		$('input.app-memoryRequirements', $el).val(obj.memoryRequirements);
+		$('input.app-parallelFlagTemplate', $el).val(obj.parallelFlagTemplate);
+        $tbl.append($el);
+	}
+
+	
 	//////////////////////////////////////////////////////////////////////////////////////
     $(document).ready( function() {
 		var $form = $("form#frmEditContainer");
@@ -198,7 +248,7 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 				$("img#previewLogo", $form).attr("src", "data:image/png;base64, " + obj.logo);
 			}
 			
-			$("#tbl-applications tbody", $form).html("");
+		/*	$("#tbl-applications tbody", $form).html("");
 			$.each(obj.applications, function (index, app) {
 				var tr = '<tr>' +
 							'<td>' + app.name + '</td>' +
@@ -208,8 +258,12 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 						'</tr>';
 				$("#tbl-applications tbody", $form).append(tr);
 				//$("select#applications", $form).append("<option>" + app.name + "</option>")
-			});
+			});*/
 			
+			$.each(obj.applications, function(i, value) {
+				helper_addApplicationRow($("#tbl-applications"), value);
+				});
+
 			$.each(obj.format, function (index, format) {
 				$("#formats", $form).addTag(format);
 			});
@@ -218,8 +272,21 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 			$("input[name=formatNameParameter]", $form).val(obj.formatNameParameter);
 			$("input[name=commonParameters]", $form).val(obj.commonParameters);
 			$("input[name=tag]", $form).val(obj.tag);
+			$("input[name=type]", $form).val(obj.type);
 		}
+
 		
+		$(".btn-cont-addnewapp").on("click", function(){
+            var $tbl = $(this).closest(".tbl-edt");
+            helper_addApplicationRow($tbl);
+        });
+
+		$(".tbl-edt")
+            .on("click", ".tbl-app-delete-action", function(e){
+                e.preventDefault();
+                $(this).closest(".val-row").remove();
+			});
+			
 		$("form#frmEditContainer")
 		.on("click", "#previewLogo", function (e) {
 			$("#containerLogo", $form).trigger("click");
@@ -233,12 +300,22 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 			var match = value.match(pattern);
 			return value.length == 0 || match;
 		}, 'Remove invalid characters (only allowed small caps letters, numbers and dashes).');
+
+		$.validator.addMethod( "isUnique", function(value,element,params){
+			var isUni = true;
+			if($.inArray(value, nameListTC && value !== obj.name) >= 0 ){
+				isUni = false;
+			}
+			return isUni;
+		}, "Container's name must be unique.");
+
 		// Validate form before submit
 		$("form#frmEditContainer").validate({
 			rules: {
 				name: {
 					required: true,
-					containerName: { regEx: "^[a-z0-9-]+$" }
+					containerName: { regEx: "^[a-z0-9-]+$" },
+					isUnique: true
 				},
 				description: {
 					required: true
@@ -264,6 +341,9 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 		$("form#frmEditContainer").submit(function (event) {
 			event.preventDefault();
 			var logoSrc = $("#previewLogo").hasClass("empty") ? userOpStack.dna.logo : $("#previewLogo").get(0).src;
+			if (typeof logoSrc === "undefined") {
+				logoSrc = "";
+            }
 			if (logoSrc.indexOf(";base64,") >= 0) {
 				logoSrc = logoSrc.substring(logoSrc.indexOf(";base64,") + 8);
 			}
@@ -272,64 +352,110 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 				name               : $("input[name=name]", this).val(),
 				description        : $("textarea[name=description]", this).val(),
 				applicationPath    : $("input[name=applicationPath]", this).val(),
-				applications       : userOpStack.dna.applications,
+			    applications       : [],
 				format             : $('input[name=formats]', this).val().split(','),
 				formatNameParameter: $("input[name=formatNameParameter]", this).val(),
 				commonParameters   : $("input[name=commonParameters]", this).val(),
 				tag                : $("input[name=tag]", this).val(),
-				logo               : logoSrc
+				logo               : logoSrc,
+				type			   : $("input[name=type]", this).val()
 			};
-			if ($(this).valid()) {
-				$(".modal-error ").fadeOut();
+
+			formData.applications = [];
+			var haserror=0;
+			var applNamesArr=[]; 
+
+            var $tblContApp = $("#tbl-applications");
+            $(".val-row", $tblContApp).each(function() {
 				
-				$.ajax({
-					cache: false,
-					url: baseRestApiURL + "docker/" + formData.id,
-					dataType: 'json',
-					type: "PUT",
-					data: JSON.stringify(formData),
-					headers: {
-						"Accept": "application/json",
-						"Content-Type": "application/json",
-						"X-Auth-Token": window.tokenKey
-					},
-					error : function (jqXHR, textStatus, errorThrown) {
-						if (jqXHR.status === 500) {
-							showMsg("Error updating container. Please check your data and try again.", "ERROR");
-							return;
-						}
-						showMsg("Unknown error. Unable to update container. Please try again.", "ERROR");
-					},
-					success: function(response,textStatus, jqXHR) {
-						var r = chkTSRF(response);
-						if (response.status === "FAILED") {
-							if (response.message) {
-								showMsg("Error updating container. Please check your data, one or more values for the attributes were not correct.", "ERROR");
-								//handle error messages
-								
-								var objResponse = JSON.parse(jqXHR.responseText);
-								objResponse = objResponse.message.split(';');
-								if (objResponse[0] !== "Entity has validation errors") {
-									return;
-								}
-								for (i = 0; i < objResponse.length; i ++) {
-									var matches = objResponse[i].match(/\[(.*?)\]/);
-									if (matches) {
-										//$(".error-"+matches[1],".modal-error").show();
-										$(".error-"+matches[1],".modal-error").css('display', 'inline-block');
-									}
-								}
-								$(".modal-error ").fadeIn("slow");
-								$('#myModalNodes').animate({scrollTop: 0}, 250);
+				var name = $(this).find("input.app-name").val();
+				var path = $(this).find("input.app-path").val();
+				var memoryRequirements = $(this).find("input.app-memoryRequirements").val();
+				var parallelFlagTemplate = $(this).find("input.app-parallelFlagTemplate").val();
+
+				var newApp = {};
+			
+               if( (typeof name !== "undefined") && (typeof name.valueOf() === "string") && (name.length > 0) && (typeof path !== "undefined") && (typeof path.valueOf() === "string") && (path.length > 0) ) {
+                    newApp.name = name;
+					newApp.path = path;
+					newApp.memoryRequirements = memoryRequirements;
+					newApp.parallelFlagTemplate = parallelFlagTemplate;
+
+					formData.applications.push(newApp);
+					
+					applNamesArr.push(name);
+                }else{
+					haserror = 1;
+                }
+			});
+
+			var applDuplicates=0;
+			if(applNamesArr.length !== new Set(applNamesArr).size) {
+					applDuplicates = 1;
+					}
+
+			if (haserror==1)
+					{
+					showMsg("Invalid application. Please choose valid names and paths to continue.", "ERROR");
+					}
+			else if (applDuplicates==1)
+					{
+					showMsg("Invalid application. Please choose unique names to continue.", "ERROR");
+					}
+			else{
+
+				if ($(this).valid()) {
+					$(".modal-error ").fadeOut();
+					
+					$.ajax({
+						cache: false,
+						url: baseRestApiURL + "docker/" + formData.id,
+						dataType: 'json',
+						type: "PUT",
+						data: JSON.stringify(formData),
+						headers: {
+							"Accept": "application/json",
+							"Content-Type": "application/json",
+							"X-Auth-Token": window.tokenKey
+						},
+						error : function (jqXHR, textStatus, errorThrown) {
+							if (jqXHR.status === 500) {
+								showMsg("Error updating container. Please check your data and try again.", "ERROR");
 								return;
 							}
-							showMsg("Error updating container. Please check your data and try again.", "ERROR");
+							showMsg("Unknown error. Unable to update container. Please try again.", "ERROR");
+						},
+						success: function(response,textStatus, jqXHR) {
+							var r = chkTSRF(response);
+							if (response.status === "FAILED") {
+								if (response.message) {
+									showMsg("Error updating container. Please check your data, one or more values for the attributes were not correct.", "ERROR");
+									//handle error messages
+									
+									var objResponse = JSON.parse(jqXHR.responseText);
+									objResponse = objResponse.message.split(';');
+									if (objResponse[0] !== "Entity has validation errors") {
+										return;
+									}
+									for (i = 0; i < objResponse.length; i ++) {
+										var matches = objResponse[i].match(/\[(.*?)\]/);
+										if (matches) {
+											//$(".error-"+matches[1],".modal-error").show();
+											$(".error-"+matches[1],".modal-error").css('display', 'inline-block');
+										}
+									}
+									$(".modal-error ").fadeIn("slow");
+									$('#myModalNodes').animate({scrollTop: 0}, 250);
+									return;
+								}
+								showMsg("Error updating container. Please check your data and try again.", "ERROR");
+							}
+							showMsg("Container successfully saved.", "SUCCESS");
+							$("#myModalNodes").modal('hide');
+							panelComp.refreshData();
 						}
-						showMsg("Container successfully saved.", "SUCCESS");
-						$("#myModalNodes").modal('hide');
-						panelComp.refreshData();
-					}
-				});
+					});
+				}
 			}
             return false; // To avoid actual submission of the form
         });

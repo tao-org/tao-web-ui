@@ -40,7 +40,7 @@
                         <div class="row">
                             <div class="col-md-12" id="list-master-controls">
                                 <div class="box-tools pull-left">
-                                    <button class="btn btn-master-tool text-black" data-action="op-plus" data-toggle="tooltip" data-original-title="Add new processing component"><i class="fa fa-plus"></i></button>
+                                    <button class="btn btn-master-tool text-black" data-action="op-plus" data-toggle="tooltip" data-original-title="Add new user"><i class="fa fa-plus"></i></button>
                                 </div>
                                 <div class="box-tools pull-left">
                                     <button class="btn btn-master-tool text-black" data-action="op-filter" data-toggle="tooltip" data-original-title="Filter by tags"><i class="fa fa-filter"></i><span class="label label-warning val-count-filters" style="display:none;">0</span></button>
@@ -76,7 +76,7 @@
                                         <div class="box-tools pull-right nppaginatedcells-order collapse" data-toggle="tooltip" title="Change order"></div>
                                     </div>
                                     <div class="nppaginatedcells-empty callout callout-empty">
-                                        <p>Component list is empty. <span class="results-empty">You do not have any components.</span><span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
+                                        <p>List is empty. <span class="results-empty">You do not have any user.</span><span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
                                     </div>
                                     <div class="box-body chat users-box">
                                         <div class="nppaginatedcells-panel-body">
@@ -89,7 +89,6 @@
                                                             <span>Tag1</span><span>Tag2</span><span>Tag3</span>
                                                         </div>
                                                         <div class="box-top">
-                                                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i>&nbsp;<span class="val-ago">never</span></small>
                                                             <div class="box-title"><span class="val-fullName"> ##### </span></div>
                                                             <div class="box-subtitle"><span class="val-username">  #####  </span></div>
                                                         </div>
@@ -99,15 +98,9 @@
                                                                 <p class="message">
                                                                     <span class="u-i-span">Groups: <strong><span class="val-labelGroups">###</span></strong></span>
                                                                     <span class="u-i-span">Email address: <strong><span class="val-email">###</span></strong></span>
-                                                                    <span class="u-i-span">Alternative email: <strong><span class="val-alternativeEmail">###</span></strong></span>
                                                                     <span class="u-i-span">User type: <strong><span class="val-labelUserType">###</span></strong></span>
                                                                     <span class="u-i-span">Status: <strong><span class="val-status">###</span></strong></span>
-                                                                    <span class="u-i-span">Phone: <strong><span class="val-phone">###</span></strong></span>
-                                                                    <span class="u-i-span">Organization: <strong><span class="val-organization">###</span></strong></span>
-                                                                    <span class="u-i-span">CPU quota: <strong><span class="val-cpuQuota">###</span></strong></span>
-                                                                    <span class="u-i-span">Memory quota: <strong><span class="val-memoryQuota">###</span></strong></span>
-                                                                    <span class="u-i-span">Input quota: <strong><span class="val-inputQuota">###</span></strong><span class="val-usageInputQuota"></span></span>
-                                                                    <span class="u-i-span">Processing quota: <strong><span class="val-processingQuota">###</span></strong><span class="val-usageProcessingQuota"></span></span>
+                                                                    <span class="u-i-span">Last log-in: <strong><span class="val-ago">never</span></strong></span>
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -131,7 +124,6 @@
                                                             <span>Tag1</span><span>Tag2</span><span>Tag3</span>
                                                         </div>
                                                         <div class="box-top">
-                                                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i>&nbsp;<span class="val-ago">never</span></small>
                                                             <div class="box-title"><span class="val-fullName"> ##### </span></div>
                                                             <div class="box-subtitle"><span class="val-username">  #####  </span></div>
                                                         </div>
@@ -140,15 +132,10 @@
                                                         <p class="message">
                                                             <span class="u-i-span">Groups: <strong><span class="val-labelGroups">###</span></strong></span>
                                                             <span class="u-i-span">Email address: <strong><span class="val-email">###</span></strong></span>
-                                                            <span class="u-i-span">Alternative email: <strong><span class="val-alternativeEmail">###</span></strong></span>
                                                             <span class="u-i-span">User type: <strong><span class="val-labelUserType">###</span></strong></span>
                                                             <span class="u-i-span">Status: <strong><span class="val-status">###</span></strong></span>
-                                                            <span class="u-i-span">Phone: <strong><span class="val-phone">###</span></strong></span>
-                                                            <span class="u-i-span">Organization: <strong><span class="val-organization">###</span></strong></span>
-                                                            <span class="u-i-span">CPU quota: <strong><span class="val-cpuQuota">###</span></strong></span>
-                                                            <span class="u-i-span">Memory quota: <strong><span class="val-memoryQuota">###</span></strong></span>
-                                                            <span class="u-i-span">Input quota: <strong><span class="val-inputQuota">###</span></strong><span class="val-usageInputQuota"></span></span>
-                                                            <span class="u-i-span">Processing quota: <strong><span class="val-processingQuota">###</span></strong><span class="val-usageProcessingQuota"></span></span>
+                                                            <span class="u-i-span">Last log-in: <strong><span class="val-ago">never</span></strong></span>
+                                                            
                                                         </p>
                                                         <div class="box-bottom">
                                                             <div class="">
@@ -298,34 +285,30 @@
                     data[i].ago = niceIsoTime(data[i].lastLoginDate);
                     var userEmailMD5 = CryptoJS.MD5(data[i].email).toString();
                     data[i].gravatarUrl = "https://www.gravatar.com/avatar/"+userEmailMD5+"?d=mp&s=80";
-                    if(data[i].external){
-                        data[i].labelUserType = "external user (LDAP)";
-                    } else{
-                        data[i].labelUserType = "TAO local user";
-                    }
+                    data[i].labelUserType = data[i].userType;
                     if(data[i].cpuQuota === -1){
-                        data[i].cpuQuota = "unmitered";
+                        data[i].cpuQuota = "unmeterred";
                     }else{
-                        data[i].cpuQuota += "X";
+                        data[i].cpuQuota += " X";
                     }
                     if(data[i].inputQuota === -1){
-                        data[i].inputQuota = "unmitered";
+                        data[i].inputQuota = "unmeterred";
                         data[i].usageInputQuota = "";
                     }else{
-                        data[i].inputQuota += "GB";
-                        data[i].usageInputQuota = ", using: "+data[i].actualInputQuota + "GB";
+                        data[i].inputQuota += " GB";
+                        data[i].usageInputQuota = ", using: "+data[i].actualInputQuota + " GB";
                     }
                     if(data[i].memoryQuota === -1){
-                        data[i].memoryQuota = "unmitered";
+                        data[i].memoryQuota = "unmeterred";
                     }else{
-                        data[i].memoryQuota += "GB";
+                        data[i].memoryQuota += " GB";
                     }
                     if(data[i].processingQuota === -1){
-                        data[i].processingQuota = "unmitered";
+                        data[i].processingQuota = "unmeterred";
                         data[i].usageProcessingQuota = "";
                     }else{
-                        data[i].processingQuota += "GB";
-                        data[i].usageProcessingQuota = ", using: "+data[i].actualProcessingQuota + "GB";
+                        data[i].processingQuota += " GB";
+                        data[i].usageProcessingQuota = ", using: "+data[i].actualProcessingQuota + " GB";
                     }
                 }
                 return data;

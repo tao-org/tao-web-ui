@@ -1,6 +1,6 @@
 # tao-web-ui
 
-Web interface of the TAO framework. A visual tool for creating workflows TAO.
+Web interface of the TAO framework. A visual tool for creating workflows.
 
 ## Quick Start
 
@@ -13,4 +13,4 @@ Check out the docs for full instructions on getting started.
 
 ## Copyright and license
 
-Copyright CS Romania and other contributors, under GNU General Public License v3.0 (LICENSE).
+Copyright CS GROUP ROMANIA and other contributors, under GNU General Public License v3.0 (LICENSE).

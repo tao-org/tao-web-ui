@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html>
+    <style>
+        .error{color: red; font-weight: normal;}
+        .fonts{font-size: unset;}
+    </style>
+	<style data="test" type="text/css"></style>
 <head>
     <meta charset="UTF-8">
     <title>TAO | Dashboard</title>
@@ -9,11 +14,17 @@
     <link href="./assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="./assets/libs/gritter/css/avl.jquery.gritter.css" />
     <!-- Theme style -->
     <link href="./assets/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
     <link href="./assets/dist/css/AdminLTEplus.css" rel="stylesheet" type="text/css" />
-    <link href="./assets/dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/dist/css/size-customization.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css" id="style_css_file"/>
 
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js
+    " type="text/javascript"></script>
+    
     <link rel="apple-touch-icon-precomposed" sizes="57x57" href="./apple-touch-icon-57x57.png" />
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./apple-touch-icon-114x114.png" />
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./apple-touch-icon-72x72.png" />
@@ -48,7 +59,8 @@
     </script>
 </head>
 
-<body class="skin-blue sidebar-mini size-normal noselect">
+<body class="sidebar-mini size-normal noselect">
+
 <!-- messages -->
 <div id="messagesBox">
     <div id="messagesBoxItemX" class="messagesBoxItem hidden" style=""></div>
@@ -124,7 +136,7 @@
                     <li class="dropdown messages-menu execution-notif-menu">
                         <!-- Menu toggle button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-random"></i>
+                            <i class="fa fa-envelope-o"></i>
                             <span id="val-countdocs02" class="label label-warning">0</span>
                         </a>
                     </li>
@@ -132,7 +144,7 @@
                     <li class="dropdown messages-menu error-notif-menu">
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-bell-o"></i>
+                            <i class="fa fa-exclamation-triangle"></i>
                             <span id="val-latedocs02" class="label label-danger">0</span>
                         </a>
 
@@ -202,30 +214,47 @@
                 <li class="routed routed-admin-dashboard active">
                     <a href="#admin/dashboard"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
                 </li>
-                <li class="treeview routed routed-my-queries routed-my-components routed-my-workflows routed-my-auxfiles routed-my-scheduling">
-                    <a href="#default"><i class="fa fa-briefcase"></i><span>My WORKSPACE</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <li class="treeview routed routed-my-explorer routed-my-sites routed-my-repositories routed-my-queries">
+                    <a href="#default"><i class="fa fa-wpexplorer"></i><span>My Datasets</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                    	<li class="routed routed-my-queries"><a href="#my/queries">Queries</a></li>
-                        <li class="routed routed-my-components"><a href="#my/components">Components</a></li>
-                        <li class="routed routed-my-workflows"><a href="#my/workflows">Workflows</a></li>
-                        <li class="routed routed-my-auxfiles"><a href="#my/auxfiles">My Files</a></li>
-                        <li class="routed routed-my-scheduling"><a href="#my/scheduling">Scheduling</a></li>
+                        <!--<li class="routed routed-auxfiles"><a href="#my/auxfiles">Repositories</a></li>-->
+                        <li class="routed routed-my-explorer active">
+                            <a href="#my/explorer">Search</a>
+                        </li>
+                        <li class="routed routed-my-sites"><a href="#my/sites">Sites</a></li>
+                        <li class="routed routed-my-repositories"><a href="#my/repositories">Repositories</a></li>
+                        <li class="routed routed-my-queries"><a href="#my/queries">Product sets</a></li>
                     </ul>
                 </li>
-                <li class="treeview routed routed-shared-datasources routed-shared-components routed-shared-workflows routed-shared-auxfiles">
+                <li class="treeview routed routed-my-workflows routed-my-scheduling routed-my-remoteServices">
+                    <a href="#default"><i class="fa fa-briefcase"></i><span>My Workflows</span> <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+						<li class="routed routed-my-workflows active"><a href="#my/workflows">Workflows</a></li>
+                        <li class="routed routed-my-remoteServices">
+                            <a href="#my/remoteServices">Remote Services</a>
+                        </li>
+                        <li class="routed routed-my-scheduling"><a href="#my/scheduling">Scheduled Jobs</a></li>
+                    </ul>
+                </li>
+               <!--<li class="treeview routed routed-shared-datasources routed-shared-components routed-shared-workflows routed-shared-auxfiles">
                     <a href="#default"><i class="fa fa-share-alt"></i><span>SHARED WORKSPACE</span> <i class="fa fa-angle-left pull-right"></i></a>
-                    <ul class="treeview-menu">
-                     	<li class="routed routed-shared-datasources"><a href="#shared/datasources">Data sources</a></li>
-                     	<li class="routed routed-shared-components"><a href="#shared/components">Components</a></li>
-                        <li class="routed routed-shared-workflows"><a href="#shared/workflows">Workflows</a></li>
-                        <li class="routed routed-shared-auxfiles"><a href="#shared/auxfiles">Common Files</a></li>
+                    <ul class="treeview-menu">-->
+                     	<!--<li class="routed routed-shared-datasources"><a href="#shared/datasources">Data sources</a></li>-->
+                     	<!--<li class="routed routed-shared-components"><a href="#shared/components">Components</a></li>
+                        <li class="routed routed-shared-workflows"><a href="#shared/workflows">Workflows</a></li>-->
+                 <!--       <li class="routed routed-shared-auxfiles"><a href="#shared/auxfiles">Common Files</a></li>
                     </ul>
-                </li>
-                <li class="treeview routed routed-admin-topology routed-admin-containers routed-admin-users admin-mode-only">
-                    <a href="#"><i class="fa fa-link"></i> <span>RESOURCES</span> <i class="fa fa-angle-left pull-right"></i></a>
-                    <ul class="treeview-menu">                        
-                        <li class="routed routed-admin-topology"><a href="#admin/topology">Topology</a></li>
+                </li>-->
+                <li class="treeview routed routed-admin-components routed-admin-datasources routed-admin-topology routed-admin-containers routed-admin-repositoriesTemplate routed-admin-remoteServices routed-admin-users routed-admin-systemDashboard admin-mode-only">
+                    <a href="#"><i class="fa fa-link"></i> <span>Admin area</span> <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class="routed routed-admin-systemDashboard"><a href="#admin/systemDashboard">System Dashboard</a></li>
                         <li class="routed routed-admin-containers"><a href="#admin/containers">Toolbox Containers</a></li>
+                        <li class="routed routed-admin-components"><a href="#admin/components">Components</a></li>
+                        <li class="routed routed-admin-remoteServices"><a href="#admin/remoteServices">Remote Web Services</a></li>
+						<li class="routed routed-admin-datasources"><a href="#admin/datasources">Data sources</a></li>
+                        <li class="routed routed-admin-repositoriesTemplate"><a href="#admin/repositoriesTemplate">Public Repositories</a></li>
+                        <li class="routed routed-admin-topology"><a href="#admin/topology">Topology</a></li>
                         <li class="routed routed-admin-users"><a href="#admin/users">Users</a></li>
                     </ul>
                 </li>
@@ -294,10 +323,8 @@ Nothing to see!
 
     <!-- Main Footer -->
     <footer class="main-footer">
-        <!-- To the right -->
-        <div class="pull-right hidden-xs">Page timestamp: <span id="page-timestamp"></span></div>
         <!-- Default to the left -->
-        Copyright &copy; 2018 <b><a href="./" class="text-black"> - Tool Augmentation by User Enhancements and Orchestration (TAO)</a></b>
+        Copyright &copy; 2023 <b><a href="./" class="text-black"> - CS GROUP ROMANIA</a></b>
     </footer>
 
     <!-- Control Sidebar -->
@@ -305,7 +332,6 @@ Nothing to see!
         <!-- Create the tabs -->
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
             <li class="active"><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-            <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -342,35 +368,42 @@ Nothing to see!
             <div class="tab-pane active" id="control-sidebar-settings-tab">
                 <form id="frmSettings" name="frmSettings">
                     <h3 class="control-sidebar-heading">Settings</h3>
-                    <p>General settings will only inpact on your account.</p>
+                    <p>General settings will only affect your account.</p>
                     <div class="form-group">
                         <label for="selectSettingsBodySize" class="control-label">Font size:</label>
                         <select id="selectSettingsBodySize" name="selectSettingsBodySize" class="form-control form-changesettings"><option value="size-small" >Small</option><option value="size-normal"  selected>Normal</option><option value="size-large" >Large</option><option value="size-larger" >Extra Large</option></select>
                     </div>
-                    <!-- /.form-group -->
-                    <div class="form-group">
-                        <label for="selectSettingsTimezone" class="control-label">Local timezone:</label>
-                        <select id="selectSettingsTimezone" name="selectSettingsTimezone" class="form-control form-changesettings"><option value="Pacific/Midway" >UTC -11:00: U.S. Outlying Islands (Midway) Time</option><option value="Pacific/Niue" >UTC -11:00: Niue Time</option><option value="Pacific/Pago_Pago" >UTC -11:00: American Samoa Time</option><option value="America/Adak" >UTC -10:00: World (Adak) Time</option><option value="Pacific/Honolulu" >UTC -10:00: United States (Honolulu) Time</option><option value="Pacific/Johnston" >UTC -10:00: U.S. Outlying Islands (Johnston) Time</option><option value="Pacific/Rarotonga" >UTC -10:00: Cook Islands Time</option><option value="Pacific/Tahiti" >UTC -10:00: French Polynesia Time</option><option value="US/Hawaii" >UTC -10:00: United States (Honolulu) Time</option><option value="Pacific/Marquesas" >UTC -09:30: World (Marquesas) Time</option><option value="America/Anchorage" >UTC -09:00: United States (Anchorage) Time</option><option value="America/Juneau" >UTC -09:00: United States (Juneau) Time</option><option value="America/Metlakatla" >UTC -09:00: World (Metlakatla) Time</option><option value="America/Nome" >UTC -09:00: United States (Nome) Time</option><option value="America/Sitka" >UTC -09:00: United States (Sitka) Time</option><option value="America/Yakutat" >UTC -09:00: United States (Yakutat) Time</option><option value="Pacific/Gambier" >UTC -09:00: World (Gambier) Time</option><option value="US/Alaska" >UTC -09:00: United States (Anchorage) Time</option><option value="America/Dawson" >UTC -08:00: Canada (Dawson) Time</option><option value="America/Los_Angeles" >UTC -08:00: United States (Los Angeles) Time</option><option value="America/Santa_Isabel" >UTC -08:00: Mexico (Santa Isabel) Time</option><option value="America/Tijuana" >UTC -08:00: Mexico (Tijuana) Time</option><option value="America/Vancouver" >UTC -08:00: Canada (Vancouver) Time</option><option value="America/Whitehorse" >UTC -08:00: Canada (Whitehorse) Time</option><option value="Canada/Pacific" >UTC -08:00: Canada (Vancouver) Time</option><option value="Pacific/Pitcairn" >UTC -08:00: World (Pitcairn) Time</option><option value="US/Pacific" >UTC -08:00: United States (Los Angeles) Time</option><option value="America/Boise" >UTC -07:00: United States (Boise) Time</option><option value="America/Cambridge_Bay" >UTC -07:00: Canada (Cambridge Bay) Time</option><option value="America/Chihuahua" >UTC -07:00: Mexico (Chihuahua) Time</option><option value="America/Creston" >UTC -07:00: Canada (Creston) Time</option><option value="America/Dawson_Creek" >UTC -07:00: Canada (Dawson Creek) Time</option><option value="America/Denver" >UTC -07:00: United States (Denver) Time</option><option value="America/Edmonton" >UTC -07:00: Canada (Edmonton) Time</option><option value="America/Hermosillo" >UTC -07:00: Mexico (Hermosillo) Time</option><option value="America/Inuvik" >UTC -07:00: Canada (Inuvik) Time</option><option value="America/Mazatlan" >UTC -07:00: Mexico (Mazatlan) Time</option><option value="America/Ojinaga" >UTC -07:00: Mexico (Ojinaga) Time</option><option value="America/Phoenix" >UTC -07:00: United States (Phoenix) Time</option><option value="America/Yellowknife" >UTC -07:00: Canada (Yellowknife) Time</option><option value="Canada/Mountain" >UTC -07:00: Canada (Edmonton) Time</option><option value="US/Arizona" >UTC -07:00: United States (Phoenix) Time</option><option value="US/Mountain" >UTC -07:00: United States (Denver) Time</option><option value="America/Bahia_Banderas" >UTC -06:00: Mexico (Bahia Banderas) Time</option><option value="America/Belize" >UTC -06:00: Belize Time</option><option value="America/Chicago" >UTC -06:00: United States (Chicago) Time</option><option value="America/Costa_Rica" >UTC -06:00: Costa Rica Time</option><option value="America/El_Salvador" >UTC -06:00: El Salvador Time</option><option value="America/Guatemala" >UTC -06:00: Guatemala Time</option><option value="America/Indiana/Knox" >UTC -06:00: United States (Knox, Indiana) Time</option><option value="America/Indiana/Tell_City" >UTC -06:00: United States (Tell City, Indiana) Time</option><option value="America/Managua" >UTC -06:00: Nicaragua Time</option><option value="America/Matamoros" >UTC -06:00: Mexico (Matamoros) Time</option><option value="America/Menominee" >UTC -06:00: United States (Menominee) Time</option><option value="America/Merida" >UTC -06:00: Mexico (Merida) Time</option><option value="America/Mexico_City" >UTC -06:00: Mexico (Mexico City) Time</option><option value="America/Monterrey" >UTC -06:00: Mexico (Monterrey) Time</option><option value="America/North_Dakota/Beulah" >UTC -06:00: United States (Beulah, North Dakota) Time</option><option value="America/North_Dakota/Center" >UTC -06:00: United States (Center, North Dakota) Time</option><option value="America/North_Dakota/New_Salem" >UTC -06:00: United States (New Salem, North Dakota) Time</option><option value="America/Rainy_River" >UTC -06:00: Canada (Rainy River) Time</option><option value="America/Rankin_Inlet" >UTC -06:00: Canada (Rankin Inlet) Time</option><option value="America/Regina" >UTC -06:00: Canada (Regina) Time</option><option value="America/Resolute" >UTC -06:00: Canada (Resolute) Time</option><option value="America/Swift_Current" >UTC -06:00: Canada (Swift Current) Time</option><option value="America/Tegucigalpa" >UTC -06:00: Honduras Time</option><option value="America/Winnipeg" >UTC -06:00: Canada (Winnipeg) Time</option><option value="Canada/Central" >UTC -06:00: Canada (Winnipeg) Time</option><option value="Pacific/Galapagos" >UTC -06:00: Ecuador (Galapagos) Time</option><option value="US/Central" >UTC -06:00: United States (Chicago) Time</option><option value="America/Atikokan" >UTC -05:00: Canada (Atikokan) Time</option><option value="America/Bogota" >UTC -05:00: Colombia Time</option><option value="America/Cancun" >UTC -05:00: Mexico (Cancun) Time</option><option value="America/Cayman" >UTC -05:00: Cayman Islands Time</option><option value="America/Detroit" >UTC -05:00: United States (Detroit) Time</option><option value="America/Eirunepe" >UTC -05:00: Brazil (Eirunepe) Time</option><option value="America/Guayaquil" >UTC -05:00: Ecuador (Guayaquil) Time</option><option value="America/Havana" >UTC -05:00: World (Havana) Time</option><option value="America/Indiana/Indianapolis" >UTC -05:00: United States (Indianapolis) Time</option><option value="America/Indiana/Marengo" >UTC -05:00: United States (Marengo, Indiana) Time</option><option value="America/Indiana/Petersburg" >UTC -05:00: United States (Petersburg, Indiana) Time</option><option value="America/Indiana/Vevay" >UTC -05:00: United States (Vevay, Indiana) Time</option><option value="America/Indiana/Vincennes" >UTC -05:00: United States (Vincennes, Indiana) Time</option><option value="America/Indiana/Winamac" >UTC -05:00: United States (Winamac, Indiana) Time</option><option value="America/Iqaluit" >UTC -05:00: Canada (Iqaluit) Time</option><option value="America/Jamaica" >UTC -05:00: Jamaica Time</option><option value="America/Kentucky/Louisville" >UTC -05:00: United States (Louisville) Time</option><option value="America/Kentucky/Monticello" >UTC -05:00: United States (Monticello, Kentucky) Time</option><option value="America/Lima" >UTC -05:00: Peru Time</option><option value="America/Montreal" >UTC -05:00: Canada (Montreal) Time</option><option value="America/Nassau" >UTC -05:00: Bahamas Time</option><option value="America/New_York" >UTC -05:00: United States (New York) Time</option><option value="America/Nipigon" >UTC -05:00: Canada (Nipigon) Time</option><option value="America/Panama" >UTC -05:00: Panama Time</option><option value="America/Pangnirtung" >UTC -05:00: Canada (Pangnirtung) Time</option><option value="America/Port-au-Prince" >UTC -05:00: Haiti Time</option><option value="America/Rio_Branco" >UTC -05:00: Brazil (Rio Branco) Time</option><option value="America/Thunder_Bay" >UTC -05:00: Canada (Thunder Bay) Time</option><option value="America/Toronto" >UTC -05:00: Canada (Toronto) Time</option><option value="Canada/Eastern" >UTC -05:00: Canada (Toronto) Time</option><option value="Pacific/Easter" >UTC -05:00: World (Easter) Time</option><option value="US/Eastern" >UTC -05:00: United States (New York) Time</option><option value="America/Anguilla" >UTC -04:00: Anguilla Time</option><option value="America/Antigua" >UTC -04:00: Antigua and Barbuda Time</option><option value="America/Aruba" >UTC -04:00: Aruba Time</option><option value="America/Barbados" >UTC -04:00: Barbados Time</option><option value="America/Blanc-Sablon" >UTC -04:00: Canada (Blanc-Sablon) Time</option><option value="America/Boa_Vista" >UTC -04:00: Brazil (Boa Vista) Time</option><option value="America/Caracas" >UTC -04:00: Venezuela Time</option><option value="America/Curacao" >UTC -04:00: Curaçao Time</option><option value="America/Dominica" >UTC -04:00: Dominica Time</option><option value="America/Glace_Bay" >UTC -04:00: Canada (Glace Bay) Time</option><option value="America/Goose_Bay" >UTC -04:00: Canada (Goose Bay) Time</option><option value="America/Grand_Turk" >UTC -04:00: Turks and Caicos Islands Time</option><option value="America/Grenada" >UTC -04:00: Grenada Time</option><option value="America/Guadeloupe" >UTC -04:00: Guadeloupe Time</option><option value="America/Guyana" >UTC -04:00: Guyana Time</option><option value="America/Halifax" >UTC -04:00: Canada (Halifax) Time</option><option value="America/Kralendijk" >UTC -04:00: Caribbean Netherlands Time</option><option value="America/La_Paz" >UTC -04:00: Bolivia Time</option><option value="America/Lower_Princes" >UTC -04:00: Sint Maarten Time</option><option value="America/Manaus" >UTC -04:00: Brazil (Manaus) Time</option><option value="America/Marigot" >UTC -04:00: Saint Martin Time</option><option value="America/Martinique" >UTC -04:00: Martinique Time</option><option value="America/Moncton" >UTC -04:00: Canada (Moncton) Time</option><option value="America/Montserrat" >UTC -04:00: Montserrat Time</option><option value="America/Port_of_Spain" >UTC -04:00: Trinidad and Tobago Time</option><option value="America/Porto_Velho" >UTC -04:00: Brazil (Porto Velho) Time</option><option value="America/Puerto_Rico" >UTC -04:00: Puerto Rico Time</option><option value="America/Santo_Domingo" >UTC -04:00: Dominican Republic Time</option><option value="America/St_Barthelemy" >UTC -04:00: Saint Barthélemy Time</option><option value="America/St_Kitts" >UTC -04:00: Saint Kitts and Nevis Time</option><option value="America/St_Lucia" >UTC -04:00: Saint Lucia Time</option><option value="America/St_Thomas" >UTC -04:00: U.S. Virgin Islands Time</option><option value="America/St_Vincent" >UTC -04:00: Saint Vincent and the Grenadines Time</option><option value="America/Thule" >UTC -04:00: Greenland (Thule) Time</option><option value="America/Tortola" >UTC -04:00: British Virgin Islands Time</option><option value="Atlantic/Bermuda" >UTC -04:00: Bermuda Time</option><option value="Canada/Atlantic" >UTC -04:00: Canada (Halifax) Time</option><option value="America/St_Johns" >UTC -03:30: Canada (St. John’s) Time</option><option value="Canada/Newfoundland" >UTC -03:30: Canada (St. John’s) Time</option><option value="America/Araguaina" >UTC -03:00: Brazil (Araguaina) Time</option><option value="America/Argentina/Buenos_Aires" >UTC -03:00: Argentina (Buenos Aires) Time</option><option value="America/Argentina/Catamarca" >UTC -03:00: Argentina (Catamarca) Time</option><option value="America/Argentina/Cordoba" >UTC -03:00: Argentina (Cordoba) Time</option><option value="America/Argentina/Jujuy" >UTC -03:00: Argentina (Jujuy) Time</option><option value="America/Argentina/La_Rioja" >UTC -03:00: Argentina (Argentina/La Rioja) Time</option><option value="America/Argentina/Mendoza" >UTC -03:00: Argentina (Mendoza) Time</option><option value="America/Argentina/Rio_Gallegos" >UTC -03:00: Argentina (Argentina/Rio Gallegos) Time</option><option value="America/Argentina/Salta" >UTC -03:00: Argentina (Argentina/Salta) Time</option><option value="America/Argentina/San_Juan" >UTC -03:00: Argentina (Argentina/San Juan) Time</option><option value="America/Argentina/San_Luis" >UTC -03:00: Argentina (Argentina/San Luis) Time</option><option value="America/Argentina/Tucuman" >UTC -03:00: Argentina (Argentina/Tucuman) Time</option><option value="America/Argentina/Ushuaia" >UTC -03:00: Argentina (Argentina/Ushuaia) Time</option><option value="America/Asuncion" >UTC -03:00: Paraguay Time</option><option value="America/Bahia" >UTC -03:00: Brazil (Bahia) Time</option><option value="America/Belem" >UTC -03:00: Brazil (Belem) Time</option><option value="America/Campo_Grande" >UTC -03:00: Brazil (Campo Grande) Time</option><option value="America/Cayenne" >UTC -03:00: French Guiana Time</option><option value="America/Cuiaba" >UTC -03:00: Brazil (Cuiaba) Time</option><option value="America/Fortaleza" >UTC -03:00: Brazil (Fortaleza) Time</option><option value="America/Godthab" >UTC -03:00: Greenland (Nuuk) Time</option><option value="America/Maceio" >UTC -03:00: Brazil (Maceio) Time</option><option value="America/Miquelon" >UTC -03:00: World (Miquelon) Time</option><option value="America/Montevideo" >UTC -03:00: Uruguay Time</option><option value="America/Paramaribo" >UTC -03:00: Suriname Time</option><option value="America/Recife" >UTC -03:00: Brazil (Recife) Time</option><option value="America/Santarem" >UTC -03:00: Brazil (Santarem) Time</option><option value="America/Santiago" >UTC -03:00: Chile Time</option><option value="Antarctica/Palmer" >UTC -03:00: Antarctica (Palmer) Time</option><option value="Antarctica/Rothera" >UTC -03:00: Antarctica (Rothera) Time</option><option value="Atlantic/Stanley" >UTC -03:00: Falkland Islands Time</option><option value="America/Noronha" >UTC -02:00: Brazil (Noronha) Time</option><option value="America/Sao_Paulo" >UTC -02:00: Brazil (Sao Paulo) Time</option><option value="Atlantic/South_Georgia" >UTC -02:00: South Georgia and the South Sandwich Islands Time</option><option value="America/Scoresbysund" >UTC -01:00: Greenland (Ittoqqortoormiit) Time</option><option value="Atlantic/Azores" >UTC -01:00: Portugal (Azores) Time</option><option value="Atlantic/Cape_Verde" >UTC -01:00: Cape Verde Time</option><option value="Africa/Abidjan" >UTC +00:00: Côte d’Ivoire Time</option><option value="Africa/Accra" >UTC +00:00: Ghana Time</option><option value="Africa/Bamako" >UTC +00:00: Mali Time</option><option value="Africa/Banjul" >UTC +00:00: Gambia Time</option><option value="Africa/Bissau" >UTC +00:00: Guinea-Bissau Time</option><option value="Africa/Casablanca" >UTC +00:00: Morocco Time</option><option value="Africa/Conakry" >UTC +00:00: Guinea Time</option><option value="Africa/Dakar" >UTC +00:00: Senegal Time</option><option value="Africa/El_Aaiun" >UTC +00:00: Western Sahara Time</option><option value="Africa/Freetown" >UTC +00:00: Sierra Leone Time</option><option value="Africa/Lome" >UTC +00:00: Togo Time</option><option value="Africa/Monrovia" >UTC +00:00: Liberia Time</option><option value="Africa/Nouakchott" >UTC +00:00: Mauritania Time</option><option value="Africa/Ouagadougou" >UTC +00:00: Burkina Faso Time</option><option value="Africa/Sao_Tome" >UTC +00:00: São Tomé and Príncipe Time</option><option value="America/Danmarkshavn" >UTC +00:00: Greenland (Danmarkshavn) Time</option><option value="Antarctica/Troll" >UTC +00:00: Unknown Region (Troll) Time</option><option value="Atlantic/Canary" >UTC +00:00: Spain (Canary) Time</option><option value="Atlantic/Faroe" >UTC +00:00: Faroe Islands Time</option><option value="Atlantic/Madeira" >UTC +00:00: Portugal (Madeira) Time</option><option value="Atlantic/Reykjavik" >UTC +00:00: Iceland Time</option><option value="Atlantic/St_Helena" >UTC +00:00: Saint Helena Time</option><option value="Europe/Dublin" >UTC +00:00: Ireland Time</option><option value="Europe/Guernsey" >UTC +00:00: Guernsey Time</option><option value="Europe/Isle_of_Man" >UTC +00:00: Isle of Man Time</option><option value="Europe/Jersey" >UTC +00:00: Jersey Time</option><option value="Europe/Lisbon" >UTC +00:00: Portugal (Lisbon) Time</option><option value="Europe/London" >UTC +00:00: United Kingdom Time</option><option value="GMT" >GMT</option><option value="UTC" >UTC</option><option value="Africa/Algiers" >UTC +01:00: Algeria Time</option><option value="Africa/Bangui" >UTC +01:00: Central African Republic Time</option><option value="Africa/Brazzaville" >UTC +01:00: Congo - Brazzaville Time</option><option value="Africa/Ceuta" >UTC +01:00: Spain (Ceuta) Time</option><option value="Africa/Douala" >UTC +01:00: Cameroon Time</option><option value="Africa/Kinshasa" >UTC +01:00: Congo - Kinshasa (Kinshasa) Time</option><option value="Africa/Lagos" >UTC +01:00: Nigeria Time</option><option value="Africa/Libreville" >UTC +01:00: Gabon Time</option><option value="Africa/Luanda" >UTC +01:00: Angola Time</option><option value="Africa/Malabo" >UTC +01:00: Equatorial Guinea Time</option><option value="Africa/Ndjamena" >UTC +01:00: Chad Time</option><option value="Africa/Niamey" >UTC +01:00: Niger Time</option><option value="Africa/Porto-Novo" >UTC +01:00: Benin Time</option><option value="Africa/Tunis" >UTC +01:00: Tunisia Time</option><option value="Arctic/Longyearbyen" >UTC +01:00: Svalbard and Jan Mayen Time</option><option value="Europe/Amsterdam" >UTC +01:00: Netherlands Time</option><option value="Europe/Andorra" >UTC +01:00: Andorra Time</option><option value="Europe/Belgrade" >UTC +01:00: Serbia Time</option><option value="Europe/Berlin" >UTC +01:00: Germany (Berlin) Time</option><option value="Europe/Bratislava" >UTC +01:00: Slovakia Time</option><option value="Europe/Brussels" >UTC +01:00: Belgium Time</option><option value="Europe/Budapest" >UTC +01:00: Hungary Time</option><option value="Europe/Busingen" >UTC +01:00: Germany (Busingen) Time</option><option value="Europe/Copenhagen" >UTC +01:00: Denmark Time</option><option value="Europe/Gibraltar" >UTC +01:00: Gibraltar Time</option><option value="Europe/Ljubljana" >UTC +01:00: Slovenia Time</option><option value="Europe/Luxembourg" >UTC +01:00: Luxembourg Time</option><option value="Europe/Madrid" >UTC +01:00: Spain (Madrid) Time</option><option value="Europe/Malta" >UTC +01:00: Malta Time</option><option value="Europe/Monaco" >UTC +01:00: Monaco Time</option><option value="Europe/Oslo" >UTC +01:00: Norway Time</option><option value="Europe/Paris" >UTC +01:00: France Time</option><option value="Europe/Podgorica" >UTC +01:00: Montenegro Time</option><option value="Europe/Prague" >UTC +01:00: Czech Republic Time</option><option value="Europe/Rome" >UTC +01:00: Italy Time</option><option value="Europe/San_Marino" >UTC +01:00: San Marino Time</option><option value="Europe/Sarajevo" >UTC +01:00: Bosnia and Herzegovina Time</option><option value="Europe/Skopje" >UTC +01:00: Macedonia Time</option><option value="Europe/Stockholm" >UTC +01:00: Sweden Time</option><option value="Europe/Tirane" >UTC +01:00: Albania Time</option><option value="Europe/Vaduz" >UTC +01:00: Liechtenstein Time</option><option value="Europe/Vatican" >UTC +01:00: Vatican City Time</option><option value="Europe/Vienna" >UTC +01:00: Austria Time</option><option value="Europe/Warsaw" >UTC +01:00: Poland Time</option><option value="Europe/Zagreb" >UTC +01:00: Croatia Time</option><option value="Europe/Zurich" >UTC +01:00: Switzerland Time</option><option value="Africa/Blantyre" >UTC +02:00: Malawi Time</option><option value="Africa/Bujumbura" >UTC +02:00: Burundi Time</option><option value="Africa/Cairo" >UTC +02:00: Egypt Time</option><option value="Africa/Gaborone" >UTC +02:00: Botswana Time</option><option value="Africa/Harare" >UTC +02:00: Zimbabwe Time</option><option value="Africa/Johannesburg" >UTC +02:00: South Africa Time</option><option value="Africa/Kigali" >UTC +02:00: Rwanda Time</option><option value="Africa/Lubumbashi" >UTC +02:00: Congo - Kinshasa (Lubumbashi) Time</option><option value="Africa/Lusaka" >UTC +02:00: Zambia Time</option><option value="Africa/Maputo" >UTC +02:00: Mozambique Time</option><option value="Africa/Maseru" >UTC +02:00: Lesotho Time</option><option value="Africa/Mbabane" >UTC +02:00: Swaziland Time</option><option value="Africa/Tripoli" >UTC +02:00: Libya Time</option><option value="Africa/Windhoek" >UTC +02:00: Namibia Time</option><option value="Asia/Amman" >UTC +02:00: Jordan Time</option><option value="Asia/Beirut" >UTC +02:00: Lebanon Time</option><option value="Asia/Damascus" >UTC +02:00: Syria Time</option><option value="Asia/Gaza" >UTC +02:00: Palestinian Territories (Gaza) Time</option><option value="Asia/Hebron" >UTC +02:00: Palestinian Territories (Hebron) Time</option><option value="Asia/Jerusalem" >UTC +02:00: Israel Time</option><option value="Asia/Nicosia" >UTC +02:00: Cyprus Time</option><option value="Europe/Athens" >UTC +02:00: Greece Time</option><option value="Europe/Bucharest" >UTC +02:00: Romania Time</option><option value="Europe/Chisinau" >UTC +02:00: Moldova Time</option><option value="Europe/Helsinki" >UTC +02:00: Finland Time</option><option value="Europe/Kaliningrad" >UTC +02:00: Russia (Kaliningrad) Time</option><option value="Europe/Kiev" >UTC +02:00: Ukraine (Kiev) Time</option><option value="Europe/Mariehamn" >UTC +02:00: Åland Islands Time</option><option value="Europe/Riga" >UTC +02:00: Latvia Time</option><option value="Europe/Sofia" >UTC +02:00: Bulgaria Time</option><option value="Europe/Tallinn" >UTC +02:00: Estonia Time</option><option value="Europe/Uzhgorod" >UTC +02:00: Ukraine (Uzhgorod) Time</option><option value="Europe/Vilnius" >UTC +02:00: Lithuania Time</option><option value="Europe/Zaporozhye" >UTC +02:00: Ukraine (Zaporozhye) Time</option><option value="Africa/Addis_Ababa" >UTC +03:00: Ethiopia Time</option><option value="Africa/Asmara" >UTC +03:00: Eritrea Time</option><option value="Africa/Dar_es_Salaam" >UTC +03:00: Tanzania Time</option><option value="Africa/Djibouti" >UTC +03:00: Djibouti Time</option><option value="Africa/Juba" >UTC +03:00: South Sudan Time</option><option value="Africa/Kampala" >UTC +03:00: Uganda Time</option><option value="Africa/Khartoum" >UTC +03:00: Sudan Time</option><option value="Africa/Mogadishu" >UTC +03:00: Somalia Time</option><option value="Africa/Nairobi" >UTC +03:00: Kenya Time</option><option value="Antarctica/Syowa" >UTC +03:00: Antarctica (Syowa) Time</option><option value="Asia/Aden" >UTC +03:00: Yemen Time</option><option value="Asia/Baghdad" >UTC +03:00: Iraq Time</option><option value="Asia/Bahrain" >UTC +03:00: Bahrain Time</option><option value="Asia/Kuwait" >UTC +03:00: Kuwait Time</option><option value="Asia/Qatar" >UTC +03:00: Qatar Time</option><option value="Asia/Riyadh" >UTC +03:00: Saudi Arabia Time</option><option value="Europe/Istanbul" >UTC +03:00: Turkey Time</option><option value="Europe/Minsk" >UTC +03:00: Belarus Time</option><option value="Europe/Moscow" >UTC +03:00: Russia (Moscow) Time</option><option value="Europe/Simferopol" >UTC +03:00: Ukraine (Simferopol) Time</option><option value="Europe/Volgograd" >UTC +03:00: Russia (Volgograd) Time</option><option value="Indian/Antananarivo" >UTC +03:00: Madagascar Time</option><option value="Indian/Comoro" >UTC +03:00: Comoros Time</option><option value="Indian/Mayotte" >UTC +03:00: Mayotte Time</option><option value="Asia/Tehran" >UTC +03:30: Iran Time</option><option value="Asia/Baku" >UTC +04:00: Azerbaijan Time</option><option value="Asia/Dubai" >UTC +04:00: United Arab Emirates Time</option><option value="Asia/Muscat" >UTC +04:00: Oman Time</option><option value="Asia/Tbilisi" >UTC +04:00: Georgia Time</option><option value="Asia/Yerevan" >UTC +04:00: Armenia Time</option><option value="Europe/Samara" >UTC +04:00: Russia (Samara) Time</option><option value="Indian/Mahe" >UTC +04:00: Seychelles Time</option><option value="Indian/Mauritius" >UTC +04:00: Mauritius Time</option><option value="Indian/Reunion" >UTC +04:00: Réunion Time</option><option value="Asia/Kabul" >UTC +04:30: Afghanistan Time</option><option value="Antarctica/Mawson" >UTC +05:00: Antarctica (Mawson) Time</option><option value="Asia/Aqtau" >UTC +05:00: Kazakhstan (Aqtau) Time</option><option value="Asia/Aqtobe" >UTC +05:00: Kazakhstan (Aqtobe) Time</option><option value="Asia/Ashgabat" >UTC +05:00: Turkmenistan Time</option><option value="Asia/Dushanbe" >UTC +05:00: Tajikistan Time</option><option value="Asia/Karachi" >UTC +05:00: Pakistan Time</option><option value="Asia/Oral" >UTC +05:00: Kazakhstan (Oral) Time</option><option value="Asia/Samarkand" >UTC +05:00: Uzbekistan (Samarkand) Time</option><option value="Asia/Tashkent" >UTC +05:00: Uzbekistan (Tashkent) Time</option><option value="Asia/Yekaterinburg" >UTC +05:00: Russia (Yekaterinburg) Time</option><option value="Indian/Kerguelen" >UTC +05:00: French Southern Territories Time</option><option value="Indian/Maldives" >UTC +05:00: Maldives Time</option><option value="Asia/Colombo" >UTC +05:30: Sri Lanka Time</option><option value="Asia/Kolkata" >UTC +05:30: India Time</option><option value="Asia/Kathmandu" >UTC +05:45: Nepal Time</option><option value="Antarctica/Vostok" >UTC +06:00: Antarctica (Vostok) Time</option><option value="Asia/Almaty" >UTC +06:00: Kazakhstan (Almaty) Time</option><option value="Asia/Bishkek" >UTC +06:00: Kyrgyzstan Time</option><option value="Asia/Dhaka" >UTC +06:00: Bangladesh Time</option><option value="Asia/Omsk" >UTC +06:00: Russia (Omsk) Time</option><option value="Asia/Qyzylorda" >UTC +06:00: Kazakhstan (Qyzylorda) Time</option><option value="Asia/Thimphu" >UTC +06:00: Bhutan Time</option><option value="Asia/Urumqi" >UTC +06:00: China (Urumqi) Time</option><option value="Indian/Chagos" >UTC +06:00: British Indian Ocean Territory Time</option><option value="Asia/Rangoon" >UTC +06:30: Myanmar [Burma] Time</option><option value="Indian/Cocos" >UTC +06:30: Cocos [Keeling] Islands Time</option><option value="Antarctica/Davis" >UTC +07:00: Antarctica (Davis) Time</option><option value="Asia/Bangkok" >UTC +07:00: Thailand Time</option><option value="Asia/Ho_Chi_Minh" >UTC +07:00: Vietnam Time</option><option value="Asia/Hovd" >UTC +07:00: Mongolia (Hovd) Time</option><option value="Asia/Jakarta" >UTC +07:00: Indonesia (Jakarta) Time</option><option value="Asia/Krasnoyarsk" >UTC +07:00: Russia (Krasnoyarsk) Time</option><option value="Asia/Novokuznetsk" >UTC +07:00: Russia (Novokuznetsk) Time</option><option value="Asia/Novosibirsk" >UTC +07:00: Russia (Novosibirsk) Time</option><option value="Asia/Phnom_Penh" >UTC +07:00: Cambodia Time</option><option value="Asia/Pontianak" >UTC +07:00: Indonesia (Pontianak) Time</option><option value="Asia/Vientiane" >UTC +07:00: Laos Time</option><option value="Indian/Christmas" >UTC +07:00: Christmas Island Time</option><option value="Asia/Brunei" >UTC +08:00: Brunei Time</option><option value="Asia/Choibalsan" >UTC +08:00: Mongolia (Choibalsan) Time</option><option value="Asia/Hong_Kong" >UTC +08:00: Hong Kong SAR China Time</option><option value="Asia/Irkutsk" >UTC +08:00: Russia (Irkutsk) Time</option><option value="Asia/Kuala_Lumpur" >UTC +08:00: Malaysia (Kuala Lumpur) Time</option><option value="Asia/Kuching" >UTC +08:00: Malaysia (Kuching) Time</option><option value="Asia/Macau" >UTC +08:00: Macau SAR China Time</option><option value="Asia/Makassar" >UTC +08:00: Indonesia (Makassar) Time</option><option value="Asia/Manila" >UTC +08:00: Philippines Time</option><option value="Asia/Shanghai" >UTC +08:00: China (Shanghai) Time</option><option value="Asia/Singapore" >UTC +08:00: Singapore Time</option><option value="Asia/Taipei" >UTC +08:00: Taiwan Time</option><option value="Asia/Ulaanbaatar" >UTC +08:00: Mongolia (Ulaanbaatar) Time</option><option value="Australia/Perth" >UTC +08:00: Australia (Perth) Time</option><option value="Asia/Pyongyang" >UTC +08:30: North Korea Time</option><option value="Australia/Eucla" >UTC +08:45: World (Eucla) Time</option><option value="Asia/Chita" >UTC +09:00: Unknown Region (Chita) Time</option><option value="Asia/Dili" >UTC +09:00: Timor-Leste Time</option><option value="Asia/Jayapura" >UTC +09:00: Indonesia (Jayapura) Time</option><option value="Asia/Khandyga" >UTC +09:00: Russia (Khandyga) Time</option><option value="Asia/Seoul" >UTC +09:00: South Korea Time</option><option value="Asia/Tokyo" >UTC +09:00: Japan Time</option><option value="Asia/Yakutsk" >UTC +09:00: Russia (Yakutsk) Time</option><option value="Pacific/Palau" >UTC +09:00: Palau Time</option><option value="Australia/Darwin" >UTC +09:30: Australia (Darwin) Time</option><option value="Antarctica/DumontDUrville" >UTC +10:00: Antarctica (Dumont d’Urville) Time</option><option value="Asia/Ust-Nera" >UTC +10:00: Russia (Ust-Nera) Time</option><option value="Asia/Vladivostok" >UTC +10:00: Russia (Vladivostok) Time</option><option value="Australia/Brisbane" >UTC +10:00: Australia (Brisbane) Time</option><option value="Australia/Lindeman" >UTC +10:00: Australia (Lindeman) Time</option><option value="Pacific/Chuuk" >UTC +10:00: Micronesia (Chuuk) Time</option><option value="Pacific/Guam" >UTC +10:00: Guam Time</option><option value="Pacific/Port_Moresby" >UTC +10:00: Papua New Guinea Time</option><option value="Pacific/Saipan" >UTC +10:00: Northern Mariana Islands Time</option><option value="Australia/Adelaide" >UTC +10:30: Australia (Adelaide) Time</option><option value="Australia/Broken_Hill" >UTC +10:30: Australia (Broken Hill) Time</option><option value="Antarctica/Casey" >UTC +11:00: Antarctica (Casey) Time</option><option value="Antarctica/Macquarie" >UTC +11:00: Antarctica (Macquarie) Time</option><option value="Asia/Magadan" >UTC +11:00: Russia (Magadan) Time</option><option value="Asia/Sakhalin" >UTC +11:00: Russia (Sakhalin) Time</option><option value="Asia/Srednekolymsk" >UTC +11:00: Unknown Region (Srednekolymsk) Time</option><option value="Australia/Currie" >UTC +11:00: Australia (Currie) Time</option><option value="Australia/Hobart" >UTC +11:00: Australia (Hobart) Time</option><option value="Australia/Lord_Howe" >UTC +11:00: World (Lord Howe) Time</option><option value="Australia/Melbourne" >UTC +11:00: Australia (Melbourne) Time</option><option value="Australia/Sydney" >UTC +11:00: Australia (Sydney) Time</option><option value="Pacific/Bougainville" >UTC +11:00: Unknown Region (Bougainville) Time</option><option value="Pacific/Efate" >UTC +11:00: Vanuatu Time</option><option value="Pacific/Guadalcanal" >UTC +11:00: Solomon Islands Time</option><option value="Pacific/Kosrae" >UTC +11:00: Micronesia (Kosrae) Time</option><option value="Pacific/Norfolk" >UTC +11:00: World (Norfolk) Time</option><option value="Pacific/Noumea" >UTC +11:00: New Caledonia Time</option><option value="Pacific/Pohnpei" >UTC +11:00: Micronesia (Pohnpei) Time</option><option value="Asia/Anadyr" >UTC +12:00: Russia (Anadyr) Time</option><option value="Asia/Kamchatka" >UTC +12:00: Russia (Kamchatka) Time</option><option value="Pacific/Funafuti" >UTC +12:00: Tuvalu Time</option><option value="Pacific/Kwajalein" >UTC +12:00: Marshall Islands (Kwajalein) Time</option><option value="Pacific/Majuro" >UTC +12:00: Marshall Islands (Majuro) Time</option><option value="Pacific/Nauru" >UTC +12:00: Nauru Time</option><option value="Pacific/Tarawa" >UTC +12:00: Kiribati (Tarawa) Time</option><option value="Pacific/Wake" >UTC +12:00: U.S. Outlying Islands (Wake) Time</option><option value="Pacific/Wallis" >UTC +12:00: Wallis and Futuna Time</option><option value="Antarctica/McMurdo" >UTC +13:00: Antarctica (McMurdo) Time</option><option value="Pacific/Auckland" >UTC +13:00: New Zealand Time</option><option value="Pacific/Enderbury" >UTC +13:00: Kiribati (Enderbury) Time</option><option value="Pacific/Fakaofo" >UTC +13:00: Tokelau Time</option><option value="Pacific/Fiji" >UTC +13:00: Fiji Time</option><option value="Pacific/Chatham" >UTC +13:45: World (Chatham) Time</option><option value="Pacific/Apia" >UTC +14:00: Samoa Time</option><option value="Pacific/Kiritimati" >UTC +14:00: World (Kiritimati) Time</option><option value="Pacific/Tongatapu" >UTC +14:00: Tonga Time</option></select>
-                    </div>
-                    <!-- /.form-group -->
-                    <div class="form-group">
-                        <label for="selectSettingsOpConfirmation" class="control-label">Confirm your operation:</label>
-                        <select id="selectSettingsOpConfirmation" name="selectSettingsOpConfirmation" class="form-control form-changesettings"><option value="1"  selected>Request confirmation</option><option value="0" >No confirmation requested</option></select>
-                    </div>
+					<div class="form-group">
+                        <label for="selectSettingsTheme" class="control-label">Theme:</label>
+                        <select id="selectSettingsTheme" name="selectSettingsTheme" class="form-control form-changesettings">
+							<option value="dark" selected >Dark</option>
+							<option value="light">Light</option>
+						</select>
+						<div id="selectThemeColor">
+							
+						</div>
+					</div>
                     <!-- /.form-group -->
                     <div class="form-group">
                         <label for="selectSettingsRefreshRate" class="control-label">Autorefresh rate:</label>
-                        <select id="selectSettingsRefreshRate" name="selectSettingsRefreshRate" class="form-control form-changesettings"><option value="60000" >1 minut</option><option value="300000"  selected>5 minutes</option><option value="600000" >10 minutes</option></select>
+                        <select id="selectSettingsRefreshRate" name="selectSettingsRefreshRate" class="form-control form-changesettings">
+                            <option value="10000" selected>10 seconds</option>
+                            <option value="30000" >30 seconds</option>
+                            <option value="60000" >1 minute</option>
+                        </select>
                     </div>
                     <!-- /.form-group -->
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary" data-action="save-settings">Save</button>
                     </div><!-- /.form-group -->
                     <div class="form-group">
-                        <p>Default settings. Press "Default settings" in order to restore your account to the factori default settings. This will not erase any of your previous work.</p>
-                        <button type="submit" class="btn btn-primary">Default settings</button>
+                        <p>Reset to defaults. Press "Reset to defaults" in order to restore your account to the initial settings. This will not erase any of your previous work.</p>
+                        <button id="btnRestore" type="submit" class="btn btn-primary" data-action="restore-settings" disabled="true">Reset to defaults</button>
                     </div><!-- /.form-group -->
+                  <!--  <div id= "notificationonsave" class="box-notification"><p><span>User preferences saved!</span></p></div>
+                    <div id= "notificationondelete" class="box-notification"><p><span>User preferences deleted!</span></p></div> -->
                 </form>
+              
             </div><!-- /.tab-pane -->
         </div>
     </aside><!-- /.control-sidebar -->
@@ -382,7 +415,7 @@ Nothing to see!
     <div id="bot-notice-chat">
         <div class="box box-success box-solid direct-chat direct-chat-success collapse">
             <div class="box-header with-border">
-                <h3 class="box-title">TAO Notifications</h3>
+                <h3 class="box-title">Notifications</h3>
                 <div class="box-tools pull-right">
                     <span data-toggle="tooltip" title="" class="badge bg-yellow val-msgcount" data-original-title="No of messages">0</span>
                     <button type="button" class="btn btn-box-tool do-clear-all-notice"><i class="fa fa-trash-o"></i></button>
@@ -485,9 +518,22 @@ Nothing to see!
 <script type="text/javascript" src="./assets/libs/momentjs/moment.min.js"></script>
 <!-- chart.js -->
 <script type="text/javascript" src="./assets/libs/chartjs/chartjs.min.js"></script>
+<!-- split.js -->
+<script type="text/javascript" src="./assets/libs/splitjs/split.js"></script>
+<!-- gritter -->
+<script type="text/javascript" src="./assets/libs/gritter/js/jquery.gritter.js"></script>
 <!-- TAO UI functions  -->
 <script src="./assets/dist/js/ui.js" type="text/javascript"></script>
 
+<style>
+.content-header>h1>small{color:#ccc;}
+.content-header>.breadcrumb>li>a{color:#aba9a9;}
+.breadcrumb>.active{color:#d2d6de}
+.main-footer>b>a.text-black{color:#ccc !important;}
+.box.box-success{border-top-color:#3c8dbc;}
+#selectThemeColor{display:inline-flex;flex-wrap: wrap;}
+#selectThemeColor a{display:block;font-size:2.5rem;}
+</style>
 
 </body>
 </html>
@@ -495,7 +541,7 @@ Nothing to see!
 <script type="text/javascript" src="./assets/libs/jquery.idle/jquery.idle.js"></script>
 <script type="text/javascript" src="./assets/libs/modernizr/modernizr.custom.input.js"></script>
 
-<script>
+<script type="text/javascript">
     //Modernizr.load({
     //    test: Modernizr.inputtypes.date,
     //    nope: ['/_tao/lib/bootstrap-datepicker/js/bootstrap-datepicker.js', '/_tao/lib/bootstrap-datepicker/js/locales/bootstrap-datepicker.ro.js'],
@@ -504,14 +550,15 @@ Nothing to see!
     //    }
     //});
     //check prefferences
-    (function(){
-        var prefferences_viewMode = _settings.readCookie("prefferences_viewMode");
-        if ((prefferences_viewMode !== "") && (prefferences_viewMode !== null)) {
-            prefferences.viewMode = prefferences_viewMode;
-        }else{
-        	prefferences.viewMode = "grid";
-        }
-    })();
+    // (function(){
+    //     var prefferences_viewMode = _settings.readCookie("prefferences_viewMode");
+    //     if ((prefferences_viewMode !== "") && (prefferences_viewMode !== null)) {
+    //         prefferences.viewMode = prefferences_viewMode;
+    //     }else{
+    //     	prefferences.viewMode = "grid";
+    //     }
+    // })();
+	var selectedColor = defaultStyle.substr(defaultStyle.indexOf("-") + 1);
 	var notificationsList = [];
 	var topics = {'info':{'header':'You have new events'},'execution':{'header':'You have new events'},'error':{'header':'You have new events'}};
 	var menu = $(".messages-menu .dropdown-menu");
@@ -519,7 +566,14 @@ Nothing to see!
             		var list ='';
 		$.each(data,function(index,value){
 					var payload = "";
-					try { payload = JSON.parse(value.data).Payload; } catch (e) { payload = value.data.substring(0, 200); }
+					try { 
+						payload = JSON.parse(value.data).Payload;
+						if (typeof payload === "undefined") {
+							payload = JSON.parse(value.data).Message;
+						}
+					} catch (e) {
+						payload = value.data.substring(0, 200);
+					}
             		list = list+  '		<li class="notif-info">'+
             					'				<div class="expand">  '+
             					'					<div class="pull-left">'+
@@ -643,6 +697,7 @@ Nothing to see!
 				$('.dropdown-menu').on("click.bs.dropdown", function (e) { e.stopPropagation(); e.preventDefault(); });
             }
         }).fail(function (jqXHR, textStatus) {
+			chkXHR(jqXHR.status);
         }).complete(function(){           
                 setTimeout(function(){
                 	getUnreadNotifications();
@@ -650,22 +705,134 @@ Nothing to see!
 
         });
  	}
+	
+	//add available styles
+	function populateAvailibleStyles(theme) {
+		if (typeof theme === "undefined") {
+			theme = $("#selectSettingsTheme").val();
+		}
+		var found_class_styles = Object.keys($.AdminLTE.options.styles).filter((key) => key.startsWith(theme+"-")).reduce((obj, key) => {
+			return Object.assign(obj,{[key]:$.AdminLTE.options.styles[key]});
+		}, {});
+		$("a", "#selectThemeColor").remove();
+		$.each(found_class_styles, function(key,value) {
+			var colorFromKey = key.replace(theme+"-", "");
+			var color = $.AdminLTE.options.colors[colorFromKey];
+			var $href = $("<a href='' data-colorKey='"+colorFromKey+"' data-skin='"+value+"' class='clearfix full-opacity-hover'></a>");
+			
+			$href.append("<i class='fa "+ (selectedColor === colorFromKey ? 'fa-check-circle' : 'fa-circle') +"' style='padding:0 1rem;color:"+color+"'></i>");
+			$("#selectThemeColor").append($href);
+		});
+	}
+
+	function applyStyle(styleClass) {
+		removeClassStartingWith($("body"),"skin-");
+		if ($("#widget-master-nodemonitor").length > 0) {
+			removeClassStartingWith($("#widget-master-nodemonitor"),"bg-");
+			$("#widget-master-nodemonitor").addClass("bg-"+selectedColor);
+		}
+		$("#style_css_file").attr("href", "./assets/dist/css/skins/"+styleClass+".min.css");
+		$("body").addClass(styleClass);
+		var style = document.querySelector('[data="test"]');
+		//change input[type='range'] clor based on selected style
+		if (style !== null) {
+			style.innerHTML = ".slider::-webkit-slider-thumb { background:"+inputRangeColor(selectedColor)+" !important; }";
+		}
+        /////////////////////////////////////////////////////////////////////////////////
+        removeClassStartingWith($('#iframe-nodemonitor').contents().find('body'),"skin-");
+        $('#iframe-nodemonitor').contents().find('body').addClass(styleClass);
+
+        /////////////////////////////
+        $(document).trigger("theme-change", [{theme: styleClass}]);
+	}
+
+    function settingsApplyChange(attribute, value, save){
+        if(attribute === "body_size"){
+            // $("body").removeClass(tpl.body_size).addClass(value);
+            $("body").removeClass(function (index, className) {
+            return (className.match (/\bsize-\S+/g) || []).join(' ');
+            });
+            $("body").addClass(value);
+
+
+            $('#iframe-nodemonitor').contents().find('body').removeClass(function (index, className) {
+            return (className.match (/\bsize-\S+/g) || []).join(' ');
+            });
+            $('#iframe-nodemonitor').contents().find('body').addClass(value);
+
+            $(document).trigger("size-change", [{size: value}]);
+
+        }
+        return true;
+    }
     ///////////////////////////////////////
+    function refreshSettings(){
+        //size
+        settingsApplyChange("body_size", window.themeParameters.size,0);
+
+        //color
+		applyStyle(window.themeParameters.color);
+
+        $(document).trigger("settings-change");
+    }
+
+
     $(document).ready( function(){
+		
+        window.themeParameters = {
+            size: "normal",
+            color: "skin-blue"
+        }
+
+		if(taoUserProfile.preferences.find( function(item) { return item.key == "refresh_rate" } )){
+       // if(taoUserProfile.preferences.find( function(item) { return item.key == "refresh_rate" } ) ){
+            $('#btnRestore').prop('disabled', false); 
+            $('#selectSettingsRefreshRate').val( taoUserProfile.preferences.find( function(item) { return item.key == "refresh_rate" } ).value);
+        }
+		if (taoUserProfile.preferences.find( function(item) { return item.key == "body_size" } )) {
+			 $('#selectSettingsBodySize').val( taoUserProfile.preferences.find( function(item) { return item.key == "body_size" } ).value);
+            //settingsApplyChange("body_size",  taoUserProfile.preferences.find( function(item) { return item.key == "body_size" } ).value,0);
+            window.themeParameters.size = $('#selectSettingsBodySize').val();
+            refreshSettings();
+		}
+		if (taoUserProfile.preferences.find( function(item) { return item.key == "body_theme" } )) {
+			$("#selectSettingsTheme").find("option[value='" + taoUserProfile.preferences.find( function(item) { return item.key == "body_theme" } ).value + "']").prop("selected",true);
+			selectedColor = taoUserProfile.preferences.find( function(item) { return item.key == "body_theme_color" } ).value;
+			//applyStyle(taoUserProfile.preferences.find( function(item) { return item.key == "body_theme_class" } ).value);
+            window.themeParameters.color = taoUserProfile.preferences.find( function(item) { return item.key == "body_theme_class" } ).value;
+            refreshSettings();
+		}else {
+            //applyStyle($.AdminLTE.options.styles[defaultStyle]);
+            window.themeParameters.color = $.AdminLTE.options.styles[defaultStyle];
+            refreshSettings();
+		}
+		populateAvailibleStyles();
+		
     	if (taoUserProfile.userRole !== "ADMIN") {
     		$("li.routed-admin-topology.routed-admin-users").css("display","none");
     	}else{
     		$("li.routed-admin-topology.routed-admin-users").css("display","");
     	}
     	
-        console.log("document ready!!!");
-
         $("#selectPane").on("change", function(event){
             var current_pane = $(this).val() || 0;
             //to do
             // $("a[data-action='" + current_pane +"']",'#pane-gen').trigger( "click" );
         });
+		
+		$("#selectThemeColor").on("click", "a", function (e) {
+			e.preventDefault();
+			var prevStyleClass = $(this).parent().find(".fa-check-circle").parent().attr("data-skin");
+			$(this).parent().find(".fa-check-circle").removeClass("fa-check-circle").addClass("fa-circle");
+			$(this).find(".fa-circle").removeClass("fa-circle").addClass("fa-check-circle");
+			
+			selectedColor = $(this).attr("data-colorKey");
+			//applyStyle($(this).attr("data-skin"),prevStyleClass);
 
+            window.themeParameters.color = $(this).attr("data-skin"),prevStyleClass;
+            refreshSettings();
+		});
+		
         //
         $('#myModalOperation').modal({
             keyboard: false,
@@ -677,13 +844,14 @@ Nothing to see!
         });
         $(document)
             .on('shown.bs.modal', ".modal.modal-form-focus", function () {
-            $("form#frmExecNodeEdit input:enabled:visible:first").focus();
+				$("form#frmExecNodeEdit input:enabled:visible:first").focus();
             })
             .on('hidden.bs.modal', function (event) {
-            if ($('.modal:visible').length) {
-                $('body').addClass('modal-open');
-            }
-            });
+				if ($('.modal:visible').length) {
+					$('body').addClass('modal-open');
+				}
+				$(".modal-backdrop").remove();
+			});
 
 
 // .modal-backdrop classes
@@ -695,51 +863,100 @@ Nothing to see!
             $(".modal-backdrop").addClass("modal-backdrop-fullscreen");
         });
 
-        function settingsApplyChange(attribute, value, save){
-            if(attribute === "body_size"){
-                $("body").removeClass(tpl.body_size).addClass(value);
-            }
-            return true;
-        }
+        
 
         $("#control-sidebar-settings-tab").on("change", ".form-changesettings", function(event){
-            event.preventDefault();
+           // event.preventDefault();
             if($(this).attr('id') === "selectSettingsBodySize"){
-                settingsApplyChange("body_size", $(this).val(),0);
+                //settingsApplyChange("body_size", $(this).val(),0);
+                window.themeParameters.size = $(this).val();
+                refreshSettings();
             }
+			if($(this).attr('id') === "selectSettingsTheme") {
+				populateAvailibleStyles(this.value);
+				//applyStyle($("i.fa-check-circle","#selectThemeColor").closest("a").attr("data-skin"));
+                window.themeParameters.color = $("i.fa-check-circle","#selectThemeColor").closest("a").attr("data-skin");
+                refreshSettings();
+			}
         }).on("click", ".btn", function(event){
             event.preventDefault();
+           
             if($(this).data('action') === "save-settings"){
                 var body_size = $('#selectSettingsBodySize').val() || '';
-                var location = $('#selectSettingsLocation').val() || '';
-                var op_confirmation = $('#selectSettingsOpConfirmation').val() || '1';
                 var refresh_rate = $('#selectSettingsRefreshRate').val() || '1';
-                var	lcl_postdata = {
-                    "body_size" : body_size,
-                    "location" : location,
-                    "op_confirmation" : op_confirmation,
-                    "refresh_rate" : refresh_rate
-                };
+                var	postdata = '[{"key" :"body_size", "value": "' + body_size + '"},{"key" :"refresh_rate", "value": "' + refresh_rate + '"},{"key": "body_theme", "value": "' + $("#selectSettingsTheme").val() + '"},{"key": "body_theme_class", "value": "' + $("i.fa-check-circle","#selectThemeColor").closest("a").attr("data-skin") + '"},{"key":"body_theme_color", "value": "' + $("i.fa-check-circle","#selectThemeColor").closest("a").attr("data-colorKey") + '"}]';
+                //alert(postdata);
                 $.ajax({
-                    type: "post",
-                    url: "http://192.168.61.101/_tao/rm_ajax/rm_savesettings.ajax.php?action=SAVE&rnd=" + Math.random(),
-                    dataType: "json",
-                    data: JSON.stringify(lcl_postdata),
-                    contentType: "application/json; charset=utf-8",
-                    error: function() {
-                        alert("Communication error. Try again or notify the site admin! Thank you.");
-                    },
-                    success: function(response) {
-                        try {
-                            showMsg(response.msgdetails.global, response.msgcode);
-                            $("#control-sidebar-settings-tab").closest("aside").removeClass("control-sidebar-open");
-                        }
-                        catch(e) {
-                            alert("Malformed server answer. Try again or notify the site admin! Thank you.");
-                        }
-                    }
-                });
+                        cache: false,
+                        url: baseRestApiURL + "user/prefs",
+                        data:postdata,
+        			    type: 'POST',
+        			    headers: {
+        			                "Accept": "application/json",
+                                    "Content-Type": "application/json",
+        			                "X-Auth-Token": window.tokenKey
+        			            }
+        				}).done(function (response) {
+                           
+                           /* var notification = $("#notificationonsave");
+                            notification.addClass("show");
+                            setTimeout(function(){
+                                notification.removeClass("show");
+                            }, 1000);*/
+
+                          // alert("User preferences saved!");
+ 
+        				}).fail(function (jqXHR, textStatus) {
+							chkXHR(jqXHR.status);
+        			     }).complete(function(){
+                            $('#btnRestore').prop('disabled', false);
+                            
+    	             });
+				
             }
+
+            if($(this).data('action') === "restore-settings"){
+                //var	postdata = [];
+                var	postdata = ["body_size","refresh_rate","body_theme","body_theme_class","body_theme_color"];
+
+                $.ajax({
+                        cache: false,
+                        url: baseRestApiURL + "user/prefs",
+                        data:JSON.stringify(postdata),
+        			    type: 'DELETE',
+        			    headers: {
+        			                "Accept": "application/json",
+                                    "Content-Type": "application/json",
+        			                "X-Auth-Token": window.tokenKey
+        			            }
+        				}).done(function (response) {
+                         
+                         /*  var notification = $("#notificationondelete");
+                            notification.addClass("show");
+                            setTimeout(function(){
+                                notification.removeClass("show");
+                            }, 1000);*/
+                         
+        					//alert("User preferences deleted!");
+        				}).fail(function (jqXHR, textStatus) {
+						  chkXHR(jqXHR.status);
+        			     }).complete(function(){
+                           // alert("complete");
+                            $('#selectSettingsBodySize').val("size-normal");
+                            $('#selectSettingsRefreshRate').val(10000);
+							selectedColor = defaultStyle.substr(defaultStyle.indexOf("-") + 1);
+							//applyStyle($.AdminLTE.options.styles[defaultStyle]);
+                            $('#btnRestore').prop('disabled', true); 
+
+                            //settingsApplyChange("body_size", "size-normal",0);
+                            window.themeParameters.color = $.AdminLTE.options.styles[defaultStyle];
+                            window.themeParameters.size = "size-normal";
+                            refreshSettings();
+                            populateAvailibleStyles();
+    	             });
+          
+            }
+
         });
 
         var ref_no = 0;
@@ -758,7 +975,6 @@ Nothing to see!
         $(document).trigger( "quota:update" );
                 
         //get unreaded notification for toolbar
-        console.log( "getUnreadNotifications");
         getUnreadNotifications();
         
      

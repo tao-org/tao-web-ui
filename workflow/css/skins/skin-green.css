@@ -1,0 +1,44 @@
+/*
+ * Skin: Green
+ * -----------
+ */
+ 
+/*** Workflow toolbox ***/
+.skin-green .toolbox-sidebar .toolbox-bar {
+  color: #fff!important;
+  background-color: #00a65a!important;
+  margin-top: 1px;
+  }
+.skin-green .toolboxAccordion .ui-accordion-header{
+  background-color: #05683b;
+  color: #ffffff;
+  }
+.skin-green .item-info{
+  border: 1px solid #00a65a;
+}
+  .skin-green .modulesholder .item {
+  border: 1px solid #00a65a;
+  }
+  .skin-green .ui-widget-content{
+  color: #05683b;
+  }
+  .skin-green .toolbox-header .toolbox-footer {
+  color: #00a65a;
+  }
+  /*** Node editor CTRL + SPACE border ***/
+  .skin-green .npsyntaxeditor{
+    border:3px dotted #00a65a; 
+  } 
+  .skin-green .form-control:focus {
+    border-color: #00a65a;
+    outline: 0;
+    box-shadow: inset 0 1px 1px #00a65bab, 0 0 8px #6fc59dab;
+  }
+  
+  .skin-green .l-form__submit:hover {
+    background-color: #6fc59d;
+  }
+  
+  .skin-green .l-form__submit{
+    background-color: #00a65a
+  }

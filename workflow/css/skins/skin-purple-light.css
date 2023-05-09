@@ -1,0 +1,66 @@
+/*
+ * Skin: Purple
+ * ------------
+ */
+ 
+/*** Workflow toolbox ***/
+.skin-purple-light .toolbox-sidebar{
+  background: #ffffff;
+}
+.skin-purple-light .toolbox-sidebar .toolbox-bar {
+  color: #fff!important;
+  background-color: #605ca8!important;
+  margin-top: 2px;
+}
+.skin-purple-light .toolboxAccordion{
+  background: #ffffff;
+}
+
+.skin-purple-light .toolboxAccordion .ui-accordion-content{
+  background: #ffffff;
+}
+
+.skin-purple-light .toolboxAccordion .ui-accordion-header{
+  background-color: #8986bd;
+  color: #ffffff;
+}
+
+.skin-purple-light .item-info{
+  background: #ffffff;
+  border: 1px solid #605ca8;
+  color: #333333;
+}
+.skin-purple-light .modulesholder .item {
+  background: #ffffff;
+  border: 1px solid #605ca8;
+}
+
+.skin-purple-light .toolbox-sidebar .toolbox-search input {
+  background: #eee;
+}
+
+.skin-purple-light .ui-widget-content{
+  color: #605ca8;
+}
+.skin-purple-light .toolbox-header .toolbox-footer {
+  color: #605ca8;
+}
+
+  /*** Node editor CTRL + SPACE border ***/
+  .skin-purple-light .npsyntaxeditor{
+    border:3px dotted #605ca8; 
+  } 
+  .skin-purple-light .form-control:focus {
+    border-color: #605ca8;
+    outline: 0;
+    box-shadow: inset 0 1px 1px #605ca8b4, 0 0 8px #8986bdc2;
+  }
+  
+  .skin-purple-light .l-form__submit:hover {
+    background-color: #8986bd;
+  }
+  
+  .skin-purple-light .l-form__submit{
+    background-color: #605ca8
+  }
+

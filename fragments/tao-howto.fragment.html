@@ -1,6 +1,6 @@
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-    <h1>How To<small>&nbsp;TAO how to guides for usual operations.</small></h1>
+    <h1>How To<small>&nbsp;TAO how-to guides for usual operations.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">TAO how to guides</li>
@@ -37,6 +37,7 @@ function loadJSON(callback) {
 	  var xobj = new XMLHttpRequest();
 	  xobj.overrideMimeType("application/json");
 	  xobj.open('GET',baseRestApiURL + "ui/fragments/howto.json", true);
+	  //xobj.open('GET',"/fragments/howto.json", true);
 	  xobj.onreadystatechange = function () {
 	    if (xobj.readyState == 4 && xobj.status == "200") {
 	      callback(JSON.parse(xobj.responseText));
@@ -70,12 +71,12 @@ $(document).ready( function(){
 				  var el = ' <div class="panel box box-primary query-accordion" >'+
 				       	   '	<div class="box-header ">'+
 				   		   '		<h4 class="box-title query-accordion-title">';
-				  el = el +'			<a data-toggle="collapse" data-parent="#accordion" href="#'+section.name.replace(' ','_')+'" aria-expanded="false" class="collapsed">'+
+				  el = el +'			<a data-toggle="collapse" data-parent="#accordion" href="#'+section.name.replaceAll(' ','_')+'" aria-expanded="false" class="collapsed">'+
 				  						section.name+
                   		'				</a>'+
               			'			</h4>'+                               
           				'		</div>'+
-						'	<div id="'+section.name.replace(' ','_')+'" class="panel-collapse collapse" aria-expanded="false" style="height: 0px; background-color: rgb(247, 250, 255);">';
+						'	<div id="'+section.name.replaceAll(' ','_')+'" class="panel-collapse collapse" aria-expanded="false" style="height: 0px; background-color: rgb(247, 250, 255);">';
           				  
 				  $.each(section.value,function(k,v){	
 					  el = el + '<div class="row box-query">'+
@@ -83,7 +84,7 @@ $(document).ready( function(){
 					  if(v.hasOwnProperty('note')){
 						  var note = getImages(v.note);		
 						  el = el +	'	<div class="box-body box-note">'+
-					    	'    			<span class="glyphicon glyphicon-info-sign" style=" color: #72afd2;"></span> '+note+
+					    	'    			<span class="glyphicon glyphicon-info-sign" style=" color: #72afd2;"></span> '+note +
 							'			</div>';
 					  }
 					  if(v.content != ''){						  
@@ -93,7 +94,7 @@ $(document).ready( function(){
 						    '        	<div class="box box-solid">'+
 						    '           	<div class="box-header with-border">'+
 						    '                	<i class="fa fa-question-circle"></i>'+
-						    '                	<h3 class="box-title query-title"><strong> '+v.title+'</strong></h3>'+
+						    '                	<h3 class="box-title query-title"><strong> '+v.title+ '</strong></h3>'+
 						    '            	</div>'+
 						    '            	<!-- /.box-header -->'+
 						    '            	<div class="box-body query-content">'+

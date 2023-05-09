@@ -1,0 +1,523 @@
+<style>
+body{padding-right:0 !important}
+::placeholder{font-style:italic}
+.main-header .navbar{opacity:0.8}
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn{opacity:0.4 !important}
+.filter-hidden{display: none!important;}
+.info-message{text-align:left;margin:0;}
+/* ======== CUSTOM SPIN BUTTON FOR INPUT TYPE NUMBER ======== */
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:inner-spin-button !important;width:25px;position:absolute;top:0;right:0;height:100%;}
+
+/* ======== #myModalNodes ======== */
+#myModalNodes{position:absolute;width:100%;height:auto;z-index:800;padding:0 !important}
+#myModalNodes #myFlatMap .ol-zoom{top:100px}
+#myModalNodes #myFlatMap .poly-map-title{padding-left:30%;top:55px}
+#myModalNodes #myFlatMap .poly-shape-type{top:60px}
+#myModalNodes #myFlatMap .poly-actions-panel{width:45rem;height:13rem;right:0;max-width:100%}
+#myModalNodes #topInfo{position:fixed;background-color:#fff4d6;border:1px solid #ffd154;top:60px;padding:0 4px;font-weight:700;color:#a71f16;border-radius:5px;pointer-events:none;min-height:1.6em;z-index:800}
+/* ======== MODAL CONTROLS AND PANELS ======== */
+#myModalNodes .modal-body .form-control:not(select){height:2em;line-height:2em;padding:0 5px}
+#myModalNodes .modal-body .form-control-feedback{height:2em;line-height:2em;}
+#myModalNodes .box-shadow--6dp{box-shadow:0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2) !important;border-radius:5px}
+#myModalNodes .modal-header{background-color:#79bde4;color:white;padding:10px 15px;border-radius:5px 5px 0 0}
+#myModalNodes .modal-header.ui-draggable-handle{position:relative;cursor:ew-resize}
+#myModalNodes .modal-header.ui-draggable-handle::before{font:normal normal normal 20px/1 FontAwesome;content:"\f07e";background-color:#79bde4;position:absolute;left:15px;top:-10px;padding:0 10px;border-radius:10px;border:1px solid #56b0e4}
+#myModalNodes .modal-title{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+#myModalNodes .modal-content .close{margin-left:10px;font-size:25px;outline:none;opacity:1;color:white}
+#myModalNodes .modal-content .close:hover{color:#c9e5f4}
+#myModalNodes .modal-content .close.custom{position:absolute;color:#286080;top:0px;right:14px;font-size:30px}
+#myModalNodes .modal-content .close.custom:hover{color:#e92f2f}
+#myModalNodes .modal-body{overflow-x:hidden;overflow-y:auto}
+#myModalNodes .modal-body .row .last{width:100%;float:left;padding-top:15px}
+#myModalNodes .modal-note{background-color:#ffffd2;border-top:1px solid #eac9a5}
+#myModalNodes .modal-note strong{display:inline-block;width:40px;color:#a71f16}
+#myModalNodes .modal-note p{margin:0}
+#myModalNodes .modal-note p+p{margin:5px 0 0 42px}
+#myModalNodes .modal-note p i{font-weight:700;color:#3d6f8a}
+/* ======== MODAL EXTENTS ======== */
+/*#myModalNodes .modal-content,*/
+#myModalNodes .extent{-webkit-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-o-transition:all 0.5s ease;-ms-transition:all 0.5s ease;transition:all 0.5s ease}
+#myModalNodes .extent.no-transitions,
+#myModalNodes .extent.ui-draggable-dragging{-webkit-transition:none;-moz-transition:none;-o-transition:none;-ms-transition:none;transition:none}
+#myModalNodes .extent{position:absolute !important;top:0;left:0;margin:0;padding:10px;width:50rem;max-width:100%;z-index:800}
+
+#myModalNodes #processingParameters.extent{width:47rem}
+#myModalNodes .extent.shifted{left:-100rem !important}
+#myModalNodes.full-map-view .main-panel{display:inline-block;width:40px;height:40px;cursor:pointer;border-radius:5px;padding:5px;text-align:center;border:0}
+#myModalNodes.full-map-view .main-panel>*{display:none}
+#myModalNodes.full-map-view .main-panel::after{content:"\f2d2";font-family:"FontAwesome";font-size:22px;color:#286080}
+#myModalNodes .extent.locked div.locked{pointer-events:none}
+#myModalNodes .extent.locked div.locked::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(255, 255, 255, 0.6);z-index:810;border-radius:5px}
+#myModalNodes .extent.locked div.locked button{opacity:0.4}
+#myModalNodes .extent.locked .ui-resizable-handle{pointer-events:none;background-color:lightgray !important}
+
+#myModalNodes #processingParameters.no-map{left:18%}
+#myModalNodes #mapExtent{display:block;width:100%;height:100%;position:fixed;top:0;right:0;background-color:white;overflow:auto}
+
+
+/* ======== TABLE CONTENTS ======== */
+#myModalNodes .vertical-container{position:relative;clear:both;border-top:1px solid #79bde4;overflow-x:hidden;overflow-y:auto;scroll-behavior:smooth;border-bottom:1px solid #79bde4;height:100%;background-color:white}
+#myModalNodes .sticky{position:relative;position:sticky;top:0;background-color:#cee9f9;padding:7px 50px 7px 15px;z-index:801;border-bottom:1px solid #93c2da;line-height:2em}
+#myModalNodes table{position:relative;table-layout:fixed;margin:0}
+#myModalNodes table tr>*{vertical-align:middle;position:relative}
+#myModalNodes table td{word-break:break-all}
+#myModalNodes table>tbody+tbody{border-top:1px solid #93c2da}
+#myModalNodes table.ds-params{table-layout:auto}
+#myModalNodes table.ds-params::before{content:" ";position:absolute;width:15px;height:100%;top:0;left:0;background-color:#79bde4}
+#myModalNodes table.ds-params td{padding:2px 10px}
+#myModalNodes table.ds-params tbody tr:first-child td{padding-top:10px}
+#myModalNodes table.ds-params tbody tr:last-child td{padding-bottom:10px}
+#myModalNodes table.ds-params tbody td:first-child{font-weight:700;text-align:right;color:#455c80;line-height:1.2em}
+#myModalNodes table.ds-params tbody td span:not([class^="select2"], .selection){font-style:normal;font-size:0.8em;color:#c0c0c0;font-weight:400}
+#myModalNodes table.ds-params tbody td:last-child{width:66.666667%}
+#myModalNodes table.ds-params td{border:0}
+#myModalNodes table.ds-params input,
+#myModalNodes table.ds-params select:not([class^="select2"]),
+#myModalNodes table.ds-params textarea:not([class^="select2"]){width:100%;border:1px solid #d2d6de;height:2em;padding:0 4px;outline:0;border-radius:2px}
+#myModalNodes table.ds-params input.datepicker{max-width:48%}
+#myModalNodes #processingParameters table.ds-params input.datepicker{max-width:100%}
+#myModalNodes table.ds-params input.datepicker:last-child{float:right}
+#myModalNodes table.ds-products tr{background-color:white;-webkit-transition:all 0.2s ease;-moz-transition:all 0.2s ease;-o-transition:all 0.2s ease;-ms-transition:all 0.2s ease;transition:all 0.2s ease}
+#myModalNodes table.ds-products td{padding:6px;color:#737373;border-top-color:#ccc}
+#myModalNodes table.ds-products tbody tr:first-child td{border-top:0}
+#myModalNodes table.ds-products tr.selected{background-color:#ffedbd}
+#myModalNodes table.ds-products tr:hover{background-color:#fff4d6}
+#myModalNodes table.ds-products img{position:relative;margin:5px 0;float:left;cursor:pointer}
+#myModalNodes table.ds-products img:hover{border:3px solid red}
+#myModalNodes table.ds-products span.highlight{background-color:#ffc188;color:#a71f16}
+#myModalNodes table.ds-products span.name{color:#a71f16;font-weight:700}
+#myModalNodes table.ds-products span.info{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;font-size:0.9em;font-weight:700;display:inline-block;width:90%;width:calc(100% - 48px);margin:0;padding:0 8px 0 25px}
+#myModalNodes table.ds-products span.info.top{width:100%;padding:0;font-size:1em}
+#myModalNodes table.ds-products span.info span{padding:2px 5px;margin-right:5px}
+#myModalNodes table.ds-products span.info i{color:#0068c1;font-weight:400;margin-right:10px;line-height:1.3em;max-height:2.6em;display:inline-block;vertical-align:bottom;overflow-y:hidden;border-bottom:1px dashed #a6cddc}
+#myModalNodes table.ds-products span p{white-space:normal;word-break:break-word;padding:2px 5px;margin:0}
+#myModalNodes table.ds-products tr.datasource{font-weight:700;background-color:#cee9f9}
+#myModalNodes table.ds-products tr.datasource td{border:0;padding:8px 5px 8px 15px;color:#286080}
+#myModalNodes table.ds-products tr.datasource:hover{background-color:#cee9f9}
+#myModalNodes table.ds-products tr.datasource span.title{width:90%;display:inline-block}
+#myModalNodes table.ds-products tr.datasource span.info{width:96%;width:calc(100% - 32px)}
+#myModalNodes table.ds-products tr.datasource.disabled{opacity:0.3}
+#myModalNodes table.ds-products tr.datasource.deprecated{background-color:#ffd1d1}
+#myModalNodes table.ds-products tr.flash{background-color:#ffccbd}
+#myModalNodes table.ds-products label.deprecated{font-style:italic;color:red;font-size:1.1em;white-space:normal;word-break:break-word;text-align:justify;padding:2px 5px}
+#myModalNodes table.ds-products label.deprecated ul{position:relative;margin:0;font-weight:400}
+#myModalNodes table.ds-products label.deprecated ul li button{padding:0;text-decoration:underline;font-weight:700}
+#myModalNodes table.ds-products label.deprecated ul li button:hover{color:#286080}
+#myModalNodes table.pd-details{table-layout:auto}
+#myModalNodes table.pd-details td{vertical-align:top;border:0;padding:10px}
+#myModalNodes table.pd-details label{color:#286080;line-height:1.2em;display:block;text-align:justify;max-height:4.8em;overflow-x:hidden;overflow-y:auto;padding-bottom:2px;margin-bottom:5px;font-size:13px}
+#myModalNodes table.pd-details span{padding:0 5px;font-weight:400;color:#555}
+#myModalNodes table.pd-details .summary{margin-bottom:10px}
+#myModalNodes table.pd-details .summary-header{border-bottom:1px solid #cfe6f6}
+#myModalNodes table.pd-details .summary-header label{font-size:16px;margin:0;padding:2px 0 2px 5px;line-height:1.9em;cursor:pointer;background-color:#f0f8fc}
+#myModalNodes table.pd-details .summary-header button{font-size:20px;padding-right:15px}
+#myModalNodes table.pd-details .summary-content{padding:5px 10px;user-select:text}
+/* ======== TABLE ACTION CONTROLS ======== */
+#myModalNodes table.ds-products .qry-ac-group{position:absolute;left:0;width:100%;padding:2px 10px;color:#286080}
+#myModalNodes table.ds-products .top-group{top:0;font-size:16px}
+#myModalNodes table.ds-products .bottom-group{bottom:0;font-size:16px;opacity:0.1;-webkit-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-o-transition:all 0.5s ease;-ms-transition:all 0.5s ease;transition:all 0.5s ease}
+#myModalNodes table.ds-products tr.datasource .qry-ac-group .pull-right{background-color:rgba(206,233,249,0.6)}
+#myModalNodes table.ds-products tr.datasource.deprecated .qry-ac-group .pull-right{background-color:rgba(255, 209, 209, 0.6)}
+#myModalNodes table.ds-products tr.datasource .top-group{font-size:20px}
+#myModalNodes table.ds-products tr.datasource .bottom-group{opacity:0.5;font-size:20px}
+#myModalNodes table.ds-products tr:hover .bottom-group{opacity:1}
+#myModalNodes table.ds-products tr.selected .bottom-group{opacity:1;padding-right:35px}
+#myModalNodes .btn-action{float:left;background-color:transparent;border:0;outline:none}
+#myModalNodes .btn-action:hover{color:#e92f2f}
+#myModalNodes .btn-action[disabled]{color:#286080;opacity:0.3}
+#myModalNodes .btn-ul-action{float:none;font-size:1em}
+#myModalNodes .modal-content .btn-movable{float:right;font-size:14px;text-shadow:none;line-height:1.9em}
+/* ======== OTHER CONTROLS ======== */
+#myModalNodes .dataset-label{padding:0 15px;display:table;width:100%;margin-bottom:10px;background:white}
+#myModalNodes .dataset-label>*{display:table-cell;width:1px;vertical-align:middle}
+#myModalNodes .dataset-label input{width:100%;border:0;background-color:transparent;color:#3d6f8a}
+#myModalNodes .checkbox{margin:0;padding:0;position:absolute;right:7px;bottom:0}
+#myModalNodes .checkbox label{margin:0;padding:4px 10px}
+#myModalNodes .checkbox input{margin:0;padding:0;position:relative;cursor:pointer}
+#myModalNodes .checkbox input{margin:0;padding:0;position:relative}
+#myModalNodes .checkbox input[name='allproducts']{margin-top:7px}
+#myModalNodes .pagination{margin:10px 15px 0 15px}
+#myModalNodes .pagination>li>a,.pagination>li>span{padding:4px 10px}
+#myModalNodes .btn-primary+.btn-primary{margin-left:10px}
+#myModalNodes .btn-primary.btn-red{background-color:red;border-color:#c50000}
+#myModalNodes .btn-primary.btn-red:hover{background-color:#e20000;border-color:#a90000}
+#myModalNodes .btn-primary label{font-size:0.7em;font-weight:400;margin:0;line-height:1em;vertical-align:top}
+#myModalNodes .btn-primary label:hover{text-shadow:0px 0px 4px white}
+#myModalNodes .btn-primary input{margin-right:5px;float:left}
+
+#myModalNodes #choosedDatasource{margin-bottom:10px;}
+#myModalNodes .info-message>span:first-child{padding-right:5px;font-style:italic}
+
+@media (max-width: 767px) {
+.sidebar-open #myModalNodes{width:70%;width: calc(100% - 230px)}
+}
+
+#processingParameters .modal-body{min-height:30vh;}
+#processingParameters .panel-title{font-weight:700;color:#286080;font-size:20px}
+#processingParameters .modal-header .panel-control{flex:0 0 auto;color:#000;text-shadow:0 1px 0 #fff;opacity:0.2;cursor:pointer;}
+#processingParameters .modal-header .panel-control:hover{color:#286080;text-decoration:none;opacity:1;}
+#processingParameters .rspace,.filter-reset{margin-left:10px;float:right;top:3px;}
+#processingParameters .treeview .sub.mCustomScrollbar .mCSB_inside>.mCSB_scrollTools{right:auto;}
+#processingParameters .treeview .sub.mCustomScrollbar .mCSB_inside>.mCSB_container {margin-right:0;margin-left:7px;}
+#processingParameters .treeview .sub.mCustomScrollbar {max-height:30em;overflow-y:auto;overflow-x:hidden;margin-left:0;}
+
+#tbProcessingParams .select2-container--default .select2-selection--multiple{border-color:#79bde4;line-height:2rem;overflow:auto !important;height:auto !important;max-height:9rem}
+#tbProcessingParams .select2-selection__choice {background-color:#79bde4;color:#286080;line-height:2rem;}
+#tbProcessingParams .select2-container--default .select2-selection--multiple .select2-selection__choice__remove, #tbProcessingParams .select2-selection__choice__remove>span{color:#286080 !important}
+#tbProcessingParams .select2-selection__clear{display:none !important;}
+#tbProcessingParams li.select2-search.select2-search--inline {display:none}
+
+#mapExtent{display:block;width:100%;height:100%;position:fixed;top:0;right:0;background-color:white;overflow:auto}
+</style>
+
+<div id="mapExtent" class="hidden"></div>
+<div id="processingParameters" class="extent no-map movable">
+	<div class="modal-content main-panel box-shadow--6dp query-parameters">
+		<div class="modal-header">
+			<button class="close query" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+			<button class="close minimize"><span aria-hidden="true">−</span><span class="sr-only">Minimize</span></button>
+			<button class="close btn btn-movable op-reset-position" data-action="op-reset-position" title="Restore initial position" disabled><i class="fa fa-outdent"></i></button>
+			<h4 class="modal-title">Sen2Agri Parameters</h4>
+		</div>
+		<div class="modal-body">
+			<!-- Parameters list -->
+			<div id="parameterList" class="row">
+				<div class="col-sm-12 col-md-12 form-horizontal">
+					<div class="form-group">
+						<label for="queryLabel" class="col-sm-4 col-md-4 control-label">Label</label>
+						<div class="col-sm-8 col-md-8">
+							<input type="hidden" id="processingLabelDefault" name="processingLabelDefault" value="">
+							<input type="text" id="processingLabel" name="processingLabel" class="form-control" value="" placeholder="Name of your processing" autocomplete="off" value="" data-errorspan="label">
+						</div>
+					</div>
+				</div>
+				<div tabindex="0" class="vertical-container">
+					<table id="tbProcessingParams" class="table ds-params" style="table-layout:auto;">
+						<tbody id="general_parameters_table">
+							<tr>
+								<td>Start Date<br><span>[Date]</span></td>
+								<td><input type="text" autocomplete="off" name="startDate" class="datepicker" data-name="startDate" value="" id="startDate_param"></td>
+							</tr>
+							<tr>
+								<td>End Date<br><span>[Date]</span></td>
+								<td><input type="text" autocomplete="off" name="endDate" class="datepicker" data-name="endDate" value="" id="endDate_param"></td>
+							</tr>
+							<tr>
+								<td>Area of Interest<br><span>[Polygon2D]</span></td>
+								<td><input type="text" name="footprint" value="" class="var_footprint" placeholder="Please select your area of interest on the map..." disabled=""></td>
+							</tr>
+							<tr>
+								<td>Observation Data<br><span>[String]</span></td>
+								<td>
+									<select id="select_observation_data" name="observation_data[]" value="" multiple="multiple">
+										<option value="Sentinel-1"> Sentinel-1 </option>
+										<option value="Sentinel-2"> Sentinel-2 </option>
+										<option value="Landsat-8"> Landsat-8 </option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>Servicies<br><span>[List]</span></td>
+								<td>
+									<select id="select_specific_servicies" name="specific_servicies[]" value="" multiple="multiple">
+										<option value="1"> Service 1 </option>
+										<option value="2"> Service 2 </option>
+										<option value="3"> Service 3 </option>
+									</select>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="last">
+					<div class="form-group" style="float:left">
+						<div class="col-sm-2 col-md-2 btnStartProcessing">
+							<button id="startProcessing" name="btnStartProcessing" class="btn btn-primary">Start Processing</button>
+						</div>
+					</div>					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- include select2 -->
+<link rel="stylesheet" type="text/css" href="assets/libs/select2/4.1.0/select2.min.css" />
+<script type="text/javascript" src="assets/libs/select2/4.1.0/select2.min.js"></script>
+
+<script type="text/javascript">
+	var $myModalNodes    = $("#myModalNodes");
+	
+	function handlePolygonMapEvents(olPoly) {
+		olPoly.el.on("newfootprint", function (evt, footprint) {
+			$("#tbProcessingParams input[name='footprint']").val(footprint);
+			defaultFootprint = footprint;
+		});
+		olPoly.el.on("clickextrafeature dblclickextrafeature", function (evt, feature, modifier) {
+			evt.stopPropagation();
+			var tableName = $("#executionExtent").hasClass("shifted") ? "tbSelectedProducts" : "tbDatasourceProducts";
+			if (feature) {
+				$.each($("#" + tableName + " tbody tr:not(.datasource)"), function () {
+					var $tr = $(this);
+					if ($tr.data("id") == feature.getId()) {
+						var $chk = $(".checkbox input[name='product']", $tr);
+						if ($chk.length > 0) {
+							if (evt.type == "dblclickextrafeature") {
+								$chk.prop({ "checked": false });
+							}
+							
+							$chk.trigger("click");
+							showTopInfo();
+							if ($chk.is(":checked")) {
+								highlightProduct($tr, true, true);
+								highlightThumbnail($tr, true);
+								setTimeout(function () { 
+									if (evt.type == "dblclickextrafeature") {
+										showDetailsPanel($tr);
+									} else {
+										updateDetailsPanel($tr);
+										updateFloatingThumbnail($tr);
+									}
+								}, 100);
+								setTimeout(function () { showTopInfo($tr); }, 500);
+								
+								return false;
+							}
+						} else {
+							return false;
+						}
+					}
+				});
+			}
+		});
+	}
+	
+	function autoPanMap(dialogId) {
+		if (typeof dialogId === "undefined") {
+			dialogId = "processingParameters";
+		}
+		if (myPolygonMap.mapActive) {
+			var mapW = $("#mapExtent").outerWidth();
+			if (mapW > 0) {
+				var panelW = $(".main-sidebar").outerWidth() + ($myModalNodes.hasClass("full-map-view") ? 0 : $("#" + dialogId).outerWidth() - 10);
+				var prc = parseInt(100*panelW/mapW);
+				if (prc != myPolygonMap.options.panPrc) {
+					setTimeout(function () { myPolygonMap.setPanPercentage(prc); }, 100);
+				}
+			}
+		}
+	}
+	
+	function previewProducts($table) {
+		if (myPolygonMap.mapActive) {
+			// remove all previous preview features on map
+			myPolygonMap.removeFeaturesByProperty({ "description": "preview" });
+			// add new preview fetures on map
+			$.each($("tbody tr", $table), function () {
+				var $tr = $(this);
+				if ($tr.data("geometry")) {
+					var geometry = $tr.data("geometry")
+						.replace('MULTIPOLYGON (((', 'POLYGON((')
+						.replace(')))', '))')
+						.replace(' ((', '((');
+					
+					var highlighted = $tr.find("input[name='product']").is(":checked");
+					var properties = {
+						"description": "preview",
+						"id"         : $tr.data("id"),
+						"name"       : $tr.data("name"),
+						"highlighted": (highlighted ? "true" : "false")
+					}
+					myPolygonMap.createShapeFromGeometry(geometry, properties);
+				}
+			});
+			// set style for all new preview features on map
+			resetPreviewProductsStyle();
+		}
+	}
+	
+	function resetPreviewProductsStyle() {
+		if (myPolygonMap.mapActive) {
+			// set style for all new preview features on map
+			var pStroke = new ol.style.Stroke({ color: [255, 119, 0, 0.3], width: 2 });
+			var pFill   = new ol.style.Fill  ({ color: [255, 153, 0, 0.1] });
+			var pStyle  = new ol.style.Style ({ stroke: pStroke, fill: pFill });
+			myPolygonMap.setFeaturesStyleByProperty({ "description": "preview" }, pStyle);
+			
+			var hStroke = new ol.style.Stroke({ color: [255, 0, 0, 1], width: 4 });
+			var hFill   = new ol.style.Fill  ({ color: [255, 153, 0, 0.1] });
+			var hStyle  = new ol.style.Style ({ stroke: hStroke, fill: hFill });
+			myPolygonMap.setFeaturesStyleByProperty({ "highlighted": "true" }, hStyle);
+		}
+	}
+	
+	function highlightProduct($tr, scrollIntoView, flashOnOff) {
+		if (scrollIntoView) {
+			// Change table page if product not on current page
+			if (!$tr.is(":visible")) {
+				var $pag = $('+.pagination-container', $tr.closest(".vertical-container")).data("paginaThing");
+				if ($pag) {
+					$pag.show(parseInt($tr.index()/$pag.options.perPage) + 1);
+				}
+			}
+			if (!$tr.is(":visible") && $tr.hasClass("hidden")) {
+				$tr.closest("tbody").find(".datasource .op-toggle").trigger("click");
+			}
+			// Scroll product into view
+			var $table     = $tr.closest("table");
+			var $container = $tr.closest(".vertical-container");
+			var $sticky    = $(".sticky", $container);
+			var scroll     = $tr.offset().top - $table.offset().top;
+			var maxScroll  = $table.outerHeight() + ($sticky.length > 0 ? $sticky.outerHeight() : 0) + 2;
+			if (scroll < maxScroll) {
+				$container.scrollTop(scroll);
+			} else {
+				$tr.get(0).scrollIntoView();
+			}
+		}
+		// highlight product in table
+		$("tr", $tr.closest("table")).removeClass("flash");
+		$tr.addClass("flash");
+		// delay showing the top info until scrollTop/scrollIntoView is finished
+		setTimeout(function () {
+			if (flashOnOff) $tr.removeClass("flash");
+			showTopInfo($tr);
+		}, 500);
+	}
+	
+	function highlightFeature($tr) {
+		if (myPolygonMap.mapActive) {
+			// partially hide all preview features on map
+			var pStroke = new ol.style.Stroke({ color: [255, 255, 255, 1], width: 2 });
+			var pFill   = new ol.style.Fill  ({ color: [255, 255, 255, 0.1] });
+			var pStyle  = new ol.style.Style ({ stroke: pStroke, fill: pFill });
+			myPolygonMap.setFeaturesStyleByProperty({ "description": "preview" }, pStyle);
+
+			var hStroke = new ol.style.Stroke({ color: [255, 0, 0, 1], width: 4 });
+			var hFill   = new ol.style.Fill  ({ color: [255, 153, 0, 0.1] });
+			var hStyle  = new ol.style.Style ({ stroke: hStroke, fill: hFill });
+			myPolygonMap.setFeaturesStyleByProperty({ "highlighted": "true" }, hStyle);
+			
+			// locate selected features on map
+			var pStroke = new ol.style.Stroke({ color: [255, 0, 0, 1], width: 4 });
+			var pFill   = new ol.style.Fill  ({ color: [255, 0, 0, 0.3] });
+			var pStyle  = new ol.style.Style ({ stroke: pStroke, fill: pFill });
+			myPolygonMap.setFeaturesStyleById($tr.data("id"), pStyle);
+		}
+	}
+	
+	function showProcessingParams() {
+		var processingModule = $("#myModalNodes").data("processingModule");
+		$("#processingLabelDefault").val(processingModule + " (" + moment().format("YYYY-MM-DD HH:mm:ss.SSS").toString() + ")");
+		if ($("#processingLabel").val() == "") {
+			$("#processingLabel").attr({ "placeholder": $("#processingLabelDefault").val() });
+		}
+
+		$("#startDate_param").datepicker({
+			changeYear : true,
+			changeMonth: true,
+			dateFormat : 'yy-mm-dd',
+			onSelect   : function (selected,evnt) {
+				var newDate = new Date(selected);
+				if (newDate) { // Not null
+					newDate.setDate(newDate.getDate() + 1);
+				}
+				$("input[name='" + $("#startDate_param").attr('data-name') + "_d2']").datepicker("option", "minDate", newDate);
+			}
+		});
+		$("#endDate_param").datepicker({
+			changeYear : true,
+			changeMonth: true,
+			dateFormat : 'yy-mm-dd',
+			onSelect   : function (selected,evnt) {
+				var newDate = new Date(selected);
+				if (newDate) { // Not null
+					newDate.setDate(newDate.getDate() + 1);
+				}
+				$("input[name='" + $("#endDate_param").attr('data-name') + "_d2']").datepicker("option", "minDate", newDate);
+			}
+		});
+			
+		$("#select_specific_servicies").select2({ placeholder: "Select services", width: "100%", allowClear: true});
+		$("#select_observation_data").select2({ placeholder: "Select observation data", width: "100%", allowClear: true});
+	}
+	
+	$("#processingParameters").on("click", ".minimize, .main-panel", function (e, t) {
+		if ($(e.currentTarget).hasClass("minimize")) {
+			e.stopPropagation();
+			$myModalNodes.addClass("full-map-view");
+		} else if ($(e.currentTarget).hasClass("main-panel") && $myModalNodes.hasClass("full-map-view")) {
+			$myModalNodes.removeClass("full-map-view");
+		}
+	});
+	
+	$(document).ready(function() {
+	
+		showProcessingParams();
+		
+		/*$("#select_observation_data").on("change", function () {
+			if (this.value !== ""){
+				$("#select_observation_data").css("color", "#444");
+			} else {
+				$("#select_observation_data").css("color", "gray");
+			}
+		});*/
+		
+		// fix bug in Firefox when selecting the month in datepicker inside a bootstrap-modal won't work (when modal tabindex is set)
+		if (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1) {
+			$.fn.modal.Constructor.prototype.enforceFocus = function (){};
+		}
+		
+		$(".movable").draggable({
+			containment: "#myModalNodes",
+			axis       : "x",
+			handle     : ".modal-header",
+			opacity    : 0.8,
+			stop: function(event, ui) {
+				var maxW = $("#myModalNodes").outerWidth();
+				var rg = ui.position.left + ui.helper.outerWidth();
+				var lf = 0;
+				if (rg > maxW) {
+					lf = parseFloat(100 - 100*ui.helper.outerWidth()/maxW).toFixed(1);
+				} else {
+					lf = parseFloat(100*ui.position.left/maxW).toFixed(1);
+				}
+				
+				ui.helper.css({ left: lf + "%", "z-index": 800 });
+				
+				if (parseInt(lf) === 0) {
+					$(".btn-movable", ui.helper).prop("disabled", true);
+				} else {
+					$(".btn-movable", ui.helper).prop("disabled", false);
+				}
+			}
+		});
+		
+		// Initialize map and query
+			var olPoly = $("#mapExtent").poly2D({ startLat: 47, startLon: 14, zoom: 5, maxFeaturesNo: 1, extraFeatureDescription: "preview" });
+			$.when(olPoly)
+			.done(function (result) {
+				//*
+				if (typeof result.readOnly === "boolean") {
+					$(".extent", "#myModalNodes").removeClass("no-map");
+					$("#mapExtent").removeClass("hidden");
+					myPolygonMap = result;
+					handlePolygonMapEvents(myPolygonMap);
+					
+					autoPanMap();
+				}
+				/* */
+				
+				// Initialize query functionality after map is loaded
+				
+			})
+			// Initialize query functionality without map
+			.fail(function () {
+				
+			});
+			
+			$myModalNodes.removeClass("full-map-view");
+			
+	});
+//# sourceURL=thematic-processing-plus.js
+</script>

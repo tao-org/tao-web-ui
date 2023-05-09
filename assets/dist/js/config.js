@@ -1,26 +1,27 @@
-//localhost API
-//var baseRestApiURL = 'https://localhost:8443/';
-//var baseRestApiURL = 'http://localhost:8080/';
-//var baseRestApiURL = 'https://localhost:8443/';
-//live API
-var baseRestApiURL = '/';
-
-var prefferences = {
-    "viewMode": "grid",
-    "autorefresh": "on"
-};
-var notificationsMaxNumber = 50;
-var notificationsCheckInterval = 10000; //milliseconds
-var monitorCheckInterval = 5000;
-
-var tokenKey = _settings.readCookie("tokenKey");
-
-var responseStatus = {
-	success: "SUCCEEDED",
-	fail   : "FAILED",
-	error  : "ERROR",
-	warning: "WARNING"
-};
-
-//msg dictionary
-var SHARED_EDIT_RESTRICTED = "Users can not edit shared components. User have edit permission restricted to own workspace.";
+(function () {
+	// Localhost API
+//	window.baseRestApiURL = 'http://localhost:8080/';
+//	window.baseRestApiURL = 'https://localhost:8443/';
+	
+	// Live API
+	window.baseRestApiURL = '/';
+	
+	// Custom API
+//	window.baseRestApiURL = 'http://yourhost:8080/';
+//	window.baseRestApiURL = 'https://yourhost:8443/';
+	
+	// User preferences
+	window.prefferences               = { "viewMode": "grid", "autorefresh": "on" };
+	window.notificationsMaxNumber     = 50;
+	window.notificationsCheckInterval = 20000; //milliseconds
+	window.monitorCheckInterval       = 10000; //milliseconds
+	
+	// User token
+	window.tokenKey = _settings.readCookie("tokenKey");
+	
+	// General functionality variables
+	window.responseStatus = { success: "SUCCEEDED", warning: "WARNING", fail: "FAILED", error: "ERROR" };
+	
+	// Msg dictionary
+	window.SHARED_EDIT_RESTRICTED = "Users can not edit shared components. User have edit permission restricted to own workspace.";
+})();

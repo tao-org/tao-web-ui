@@ -154,13 +154,142 @@
   }
 }
 .skin-blue-light .main-footer {
-  border-top-color: #d2d6de;
+	background-color: #f9fafc;
+	border-top-color: #d2d6de;
+	color: #333;
+  
 }
-.skin-blue.layout-top-nav .main-header > .logo {
+.skin-blue-light.layout-top-nav .main-header>.logo {
+	background-color: #3c8dbc;
+	color: #fff;
+	border-bottom: 0 solid transparent
+}
+.skin-blue-light.layout-top-nav .main-header>.logo:hover {
+		background-color: #3b8ab8
+}
+.skin-blue-light .content-wrapper,
+.skin-blue-light .right-side,
+.skin-blue-light .control-sidebar,
+.skin-blue-light .control-sidebar-bg {
+		background-color: #f9fafc;
+}
+.skin-blue-light .content-header>h1,
+.skin-blue-light .content-header>h1>small,
+.skin-blue-light .main-footer>b>a.text-black,
+.skin-blue-light .content-header>.breadcrumb>li>a {
+	color: #333 !important;
+}
+.skin-blue-light .control-sidebar-dark .control-sidebar-tabs>li.active>a,
+.skin-blue-light .control-sidebar-dark .control-sidebar-tabs>li.active>a:hover,
+.skin-blue-light .control-sidebar-dark .control-sidebar-tabs>li.active>a:focus,
+.skin-blue-light .control-sidebar-dark .control-sidebar-tabs>li.active>a:active,
+.skin-blue-light .control-sidebar .control-sidebar-heading {
+	background-color: #f9fafc; 
+	color: #333 !important;
+}
+.skin-blue-light .control-sidebar>* {
+	color: #777;
+}
+
+.skin-blue-light .callout.callout-empty,
+.skin-blue-light .box.box-primary {
+	border-color: #3c8dbc;
+}
+.skin-blue-light .main-footer {
+  background: #3c8dbc;
+	color: #d2d6de;
+	border-top-color: #3c8dbc;
+}
+.skin-blue-light .modal-header {
   background-color: #3c8dbc;
-  color: #ffffff;
-  border-bottom: 0px solid transparent;
+  color: white;
 }
-.skin-blue.layout-top-nav .main-header > .logo:hover {
-  background-color: #3b8ab8;
+/*** pop-up close ***/
+.skin-blue-light .close {
+  color: #ffffff;
+  text-shadow: none;
+  opacity: unset;
+  }
+  .skin-blue-light .box.box-solid.box-success{
+    border: 1px solid #3c8dbc;
+  }
+  .skin-blue-light .box.box-solid.box-success>.box-header{
+    color: #fff;
+    background: #3c8dbc;
+    background-color: #3c8dbc;
+  }
+
+  /*** Workflow toolbox ***/
+.skin-blue-light .toolbox-sidebar{
+  background: #ffffff;
+}
+.skin-blue-light .toolbox-sidebar .toolbox-bar {
+  color: #fff!important;
+  background-color: #3c8dbc!important;
+  margin-top: 2px;
+}
+.skin-blue-light .toolboxAccordion{
+  background: #ffffff;
+}
+
+.skin-blue-light .toolboxAccordion .ui-accordion-content{
+  background: #ffffff;
+}
+
+.skin-blue-light .toolboxAccordion .ui-accordion-header{
+  background-color: #76accc;
+  color: #ffffff;
+}
+
+.skin-blue-light .item-info{
+  background: #ffffff;
+  border: 1px solid #3c8dbc;
+  color: #333333;
+}
+.skin-blue-light .modulesholder .item {
+  background: #ffffff;
+  border: 1px solid #3c8dbc;
+}
+
+.skin-blue-light .toolbox-sidebar .toolbox-search input {
+  background: #eee;
+}
+
+.skin-blue-light .ui-widget-content{
+  color: #3c8dbc;
+}
+/*** Node monitor model ***/
+.skin-blue-light .modal-header {
+  background-color: #3c8dbc;
+  color: white;
+}
+/*** Repositories modals windows ***/
+.skin-blue-light #properties h4, .skin-blue-light #properties .action-name, .skin-blue-light #view_on_map h4, .skin-blue-light #view_file_content h4, 
+.skin-blue-light #view_on_map button.close, .skin-blue-light #view_file_content button.close, 
+.skin-blue-light #view_file_content .content_prev, .skin-blue-light #view_file_content .content_next {
+  color:#3c8dbc;
+}
+.skin-blue-light #view_on_map button.close:hover, 
+.skin-blue-light #view_file_content button.close:hover {
+  color:#8bccf3;
+}
+.skin-blue-light #properties.folder .callout-title, .skin-blue-light #properties .callout-title,
+.skin-blue-light #view_on_map.map .callout-title, .skin-blue-light #view_file_content .callout-title {
+  border-top: 5px solid rgb(60 141 188);
+  background-color: rgb(60 141 188 / 10%);
+}
+.skin-blue-light #myFlatMap .drawer-pin .btn-poly {
+	color: white;
+}
+.skin-blue-light #myFlatMap .drawer-content .btn-poly {
+	color:#3c8dbc;
+}
+.skin-blue-light #myFlatMap .drawer-panel {
+	border-right: 20px solid #3c8dbc;
+}
+.skin-blue-light #myFlatMap .drawer-panel .drawer-content {
+	border: 1px solid #3c8dbc;
+}
+.skin-blue-light #myFlatMap .drawer-panel.closed .drawer-content::after {
+	color: #3c8dbc;
 }

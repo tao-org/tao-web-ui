@@ -1,4 +1,5 @@
 <style>
+	textarea{resize: none;}
 	.nodes-item-core-box .box-top .box-text{line-height:1.3em;white-space:nowrap;overflow:hidden}
 	.nodes-item-core-box .box-description{background:#e3f3fc;padding:5px 15px;margin:10px -15px 10px -15px;line-height:1.2em;color:#555}
 	.nodes-item-core-box .box-bottom{padding:0}
@@ -14,6 +15,24 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <!-- modal nodes op -->
+
+
+<!-- modal nodes container descriptor -->
+<div id="myModalNodesContDesc" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- modal nodes op -->
+
+
+<!-- modal nodes component descriptor -->
+<div id="myModalNodesCompDesc" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- modal nodes op -->
+
+
 
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
@@ -82,7 +101,7 @@
 										<div class="box-tools pull-right nppaginatedcells-order collapse" data-toggle="tooltip" title="Change order"></div>
 									</div>
 									<div class="nppaginatedcells-empty callout callout-empty">
-										<p>Containers list is empty. <span class="results-empty">You do not have any node.</span><span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
+										<p>List is empty. <span class="results-empty">You do not have any container.</span><span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
 									</div>
 									<div class="box-body chat users-box">
 										<div class="nppaginatedcells-panel-body"></div>
@@ -169,6 +188,7 @@
 	</div>
 </section><!-- /.content -->
 <script>
+	var nameListTC = [];
 	myModalNodesOpShow = function (operationid, args) {
 		var $modal = $("#myModalNodes");
 		$(".modal-dialog", $modal).removeClass("modal-lg");
@@ -229,6 +249,7 @@
 					data[i].appsCount = data[i].applications.length;
 					data[i].formatCount = data[i].format.length;
 					data[i].tags = [data[i].tag];
+					nameListTC.push(data[i].name);
 				}
 				return data;
 			},

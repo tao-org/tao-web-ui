@@ -33,7 +33,7 @@ app-modal-overlay a:hover{
 
 app-modal {
     position: absolute;    
-	width: 600px;
+	width: 500px;
     height: 100vh;
     max-height: 100vh;
     border-radius: 0;
@@ -177,7 +177,7 @@ app-modal-content {
     border-top: 1px solid #fff;
     border-bottom: 1px solid #fff;
 	transition: padding .4s ease-in-out;
-    font-size: 14px;
+    font-size: 12px;
 }
 .app-card-note-item:hover {
 	padding: 20px 24px;
@@ -259,7 +259,7 @@ btn-avatar{
     font-size: 1.4rem;
     text-transform: uppercase;
     text-decoration: none;
-    padding: 19px 40px 20px;
+    padding: 15px 40px;
     display: block;
     width: 100%;
     transition: box-shadow 420ms cubic-bezier(.165,.84,.44,1),color 420ms cubic-bezier(.165,.84,.44,1),background 420ms cubic-bezier(.165,.84,.44,1);
@@ -328,5 +328,11 @@ btn-avatar{
     display:none;
 }
 
+.ui-dialog {z-index:10001;box-shadow: 0 0 0 1px rgb(0 0 0 / 10%), 0 12px 18px 1px rgb(0 0 0 / 20%);}
+.ui-dialog .ui-dialog-buttonpane {text-align:center;border:0;margin:0;}
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {float:none;}
+.ui-dialog label {color: #286080;display: block;}
+
+.ui-dialog input[type="radio"]:hover{outline: 5px auto #0075ff;outline-offset: -1px;}
 
 /**/

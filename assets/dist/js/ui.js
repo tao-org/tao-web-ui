@@ -35,6 +35,7 @@ var taoUserGroups = {
         return undefined;
     }
 };
+var taoFlavors = [];
 var taoEnums = {
     data: {},
     getEntity: function(e){
@@ -100,26 +101,31 @@ $(function () {
         });
     }
     function getUserGroups(){
-        return $.ajax({
-            cache: false,
-            async: false,
-            crossDomain: true,
-            url: baseRestApiURL + "admin/users/groups",
-            dataType : 'json',
-            method: 'GET',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
-            }
-        });
+		// when user role is not Admin user groups is unauthorized
+        if (typeof _settings.readCookie() !== "undefined" && _settings.readCookie("userRole") === "ADMIN") {
+			return $.ajax({
+				cache: false,
+				async: false,
+				crossDomain: true,
+				url: baseRestApiURL + "admin/users/groups",
+				dataType : 'json',
+				method: 'GET',
+				headers: {
+					"Accept": "application/json",
+					"Content-Type": "application/json",
+					"X-Auth-Token": window.tokenKey
+				}
+			});
+		} else {
+			return [{"data":{},"message":null,"status":"SUCCEEDED"}];
+		}
     }
 
     $.when(getUserProfile(username), getConfigEnums(),getUserGroups())
         .done(function (responseProfile, responseEnums, responseUserGroups) {
             var r = chkTSRF(responseProfile[0]);
             taoEnums.data = chkTSRF(responseEnums[0]);
-            taoUserGroups.data = chkTSRF(responseUserGroups[0]);
+			taoUserGroups.data = chkTSRF(responseUserGroups[0]);
 
             //inject additional elements into user profile data.
             if(r.id){
@@ -294,18 +300,18 @@ $(function () {
         "processing":-1,
         "processingActual":-1,
         "used":0,
-        "um":"GB",
+        "um":" GB",
         "files":0,
         "folders":0
     };
     function ui_update(v){
         $.extend(q, v);
-        var lblInputQ = humanFileSizeFromMB(q.input);
+        var lblInputQ = humanFileSizeFromMB(q.inputActual);
         var pctI = Math.ceil(q.inputActual/q.input*100);
         if(pctI>100){pctI = 100;}
         var lblInputPercent = pctI+"%";
         if(q.input === -1){
-            lblInputQ = "unmetered";
+            //lblInputQ = "unmeterred";
             lblInputPercent = "n/a";
             pctI = 0;
         }
@@ -314,7 +320,7 @@ $(function () {
         if(pctP>100){pctP = 100;}
         var lblProcessingPercent = pctP+"%";
         if(q.processing === -1){
-            lblProcessingQ = "unmetered";
+            lblProcessingQ = "unmeterred";
             lblProcessingPercent = "n/a";
             pctP = 0;
         }
@@ -322,8 +328,8 @@ $(function () {
 //      var quota_usage_details = "using: "+q.used+"GB<br>"+q.files+" Files, "+q.folders+" Folders";
 
         var usageHTML =
-            '        <h4 class="control-sidebar-subheading">User quota:</h4>' +
-            '        <h4 class="control-sidebar-subheading"><i class="fa fa-arrow-right fa-fw" aria-hidden="true"></i>input:&nbsp;<span>'+lblInputQ+'</span><span class="label label-danger pull-right">'+lblInputPercent+'</span></h4>' +
+            '        <h4 class="control-sidebar-subheading">Resource usage:</h4>' +
+            '        <h4 class="control-sidebar-subheading"><i class="fa fa-arrow-right fa-fw" aria-hidden="true"></i>storage:&nbsp;<span>'+lblInputQ+'</span><span class="label label-danger pull-right">'+lblInputPercent+'</span></h4>' +
             '        <div class="progress progress-xxs"><div class="progress-bar progress-bar-danger progress-bar-graph" style="width: '+pctI+'%;"></div></div>' +
             '        <h4 class="control-sidebar-subheading"><i class="fa fa-bolt fa-fw" aria-hidden="true"></i>processing:&nbsp;<span>'+lblProcessingQ+'</span><span class="label label-danger pull-right">'+lblProcessingPercent+'</span></h4>' +
             '        <div class="progress progress-xxs"><div class="progress-bar progress-bar-danger progress-bar-graph" style="width: '+pctP+'%;"></div></div>';
@@ -403,53 +409,101 @@ $(function () {
 
 
 (function () {
-    var version = '0.3',
-        $elMsgBox = $("#messagesBox"),
-        my_messages_index = 0;
-	function checkLocked() {
-		if ($(".messagesBoxItem.locked", $elMsgBox).length > 0) {
-			$elMsgBox.addClass("locked");
-		} else {
-			$elMsgBox.removeClass("locked");
-		}
-	}
-	function messagestack(msg, status) {
-		var o = {
-			msg     : msg,
-			status  : status,
-			lifetime: 4000,
-			closable: true
-		};
+    //var version = '0.3',
+    //    $elMsgBox = $("#messagesBox"),
+    //    my_messages_index = 0;
+	//function checkLocked() {
+	//	if ($(".messagesBoxItem.locked", $elMsgBox).length > 0) {
+	//		$elMsgBox.addClass("locked");
+	//	} else {
+	//		$elMsgBox.removeClass("locked");
+	//	}
+	//}
+	//function messagestack(msg, status) {
+	//	var o = {
+	//		msg     : msg,
+	//		status  : status,
+	//		lifetime: 4000,
+	//		closable: true
+	//	};
 		
-		// Set message color
-		var collor_class = "";
-		switch (o.status.toUpperCase()) {
-			case 'SUCCESS': collor_class = " msg-green" ; break;
-			case 'INFO'   : collor_class = " msg-blue"  ; break;
-			case 'WARN'   : collor_class = " msg-yellow"; break;
-			case 'WARNING': collor_class = " msg-yellow"; break;
-			case 'FAIL'   : collor_class = " msg-red locked"; o.closable = false; break;
-			case 'FAILED' : collor_class = " msg-red locked"; o.closable = false; break;
-			case 'ERROR'  : collor_class = " msg-red locked"; o.closable = false; break;
-		}
+	//	// Set message color
+	//	var collor_class = "";
+	//	switch (o.status.toUpperCase()) {
+	//		case 'SUCCESS': collor_class = " msg-green" ; break;
+	//		case 'INFO'   : collor_class = " msg-blue"  ; break;
+	//		case 'WARN'   : collor_class = " msg-yellow"; break;
+	//		case 'WARNING': collor_class = " msg-yellow"; break;
+	//		case 'FAIL'   : collor_class = " msg-red locked"; o.closable = false; break;
+	//		case 'FAILED' : collor_class = " msg-red locked"; o.closable = false; break;
+	//		case 'ERROR'  : collor_class = " msg-red locked"; o.closable = false; break;
+	//	}
 		
-		// Set message ID
-		my_messages_index++;
+	//	// Set message ID
+	//	my_messages_index++;
 		
-		// Add message to stack
-		$elMsgBox.append('<div id="messagesBoxItem'+my_messages_index+'" class="messagesBoxItem'+collor_class+'"><span class="glyphicon glyphicon-remove"></span>'+o.msg+'</div>');
+	//	// Add message to stack
+	//	$elMsgBox.append('<div id="messagesBoxItem'+my_messages_index+'" class="messagesBoxItem'+collor_class+'"><span class="glyphicon glyphicon-remove"></span>'+o.msg+'</div>');
 		
-		// Manual close
-		$elMsgBox.on("click", "#messagesBoxItem"+my_messages_index+" span.glyphicon-remove", function () {
-			$(this).closest(".messagesBoxItem").remove();
-			checkLocked();
-		});
+	//	// Manual close
+	//	$elMsgBox.on("click", "#messagesBoxItem"+my_messages_index+" span.glyphicon-remove", function () {
+	//		$(this).closest(".messagesBoxItem").remove();
+	//		checkLocked();
+	//	});
 		
-		// Automatic close
-		if (o.closable) { $('#messagesBoxItem'+my_messages_index).delay(o.lifetime).fadeOut(function () { $(this).remove(); checkLocked(); }); }
-		checkLocked();
+	//	// Automatic close
+	//	if (o.closable) { $('#messagesBoxItem'+my_messages_index).delay(o.lifetime).fadeOut(function () { $(this).remove(); checkLocked(); }); }
+	//	checkLocked();
+    //}
+    //window.showMsg=messagestack;
+
+    //VPA 2022.08 Added Gritter for notifications
+    function showGritterMessage(message, title) {
+        $.gritter.add({
+            title: title,
+            text: message,
+            sticky: false,
+            time: 2000
+        });
     }
-	window.showMsg=messagestack;
+    function showGritterInfo(message, title) {
+        $.gritter.add({
+            title: title,
+            text: message,
+            sticky: false,
+            class_name: 'gritter-info',
+            time: 2000
+        });
+    }
+    function showGritterWarning(message, title) {
+        $.gritter.add({
+            title: title,
+            text: message,
+            sticky: false,
+            class_name: 'gritter-warning',
+            time: 3000
+        });
+    }
+    function showGritterError(message, title) {
+        $.gritter.add({
+            title: title,//the heading of the notification
+            text: message,//the text inside the notification
+            sticky: true,
+            class_name: 'gritter-danger'
+        });
+    }  
+    function showGritter(message, status) {
+        switch (status.toUpperCase()) {
+            case 'SUCCESS': showGritterMessage(message, status); break;
+            case 'INFO': showGritterInfo(message, status);collor_class = " msg-blue"; break;
+            case 'WARN': showGritterWarning(message, status);collor_class = " msg-yellow"; break;
+            case 'WARNING': showGritterWarning(message, status);collor_class = " msg-yellow"; break;
+            case 'FAIL': showGritterError(message, status);collor_class = " msg-red locked"; break;
+            case 'FAILED': showGritterError(message, status);collor_class = " msg-red locked"; break;
+            case 'ERROR': showGritterError(message, status);collor_class = " msg-red locked"; break;
+        }
+    }
+    window.showMsg = showGritter;
 	return this;
 }());
 
@@ -499,7 +553,8 @@ $(function () {
             type: 'GET',
             headers: {
                 "Accept": "application/json",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+				"X-Auth-Token": window.tokenKey
             }
         })
         .done(function (r, statusText, xhr) {
@@ -519,7 +574,11 @@ $(function () {
                             flagExecRefresh = true;
                         }
                         var obj = JSON.parse(getMonitorNotificationResponse[k]['data']);
-                        $el.find(".val-msg-txt").html(obj.Payload);
+                        if (obj.Message) {
+                            $el.find(".val-msg-txt").html(obj.Message);
+                        } else {
+                            $el.find(".val-msg-txt").html(obj.Payload);
+                        }
                     }
                     catch(err) {
                         $el.find(".val-msg-txt").html("unparsable message");
@@ -536,11 +595,17 @@ $(function () {
                         $elMsgCount.html(count);
                     }
             }
-            if(flagExecRefresh){
-                $("#exec-list-panel, #exec-history-panel").trigger("panel:refresh");
-            }
+           //if(flagExecRefresh){
+               $("#exec-list-panel, #exec-history-panel, #notification-history-panel, #download-statistics-panel, #exec-user-list-panel, #exec-user-history-panel").trigger("panel:refresh");
+           //}
+           
             setTimeout(function(){
-                retriveNotifications();
+			   //  alert(notificationsCheckInterval);
+			   if(taoUserProfile.preferences.find( function(item) { return item.key == "refresh_rate"} )){
+				 notificationsCheckInterval = taoUserProfile.preferences.find( function(item) { return item.key == "refresh_rate" } ).value
+				}
+				//alert(notificationsCheckInterval);
+				 retriveNotifications();
             }, notificationsCheckInterval);
         })
         .fail(function (jqXHR) {
@@ -566,12 +631,21 @@ $(function () {
             $("#bot-notice-chat .direct-chat-messages .tools").trigger("click");
             $(".max-msg-note").addClass("hidden");
         });
-    retriveNotifications();
+	$(".content-wrapper.tao-async-cw").on('mouseover', ".nodes-item-core-box .box-title span", function(event) {
+		  var target = event.target;
+		 // if (!target.matches('[title]')) return;
+
+		  var container = target.parentNode;
+		  var overflowed = container.scrollWidth > container.clientWidth;
+
+		  target.title = overflowed ? target.textContent : '';
+		});
+	retriveNotifications();
     return true;
 }());
 
 
-//customize paremeterws for workflow
+//customize paremeters for workflow
 (function () {
 
     var wf_loadModuleProcessing = function(nid,lcl_n,componentTemplate){
@@ -599,10 +673,10 @@ $(function () {
 
             if((valueset.length === 1) && (( valueset[0] === "") || ( valueset[0] === "null"))){
                 $('input.var-value', $el).val(value);
-                if(humanJavaDataType(type) === "Date"){
+                if(type === "date"){
                     $('input.var-value-string', $el).attr("type", "date");
                 }
-                if((humanJavaDataType(type) === "Double") || (humanJavaDataType(type) === "Short") || (humanJavaDataType(type) === "Float") || (humanJavaDataType(type) === "Number")){
+                if((type === "double") || (type === "short") || (type === "float") || (type === "number")){
                     $('input.var-value-string', $el).attr("type", "number");
                 }
                 $('input.var-value-string', $el).val(value).show();
@@ -617,7 +691,7 @@ $(function () {
         };
         var helper_addSTblEdtRow = function($tblEdt, payload){
             var obj = {
-                "dataType": "java.lang.String",
+                "dataType": "string",
                 "defaultValue": "",
                 "description": "",
                 "format": null,
@@ -635,12 +709,12 @@ $(function () {
             $('span.var-id', $el).html(obj.id);
             $('span.var-label', $el).html(obj.label);
             $('span.var-description', $el).html(obj.description);
-            $('span.var-dataType', $el).html(humanJavaDataType(obj.dataType));
+            $('span.var-dataType', $el).html(obj.dataType);
             $('span.var-default', $el).html(obj.defaultValue);
             if((obj.value == null) || (obj.value === '') || (obj.value === undefined)){
                 obj.value = obj.defaultValue;
             }
-            if(obj.dataType === "java.lang.Boolean"){
+            if(obj.dataType === "bool"){
                 helper_putValue($el, obj.id, obj.dataType, obj.value, ["true","false"]);
             }else{
                 helper_putValue($el, obj.id, obj.dataType, obj.value, obj.valueSet);

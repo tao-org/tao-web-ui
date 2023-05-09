@@ -33,9 +33,62 @@ function routeLoading(action){
     if(action === "hide"){
         setTimeout(function(){
             taoLoadingDiv.modal('hide');
-        },1000);
+        }, 100);
     }
 }
+
+function refreshToken() {
+	var refreshed = false;
+	
+	var tokenRefresh = _settings.readCookie("refreshToken");
+	var userName     = _settings.readCookie("TaoUserName");
+	if (tokenRefresh !== "" && tokenRefresh != null && userName !== "" && userName != null) {
+		// Refresh token
+		$.ajax({
+			"async"  : false,	// !!! Important: this call MUST be synchronous otherwise some ajax call will fail
+			"cache"  : false,
+			"url"    : baseRestApiURL + "auth/refresh",
+			"method" : "POST",
+			"headers": { "Content-Type": "application/x-www-form-urlencoded" },
+			"data"   : { "user" : userName, "token": tokenRefresh },
+			"success": function (r) {
+				var apiData = chkTSRF(r);
+				if (apiData.token && apiData.refreshToken) {
+					console.log("Token refreshed [" + apiData.token + "]");
+					// Restore token cookies
+					_settings.createCookie("tokenKey", apiData.token, apiData.expiresInSeconds/60/60/24);
+					_settings.createCookie("refreshToken", apiData.refreshToken);
+					// Restore global token variable
+					window.tokenKey = apiData.token;
+					refreshed = true;
+				} else {
+					console.log("Failed to retrieve new token. User should try and log back in.");
+				}
+			},
+			"error": function (jqXHR, status, textStatus) {
+				console.log("Could not refresh the token. User should try and log back in.");
+			}
+		});
+	} else {
+		console.log("Missing refresh token information");
+	}
+	return refreshed;
+}
+
+// Catch ajax calls and check for token validity
+(function() {
+	var _oldAjax = $.ajax;
+	$.ajax = function(options) {
+		var tokenKey = _settings.readCookie("tokenKey");
+		if ((typeof options.headers !== "undefined") && (typeof options.headers["X-Auth-Token"] !== "undefined") && (tokenKey === "" || tokenKey == null)) {
+			// Refresh token
+			if (refreshToken()) {
+				options.headers["X-Auth-Token"] = window.tokenKey;
+			}
+		}
+		return _oldAjax(options);
+	 };
+})();
 
 //ROUTER
 $(function () {
@@ -48,19 +101,31 @@ $(function () {
 	
     // User section
     hashRoutesMap["my/queries"] = "./fragments/datasources-queries.fragment.html";
-    hashRoutesMap["my/components"] = "./fragments/component-admin2.fragment.html";
+	hashRoutesMap["my/explorer"] = "./fragments/datasources-queries.fragment.html";
 	hashRoutesMap["my/workflows"] = "./fragments/workflows-admin2.fragment.html";
-    hashRoutesMap["my/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
+//	hashRoutesMap["my/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
+    hashRoutesMap["my/repositories"] = "./fragments/repositories.fragment.html";
     hashRoutesMap["my/scheduling"] = "./fragments/scheduling-admin2.fragment.html";
+    hashRoutesMap["my/sites"] = "./fragments/sites.fragment.html";
+    
+	// Remote Services components section
+	hashRoutesMap["my/remoteServices"] ="./fragments/remoteServices-components.fragment.html";
+	
     // Shared section
-    hashRoutesMap["shared/datasources"] = "./fragments/datasource-admin2.fragment.html";
-    hashRoutesMap["shared/components"] = "./fragments/component-admin2.fragment.html";
-	hashRoutesMap["shared/workflows"] = "./fragments/workflows-admin2.fragment.html";
-    hashRoutesMap["shared/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
+//	hashRoutesMap["shared/components"] = "./fragments/component-admin2.fragment.html";
+//	hashRoutesMap["shared/workflows"] = "./fragments/workflows-admin2.fragment.html";
+//	hashRoutesMap["shared/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
+	
 	// Resources
+	hashRoutesMap["admin/components"] = "./fragments/component-admin2.fragment.html";
+	hashRoutesMap["admin/datasources"] = "./fragments/datasource-admin2.fragment.html";
     hashRoutesMap["admin/topology"] = "./fragments/topology-admin2.fragment.html";
     hashRoutesMap["admin/containers"] = "./fragments/containers-admin2.fragment.html";
+    hashRoutesMap["admin/repositoriesTemplate"] = "./fragments/repositoriesTemplate-admin2.fragment.html";
+    hashRoutesMap["admin/remoteServices"] = "./fragments/remoteServices-admin2.fragment.html";
     hashRoutesMap["admin/users"] = "./fragments/users-admin2.fragment.html";
+    hashRoutesMap["admin/systemDashboard"] = "./fragments/systemDashboard-admin2.fragment.html";
+	
 	// Documentation
     hashRoutesMap["howto/intro"] = "./fragments/tao-howto.fragment.html";
     hashRoutesMap["documentation/intro"] = "./fragments/tao-documentation.fragment.html";
@@ -69,16 +134,16 @@ $(function () {
     // Event handlers for frontend navigation
     $(window).on('hashchange', function(){
         //check authtoken
-        var tokenKey = _settings.readCookie("tokenKey");
-        if ((tokenKey==="") || (tokenKey == null)){
-            $("body").empty();
-            window.location = 'login.html';
-        }else{
+		var tokenKey = _settings.readCookie("tokenKey");
+		if (tokenKey === "" || tokenKey == null) {
+			if (!refreshToken()) {
+				$("body").empty();
+				window.location = 'login.html';
+			}
+        } else {
             window.tokenKey = tokenKey;
         }
         navRouter(decodeURI(window.location.hash));
-        var current = moment().toISOString();
-        $("#page-timestamp").html(current);
     });
 
     // Navigation/router function will call appropriate functions.
@@ -98,7 +163,7 @@ $(function () {
                 hExtra = hExtra.split("|");
                 _.map(hExtra, function(s){ var a=s.split("="); routeFilters[a[0]] = a[1];});
             }
-            console.log(routeFilters);
+            //console.log(routeFilters);
         }
         if(hashRoutesMap[hash] === undefined){
             hash = UNDEFINED_PAGE_URL;
@@ -110,6 +175,26 @@ $(function () {
         routeLoading('show');
         fragmentUrl = hashRoutesMap[hash];
         unsolvedRoute = false;
+
+        //set viewMode before loading fragment
+        var prefferences_viewMode = "grid";
+        var username = _settings.readCookie("TaoUserName");
+        var pageName = routeTags[0] +'-'+ routeTags[1];
+        var currentPref = [];
+        $.when(_userPref.getUserPreferences(username))
+        .done(function(responseProfile){
+            var r = responseProfile.data;
+            currentPref = r.preferences;
+        });
+        $.each(currentPref, function(index,value){
+            keyValue = value.key;
+            if(keyValue.includes(pageName) === true){
+                prefferences_viewMode = value.value;
+                return false;
+            }
+        });
+        prefferences.viewMode = prefferences_viewMode;
+        
         $.ajax({
             cache: false,
             url: fragmentUrl

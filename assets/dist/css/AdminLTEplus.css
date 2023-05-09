@@ -394,7 +394,7 @@ body.sidebar-collapse #wrapper-quota-small{
 	#messagesBox.locked{padding-left:66%}
 }
 .messagesBoxItem{background:none repeat scroll 0 0 rgba(60,170,224,0.9);margin:0px 0 5px 0;padding:7px 2em;position:relative;overflow:hidden;border:solid 3px #FFF;border-width:3px 0 3px 3px;border-radius:0.5em 0 0 0.5em;color:white;font-size:large;font-weight:bold;text-align:left;-webkit-transition: background-color 0.2s linear;transition:background-color 0.2s linear;box-shadow:0 1px 3px black}
-.messagesBoxItem span{display:block;position:absolute;top:5px;right:4px;padding:3px;font-size:12px;cursor:pointer;border-radius:10px;color:transparent}
+.messagesBoxItem span{display:block;position:absolute;top:8px;right:10px;padding:5px;font-size:13px;cursor:pointer;border-radius:50%;color:transparent}
 .messagesBoxItem.msg-red   {background:none repeat scroll 0 0 rgba(221,75,57,0.9)}
 .messagesBoxItem.msg-yellow{background:none repeat scroll 0 0 rgba(243,156,18,0.9)}
 .messagesBoxItem.msg-green {background:none repeat scroll 0 0 rgba(100,193,10,0.9)}
@@ -690,7 +690,7 @@ ul.timeline.current_route:before{
 .nodes-item-core-box .box-top .box-title {
     text-transform: uppercase;
     color: #3c8dbc;
-    font-size: 1.8em;
+    font-size: 1.4em;
     /*font-weight: 700;*/
     line-height: 1;
     overflow: hidden;
@@ -702,15 +702,31 @@ ul.timeline.current_route:before{
     margin: 0 0 10px;
     font-size: 1em;
     color: #555;
+	overflow: hidden;
+    text-overflow: ellipsis;
+	white-space: nowrap;
+	min-height: 2rem;
 }
 .nodes-item-core-box .box-top .box-text {
     margin: 4px 0;
     font-size: .9em;
     line-height: 1;
     color: #3c8dbc;
+	overflow: hidden;
+    text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.nodes-item-core-box .box-top .box-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 2.8em;
+    font-size: 12px;
 }
 .nodes-item-core-box .box-top .box-icon {
-    font-size: 2em;
+    font-size: 1.6em;
     color: #3c8dbc;
     position: absolute;
     top: -5px;
@@ -768,9 +784,9 @@ ul.timeline.current_route:before{
 }
 
 .nodes-item-core-box .box-bottom .btn-nodeop {
-	padding: 5px 6px;
-    margin-top: 2px;
-	border-radius:5px;
+	padding: 0.28em 0.28em;
+    margin-top: 0.14em;
+	border-radius:0.35em;
 }
 /* for workflows */
 .nodes-item-core-box .progress{
@@ -931,7 +947,7 @@ ul.timeline.current_route:before{
 .search-box:not(:focus) {
     text-indent: -5000px;
 }
-#search-submit {
+#search-submit,#search-submit-nodes,#search-submit-nodesX {
     position: relative;
     left: -5000px;
 }
@@ -1268,6 +1284,38 @@ svg .small-cog{
     margin:0;
 }
 
+
+/*multilineSelect*/
+#inputFlavor-button{
+    /*width:100%;*/
+}
+.ui-selectmenu-menu-item-header {
+    text-decoration: underline;
+    font-weight:bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.ui-selectmenu-menu-item-content {
+    font-style: italic;
+    font-size: .8em;
+    margin-bottom: 10px;
+}
+.ui-selectmenu-menu-item-content span{
+    display: inline-block;
+    background: black;
+    margin-right: 0.2em;
+    border-radius: 1em;
+    padding: 0.2em .8em;
+    color: white;
+}
+.ui-selectmenu-menu-item-odd{
+    background:#eee;
+}
+.overflow-npmultilineselect {
+    height: 300px;
+}
+
+
 /*services status*/
 #servicesStatusWrapper .box-body hr:last-child {
     display:none;
@@ -1304,3 +1352,6 @@ span.markasread:hover{color:green}
 span.notification-menu-header{display:block;text-align:center}
 span.markallasread{color:#3c8dbc;  cursor: pointer}
 span.markallasread:hover{color:green}
+
+p.message {white-space:nowrap;}
+p.message span{overflow:hidden;text-overflow:ellipsis;}

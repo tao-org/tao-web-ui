@@ -2,7 +2,7 @@
  * Skin: Red
  * ---------
  */
-.skin-red-light .main-header .navbar {
+ .skin-red-light .main-header .navbar {
   background-color: #dd4b39;
 }
 .skin-red-light .main-header .navbar .nav > li > a {
@@ -60,8 +60,7 @@
 .skin-red-light .left-side {
   background-color: #f9fafc;
 }
-.skin-red-light .content-wrapper,
-.skin-red-light .main-footer {
+.skin-red-light .content-wrapper{
   border-left: 1px solid #d2d6de;
 }
 .skin-red-light .user-panel > .info,
@@ -152,4 +151,363 @@
   .skin-red-light.sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu {
     border-left: 1px solid #d2d6de;
   }
+}
+/*** Background ***/
+.skin-red-light .content-wrapper, .right-side {
+  background-color: #ffffff;
+  z-index: 800;
+}
+/*** Contente headers ***/
+.skin-red-light .content-header>h1 {
+  color: black;
+}
+.skin-red-light .content-header>h1>small {
+  color: #333333;
+}
+
+/**** Navigation bar ****/
+.skin-red-light .main-header .navbar {
+  opacity: unset;
+}
+/**** Dashboard ****/
+.skin-red-light .box.box-primary {
+  border-top-color: #dd4b39;
+  border-right: 1px solid #dd4b39;
+  border-left: 1px solid #dd4b39;
+  border-bottom: 1px solid #dd4b39;
+}
+.skin-red-light .box.box-warning {
+  border-top-color: #dd4b39;
+  border-right: 1px solid #dd4b39;
+  border-left: 1px solid #dd4b39;
+  border-bottom: 1px solid #dd4b39;
+}
+.skin-red-light .progress-bar-info {
+  background-color: #dd4b39;
+}
+.skin-red-light .callout.callout-empty {
+  background-color: #eaeaea !important;
+  border-color: #dd4b39;
+}
+.skin-red-light .job-history-one.running {
+  border-left: 5px solid #f39c12;
+}
+/**** Footer ****/
+.skin-red-light .main-footer {
+  background: #dd4b39;
+  color: #fff;
+  border-top: 1px solid #dd4b39;
+}
+.skin-red-light .main-footer>b>a.text-black {
+  color: #ffffff !important;
+}
+
+/*** Remote Datasets MAP ***/
+.skin-red-light #myModalNodes .modal-header {
+  background-color: #dd4b39;
+  color: white;
+}
+.skin-red-light #myModalNodes .modal-header.ui-draggable-handle::before {
+background-color: #dd4b39;
+border-color: #dd4b39;
+}
+.skin-red-light #queryExtent .modal-header .panel-control {
+  color: #fff;
+  text-shadow: none;
+  opacity: unset;
+}
+.skin-red-light #listDatasources a.selected {
+  color: #dd4b39;
+  background-color: #ffffff;
+}
+.skin-red-light #listDatasources a:hover {
+  color: #911102;
+}
+.skin-red-light .ui-slider-range-min {
+  background-color: #911102;
+}
+.skin-red-light #coverage{
+  color: #911102;
+}
+.skin-red-light #queryExtentParameters .sensor-name {
+  background-color: #dd4b39;
+  color: #ffffff;
+}
+.skin-red-light #myModalNodes table.ds-params::before{
+  background-color: #911102;
+}
+.skin-red-light #myModalNodes table.ds-params tbody td:first-child {
+  color: #911102;
+}
+.skin-red-light #myModalNodes .vertical-container {
+  border-top: 1px solid #911102;
+  border-bottom: 1px solid #911102;
+  background-color: #ffffff;
+}
+.skin-red-light #myFlatMap .poly-action-tools {
+  border-color: #ffa194;
+  background-color: #ffa194;
+  color: white;
+}
+.skin-red-light #myFlatMap .poly-switch>label::after {
+  border-color: #911102;
+  background-color: #911102;
+  color: white;
+}
+.skin-red-light .btn-primary:not(.login-box *),
+.skin-red-light #myFlatMap .poly-shape-type select,
+.skin-red-light #myFlatMap .ol-zoom button {
+  background-color: #911102;
+  border-color: #911102;
+}
+.skin-red-light #myFlatMap .btn-poly:disabled {
+  background-color: #911102;
+  color: #a2a3a3;
+  border-color: #911102;
+}
+.skin-red-light #myFlatMap .poly-shape-type select.disabled {
+  color: #a2a3a3;
+}
+.skin-red-light #myFlatMap .drawer-pin .btn-poly {
+  color: white;
+}
+.skin-red-light #myFlatMap .btn-poly,
+.skin-red-light #myFlatMap .poly-map-title {
+  color: #d73925;
+}
+.skin-red-light #myFlatMap .drawer-panel {
+  border-right: 20px solid #911102;
+}
+.skin-red-light #myFlatMap .drawer-panel .drawer-content {
+  border: 1px solid #911102;
+}
+.skin-red-light #myFlatMap .drawer-panel.closed .drawer-content::after {
+  color: #911102;
+}
+.skin-red-light #myFlatMap .btn-poly:hover,
+.skin-red-light #queryExtent .modal-header .panel-control:hover {
+  color: #911102;
+}
+.skin-red-light #queryExtentParameters .sensor-name {
+  background-color: #eaeaea;
+  color: #000000;
+}
+.skin-red-light #myFlatMap .poly-switch>label::before {
+background: #ffffff;
+border: 1px solid #ffffff;
+}
+
+/*** Bot chat ***/
+.skin-red-light .box.box-solid.box-success {
+  border: 1px solid #dd4b39;
+}
+.skin-red-light .box.box-solid.box-success>.box-header {
+  color: #fff;
+  background: #dd4b39;
+  background-color: #dd4b39;
+}
+/*** Text boxes ***/
+.skin-red-light .nodes-item-core-box .box-top .box-text {
+  color: #911102;
+}
+.skin-red-light .nodes-item-core-box .box-top .box-icon {
+  color: #911102;
+}
+.skin-red-light .box.box-success {
+  border-top-color: #911102;
+}
+.skin-red-light .nodes-item-core-box .box-top .box-title {
+  color: #911102;
+} 
+.skin-red-light .nodes-item-core-box {
+  background: #FFFFFF;
+  border: 1px solid #dd4b397d;
+  border-top: 2px solid #911102;
+  box-shadow: 1px 1px 3px 0 rgb(51 51 51 / 12%);
+}
+.skin-red-light .nodes-item-core-box .box-top .box-subtitle {
+  color: #911102;
+}
+.skin-red-light .nodes-item-core-box .box-top-tags span {
+  background-color: #f7f7f7;
+  color: #000;
+  border: 2px solid #911102;
+}
+.skin-red-light .nodes-item-core-box .box-description {
+  background: #e7e7e7;
+  padding: 5px 15px;
+  margin: 10px -15px 10px -15px;
+  line-height: 1.2em;
+  color: #000000;
+}
+
+/*** Pagination ***/
+.skin-red-light .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+
+  color: #fff;
+  background-color: #911102;
+  border-color: #911102;
+}
+
+/*** Tables ***/
+.skin-red-light .tbl-edt thead tr:nth-child(1) th {
+  background: #911102;
+  color: white;
+}
+.skin-red-light .val-gravatar {
+  border-bottom: 2px solid #911102;
+}
+.skin-red-light a {
+  color: #911102;
+}
+.skin-red-light .nav-tabs-custom>.nav-tabs>li.active {
+  border-top-color: #911102;
+}
+.skin-red-light #comp-tab-ports .table-title {
+  background-color: #911102;
+  color: white;
+}
+/*** Sidebars - left & right ***/
+.skin-red-light .main-sidebar {
+background-color: #ffffff;
+border-right: 1px solid #dd4b39 ;
+}
+.skin-red-light .control-sidebar-bg{
+  position: absolute;
+}
+.skin-red-light .control-sidebar-dark, .control-sidebar-dark+.control-sidebar-bg {
+  background: #ffffff;
+  border-left: 1px solid #dd4b39 ;
+}
+.skin-red-light .control-sidebar-dark {
+  color: #000000;
+}
+.skin-red-light .control-sidebar-dark .control-sidebar-heading, 
+.skin-red-light .control-sidebar-dark .control-sidebar-subheading {
+  color: rgb(0, 0, 0);
+}
+.skin-red-light .control-sidebar-dark .control-sidebar-tabs>li.active>a, 
+.skin-red-light .control-sidebar-dark .control-sidebar-tabs>li.active>a:hover,
+.skin-red-light .control-sidebar-dark .control-sidebar-tabs>li.active>a:focus,
+.skin-red-light .control-sidebar-dark .control-sidebar-tabs>li.active>a:active {
+  background: #ffffff;
+  color: #dd4b39;
+}
+/*** Repositories view ***/
+.skin-red-light .tree-content .treeview a.selected {
+background-color: #ffbdb56e;
+color: #911102;
+border: 1px solid #dd4b39;
+}
+.skin-red-light .tree-content .treeview a:hover{
+background-color: #ffbcb54b;
+border-color: #dd4c3970;
+color: #911102;
+}
+.skin-red-light .foldercontent .foldercontent-item:hover {
+background-color: #ffbcb54b;
+border-color: #dd4c3970;
+color: #911102;
+}
+.skin-red-light .foldercontent .foldercontent-item.selected {
+background-color: #ffbdb56e;
+color: #911102;
+border: 1px solid #dd4b39;
+}
+.skin-red-light .foldercontent .foldercontent-item.selected a {
+color: #911102;
+}
+/*** pop-up close ***/
+.skin-red-light .close {
+color: #ffffff;
+text-shadow: none;
+opacity: unset;
+}
+/*** User profile card ***/
+.skin-red-light .card .card-profile {
+  background: #dd4b39;
+  color: #ffffff;
+}
+.skin-red-light .card .card-profile::after {
+  background: #911102;
+  color: #ffffff;
+}
+/*** Components parameters edit ***/
+.skin-red-light .val-row-plus {
+  background: #ffa59a;
+}
+/*** Workflow toolbox ***/
+.skin-red-light .toolbox-sidebar{
+  background: #ffffff;
+}
+.skin-red-light .toolbox-sidebar .toolbox-bar {
+  color: #fff!important;
+  background-color: #911102!important;
+  margin-top: 2px;
+}
+.skin-red-light .toolboxAccordion{
+  background: #ffffff;
+}
+
+.skin-red-light .toolboxAccordion .ui-accordion-content{
+  background: #ffffff;
+}
+
+.skin-red-light .toolboxAccordion .ui-accordion-header{
+  background-color: #dd4b39;
+  color: #ffffff;
+}
+
+.skin-red-light .item-info{
+  background: #ffffff;
+  border: 1px solid #911102;
+  color: #333333;
+}
+.skin-red-light .modulesholder .item {
+  background: #ffffff;
+  border: 1px solid #911102;
+}
+
+.skin-red-light .toolbox-sidebar .toolbox-search input {
+  background: #eee;
+}
+
+.skin-red-light .ui-widget-content{
+  color: #911102;
+}
+.skin-red-light .toolbox-header .toolbox-footer {
+  color: #911102;
+}
+  
+/*** Repositories modals windows ***/
+.skin-red-light #properties h4, .skin-red-light #properties .action-name, .skin-red-light #view_on_map h4, .skin-red-light #view_file_content h4, 
+.skin-red-light #view_on_map button.close, .skin-red-light #view_file_content button.close, 
+.skin-red-light #view_file_content .content_prev, .skin-red-light #view_file_content .content_next {
+  color:#dd4b39;
+}
+.skin-red-light #view_on_map button.close:hover, 
+.skin-red-light #view_file_content button.close:hover {
+  color:#e98b80;
+}
+.skin-red-light #properties.folder .callout-title, .skin-red-light #properties .callout-title,
+.skin-red-light #view_on_map.map .callout-title, .skin-red-light #view_file_content .callout-title {
+	border-top: 5px solid rgb(221 75 57);
+	background-color: rgb(221 75 57 / 10%);
+}
+.skin-red-light .panel-info > .panel-heading{
+  background-color:rgb(221 75 57 / 10%);
+  border-color: #911102;
+}
+.skin-red-light .panel-info{
+    border-color: #911102;
+}
+
+.skin-red-light .select-repository li {
+  color: #911102;
+}
+.skin-red-light .repo-parameters .fa-info-circle{
+  color: #911102;
+}
+.skin-red-light .select-repository li.selected{
+  background-color: #911102;
 }

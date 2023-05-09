@@ -1,0 +1,522 @@
+<style>
+.modal-error{background-color:red}
+.modal-error span{background:#a63f3f}
+
+.docker-files   {position:relative;border-left:10px solid #79bde4;background-image: linear-gradient(to right, #eff9ff, transparent);}
+.auxiliary-files{position:relative;border-left:10px solid #8fcc97;background-image: linear-gradient(to right, #effff1, transparent);}
+.docker-files    .info-text{font-style:italic;display:inline-block;color:#79bde4}
+.auxiliary-files .info-text{font-style:italic;display:inline-block;color:#8fcc97}
+
+.add-extra-file{position:absolute;top:0;right:14px;color:#146b9c;font:normal normal normal 20px/1 FontAwesome;padding:5px;margin:5px;cursor:pointer}
+.add-extra-file::after{content:"\f067"}
+
+.extra-files-container>input[type="file"]{width:92%;margin-bottom:2px}
+.extra-files-container>input[type="file"]::after{content:"\f014";font:normal normal normal 16px/1 FontAwesome;display:inline-block;cursor:pointer;padding:2px;position:absolute;left:91%;color:red}
+</style>
+
+
+<div class="modal-content" style="padding-bottom: 15px;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add new remote service</h4>
+    </div>
+
+    <form id="frmUploadContainer" class="form-horizontal" enctype="multipart/form-data" role="form">
+		<input type="hidden" id ="idsystem" name="system" value="false" />
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error adding the remote service!</h4>
+            <p id="modal-error-msg">Please check your data.</p>
+            <p>
+                <span class="error-container collapse"><i class="fa fa-exclamation-triangle fa-fw"></i>Error.</span>
+            </p>
+        </div>
+        <div class="modal-body">
+            <section>
+				
+				<div class="row form-group">
+					<label class="col-sm-2 col-md-2 control-label" style="font-size: medium;">Authentication</label>
+					<div class="col-md-12 form-group" >
+						<form class="form-check form-check-inline  form-group">
+							<div class="form-inline col-md-12">
+								<div class="row">
+									<div class="form-group form-inline col-sm-6 col-md-6">
+										<label for="type" class="col-sm-4 col-md-4 control-label" >Type</label>
+										
+										<label class="radio-inline">
+											<input type="radio" name="authOpt" id="noneAuth" value="NONE" checked>None
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="authOpt" id="basicAuth" value="BASIC" >Basic
+										</label>
+						
+										<label class="radio-inline">
+											<input type="radio" name="authOpt" id="tokenAuth" value="TOKEN" >Token
+										</label>
+
+
+									</div>
+									<div class="form-inline form-group col-sm-6 col-md-6">
+										<label for="uname" class="col-sm-5 col-md-5 control-label">Header</label>
+										<input type="text" class="form-control" id="authHd" name="authHd" placeholder="Header" autocomplete="off" value="" readonly/>
+										
+									</div>
+								</div>
+							</div>
+							
+						</form>
+
+					</div>
+
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="uname" class="col-sm-2 col-md-2 control-label" >Username</label>
+							<div class="col-sm-10 col-md-10">
+    							<input type="text" class="form-control" placeholder="Enter Username" name="uname" id="uname" value="" readonly>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="lgnURL" class="col-sm-2 col-md-2 control-label" >Password</label>
+							<div class="col-sm-10 col-md-10">
+								<input type="password" class="form-control" placeholder="Enter Password" name="psw" id="psw" value="" readonly>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="psw" class="col-sm-2 col-md-2 control-label" >Login URL</label>
+							<div class="col-sm-10 col-md-10">
+								<input type="text" class="form-control" id="loginURL" name="loginURL" placeholder="Login URL" autocomplete="off" value="" readonly/>
+							</div>
+						</div>
+					</div>
+				</div>
+
+                <div class="row">
+					<label class="col-sm-2 col-md-2 control-label" style="font-size: medium;">Remote Service</label>
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="name" class="col-sm-2 col-md-2 control-label">Name</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="name" autocomplete="off" value="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="description" class="col-sm-2 col-md-2 control-label">Description</label>
+                            <div class="col-sm-10 col-md-10">
+                                <textarea class="form-control" rows="1" id="description" name="description" placeholder="description" autocomplete="off"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="dockerFile" class="col-sm-2 col-md-2 control-label">URL</label>
+                            <div class="col-sm-10 col-md-10">
+								<!-- <input type="file" id="dockerFile" class="form-control for-validation" name="dockerFiles" /> -->
+								<input type="text" class="form-control" id="URL" name="URL" placeholder="URL" autocomplete="off" value="" />
+                            </div>
+                        </div>
+                    </div>		
+				    <div class="col-md-12">
+						<div class="form-group has-feedback">
+							<div class="col-sm-2 col-md-2 ">
+							</div>
+                           <div class="col-sm-6 col-md-6 ">
+							<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-components">
+								<tbody class="tpl-sample-body">
+									<tr class="tpl-sample-row">
+										<th class="del-col" scope="row">
+											<a href="#" class="text tbl-app-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+										</th>
+										<td><input type="text" class="comp-id " value="" readonly ></td>
+										<td><input type="text" class="comp-path" value="" readonly ></td>
+									</tr>
+							    </tbody>
+							</table>
+							</div>
+							<div class="col-sm-2 col-md-2 ">
+							</div>
+                        </div>
+					</div>
+
+                    <!--<div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="containerLogo" class="col-sm-2 col-md-2 control-label">Logo image</label>
+                            <div class="col-sm-9 col-md-9">
+								<input type="file" id="containerLogo" class="form-control for-validation" name="containerLogo" />
+                            </div>
+							<div class="col-sm-1 col-md-1" style="padding:0;margin-left:-15px">
+								<img id="previewLogo" src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" width="64" height="64" onerror="devalidateLogoFile(event)" />
+							</div>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                                <button id="saveContainer" type="submit" class="btn btn-primary btn-submit" name="btnSave">Add remote service</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- /.modal-body -->
+    </form>
+    <!--<div class="modal-note">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                        <h4>Help filling in</h4>
+                        <p>Please fill in all needed information. Remote service name must be unique and it can contain small caps letters (a-z), numbers (0-9) and dashes (-)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div> -->
+</div><!-- /.modal-content -->
+
+<script>
+
+
+  //var elem = document.querySelector('.js-switch');
+  //var init = new Switchery(elem,{ color: '#3c8dbc', });
+
+
+	function detectIE() {
+		var ua = window.navigator.userAgent;
+		
+		// IE 10 or older => return version number
+		var msie = ua.indexOf('MSIE ');
+		if (msie > 0) {
+			return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+		}
+		
+		// IE 11 => return version number
+		var trident = ua.indexOf('Trident/');
+		if (trident > 0) {
+			var rv = ua.indexOf('rv:');
+			return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+		}
+		
+		// Edge (IE 12+) => return version number
+		var edge = ua.indexOf('Edge/');
+		if (edge > 0) {
+		   return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+		}
+		
+		// other browser
+		return false;
+	}
+
+	// Signal error when logo file is a broken image file
+	/*var devalidateLogoFile = function(event) {
+		if (event.type == "error") {
+			var $previewLogo = $("#previewLogo");
+			$previewLogo.addClass("invalid");
+			$("#containerLogo").valid();
+		}
+	} */			//not used at this moment
+
+	// Validate Logo file
+	/*
+	var validateLogoFile = function(element, validTypes) {
+		var $previewLogo = $("#previewLogo");
+		var emptyGif = "data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=";
+		
+		if ($previewLogo.hasClass("invalid")) {
+			if ($previewLogo.attr("src") != emptyGif) {
+				$previewLogo.attr("src", emptyGif);
+				return false;
+			} else {
+				$previewLogo.removeClass("invalid");
+				return false;
+			}
+		}
+		
+		var reader = new FileReader();
+		reader.onload = function() {
+			$previewLogo.attr("src", reader.result);
+		};
+		
+		if (element.files.length > 0) {
+			var file = element.files[0];
+			if ($.inArray(file["type"], validTypes) >= 0) {
+				$previewLogo.removeClass("invalid");
+				reader.readAsDataURL(file);
+				return true;
+			} else {
+				$previewLogo.attr("src", emptyGif);
+				return false;
+			}
+		} else {
+			$previewLogo.removeClass("invalid");
+			$previewLogo.attr("src", emptyGif);
+			return true;
+		}
+		return false;
+	}; */			//not used at this moment
+
+	//////////////////////////////////////////////////////////////////////////////////////
+    $(document).ready( function() {
+
+		// Custom validation for container name
+		$.validator.addMethod('remoteServiceName', function (value, element, params) {
+			var pattern = new RegExp(params.regEx, "g");
+			var match = value.match(pattern);
+			return value.length == 0 || match;
+		}, 'Remove invalid characters (only allowed small caps letters, numbers and dashes).');
+		// Custom validation for various file types
+		$.validator.addMethod('isValidFileType',
+			function (value, element, params) {
+				var validFileType = false;
+				switch (params.fileType) {
+					case "json"  : validFileType = (value.length == 0 || $.inArray(element.files[0]["type"], params.typesList) >= 0); break;
+					case "image" : validFileType = validateLogoFile(element, params.typesList); break;
+				}
+				return validFileType;
+			},
+			function (params) {
+				switch (params.fileType) {
+					case "json"  : return "Invalid configuration Json file." ; break;
+					case "image" : return "Invalid image file."              ; break;
+					default      : return "Invalid file.";
+				}
+			}
+		);
+
+		$.validator.addMethod('isURLValid', 
+			function (value, element){
+				
+				var urlCheck ;
+				try{
+					var urlValid = new URL(value);
+					urlCheck = true;
+				} catch(e){
+					urlCheck = false;
+				}
+				
+				return urlCheck ;
+		}, 'Invalid URL, please insert a valid URL.');
+
+		$.validator.addMethod( "isUnique", function(value,element,params){
+			var isUni = true;
+			if($.inArray(value, nameListRS) >= 0 ){
+				isUni = false;
+			}
+			return isUni;
+		}, "Remote service's name must be unique.");
+
+		// Validate form before submit
+		$("form#frmUploadContainer").validate({
+			rules: {
+				name: {
+					required: true,
+					remoteServiceName: { regEx: "^[a-z0-9-]+$" },
+					isUnique: true
+				},
+				description: {
+					required: true
+				},
+				/*containerLogo: {
+					required: true,
+					isValidFileType: { fileType: "image" , typesList: [ "image/gif", "image/jpeg", "image/png" ] }
+				},*/			//not used at this moment
+				URL: {
+					required: true,
+					isURLValid: true
+					
+				}
+
+			},
+			highlight: function(element, errorClass) {
+				$(element).parent().addClass("has-error");
+			},
+			unhighlight: function(element, errorClass) {
+				$(element).parent().removeClass("has-error");
+			},
+			messages: {
+			},
+			errorPlacement: function(error, element) {
+				error.appendTo(element.parent());
+			},
+			success: function(label) {
+				label.remove();
+			}
+		});
+		// Trigger validation when selected file changed
+		$("form#frmUploadContainer").on("change", "input[type='file'].for-validation", function (e) {
+			$(this).trigger("blur");
+		});
+		
+        // Submit form
+		$("form#frmUploadContainer").submit(function (event) {
+			event.preventDefault();
+			var action = $("a[data-toggle='tab'][aria-expanded='true']", "#panel-remote-wrapper").data("action");
+			
+			if ($(this).valid()) {
+					$(".modal-error ").fadeOut();
+					
+					var url = "";
+					if (action === "wps_nodes") {
+						$.extend( inspectData, {"request" : "GetCapabilities"} );
+						url = baseRestApiURL + "wps/";
+					}
+					if (action === "stac_nodes") {
+						url = baseRestApiURL + "stac/";
+					}
+					
+					var formData = {
+						name				: $("input[name=name]", this).val(),
+						description			: $("textarea[name=description]", this).val(),
+						applicationPath		: $("input[name=URL]", this).val(),
+						applications		: [],
+						type				: action === "stac_nodes" ? "STAC" : "WPS",
+						tag					: action === "stac_nodes" ? "STAC" : "WPS",
+						format				: [],
+						authType 			: $("input[name=authOpt]:checked", this).val(),
+						user 				: $("input[name=uname]", this).val(),
+						password			: $("input[name=psw]", this).val(),
+						loginUrl			: $("input[name=loginURL]", this).val(),
+						authHeader 			: $("input[name=authHd]", this).val()
+						//logo				: logoSrc			//not used at this moment
+					};
+					if (url !== "") {
+						$.ajax({
+							cache: false,
+							url: url,
+							dataType: 'json',
+							type: "POST",
+							data: JSON.stringify(formData),
+							headers: {
+								"Accept": "application/json",
+								"Content-Type": "application/json",
+								"X-Auth-Token": window.tokenKey
+							},
+							error : function (jqXHR, textStatus, errorThrown) {
+								if (jqXHR.status === 500) {
+									showMsg("Error updating remote service. Please check your data and try again.", "ERROR");
+									return;
+								}
+								showMsg("Unknown error. Unable to update remote service. Please try again.", "ERROR");
+							},
+							success: function(response,textStatus, jqXHR) {
+								var r = chkTSRF(response);
+								if (response.status === "FAILED") {
+									if (response.message) {
+										showMsg("Error updating remote service. Please check your data, one or more values for the attributes were not correct.", "ERROR");
+										//handle error messages
+										
+										var objResponse = JSON.parse(jqXHR.responseText);
+										objResponse = objResponse.message.split(';');
+										if (objResponse[0] !== "Entity has validation errors") {
+											return;
+										}
+										for (i = 0; i < objResponse.length; i ++) {
+											var matches = objResponse[i].match(/\[(.*?)\]/);
+											if (matches) {
+												//$(".error-"+matches[1],".modal-error").show();
+												$(".error-"+matches[1],".modal-error").css('display', 'inline-block');
+											}
+										}
+										$(".modal-error ").fadeIn("slow");
+										$('#myModalNodes').animate({scrollTop: 0}, 250);
+										return;
+									}
+									showMsg("Error updating container. Please check your data and try again.", "ERROR");
+								}
+								showMsg("Container successfully saved.", "SUCCESS");
+								$("#myModalNodes").modal('hide');
+								panelComp.refreshData();
+							}
+						});
+					} else {
+						showMsg("Error adding remote service.", "ERROR");
+						console.error("Wrong action! Save remote service can not be done!");
+					}
+				}
+
+
+
+            return false; // To avoid actual submission of the form
+		});
+		
+						
+		  $(".tbl-edt")
+            .on("click", ".tbl-app-delete-action", function(e){
+                e.preventDefault();
+
+			    var idToDelete = $(this).closest(".val-row").find("input.comp-id").val();
+				var indx = componentlist.findIndex(v => v.id === idToDelete);
+				componentlist.splice(indx, indx >= 0 ? 1 : 0);
+
+				$(this).closest(".val-row").remove();
+				
+			});
+			
+
+	});
+	
+	$('input[name="authOpt"]').change(function(){
+		var authChoice = document.querySelector('input[name="authOpt"]:checked').value;
+		if(authChoice == "NONE"){
+			document.getElementById("uname").setAttribute('readonly', true);
+			document.getElementById("psw").setAttribute('readonly', true);
+			document.getElementById("loginURL").setAttribute('readonly', true)
+			document.getElementById("authHd").setAttribute('readonly', true);
+		}
+		else{
+			document.getElementById("uname").removeAttribute('readonly');
+			document.getElementById("psw").removeAttribute('readonly');
+			document.getElementById("loginURL").removeAttribute('readonly');
+			
+		}
+
+		if(authChoice == "BASIC"){
+			document.getElementById("authHd").setAttribute('readonly', true);
+		}
+		else if(authChoice == "TOKEN"){
+			document.getElementById("authHd").removeAttribute('readonly');
+		}
+
+    } );
+
+	$('input[name="authOpt"]').change(function(){
+		var req = document.querySelector('input[name="authOpt"]:checked').value;
+		if(req == "NONE"){
+			document.getElementById("uname").removeAttribute('required');
+			document.getElementById("psw").removeAttribute('required');
+			document.getElementById("loginURL").removeAttribute('required');
+			document.getElementById("authHd").removeAttribute('required');
+		}
+		else{
+			document.getElementById("uname").setAttribute('required', true);
+			document.getElementById("psw").setAttribute('required', true);
+			document.getElementById("loginURL").setAttribute('required', true);	
+		}
+		if(req == "BASIC"){
+			document.getElementById("authHd").removeAttribute('required');
+		}
+		else if(req == "TOKEN"){
+			document.getElementById("authHd").setAttribute('required', true);
+		}
+	} );
+ 
+	var pathPlusApplNamesList=[]; 
+
+	//# sourceURL=remoteServices-plus.js
+
+	
+</script>

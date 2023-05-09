@@ -106,7 +106,13 @@ var npDOMhelper = {
             caretPosition -= nodesText[i].charLen;
             i++;
         }
-        node_pos = nodesText[i];
+		/*if (nodesText[i].content !== ":") {
+			node_pos = nodesText[i + 1];
+			caretPosition = nodesText[i + 1].charLen;
+		} else {
+			node_pos = nodesText[i];
+		}*/
+		node_pos = nodesText[i];
         return {node:node_pos.node, "pos":caretPosition};
     },
     setCaretTo: function(node,pos,el) {
@@ -125,7 +131,7 @@ var npDOMhelper = {
 
 //////////////////////
 (function ($, window) {
-
+            
     // -- tokenizer ------------------------------
     var _tkn = function(){
         var navigationKeys = ["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown", "End", "Home", "Right", "Left", "Up", "Down"];
@@ -175,7 +181,7 @@ var npDOMhelper = {
             return /[a-z]/i.test(ch);
         }
         function isOtherLetter(ch) {
-            return /\#|_|\*/.test(ch);
+            return /\#|_|\*|,|-|\\|\/|\(|\)/.test(ch);
         }
         function isRightCurlyBracket(ch) {
             return /\}/.test(ch);
@@ -191,6 +197,7 @@ var npDOMhelper = {
                     tokens[i].role = "index";
                 }
                 if(tokens[i-1] && (tokens[i].code === "ltr") && (tokens[i-1].code === "vbas")){
+                //if(tokens[i-2] && (tokens[i-1].code === "ltr") && (tokens[i-2].code === "leftcb") && (tokens[i].code === "ltr") && (tokens[i-1].code === "vbas")){
                     tokens[i].role = "tag";
                     tokens[i].value = tokens[i].value.toUpperCase();
                 }
@@ -203,7 +210,11 @@ var npDOMhelper = {
             var result=[];
             var textBuffer=[];
 
-            str.replace(/\s+/g, "");
+            str.replace(/\s+/g, ""); 
+
+            var originalStr = str;
+            var resultStr;
+
             str=str.split("");
 
             function emptyTextBufferAsLiteral() {
@@ -244,8 +255,18 @@ var npDOMhelper = {
                 }
                 else if(isColon(char))
                 {
-                    emptyTextBufferAsLiteral();
-                    result.push(new Token("vbas", char));
+                    resultStr = originalStr;
+                    resultStr = resultStr.slice(0, idx);
+                    //   verifies if there is a ${... string before :        
+                    if( /[$][{][^:]*$/.test(resultStr)){
+                        emptyTextBufferAsLiteral();
+                        result.push(new Token("vbas", char));
+                    }
+                    else{
+                        textBuffer.push(char);
+                    }
+                    //emptyTextBufferAsLiteral();
+                    //result.push(new Token("vbas", char));
                 }
                 else if(char===".")
                 {
@@ -265,7 +286,7 @@ var npDOMhelper = {
             "parseRoles": parseRoles
         };
     }();
-
+	
     var ui = {
         fixMenuPosition: function(element) {
             //move menu inside window
@@ -422,6 +443,8 @@ var npDOMhelper = {
             }
             if(html === '') return;
             html = '<div class="text-list">' + html + '</div>';
+			$("div.textviewWrapper").tooltip('hide');
+			$("div.textviewWrapper").tooltip('disable');
             $(info.el.dropdown).empty().append(html).scrollTop(0).show();
             var delta = this.fixMenuPosition($(info.el.dropdown));
             info.el.dropdown.style.left = left-delta.x+"px";
@@ -447,6 +470,7 @@ var npDOMhelper = {
                 .off("npmenu:doselect")
                 .one( "npmenu:hide", function( event ) {
                     $(this).hide();
+					$("div.textviewWrapper").tooltip('enable');
                     $(document)
                         .off("mousedown", userMouseDownWhileMenu);
                 })
@@ -491,6 +515,7 @@ var npDOMhelper = {
                         parseOnce(settings, fullText, true);
                     }
                 });
+
             //intercept keydown while visible
             $(document)
                 .on("mousedown", userMouseDownWhileMenu);
@@ -574,14 +599,13 @@ var npDOMhelper = {
 
     var parseOnce = function(settings, txt, focused){
         settings.info.tokens = compose(_tkn.parseRoles,_tkn.tokenize)(txt);
-
         var currentLScroll = $(settings.info.cLine).scrollLeft();
         $(settings.info.el.editable).empty();
         var nL = ui.appendFragmentToEl(ui.renderTokensFragment(settings.info.tokens),settings.info.el.editable);
         $(nL).scrollLeft(currentLScroll);
-        var nodesText = npDOMhelper.traverseNodes(settings.info.el.editable);
+        var nodesText = npDOMhelper.traverseNodes(settings.info.el.editable);       
         var caretNodeData = npDOMhelper.computeCaretNodeAndPosition(nodesText, settings.info.caretLinePos);
-        if(focused){
+        if (focused) {
             npDOMhelper.setCaretTo(caretNodeData.node,caretNodeData.pos, settings.info.el.editable);
             settings.info.setCaretInfo(npDOMhelper.getCaretPosition());
         }
@@ -646,7 +670,39 @@ var npDOMhelper = {
             }
             if (e.ctrlKey  &&  e.keyCode === 32) {  // CTRL + SPACE
                 e.preventDefault();
-                startAutocomplete(settings);
+                if (settings.tags.length > 0) {
+					var fullText = this.innerText;
+					if (settings.sourcesIndex.length > 1) {
+						var info = settings.info;
+						var left = $(info.cNode).position().left;
+						info.el.dropdown.style.left = left+"px";
+						var html = '';
+						if(settings.sourcesIndex.length){
+							settings.sourcesIndex.forEach(function (value) {
+								html += '<div class="text-suggestion"><div class="key-label">'+value.index+'</div><div class="desc-label">'+value.sensor+'</div></div>';
+							});
+						}
+						if(html === '') return;
+						html = '<div class="text-list">' + html + '</div>';
+						$("div.textviewWrapper").tooltip('hide');
+						$("div.textviewWrapper").tooltip('disable');
+						$(info.el.dropdown).empty().append(html).scrollTop(0).show();
+						
+						//select first option.
+						$(".text-suggestion",$(info.el.dropdown)).first().addClass("selected");
+						
+						$(info.el.dropdown)
+							.off("click")
+							.on("click", ".text-suggestion", function(e){
+								e.preventDefault();
+								var selectedProduct = $(".key-label", $(this)).text();
+								$(info.el.dropdown).trigger("npmenu:hide");
+								prepareAutocomplete (fullText, selectedProduct);
+							});
+					} else {
+						prepareAutocomplete (fullText, "1");
+					}
+				}
                 return false;
             }
             if((e.key === "Enter") && settings.submitOnEnter){
@@ -674,7 +730,7 @@ var npDOMhelper = {
             settings.info.setCaretInfo(npDOMhelper.getCaretPosition());
             var fullText = this.innerText;
             if(_tkn.isNavKey(e.key) || _tkn.isModifierKey(e.key)){
-            }else{
+            } else{
                 var sugg = autofill.testChar(e.key);
                 fullText = autofill.applySugg(settings,fullText, sugg);
                 parseOnce(settings, fullText, true);
@@ -685,6 +741,43 @@ var npDOMhelper = {
             ui.caretAwarenessTest(settings, fullText);
         };
 
+        function prepareAutocomplete(fullText, selectedProduct) {
+            var caretPos = npDOMhelper.getCaretPosition().linePos;
+            var node = $(".has-focus", npDOMhelper.getCaretPosition().node);
+			node.append('<span class="vbsm">$</span><span class="leftcb">{</span><span class="ltr index has-focus">' + selectedProduct + ':</span><span class="rightcb">}</span>');
+			if (fullText.lastIndexOf(":") < 0) {
+				settings.info.setCaretLinePos(4);
+                //fullText = "";
+                if(fullText === ""){
+                    caretPos = 0;
+                }
+            }
+
+            //2022.04 VPA move caret if inside another element
+            if (caretPos > 0 && caretPos < fullText.length) {//caret inside text
+                var idxDollar = fullText.indexOf("$", caretPos);
+                var idxEndBracket = fullText.indexOf("}", caretPos);
+                if (idxDollar != -1 && idxEndBracket != -1 && idxEndBracket < idxDollar) {//caret between $ and }
+                    caretPos = idxEndBracket + 1;//move caret after bracket
+                }
+                else if (idxDollar == -1 && idxEndBracket > -1)//caret before last }
+                {
+                    caretPos = idxEndBracket + 1;//move caret after bracket
+                }
+            }
+			
+            var sugg = autofill.testChar(":");
+            //2022.04 VPA insert new element at caret position, not at the end
+            //fullText = fullText + autofill.applySugg(settings,"${" + selectedProduct + ":}", sugg);
+            //settings.info.setCaretLinePos(fullText.lastIndexOf(":") + 1);
+            fullText = fullText.slice(0, caretPos) + autofill.applySugg(settings, "${" + selectedProduct + ":}", sugg) + fullText.slice(caretPos);
+            settings.info.setCaretLinePos(caretPos + 4);
+
+            parseOnce(settings, fullText, true);
+			
+			startAutocomplete(settings);
+		}
+	
         (function(element, settings){
             var genuineEl = element[0];
             var genuineElAttr = {name: genuineEl.name, value: genuineEl.value };
@@ -695,14 +788,17 @@ var npDOMhelper = {
                 hiddenEl = $("<input type='hidden' />").attr(genuineElAttr).insertBefore(genuineEl);
             }
             genuineElAttr.id = genuineEl.id;
-            var htmlStr = '<div class="textviewWrapper"><div class="npsyntaxeditortooltip">!<div class="tooltiptext"></div></div><div class="npsyntaxeditor input form-control" spellcheck="false" contenteditable="true" role="textbox" dir="ltr" aria-multiline="false" aria-readonly="false"><div role="presentation" class="sintaxLine has-focus"><span class="ltr has-focus">'+genuineElAttr.value+'</span></div></div>'
+			var tooltipdesc = "In order to trigger autocomplete press CTRL+Space. Also you can fill the filed with the following sintax: ${index:}, where index in the input source index (starting from 1)."
+			var htmlStr = '<div class="textviewWrapper" data-placement="bottom" data-original-title="' + tooltipdesc + '"><div class="npsyntaxeditortooltip">!<div class="tooltiptext"></div></div><div class="npsyntaxeditor input form-control" spellcheck="false" contenteditable="true" role="textbox" dir="ltr" aria-multiline="false" aria-readonly="false"><div role="presentation" class="sintaxLine has-focus"><span class="ltr has-focus">'+genuineElAttr.value+'</span></div></div>'
                 +'<div class="npsyntaxeditordropdown text-dropdown text-position-below"><div class="text-list"></div></div>'
                 +'</div>';
-
+			
             $(genuineEl).hide();
             var edtEl = $(htmlStr).insertBefore(genuineEl);
             $(genuineEl).remove();
             hiddenEl[0].id = genuineElAttr.id;
+			
+			$(".textviewWrapper").tooltip();
 
             settings.info = {
                 setCaretInfo:null,
@@ -730,6 +826,10 @@ var npDOMhelper = {
                 this.caretNodePos = cp.nodePos;
                 ui.refreshCaretInfo(settings);
             };
+			settings.info.setCaretLinePos = function(linePos) {                
+                this.caretLinePos = linePos;
+                ui.refreshCaretInfo(settings);
+            };
 
             //bind event handlers
             $(settings.info.el.dropdown)
@@ -742,6 +842,7 @@ var npDOMhelper = {
                 })
                 .bind("keydown", userKeyDown)
                 .bind("keyup", userKeyUp)
+                
                 .bind("focus", function(){
                     $(this).addClass("has-focus");
                     parseOnce(settings, $(this).text(), true);

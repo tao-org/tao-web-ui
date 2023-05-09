@@ -1,0 +1,286 @@
+<style>
+.modal-error{background-color:red}
+.modal-error span{background:#a63f3f}
+.floating-img{width:16.666667%;float:right}
+.floating-img>img{width:100%;height:auto;max-height:120px;margin:0;cursor:pointer}
+.tbl-edt{border-top:0;margin:0}
+.tbl-edt thead tr:nth-child(1) th{position:sticky;background:#556270;color:white;top:0px;z-index:10;white-space:normal;word-break:break-all;vertical-align:middle;padding:3px 8px}
+.tbl-edt tbody tr:nth-child(even){background-color:#f4f4f4}
+.tbl-edt tbody tr td{padding:3px 8px}
+form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#556270}
+@media (max-width: 991px) {
+	.floating-img{width:100%;margin-bottom:10px}
+	.floating-img>img{width:100px;float:right}
+}
+@media (min-width: 992px) {
+	 .col-name .col-md-2{width:20%}
+	 .col-name .col-md-10{width:80%}
+}
+</style>
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add container descriptor</h4>
+    </div>
+	
+    <form id="frmAddContainerDescriptor" class="form-horizontal" action="" role="form">
+		<input type="hidden" name="system" value="true" />
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error adding container descriptor!</h4>
+            <p id="modal-error-msg">Please check your data.</p>
+            <p>
+                <span class="error-container collapse"><i class="fa fa-exclamation-triangle fa-fw"></i>Error.</span>
+            </p>
+        </div>
+        <div class="modal-body">
+            <section>
+				<div class="row">
+					<!--<div class="col-md-2 floating-img">
+						<input type="file" id="containerLogo" class="form-control for-validation hidden" name="containerLogo" />
+						<img id="previewLogo" src="" class="base64image" onerror="devalidateLogoFile(event)" />
+					</div>-->
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 col-md-2 control-label">Name</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="name" value="" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-sm-2 col-md-2 control-label">Description</label>
+                            <div class="col-sm-10 col-md-10">
+                                <textarea class="form-control" rows="3" id="description" name="description" placeholder="description" style="resize:none"></textarea>
+                            </div>
+                        </div>
+					</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="applicationPath" class="col-sm-2 col-md-2 control-label">Application path</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="applicationPath" name="applicationPath" value="" />
+                            </div>
+                        </div>
+                        <div class="form-group" id="cont-tab-app" >
+                            <label class="col-sm-2 col-md-2 control-label">Applications</label>
+                            <div class="col-sm-10 col-md-10" style="overflow:auto;max-height:350px">
+							
+								<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-applications">
+
+									<thead>
+										<tr>
+											<th></th>
+											<th>Name</th>
+											<th>Path</th>
+											<th>Memory<br/>Requirements</th>
+											<th>Parralel Flag<br/>Template</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<td colspan="5">
+												<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-cont-addnewapp" data-action="cont-add-new-app">
+													<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new application</span>
+												</button>
+											</td>
+										</tr>
+									</tfoot>
+									<tbody class="tpl-sample-body">
+										<tr class="tpl-sample-row">
+											<th class="del-col" scope="row">
+												<a href="#" class="text tbl-app-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+											</th>
+											<td><input type="text" class="app-name" value="" placeholder="name"></td>
+											<td><input type="text" class="app-path" value="" placeholder="path"></td>
+											<td><input type="text" class="app-memory" value="" placeholder="memory requirements"></td>
+											<td><input type="text" class="app-flag" value="" placeholder="parallel flag template"></td>
+										</tr>
+										</tbody>
+								</table>
+							</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="formats" class="col-sm-2 col-md-2 control-label">Formats</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input id="formats" name="formats" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="formatNameParameter" class="col-sm-2 col-md-2 control-label">Format name parameter</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="formatNameParameter" name="formatNameParameter" placeholder="format name parameter" value="" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="commonParameters" class="col-sm-2 col-md-2 control-label">Common parameters</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="commonParameters" name="commonParameters" placeholder="common parameters" value="" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tag" class="col-sm-2 col-md-2 control-label">Tag</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="tag" name="tag" placeholder="tag" value="" autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+								 <button id="btnConfirmContainerDescriptor" class="btn btn-default" name="btnConfirmContainerDescriptor">Confirm</button>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- /.modal-body -->
+    </form>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div><!-- /.modal-content -->
+<link rel="stylesheet" href="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.css" type="text/css" />
+<script src="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.js" type="text/javascript"></script>
+
+<script>
+
+    $(document).ready( function() {
+		var $form =  $('#frmAddContainerDescriptor');
+		var obj = container;// $('input[name=containerDescriptor]', "#frmUploadContainer").val();
+	
+		// initializeFormats
+		$("#formats", $form).tagsInput({
+			minChars    : 0,
+			maxChars    : null,
+			limit       : null,
+			interactive : true,
+			autocomplete: null,
+			unique      : true,
+			placeholder : 'Add a format',
+			delimiter   : ','
+		});
+		
+		if (typeof obj !== "undefined") {
+			$("input[name=name]", $form).val(obj.name);
+			$("textarea[name=description]", $form).val(obj.description);
+	
+			$.each(obj.applications, function(i, value) {
+				helper_addApplicationRow($("#tbl-applications"), value);
+				});
+
+				formatArr=[];
+				if (obj.format !==undefined){
+					formatArr=obj.format.split(",")
+				$.each(formatArr, function (index, format) {
+				$("#formats", $form).addTag(format);
+			});
+			}
+		
+			
+			$("input[name=applicationPath]", $form).val(obj.applicationPath);
+			$("input[name=formatNameParameter]", $form).val(obj.formatNameParameter);
+			$("input[name=commonParameters]", $form).val(obj.commonParameters);
+			$("input[name=tag]", $form).val(obj.tag);
+		}
+
+	// Custom validation for container name
+	$.validator.addMethod('containerName', function (value, element, params) {
+			var pattern = new RegExp(params.regEx, "g");
+			var match = value.match(pattern);
+			return value.length == 0 || match;
+		}, 'Remove invalid characters (only allowed small caps letters, numbers and dashes).');
+	
+
+		$("form#frmAddContainerDescriptor").on("click", "#btnConfirmContainerDescriptor", function (e)  {
+			e.preventDefault();
+			var $el = $('#frmAddContainerDescriptor');
+			 container = {
+				"name"               : 	$('input[name=name]', $el).val(),
+				"description"        : 	$('textarea[name=description]', $el).val(),
+				"applicationPath"    : 	$('input[name=applicationPath]', $el).val(),
+				"format"             : 	$('input[name=formats]', $el).val(),
+				"formatNameParameter": 	$('input[name=formatNameParameter]', $el).val(),
+				"commonParameters"   : 	$('input[name=commonParameters]', $el).val(),
+				"tag"                : 	$('input[name=tag]', $el).val()
+			};
+			
+			container.applications = [];
+			var applNamesArr=[]; 
+			var haserror=0;
+
+			var $tblContApp = $("#tbl-applications");
+			
+            $(".val-row", $tblContApp).each(function() {
+				
+				var name = $(this).find("input.app-name").val();
+				var path = $(this).find("input.app-path").val();
+				var memoryRequirements = $(this).find("input.app-memory").val();
+				var parallelFlagTemplate = $(this).find("input.app-flag").val();
+
+
+                var newApp = {};
+                if( (typeof name !== "undefined") && (typeof name.valueOf() === "string") && (name.length > 0) && (typeof path !== "undefined") && (typeof path.valueOf() === "string") && (path.length > 0) ) {
+                    newApp.name = name;
+					newApp.path = path;
+					newApp.memoryRequirements = memoryRequirements;
+					newApp.parallelFlagTemplate = parallelFlagTemplate;
+
+					container.applications.push(newApp);
+					
+					applNamesArr.push(name);
+                }else{
+					showMsg("Invalid application. Please choose valid names and paths to continue.", "ERROR");
+					haserror=1;
+				}
+			});
+				
+			var applDuplicates=0;
+				if(applNamesArr.length !== new Set(applNamesArr).size) {
+					applDuplicates = 1;
+					showMsg("Invalid application. Please choose unique names to continue.", "ERROR");
+					}
+
+			if (haserror==0 && applDuplicates==0){
+				//$('input[name=containerDescriptor]', "#frmUploadContainer").val(JSON.stringify(container));
+					var $modal = $("#myModalNodesContDesc");
+					$modal.modal('hide');
+			}
+
+		});
+
+		$(".btn-cont-addnewapp").on("click", function(){
+            var $tbl = $(this).closest(".tbl-edt");
+            helper_addApplicationRow($tbl);
+        });
+
+		$(".tbl-edt")
+            .on("click", ".tbl-app-delete-action", function(e){
+                e.preventDefault();
+                $(this).closest(".val-row").remove();
+            });
+			
+	});
+	
+	function helper_addApplicationRow($tbl, payload){
+        var obj = {"name":"","path":"","memoryRequirements":"","parallelFlagTemplate":""};
+        $.extend( obj, payload );
+		//var $el = $tbl.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
+		
+		var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
+		$el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+		
+        $('input.app-name', $el).val(obj.name);
+		$('input.app-path', $el).val(obj.path);
+		$('input.app-memory', $el).val(obj.memoryRequirements);
+		$('input.app-flag', $el).val(obj.parallelFlagTemplate);
+        $tbl.append($el);
+	}
+	
+	
+
+	//# sourceURL=containers-addContainerDescriptor.js
+
+</script>

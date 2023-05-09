@@ -937,7 +937,7 @@ if (typeof jQuery === 'undefined') {
 
   Modal.VERSION  = '3.3.4'
 
-  Modal.TRANSITION_DURATION = 300
+  Modal.TRANSITION_DURATION = 150
   Modal.BACKDROP_TRANSITION_DURATION = 150
 
   Modal.DEFAULTS = {

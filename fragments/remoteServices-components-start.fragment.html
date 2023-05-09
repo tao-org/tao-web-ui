@@ -1,0 +1,367 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Start processing remote service</h4>
+    </div>
+
+    <form id="frmStartWPS" class="form-horizontal form-newpc" role="form">
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error processing!</h4>
+            <p id="modal-error-msg">Please check you data, one or more values for the attributes is not in the acceptable range.</p>
+            <p>
+                <span class="error-name collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Remote service name cannot be empty.</span>
+                <span class="error-fileLocation collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> File location has an invalid value.</span>
+            </p>
+            <p id="modal-error-msg-server"></p>
+        </div>
+
+        <div class="modal-body">
+            <section>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="wf-header" class="padding-left--20 padding-bottom--20">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="info-box bg-aqua">
+                                        <span class="info-box-icon"><i class="fa fa-rocket"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Selected remote service for processing</span>
+                                            <span class="info-box-number val-start-wf-id"></span>
+                                            <div class="progress">
+                                                <div class="progress-bar" style="width: 100%"></div>
+                                            </div>
+                                            <span class="progress-description">
+                                                user: <small class="label bg-white val-start-wf-owner">###</small>
+                                                 ,visibility: <small class="label bg-white val-start-wf-visibility">###</small>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputWorkflowInstanceName" class="col-sm-2 col-md-2 control-label">Execution name</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputWorkflowInstanceName" name="inputWorkflowInstanceName" placeholder="workflow execution name" autocomplete="off" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12">
+                            <p>You can customize remote services parameters before run. Values will only affect current remote service processing call.</p>
+                        </div>
+						
+                        <div id="comp-tab-config" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="box-group" id="accordion">
+										 <div id="acc-panel-tpl-site" class="panel box box-primary">
+											<div class="box-header with-border">
+                                                <h4 class="box-title">
+													<a data-toggle="collapse" data-parent="#accordion" href="#collapse-one-body-tpl-site" aria-expanded="true" class="">
+                                                        <span class="fa-stack fa-lg start-component-logo"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-database fa-stack-1x fa-inverse"></i></span>Sites
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse-one-body-tpl-site" class="panel-collapse collapse" aria-expanded="false">
+												<div class="box-body">
+													<div class="row">
+														<label for="selected_site" class="col-sm-2 col-md-2 control-label">Site</label>
+														<div class="col-sm-10 col-md-10">
+															<select id="selected_site" class="form-control">
+																<option value=""> -- Select a site --</option>
+															</select>
+														</div>
+													</div>
+													<!--<div class="row">
+														<label class="col-sm-2 col-md-2 control-label">Start date</label>
+														<div class="col-sm-10 col-md-10">
+															<input type="text" autocomplete="off" name="startDate" class="form-control datepicker var_startDate" data-name="startDate" value="" style="max-width:100%">
+														</div>
+													</div>
+													<div class="row">
+														<label class="col-sm-2 col-md-2 control-label">End date</label>
+														<div class="col-sm-10 col-md-10">
+															<input type="text" autocomplete="off" name="endDate" class="form-control datepicker var_endDate" data-name="endDate" value="" style="max-width:100%">
+														</div>
+													</div>-->
+												</div>
+											</div>
+										 </div>
+                                        <div id="acc-panel-tpl-param" class="panel box box-primary">
+                                            <div class="box-header with-border">
+                                                <h4 class="box-title">
+													<a data-toggle="collapse" data-parent="#accordion" href="#collapse-one-body-tpl-param" aria-expanded="true" class="">
+                                                        <span class="fa-stack fa-lg start-component-logo"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-cog fa-stack-1x fa-inverse"></i></span>Parameters
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse-one-body-tpl-param" class="panel-collapse collapse" aria-expanded="false">
+                                                <div class="box-body">
+                                                    <div>
+                                                        <table class="table table-bordered box-shadow--6dp tbl-edt tbl-edt-sysvar">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>Name</th>
+                                                                <th>Value</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr class="tpl-sample-row">
+                                                                <td>
+                                                                    <span class="var-id hidden"></span>
+                                                                    <strong><span class="var-label"></span></strong>&nbsp;(<span class="var-dataType"></span>)
+                                                                </td>
+                                                                <td style="width: 70%;">
+                                                                    <input type="hidden" class="var-value" value="" placeholder="input variable's value">
+                                                                    <input type="text" class="var-value-string collapse" value="" placeholder="input variable's value">
+                                                                    <input type="text" class="var-value-string2 collapse" value="" placeholder="input variable's value">
+                                                                    <select class="var-value-list collapse"></select>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-12 col-sm-12">
+                                <!--<button id="saveExecNode" type="submit" class="btn btn-primary btn-submit" disabled>Process</button>-->
+								<div class="modal-footer">
+									<button id="saveExecNode" type="submit" class="btn btn-primary btn-submit left-btn" disabled>Process</button>
+									<button type="button" class="btn btn-default right-btn" data-dismiss="modal">Close</button>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- /.modal-body -->
+    </form>
+    <!--<div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>-->
+</div><!-- /.modal-content -->
+<style>
+table.tbl-edt-sysvar input[type="number"]{border:none;width:100%}
+</style>
+
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.theme.css" type="text/css" />
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.structure.css" type="text/css" />
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.css" type="text/css" />
+
+<script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="./assets/libs/openlayers/ol-poly.js"></script>
+<script type="text/javascript">
+	var processorRegex = /\w+~processor\./i;
+	function populateWPSParameter (data) {
+		//populate wps header
+		var $el = $('#wf-header');
+		$('.val-start-wf-id', $el).html(data.id);
+		$('.val-start-wf-owner', $el).html(data.owner);
+		$('.val-start-wf-visibility', $el).html(data.visibility);
+		
+		//init exec name with name + timestamp
+		$('#inputWorkflowInstanceName').val(data.label+", "+moment().format('DD/MM/YYYY HH:mm:ss'));
+		
+		//add parameters
+		var $tableEL = $(".tbl-edt-sysvar");
+		
+		$.each(data.parameters, function (idx, obj) {
+			if (processorRegex.test(obj.id) || obj.id.indexOf("footprint") > -1 || obj.id.indexOf("startDate") > -1 || obj.id.indexOf("endDate") > -1){
+				helper_addSTblEdtRow($tableEL, obj);
+			}
+		});
+	}
+	
+	function helper_addSTblEdtRow ($tblEdt, payload) {
+		var obj = {
+			"type": "REGULAR",
+			"dataType": "string",
+			"name": "",
+			"valueSet": [],
+			"value": null
+		};
+		$.extend(obj, payload);
+		var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
+		// hide all site parameters
+		if (!processorRegex.test(obj.id)) {
+			$el.prop("hidden", true);
+			$el.attr("id",obj.id);
+		}
+		$('span.var-id', $el).html(obj.id);
+		$('span.var-label', $el).html(obj.name);
+		//                $('span.var-description', $el).html(obj.description);
+		$('span.var-dataType', $el).html(obj.dataType);
+		//                $('span.var-default', $el).html(obj.defaultValue);
+		if ((obj.value == null) || (obj.value === '') || (obj.value === undefined)) {
+			obj.value = obj.defaultValue;
+		}
+		if (obj.dataType === "bool") {
+			helper_EdtRowPutValue($el, obj.name, obj.dataType, obj.value, ["true", "false"]);
+		} else {
+			helper_EdtRowPutValue($el, obj.name, obj.dataType, obj.value, obj.valueSet);
+		}
+		$tblEdt.append($el);
+	}
+	
+	function helper_EdtRowPutValue ($el, name, type, value, valueset) {
+		if (valueset === null || valueset.length === 0) {
+			$('input.var-value', $el).val(value);
+			if (type === "Date") {
+				$('input.var-value-string, input.var-value-string2', $el).attr("type", "date");
+				if (name.toLowerCase() === "startdate" || name.toLowerCase() === "enddate") {
+					var date1 = "";
+					var date2 = "";
+					if (value !== null) {
+						var match = value.match(/^\[(.*),(.*)\]$/);
+						date1 = match ? match[1] : value;
+						date2 = match ? match[2] : "";
+					}
+					$('input.var-value-string', $el).val(date1).show();
+					$('input.var-value-string2', $el).val(date2).show();
+					return;
+				}
+			}
+			if ((type === "double") || (type === "float") || (type === "number")) {
+				$('input.var-value-string', $el).attr("type", "number").attr("step", "any");
+			}
+			if ((type === "int") || (type === "short")) {
+				$('input.var-value-string', $el).attr("type", "number");
+			}
+			if (type === "polygon") {
+				$('input.var-value-string', $el).attr("geotype", "Polygon2D");
+			}
+			$('input.var-value-string', $el).val(value).show();
+		} else {
+			$('input.var-value', $el).val(value);
+			var html = "";
+			$.each(valueset, function (i, v) {
+				html += "<option " + (v === value && 'selected ') + "value=\"" + v + "\">" + v + "</option>";
+			});
+			$('select.var-value-list', $el).html(html).show();
+		}
+	}
+	
+	// START Functions for sites tab
+	
+	function populateSites () {
+		$("option[value!='']", "#selected_site").remove();
+		$.when(getAvailableSites()).done(function (getAvailableSitesResponse) {
+			var data = chkTSRF(getAvailableSitesResponse);
+			if (data === null || data.length === 0) {
+				 showMsg("No site is defined. Please first add a site !", "ERROR");
+				 $("#saveExecNode").prop("disabled", true);
+			} else {
+				$.each(data, function(idx, obj) {
+					var $option = $("<option value='"+obj.id+"'>"+obj.name+"</option>");
+					$option.data("dna",obj);
+					$("#selected_site").append($option);
+				});
+			}
+		});
+	}
+	// END Functions for sites tab
+	
+    $(document).ready( function(){
+		closePolygonMap();
+		if(window.userOpStack[0].dna && window.userOpStack[0].dna.id) {
+			populateSites();
+			populateWPSParameter(userOpStack[0].dna);
+        } else {
+            showMsg("Error determining remote service ID.", "ERROR");
+        }
+		
+		// select a site action
+		$("#selected_site").on("change", function () {
+			var siteId = $(this).val();
+			if (siteId === "") {
+				$("#saveExecNode").prop("disabled", true);
+			} else {
+				var data = $("option[value='"+siteId+"']", "#selected_site").data("dna");
+				var $tblParameterDescriptors = $("#comp-tab-config table");
+				$.each($("tr[id]", $tblParameterDescriptors), function(index, elem){
+				    var eId = elem.id.replace("service~", "");
+					$("input.var-value", $(elem)).val(data[eId]);
+				});
+				$("#saveExecNode").prop("disabled", false);
+			}
+		});
+		
+        //remove error for some input elements
+		$("#frmStartWPS").off("change",".var-value-string, .var-value-string2, .var-value-list");
+        $("#frmStartWPS")
+            .on("change",".var-value-string, .var-value-string2, .var-value-list",function(e){
+				if ($(".var-value-string2:visible", $(this).parent()).length > 0) {
+					var d1 = $(".var-value-string" , $(this).parent()).val();
+					var d2 = $(".var-value-string2", $(this).parent()).val();
+					var ds = (d1.length > 0 && d2.length > 0) ? "[" + d1 + "," + d2 + "]" : (d1.length > 0 ? d1 : d2);
+					$(this).siblings(".var-value").val(ds);
+                } else {
+					$(this).siblings(".var-value").val($(this).val());
+				}
+            })
+            .submit(function (e) {
+				e.preventDefault();
+				var formData = {};
+                formData['wpsId'] = window.userOpStack[0].dna.id;
+				var parametersObj = {}
+				var $tableValRows = $(".tbl-edt-sysvar", "#acc-panel-tpl-param").find(".val-row");
+				$.each($tableValRows, function(i, $tableValRow) {
+					var n = $(".var-id",$tableValRow).text();
+					var v = $(".var-value",$tableValRow).val();
+					parametersObj[n] = v;
+				});
+				formData['parameters'] = parametersObj;
+				var settings = {
+					"async": true,
+					"url": baseRestApiURL + "orchestrator/wps",
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json",
+						"Cache-Control": "no-cache",
+						"X-Auth-Token": window.tokenKey
+					},
+					"data": JSON.stringify(formData)
+				};
+				$.ajax(settings)
+					.done(function (response) {
+						console.log("START POST");
+						console.log(response);
+						if(response.status === "SUCCEEDED") {
+							showMsg("Remote service processing successfully started. Orchestrator returned job ID "+response.data, "SUCCESS");
+							$("#myModalNodes").modal('hide');
+						} else {
+							showMsg("Remote service processing could not be started. Orchestrator returned message: "+response.message, "ERROR");
+						}
+					})
+					.fail(function (response) {
+						showMsg("Could not start execution." , "ERROR");
+					});
+				//SUBMIT TO SERVER
+				return false;
+			});
+    });
+    //# sourceURL=start-wps.js
+</script>

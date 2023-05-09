@@ -1,0 +1,999 @@
+	<!-- modal -->
+	<div id="myModalNodes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<!-- task command line modal -->
+	<div id="vmCommandModalNode" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="myModalLabel">Command Line</h4>
+				</div>
+				<div class="modal-body">
+					<h5 class="title" id="myModalLabel"></h5>
+					<textarea class="content_area" disabled ></textarea>
+				</div>
+			</div>
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<!-- info-content-->
+	
+	<div id="info-content" style="display:none">
+		<div class="modal-content user-info-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="myModalLabel"> ### </h4>
+			</div>
+			<div class="modal-body" id="user_info_accordion">
+				<div id="user-download-statistics-panel" class="panel panel-info box">
+					<div class="panel-heading box-header">
+						<h3 class="panel-title"><a data-toggle="collapse" data-parent="#user_info_accordion"
+								class="" href="#user_download_list">Download statistics</a></h3>
+					</div>
+					<div class="panel-body panel-collapse collapse" id="user_download_list">
+						<div class="box-body statistics">
+							<div class="progress">
+							</div>
+							<div><label>Active downloads: <span id="user_estimated_downloads_accordion"></span> </label></div>
+						</div>
+					</div>
+				</div>
+				<div id="exec-user-history-panel" class="panel panel-info box">
+					<div class="panel-heading box-header">
+						<h3 class="panel-title"><a data-toggle="collapse" data-parent="#user_info_accordion"
+								class="collapsed" href="#executions_history">Executions History</a></h3>
+					</div>
+					<div class="panel-body panel-collapse collapse" id="executions_history">
+						<div class="panel-filter">
+						</div>
+						<div class="col-md-12 like collapse">
+						</div>
+						<div class="box-body">
+							<div class="panel-list">
+							</div>
+							<div class="panel-list-empty callout callout-empty collapse">
+								<p>Results list is empty.</p>
+							</div>
+						</div>
+						<div class="box-footer clearfix no-border">
+							<div class="box-tools pull-right">
+								<ul class="pagination pagination-sm inline">
+									<li class="prev"><a href="#" data-page="prev" title="See newer notifications">«</a></li>
+									<li class="active"><a href="#" data-page="0">1</a></li>
+									<li><a href="#" data-page="1">2</a></li>
+									<li class="disabled"><span>...</span></li>
+									<li><a href="#" data-page="10">10</a></li>
+									<li class="next"><a href="#" data-page="next" title="See older notifications">»</a></li>
+								</ul>
+								<ul class="pagination pagination-sm actions inline">
+									<li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+									<li class="clear"><a href="#clear" data-action="go-clear" title="Clear list"><i class="fa fa-eraser" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="box-notification"><p><span>Updated</span></p></div>
+					</div>
+				</div>
+				<div id="exec-user-list-panel" class="panel panel-info box">
+					<div class="panel-heading box-header">
+						<h3 class="panel-title"><a data-toggle="collapse" data-parent="#user_info_accordion"
+								class="" href="#running_jobs_list">Running Jobs</a></h3>
+					</div>
+					<div class="panel-body panel-collapse collapse in" id="running_jobs_list">
+						<div class="panel-filter">
+						</div>
+						<div class="col-md-12 like collapse">
+						</div>
+						<div class="box-body">
+							<div class="panel-list">
+							</div>
+							<div class="panel-list-empty callout callout-empty collapse">
+								<p>Results list is empty.</p>
+							</div>
+						</div>
+						<div class="box-footer clearfix no-border">
+							<div class="box-tools pull-right">
+								<ul class="pagination pagination-sm inline">
+									<li class="prev"><a href="#" data-page="prev" title="See newer notifications">«</a></li>
+									<li class="active"><a href="#" data-page="0">1</a></li>
+									<li><a href="#" data-page="1">2</a></li>
+									<li><a href="#" data-page="2">3</a></li>
+									<li class="next"><a href="#" data-page="next" title="See older notifications">»</a></li>
+								</ul>
+								<ul class="pagination pagination-sm actions inline">
+									<li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="box-notification"><p><span>Updated</span></p></div>
+					</div>
+				</div> 
+			</div><!-- /.modal-body -->
+		</div>
+	</div>
+	<!-- vm-content-->
+	<div id="vm-content" style="display:none">
+		<div class="modal-content vm-info-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="myModalLabel"> ### </h4>
+			</div>
+			<div class="panel-filter">
+			</div>
+			<div class="col-md-12 like collapse">
+			</div>
+			<div class="modal-body">
+				<div class="box" id="vm_running_tasks">
+					<div class="box-header">
+						<h3 class="panel-title">Running Tasks</h3>
+					</div>
+					<div class="panel-filter">
+					</div>
+					<div class="col-md-12 like collapse">
+					</div>
+					<div class="box-body">
+						<div class="panel-list">
+						</div>
+						<div class="panel-list-empty callout callout-empty collapse">
+							<p>Results list is empty.</p>
+						</div>
+					</div>
+					<div class="box-footer clearfix no-border">
+						<div class="box-tools pull-right">
+							<ul class="pagination pagination-sm inline">
+								<li class="prev"><a href="#" data-page="prev" title="See newer notifications">«</a></li>
+								<li class="active"><a href="#" data-page="0">1</a></li>
+								<li><a href="#" data-page="1">2</a></li>
+								<li class="disabled"><span>...</span></li>
+								<li><a href="#" data-page="10">10</a></li>
+								<li class="next"><a href="#" data-page="next" title="See older notifications">»</a></li>
+							</ul>
+							<ul class="pagination pagination-sm actions inline">
+								<li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="box-notification"><p><span>Updated</span></p></div>
+				</div>
+			</div><!-- /.modal-body -->
+		</div>
+	</div>
+	<!-- Content Header (Page header) -->
+    <section class="content-header tao-async-ph">
+        <!--
+        <div class="row">
+            <div class="col-md-12">
+        -->
+        <h1>Dashboard <small>Overview of TAO activity.</small></h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+        <!-- 	</div>
+        </div>
+        -->
+    </section>
+    <!-- /Content Header (Page header) -->
+    <!-- Main content -->
+    <section class="content tao-async-mc">
+
+        <div class="row" id="panel-user-wrapper" style="display:none">
+            <!-- Left col -->
+            <section class="col-lg-7">
+
+                <!-- TO DO List -->
+				
+                <div id="download-statistics-panel" class="box box-primary statistics">
+                    <div class="box-header">
+                        <i class="ion ion-clipboard"></i>
+                        <h3 class="box-title">Download statistics</h3>
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li class="refresh"><a href="#refresh" class="refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+					<div class="box-body">
+						<div class="progress">
+							<div class="progress-bar progress-bar-success" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:'In progress',show:true});"></div>
+							<div class="progress-bar progress-bar-warning" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip();"></div>
+							<div class="progress-bar progress-bar-info"    role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip();"></div>
+							<div class="progress-bar progress-bar-danger"  role="progressbar" data-toggle="tooltip" title="" data-original-title="Failed downloads" data-placement="bottom" onmouseover="$(this).tooltip();"></div>
+						</div>
+						<div><label>Active downloads: <span id="estimated_downloads"></span> </label></div>
+                    </div>
+				  
+				</div> 
+            </section> 
+            <!-- /.Left col -->
+            <section class="col-lg-5">
+                <!-- Load -->
+                <div class="box box-solid bg-green-gradient collapse">
+                    <div class="box-header">
+                        <i class="fa fa-calendar"></i>
+                        <h3 class="box-title">Load</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer text-black">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <!-- Progress bars -->
+                                <div class="clearfix">
+                                    <span class="pull-left">Node #1</span>
+                                    <small class="pull-right">90%</small>
+                                </div>
+                                <div class="progress xs">
+                                    <div class="progress-bar progress-bar-green" style="width: 90%;"></div>
+                                </div>
+
+                                <div class="clearfix">
+                                    <span class="pull-left">Node #2</span>
+                                    <small class="pull-right">70%</small>
+                                </div>
+                                <div class="progress xs">
+                                    <div class="progress-bar progress-bar-green" style="width: 70%;"></div>
+                                </div>
+
+                                <div class="clearfix">
+                                    <span class="pull-left">Node #3</span>
+                                    <small class="pull-right">0%</small>
+                                </div>
+                                <div class="progress xs">
+                                    <div class="progress-bar progress-bar-green" style="width: 0;"></div>
+                                </div>
+
+                                <div class="clearfix">
+                                    <span class="pull-left">Node #4</span>
+                                    <small class="pull-right">30%</small>
+                                </div>
+                                <div class="progress xs">
+                                    <div class="progress-bar progress-bar-green" style="width: 30%;"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                </div>
+                <!-- /.box -->
+				<!-- TO DO List -->
+                <div id="exec-history-panel" class="box box-primary">
+                    <div class="box-header">
+                        <i class="ion ion-clipboard"></i>
+                        <h3 class="box-title">Executions History</h3>
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
+                                <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
+                                <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
+                                <li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+                                <li class="clear"><a href="#clear" data-action="go-clear" title="Clear list"><i class="fa fa-eraser" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+					<div class="panel-filter">
+					</div>
+					<div class="col-md-12 like collapse">
+					</div>
+                    <div class="box-body">
+                        <div class="panel-list">
+                        </div>
+                        <div class="panel-list-empty callout callout-empty collapse">
+                            <p>Results history is empty. It looks you did not run any workflows yet.</p>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix no-border">
+						<div class="box-tools pull-right">
+							<ul class="pagination pagination-sm inline">
+								<li class="prev"><a href="#" data-page="prev" title="See newer notifications">«</a></li>
+								<li class="active"><a href="#" data-page="0">1</a></li>
+								<li><a href="#" data-page="1">2</a></li>
+								<li class="disabled"><span>...</span></li>
+								<li><a href="#" data-page="10">10</a></li>
+								<li class="next"><a href="#" data-page="next" title="See older notifications">»</a></li>
+							</ul>
+							<ul class="pagination pagination-sm actions inline">
+								<li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+								<li class="clear"><a href="#clear" data-action="go-clear" title="Clear list"><i class="fa fa-eraser" aria-hidden="true"></i></a></li>
+							</ul>
+						</div>
+					</div>
+                    <div class="box-notification"><p><span>List updated</span></p></div>
+                </div>
+				<style>
+					.progress.history{width:fit-content;max-width:4em;background-color:#eaeaea !important;display:inline-flex;float:right;margin-top:5px}
+					.progress.history .progress-bar{margin:0;line-height:1em;}
+
+					/* Task log info */
+					.log-info{color: #00c0ef;background: 0 0; border: 0; font-size: 18px;}
+					.log-modal{display: none; position: fixed; overflow: auto; z-index: 3; padding-top: 10em; width: 100%; height: 100%;background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4);left: 0; top: 0;}
+					.log-modal-content{ background-color:#fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 65%;}
+					.log-close {color: #aaaaaa; float: right; font-size: 28px; font-weight: bold; padding: 0; background: 0 0; border: 0;}
+					.log-close:hover,.log-close:focus{color: #000;text-decoration: none;cursor: pointer;}
+					.log-title-button{background-color: white;display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between;}
+					.log-title{background-color: white;}
+				</style>
+                <!-- /.box -->
+                <!-- TO DO List -->
+                <div id="exec-list-panel" class="box box-warning">
+                    <div class="box-header">
+                        <i class="ion ion-clipboard"></i>
+                        <h3 class="box-title">Running Jobs</h3>
+                        <div class="box-tools pull-right">
+                            <ul class="pagination pagination-sm inline">
+                                <li class="disabled"><span>current page: <strong class="val-current-page">1</strong></span></li>
+                                <li class="prev"><a href="#prev" data-action="go-prev" title="See newer notifications">«</a></li>
+                                <li class="next"><a href="#next" data-action="go-next" title="See older notifications">»</a></li>
+                                <li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+					<div class="panel-filter">
+					</div>
+					<div class="col-md-12 like collapse">
+					</div>
+                    <div class="box-body">
+                        <div class="panel-list">
+                        </div>
+                        <div class="panel-list-empty callout callout-empty collapse">
+                            <p>Results history is empty. It looks you did not run any workflows yet.</p>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix no-border">
+						<div class="box-tools pull-right">
+							<ul class="pagination pagination-sm inline">
+								<li class="prev"><a href="#" data-page="prev" title="See newer notifications">«</a></li>
+								<li class="active"><a href="#" data-page="0">1</a></li>
+								<li><a href="#" data-page="1">2</a></li>
+								<li><a href="#" data-page="2">3</a></li>
+								<li class="next"><a href="#" data-page="next" title="See older notifications">»</a></li>
+							</ul>
+							<ul class="pagination pagination-sm actions inline">
+								<li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+							</ul>
+						</div>
+					</div>
+                    <div class="box-notification"><p><span>List updated</span></p></div>
+                </div>
+                <!-- /.box -->
+            </section>
+            <!-- right col -->
+        </div>
+		<!--Admin-->
+		<div class="row" id="panel-admin-wrapper" style="display:none">
+			<style>
+				.user-info-content .u-i-span{display:block;}
+				#myModalNodes .modal-dialog{width:80vw;}
+				#myModalNodes .modal-content{height:93vh;}
+				#user_info_accordion{font-size:1.3rem}
+				#user_info_accordion h4{font-size:14px;}
+				#resource_usage .box-body>div{margin-left:10px;}
+				#resource_usage .message strong{padding-left:10px;}
+				#resource_usage .box-header>.pull-left{margin-top:-5px;}
+				#resource_usage .box-header{display:inline-flex;}
+				#resource_usage .box-header>h3{width:fit-content;padding-right:5px;}
+				#vm_running_tasks .box-body{height:calc(100vh - 20em)!important;overflow:auto;}
+			</style>
+            <div class="col-md-12">
+				<div class="nav-tabs-custom">
+					<ul class="nav nav-tabs hidden-xs">
+						<li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_users" aria-expanded="true">Available Users</a></li>
+						<li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="all_vms" aria-expanded="false">Available VM's</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="panel-nodes">
+							<div class="row">
+								<div class="col-md-12" id="list-master-controls">
+									<div class="box-tools pull-left">
+										<button class="btn btn-master-tool text-black" data-action="op-filter" data-toggle="tooltip" data-original-title="Filter by tags"><i class="fa fa-filter"></i><span class="label label-warning val-count-filters" style="display:none;">0</span></button>
+									</div>
+									<div class="box-tools pull-left">
+										<form class="search-container collapse" action="">
+											<input id="search-box-nodes" type="text" class="search-box" name="q" placeholder="Search by label" />
+											<label for="search-box-nodes"><i class="fa fa-search search-icon" aria-hidden="true"></i></label>
+											<input type="submit" id="search-submit-nodes" />
+										</form>
+									</div>
+									<div class="box-tools pull-right">
+										<button class="btn btn-master-tool text-black" data-action="refresh-list" data-toggle="tooltip" data-original-title="Refresh"><i class="fa fa-refresh fa-spin-hover"></i></button>																																	
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12 like collapse">
+									<span data-tag="tag">Label like: <strong class="val-q"></strong>&nbsp;<i class="fa fa-times fa-fw clear-search" aria-hidden="true"></i></span>
+								</div>
+								<div class="col-md-12 tags collapse">
+									<span class="collapse" data-tag="tag">tag<i class="fa fa-check fa-fw" aria-hidden="true"></i></span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="box box-success">
+										<div class="box-header">
+											<i class="fa fa-server" aria-hidden="true"></i>
+											<h3 class="box-title">Users -  <span class="val-itemfrom">0</span> to <span class="val-itemto">0</span> of <span class="val-itemscount">0</span></h3>
+											<div class="box-tools pull-right nppaginatedcells-order collapse" data-toggle="tooltip" title="Change order"></div>
+										</div>
+										<div class="nppaginatedcells-empty callout callout-empty">
+											<p>List is empty. <span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
+										</div>
+										<div class="box-body chat users-box">
+											<div class="nppaginatedcells-panel-body">
+											</div>
+											<div class="cell-templates collapse">
+												<core-cell-list>
+													<div class="col-md-12 col-sm-12">
+														<div class="nodes-item-core-box">
+															<div class="box-top-tags">
+																<span>Tag1</span><span>Tag2</span><span>Tag3</span>
+															</div>
+															<div class="box-top">
+																<div class="user-info-row">
+																	<div class="box-title"><i class="fa fa-circle"></i><span class="val-fullName"> ##### </span></div>
+																	<div class="box-subtitle"><span class="val-username">  #####  </span></div>
+																</div>
+																<div class="vm-info-row" style="display:none">
+																	<div class="box-title"><span class="val-id"> ##### </span></div>
+																	<div class="box-icon">
+																		<i class="fa fa-server"></i>
+																	</div>
+																</div>
+															</div>
+															<div class="user-info-row">
+																<div class="row">
+																	<div class="col-md-12 col-sm-12 col-xs-12">
+																		<input type="hidden" value="" name="username"/>																		
+																		<p class="message">
+																			<span class="u-i-span">Email address: <strong><span class="val-email">###</span></strong></span>
+																			<span class="u-i-span">Last log-in: <strong><span class="val-ago">never</span></strong></span>
+																			<span class="u-i-span">Storage: <strong><span class="actualInputQuota">###</span></strong></span>
+																		</p>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-md-12 col-sm-12 col-xs-12">
+																		<div class="user_download_info statistics"><label>Active downloads: <span id="user_estimated_downloads"></span> </label><div class="progress"></div></div>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-md-12 col-sm-12 col-xs-12">
+																		<div class="text-right">
+																			<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view_user_info"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i></button>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="row vm-info-row" style="display:none">
+																<div class="row">
+																	<div class="col-md-12 col-sm-12 col-xs-12 message">
+																		<div class="vm-row">
+																			<span class=""><strong>CPU: </strong></span>
+																			<div class="cpu-progress-bar">
+																				<div class="progress-bar" role="progressbar"></div>
+																			</div>
+																			<span>of <strong><span class="totalCpu">###</span></strong></span>
+																		</div>
+																		<div class="vm-row">
+																			<span class=""><strong>Disk: </strong></span>
+																			<div class="disk-progress-bar">
+																				<div class="progress-bar" role="progressbar"></div>
+																			</div>
+																			<span>of <strong><span class="totalDisk">###</span></strong></span>
+																		</div>
+																		<div class="vm-row">
+																			<span class=""><strong>Memory: </strong></span>
+																			<div class="memory-progress-bar">
+																				<div class="progress-bar" role="progressbar"></div>
+																			</div>
+																			<span>of <strong><span class="totalMemory">###</span></strong></span>
+																		</div>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-md-12 col-sm-12 col-xs-12">
+																		<div class="text-right">
+																			<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view_vm_info"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i></button>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</core-cell-list>
+											</div>
+										</div>
+										<div class="box-footer clearfix no-border">
+											<div class="box-tools pull-right">
+												<ul class="nppaginatedcells-panel-pagination pagination pagination-sm inline">
+													<li><a href="#" data-page="prev">«</a></li>
+													<li class="active"><a href="#" data-page="0">1</a></li>
+													<li><a href="#" data-page="1">2</a></li>
+													<li><a href="#" data-page="2">3</a></li>
+													<li><a href="#" data-page="next">»</a></li>
+												</ul>
+											</div>
+										</div>
+										<div class="box-notification"><p><span>List updated</span></p></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<style>
+				core-cell-list .fa.fa-circle.online,core-cell-list .fa.fa-circle.offline{padding:0 0.5em;}
+				core-cell-list .user-info-row .box-subtitle{padding:0 2.5em;}
+				core-cell-list .fa.fa-circle.online{color:green}
+				core-cell-list .fa.fa-circle.offline{color:grey}
+				core-cell-list img.user-info-row{position:absolute;}
+				core-cell-list .box-top .user-info-row{width:100%;}
+				core-cell-list .user-info-row .message,core-cell-list .user-info-row .user_download_info{padding-left:0;}
+				core-cell-list .message,core-cell-list .user_download_info,#vm_running_tasks .message,#vm_running_tasks .box-top .box-text{display:inline-flex!important;flex-wrap:wrap;width:100%}
+				core-cell-list .message>*,core-cell-list .user_download_info>*,#vm_running_tasks .message>*,#vm_running_tasks .box-top .box-text>*{padding-left:10px;min-width:25%}
+				core-cell-list .vm-row,#vm_running_tasks .vm-row{display:inline-flex;}
+				core-cell-list .vm-row>span,#vm_running_tasks .vm-row>span{min-width:fit-content;max-width:30%;padding:0 2%}
+				core-cell-list .vm-row>div,#vm_running_tasks .vm-row>div{width:60%;}
+				core-cell-list .user_download_info label{margin:0;}
+				
+				#panel-admin-wrapper .nodes-item-core-box .box-top .box-icon{top:-3px;}
+			</style>
+        </div>
+    </section><!-- /.content -->
+	<style>
+		#exec-user-history-panel .box-body,#exec-user-list-panel .box-body,#user_download_list .box-body{height:calc(100vh - 37em)!important;overflow:auto;}
+		#exec-user-history-panel .box-footer .pagination,#exec-user-list-panel .box-footer .pagination{margin:0}
+		#exec-history-panel .box-body,#exec-list-panel .box-body{height:240px;overflow:auto}
+		#exec-user-list-panel .tasks .one-task{display:inline-flex;flex-wrap:wrap;width:100%;}
+		#exec-user-list-panel .progress.history{max-width:none;width:20%;margin:0 15px;min-width:fit-content;}
+		#notification-history-panel .box-body{min-height:450px;}
+
+		.progress{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+		.progress,.progress>.progress-bar{clear:both;height:auto;margin-bottom:5px;text-align:left;text-shadow:1px 1px 1px black;text-indent:5px;line-height:2em;white-space:nowrap}
+		.progress-bar{max-width:100%;}
+		.user_download_info .progress{height:2rem;padding:0;margin:0;}
+		
+		.memory-progress-bar.unavailable,.cpu-progress-bar.unavailable,.disk-progress-bar.unavailable{background-color:grey}
+		.memory-progress-bar,.cpu-progress-bar,.disk-progress-bar,.used-ram-progress-bar,.used-cpu-progress-bar{background-color:#cadce7;height:20px;padding:0;}
+		
+		.vm-info-row .row,#vm_running_tasks .row{margin:5px 0}
+		
+		#panel-admin-wrapper .box-bottom{padding-top:0;}
+		#panel-admin-wrapper .box-header{padding:5px}
+		#panel-admin-wrapper .nodes-item-core-box{padding:5px;margin-bottom:5px;}
+		#panel-admin-wrapper .search-box{height:30px;}
+		#panel-admin-wrapper .search-box:(not:focus){width:30px}
+		#panel-admin-wrapper .search-icon, #panel-admin-wrapper .btn-master-tool{font-size:2rem;}
+		
+		#vm_running_tasks .nodes-item-core-box .box-top .box-title .btn-nodeop{padding:0;border-radius:1em;text-align:center;display:inline-flex;top:0;position:absolute;}
+		#vm_running_tasks .fa.fa-terminal.fa-fw{font-size:1rem;}
+		
+		#vmCommandModalNode .modal-content{height:30vh;width:100%;}
+		#vmCommandModalNode .modal-dialog{top:10%}
+		#vmCommandModalNode .modal-body{margin-left:15px;height:80%;max-height:80%;line-height:1em}
+		#vmCommandModalNode .modal-body h5{text-align:center;color:#3c8dbc;text-transform:uppercase;margin-top:0}
+		#vmCommandModalNode .modal-body .content_area{width:100%;height:90%;border:none;font-family:"Courier New";white-space:pre;}
+		#vmCommandModalNode .modal-body .content_area:disabled{background-color:white;resize:none}
+		
+		#panel-user-wrapper .panel-filter input,#user_info_accordion .panel-filter input,#vm_running_tasks .panel-filter input{width:14rem;margin-right:4rem;}
+		.panel-filter .box-tools .filter-inputs,.like{font-size:1rem;}
+		.panel-filter,.like{font-size:1rem;padding-left:1rem;}
+		.panel-filter .box-tools>i{font-size:2rem;left:0;}
+		.panel-filter .box-tools{width:100%;display:inline-flex;height:2rem;}
+		.like span{margin:5px 5px 5px 0;}
+		
+		.panel-filter .box-tools .filter-inputs .search-box{height:2rem;}
+		#panel-user-wrapper .search-icon,#user_info_accordion .search-icon,#vm_running_tasks .search-icon{color:black;}
+		#panel-user-wrapper .search-box,#user_info_accordion .search-box,#vm_running_tasks .search-box{text-indent:initial;color:red;border:none;outline:none;box-shadow:none;padding-left:15px;cursor:text;border-radius:2px;background:#ecf0f5;color:black;-webkit-transition:width 0.6s cubic-bezier(0, 1.22, 0.66, 1.39),border-radius 0.6s,background 0.6s;transition:width 0.6s cubic-bezier(0, 1.22, 0.66, 1.39),border-radius 0.6s, background 0.6s;}
+		#panel-user-wrapper .search-box::placeholder,#user_info_accordion .search-box::placeholder,#vm_running_tasks .search-box::placeholder{font-family:"Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;color:#black}
+		.ui-widget.ui-widget-content{font-size:1rem;}
+		
+	</style>
+<script>
+	var downloadStatisticsTimeout;
+	function updateDownloadStatistics(username, options, once) {
+		var parentTree = $.extend({"id": "#panel-user-wrapper",
+						  "estimatedID": "#estimated_downloads",
+						  "accordionID": ""
+						 }, options);
+		if (typeof username === "undefined") {
+			username = taoUserProfile.username;
+		}
+		$.ajax({
+            cache    : false,
+			url      : baseRestApiURL + "progress?category=product.progress&userName=" + username,
+            dataType : 'json',
+            type     : 'GET',
+            headers  : {
+                "Accept"      : "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+		}).done(function (result) {
+			var res = chkTSRF(result);
+			
+			var totPrc = 0
+			var cnt = 0;
+			$(".statistics .progress", parentTree.id).html("");
+			var $bar = "";
+			if (res.length > 0) {
+				res.sort(function (a, b){
+					if (a.name.toLowerCase() > b.name.toLowerCase()) { return 1; }
+					if (a.name.toLowerCase() < b.name.toLowerCase()) { return -1; }
+					return 0;
+				});
+				
+				var parentID = parentTree.accordionID !== "" ? parentTree.accordionID : parentTree.id;
+				$.each(res, function (index, resource) {
+					$bar = $('<div class="progress-bar progress-bar-success" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">' + resource.name + '</div>');
+					$bar.attr("title", parseInt(resource.progress*100) + "%" + (typeof resource.info.speed === "undefined" ? "" : " [" + resource.info.speed + "]"));
+					$bar.css({ width: parseInt(resource.progress*100) + "%" });
+					$(".statistics .progress", parentID).append($bar);
+					
+					totPrc += resource.progress;
+					cnt ++;
+				});
+				
+				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">Overall progress (' + Math.ceil(totPrc) + ' of ' + cnt + ')</div>');
+				$bar.attr("title", parseInt(totPrc*100/cnt) + "%");
+				$bar.css({ width: parseInt(totPrc*100/cnt) + "%" });
+			} else {
+				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">No downloads in progress</div>');
+				$bar.attr("title", "");
+				$bar.css({ width: "100%" });
+			}
+			$(".statistics .progress", parentTree.id).prepend($bar);
+			$(".statistics " + parentTree.estimatedID, parentTree.id).html(cnt);
+		}).fail(function (jqXHR, textStatus) {
+		}).complete(function () {
+			if (!once) {
+				downloadStatisticsTimeout = setTimeout(function () { updateDownloadStatistics(username, options); $(document).trigger("quota:update")}, 20000);
+			}
+        });
+	}
+    
+	function availableUsersDownloadStatistics(once) {
+		$.ajax({
+            cache    : false,
+			url      : baseRestApiURL + "progress?category=product.progress",
+            dataType : 'json',
+            type     : 'GET',
+            headers  : {
+                "Accept"      : "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+		}).done(function (result) {
+			var res = chkTSRF(result);
+			$.each($("core-cell-list[id]", "#panel-admin-wrapper"), function(idx, elem) {
+				var totPrc = 0
+				var cnt = 0;
+				var userName = $("input[name='username']", elem).val();
+				var inProgress = res.filter(i => i.info.Principal === userName);
+				if (inProgress.length > 0) {
+					inProgress.sort(function (a, b){
+						if (a.name.toLowerCase() > b.name.toLowerCase()) { return 1; }
+						if (a.name.toLowerCase() < b.name.toLowerCase()) { return -1; }
+						return 0;
+					});
+					$.each(inProgress, function (index, resource) {
+						totPrc += resource.progress;
+						cnt ++;
+					});
+					$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">Overall progress (' + Math.ceil(totPrc) + ' of ' + cnt + ')</div>');
+					$bar.attr("title", parseInt(totPrc*100/cnt) + "%");
+					$bar.css({ width: parseInt(totPrc*100/cnt) + "%" });
+				} else {
+					$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">No downloads in progress</div>');
+					$bar.attr("title", "");
+					$bar.css({ width: "100%" });
+				}
+				$(".statistics .progress", elem).prepend($bar);
+			});
+			
+		}).fail(function (jqXHR, textStatus) {
+		}).complete(function () {
+			if (!once) {
+				setTimeout(function () { availableUsersDownloadStatistics(); $(document).trigger("quota:update")}, 20000);
+			}
+        });
+	}
+	
+	function getUserQuotaInfo(username) {
+		return $.ajax({
+			cache: false,
+			url: baseRestApiURL + "user/"+username,
+			dataType : 'json',
+			type: 'GET',
+			async: false,
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"X-Auth-Token": window.tokenKey
+			}
+		}); 
+	}
+	
+	myModalOpShow = function(operationid, args) {
+        var $modal = $("#myModalNodes");
+        var rmContent = '';
+        window.userOpStack = [];
+		if (operationid === "view_user_info") {
+			rmContent = viewUserInfo(args.dna);
+		}
+		if (operationid === "view_vm_info") {
+			rmContent = viewVMInfo(args.dna);
+		}
+		if (rmContent !== "") {
+			$modal.find('.modal-dialog').html(rmContent);
+			$modal.modal('show');
+		} else {
+			alert("Could not retrive needed data from server.");
+			return;
+		}
+    };
+	
+	function viewUserInfo(usrData) {
+		var $userInfo = $("#info-content").clone().removeAttr("style id");
+		$(".modal-title", $userInfo).html(usrData.fullName);
+		$("input[name='username']", $userInfo).val(usrData.username);				
+																							  
+		$("#exec-user-list-panel", $userInfo).npExecPanels({
+            msgEnd: "No more job to show.",
+            msgEmpty: "No job is currently running.",
+            theme: '',
+			itemsOnPage: 8,
+            url: baseRestApiURL + "orchestrator/running/jobs/" + usrData.username,
+			cancelURL:  baseRestApiURL + "orchestrator/stop"
+        });
+		$("#exec-user-history-panel", $userInfo).npExecPanels({
+            msgEnd: "You reached the end of execution list. Nothing more to show.",
+            msgEmpty: "Results history is empty. It looks you did not run any workflows yet.",
+            theme: '',
+			itemsOnPage: 8,
+            url: baseRestApiURL + "orchestrator/history/" + usrData.username
+        });
+		var options = { "id": "#user_download_list",
+						"estimatedID": "#user_estimated_downloads_accordion",
+						"accordionID": "#user_download_list"
+					  }
+		updateDownloadStatistics(usrData.username, options);
+		return $userInfo;
+	}
+	
+	function viewVMInfo(data) {
+		var $vmInfo = $("#vm-content").clone().removeAttr("style id");
+		$(".modal-title", $vmInfo).html(data.id.toUpperCase());
+												 
+		$("#vm_running_tasks",$vmInfo).npExecPanels({
+			msgEnd: "No more tasks to show.",
+            msgEmpty: "No task is currently running.",
+            theme: '',
+			type: "task",
+			itemsOnPage: 12,
+            url: baseRestApiURL + "orchestrator/running/tasks",
+			host: data.id,
+			availableResources:{"cpu":data.flavor.cpu,"memory":unitTransform("GB","MB",data.flavor.memory)}
+		});
+		$("#vm_running_tasks",$vmInfo).on("click",".box-top .box-title button", function(e){
+			var action = $(this).data("action");
+			if (action === "view_command") {
+				$modal = $("#vmCommandModalNode");
+				var task = $(this).closest(".task").data("taskData");
+				$(".title", $modal).html(task.componentName + " (" + task.jobName + ")");
+				$(".content_area", $modal).html(task.command);
+				$modal.modal('show');
+			} else {
+				showMsg("This action is not supported.", "WARNING");	
+			}
+		});
+		return $vmInfo;
+	}
+	
+	function createAdminDashboard() {
+		$("#panel-admin-wrapper").show();
+		urls = [
+			baseRestApiURL + "admin/users?status=ACTIVE"
+		];
+		var tabAction = "all_users";
+		$("#myModalNodes").on("click","#resource_usage .pagination a", function(e) {
+			e.preventDefault();
+			var $parent = $(this).closest("#resource_usage");
+			var username = $("input[name='username']", $parent).val();
+			refreshUserInfo($parent, username);
+		});
+		
+		$("#myModalNodes").on('hide.bs.modal', function() {
+			//clear datepicker if exist
+			if (typeof $.datepicker.dpDiv !== "undefined") {
+				$("#" + $.datepicker.dpDiv.attr("id")).remove();
+			}
+			if (typeof downloadStatisticsTimeout !== "undefined") {
+				clearTimeout(downloadStatisticsTimeout);
+			}
+		});
+		
+		$('a[data-toggle="tab"]', '#panel-admin-wrapper').on('shown.bs.tab', function (e) {
+			tabAction = $(this).data("action");
+			var title = "";
+			if (tabAction ==="all_users") {
+				title = "Users - ";
+				$(".vm-info-row", "#panel-admin-wrapper").hide();
+				$(".user-info-row", "#panel-admin-wrapper").show();
+				urls = [
+					baseRestApiURL + "admin/users?status=ACTIVE"
+				];
+			}
+			if (tabAction ==="all_vms") {
+				title = "VM's - ";
+				$(".vm-info-row", "#panel-admin-wrapper").show();
+				$(".user-info-row", "#panel-admin-wrapper").hide();
+				urls = [
+					baseRestApiURL + "topology/active"
+				];
+			}
+			// add new tab title
+			$(".box-success .box-header .box-title", "#panel-admin-wrapper").get(0).childNodes[0].nodeValue = title;
+			window.panelComp.refreshData(urls);
+		});
+		
+		window.panelComp = $("#panel-nodes").npPaginatedCells({
+			headerUser: taoUserProfile.username,
+			url: urls,
+			viewMode: prefferences.adminViewMode,
+			filterAttribute: tabAction === "all_users" ? "fullName" : "id",
+			itemsOnPage: 4,
+			order:[
+				{
+					"label":"Name ascending",
+					"objAttributeName":tabAction === "all_users" ? "fullName" : "id",
+					"direction":"ASC"
+				},
+				{
+					"label":"Name descending",
+					"objAttributeName":tabAction === "all_users" ? "fullName" : "id",
+					"direction":"DSC"
+				}
+			],
+			doDataPreprocessing: function(data) {
+				if (tabAction === "all_users") {
+					var onlineUsers = [];
+					$.ajax({
+						cache: false,
+						url: baseRestApiURL + "admin/users/logged",
+						dataType : 'json',
+						type: 'GET',
+						async: false,
+						headers: {
+							"Accept": "application/json",
+							"Content-Type": "application/json",
+							"X-Auth-Token": window.tokenKey
+						},
+						error : function (jqXHR, textStatus, errorThrown) { },
+						success: function (result) {
+							onlineUsers = result.data;
+						}
+					});
+					for (var i = 0; i < data.length; i++) {	
+						data[i].fullName = data[i].firstName+" "+data[i].lastName;
+						var online = onlineUsers.filter(u => u.id === data[i].id).length > 0;
+						data[i]["online"] = online;
+						data[i].ago = niceIsoTime(data[i].lastLoginDate);
+					}
+				}
+				if (tabAction === "all_vms") {
+					var vmsRuntimeInfo = [];
+					$.ajax({
+						cache: false,
+						url: baseRestApiURL + "monitor/",
+						dataType : 'json',
+						type: 'GET',
+						async: false,
+						headers: {
+							"Accept": "application/json",
+							"Content-Type": "application/json",
+							"X-Auth-Token": window.tokenKey
+						},
+						error : function (jqXHR, textStatus, errorThrown) { },
+						success: function (result) {
+							vmsRuntimeInfo = result.data;
+						}
+					});
+					data.forEach(function(vm) {
+						var runtimeInfo = {
+							"runtimeInfo": {
+								"cpu":    vmsRuntimeInfo[vm.id].cpuTotal > 100 ? parseInt(vmsRuntimeInfo[vm.id].cpuTotal/vm.flavor.cpu) : vmsRuntimeInfo[vm.id].cpuTotal,
+								"disk":   vmsRuntimeInfo[vm.id].diskUsed > -1 ? parseInt(vmsRuntimeInfo[vm.id].diskUsed/vmsRuntimeInfo[vm.id].diskTotal*100) : vmsRuntimeInfo[vm.id].diskUsed,
+								"memory": vmsRuntimeInfo[vm.id].availableMemory > -1 ? parseInt((vmsRuntimeInfo[vm.id].totalMemory-vmsRuntimeInfo[vm.id].availableMemory)/vmsRuntimeInfo[vm.id].totalMemory*100) : vmsRuntimeInfo[vm.id].availableMemory
+							}
+						};
+						$.extend(vm,runtimeInfo);
+					});
+				}
+				return data;
+			},
+			doCustomRender: function($el, data) {
+				if (tabAction === "all_users") {
+					$(".actualInputQuota", $el).html(humanFileSizeFromMB(data.actualInputQuota));
+					$("input[name='username']", $el).val(data.username);
+				}
+				if (tabAction === "all_vms") {
+					$(".totalCpu", $el).text(data.flavor.cpu);
+					$(".totalDisk", $el).text(data.flavor.disk);
+					$(".totalMemory", $el).text(data.flavor.memory);
+					if (data.runtimeInfo.cpu > -1) {
+						$(".cpu-progress-bar .progress-bar", $el).text(data.runtimeInfo.cpu + "%");
+					} else {
+						$(".cpu-progress-bar .progress-bar", $el).text("unavailable");
+						$(".cpu-progress-bar .progress-bar", $el).parent().addClass("unavailable");
+					}
+					if (data.runtimeInfo.disk > -1) {
+						$(".disk-progress-bar .progress-bar", $el).text(data.runtimeInfo.disk + "%");
+					} else {
+						$(".disk-progress-bar .progress-bar", $el).text("unavailable");
+						$(".disk-progress-bar .progress-bar", $el).parent().addClass("unavailable");
+					}
+					if (data.runtimeInfo.memory > -1) {
+						$(".memory-progress-bar .progress-bar", $el).text(data.runtimeInfo.memory + "%");
+					} else {
+						$(".memory-progress-bar .progress-bar", $el).text("unavailable");
+						$(".memory-progress-bar .progress-bar", $el).parent().addClass("unavailable");
+					}
+					if (data.runtimeInfo.cpu < 50) {
+						$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.cpu + "%");
+					}else if (data.runtimeInfo.cpu > 80) {
+						$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.cpu + "%");
+					} else {
+						$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.cpu + "%");
+					}
+					
+					if (data.runtimeInfo.disk < 50) {
+						$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.disk + "%");
+					}else if (data.runtimeInfo.disk > 80) {
+						$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.disk + "%");
+					} else {
+						$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.disk + "%");
+					}
+					
+					if (data.runtimeInfo.memory < 50) {
+						$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.memory + "%");
+					}else if (data.runtimeInfo.memory > 80) {
+						$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.memory + "%");
+					} else {
+						$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.memory + "%");
+					}
+				}
+			},
+			doDataPostprocessing: function() {
+				availableUsersDownloadStatistics();
+			},
+			doAction: function (action, args) {
+				if (taoUserProfile.userRole !== "ADMIN") {
+					showMsg("This action is available only for admin roles.", "ERROR");
+					return;		
+				}
+				if (action === "view_user_info" || action === "view_vm_info" ) {
+					myModalOpShow(action, args);
+				}
+			}
+		});
+	}
+	
+	$( document ).ready(function() {
+		createAdminDashboard();
+		$.AdminLTE.layout.fix();
+    });
+	
+//# sourceURL=dashboard-admin.js
+</script>

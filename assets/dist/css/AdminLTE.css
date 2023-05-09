@@ -1220,10 +1220,11 @@ a:focus {
  * Component: Form
  * ---------------
  */
-.form-control {
+.form-control,
+.form-control[readonly]:focus {
   border-radius: 0px !important;
   box-shadow: none;
-  border-color: #d2d6de;
+  border-color: #d2d6de!important;
 }
 .form-control:focus {
   border-color: #3c8dbc !important;
@@ -4207,4 +4208,12 @@ table.text-center th {
   .table-responsive > .table tr td {
     white-space: normal!important;
   }
+}
+
+/* Button position*/
+.left-btn {
+	float:left;
+}
+.right-btn {
+		float:right;
 }

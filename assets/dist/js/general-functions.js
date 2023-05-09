@@ -1,3 +1,4 @@
+var defaultStyle = "dark-blue";
 //Array.from is not supported in IE11
 //The following lines will emulate an ES6's Array.from method.
 if (!Array.from) {
@@ -357,26 +358,48 @@ function arrayFromDatetime(){
 }
 
 //array from date(day to sec), uses moment.js
-function humanJavaDataType(str){
+/*function humanJavaDataType(str){
     var a= str.split(".");
     if(a.length>0){
         return a[a.length-1];
     }
     return "";
-}
+}*/
 
 function humanFileSizeFromMB(size) {
     var i = Math.floor( Math.log(size) / Math.log(1024) );
-    return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['MB', 'GB', 'TB'][i];
+    return size > 0 ? (size/Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['MB', 'GB', 'TB'][i] : '0 GB';
 }
 function humanFileSize(size) {
     var i = Math.floor( Math.log(size) / Math.log(1024) );
-    return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+    return size > 0 ? (size/Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'KB', 'MB', 'GB', 'TB'][i] : '0 GB';
 }
 function getFileSizeAsGB(size){
     return ( size / Math.pow(1024, 3) ).toFixed(2) * 1 ;
 }
+function getFileSize(size,toUnit){
+	var arrayOfUnits = ['B', 'KB', 'MB', 'GB', 'TB'];
+	var sizeNumber = size.replace(/[^0-9.]/g,'');
+	var sizeUnit = size.replace(/[0-9. ]/g,'');
+	if (arrayOfUnits.indexOf(toUnit) > arrayOfUnits.indexOf(sizeUnit)) {
+		var pow = arrayOfUnits.indexOf(toUnit) - arrayOfUnits.indexOf(sizeUnit);
+		return ( sizeNumber / Math.pow(1024, pow) ).toFixed(2) * 1 ;
+	} else {
+		var pow = arrayOfUnits.indexOf(sizeUnit) - arrayOfUnits.indexOf(toUnit);
+		return ( sizeNumber * Math.pow(1024, pow) ).toFixed(2) * 1 ;
+	}
+}
 
+function unitTransform (fromUnit, toUnit, value) {
+	var arrayOfUnits = ['B', 'KB', 'MB', 'GB', 'TB'];
+	if (arrayOfUnits.indexOf(toUnit) > arrayOfUnits.indexOf(fromUnit)) {
+		var pow = arrayOfUnits.indexOf(toUnit) - arrayOfUnits.indexOf(fromUnit);
+		return ( value / Math.pow(1024, pow) ).toFixed(2) * 1 ;
+	} else {
+		var pow = arrayOfUnits.indexOf(fromUnit) - arrayOfUnits.indexOf(toUnit);
+		return ( value * Math.pow(1024, pow) ).toFixed(2) * 1 ;
+	}
+}
 
 var _settings = {
     init: function() {
@@ -416,6 +439,42 @@ var _settings = {
     chkCookie: function(e) {
         var filter = new RegExp('(?:(?:^|.*;\\s*)' + e + '\\s*\\=\\s*([^;]*).*$)|^.*$');
         return document.cookie.replace(filter, "$1");
+    }
+};
+
+var _userPref = {
+    getUserPreferences: function(username){
+        //var username = _settings.readCookie("TaoUserName");
+        return $.ajax({
+            cache: false,
+            url: baseRestApiURL + "user/"+username,
+            dataType : 'json',
+            type: 'GET',
+            async: false,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+
+    },
+    updateUserPreferences: function(data){
+        $.ajax({
+            cache: false,
+            url: baseRestApiURL + "user/prefs",
+            data:data,
+            type: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        }).done(function (response) {
+    
+        }).fail(function (jqXHR, textStatus) {
+                chkXHR(jqXHR.status);
+        });
     }
 };
 
@@ -542,4 +601,87 @@ function closePolygonMap() {
 		window.myPolygonMap.container.closest(".for-poly2D").remove();
 		delete window.myPolygonMap;
 	}
+}
+
+//UI loading indicator management
+function contentLoading(action){
+	var taoLoadingDiv = $("#myModalLoading",window.parent.jQuery(window.parent.document));
+	if(action === "show"){			
+		taoLoadingDiv.modal('show');			
+	}
+	if(action === "hide"){
+		setTimeout(function(){
+			taoLoadingDiv.modal('hide');
+		}, 100);
+	}
+}
+
+// get available sites list
+var getAvailableSites = function () {
+	return $.ajax({
+		cache: false,
+		url: baseRestApiURL + "site/",
+		dataType : 'json',
+		type: 'GET',
+		headers: {
+			"Accept": "application/json",
+			"Content-Type": "application/json",
+			"X-Auth-Token": window.tokenKey
+		}
+	});
+}
+
+// get parameters enums as map and populate specific dropdown
+function populateDataTypeSelect($selectElem){
+	var optionList;
+	var optionsMap = getTaoEnumsMap("JavaType");
+
+	$.each(optionsMap, function(index, obj) {
+		if( obj.key.toUpperCase() !== "DATA_FORMAT" && obj.key.toUpperCase() !== "SENSOR_TYPE" ) {
+			optionList += '<option value="' + obj.value + '">' + obj.value + '</option>'; //parameter data type can be equal with object value (the key is not used)
+		}
+	});
+	$("option", $selectElem).remove();
+	$selectElem.html(optionList);
+}
+
+function populateSelectElem($selectElem,enumType){
+	var optionList;
+	var userTypeOptions = getTaoEnumsMap(enumType);
+
+	$.each(userTypeOptions, function(index, obj) {
+		optionList += '<option value="' + obj.key + '">' + obj.value + '</option>'; 
+	});
+	$("option", $selectElem).remove();
+	$selectElem.html(optionList);
+}
+
+function getTaoEnumsMap(name) {
+	var retVal = [];
+	$.each(taoEnums.data, function (index, enm) {
+		if (index.toLowerCase().indexOf(name.toLowerCase()) >= 0) {
+			$.each(enm, function (idx, values) {
+				retVal.push(values);
+			});
+		}
+	});
+	return retVal;
+}
+function removeClassStartingWith($element, filter) {
+    $element.removeClass(function (index, className) {
+        return (className.match(new RegExp("\\S*" + filter + "\\S*", 'g')) || []).join(' ')
+    });
+    return $element;
+};
+
+function inputRangeColor (color) {
+	switch (color) {
+      case "black": return "#25131b"; break;
+      case "blue": return "#2e6da4"; break;
+      case "green": return "#006d34"; break;
+      case "purple": return "#523c90"; break;
+      case "red": return "#830000"; break;
+      case "yellow": return "#e57c00"; break;
+      default: return "#d3d3d3";
+    }
 }

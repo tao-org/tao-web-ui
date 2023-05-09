@@ -3,21 +3,23 @@ body{padding-right:0 !important}
 ::placeholder{font-style:italic}
 .main-header .navbar{opacity:0.8}
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn{opacity:0.4 !important}
-/* ======== CUSTOM COMBOBOX ======== */
-.custom-combobox{position:relative;display:block}
-.custom-combobox .custom-combobox-input{background-color:white}
-.custom-combobox .custom-combobox-input[disabled]{background-color:#eee}
-.custom-combobox .custom-combobox-toggle{position:absolute;top:0;bottom:0;right:-3px}
-ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:1009}
+.filter-hidden{display: none!important;}
+.info-message{text-align:left;margin:0;}
+/* ======== CUSTOM SPIN BUTTON FOR INPUT TYPE NUMBER ======== */
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:inner-spin-button !important;width:25px;position:absolute;top:0;right:0;height:100%;}
+
 /* ======== #myModalNodes ======== */
 #myModalNodes{position:absolute;width:100%;height:auto;z-index:800;padding:0 !important}
 #myModalNodes #myFlatMap .ol-zoom{top:100px}
 #myModalNodes #myFlatMap .poly-map-title{padding-left:30%;top:55px}
 #myModalNodes #myFlatMap .poly-shape-type{top:60px}
+#myModalNodes #myFlatMap .poly-actions-panel{width:45rem;height:13rem;right:0;max-width:100%}
 #myModalNodes #topInfo{position:fixed;background-color:#fff4d6;border:1px solid #ffd154;top:60px;padding:0 4px;font-weight:700;color:#a71f16;border-radius:5px;pointer-events:none;min-height:1.6em;z-index:800}
 /* ======== MODAL CONTROLS AND PANELS ======== */
 #myModalNodes .modal-body .form-control:not(select){height:2em;line-height:2em;padding:0 5px}
-#myModalNodes .modal-body .form-control-feedback{height:2em;line-height:2em}
+#myModalNodes .modal-body .form-control:not(select):focus{border-color:#79bde4!important}
+#myModalNodes .modal-body .form-control-feedback{height:2em;line-height:2em;}
+#myModalNodes #tbDatasourceParams .form-control-feedback{height:2em;line-height:3em;right:0.3em;}
 #myModalNodes .box-shadow--6dp{box-shadow:0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2) !important;border-radius:5px}
 #myModalNodes .modal-header{background-color:#79bde4;color:white;padding:10px 15px;border-radius:5px 5px 0 0}
 #myModalNodes .modal-header.ui-draggable-handle{position:relative;cursor:ew-resize}
@@ -39,8 +41,10 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes .extent{-webkit-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-o-transition:all 0.5s ease;-ms-transition:all 0.5s ease;transition:all 0.5s ease}
 #myModalNodes .extent.no-transitions,
 #myModalNodes .extent.ui-draggable-dragging{-webkit-transition:none;-moz-transition:none;-o-transition:none;-ms-transition:none;transition:none}
-#myModalNodes .extent{position:absolute;top:0;left:0;margin:0;padding:10px;width:40%;max-width:800px;z-index:800}
-#myModalNodes .extent.shifted{left:-41% !important}
+#myModalNodes .extent{position:absolute !important;top:0;left:0;margin:0;padding:10px;width:50rem;max-width:100%;z-index:800}
+/*#myModalNodes #queryExtent.extent{width:40rem}*/
+#myModalNodes #processingParameters.extent{width:47rem}
+#myModalNodes .extent.shifted{left:-100rem !important}
 #myModalNodes.full-map-view .main-panel{display:inline-block;width:40px;height:40px;cursor:pointer;border-radius:5px;padding:5px;text-align:center;border:0}
 #myModalNodes.full-map-view .main-panel>*{display:none}
 #myModalNodes.full-map-view .main-panel::after{content:"\f2d2";font-family:"FontAwesome";font-size:22px;color:#286080}
@@ -50,11 +54,10 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes .extent.locked .ui-resizable-handle{pointer-events:none;background-color:lightgray !important}
 #myModalNodes #collectionExtent.no-map{opacity:1}
 #myModalNodes #collectionExtent.no-map .minimize{display:none}
-#myModalNodes #queryExtent.no-map{left:18%}
-#myModalNodes #mapExtent{display:block;width:100%;height:100%;position:fixed;top:0;right:0;background-color:white}
+#myModalNodes #queryExtent.no-map, #myModalNodes #queryExtentParameters.no-map, #myModalNodes #processingParameters.no-map{left:18%}
+#myModalNodes #mapExtent{display:block;width:100%;height:100%;position:fixed;top:0;right:0;background-color:white;overflow:auto}
 #myModalNodes #collectionExtent{opacity:0.9}
-#myModalNodes #queryExtent{top:100px;width:34%}
-#myModalNodes #detailsExtent{left:40%;width:30%}
+#myModalNodes #detailsExtent{width:30%}
 #myModalNodes.full-map-view #detailsExtent{left:3%;width:37%}
 /* ======== TABLE CONTENTS ======== */
 #myModalNodes .vertical-container{position:relative;clear:both;border-top:1px solid #79bde4;overflow-x:hidden;overflow-y:auto;scroll-behavior:smooth;border-bottom:1px solid #79bde4;height:100%;background-color:white}
@@ -65,17 +68,18 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes table>tbody+tbody{border-top:1px solid #93c2da}
 #myModalNodes table.ds-params{table-layout:auto}
 #myModalNodes table.ds-params::before{content:" ";position:absolute;width:15px;height:100%;top:0;left:0;background-color:#79bde4}
-#myModalNodes table.ds-params td{padding:2px 15px}
+#myModalNodes table.ds-params td{padding:2px 10px}
 #myModalNodes table.ds-params tbody tr:first-child td{padding-top:10px}
 #myModalNodes table.ds-params tbody tr:last-child td{padding-bottom:10px}
 #myModalNodes table.ds-params tbody td:first-child{font-weight:700;text-align:right;color:#455c80;line-height:1.2em}
-#myModalNodes table.ds-params tbody td span{font-style:normal;font-size:0.8em;color:#c0c0c0;font-weight:400}
+#myModalNodes table.ds-params tbody td span:not([class^="select2"], .selection){font-style:normal;font-size:0.8em;color:#c0c0c0;font-weight:400}
 #myModalNodes table.ds-params tbody td:last-child{width:66.666667%}
 #myModalNodes table.ds-params td{border:0}
 #myModalNodes table.ds-params input,
-#myModalNodes table.ds-params select,
-#myModalNodes table.ds-params textarea{width:100%;border:1px solid #d2d6de;height:2em;padding:0 4px;outline:0;border-radius:2px}
+#myModalNodes table.ds-params select:not([class^="select2"]),
+#myModalNodes table.ds-params textarea:not([class^="select2"]){width:100%;border:1px solid #d2d6de;height:2em;padding:0 4px;outline:0;border-radius:2px}
 #myModalNodes table.ds-params input.datepicker{max-width:48%}
+#myModalNodes #processingParameters table.ds-params input.datepicker{max-width:100%}
 #myModalNodes table.ds-params input.datepicker:last-child{float:right}
 #myModalNodes table.ds-products tr{background-color:white;-webkit-transition:all 0.2s ease;-moz-transition:all 0.2s ease;-o-transition:all 0.2s ease;-ms-transition:all 0.2s ease;transition:all 0.2s ease}
 #myModalNodes table.ds-products td{padding:6px;color:#737373;border-top-color:#ccc}
@@ -95,6 +99,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes table.ds-products tr.datasource td{border:0;padding:8px 5px 8px 15px;color:#286080}
 #myModalNodes table.ds-products tr.datasource:hover{background-color:#cee9f9}
 #myModalNodes table.ds-products tr.datasource span.title{width:90%;display:inline-block}
+#myModalNodes table.ds-products tr.datasource input.title{width:90%;display:inline-block}
 #myModalNodes table.ds-products tr.datasource span.info{width:96%;width:calc(100% - 32px)}
 #myModalNodes table.ds-products tr.datasource.disabled{opacity:0.3}
 #myModalNodes table.ds-products tr.datasource.deprecated{background-color:#ffd1d1}
@@ -113,7 +118,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes table.pd-details .summary-header button{font-size:20px;padding-right:15px}
 #myModalNodes table.pd-details .summary-content{padding:5px 10px;user-select:text}
 /* ======== TABLE ACTION CONTROLS ======== */
-#myModalNodes table.ds-products .qry-ac-group{position:absolute;left:0;width:100%;padding:2px 10px;color:#286080}
+#myModalNodes table.ds-products .qry-ac-group{position:absolute;right:0;/*width:100%*/;padding:2px 10px;color:#286080}
 #myModalNodes table.ds-products .top-group{top:0;font-size:16px}
 #myModalNodes table.ds-products .bottom-group{bottom:0;font-size:16px;opacity:0.1;-webkit-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-o-transition:all 0.5s ease;-ms-transition:all 0.5s ease;transition:all 0.5s ease}
 #myModalNodes table.ds-products tr.datasource .qry-ac-group .pull-right{background-color:rgba(206,233,249,0.6)}
@@ -173,24 +178,98 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 #myModalNodes #floatingExtent .floating>div:hover::after{content:"\f010";color:white;font:normal normal normal 16px/1 FontAwesome;position:absolute;right:5px;top:5px;background-color:rgba(13, 134, 204, 0.5);padding:5px;border-radius:12px;pointer-events:none}
 #myModalNodes #floatingExtent .floating>div img{width:100%;height:100%;cursor:pointer;box-shadow:0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2);border-radius:10px;border:3px solid rgba(255, 255, 255, 0.4)}
 
+#myModalNodes #choosedDatasource{margin-bottom:10px;}
+#myModalNodes .info-message>span:first-child{padding-right:5px;font-style:italic}
+
 @media (max-width: 767px) {
 .sidebar-open #myModalNodes{width:70%;width: calc(100% - 230px)}
+#queryExtent .modal-body {min-height:45vh;max-height:calc(100vh - 22em)!important;}
 }
 
+@media (max-width: 1320px) {
+  #myModalNodes #filtersDialog:not(.shifted){max-width:100%;left:0 !important;}
+}
+
+#listDatasources{width:100%;max-height:72rem;}
+#listDatasources input[type='checkbox']{display:none;}
+#listDatasources .fa-folder{color:#ffb85d;}
+#listDatasources .fa{float:none;width:30px;}
+#listDatasources a span{padding:0 7px;text-align:right}
+#listDatasources a{color:#333;display:block;cursor:pointer;padding:0 7px 0 0;line-height:1.8em;max-height:1.8em;white-space:nowrap;width:auto;width:max-content;font-weight:700;}
+#listDatasources a:hover{color:#3c8dbc}
+#listDatasources a.selected{color:#3c8dbc;background-color:#3c8dbc1f}
+
+#listDatasources .treeview label{position:relative;display:block}
+#listDatasources .treeview label::before{content:'\f105';margin-left:0;display:block;position:absolute;top:-0.2em;left:-17px;font-family:'FontAwesome';font-size:1.7rem;padding:0 7px;color:#5c5d5e;opacity:0.3;}
+#listDatasources .treeview input:checked+label::before{content:'\f107';margin-left:-3px;}
+#listDatasources .treeview label:hover:before{opacity:1}
+#listDatasources .treeview:hover input:checked+label::before{opacity:1}
+
+#listDatasources .datasource{padding-left:1rem;}
+#listDatasources .datasource_list::-webkit-scrollbar, #listDatasources .datasource::-webkit-scrollbar{display:none;}
+#listDatasources .dataset{padding-left:3px;}
+
+#listDatasources .dataset>a{display:inline-flex;}
+#listDatasources .dataset>span.info{font-size:1rem;color:#555;position:absolute}
+#listDatasources .dataset>span.info:hover{color:#3c8dbc;}
+
+#queryExtent .modal-body{min-height:40vh;max-height:calc(100vh - 8em)!important;}
+#queryExtent .panel-title{font-weight:700;color:#286080;font-size:20px}
+#queryExtent .modal-header .panel-control{flex:0 0 auto;color:#000;text-shadow:0 1px 0 #fff;opacity:0.2;cursor:pointer;}
+#queryExtent .modal-header .panel-control:hover{color:#286080;text-decoration:none;opacity:1;}
+#queryExtent .rspace,.filter-reset{margin-left:10px;float:right;top:3px;}
+#queryExtent .treeview .sub.mCustomScrollbar .mCSB_scrollTools.mCSB_scrollTools_vertical{right:auto;margin-left:-4px;}
+#queryExtent .treeview .sub.mCustomScrollbar .mCSB_scrollTools_horizontal{bottom:-5px;}
+#queryExtent .treeview .sub.mCustomScrollbar .mCSB_container_wrapper{position:relative;}
+#queryExtent .treeview .sub.mCustomScrollbar {max-height:20rem;overflow-y:auto;overflow-x:hidden;margin-left:0;}
+#queryExtent .info-text{padding:5px 15px;font-style:italic;font-size:1.3rem;}
+
+#queryExtentParameters .sensor-name{background-color:#cee9f9;text-align:center;color:#455c80;padding:4px}
+#queryExtentParameters .sensor-name>h3{font-weight:700;}
+#queryExtentParameters #parameterList .form-group{margin-bottom:5px;margin-right:0}
+#queryExtentParameters #parameterList .control-label{padding-right:0;}
+#queryExtentParameters #parameterList .last .form-group{display:inline-flex}
+#queryExtentParameters #parameterList .btnStartInterrogation{padding-left:0;}
+
+#filtersDialog #filters{padding-top:10px;}
+
+#filtersDialog .select2-container--default .select2-selection--multiple{border-color:#d2d6de;line-height:2rem;overflow:auto !important;height:auto !important;max-height:9rem}
+#filtersDialog .select2-container::after{content:"\25be";font-size:32px;color:#79bde4;position:absolute;display:block;right:0;top:0;line-height:3.2rem;pointer-events:none}
+#filtersDialog .select2-container--default.select2-container--open::after{content:"\25b4"}
+#filtersDialog .select2-container.overflow::after{right:1.5rem}
+#filtersDialog .select2-container--default.select2-container--open .select2-selection--multiple{border-color:#79bde4}
+#filtersDialog .select2-selection__choice{background-color:#79bde4;border-color:#79bde4;color:white;line-height:2rem}
+#filtersDialog .select2-container--default .select2-selection--multiple .select2-selection__choice__remove{color:white;border-right:1px solid rgba(255,255,255,0.3)}
+#filtersDialog .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover{background-color:#41a0d8}
+#filtersDialog .select2-container--default .select2-search--inline .select2-search__field::placeholder{font-family:"Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;color:#bbb}
+#filtersDialog .select2-selection__clear{display:none !important;}
+#filtersDialog.shifted .select2{display:none}
+#filtersDialog li.select2-search.select2-search--inline {display:none}
+#filtersDialog #search_button button {width:100%;background-color:#79bde4;color:#286080}
+#filtersDialog #search_button button:hover{background-color:#79bde461}
+#filtersDialog #search_button button:focus{outline:0 !important;}
+
+#coverage{border:0;color:#3c8dbc;font-weight:bold;}
+.return-button{
+	position: absolute !important;
+    padding: 10px;
+    z-index: 800;
+	right: 125px;
+	top: 8px;
+    text-align: center;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
 </style>
 
 <div id="mapExtent" class="hidden"></div>
-
-<div id="collectionExtent" class="extent no-map no-transitions can-be-locked">
-	<div class="modal-content box-shadow--6dp" style="border:0">
-		<div class="modal-header dataset-label" style="border:0;color:#286080;border-radius:5px">
-			<label for="datasetLabel" style="">Label:</label>
-			<input type="text" id="datasetLabel" class="form-control" name="datasetLabel" placeholder="Name of your dataset collection" value="" />
-		</div>
-		<button class="close custom" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	</div>
+<div>
+	<button id="returnButton" class="return-button btn-primary fa fa-reply-all" ></button>
+</div>
+<div id="collectionExtent" class="extent no-map no-transitions can-be-locked shifted">
 	<div class="modal-content main-panel box-shadow--6dp can-be-locked" style="border-radius:5px 5px 0 0">
 		<div class="modal-header" style="border:0">
+			<button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 			<button class="close minimize"><span aria-hidden="true">&minus;</span><span class="sr-only">Minimize</span></button>
 			<h4 class="modal-title" id="myModalLabel">Edit query</h4>
 		</div>
@@ -209,7 +288,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				<div class="last">
 					<div class="col-sm-12 col-md-12">
 						<button id="saveQuery" name="btnSaveQuery" class="btn btn-primary">Save collection</button>
-						<button id="saveComponent" name="saveComponent" class="btn btn-primary hidden">Create datasource component&nbsp;&nbsp;( <label title="Products will be downloaded automatically"><input type="checkbox" />Download<br/>products?</label> )</button>
+						<button id="saveComponent" name="saveComponent" class="btn btn-primary hidden">Download Product List</button>
 					</div>
 				</div>
 			</div>
@@ -220,7 +299,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 <div id="executionExtent" class="extent no-map movable shifted">
 	<div class="modal-content box-shadow--6dp execution-results" style="border-radius:5px 5px 0 0">
 		<div class="modal-header" style="border:0">
-			<button class="cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<button class="btn cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 			<button class="close btn btn-movable op-reset-position" data-action="op-reset-position" title="Restore initial position" disabled><i class="fa fa-outdent"></i></button>
 			<h4 class="modal-title">Query product results</h4>
 		</div>
@@ -257,15 +336,46 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 </div>
 
 <div id="queryExtent" class="extent no-map movable shifted">
+	<div class="modal-content main-panel box-shadow--6dp query-parameters">
+		<div class="modal-header">
+			<button class="close query hidden" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<button class="close minimize"><span aria-hidden="true">−</span><span class="sr-only">Minimize</span></button>
+			<span class="glyphicon glyphicon-filter panel-control filter rspace" title="Filters"></span>
+			<span class="glyphicon glyphicon-refresh panel-control filter-reset" title="Reset filters"></span>
+			<button class="close btn btn-movable op-reset-position" data-action="op-reset-position" title="Restore initial position" disabled><i class="fa fa-outdent"></i></button>
+			<h4 class="modal-title">Dataset Explorer</h4>
+		</div>
+		
+		<div class="modal-body">
+			<div>
+				<div class="col-sm-12 col-md-12">
+					<div class="ui-widget col-sm-8 col-md-8" id="listDatasources">
+					</div>
+					<h3 id="noDatasource" class="panel-title hidden">No datasource found</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="queryExtentParameters" class="extent no-map movable shifted">
 	<div class="modal-content box-shadow--6dp query-parameters">
 		<div class="modal-header">
-			<button class="cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<button class="btn cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 			<button class="close btn btn-movable op-reset-position" data-action="op-reset-position" title="Restore initial position" disabled><i class="fa fa-outdent"></i></button>
-			<h4 class="modal-title">Datasource Interrogation</h4>
+			<h4 class="modal-title">Datasource Parameters</h4>
+		</div>
+		<div class="sensor-name">
+			<h3 id="choosedDatasource" class="panel-title">ADEOS-1 (NASA_CMR)</h3>
+			<p class="info-message"><span>Data temporal coverage:</span><span class="info-temporal-message"></span></p>
+			<p class="info-message"><span>Data spatial coverage:</span><span class="info-spatial-message"></span></p>
+			<p class="info-message noinfo"><span>Temporal and spatial coverage information are not available.</span></p>
+
 		</div>
 		<div class="modal-body">
-			<div class="row form-horizontal">
-				<div class="col-sm-12 col-md-12">                           
+			<!-- Parameters list -->
+			<div id="parameterList" class="row hidden">
+				<div class="col-sm-12 col-md-12 form-horizontal">
 					<div class="form-group">
 						<label for="queryLabel" class="col-sm-4 col-md-4 control-label">Label</label>
 						<div class="col-sm-8 col-md-8">
@@ -273,18 +383,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 							<input type="text" id="queryLabel" name="queryLabel" class="form-control" value="" placeholder="Name of your query" autocomplete="off" value="" data-errorspan="label">
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="col-sm-4 col-md-4 control-label">Datasource</label>
-						<div class="ui-widget col-sm-8 col-md-8">
-							<select id="listDatasources" name="listDatasources" class="form-control"></select>
-							<input type="hidden" id="selectedDatasource" class="form-control" value="default">
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Parameters list -->
-			<div id="parameterList" class="row hidden">
-				<div class="col-sm-12 col-md-12 form-horizontal">
 					<div class="form-group has-feedback">
 						<label for="user_name" class="col-sm-4 col-md-4 control-label">User </label>
 						<div class="col-sm-5 col-md-5">
@@ -298,28 +396,42 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 							<i class="glyphicon glyphicon-eye-open form-control-feedback" title="show password"></i>
 						</div>
 					</div>
+					<div class="form-group">
+						<label for="use_site" class="col-sm-4 col-md-4 control-label">Choose AOI from </label>
+						<div class="col-sm-5 col-md5">
+							<select id="use_site" class="form-control" disabled>
+								<option value=""></option>
+							</select>
+						</div>
+					</div>
 				</div>
 				<div tabindex="0" class="vertical-container">
 					<table id="tbDatasourceParams" class="table ds-params" style="table-layout:auto"></table>
 				</div>
-				<div class="last">
+				<div class="last">	
+					<div class="form-group" style="display: block;padding: 0 15px;padding-bottom: 5px;">
+						<div class="" style="">	<label for="coverage">Coverage: </label>
+							<span id="coverage"></span>
+						</div>		
+						<div id="coverageSlider" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content" style="">
+							<span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 46%;"></span>
+						</div>
+					</div>
+					
 					<div class="form-group" style="float:left">
 						<label for="limit" class="col-sm-2 col-md-2 control-label">Limit</label>
 						<div class="col-sm-2 col-md-2">
-							<input type="number" id="limit" value="20" class="form-control" min="0" />
-						</div>
-						<label for="pageNumber" class="col-sm-2 col-md-2 control-label">Page number</label>
-						<div class="col-sm-2 col-md-2">
-							<input type="number" id="pageNumber" value="1" class="form-control" min="0" />
+							<input type="number" id="limit" value="500" class="form-control" min="1" />
 						</div>
 						<label for="pageSize" class="col-sm-2 col-md-2 control-label">Page size</label>
 						<div class="col-sm-2 col-md-2">
-							<input type="number" id="pageSize" value="10" class="form-control" min="0" />
+							<input type="number" id="pageSize" value="100" class="form-control" min="1" />
+						</div>
+						<div class="col-sm-2 col-md-2 btnStartInterrogation">
+							<button id="startInterrogation" name="btnStartInterrogation" class="btn btn-primary">Start Interrogation</button>
 						</div>
 					</div>
-					<div class="col-sm-12 col-md-12">
-						<button id="startInterrogation" name="btnStartInterrogation" class="btn btn-primary">Start interrogation</button>
-					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -334,7 +446,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 <div id="detailsExtent" class="extent no-map movable shifted">
 	<div class="modal-content box-shadow--6dp">
 		<div class="modal-header" style="border:0">
-			<button class="cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<button class="btn cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 			<button class="close btn btn-movable op-reset-position" data-action="op-reset-position" title="Restore initial position" disabled><i class="fa fa-outdent"></i></button>
 			<h4 class="modal-title">Product Details</h4>
 		</div>
@@ -368,7 +480,81 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	</div>
 </div>
 
-<script>
+<div id="filtersDialog" class="extent no-map movable shifted">
+	<div class="modal-content box-shadow--6dp execution-results" style="border-radius:5px 5px 0 0">
+		<div class="modal-header" style="border:0">
+			<button class="btn cancel close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<button class="close btn btn-movable op-reset-position" data-action="op-reset-position" title="Restore initial position" disabled><i class="fa fa-outdent"></i></button>
+			<h4 class="modal-title">Filters</h4>
+		</div>
+		<div class="modal-body" style="padding-top:0">
+			<div id="filters">
+				<div class="col-sm-12 col-md-12 form-horizontal">
+					<div class="form-group">
+						<label for="categoryNames" class="col-sm-3 col-md-3 control-label">Category</label>
+						<div class="col-sm-9 col-md-9">
+							<select id="categoryNames" name="categoryNames[]" multiple="multiple"></select>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-12 form-horizontal">
+					<div class="form-group">
+						<label for="colectionName" class="col-sm-3 col-md-3 control-label">Collection</label>
+						<div class="col-sm-9 col-md-9">
+							<input type="text" id="colectionName" name="colectionName" class="form-control" value="" placeholder="Name of the sensor or collection..." autocomplete="off" data-errorspan="label">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-12 form-horizontal">
+					<div class="form-group">
+						<label for="providers" class="col-sm-3 col-md-3 control-label">Provider</label>
+						<div class="col-sm-9 col-md-9">
+							<select id="providers" name="providers[]" multiple="multiple"></select>
+						</div>
+					</div>
+				</div>
+				<div id="search_button" class="col-sm-12 col-md-12 form-horizontal" style="margin-bottom: 0px;">
+					<button name="search" class="btn search-btn">Search</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Template -->
+<div id="template_datasourceList" style="display:none">
+	<div class="treeview sub">
+		
+	</div>
+	<!-- template for category level-->
+	<div class="category">
+		<input type="checkbox" id="">
+		<label for="">
+			<a href="#" title=""><span class="fa fa-folder"></span></a>
+		</label>
+	</div>
+	<!-- template for datasource level, including datasource_list-->
+	<div class="datasource hidden">
+		<input type="checkbox" id="">
+		<label for="">
+			<a href="#" title=""><span class="fa fa-cubes"></span></a>
+		</label>
+		<div class="sub datasource_list hidden">
+		</div>
+	</div>
+</div>
+
+<!-- include select2 -->
+<!-- already included in datasources-queries.fragment.html
+<link rel="stylesheet" type="text/css" href="assets/libs/select2/4.1.0/select2.min.css" />
+<script type="text/javascript" src="assets/libs/select2/4.1.0/select2.min.js"></script>
+-->
+
+<!-- include custom scrollbar -->
+<link rel="stylesheet" type="text/css" href="assets/libs/customScrollbar/jquery.mCustomScrollbar.min.css" />
+<script type="text/javascript" src="assets/libs/customScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+
+<script type="text/javascript">
     var $myModalNodes    = $("#myModalNodes");
 	var isCollection     = false;
     var modeEdit         = false;
@@ -382,6 +568,52 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	var localEditMode    = false;
 	var myPolygonMap     = { mapActive: false };
 	var inputType        = { "Integer": { type: "number", min: "0" }, "Float": { type: "number" }, "Double": { type: "number" }, "String": { type: "text" } };
+	var filtersDialogInitialzIndex = $("#filtersDialog").css("z-index");
+	var queryExtentInitialzIndex = $("#queryExtent").css("z-index");
+	var filterDialogPositionLeft;
+	var dateFormat = "yy-mm-dd";
+	
+	var getParameters = function (sensor, datasource) {
+		return $.ajax({
+			cache: false,
+			url: baseRestApiURL + "query/sensor/" + sensor + "/" + datasource,
+			dataType : 'json',
+			type: 'GET',
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"X-Auth-Token": window.tokenKey
+			}
+		});
+	}
+
+	function populateFilters(datasourceSelectList, categorySelectList) {
+		$("#categoryNames option", "#filtersDialog").remove();
+		$("#providers option", "#filtersDialog").remove();
+		$.each(datasourceSelectList, function (index, value) {
+			$("#providers").append("<option value='" + value + "'>" + value + "</option>");
+		});
+		$.each(categorySelectList, function (index, value) {
+			$("#categoryNames").append("<option value='" + value.replaceAll(" ", "_") + "'>" + value + "</option>");
+		});
+		var maxHeight = $("#filters").closest(".modal-body").height ();
+		$("#categoryNames" ).select2({ placeholder: "Select category..."  , width: "100%", allowClear: true});
+		$("#providers"     ).select2({ placeholder: "Select provider..."  , width: "100%", allowClear: true});
+		// Capture "keydown" event on select2 control before its own routine does (which prevents this type of event from being propagated), then forward it to the parent dialog
+		$("#filtersDialog .select2-search--inline").on("keydown", function (e) {
+			$("#filtersDialog").trigger("keypress", [ e ]);
+		});
+		
+		$("#providers,#categoryNames").on("change.select2", function (e) {
+			var $container = $(e.target).data("select2").$container;
+			var $selection = $(e.target).data("select2").$selection;
+			if ($selection.get(0).clientHeight < $selection.get(0).scrollHeight) {
+				$container.addClass("overflow");
+			} else {
+				$container.removeClass("overflow");
+			}
+		});
+	}
 	
 	function niceFileSize(size) {
 		if (size < 1024) {
@@ -437,184 +669,13 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		return deferred.promise();
     }
 	
-    function initComboboxAutocomplete() {
-		$.widget("custom.combobox", {
-			_create: function () {
-				this.wrapper = $("<span>")
-					.addClass("custom-combobox")
-					.insertAfter(this.element);
-
-				this.element.hide();
-				this._createAutocomplete();
-				this._createShowAllButton();
-			},
-
-			_createAutocomplete: function () {
-				var selected = this.element.children(":selected"),
-					value = selected.val() ? selected.text() : "";
-
-				this.input = $("<input>")
-					.appendTo(this.wrapper)
-					.val(value)
-					.attr("title", "")
-					.addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
-					.autocomplete({
-						delay: 0,
-						minLength: 0,
-						source: $.proxy(this, "_source")
-					})
-					.tooltip({
-						tooltipClass: "ui-state-highlight"
-					});
-
-				this._on(this.input, {
-					autocompleteselect: function (event, ui) {
-						ui.item.option.selected = true;
-						this._trigger("select", event, {
-							item: ui.item.option
-						});
-
-						$("#selectedDatasource").val(ui.item.option.value);
-						//autolabel query when not in edit mode
-						if (!localEditMode) {
-							$("#queryLabelDefault").val(ui.item.label + " (" + moment().format("YYYY-MM-DD HH:mm:ss.SSS").toString() + ")");
-							if ($("#queryLabel").val() == "") {
-								$("#queryLabel").attr({ "placeholder": $("#queryLabelDefault").val() });
-							}
-							this.input.prop("disabled", false);
-						} else {
-							this.input.prop("disabled", true);
-						}
-						
-						showDatasourceParams(datasourcesList[ui.item.option.value.replace('d_','')].parameters);
-						$(".datepicker").datepicker({ dateFormat: 'yy-mm-dd' });
-					},
-					autocompletechange: "_removeIfInvalid"
-				});
-			},
-			
-			_createShowAllButton: function () {
-				var input = this.input,
-					wasOpen = false;
-
-				$("<a>")
-					.attr("tabIndex", -1)
-					.tooltip()
-					.appendTo(this.wrapper)
-					.button({
-						icons: { primary: "ui-icon-triangle-1-s" },
-						text: false
-					})
-					.removeClass("ui-corner-all")
-					.addClass("custom-combobox-toggle ui-corner-right")
-					.click(function (event) {
-						if (input.prop("disabled")) return;
-						if (input.autocomplete("widget").is(":visible")) return;
-						
-						input.focus();
-
-						// Pass empty string as value to search for, displaying all results
-						input.autocomplete("search", "");
-
-						event.stopImmediatePropagation();
-					});
-				input.dblclick(function (event) {
-						if (input.prop("disabled") || input.val() != "") return;
-						if (input.autocomplete("widget").is(":visible")) return;
-						
-						input.focus();
-
-						// Pass empty string as value to search for, displaying all results
-						input.autocomplete("search", "");
-
-						event.stopImmediatePropagation();
-					});
-			},
-			
-			_source: function (request, response) {
-				var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-				response(this.element.children("option").map(function () {
-					var text = $(this).text();
-					if (this.value && (!request.term || matcher.test(text))) return {
-						label: text,
-						value: text,
-						option: this
-					};
-				}));
-			},
-			
-			_removeIfInvalid: function (event, ui) {
-				// Selected an item, nothing to do
-				if (ui.item) {
-					return;
-				}
-				
-				// Search for a match (case-insensitive)
-				var value = this.input.val(),
-					valueLowerCase = value.toLowerCase(),
-					valid = false;
-				this.element.children("option").each(function () {
-					if ($(this).text().toLowerCase() === valueLowerCase) {
-						this.selected = valid = true;
-						return false;
-					}
-				});
-				
-				// Found a match, nothing to do
-				if (valid) {
-					return;
-				}
-				
-				// Remove invalid value
-				this.input.val("")
-					.attr("title", value + " didn't match any item")
-					.tooltip("open");
-				this.element.val("");
-				this._delay(function () {
-					this.input.tooltip("close").attr("title", "");
-					
-				}, 2500);
-				this.input.data("ui-autocomplete").term = "";
-			},
-			_destroy: function () {
-				this.wrapper.remove();
-				this.element.show();
-			},
-			autocomplete: function(value) {
-				var ui = {
-					item: {
-						label: value.name,
-						option: $("#listDatasources option")[value.id],
-						value: value.name
-					}
-				}
-				this.element.val(value.name);
-				this.input.val(value.name);
-				this.input.trigger("autocompleteselect", ui);
-			},
-			clear: function() {
-				this.input.prop("disabled", false);
-				this.input.val("");
-				this.element.val("");
-				this.input.data("ui-autocomplete").term = "";
-			},
-			focus: function() {
-				this.input.focus();
-			},
-			enable: function() {
-				this.input.prop("disabled", false);
-			},
-			disable: function() {
-				this.input.prop("disabled", true);
-			},
-			selectedIndex: function() {
-				return $(this.element).prop("selectedIndex");
-			}
-		});
-    }
-	
 	function handlePolygonMapEvents(olPoly) {
 		olPoly.el.on("newfootprint", function (evt, footprint) {
+			if (typeof event !== "undefined" && event.type !== "load" && $(event.target.closest("*[id]")).attr("id").toLowerCase().indexOf("map") > -1 && defaultFootprint !== footprint) {
+				if (!$("option[value='']","#use_site").prop("selected")) {
+					$("option[value='']","#use_site").prop("selected", true).trigger("change");
+				}
+			}
 			$("#tbDatasourceParams input[name='footprint']").val(footprint);
 			defaultFootprint = footprint;
 		});
@@ -657,11 +718,14 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		});
 	}
 	
-	function autoPanMap() {
+	function autoPanMap(dialogId) {
+		if (typeof dialogId === "undefined") {
+			dialogId = "collectionExtent";
+		}
 		if (myPolygonMap.mapActive) {
 			var mapW = $("#mapExtent").outerWidth();
 			if (mapW > 0) {
-				var panelW = $(".main-sidebar").outerWidth() + ($myModalNodes.hasClass("full-map-view") ? 0 : $("#collectionExtent").outerWidth() - 10);
+				var panelW = $(".main-sidebar").outerWidth() + ($myModalNodes.hasClass("full-map-view") ? 0 : $("#" + dialogId).outerWidth() - 10);
 				var prc = parseInt(100*panelW/mapW);
 				if (prc != myPolygonMap.options.panPrc) {
 					setTimeout(function () { myPolygonMap.setPanPercentage(prc); }, 100);
@@ -778,8 +842,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			
 			$("#saveComponent").addClass("hidden");
 			$("#saveComponent").prop("disabled", true);
-			
-			$("#datasetLabel").prop("disabled", false);
 		} else {
 			$("#myModalLabel").html(modeEdit ? "Edit query" : "Create query");
 			
@@ -788,22 +850,17 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			
 			$("#saveComponent").removeClass("hidden");
 			$("#saveComponent").prop("disabled", selectedProducts.length == 0);
-			
-			$("#datasetLabel").prop("disabled", true);
 			if (queryCollection.length == 0) {
 				// Enable Addnew button
 				$("#tbAddNewCriteria .datasource").removeClass("disabled");
 				$("#tbAddNewCriteria button.op-addnew").prop("disabled", false);
-				// Reset query label on top
-				$("#datasetLabel").val("");
-				$("#datasetLabel").attr("placeholder", "Name of your dataset collection");
 			} else if (queryCollection.length == 1)	{
 			 	// Disable Addnew button
 				$("#tbAddNewCriteria .datasource").addClass("disabled");
 				$("#tbAddNewCriteria button.op-addnew").prop("disabled", true);
 				// Set query label on top
 				$("#datasetLabel").val(queryCollection[0].label);
-				$("#datasetLabel").attr("placeholder", queryCollection[0]._dsLabelDefault);
+				$("#datasetLabel").attr("placeholder", queryCollection[0]._dsLabelDefault);			 
 			} else {
 				// Shold not have more than 1 query
 				alert("Error. You have more than one query active.");
@@ -812,20 +869,75 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	}
 	
 	function initDatasources() {
-		$.when(ajaxCallFnc("query/", {}, "GET", false))
+		$("#listDatasources").html("");
+		$.when(ajaxCallFnc("query/summary", {}, "GET", false))
 		.done(function (response, textStatus, jqXHR) {
 			datasourcesList = chkTSRF(response);
 			if (jqXHR.status === 204) {
 				showMsg("No datasource found.", "SUCCESS");
 				datasourcesList = [];
 			}
-			$("option", "#listDatasources").remove();
+			var $dataSourceTree = $("div.treeview","#template_datasourceList").clone();
+			//variable used for filters
+			var categorySelectList = [];
+			var datasourceSelectList = [];
+			// sort datasource by category, by sensor and by datasource
+			datasourcesList.sort((a, b) => (
+				(a.category.toLowerCase() !== b.category.toLowerCase()) ? 
+					(a.category.toLowerCase() < b.category.toLowerCase()) ? -1 : 1
+					: (a.sensor.toLowerCase() !== b.sensor.toLowerCase()) ? 
+						(a.sensor.toLowerCase() < b.sensor.toLowerCase()) ? -1 : 1
+						:(a.dataSourceName.toLowerCase() < b.dataSourceName.toLowerCase()) ? -1 : 1
+			));
 			$.each(datasourcesList, function (k, v) {
-				$("#listDatasources").append($('<option>', { value: 'd_' + k, text: v.sensor + " " + v.dataSourceName }));
+				var categoryId = v.category.replaceAll(" ", "_");
+				var category = v.category;
+
+				if (categoryId === "Unknown") {
+					categoryId = "Unclassified";
+					category = "Unclassified";
+				}
+				//datasource id is based ok category id, in order to be unique
+				var datasourceId = categoryId + "_" + v.dataSourceName.replaceAll(" ", "_");
+				if ($.inArray(categoryId, categorySelectList) < 0) {
+					categorySelectList.push(categoryId);
+				}
+				if ($.inArray(v.dataSourceName, datasourceSelectList) < 0) {
+					datasourceSelectList.push(v.dataSourceName);
+				}
+				var $category;
+				if ($("input#" + categoryId, $dataSourceTree).length > 0) {
+					$category = $("input#" + categoryId, $dataSourceTree).closest(".category");
+				} else {
+					$category = $(".category","#template_datasourceList").clone();
+					$category.children("input").attr("id", categoryId);
+					$category.children("label").attr("for", categoryId);
+					$category.children("label").children("a").attr("title", category).append(category);
+					$dataSourceTree.append($category);
+				}
+				var sensorId = categoryId + "_" + v.sensor.replace(/[\/ \\]/g, "_").replace(/[()]/g, "");
+				if (typeof v.mission !== "undefined" && v.mission !== null) {
+					sensorId = categoryId + "_" + v.mission.replace(/[\/ \\]/g, "_");
+				}
+				var $dataSource = '<div class="dataset"><a href="#" title="' +  v.dataSourceLabel + '"id="' + k + '"><span class="fa fa-cube"></span>' +  v.dataSourceLabel + '</a></div>';
+				if (typeof v.description !== "undefined" && v.description !== null && v.description.trim() !== "") {
+					$dataSource = '<div class="dataset"><a href="#" title="' +  v.dataSourceLabel + '"id="' + k + '"><span class="fa fa-cube"></span>' +  v.dataSourceLabel + '</a><span class="info">&#x1F6C8;</span><div class="info-text" style="display:none">' + v.description + '</div></div>';
+				}
+				if ($("input#" + sensorId, $category).length > 0) {
+					$("input#" + sensorId, $category).parent().find("div.datasource_list").append($dataSource);
+				} else {
+					var $dataSourceTemplate = $(".datasource","#template_datasourceList").clone();
+					$("input",$dataSourceTemplate).attr("id", sensorId);
+					$("label",$dataSourceTemplate).attr("for", sensorId);
+					$("label>a",$dataSourceTemplate).attr("title", v.mission).append(v.mission);
+					$("div.datasource_list",$dataSourceTemplate).append($dataSource);
+					$category.append($dataSourceTemplate);
+				}
 			});
-			initComboboxAutocomplete();
-			$("#listDatasources").combobox();
+			populateFilters(datasourceSelectList, categorySelectList);
+			$("#listDatasources").append($dataSourceTree);
 			$(".ui-autocomplete-input").addClass("form-control");
+			
 		});
 	}
 	
@@ -834,8 +946,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		selectedProducts = [];
 		listOfProducts   = [];
 		
-		resizePanels();
-		
+		resizePanels();		
 		// Populate page forms depending on action type
 		if (modeEdit) {
 			var dsQueries = [objDna];
@@ -850,7 +961,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			
 			var dsComponents = [];
 			if (isCollection) {
-				$("#datasetLabel").val(dsQueries[0].label).data("groupId", dsQueries[0].id);
 				// Get query collection
 				$.when(ajaxCallFnc("datasource/user/group", { id: dsQueries[0].id }, "GET", false))
 				.done(function (response) {
@@ -872,8 +982,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 						showMsg(response.message, "FAIL");
 					}
 				});
-			} else {
-				localEditMode = true;
 			}
 			
 			var addQueriesInCollection = function (qryList) {
@@ -962,7 +1070,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				if (myPolygonMap.mapActive && defaultFootprint != "") {
 					myPolygonMap.createShapeFromGeometry(defaultFootprint, null, true);
 				}
-				updateSelectedProductsTable();
+				updateSelectedProductsTable("query edit");
 				if (myPolygonMap.mapActive && defaultFootprint != "") {
 					myPolygonMap.fitAllFeatures();
 				}
@@ -1060,8 +1168,8 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		h -= 15; // set panel bottom gap
 		
 		// resize query parameters section
-		if (!$("#queryExtent").hasClass("shifted")) {
-			var h1 = h - $("#tbDatasourceParams").parent().offset().top - 10;
+		if (!$("#queryExtent").hasClass("shifted") || localEditMode) {
+			var h1 = h - $("#tbDatasourceParams").parent().offset().top - 115;
 			h1 -= $("#queryExtent .last").outerHeight();
 			h1 -= $("#queryExtent .modal-note").outerHeight();
 			h1 = h1 < 60 ? 60 : h1;
@@ -1108,23 +1216,67 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			$("#tbDatasourceProducts, #tbSelectedProducts").closest(".modal-content").css({ "border-radius": "5px 5px 0 0" });
 			$("#thumbsExtent").css({ "opacity": 0.9 });
 		}
+		
+		if (!$("#filtersDialog").hasClass("shifted")) {
+			computeFiterDialogPosition();
+			$("#filtersDialog").css({left: filterDialogPositionLeft, "z-index": queryExtentInitialzIndex + 100});
+		}
 	}
 	
 	function showPanel(panel) {
 		showTopInfo();
 		
 		unlockPanels();
-		if (panel == "query parameters") {
+		if (panel == "query explorer") {			
+			lockPanels("#thumbsExtent");
+			
+			// hide other panels
+			$("#queryExtentParameters").addClass("shifted");
+			$("#executionExtent").addClass("shifted");
+			// show required panels
+			if ($("#collectionExtent").hasClass("shifted")) {
+				$("#queryExtent").removeClass("shifted");
+				lockPanels("#collectionExtent");
+			} else {
+				$("#collectionExtent").addClass("shifted");
+				$("#queryExtent").removeClass("shifted");
+			}
+		} else if (panel == "query parameters") {
 			lockPanels("#collectionExtent");
 			lockPanels("#thumbsExtent");
+			
 			if (myPolygonMap.mapActive) {
 				myPolygonMap.setReadOnly(false);
 			}
+			
 			// hide other panels
 			$("#executionExtent").addClass("shifted");
 			// show required panels
-			$("#queryExtent").removeClass("shifted");
-			$("#listDatasources").combobox("focus");
+			$("#queryExtentParameters").removeClass("shifted");
+		} else if (panel == "query edit") {
+			$("#collectionExtent").removeClass("shifted");
+			unlockPanels("#collectionExtent");
+			lockPanels("#thumbsExtent");
+			
+			if (myPolygonMap.mapActive) {
+				myPolygonMap.setReadOnly(true);
+			}
+			
+			// hide other panels
+			$("#executionExtent").addClass("shifted");
+		} else if (panel == "query edit parameters") {
+			$("#collectionExtent").removeClass("shifted");
+			lockPanels("#collectionExtent");
+			lockPanels("#thumbsExtent");
+			
+			if (myPolygonMap.mapActive) {
+				myPolygonMap.setReadOnly(false);
+			}
+			
+			// hide other panels
+			$("#executionExtent").addClass("shifted");
+			
+			$("#queryExtentParameters").removeClass("shifted");
 		} else if (panel == "query execution results") {
 			lockPanels("#collectionExtent");
 			if (myPolygonMap.mapActive) {
@@ -1132,17 +1284,25 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			}
 			// hide other panels
 			$("#queryExtent").addClass("shifted");
+			$("#queryExtentParameters").addClass("shifted");
+			$("#collectionExtent").addClass("shifted");
 			// reset checkboxes
 			$('input[name=allproducts]').prop('checked', false);
 			// show required panels
 			$("#executionExtent").removeClass("shifted");
 		} else {
-			if (myPolygonMap.mapActive) {
+			if (myPolygonMap.mapActive && panel !== "query datasource") {
 				myPolygonMap.setReadOnly(true);
 			}
-			// hide other panels
-			$("#queryExtent").addClass("shifted");
-			$("#executionExtent").addClass("shifted");
+			
+			if (!$("#queryExtentParameters").hasClass("shifted")) {
+				$("#queryExtentParameters").addClass("shifted");
+			} else {
+				// hide other panels
+				$("#queryExtent").addClass("shifted");
+				$("#queryExtentParameters").addClass("shifted");
+				$("#executionExtent").addClass("shifted");
+			}
 		}
 		// Only hide details panel when main panel is not minimized
 		if (!$myModalNodes.hasClass("full-map-view")) {
@@ -1151,6 +1311,8 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		
 		// Always hide floating picture preview when switching panels
 		hideFloatingThumbnail();
+		//clear thumbnails
+		$(".thumbnails", "#thumbsExtent").html("");
 	}
 	
 	function resetDatasourcesList() {
@@ -1158,50 +1320,177 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		$("#queryLabelDefault").val("");
 		$("#queryLabel").val("");
 		$("#queryLabel").prop("placeholder", "Name of your query");
-		// Reset datasource combo
-		$("#listDatasources").combobox("clear");
-		$("#selectedDatasource").val("");
-		$("#parameterList").addClass("hidden");
+		$("#listDatasources .treeview a.selected").removeClass("selected");
+		$('input:checkbox').removeAttr('checked');
+		$("#listDatasources .datasource").addClass("hidden");
+		$("#listDatasources .datasource_list").addClass("hidden");
+		$("#noDatasource").addClass("hidden");
 	}
 	
-    function showDatasourceParams(param) {
+	function evaluateCondition(condition, value, expectedValue) {
+		switch (condition.toUpperCase()) {
+			case "EQ":
+				return value === expectedValue;
+				break;
+			case "NEQ":
+				return value !== expectedValue;
+				break;
+			case "LT":
+				return value < expectedValue;
+				break;
+			case "LTE":
+				return value <= expectedValue;
+				break;
+			case "GT":
+				return value > expectedValue;
+				break;
+			case "GTE":
+				return value >= expectedValue;
+				break;
+			case "IN":
+				if($.isArray(expectedValue)) {
+					return $.inArray(value,expectedValue);
+				} else {
+					console.error("Expected value is not array for condition " + condition);
+				}
+				break;
+			case "NOTIN":
+				if($.isArray(expectedValue)) {
+					return !$.inArray(value,expectedValue);
+				} else {
+					console.error("Expected value is not array for condition " + condition);
+				}
+				break;
+			default:
+				console.error("Missing case for condition " + condition);
+				break;
+		}
+		return;
+	}
+
+	function evaluateDependencyType(dependencyType, condition, value, expectedValue) {
+		switch (dependencyType.toLowerCase()) {
+			case "filter":
+				return evaluateCondition(condition, value, expectedValue);
+				break;
+			case "exclusive":
+				//TODO implement function for this type
+				break;
+			default:
+				console.error("Missing case for dependency type " + dependencyType);
+				break;
+		}
+		return;
+	}
+
+	function showAllowedValues($element, allowedValues) {
+		$.each($("[value]", $element), function (i, elem) {
+			if ($.inArray(elem.value,allowedValues) < 0) {
+				$(elem).addClass("hidden");
+			} else {
+				$(elem).removeClass("hidden");
+			}
+		});
+		if ($element.is("select") && $("option:selected",$element).hasClass("hidden")) {
+			$("option:not(.hidden):first",$element).prop("selected",true);
+		}
+	}
+	
+    function showDatasourceParams(data, paramInfo, defaultLabel) {
+		
 		$("#parameterList").removeClass("hidden");
-		var html = "";
-		$.each(param, function (index, property) {
-			var lType = property.type.split(".");
+		$("#choosedDatasource").html(data.sensor);
+		var param = paramInfo.parameter;
+		var auth = typeof paramInfo.auth !== "undefined" ? paramInfo.auth : {};
+		if ($("#queryLabelDefault").val() === "") {
+			$("#queryLabelDefault").val(defaultLabel + " (" + moment().format("YYYY-MM-DD HH:mm:ss.SSS").toString() + ")");
+		}
+		if (typeof data.temporalCoverage !== "undefined" && data.temporalCoverage !== null && data.temporalCoverage.trim() !== "" ||
+				typeof data.spatialCoverage !== "undefined" && data.spatialCoverage !== null && data.spatialCoverage.trim() !== "") {
+			if (typeof data.temporalCoverage !== "undefined" && data.temporalCoverage !== null && data.temporalCoverage.trim() !== "") {
+				$(".info-temporal-message","#queryExtentParameters").html(data.temporalCoverage);
+			} else {
+				$(".info-temporal-message","#queryExtentParameters").html("");
+				$(".info-temporal-message","#queryExtentParameters").closest(".info-message").addClass("hidden");
+			}
+			if (typeof data.spatialCoverage !== "undefined" && data.spatialCoverage !== null && data.spatialCoverage.trim() !== "") {
+				$(".info-spatial-message","#queryExtentParameters").html(data.spatialCoverage);
+			} else {
+				$(".info-spatial-message","#queryExtentParameters").html("");
+				$(".info-spatial-message","#queryExtentParameters").closest(".info-message").addClass("hidden");
+			}
+			$(".info-message.noinfo","#queryExtentParameters").addClass("hidden");
+		} else {
+			$(".info-temporal-message","#queryExtentParameters").closest(".info-message").addClass("hidden");
+			$(".info-spatial-message","#queryExtentParameters").closest(".info-message").addClass("hidden");
+			$(".info-message.noinfo","#queryExtentParameters").removeClass("hidden");
+		}
+		
+		$("#user_name","#queryExtentParameters").val("");
+		$("#user_pass","#queryExtentParameters").val("");
+		$("#user_name").prop("disabled", false);
+		$("#user_pass").prop("disabled", false);
+			
+		if ($.isEmptyObject(auth) && typeof data.requiresAuthentication !== "undefined" && !data.requiresAuthentication) {
+				$("#user_name").prop("disabled", true);
+				$("#user_pass").prop("disabled", true);
+		} else {
+			if (typeof auth.userName !== "undefined" && auth.userName !== null && auth.userName.trim() !== "") {
+				$("#user_name","#queryExtentParameters").val(auth.userName);
+			}
+			if (typeof auth.password !== "undefined" && auth.password !== null && auth.password.trim() !== "") {
+				$("#user_pass","#queryExtentParameters").val(auth.password);
+			}
+		}
+		if ($("#queryLabel").val() == "") {
+			$("#queryLabel").attr({ "placeholder": $("#queryLabelDefault").val() });
+		}
+		//var html = "";
+		var sortedParams = _.sortBy( param, 'order' );
+		
+		var $html = $("<tbody></tbody>");
+		$.each(sortedParams, function (index, property) {
+			var paramType = property.type;
+			var paramName = property.name;
 			
 			var lDefault = "";
-			if(property.defaultValue !== null) {
+			if(typeof property.defaultValue !== "undefined" && property.defaultValue !== null) {
 				lDefault = property.defaultValue;
 			}
 			var label = property.label ? property.label : property.name;
-			html += "<tr" + (property.required ? " class='required'" : "") + ">" +
-					"<td>" + label + "<br/><span>[" + lType[lType.length - 1] + "]</span></td>" +
-					"<td>";
-			var paramType = lType[lType.length - 1];
-			paramType = $.trim(paramType.replace(/;/g,''));
+			var $tr = ($( "<tr" + (property.required ? " class='required'" : "") + ">" +
+					"<td>" + label + "<br/><span>[" + paramType + "]</span></td>" +
+					"<td>"));
+			
+			if (paramName.toLowerCase().endsWith("password")) {
+				paramType = "Password";
+			} else {
+				paramType = $.trim(paramType.replace(/;/g,''));
+			}
 			
 			switch (paramType) {
 				case "DataFormat":
-					html += '<input type="text" name="' + index + '" value=""  class="var_' + index + '">';
+					$("td",$tr).last().append($('<input type="text" name="' + paramName + '" value=""  class="var_' + paramName + '">'));
 				break;
-				case "Polygon2D":
+				case "polygon":
 					// Check current footprint
 					lDefault = myPolygonMap.mapActive ? myPolygonMap.getFootprint() : defaultFootprint;
-					html += '<input type="text" name="' + index + '" value="' + lDefault + '"  class="var_' + index + '" placeholder="Please select your area of interest on the map..."' + (myPolygonMap.mapActive ? ' disabled' : '') + ' />';
+					$("td",$tr).last().append($('<input type="text" name="' + paramName + '" value="' + lDefault + '"  class="var_' + paramName + '" placeholder="Please select your area of interest on the map..."' + (myPolygonMap.mapActive ? ' disabled' : '') + ' />'));
 				break;
 				case "SensorType":
 					var enums = taoEnums.getEntity(property.type);
-					
-					html += "<select name='" + index + "' class='var_" + index + "'>";
-					html += (property.defaultValue == null) ? "<option value='default' selected='selected'>Select</option>" : "";
+					var $select = $("<select name='" + paramName + "' class='var_" + paramName + "'></select>");
+					if (property.defaultValue == null) {
+						$select.append($("<option value='default'>Select</option>").prop("selected",true));
+					}
 					$.each(enums, function (index, values) {
-						html += "<option value='" + values.key + "'" + (lDefault === values.key ? " selected='selected'" : "") + ">" + values.value + "</option>";
+						$select.append($("<option value='" + values.key + "'>" + values.value + "</option>").prop("selected",lDefault === values.key ? true : false));
 					});
+					$("td",$tr).last().append($select);
 				break;
-				case "Date":
+				case "date":case "date[]":
 					// Set the startDate default value to the last one set by the user
-					if (index == "startDate") {
+					if (paramName == "startDate") {
 						if (localEditMode) {
 							lDefault = (lDefault == "") ? defaultInterval : lDefault;
 						} else {
@@ -1219,30 +1508,85 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 						lDefault1 = lDefault[0];
 					}
 					
-					html += "<input type='text' autocomplete='off' name='" + index + "_d1' class='datepicker var_" + index + "' data-name='" + index + "' value='" + lDefault1 + "'>";
-					html += "<input type='text' autocomplete='off' name='" + index + "_d2' class='datepicker var_" + index + "' data-name='" + index + "' value='" + lDefault2 + "'>";
+					if (paramType === "date[]") {
+						$("td",$tr).last().append($("<input type='text' autocomplete='off' name='" + paramName + "_d1' class='datepicker var_" + paramName + "' data-name='" + paramName + "' value='" + lDefault1 + "'>"));
+						$("td",$tr).last().append($("<input type='text' autocomplete='off' name='" + paramName + "_d2' class='datepicker var_" + paramName + "' data-name='" + paramName + "' value='" + lDefault2 + "'>"));
+					} else {
+						$("td",$tr).last().append($("<input type='text' autocomplete='off' name='" + paramName + "_d1' class='datepicker var_" + paramName + "' data-name='" + paramName + "' value='" + lDefault1 + "' style='max-width:100%'>"));
+						$("td",$tr).last().append($("<input type='text' autocomplete='off' name='" + paramName + "_d2' class='datepicker hidden var_" + paramName + "' data-name='" + paramName + "' value=''>"));
+					}
 				break;
+				case "Password":
+					var value = typeof property.defaultValue !== "undefined" && property.defaultValue !== null && property.defaultValue.trim() !== "" ? property.defaultValue : "";
+					$("td",$tr).last().append($("<input type='password' id='" + paramName + "' name='" + paramName + "' value='" + value + "' class='var_" + paramName + "'> <i class='glyphicon glyphicon-eye-open form-control-feedback' title='show password'></i>"));
+					break;
 				default:
-					if (property.valueSet !== null) {
-						html += "<select name='" + index + "' class='var_" + index + "'>";
-						html += (property.defaultValue == null) ? "<option value='default' selected='selected'>Select </option>" : "";
+					if (typeof property.valueSet !== "undefined" && property.valueSet !== null) {
+						var $select = $("<select name='" + paramName + "' class='var_" + paramName + "'></select>");
+						if (property.defaultValue == null) {
+							$select.append($("<option value='default'>Select </option>").prop("selected",true));
+						}
 						$.each(property.valueSet, function (index, value) {
-							html += "<option value='" + value + "'" + (lDefault === value ? " selected='selected'" : "") + ">" + value + "</option>";
+							$select.append($("<option value='" + value + "'>" + value + "</option>").prop("selected", lDefault === value ? true : false));
 						});
+						$("td",$tr).last().append($select);
 					} else {
 						var type = (inputType.hasOwnProperty(paramType)) ? ((inputType[paramType].hasOwnProperty("type"))? inputType[paramType]['type'] : "text") : "text";
 						var min  = (inputType.hasOwnProperty(paramType)) ? ((inputType[paramType].hasOwnProperty("min")) ? "min='" + inputType[paramType]['min'] + "'" : "") : "";
 						
-						html +=  "<input type='" + type + "' name='" + index + "' value='" + lDefault + "' " + min + " class='var_" + index + "'>";
+						$("td",$tr).last().append($("<input type='" + type + "' name='" + paramName + "' value='" + lDefault + "' " + min + " class='var_" + paramName + "'>"));
 					}
 				break;
 			}
-			
-			html +="</td>"+
-			"</tr>";
+			// works only for select elements
+			if (typeof property.dependencies !== "undefined" && property.dependencies !== null) {
+				// add allowed values on referenced paramater, in order to used it on change
+				var allowedValues = [];
+				$.each(property.dependencies, function (idx, dependency) {
+					var referencedParameter = $("[name='"+dependency.referencedParameterId+"']", $html);
+					// add allowed values on referenced paramater, in order to used it on change
+					if (referencedParameter.is("select")) {
+						var foundAllowedValues = false;
+						$.each($("option",$(referencedParameter)), function (i, elem) {
+							foundAllowedValues = evaluateDependencyType(dependency.dependencyType, dependency.condition, elem.value, dependency.expectedValue);
+							if (foundAllowedValues) {
+								$(elem).data("dna",{"parameterName":paramName,"allowedValues":dependency.allowedValues});
+								//apply dependency for current selection
+								if ($(elem).is(":selected")) {
+									allowedValues = dependency.allowedValues.replace(/\s*,\s*/g, ",").split(",");
+								}
+								return true;
+							}
+						});
+					}
+				});
+				showAllowedValues($("[name='"+paramName+"']",$tr),allowedValues);
+			}
+			$html.append($tr);
 		});
 		$('table#tbDatasourceParams tbody').remove();
-		$('table#tbDatasourceParams ').append('<tbody>'+html+'</tbody>');
+		$('table#tbDatasourceParams').append($html);
+		
+		var passwordInputs = $("input[type=password]", "table#tbDatasourceParams");
+		if (passwordInputs.length > 0) {
+			$.each(passwordInputs, function (l) {
+				// Hide/Show password by clicking on the eye glyphicon
+				$("input[name='" + this.name + "'] + .glyphicon ").css({ 'cursor': 'pointer', 'pointer-events': 'all' });
+				$('input[name="' + this.name + '"] + .glyphicon ').on('click', function () {
+					if ($(this).hasClass('glyphicon-eye-open')) {
+						$("#" + this.previousElementSibling.id ).attr('type','text');
+						$(this).removeClass('glyphicon-eye-open');
+						$(this).addClass('glyphicon-eye-close');
+						$(this).attr('title', 'hide password');
+					} else {
+						$("#" + this.previousElementSibling.id).attr('type', 'password');
+						$(this).removeClass('glyphicon-eye-close');
+						$(this).addClass('glyphicon-eye-open');
+						$(this).attr('title', 'show password');
+					}
+				});
+			});
+		}
 		
 		//remove old datepickers
 		$("#" + $.datepicker.dpDiv.attr("id")).remove();
@@ -1251,10 +1595,11 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		$.each($("input[name*='_d1']"), function () {
 			var name = $(this).attr('data-name');
 			$(this).datepicker({
-				changeYear : true,
-				changeMonth: true,
-				dateFormat : 'yy-mm-dd',
-				onSelect   : function (selected,evnt) {
+				changeYear	: true,
+				changeMonth : true,
+				dateFormat  : dateFormat,
+				yearRange   : "1990:c+10",
+				onSelect    : function (selected,evnt) {
 					var newDate = new Date(selected);
 					if (newDate) { // Not null
 						newDate.setDate(newDate.getDate() + 1);
@@ -1262,6 +1607,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 					$("input[name='" + name + "_d2']").datepicker("option", "minDate", newDate);
 				}
 			});
+			var minDate = $(this).datepicker( "option", "minDate" );
 		});
 		
 		$.each($("input[name*='_d2']"), function () {
@@ -1306,42 +1652,39 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			}
 		});
 		
+		if ($("option:selected", "#use_site").val() !== "") {
+			 var optionData = $("option:selected", "#use_site").data("dna");
+			 populateStartEndDate (optionData.startDate, optionData.endDate);
+		}
 		resizePanels();
     }
 	
 	function getTileFootprint(tileId) {
 		var deferred = $.Deferred();
 		
-		var dsId = $("#listDatasources").combobox("selectedIndex");
+		var dsId = parseInt($("a.selected","#listDatasources").attr("id"));
 		if (!datasourcesList[dsId]) {
 			deferred.reject(null, "FAILED", "The selected datasource is invalid");
 		} else {
 			var sensor = datasourcesList[dsId]['sensor'];
-			var url = "";
-			switch (sensor.toLowerCase()) {
-				case "sentinel2": url = "query/footprint/sentinel2"; break;
-				case "landsat8" : url = "query/footprint/landsat8" ; break;
-			}
-			if (url == "") {
-				deferred.reject(null, "FAILED", "The sensor for the selected datasource does not support tiles");
-			} else {
-				$.ajax({
-					url: baseRestApiURL + url,
-					type: "GET",
-					data: { tile: tileId },
-					beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
-					success: function(response) {
-						if (response.status === "SUCCEEDED") {
-							deferred.resolve(response.data);
-						} else {
-							deferred.reject(response.data, response.status, response.message);
-						}
+			$.ajax({
+				url: baseRestApiURL + "query/footprint",
+				type: "GET",
+				data: { satellite: sensor.toLowerCase(),
+						tile: tileId	
 					},
-					error: function (jqXHR, textStatus, errorThrown) {
-						deferred.reject(jqXHR, textStatus, errorThrown);
+				beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
+				success: function(response) {
+					if (response.status === "SUCCEEDED") {
+						deferred.resolve(response.data);
+					} else {
+						deferred.reject(response.data, response.status, response.message);
 					}
-				});
-			}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					deferred.reject(jqXHR, textStatus, errorThrown);
+				}
+			});
 		}
 		return deferred.promise();
 	}
@@ -1353,7 +1696,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		$('tbody', $table).paginathing({
     		firstLast: false,
     	    perPage: pageSize || 10,
-    	    pageNumbers: 'number',
+    	    pageNumbers: true,
     	    insertAfter: $insertAfter,
 		});
 		// Get thumbnails after pagination
@@ -1409,7 +1752,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			$('table#tbDatasourceProducts tbody').append($tr);
 		});
 		
-    	rebuildPagination($("table#tbDatasourceProducts"), parseInt($("#pageSize", "#queryExtent").val()));
+    	rebuildPagination($("table#tbDatasourceProducts"), parseInt($("#pageSize", "#queryExtentParameters").val()));
 		getVisibleProductsThumbnails($("table#tbDatasourceProducts"));
 		countSelectedProducts("tbDatasourceProducts");
 		
@@ -1444,8 +1787,13 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		$("input[name='product']:checked", "table#tbSelectedProducts").trigger("click");
 	}
 	
-	function updateSelectedProductsTable() {
-		showPanel("selected products");
+	function updateSelectedProductsTable(panelName) {
+		
+		if (typeof panelName === "undefined") {
+			panelName = "selected products";
+		}		
+		showPanel(panelName);
+			
 		$('table#tbSelectedProducts tbody').remove();
 		
 		// Parse and render table headers for each datasource
@@ -1455,7 +1803,8 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 										"		<span class='pull-right'>" +
 										(modeEdit && !isCollection ? "" :
 										"			<button class='btn-action op-discard' data-action='op-discard' title='Remove query from collection'><i class='fa fa-trash'></i></button>") +
-										"			<button class='btn-action op-edit' data-action='op-edit' title='Edit query'><i class='fa fa-pencil'></i></button>" +
+										"			<button class='btn-action op-edit' data-action='op-edit' title='"+(modeEdit?'Edit query':'Edit label')+"'><i class='fa fa-pencil'></i></button>" +
+										"			<button class='btn-action op-checked' data-action='op-checked' title='Done' style='display:none'><i class='fa fa-check'></i></button>" +
 										"		</span>" +
 										"	</span>" +
 										"	<span class='qry-ac-group bottom-group'>" +
@@ -1464,6 +1813,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 										"		</span>" +
 										"	</span>" +
 										"	<span class='title'>" + query._dsName + " / " + (query.label == "" ? query._dsLabelDefault : query.label) + "</span>" +
+										"   <input class='title form-control' value='"+query._dsName+" / "+(query.label==""?query._dsLabelDefault:query.label)+"' style='display: none'></input>" +
 										"	<span class='info'><p></p></span>" +
 										"</td></tr></tbody>");
 			$crtDatasetHeader.find("tr.datasource").data("dsName", query._dsName);
@@ -1555,13 +1905,15 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		});
 		getVisibleProductsThumbnails($("table#tbSelectedProducts"));
 		
-		resetDatasourcesList();
 		initControls();
 		
 		// Show products on map
 		previewProducts($("table#tbSelectedProducts"));
 		showThumbnails($("table#tbSelectedProducts"));
 		unlockPanels("#thumbsExtent");
+		//clear thumbnails
+		$(".thumbnails", "#thumbsExtent").html("");
+		$("#thumbsExtent").css({ "opacity": 0 });
 	}
 	
 	function countSelectedProducts(tableName) {
@@ -1594,14 +1946,19 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	}
 	
 	function getCurrentUserQuery() {
-		var dsId = $("#listDatasources").combobox("selectedIndex");
+		var dsId;
+		if (typeof $("#queryExtent").data("query") !== "undefined") {
+			dsId = $("#queryExtent").data("query")._dsId;
+		} else {
+			dsId = parseInt($("#listDatasources .treeview a.selected").attr("id"));
+		}
 		if (!datasourcesList[dsId]) {
 			return false;
 		}
 		
 		// Get all updated values for query parameters
 		var values = {};
-		$("[class^='var_'],[class*=' var_']", "#queryExtent").each(function () {
+		$("[class^='var_'],[class*=' var_']", "#queryExtentParameters").each(function () {
 			if ($(this).val() !== 'default' && $.trim($(this).val()) !== "") {
 				if ($(this).hasClass("datepicker") ) {
 					var paramName = $(this).attr("data-name");
@@ -1629,14 +1986,16 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		});
 		var query = {
 			userId    : taoUserProfile.username,
+			siteId	  : $("option:selected", "#use_site").val() || null,
 			label     : $("#queryLabel").val(),
 			sensor    : datasourcesList[dsId]['sensor'],
 			dataSource: datasourcesList[dsId]['dataSourceName'],
 			user      : $('#user_name').val(),
 			password  : $('#user_pass').val(),
-			limit     : parseInt($("#limit"     , "#queryExtent").val()) || 10,
-			pageNumber: parseInt($("#pageNumber", "#queryExtent").val()) || 1,
-			pageSize  : parseInt($("#pageSize"  , "#queryExtent").val()) || 10,
+			coverage  : ($("#coverageSlider").slider("option", "value") || 50) / 100, // coverage is double between 0.0 and 1.0
+			limit     : parseInt($("#limit"     , "#queryExtentParameters").val()) || 10,
+			pageNumber: parseInt($("#pageNumber", "#queryExtentParameters").val()) || 1,
+			pageSize  : parseInt($("#pageSize"  , "#queryExtentParameters").val()) || 10,
 			values    : values
 		}
 		return query;
@@ -1756,7 +2115,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	
 	function showFloatingThumbnail($tr) {
 		var trId = $tr.get(0).id;
-		var $thumbnail = $(".thumbnails>div#" + trId, "#thumbsExtent");
+		var $thumbnail = $(".thumbnails>div[id='" + trId + "']", "#thumbsExtent");
 		if ($thumbnail.length == 0) return;
 		
 		var $floating = $(".floating>div", "#floatingExtent");
@@ -1835,7 +2194,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			var $chk = $(".checkbox input[name='product']", $tr);
 			if ($chk.length == 0) return;
 			
-			var $thumbnail = $(".thumbnails>div#" + trId, "#thumbsExtent");
+			var $thumbnail = $(".thumbnails>div[id='" + trId + "']", "#thumbsExtent");
 			if ($thumbnail.length == 0) {
 				var $img = $("td img", $tr);
 				var $div = $(
@@ -1849,7 +2208,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				);
 				$(".thumbnails", "#thumbsExtent").prepend($div);
 				$img = $(".thumbnails>div#"+ trId + " img", "#thumbsExtent");
-				if ($img.attr("src").indexOf("preview-not-available.png") >= 0) {
+				if ($img.length > 0 && $img.attr("src").indexOf("preview-not-available.png") >= 0) {
 					var qryUser = isSelectedProductsTable ? "" : $("#user_name").val();
 					var qryPass = isSelectedProductsTable ? "" : $("#user_pass").val();
 					if (isSelectedProductsTable) {
@@ -1877,7 +2236,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	}
 	
 	function highlightThumbnail($tr, scrollIntoView) {
-		var $thumbnail = $(".thumbnails>div#" + $tr.data("id"), "#thumbsExtent");
+		var $thumbnail = $(".thumbnails>div[id='" + $tr.data("id") + "']", "#thumbsExtent");
 		if ($thumbnail.length > 0) {
 			var $thumbnails = $thumbnail.closest(".thumbnails");
 			var $container  = $thumbnail.closest(".vertical-container");
@@ -1918,11 +2277,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			
 			var attributes = {
 				date      : niceIsoTime(product.acquisitionDate),
-				id        : "-",
-				filename  : "-",
-				instrument: "-",
-				sensor    : "-",
-				size      : "0"
+				id        : "-"
 			};
 			
 			var detailsProd = "";
@@ -1931,7 +2286,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 					   if (key == "acquisitionDate") { attributes.date   = niceIsoTime(product[key]);
 				} else if (key == "name"           ) { attributes.id     = product[key];
 				} else if (key == "productType"    ) { attributes.sensor = product[key];
-				} else if (key == "approximateSize") { attributes.size   = niceFileSize(product[key]); detailsProd += "<label>" + key + ":<span>" + product[key] + "</span></label>";
+				} else if (key == "approximateSize") { if (product[key] > 0) {attributes.size   = niceFileSize(product[key]); detailsProd += "<label>" + key + ":<span>" + product[key] + "</span></label>";}
 				} else if (key.indexOf("_ds") == -1 && typeof product[key] !== "object") {
 					if ((product[key] + "").indexOf("http:") == 0 ||
 						(product[key] + "").indexOf("https:") == 0 ||
@@ -1976,6 +2331,8 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		}
 		
 		$("#detailsExtent").removeClass("shifted");
+		var leftValue = $("#executionExtent").outerWidth() - 2 * parseInt($("#executionExtent").css("padding"));
+		$("#detailsExtent").css("left",leftValue + "px");
 		$("#detailsExtent").data("id", $tr.data("id"));
 		
 		resizePanels();
@@ -2050,6 +2407,156 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		}
 	};
 
+	function expandFolder(selectionId) {
+		var $checkbox = $("input#"+selectionId);
+		if ($checkbox.is(":checked")) {
+			$checkbox.siblings("div").removeClass("hidden");
+			if ($checkbox.siblings("div").hasClass("datasource_list")) {
+				$checkbox.siblings("div").mCustomScrollbar({
+				axis: "y",
+				scrollbarPosition: "outside",
+				theme: "rounded-dots-dark"
+			});
+				$checkbox.siblings("div").find(".mCSB_container").css("left",0);
+				$checkbox.siblings("div.mCustomScrollbar").css("max-height","20rem");
+			}
+		} else {
+			$checkbox.siblings("div").addClass("hidden");
+		}
+	}
+	
+	function resetFilters() {
+		//clear existing filters
+		$("#categoryNames").val("").trigger("change");
+		$("#providers").val("").trigger("change");
+		$("#colectionName").val("");
+		resetDatasourceFilters();
+	}
+	
+	function resetDatasourceFilters() {
+		$("#queryExtent").find(".filter-hidden").removeClass("filter-hidden");
+		$("#noDatasource").addClass("hidden");
+	}
+	
+	function searchDataSource() {
+		var categoryFilters = $("#categoryNames").select2("val");
+		var databaseFilters = $("#providers").select2("val");
+		var sensor = $("#colectionName").val().trim().toLowerCase();
+		
+		resetDatasourceFilters();
+	
+		if (typeof categoryFilters !== "undefined" && categoryFilters !== null) {
+			$.each($(".category", "#queryExtent").children("input[type='checkbox']"),function(index, elem) {
+				if ($.inArray(elem.id,categoryFilters) < 0) {
+					$(elem).closest(".category").addClass("filter-hidden");
+				}
+			});
+		}
+		
+		if (sensor.trim() !== "") {
+			$.each($(".datasource",$(".category:not(.filter-hidden)","#queryExtent")).children("input[type='checkbox']"),function(index,elem){
+				if (!elem.id.toLowerCase().includes(sensor.trim())) {
+					$(elem).closest(".datasource").addClass("filter-hidden");
+				}
+			});			
+		}
+		
+		if (typeof databaseFilters !== "undefined" && databaseFilters !== null) {
+			$.each($(".datasource_list a", $(".datasource:not(.filter-hidden)","#queryExtent")),function(index, elem) {
+				if (!databaseFilters.some(filter => elem.title.replaceAll(" ","_").toLowerCase().includes(filter.replaceAll(" ","_").toLowerCase()))) {
+					$(elem).closest(".dataset").addClass("filter-hidden");
+				}
+			});
+		}
+		
+		$.each($(".datasource_list",$(".category:not(.filter-hidden)","#queryExtent")),function(index,elem){
+			if ($(elem).find("div.dataset:not(.filter-hidden)").length === 0) {
+				$(elem).closest(".datasource").addClass("filter-hidden");
+			}
+		});
+		$.each($(".category:not(.filter-hidden)","#queryExtent"),function(index,elem){
+			if ($(elem).find(".datasource:not(.filter-hidden)").length === 0) {
+				$(elem).addClass("filter-hidden");
+			}
+		});
+		$.each($(".category","#queryExtent"),function(index,elem){
+			if ($(elem).find(".datasource:not(.filter-hidden)").length === 0) {
+				$(elem).closest(".datasource").addClass("filter-hidden");
+			}
+		});
+		if ($(".category:not(.filter-hidden)", "#queryExtent").length === 0) {
+			$("#noDatasource").removeClass("hidden");
+		}
+	}
+	
+	function computeFiterDialogPosition (leftValue) {
+		if (typeof leftValue === "undefined") {
+			leftValue = parseInt($("#queryExtent").css("left"));
+		}
+		var queryExtentCover = leftValue + $("#queryExtent").width();
+		filterDialogPositionLeft = queryExtentCover;
+		if (queryExtentCover + filterDialogPositionLeft > window.innerWidth) {
+			filterDialogPositionLeft = parseInt($("#queryExtent").css("left")) - $("#filtersDialog").width() + 30;
+		}
+	}
+	
+	function populateRegionOfInterest(polygon) {
+		var geometry = polygon
+						.replace('MULTIPOLYGON (((', 'POLYGON((')
+						.replace(')))', '))')
+						.replace(' ((', '((');
+		myPolygonMap.createShapeFromGeometry(geometry, null, true);
+		myPolygonMap.fitAllFeatures();
+		myPolygonMap.restartActiveInteraction();
+	};
+	
+	function populateStartEndDate (d1, d2) {
+		//disable date fields
+		$("#tbDatasourceParams").find(".datepicker").prop("disabled",true);
+		// if two start date fileds are found in the paramaters section
+		if ($("#tbDatasourceParams").find(".datepicker[name*='_d2']:not(.hidden)").length > 0) {
+			$(".datepicker[name*='_d1']", "#tbDatasourceParams").val($.datepicker.formatDate(dateFormat, new Date(d1)));
+			$(".datepicker[name*='_d2']", "#tbDatasourceParams").val($.datepicker.formatDate(dateFormat, new Date(d2)));
+		} else {
+			$($(".datepicker[name*='_d1']", "#tbDatasourceParams")[0]).val($.datepicker.formatDate(dateFormat, new Date(d1)));
+			$($(".datepicker[name*='_d1']", "#tbDatasourceParams")[1]).val($.datepicker.formatDate(dateFormat, new Date(d2)));
+		}
+	}
+	
+	function populateAvailableSites (siteId) {
+		$.when(getAvailableSites()).done(function (getAvailableSitesResponse) {
+			$("option[value!='']", "#use_site").remove();
+			var availableSitesData = chkTSRF(getAvailableSitesResponse);
+			if (availableSitesData !== null && availableSitesData.length > 0) {
+				$.each(availableSitesData, function(idx, obj) {
+					var $option = $("<option value='"+obj.id+"'>"+obj.name+"</option>");
+					$option.data("dna",obj);
+					$("#use_site").append($option);
+				});
+				$("#use_site").prop("disabled", false);
+			} else {
+				$("#use_site").prop("disabled", true);
+			}
+			if (localEditMode && typeof siteId !== "undefined" && siteId !== null) {
+				$("option[value='" + siteId + "']","#use_site").prop("selected", true).trigger("change");
+			}
+		});
+	}
+	
+	$("#tbSelectedProducts").on("keypress", "input.title", function (e) {
+		if(e.which === $.ui.keyCode.ENTER) {
+			var $tr = $(this).closest("tr.datasource");
+			var crtQuery = $tr.hasClass("datasource") ? queryCollection[$tr.data("index")] : null;
+			crtQuery.label = this.value;
+			$("span.title",$tr).html(this.value);
+			$("span.title",$tr).show();
+			$("input.title",$tr).hide();
+			$(".btn-action:not(.op-checked)",$tr).show();
+			$(".btn-action.op-checked",$tr).hide();
+			console.log("enter pressed");
+		}
+	});
+	
 	$("#tbSelectedProducts, #tbDatasourceProducts").on("click dblclick", "tr img", function (e) {
 		e.stopPropagation();
 		var $tr = $(this).closest("tr");
@@ -2060,7 +2567,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	$("#thumbsExtent").on("click", ".thumbnails>div", function (e) {
 		// Update details panel if visible
 		var tableName = $("#executionExtent").hasClass("shifted") ? "tbSelectedProducts" : "tbDatasourceProducts";
-		var $tr = $("tr#" + this.id, "table#" + tableName);
+		var $tr = $("tr[id='" + this.id + "']", "table#" + tableName);
 		if ($tr.length > 0) {
 			highlightProduct($tr, true);
 			toggleFloatingThumbnail($tr);
@@ -2073,7 +2580,19 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	});
 	
 	$(".btn-movable").on("click", function (e) {
-		$(this).closest(".extent").css({ left: "" });
+		e.stopPropagation();
+		if ($(this).closest(".extent").attr("id") === "filtersDialog") {
+			$(this).closest(".extent").css({ left: filterDialogPositionLeft});
+		} else if ($(this).closest(".extent").attr("id") === "queryExtent") {			
+			$(this).closest(".extent").css({left: "", "z-index": queryExtentInitialzIndex});
+			if (!$("#filtersDialog").hasClass("shifted")) {
+				computeFiterDialogPosition(0);
+				$("#filtersDialog").css({left: filterDialogPositionLeft, "z-index": queryExtentInitialzIndex + 100});
+				$(".btn-movable","#filtersDialog").prop("disabled", true);
+			}
+		} else {
+			$(this).closest(".extent").css({ left: ""});
+		}
 		$(this).prop("disabled", true);
 	});
 	
@@ -2082,7 +2601,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		
 		if (e.type == "dblclick") return;
 		
-		var $tr = (e.delegateTarget.id == "thumbsExtent") ? $("tr#" + $(this).closest("div").attr("id"), $("#executionExtent").hasClass("shifted") ? "#tbSelectedProducts" : "#tbDatasourceProducts") : $(this).closest("tr");
+		var $tr = (e.delegateTarget.id == "thumbsExtent") ? $("tr[id='" + $(this).closest("div").attr("id") + "']", $("#executionExtent").hasClass("shifted") ? "#tbSelectedProducts" : "#tbDatasourceProducts") : $(this).closest("tr");
 		if ($tr.length == 0) return;
 		if ($tr.hasClass("datasource")) {
 			// per collection stuff
@@ -2100,16 +2619,15 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 						}
 					break;
 					case "op-addnew":
-						if ($("#queryExtent").hasClass("shifted")) {
-							resetSelectedProductsTable();
-							resetDatasourcesList();
-							showPanel("query parameters");
-						} else {
-							showPanel("selected products");
-						}
+						$("#collectionExtent").addClass("shifted");
+						resetSelectedProductsTable();
+						resetDatasourcesList();
+						resetFilters();
+						myPolygonMap.setReadOnly(false);
+						showPanel("query explorer");
 					break;
 					case "op-edit":
-						if (crtQuery && $("#queryExtent").hasClass("shifted")) {
+						if (crtQuery && modeEdit) {
 							localEditMode = true;
 							
 							// Open the parameters section and populate the form with query data for editing
@@ -2122,35 +2640,42 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 							
 							// restore datasource default values for all parameters before restoring the query datasource
 							var defaults   = crtQuery.values;
-							var parameters = datasourcesList[crtQuery._dsId].parameters;
-							$.each(parameters, function (key, param) {
-								param['defaultValue'] = (defaults.hasOwnProperty(key) ? defaults[key] : null);
+							$.when(getParameters(objDna.sensor, objDna.dataSource)).done(function (getParametersResponse) {
+								var infoParameters = chkTSRF(getParametersResponse);
+								$.each(infoParameters.parameter, function (index, param) {
+									param['defaultValue'] = (defaults.hasOwnProperty(param.name) ? defaults[param.name] : null);
+								});
+								// Search for unknown parameters
+								var queryParamsNotFound = $.map(defaults, function (val, key) { return (infoParameters.parameter.find((obj => obj.name === key)) ? null : key); });
+								if (queryParamsNotFound.length > 0) {
+									$("#queryExtent .modal-note p.note+p").remove();
+									$("#queryExtent .modal-note p.note").after('<p>Parameters not found: <i>' + queryParamsNotFound.join().replace(",", ", ") + '</i></p>' );
+									$("#queryExtent .modal-note").removeClass("hidden");
+								} else {
+									$("#queryExtent .modal-note").addClass("hidden");
+								}
+								
+								showPanel("query edit parameters");
+								$("#listDatasources .treeview a.selected", "#queryExtent").removeClass("selected");
+								$("#listDatasources .treeview", "#queryExtent").find("a[title='" + objDna.dataSource + " " + objDna.sensor + "'][id='" + crtQuery._dsId + "']").addClass("selected");		
+								
+								showDatasourceParams(objDna, infoParameters, crtQuery._dsLabelDefault);
+								// restore query general info
+								$("#user_name").val(crtQuery.user);
+								$("#user_pass").val(crtQuery.password);
+								$("#limit").val(crtQuery.limit);
+								$("#pageNumber").val(crtQuery.pageNumber);
+								$("#pageSize").val(crtQuery.pageSize);
+								
+								populateAvailableSites(crtQuery.siteId);
+								
+								$("#queryExtent").data("query", crtQuery);
 							});
-							// Search for unknown parameters
-							var queryParamsNotFound = $.map(defaults, function (val, key) { return (parameters.hasOwnProperty(key) ? null : key); });
-							if (queryParamsNotFound.length > 0) {
-								$("#queryExtent .modal-note p.note+p").remove();
-								$("#queryExtent .modal-note p.note").after('<p>Parameters not found: <i>' + queryParamsNotFound.join().replace(",", ", ") + '</i></p>' );
-								$("#queryExtent .modal-note").removeClass("hidden");
-							} else {
-								$("#queryExtent .modal-note").addClass("hidden");
-							}
-							
-							showPanel("query parameters");
-							
-							// restore query datasource
-							$("#listDatasources").combobox("autocomplete", { name: crtQuery._dsName, id: crtQuery._dsId });
-							
-							// restore query general info
-							$("#user_name").val(crtQuery.user);
-							$("#user_pass").val(crtQuery.password);
-							$("#limit").val(crtQuery.limit);
-							$("#pageNumber").val(crtQuery.pageNumber);
-							$("#pageSize").val(crtQuery.pageSize);
-							
-							$("#queryExtent").data("query", crtQuery);
 						} else {
-							showPanel("selected products");
+							$("span.title",$tr).hide();
+							$("input.title",$tr).show();
+							$(".btn-action:not(.op-checked)",$tr).hide();
+							$(".btn-action.op-checked",$tr).show();
 						}
 					break;
 					case "op-footprint":
@@ -2186,9 +2711,20 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 								// Remove selected query from collection
 								queryCollection.splice($.inArray(crtQuery, queryCollection), 1);
 								updateSelectedProductsTable();
+								if (queryCollection.length === 0) {
+									//reset map, date and AOI
+									myPolygonMap.removeFeaturesByProperty({ "description": "preview" });
+									$("option[value='']","#use_site").prop("selected", true).trigger("change");
+									defaultInterval = "";
+								}
 							},
 							callbackCancel: function () { }
 						});
+					break;
+					case "op-checked":
+						var evnt = evnt = jQuery.Event('keypress', { which: $.ui.keyCode.ENTER})
+						$(this.closest("tr")).find("input.title").trigger(evnt);
+						console.log("done");
 					break;
 				}
 			}
@@ -2234,7 +2770,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 							var $table = $tr.closest("table");
 							if ($table.get(0).id == "tbDatasourceProducts") {
 								// remove product thumbnail and floating image
-								var $thumbnail = $(".thumbnails>div#"+ $tr.data("id"), "#thumbsExtent");
+								var $thumbnail = $(".thumbnails>div[id='"+ $tr.data("id") + "']", "#thumbsExtent");
 								$thumbnail.remove();
 								hideDetailsPanel();
 								hideFloatingThumbnail();
@@ -2246,6 +2782,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 									$(tr).data("selIndex", _.findIndex(listOfProducts, { "name": tr.id }));
 								});
 								
+								countSelectedProducts($table.get(0).id);
 								// rebuild table pagination
 								var $pag = $('+.pagination-container', $table.closest(".vertical-container")).data("paginaThing");
 								var pageSize = (typeof $pag === "undefined") ? 10 : $pag.options.perPage;
@@ -2284,7 +2821,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		}
 		$.each($("table#tbDatasourceProducts tbody tr"), function () {
 			var $tr = $(this);
-			var $thumbnail = $(".thumbnails>div#" + $tr.attr("id"), "#thumbsExtent");
+			var $thumbnail = $(".thumbnails>div[id='" + $tr.attr("id") + "']", "#thumbsExtent");
 			if (highlighted) {
 				$tr.addClass("selected");
 				$thumbnail.addClass("selected");
@@ -2311,7 +2848,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		if (e.type == "dblclick") return;
 		
 		var $tr = $(this).closest("tr");
-		var $thumbnail = $(".thumbnails>div#" + $tr.attr("id"), "#thumbsExtent");
+		var $thumbnail = $(".thumbnails>div[id='" + $tr.attr("id") + "']", "#thumbsExtent");
 		// Reset highlight for all other products when in "Selected Products" table
 		if (typeof $tr.data("dsIndex") !== "undefined") {
 			$("tr", $tr.closest("table")).removeClass("selected");
@@ -2344,7 +2881,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				feature.setProperties({ "highlighted": (highlighted ? "true" : "false") });
 			}
 		}
-		if (true) {//(!e.originalEvent.isTrusted) {
+		if (true) {
 			resetPreviewProductsStyle();
 		}
 		countSelectedProducts(e.delegateTarget.id);
@@ -2383,15 +2920,21 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		showTopInfo();
 	});
 	
+	$("#tbDatasourceParams").on("change", "select", function (e) {
+		var selectedOptionData = $("option[value='"+this.value+"']",this).data("dna");
+		if (typeof selectedOptionData !== "undefined") {
+			allowedValues = selectedOptionData.allowedValues.replace(/\s*,\s*/g, ",").split(",");
+			showAllowedValues($("[name='"+selectedOptionData.parameterName+"']"), allowedValues);
+		}
+	});
+	
 	$("#thumbsExtent").on("mouseenter", ".thumbnails>div", function (e) {
-		var $tr = $("tr#" + this.id, $("#executionExtent").hasClass("shifted") ? "#tbSelectedProducts" : "#tbDatasourceProducts");
+		var $tr = $("tr[id='" + this.id + "']", $("#executionExtent").hasClass("shifted") ? "#tbSelectedProducts" : "#tbDatasourceProducts");
 		if ($tr.length > 0) {
 			highlightProduct($tr);
 			resetPreviewProductsStyle();
-			if (myPolygonMap.mapActive) {
-				highlightFeature($tr);
-			}
-		}
+			highlightFeature($tr);
+		}		
 	});
 	
 	$("#thumbsExtent").on("mouseleave", ".thumbnails", function (e) {
@@ -2400,7 +2943,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		showTopInfo();
 	});
 	
-	$("#collectionExtent").on("click", ".minimize, .main-panel", function (e, t) {
+	$("#collectionExtent, #queryExtent").on("click", ".minimize, .main-panel", function (e, t) {
 		if ($(e.currentTarget).hasClass("minimize")) {
 			e.stopPropagation();
 			$myModalNodes.addClass("full-map-view");
@@ -2417,18 +2960,147 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			}, 500);
 			showTopInfo();
 			
-			if ($("#detailsExtent").hasClass("shifted")) { autoPanMap(); }
+			if ($("#detailsExtent").hasClass("shifted")) { autoPanMap($(e.currentTarget).closest("div[id]").attr("id")); }
 			
 		} else if ($(e.currentTarget).hasClass("main-panel") && $myModalNodes.hasClass("full-map-view")) {
 			$myModalNodes.removeClass("full-map-view");
 			resizePanels();
 			
-			if ($("#detailsExtent").hasClass("shifted")) { autoPanMap(); }
+			if ($("#detailsExtent").hasClass("shifted")) { autoPanMap($(e.currentTarget).closest("div[id]").attr("id")); }
 		}
 	});
 	
-	$("#queryExtent, #executionExtent").on("click", ".cancel", function (e) {
-		updateSelectedProductsTable();
+	$("#collectionExtent").on("click", "button.close:not(.minimize)", function (e) {
+		e.stopPropagation();
+		if (window.location.hash.endsWith("/explorer")) {
+			modeEdit = false;
+			initQuery();
+					
+			updateSelectedProductsTable("query explorer");
+			//reset map, date and AOI
+			myPolygonMap.setReadOnly(false);
+			myPolygonMap.removeFeaturesByProperty({ "description": "preview" });
+			$("option[value='']","#use_site").prop("selected", true).trigger("change");
+			defaultInterval = "";
+		} else {
+			$("#myModalNodes").modal("hide");
+		}
+	});
+
+	$("#returnButton").on("click", function (e) {
+		e.stopPropagation();
+		if (window.location.hash.endsWith("/explorer")) {
+			modeEdit = false;
+			initQuery();
+					
+			updateSelectedProductsTable("query explorer");
+			//reset map, date and AOI
+			myPolygonMap.setReadOnly(false);
+			myPolygonMap.removeFeaturesByProperty({ "description": "preview" });
+			$("option[value='']","#use_site").prop("selected", true).trigger("change");
+			defaultInterval = "";
+		} else {
+			$("#myModalNodes").modal("hide");
+		}
+	});
+	
+	$("#queryExtent").on("click", function(e) {
+		if (!$("#filtersDialog").hasClass("shifted")) {
+			$("#filtersDialog").css("z-index", filtersDialogInitialzIndex);
+			$("#queryExtent").css("z-index", parseInt(filtersDialogInitialzIndex) + 100);
+		}
+	});
+	
+	$("#executionExtent").on("click", ".cancel", function (e) {
+		updateSelectedProductsTable("query parameters");
+		//resetFilters();
+		e.stopPropagation();
+	});
+	
+	$("#queryExtent").on("click",".filter", function (e){
+		$("button.cancel.close","#queryExtent").prop("disabled", true);
+		
+		//show filters dialog and place it in front of the parent dialogs
+		$("#filtersDialog").removeClass("shifted").css("z-index", parseInt(filtersDialogInitialzIndex) + 100);
+		computeFiterDialogPosition();
+		$("#filtersDialog").css("left",filterDialogPositionLeft);
+		
+		e.stopPropagation();
+	});
+	
+	$("#queryExtent").on("click",".filter-reset", function (e){
+		resetFilters();
+		e.stopPropagation();
+	});
+	
+	$("#filtersDialog").on("click", function(e) {
+		$("#queryExtent").css("z-index", queryExtentInitialzIndex);
+		$("#filtersDialog").css("z-index", parseInt(queryExtentInitialzIndex) + 100);
+	});
+	
+	$("#filtersDialog").on("click", ".cancel", function (e) {
+		$("#queryExtent").css("z-index",queryExtentInitialzIndex);
+		$("#filtersDialog").css("z-index",filtersDialogInitialzIndex);
+		$("#filtersDialog").addClass("shifted");
+		$("button.cancel.close","#queryExtent").prop("disabled", false);
+		e.stopPropagation();
+	});
+	
+	$("#filtersDialog").on("click", ".search-btn", function(e){
+		searchDataSource();
+		e.stopPropagation();
+	});
+	
+	function closeFiltersDialogOnEscape(e) {
+		if (e?.which === 27) {
+			// When filters dialog has the focus
+			var $fitersDialog = $('#filtersDialog');
+			if (!$fitersDialog.hasClass("shifted") && parseInt($fitersDialog.css("z-index")) == parseInt(queryExtentInitialzIndex) + 100) {
+				// Close it except when its select2 children controls are inactive
+				if ($(e.target).closest(".select2-container--open").length == 0) {
+					e.stopPropagation();
+					// Trigger dialog close
+					$(".cancel", $fitersDialog).get(0).click();
+				}				
+			}
+		}
+	}
+	
+	$(window).on("keydown", function(e) {
+		closeFiltersDialogOnEscape(e);
+	});
+	
+	$("#filtersDialog").on("keypress", function(e, originalEvent) {
+		closeFiltersDialogOnEscape(originalEvent || e);
+	});
+	
+	$("#filtersDialog").keypress(function(e) {
+		if(e.which == 13) {
+			e.preventDefault();
+			searchDataSource();
+		}
+	});
+	
+	$("#queryExtentParameters").on("click", ".cancel", function (e) {
+		if (!$("#collectionExtent").hasClass("shifted") && $("#collectionExtent").hasClass("locked")) {
+			unlockPanels("#collectionExtent");
+			unlockPanels("#thumbsExtent");
+			
+			$("#queryExtentParameters").addClass("shifted");
+		} else {
+			// send attribute in order to keep the expantion of data set list
+			if (localEditMode && !window.location.hash.endsWith("/explorer")) {
+				$("#myModalNodes").modal("hide");
+			} else {
+				updateSelectedProductsTable("query explorer");
+			}
+		}
+	});
+	
+	$("#queryExtentParameters").on("change keyup", "input[type='number']", function (e) {
+		if (parseInt(this.value) < parseInt(this.min)) {
+			$(this).val(parseInt(this.min));
+		}
 	});
 	
 	$("#detailsExtent").on("click", ".cancel", function (e) {
@@ -2471,7 +3143,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			return;
 		}
 		// Append some extra info to current query for later use
-		qry._dsId           = $("#listDatasources").combobox("selectedIndex");
+		qry._dsId           = parseInt($("a.selected","#listDatasources").attr("id"));
 		qry._dsName         = qry.sensor + " " + qry.dataSource;
 		qry._dsLabelDefault = $("#queryLabelDefault").val();
 		
@@ -2493,6 +3165,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		
 		registerQueryInCollection(qry);
 		updateSelectedProductsTable();
+		$("#collectionExtent").removeClass("shifted");
 	});
 	
 	$("#discardProducts").on("click", function (e) {
@@ -2505,7 +3178,6 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				hideFloatingThumbnail();
 				
 				$("input[name='allproducts']", "#datasourceProducts").prop("checked", false);
-				
 				var $table = $("table#tbDatasourceProducts");
 				$.each($("tr.selected", $table), function (index, tr) {
 					// Remove product from products list
@@ -2524,7 +3196,9 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				
 				// Redraw product map features
 				previewProducts($table);
-				
+				countSelectedProducts($table.attr("id"));
+
+
 				unlockPanels("#thumbsExtent");
 				resizePanels();
 			},
@@ -2537,6 +3211,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	});
 	
 	$("#saveComponent").on("click", function (e) {
+		modeEdit = false;
 		$btn = $(this);
 		$btn.prop("disabled", true);
 		if (!isCollection && queryCollection.length == 1) {
@@ -2566,38 +3241,41 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			});
 			
 			if (formData.products.length > 0) {
-				$.when(ajaxCallFnc("datasource/create", JSON.stringify(formData), "POST"))
+				showMsg("Download queued. Progress can be seen in Dashboard section", "SUCCESS");
+				
+				// Start downloading selected products
+				var queryData = {
+					"query"   : $.extend(true, {}, query),
+					"products": formData.products,
+					"mode"    : "1"//RESUME
+				};
+				removeExtraDsInfo(queryData.query);
+							$.when(ajaxCallFnc("query/fetch", JSON.stringify(queryData), "POST", false))
 				.done(function (data) {
-					if($.type(data) === 'object' && data.status === "SUCCEEDED") {
-						showMsg("Datasource component was successfully created.", "SUCCESS");
-						
-						// Start downloading selected products
-						var $chk = $("input[type='checkbox']", $btn);
-						if ($chk.is(":checked")) {
-							var queryData = {
-								"query"   : $.extend(true, {}, query),
-								"products": formData.products,
-								"mode"    : "1"//RESUME
-							};
-							removeExtraDsInfo(queryData.query);
-							$.when(ajaxCallFnc("query/fetch", JSON.stringify(queryData), "POST"))
-							.done(function (data) {
-								if ($.type(data) === 'object' && data.status === "SUCCEEDED") {
-									showMsg("Started downloading selected products. Please wait!", "INFO");
-								} else if ($.type(data) === 'object' && data.status === "FAILED") {
-									showMsg(data.message, "FAILED");
-								} else {
-									showMsg("The selected products were not downloaded.", "INFO");
-								}
-							});
-						}
+					if ($.type(data) === 'object' && data.status === "SUCCEEDED") {
+						showMsg("Started downloading selected products. Please wait!", "INFO");
 					} else if ($.type(data) === 'object' && data.status === "FAILED") {
 						showMsg(data.message, "FAILED");
 					} else {
-						showMsg("Datasource component was not created.", "SUCCESS");
+						showMsg("The selected products were not downloaded.", "INFO");
 					}
-					$("#myModalNodes").modal("hide");
 				});
+				$("#queryExtent").removeData("query");
+				initControls();
+				initDatasources();
+				initQuery();
+				
+				if (window.location.hash.endsWith("/explorer")) {
+					$("#collectionExtent").addClass("shifted");
+					$("#queryExtent").removeClass("shifted");
+					//reset map, date and AOI
+					myPolygonMap.setReadOnly(false);
+					myPolygonMap.removeFeaturesByProperty({ "description": "preview" });
+					$("option[value='']","#use_site").prop("selected", true).trigger("change");
+					defaultInterval = "";
+				} else {
+					$("#myModalNodes").modal("hide");
+				}
 			} else {
 				showMsg("No products selected for download", "WARNING");
 			}
@@ -2605,25 +3283,20 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	});
 	
 	$("#saveQuery").on("click", function (e) {
+		// remove delete button
+		$(".btn-action.op-discard", "#collectionExtent").remove();
 		if (isCollection) {
 			// Create/Save existing query collection
 			if (queryCollection.length == 0) {
 				showMsg("You must define at least one query in order to proceed.", "FAILED");
 				return false;
 			}
-			
-			var label = $("#datasetLabel").val();
-			if (label == "") {
-				showMsg("You must specify a label for your collection in order to proceed.", "FAILED");
-				return false;
-			}
 			var myGroup = {
-				groupId   : $("#datasetLabel").data("groupId"),
+				//groupId   : $("#datasetLabel").data("groupId"),
 				groupLabel: label,
 				queries   : []
 			};
 			
-			if (!modeEdit) { delete myGroup["groupId"]; }
 			$.each(queryCollection, function (index, query) {
 				var queryData = {
 					query: $.extend(true, {}, query),
@@ -2647,7 +3320,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			$.when(ajaxCallFnc("datasource/user/group/save", JSON.stringify(myGroup), "POST"))
 			.done(function (response) {
 				if ($.type(response) === 'object' && response.status === "SUCCEEDED" && Object.keys(response.data).length > 0) {
-					showMsg("Your query collection has been successfully " + (modeEdit ? "updated." : "saved."), "SUCCESS");
+					showMsg("Query collection has been successfully " + (modeEdit ? "updated." : "saved."), "SUCCESS");
 					
 					modeEdit = true;
 					objDna = response.data;
@@ -2660,7 +3333,7 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				} else if ($.type(response) === 'object' && response.status === "FAILED") {
 					showMsg(response.message, "FAILED");
 				} else {
-					showMsg("Failed to save your query collection.", "FAILED");
+					showMsg("Failed to save query collection.", "FAILED");
 				}
 			});
 		} else {
@@ -2674,19 +3347,22 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			$.when(ajaxCallFnc("datasource/query/", JSON.stringify(qry), method))
 			.done(function (response) {
 				if ($.type(response) === 'object' && response.status === "SUCCEEDED" && Object.keys(response.data).length > 0) {
-					showMsg("Your query has been successfully " + (modeEdit ? "updated." : "saved."), "SUCCESS");
+					showMsg("Query has been successfully " + (modeEdit ? "updated." : "saved and can be found in Workspace/Queries section"), "SUCCESS");
 					
-					modeEdit = true;
 					objDna = response.data;
 					$.each(Object.keys(objDna), function (index, key) {
 						queryCollection[0][key] = objDna[key];
 					});
-					
-					initControls();
+					if (modeEdit) {
+						$("#myModalNodes").modal("hide");
+					} else {
+						window.location.hash="#my/queries";
+						$(window).trigger('hashchange');
+					}
 				} else if ($.type(response) === 'object' && response.status === "FAILED") {
 					showMsg(response.message, "FAIL");
 				} else {
-					showMsg("Failed to save your query.", "FAILED");
+					showMsg("Failed to save query.", "FAILED");
 				}
 			});
 		}
@@ -2696,7 +3372,70 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		showTopInfo();
 	});
 	
-    $(window).off("resize");
+	$("#listDatasources").on("click", "a", function (e) {
+		e.preventDefault();
+		$("#listDatasources .treeview a.selected").removeClass("selected");
+		$(this).addClass("selected");		
+		if ($(this).closest(".sub").hasClass("datasource_list")) {
+			var data = datasourcesList[$(this).attr("id")];
+			var sensor = data.sensor;
+			var datasource = data.dataSourceName;
+			var defaultLabel = sensor + " " + datasource;
+			$.when(getParameters(sensor, datasource)).done(function (getParametersResponse) {
+				var parameters = chkTSRF(getParametersResponse);
+				showDatasourceParams(data, parameters, defaultLabel);
+				populateAvailableSites();
+				if ($("#queryExtentParameters").hasClass("shifted")) {
+					$("#queryExtentParameters").removeClass("shifted");
+					$("#queryExtent").addClass("shifted");
+					$("#filtersDialog").addClass("shifted");
+				}
+			});
+			
+		}
+	});
+	
+	$("#listDatasources").on("dblclick", "label", function (e) {
+		e.preventDefault();
+		var $chk = $(this).siblings("input[type='checkbox']");
+		if ($chk.length > 0) {
+			// Expand/collapse folder
+			$chk.prop("checked", !$chk.prop("checked"));
+			// Show folder contents
+			expandFolder($chk.attr("id"));
+		}
+	});
+	
+	$("#listDatasources").on("change", "input[type='checkbox']", function () {
+		expandFolder($(this).attr("id"));
+	});
+	
+	$("#listDatasources").on("click","span.info",function (){
+		if(typeof $(this).parent().find(".info-text").attr("style") === "undefined") {
+			$(this).parent().find(".info-text").css({display:"none"});
+		} else {
+			$("div.info-text","#listDatasources").css({display:"none"});
+			$(this).parent().find(".info-text").removeAttr("style");
+		}
+	});
+	
+	$("#use_site").on("change", function () {
+		var siteId = $(this).val();
+		if (siteId === "") {
+			/* when action is on map the polygon remains the same */
+			if (event.type === "load" || $(event.target.closest("*[id]")).attr("id").toLowerCase().indexOf("map") < 0) {
+				myPolygonMap.removeAllFeatures();
+				myPolygonMap.startDrawing();
+			}
+			$("#tbDatasourceParams").find(".datepicker").prop("disabled",false);
+		} else {
+			var data = $("option[value='"+siteId+"']", "#use_site").data("dna");
+			populateStartEndDate(data.startDate, data.endDate);
+			populateRegionOfInterest(data.footprint);
+		}
+	});
+	
+	$(window).off("resize");
 	
     $(window).on("resize", function(e) {
 		setTimeout(function () {
@@ -2706,6 +3445,33 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 	});
 	
     $(document).ready(function() {
+		// when loading the page scroll to top because window is not scrollable
+		window.scrollTo(0, 0);
+		if($("li.routed-my-queries").hasClass("active")){
+			$("#returnButton").removeClass("hidden");
+		} else{
+			$("#returnButton").addClass("hidden");
+		}
+
+
+		$("#coverageSlider").slider({
+			range: "min",
+			min: 1,
+			max: 100,
+			animate:"slow",  
+			orientation: "horizontal",
+			step: 1,
+			slide: function(event, ui) {
+				$("#coverage").html(ui.value + "%");
+		   },
+		   change: function (event, ui) {
+				$("#coverage").html(ui.value + "%");
+		   }
+		});
+		$("#coverageSlider").slider("option", "value" , 50);
+		if (window.location.hash.endsWith("/queries")) {
+			$("button.close.query", "#queryExtent").removeClass("hidden");
+		}
 		// fix bug in Firefox when selecting the month in datepicker inside a bootstrap-modal won't work (when modal tabindex is set)
 		if (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1) {
 			$.fn.modal.Constructor.prototype.enforceFocus = function (){};
@@ -2737,16 +3503,14 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		var olPoly = $("#mapExtent").poly2D({ startLat: 47, startLon: 14, zoom: 5, maxFeaturesNo: 1, extraFeatureDescription: "preview" });
 		$.when(olPoly)
 		.done(function (result) {
-			//*
 			if (typeof result.readOnly === "boolean") {
 				$(".extent", "#myModalNodes").removeClass("no-map");
 				$("#mapExtent").removeClass("hidden");
 				myPolygonMap = result;
 				handlePolygonMapEvents(myPolygonMap);
-				
+				$(".sliderscontainer.drawer-panel", "#mapExtent").remove();
 				autoPanMap();
 			}
-			/* */
 			
 			// Initialize query functionality after map is loaded
 			initControls();
@@ -2757,9 +3521,9 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 		.fail(function () {
 			initControls();
 			initDatasources();
-			initQuery();
+			
 		});
-		
+			
 		$myModalNodes.removeClass("full-map-view");
 		$(".movable").draggable({
 			containment: "#myModalNodes",
@@ -2775,9 +3539,16 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 				} else {
 					lf = parseFloat(100*ui.position.left/maxW).toFixed(1);
 				}
-				ui.helper.css({ left: lf + "%" });
+				var filtersZIndex = $("#filtersDialog").css("z-index");
+				var queryExtentZIndex = $("#queryExtent").css("z-index");
+				var zIndex = filtersZIndex == queryExtentZIndex ? filtersZIndex : parseInt(filtersZIndex > queryExtentZIndex ? filtersZIndex : queryExtentZIndex) + 100;
+				ui.helper.css({ left: lf + "%", "z-index": zIndex });
 				
-				$(".btn-movable", ui.helper).prop("disabled", false);
+				if (ui.helper[0].id !== "filtersDialog" && parseInt(lf) === 0 || ui.helper[0].id === "filtersDialog" && parseFloat(lf).toFixed(1) === parseFloat(filterDialogPositionLeft / maxW * 100).toFixed(1)) {
+					$(".btn-movable", ui.helper).prop("disabled", true);
+				} else {
+					$(".btn-movable", ui.helper).prop("disabled", false);
+				}
 			}
 		});
 		$(".floating", "#floatingExtent").draggable({
@@ -2806,6 +3577,8 @@ ul.ui-autocomplete{max-height:400px;overflow-x:hidden;overflow-y:scroll;z-index:
 			containment: "parent",
 			stop: function (event, ui) { resizePanels(); }
 		});
+		
+		window.addEventListener('resize', resizePanels());
     });
 
 //# sourceURL=datasource-queries-plus.js

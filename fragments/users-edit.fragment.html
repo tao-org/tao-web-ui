@@ -326,10 +326,11 @@
 
 
         var currentUserName = userOpStack[0].dna.username;
+        var currentUserId = userOpStack[0].dna.id;
         //populate data with fresh, just in time values
         function populateCurrentUser(){
             $.ajax({
-                url: baseRestApiURL + "admin/users/"+currentUserName,
+                url: baseRestApiURL + "admin/users/"+currentUserId,
                 method: "GET",
                 headers: {
                     "Cache-Control": "no-cache",
@@ -408,7 +409,7 @@
 
             $.ajax({
                 cache: false,
-                url: baseRestApiURL + "admin/users/"+currentUserName,
+                url: baseRestApiURL + "admin/users/"+currentUserId,
                 dataType : 'json',
                 type: 'PUT',
                 data: JSON.stringify(formData),

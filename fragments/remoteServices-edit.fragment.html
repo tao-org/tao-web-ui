@@ -2,7 +2,6 @@
 .modal-error{background-color:red}
 .modal-error span{background:#a63f3f}
 .floating-img{width:16.666667%;float:right}
-.floating-img>img{width:100%;height:auto;max-height:120px;margin:0;/*cursor:pointer*/}
 .tbl-edt{border-top:0;margin:0}
 .tbl-edt thead tr:nth-child(1) th{position:sticky;background:#556270;color:white;top:0px;z-index:10;white-space:normal;word-break:break-all;vertical-align:middle;padding:3px 8px}
 .tbl-edt tbody tr:nth-child(even){background-color:#f4f4f4}
@@ -17,12 +16,12 @@
 form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#556270}
 @media (max-width: 991px) {
 	.floating-img{width:100%;margin-bottom:10px}
-	.floating-img>img{width:100px;float:right}
 }
 @media (min-width: 992px) {
 	 .col-name .col-md-2{width:20%}
 	 .col-name .col-md-10{width:80%}
 }
+.loading{z-index: 1;position: absolute;bottom: 200px;text-align: center;}
 </style>
 <div class="modal-content">
     <div class="modal-header">
@@ -49,7 +48,7 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 							<div class="form-inline col-md-12">
 								<div class="row">
 									<div class="form-group form-inline col-sm-6 col-md-6">
-										<label for="type" class="col-sm-4 col-md-4 control-label" >Type</label>
+										<label class="col-sm-4 col-md-4 control-label" >Type</label>
 
 										<label class="radio-inline">
 											<input type="radio" name="authOpt" id="noneAuth" value="NONE" checked>None
@@ -65,7 +64,7 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 
 									</div>
 									<div class="form-inline form-group col-sm-6 col-md-6">
-										<label for="uname" class="col-sm-5 col-md-5 control-label">Header</label>
+										<label for="authHd" class="col-sm-5 col-md-5 control-label">Header</label>
 										<input type="text" class="form-control" id="authHd" name="authHd" placeholder="Header" autocomplete="off" value="" readonly/>
 										
 									</div>
@@ -139,6 +138,9 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
                 </div>
 
                 <div class="row">
+					<div class="col-md-12 loading hidden">
+						<img src="./assets/dist/img/loading-circle.gif" />
+					</div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="col-sm-2 col-md-2 control-label">Applications</label>
@@ -196,6 +198,7 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
                         </div>
                     </div>
                 </div>
+				<div class="box-notification"><p><span>Inspection finished</span></p></div>
             </section>
         </div><!-- /.modal-body -->
     </form>
@@ -327,21 +330,20 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 		}
 
 		var authChoice = obj.authType;
-		if(authChoice == "NONE"){
+		if(typeof authChoice === "undefined" || authChoice === "NONE") {
 			document.getElementById("uname").setAttribute('readonly', true);
 			document.getElementById("psw").setAttribute('readonly', true);
 			document.getElementById("loginURL").setAttribute('readonly', true)
 			document.getElementById("authHd").setAttribute('readonly', true);
-		}
-		else{
+		} else {
 			document.getElementById("uname").removeAttribute('readonly');
 			document.getElementById("psw").removeAttribute('readonly');
 			document.getElementById("loginURL").removeAttribute('readonly');	
 		}
-		if(authChoice == "BASIC"){
+		if(authChoice === "BASIC") {
 			document.getElementById("authHd").setAttribute('readonly', true);
 		}
-		else if(authChoice == "TOKEN"){
+		else if(authChoice === "TOKEN") {
 			document.getElementById("authHd").removeAttribute('readonly');
 		}
 
@@ -448,19 +450,14 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 
 			var applDuplicates=0;
 			if(applNamesArr.length !== new Set(applNamesArr).size) {
-					applDuplicates = 1;
-					}
+				applDuplicates = 1;
+			}
 
-			if (haserror==1)
-					{
-					showMsg("Invalid application. Please choose valid names and paths to continue.", "ERROR");
-					}
-			else if (applDuplicates==1)
-					{
-					showMsg("Invalid application. Please choose unique names to continue.", "ERROR");
-					}
-			else{
-
+			if (haserror==1) {
+				showMsg("Invalid application. Please choose valid names and paths to continue.", "ERROR");
+			} else if (applDuplicates==1) {
+				showMsg("Invalid application. Please choose unique names to continue.", "ERROR");
+			} else {
 				if ($(this).valid()) {
 					$(".modal-error ").fadeOut();
 					var url = baseRestApiURL + userOpStack.dna.type.toLowerCase() + "/";
@@ -538,8 +535,20 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 			if (selectedRemoteService === "stac_nodes") {
 				url = baseRestApiURL + "stac/collections";
 			}
-			
+			if (selectedRemoteService === "wms_nodes") {
+				$.extend( inspectData, {"request" : "GetCapabilities"} );
+				url = baseRestApiURL + "wms/inspect";
+			}
 			if (url !== "") {
+				$(".loading").removeClass("hidden");
+				if( $("input.app-path","#tbl-applications tbody:not(.tpl-sample-body)").length <= 3){
+					var bottomPos = $("input.app-path","#tbl-applications tbody:not(.tpl-sample-body)").length * 20 + 70 +'px';
+					$(".loading").css("bottom", bottomPos);
+				}else{
+					$(".loading").css("bottom", "200px");
+				}
+				$("#tbl-applications").css("opacity","0.5");
+
 				$.ajax({
 					cache: false,
 					url: url,
@@ -550,11 +559,13 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 						"X-Auth-Token": window.tokenKey
 					},
 					error : function (jqXHR, textStatus, errorThrown) {
+						$(".loading").addClass("hidden");$("#tbl-applications").css("opacity","");
 						showMsg("Unknown error. Unable to inspect remote service. Please try again.", "ERROR");
 					},
 					success: function(response,textStatus, jqXHR) {
 						var r = chkTSRF(response);
 						if (response.status === "FAILED") {
+							$(".loading").addClass("hidden");$("#tbl-applications").css("opacity","");
 							if (response.message) {
 								showMsg("Error updating remote service. Please check your data, one or more values for the attributes were not correct.", "ERROR");
 								//handle error messages
@@ -582,11 +593,13 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 						if(response.status === "SUCCEEDED"){
 							var dataApp = response.data.applications;
 							var existingPaths = $("input.app-path","#tbl-applications tbody:not(.tpl-sample-body)").map(function(){return $(this).val();});
-
+								
+							// for each entry from response 
 							$.each(dataApp, function(index,element){
 								var elementId = element.path;
 								var existingValue = false;
 
+								// if element is already in table
 								if( $.inArray(elementId, existingPaths) > -1){
 									existingValue = true;
 
@@ -594,13 +607,15 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 
 								}
 
-								if(existingValue === false){
+								// else and has no path
+								if(existingValue === false && (typeof element.path !== 'undefined')){
 									//adding new elements in table
 									helper_addApplicationRow($("#tbl-applications"), element);
 									$("input.app-path","#tbl-applications tbody:not(.tpl-sample-body)").filter(function(){return this.value == elementId}).closest("tr").find("span").text("New!").addClass("new-icon");
 								}							
 							});
 
+							// for each table row
 							$.each(existingPaths, function(i,value){
 								var keep = false;
 
@@ -616,6 +631,14 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 
 							});
 							$("#legend").show();
+
+							$(".loading").addClass("hidden");
+							$("#tbl-applications").css("opacity","");
+							var $notification = $(".box-notification");
+							$notification.addClass("show");
+							setTimeout(function(){
+								$notification.removeClass("show");
+							}, 3000);
 						}						
 					}
 				});

@@ -14,21 +14,10 @@
     <link href="./assets/dist/css/AdminLTEplus.css" rel="stylesheet" type="text/css" />
     <link href="./assets/dist/css/size-customization.css" rel="stylesheet" type="text/css" />
     <link href="./assets/dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css" id="style_css_file"/>
-
-    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="./apple-touch-icon-57x57.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./apple-touch-icon-114x114.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./apple-touch-icon-72x72.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./apple-touch-icon-144x144.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="./apple-touch-icon-60x60.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="./apple-touch-icon-120x120.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="./apple-touch-icon-76x76.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="./apple-touch-icon-152x152.png" />
-    <link rel="icon" type="image/png" href="./favicon-196x196.png" sizes="196x196" />
-    <link rel="icon" type="image/png" href="./favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
-    <link rel="icon" type="image/png" href="./favicon-128.png" sizes="128x128" />
-    <meta name="application-name" content="&nbsp;"/>
+	
+    <link rel="shortcut icon" type="image/x-icon" href="/media/icons/dunia-favicon.ico" />
+    
+	<meta name="application-name" content="&nbsp;"/>
     <meta name="msapplication-TileColor" content="#FFFFFF" />
     <meta name="msapplication-TileImage" content="./mstile-144x144.png" />
     <meta name="msapplication-square70x70logo" content="./mstile-70x70.png" />
@@ -44,6 +33,7 @@
     <![endif]-->
     <script src="./assets/dist/js/general-functions.js" type="text/javascript"></script>
     <script src="./assets/dist/js/config.js" type="text/javascript"></script>
+	
 </head>
 
 <body class="sidebar-mini size-normal noselect bg-navy">
@@ -110,6 +100,63 @@
 <script src="./assets/dist/js/app.js" type="text/javascript"></script>
 
 <script type="text/javascript">
+    (function ($, window) {
+	'use strict';
+	
+	// WsController Class
+	var WsController = function (element, options) {
+		var _self = this;
+		
+		_self.options = $.extend({}, $.fn.wsController.defaults, options);
+
+		$(element).html('').attr("id", "wscontroller").addClass("wscontroller");
+		_self.el = $(element);
+		_self.ws = null;
+
+		var deferred = $.Deferred();
+		_self.connect().then(function() { deferred.resolve(_self); });
+		return deferred.promise();
+	};
+	
+	WsController.prototype = {
+		
+		// Destroy control
+		destroy: function (globalInstance) {
+			var _self = this;
+			_self.el.html("").attr("id", "").removeClass("wscontroller");
+			_self.ws.send([ 'UNSUBSCRIBE', 'id:1', 'destination:/queue/' + _self.options.user, '\n', null ].join('\n'));
+		},
+		connect: function () {
+			var _self = this;
+			
+			var deferred = $.Deferred();
+				_self.ws = new WebSocket(_self.options.url);
+
+				_self.ws.onopen = function (event) {
+					_self.ws.send([ 'SUBSCRIBE', 'id:1', 'destination:/queue/' + _self.options.user, '\n', null ].join('\n'));
+					deferred.resolve(event);
+				};
+				_self.ws.onclose = function (event) {
+					console.log("WebSockets closed with code: " + event.code);
+					deferred.reject(event);
+				}; 
+				_self.ws.onerror = function (event) {
+					console.log("WebSockets error: " + event.reason);
+					deferred.reject(event);
+				}; 
+				_self.ws.onmessage = function (event) {
+					_self.el.trigger("wsmessage", [ event.data ]);
+				};
+			return deferred.promise();
+		}
+	};
+	
+	$.fn.wsController = function (options) {
+		return new WsController(this, options);
+	};
+
+})(jQuery, window, document);
+
     function jsGetUrlQueryValue (sVar) {
         return decodeURI(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURI(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
     }
@@ -213,7 +260,7 @@
 					}else{
 						var lines = {
 							cpu: percent.cpu+"%",
-							memory: percent.memory+"% ("+humanFileSize((r.totalMemory-r.availableMemory)*r.memoryUnit)+"/"+humanFileSize(r.totalMemory*r.memoryUnit)+", used/total)",
+							memory: percent.memory+"% ("+humanFileSize((r.totalMemory-r.availableMemory)*r.memoryUnit)+"/"+humanFileSizeFromMB(r.totalMemory - r.availableMemory/r.totalMemory)+", used/total)",
 							storage: percent.storage+"% ("+humanFileSize(r.diskUsed*r.diskUnit)+"/"+humanFileSize(r.diskTotal*r.diskUnit)+", used/total)"
 						};
 						$(".val-mm-processors").text(lines.cpu);
@@ -262,6 +309,37 @@
 	});
 
     $(document).ready( function(){
+
+        var $wsc = $('<div></div>');
+        $("body").append($wsc);
+        
+        $wsc.wsController({
+            "url" : window.baseWssUrl + "queue?tokenKey=" + window.tokenKey,
+            "user": _settings.readCookie("TaoUserId")
+        })
+        .then(function (result) {
+            window.wsController = result;
+
+            window.wsController.el.on("wsmessage", function (e, msg) {
+                    try {
+                        var dna = JSON.parse(msg);
+                        switch (dna.topic) {
+                            case "resources":
+                                $('[ws-id="resources|SystemAccount|' + dna.source + '"]').trigger("wsmessage", [ dna.data ]);
+                                break;
+                            }
+                    } catch (error) {
+                        console.error(error + "\nExpected JSON message");
+                    }
+                });
+
+            window.onunload = function(){ window.wsController.destroy(); }
+        });
+    
+		// Load favicon
+		$("link[rel*='icon']").remove();
+		$('head').append('<link type="image/x-icon" rel="shortcut icon" href="' + (typeof window.favicon !== "undefined" ? window.favicon : "./favicon.ico") + '">');
+		
 		$("#style_css_file").attr("href", "./assets/dist/css/skins/"+$.AdminLTE.options.styles[defaultStyle]+".min.css");
 		$("body").addClass($.AdminLTE.options.styles[defaultStyle]);
 	
@@ -284,6 +362,18 @@
             })
             .trigger( "resize" );
         updateMasterMonitorWidget();
+        
+        // update graph
+        $("#widget-master-monitor").attr("ws-id", "resources|SystemAccount|" + node);
+        $("#widget-master-monitor").on("wsmessage", function (e, wsdna) {
+            _loadChart.node = node;
+            _loadChart.updateData(
+                    (parseInt(wsdna.cpuTotal)  || 0),
+                    (parseInt((wsdna.totalMemory - wsdna.availableMemory)/wsdna.totalMemory*100) || 0),
+                    (parseInt(wsdna.diskUsed/wsdna.diskTotal*100) || 0),
+                    (moment(wsdna.timestamp).format("HH:mm:ss"))
+                );
+        }); 
     });
 //# sourceURL=my-nodemonitor.js
 </script>

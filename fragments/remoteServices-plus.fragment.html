@@ -272,6 +272,17 @@
 	//////////////////////////////////////////////////////////////////////////////////////
     $(document).ready( function() {
 
+		var action = $("a[data-toggle='tab'][aria-expanded='true']", "#panel-remote-wrapper").data("action");
+		if (action === "wps_nodes") {
+			$("#myModalLabel").text("New WPS service");
+		}
+		if (action === "wms_nodes") {
+			$("#myModalLabel").text("New WMS service");
+		}
+		if (action === "stac_nodes") {
+			$("#myModalLabel").text("New STAC service");
+		}
+
 		// Custom validation for container name
 		$.validator.addMethod('remoteServiceName', function (value, element, params) {
 			var pattern = new RegExp(params.regEx, "g");
@@ -364,18 +375,27 @@
         // Submit form
 		$("form#frmUploadContainer").submit(function (event) {
 			event.preventDefault();
-			var action = $("a[data-toggle='tab'][aria-expanded='true']", "#panel-remote-wrapper").data("action");
+			action = $("a[data-toggle='tab'][aria-expanded='true']", "#panel-remote-wrapper").data("action");
 			
 			if ($(this).valid()) {
 					$(".modal-error ").fadeOut();
-					
+					var rsType = "";
+					var rsTag = "";
 					var url = "";
 					if (action === "wps_nodes") {
-						$.extend( inspectData, {"request" : "GetCapabilities"} );
 						url = baseRestApiURL + "wps/";
+						rsType = "WPS";
+						rsTag = "WPS";
+					}
+					if (action === "wms_nodes") {
+						url = baseRestApiURL + "wms/";
+						rsType = "WMS";
+						rsTag = "WMS";
 					}
 					if (action === "stac_nodes") {
 						url = baseRestApiURL + "stac/";
+						rsType = "STAC";
+						rsTag = "STAC";
 					}
 					
 					var formData = {
@@ -383,8 +403,8 @@
 						description			: $("textarea[name=description]", this).val(),
 						applicationPath		: $("input[name=URL]", this).val(),
 						applications		: [],
-						type				: action === "stac_nodes" ? "STAC" : "WPS",
-						tag					: action === "stac_nodes" ? "STAC" : "WPS",
+						type				: rsType,
+						tag					: rsTag,
 						format				: [],
 						authType 			: $("input[name=authOpt]:checked", this).val(),
 						user 				: $("input[name=uname]", this).val(),

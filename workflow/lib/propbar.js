@@ -44,6 +44,10 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 			$(this).siblings(".var-value").val(ds);
 		} else {
 			$(this).siblings(".var-value").val($(this).val());
+            if($(this)[0].type == "date"){
+                var endstring = $(this).siblings(".var-default").html().split("T")[1];
+                $(this).siblings(".var-value").val($(this).val() + "T" + endstring);
+            }
 		}
     })
     .on("click", "#update-custum-values",function(e){
@@ -64,8 +68,12 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 	})
     .on("click", ".var-default",function(e){
 		if ($(".var-value-string:visible", $(this).parent()).length > 0) {
-			$(this).siblings(".var-value-string").val($(this).html());
-			$(this).siblings(".var-value-string").trigger("change");
+            if(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/.test($(this).html())){
+                $(this).siblings(".var-value-string").val($(this).html().split("T")[0]);
+            }else{
+                $(this).siblings(".var-value-string").val($(this).html());
+            }
+            $(this).siblings(".var-value-string").trigger("change");
 		}
 		if ($(".var-value-list:visible", $(this).parent()).length > 0) {
 			$(this).siblings(".var-value-list").val($(this).html());
@@ -157,7 +165,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 }
             })
             .fail(function(){
-                alert("Could udate custom values", "ERROR");
+                alert("Could not update custom values", "ERROR");
             });
     };
 
@@ -339,16 +347,22 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 value = currentCustomValueSet.parameterValue;
             }
 
-            if((valueset.length === 1) && (( valueset[0] === "") || ( valueset[0] === "null"))){
+            if ((valueset === null) || (valueset.length === 0) || ((valueset.length === 1) && ((valueset[0] === "") || (valueset[0] === "null")))) {
                 $('input.var-value', $el).val(value);
-                if(type === "date"){
+                if (type === "date") {
                     $('input.var-value-string', $el).attr("type", "date");
+                    if(value != null){
+                        $('input.var-value-string', $el).val(value.split("T")[0]).show();
+                    }else{
+                        $('input.var-value-string', $el).show();
+                    }
+                } else {
+                    if ((type === "int") || (type === "long") || (type === "double") || (type === "short") || (type === "float") || (type === "number")) {
+                        $('input.var-value-string', $el).attr("type", "number");
+                    }
+                    $('input.var-value-string', $el).val(value).show();
                 }
-                if((type === "double") || (type === "short") || (type === "float") || (type === "number")){
-                    $('input.var-value-string', $el).attr("type", "number");
-                }
-                $('input.var-value-string', $el).val(value).show();
-            }else{
+            } else {
                 $('input.var-value', $el).val(value);
                 var html = "";
                 $.each(valueset, function(i, v) {
@@ -357,7 +371,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 $('select.var-value-list', $el).html(html).show();
             }
         };
-        var helper_addSTblEdtRow = function($tblEdt, payload){
+        var helper_addSTblEdtRow = function($tblEdt, payload, objParent){
             var obj = {
                 "dataType": "string",
                 "defaultValue": "",
@@ -370,25 +384,54 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 "unit":null,
                 "validator":null,
                 "valueSet": [],
-                "value": null
+                "value": null,
+                "parameters": []
             };
             $.extend( obj, payload );
+           
             var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
             $('span.var-id', $el).html(obj.id);
             $('span.var-name', $el).html(obj.name);
             $('span.var-label', $el).html(obj.label);
             $('span.var-description', $el).html(obj.description);
             $('span.var-dataType', $el).html(obj.dataType);
-            $('span.var-default', $el).html(obj.defaultValue);
-            if((obj.value == null) || (obj.value === '') || (obj.value === undefined)){
-                obj.value = obj.defaultValue;
+            
+            if(obj.defaultValue !== ''){
+                $('span.var-default', $el).html(obj.defaultValue);
+            }else{
+                $('#show-var-def', $el).addClass('collapse');
             }
+
             if(obj.dataType === "bool"){
-                helper_putValue($el, obj.name, obj.dataType, obj.value, ["true","false"]);
+                if(obj.value === null){
+                    helper_putValue($el, obj.name, obj.dataType, obj.defaultValue, ["true","false"]);
+                }else{
+                    helper_putValue($el, obj.name, obj.dataType, obj.value, ["true","false"]);
+                }
             }else{
                 helper_putValue($el, obj.name, obj.dataType, obj.value, obj.valueSet);
             }
-            $tblEdt.append($el);
+
+            if(obj.type === "TEMPLATE"){
+                $el.find(".textviewWrapper ").removeClass(".textviewWrapper ");
+            }
+
+            if(typeof objParent === "undefined"){
+                $tblEdt.append($el);
+            } else {
+                $('span.var-parent-id', $el).html(objParent.id);
+                $('span.var-parent-name', $el).html(objParent.name);
+                objParent.container.append($el);
+            } 
+
+            if(obj.parameters[0] !== undefined){
+                $el.find("td").append('<table class="tbl-extra-param"><tbody></tbody></table>');
+                $.each(obj.parameters, function(i,param){
+                    obj.container = $(".tbl-extra-param>tbody", $el);
+                    helper_addSTblEdtRow($tblEdt, param, obj);
+                });
+            }
+
             return $el;
         };
         /////////////////////////////////
@@ -413,7 +456,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             helper_addSTblEdtRow($("#tbl-edt-sysvar"),value);
         });*/
         $.each(componentTemplate.parameterDescriptors, function(i, parameter) {
-            if(parameter.dataType === "string" && parameter.valueSet[0] === "null"){
+            if(parameter.dataType === "string" && parameter.valueSet[0] === "null" && parameter.type !== "TEMPLATE"){
                 var value = {
 					id          : parameter.id,
                     dataType    : parameter.dataType,
@@ -423,7 +466,8 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 					label       : parameter.label,
                     notNull     : parameter.notNull,
 					type        : parameter.type,
-					valueSet    : parameter.valueSet
+					valueSet    : parameter.valueSet,
+                    parameters  : parameter.parameters
                     
 				};
                 var elValue = helper_addSTblEdtRow($("#tbl-edt-sysvar"), value);
@@ -446,12 +490,12 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 
         // Parse targets
 		$.each(componentTemplate.targets, function(i, target) {
-			if (typeof target.dataDescriptor !== "undefined") {
+			if ((wfTools.isOldVersion && typeof target.dataDescriptor !== "undefined") || !wfTools.isOldVersion) {
 				var value = {
 					id          : target.id,
 					name        : target.name,
 					label       : target.name,
-					defaultValue: target.dataDescriptor.location,
+					defaultValue: wfTools.isOldVersion ? target.dataDescriptor.location : target.location,
 					description : "Output parameter",
 					valueSet    : [ "null" ]
 				};
@@ -509,7 +553,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 
         var helper_putValue = function($el, name, type, value, valueset){
 			$('input.var-value', $el).val(value);
-            if ((valueset.length === 1) && (( valueset[0] === "") || ( valueset[0] === "null"))) {
+            if ((valueset == null) || (valueset.length === 0) || ((valueset.length === 1) && ((valueset[0] === "") || (valueset[0] === "null")))) {
 				if (type === "date") {
 					$('input.var-value-string', $el).attr("type", "date").css({ "width": "30%", "margin-right": "2%" });
 					if (name.toLowerCase() === "startdate" || name.toLowerCase() === "enddate") {
@@ -528,7 +572,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 						// single field
 						$('input.var-value-string', $el).attr("type", "date").css({ "width": "30%" });
 					}
-				} else if (type === "double" || type === "short" || type === "float" || type === "number") {
+				} else if ((type === "int") || (type === "long") || (type === "double") || (type === "short") || (type === "float") || (type === "number")) {
 					$('input.var-value-string', $el).attr("type", "number");
                 } else if (type === "polygon") {
 					// Add button to open polygon map

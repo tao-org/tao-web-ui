@@ -110,7 +110,7 @@ $.AdminLTE.options = {
     aqua: "#00c0ef",
     yellow: "#f39c12",
     blue: "#0073b7",
-    navy: "#001F3F",
+    navy: "#00587a",
     teal: "#39CCCC",
     olive: "#3D9970",
     lime: "#01FF70",
@@ -132,12 +132,14 @@ $.AdminLTE.options = {
   },
   // when a new style is available it must be added here
   styles:{
+	"dark-navy":"skin-navy",
 	"dark-blue":"skin-blue",
 	"dark-black":"skin-black",
 	"dark-red":"skin-red",
 	"dark-yellow":"skin-yellow",
 	"dark-purple":"skin-purple",
 	"dark-green":"skin-green",
+	"light-navy":"skin-navy-light",
 	"light-blue":"skin-blue-light",
 	"light-black":"skin-black-light",
 	"light-red":"skin-red-light",

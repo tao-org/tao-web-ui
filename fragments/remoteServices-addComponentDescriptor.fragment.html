@@ -227,7 +227,6 @@
 							<div id="comp-tab-param" class="tab-pane fade padding-top--20 padding-bottom--20">
 								<div class="row">
 									<div class="col-md-12">
-										<p>Parameter list:</p>
 										<div class="responsive">
 											<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-paramdesc">
 												<thead>
@@ -339,7 +338,7 @@
 									</div>
 								</div>
 							</div>
-							<div id="comp-tab-sys" class="tab-pane fade">
+							<div id="comp-tab-sys" class="tab-pane fade padding-top--20 ">
 								<div class="row">
 									<div class="col-md-12">
 										<p>Variables:</p>
@@ -375,13 +374,13 @@
 									</div>
 								</div>
 							</div>
-							<div id="comp-tab-ports" class="tab-pane fade">
+							<div id="comp-tab-ports" class="tab-pane fade padding-top--20 ">
 								<div class="row">
 									<div class="col-md-12">
 										<div class="responsive box-shadow--6dp" style="margin-bottom:20px;overflow:auto">
 											<table class="table table-bordered tbl-edt" id="tbl-edt-sources" style="margin:0">
 												<thead>
-												<tr><th colspan="8" class="table-title">Sources:</th></tr>
+												<tr><th colspan="8" class="table-title">Sources</th></tr>
 												<tr>
 													<th></th>
 													<th>Source Name</th>
@@ -496,7 +495,7 @@
 <!-- Specific styles -->
 <style>
 #comp-tab-ports thead th{vertical-align:middle}
-#comp-tab-ports .table-title{background-color:#3c8dbc;color:white;font-size:1.2em;line-height:1.2em}
+#comp-tab-ports .table-title{color:white;font-size:1.2em;line-height:1.2em}
 #comp-tab-ports .tbl-edt input[type="number"]{
 	width: 100%;
 	padding-left: 0.3em;
@@ -599,23 +598,41 @@
 	// get sensor type all possible values
 	sourceTargetSpecificFormats["sensorType"] = getTaoEnumsArray("SensorType");
     
-////////////
     function helper_addSourceTargetDescriptorsRow($tbl, payload, specificFormats){
         var obj = {
 			"id": null,
 			"parentId": null,
 			"name": null,
-			"dataDescriptor": {
-				"formatType": null,
-				"formatName": null,
-				"geometry": null,
-				"crs": null,
-				"sensorType": null,
-				"dimension": null,
-				"location": null
-			},
+			"formatType": null,
+			"formatName": null,
+			"location": null,
 			"constraints": null
 		};
+		if (isOldVersion) {
+			if (typeof payload !== "undefined") {
+				$.each(payload.dataDescriptor, function(k, v) {
+					payload[k] = v;
+				});
+				delete payload["dataDescriptor"];
+			} else {
+				obj["geometry"] = null;
+				obj["crs"] = null;
+				obj["sensorType"] = null;
+				obj["dimension"] = null;
+			}
+		} else {
+			obj["attributes"] = null;
+			
+			$tbl.find("thead th:contains('Geometry')").remove();
+			$tbl.find("thead th:contains('CRS')").remove();
+			$tbl.find("thead th:contains('Dimension')").remove();
+			$tbl.find("thead th:contains('Sensor Type')").remove();
+			
+			$('textarea.var-geometry', $sRow).closest("td").remove();
+			$('input.var-crs', $sRow).closest("td").remove();
+			$('select.var-sensorType', $sRow).closest("td").remove();
+			$('input.var-dimension', $sRow).closest("td").remove();
+		}
         $.extend( obj, payload );
 		
 		// Populate all combo-boxes with descriptor formats
@@ -646,14 +663,14 @@
 		$('input.var-id', $el).val(obj.id);
 		$('input.var-name', $el).val(obj.name);
         $('select.var-formatType option', $el).removeAttr("selected");
-        $('select.var-formatType option[value="'+obj.dataDescriptor.formatType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
+        $('select.var-formatType option[value="'+obj.formatType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
         $('select.var-formatName option', $el).removeAttr("selected");
-        $('select.var-formatName option[value="'+obj.dataDescriptor.formatName+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
-		$('textarea.var-geometry', $el).val(obj.dataDescriptor.geometry);
-        $('input.var-crs', $el).val(obj.dataDescriptor.crs);
+        $('select.var-formatName option[value="'+obj.formatName+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
+		$('textarea.var-geometry', $el).val(obj.geometry);
+        $('input.var-crs', $el).val(obj.crs);
         $('select.var-sensorType option', $el).removeAttr("selected");
-        $('select.var-sensorType option[value="'+obj.dataDescriptor.sensorType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
-        $('input.var-dimension', $el).val(obj.dataDescriptor.dimension);
+        $('select.var-sensorType option[value="'+obj.sensorType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
+        $('input.var-dimension', $el).val(obj.dimension);
         $('input.var-cardinality', $el).val(obj.cardinality);
 
 		$tbl.append($el);
@@ -743,21 +760,28 @@
 			var port_dimension   = $(this).find(".var-dimension").val();
 			var port_cardinality = $(this).find(".var-cardinality").val();
 			if( ((typeof port_name !== "undefined") && (typeof port_name.valueOf() === "string") && (port_name.length > 0)) ) {
+				var newPortDesc = {
+					"geometry"   : port_geometry  === "" ? null : port_geometry,
+					"crs"        : port_crs       === "" ? null : port_crs,
+					"dimension"  : port_dimension === "" ? null : port_dimension,
+					"formatType" : port_formatType === "" ? null : port_formatType,
+					"formatName" : port_formatName === "" ? null : port_formatName,
+					"sensorType" : port_sensorType === "" ? null : port_sensorType,
+					"location"   : null
+				};
 				var newPort = {
 					"parentId"       : parentId,
 					"name"           : port_name,
 					"cardinality"    : port_cardinality,
-					"id"             : port_id        === "" ? null : port_id,
-					"dataDescriptor" : {
-						"geometry"   : port_geometry  === "" ? null : port_geometry,
-						"crs"        : port_crs       === "" ? null : port_crs,
-						"dimension"  : port_dimension === "" ? null : port_dimension,
-						"formatType" : port_formatType === "" ? null : port_formatType,
-						"formatName" : port_formatName === "" ? null : port_formatName,
-						"sensorType" : port_sensorType === "" ? null : port_sensorType,
-						"location"   : null
-					}
+					"id"             : port_id        === "" ? null : port_id
 				};
+				
+				if (isOldVersion) {
+					newPort["dataDescriptor"] = newPortDesc;
+				} else {
+					$.extend(newPort, newPortDesc);
+				}
+				
 				newPorts.push(newPort);
 			}
 		});

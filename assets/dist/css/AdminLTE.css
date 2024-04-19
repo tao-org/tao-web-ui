@@ -2642,6 +2642,9 @@ table.text-center th {
   margin: 5px 0 0 50px;
   color: #444444;
 }
+.direct-chat-text span {
+  overflow-wrap: break-word;
+}
 .direct-chat-text:after,
 .direct-chat-text:before {
   position: absolute;

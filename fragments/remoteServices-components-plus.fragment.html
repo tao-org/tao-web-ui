@@ -140,14 +140,31 @@
 									</div>
 								</div>
 							</div>
+							<div class="col-md-12 loading hidden">
+								<img src="./assets/dist/img/loading-circle.gif" />
+							</div>
 							<div id="comp-tab-conf" class="tab-pane fade padding-top--20 padding-left--20 padding-bottom--20">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputContainerSelect" class="col-sm-2 col-md-2 control-label">Service type</label>
+											<div class="col-sm-10 col-md-10">
+												<select id="inputContainerSelect" name="inputContainerSelect" class="form-control">
+													<option value="" selected disabled >-- Select service --</option>
+													<option value="WPS"  >WPS</option>
+													<option value="WMS"  >WMS</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
 								<div class="row">
 									<div class="col-md-12">
 										<div class="form-group">
 											<label for="inputContainerId" class="col-sm-2 col-md-2 control-label">Service Id </label>
 											<div class="col-sm-10 col-md-10">
-												<select id="inputContainerId" name="inputContainerId" class="form-control">
-													<option value="" selected disabled >-- Select WPS --</option>
+												<select id="inputContainerId" name="inputContainerId" class="form-control" disabled >
+													<option class="default-option" value="" selected disabled >-- Select service ID --</option>
 												</select>
 											</div>
 										</div>
@@ -159,7 +176,7 @@
 											<label for="inputCapabilityId" class="col-sm-2 col-md-2 control-label">Application </label>
 											<div class="col-sm-10 col-md-10">
 												<select id="inputCapabilityId" name="inputCapabilityId" class="form-control" disabled>
-													<option value="" selected disabled >-- Select application --</option>
+													<option class="default-option" value="" selected disabled >-- Select application --</option>
 												</select>											
 											</div>
 										</div>
@@ -174,7 +191,6 @@
 							<div id="comp-tab-param" class="tab-pane fade padding-top--20 padding-bottom--20">
 								<div class="row">
 									<div class="col-md-12">
-										<p>Parameter list:</p>
 										<div class="responsive">
 											<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-paramdesc">
 												<thead>
@@ -279,23 +295,20 @@
 									</div>
 								</div>
 							</div>
-							<div id="comp-tab-ports" class="tab-pane fade">
+							<div id="comp-tab-ports" class="tab-pane fade padding-top--20 padding-bottom--20">
 								<div class="row">
 									<div class="col-md-12">
 										<div class="responsive box-shadow--6dp" style="margin-bottom:20px;overflow:auto">
 											<table class="table table-bordered tbl-edt" id="tbl-edt-sources" style="margin:0">
 												<thead>
-												<tr><th colspan="8" class="table-title">Sources:</th></tr>
-												<tr>
-													<th></th>
-													<th>Source Name</th>
-													<th>Format Type</th>
-													<th>Geometry</th>
-													<th>CRS</th>
-													<th>Sensor Type</th>
-													<th>Dimension</th>
-													<th>Cardinality<br><i>(0 for list)</i></th>
-												</tr>
+													<tr><th colspan="8" class="table-title">Sources</th></tr>
+													<tr>
+														<th></th>
+														<th>Source Name</th>
+														<th>Format Type</th>
+														<th>Cardinality<br><i>(0 for list)</i></th>
+														<th></th> <!--empty header row used for more icon -->
+													</tr>
 												</thead>
 												<tfoot>
 												<tr>
@@ -307,36 +320,34 @@
 												</tr>
 												</tfoot>
 												<tbody class="tpl-sample-body">
-												<tr class="tpl-sample-row">
-													<th scope="row">
-														<a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
-													</th>
-													<td>
-														<input type="hidden" class="var-id" value="">
-														<input type="text" class="var-name" value="" placeholder="Source name">
-													</td>
-													<td><select class="var-formatType empty"></select></td>
-													<td><textarea rows="1" class="var-geometry"></textarea></td>
-													<td><input type="text" class="var-crs" value=""></td>
-													<td><select class="var-sensorType empty"></select></td>
-													<td><input type="text" class="var-dimension" value=""></td>
-													<td><input type="number" class="var-cardinality" value="0" style="width:40px;text-align:left"></td>
-												</tr>
+													<tr class="tpl-sample-row">
+														<th scope="row">
+															<a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+														</th>
+														<td>
+															<input type="hidden" class="var-id" value="">
+															<input type="text" class="var-name" value="" placeholder="Source name">
+														</td>
+														<td><select class="var-formatType empty"></select></td>
+														<td><input type="number" class="var-cardinality" value="0" style="width:40px;text-align:left"></td>
+														<td><button type="button" name="more"><i class="fa fa-ellipsis-h"></i></button></td>
+													</tr>
 												</tbody>
 											</table>
 										</div>
 										<div class="responsive box-shadow--6dp" style="margin-bottom:20px;overflow:auto">
 											<table class="table table-bordered tbl-edt" id="tbl-edt-targets" style="margin:0">
 												<thead>
-												<tr><th colspan="9" class="table-title">Targets:</th></tr>
-												<tr>
-													<th></th>
-													<th>Target Name</th>
-													<th>Format Type</th>
-													<th>Format Name</th>
-													<th>Location</th>
-													<th>Cardinality<br><i>(0 for list)</i></th>
-												</tr>
+													<tr><th colspan="9" class="table-title">Targets</th></tr>
+													<tr>
+														<th></th>
+														<th>Target Name</th>
+														<th>Format Type</th>
+														<th>Format Name</th>
+														<th>Location</th>
+														<th>Cardinality<br><i>(0 for list)</i></th>
+														<th></th> <!--empty header row used for more icon -->
+													</tr>
 												</thead>
 												<tfoot>
 												<tr>
@@ -348,24 +359,73 @@
 												</tr>
 												</tfoot>
 												<tbody class="tpl-sample-body">
-												<tr class="tpl-sample-row">
-													<th scope="row">
-														<a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
-													</th>
-													<td>
-														<input type="hidden" class="var-id" value="">
-														<input type="text" class="var-name" value="" placeholder="Target name">
-													</td>
-													<td><select class="var-formatType empty"></select></td>
-													<td><select class="var-formatName empty"></select></td>
-													<td>
-														<input type="text" class="var-location">
-														<button type="button" class="var-location" ><i class="fa fa-pencil-square-o"></i><span></span></button>
-													</td>
-													<td><input type="number" class="var-cardinality" value="0" style="width:40px;text-align:left"></td>
-												</tr>
+													<tr class="tpl-sample-row">
+														<th scope="row">
+															<a href="#" class="text tbl-port-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+														</th>
+														<td>
+															<input type="hidden" class="var-id" value="">
+															<input type="text" class="var-name" value="" placeholder="Target name">
+														</td>
+														<td><select class="var-formatType empty"></select></td>
+														<td><select class="var-formatName empty"></select></td>
+														<td>
+															<input type="text" class="var-location">
+															<button type="button" class="var-location" ><i class="fa fa-pencil-square-o"></i><span></span></button>
+														</td>
+														<td><input type="number" class="var-cardinality" value="0" style="width:40px;text-align:left"></td>
+														<td><button type="button" name="more"><i class="fa fa-ellipsis-h"></i></button></td>
+													</tr>
 												</tbody>
 											</table>
+										</div>
+										
+										<div id="moreDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="moreDialogModalLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<button type="button" class="close close-modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+														<h4 class="modal-title" id="moreDialogModalLabel"></h4>
+													</div>
+													<div class="modal-body">
+														<section>
+															<div class="responsive">
+																<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-ports-contraints">
+																	<thead>
+																		<tr>
+																			<th></th>
+																			<th>Key</th>
+																			<th>Value</th>
+																		</tr>
+																	</thead>
+																	<tfoot>
+																		<tr>
+																			<td colspan="3">
+																				<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-ports-addnewconstraint" data-action="ports-add-new-constraint">
+																					<i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new variable</span>
+																				</button>
+																			</td>
+																		</tr>
+																	</tfoot>
+																	<tbody>
+																		<tr class="tpl-sample-row">
+																			<th class="del-col" scope="row">
+																				<a href="#" class="text tbl-sysvar-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+																			</th>
+																			<td><input type="text" class="var-key" value="" placeholder="input variable's name"></td>
+																			<td><input type="text" class="var-value" value="" placeholder="input variable's value"></td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+														</section>
+													</div>
+													<div class="modal-footer">
+														<!--<button id="doneModifConstraints" type="button" class="btn btn-primary btn-submit left-btn" name="btnDone">Done</button>-->
+														<button type="button" class="btn btn-default close-modal">Close</button>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -373,6 +433,7 @@
 						</div>
                     </div>
                 </div>
+				<div class="box-notification"><p><span>Inspection finished</span></p></div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -399,7 +460,6 @@
 <!-- Specific styles -->
 <style>
 #comp-tab-ports thead th{vertical-align:middle}
-#comp-tab-ports .table-title{background-color:#3c8dbc;color:white;font-size:1.2em;line-height:1.2em}
 #comp-tab-ports .tbl-edt input[type="number"]{
 	width: 100%;
 	padding-left: 0.3em;
@@ -414,6 +474,7 @@
 #comp-tab-ports .tbl-edt textarea:hover,
 #comp-tab-ports .tbl-edt select:hover{border-color: #d0d0d0}
 #comp-tab-ports button.var-location{background-color:#3c8dbc82;border-color:#367fa991;}
+#comp-tab-ports .tbl-edt button[name='more']{background:none;border:none;color:#3c8dbc;}
 
 .table>tbody+tbody{border:0}
 .table select.empty{color:#999;font-style:italic}
@@ -430,6 +491,8 @@
 @media (min-width: 992px) {
 	.modal-lg { width: 60%; }
 }
+
+.loading{z-index: 1;position: absolute;bottom: 100px;text-align: center;}
 </style>
 
    <link rel="stylesheet" href="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.css" type="text/css" />
@@ -439,7 +502,7 @@
    <script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
 
 <script>
-    var action = 'op-plus';
+    //var action = 'op-plus';
 
 	function arrayOption(){
 		$(".tag-format", "#tbl-edt-paramdesc").tagsInput({
@@ -509,19 +572,29 @@
 		}
 		$("input#remoteAddress").val(data.remoteAddress);
 		// populate fields only in edit mode
-		if (userOpStack[0] && userOpStack[0].action ==="wps_edit") {
+		if (userOpStack[0] && (userOpStack[0].action ==="wps_edit" || userOpStack[0].action ==="wms_edit")) {
 			// general desc section
 			$("input[name=inputCompID]", $el).val(data.id).prop("disabled",true); //always disabled on edit
 			// configuration section
-			$("select#inputContainerId").prop("disabled", true); //always disabled on edit
+			//$("select#inputContainerId").prop("disabled", true); //always disabled on edit
+			$("#inputContainerSelect", $el).prop("disabled",true); 
 			$("select[name=inputContainerId] option", $el).removeAttr("selected");
-			$("select[name=inputContainerId] option[value='"+data.serviceId+"']", $el).attr("selected", "selected");
+			$("#inputContainerId", $el).append("<option value='"+ data.service.id +"' selected>"+ data.service.name +"</option>")
 			
-			$("select#inputCapabilityId").prop("disabled", true); //always disabled on edit
+			//$("select#inputCapabilityId").prop("disabled", true); //always disabled on edit
 			$("select[name=inputCapabilityId] option", $el).removeAttr("selected");
-			$("select[name=inputCapabilityId] option[value='"+parseInt(data.capabilityName)+"']", $el).attr("selected", "selected");
+			$("#inputCapabilityId", $el).append("<option value='"+ data.capabilityName +"' selected>"+ data.capabilityName +"</option>")
 		}
 		//parameters section
+
+		//configuration
+		if(userOpStack[0] && userOpStack[0].action ==="wps_edit"){
+			$("#inputContainerSelect").find("[value='WPS']").prop("selected",true);
+		}else if(userOpStack[0] && userOpStack[0].action ==="wms_edit"){
+			$("#inputContainerSelect").find("[value='WMS']").prop("selected",true);
+		}
+
+		
 		
 		// disable all input, textarea and select fields, add new parameters button, remove and edit paramater form template, if user. Otherwise enable it
 		$("button[data-action='comp-add-new-var'], input, select, textarea", "#tbl-edt-paramdesc", "#tbl-edt-paramdesc .tpl-sample-body").prop("disabled",disableField);
@@ -533,6 +606,7 @@
 		$.each(data.parameters, function(i, value) {
 			helper_addParameterDescriptorsRow($("#tbl-edt-paramdesc"), value);
 			$("#tbl-edt-paramdesc").find("*[class^='var-']").prop("disabled", true);
+			$(".var-default", "#tbl-edt-paramdesc").prop("disabled", false);
 		});
 		
 		// get format name all possible values
@@ -549,23 +623,27 @@
 		// the user can not add a new parameter (hide the button)
 		$(".btn-comp-addnewparam","#tbl-edt-paramdesc").hide();
 	}
-////////////
+	
     function helper_addSourceTargetDescriptorsRow($tbl, payload, specificFormats){
         var obj = {
 			"id": null,
 			"parentId": null,
 			"name": null,
-			"dataDescriptor": {
-				"formatType": null,
-				"formatName": null,
-				//"geometry": null,
-				//"crs": null,
-				//"sensorType": null,
-				//"dimension": null,
-				"location": null
-			},
+			"formatType": null,
+			"formatName": null,
+			"location": null,
 			"constraints": null
 		};
+		if (isOldVersion) {
+			if (typeof payload !== "undefined") {
+				$.each(payload.dataDescriptor, function(k, v) {
+					payload[k] = v;
+				});
+				delete payload["dataDescriptor"];
+			}
+		} else {
+			obj["attributes"] = null;
+		}
         $.extend( obj, payload );
 		
 		// Populate all combo-boxes with descriptor formats
@@ -591,31 +669,37 @@
 				}
 			});
 		}
-		$el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+		$sRow.addClass("val-row").removeClass("tpl-sample-row");
         
-		$('input.var-id', $el).val(obj.id);
-		$('input.var-name', $el).val(obj.name);
-        $('select.var-formatType option', $el).removeAttr("selected");
-        $('select.var-formatType option[value="'+obj.dataDescriptor.formatType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
-        $('select.var-formatName option', $el).removeAttr("selected");
-        $('select.var-formatName option[value="'+obj.dataDescriptor.formatName+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
+		$('input.var-id', $sRow).val(obj.id);
+		$('input.var-name', $sRow).val(obj.name);
+        $('select.var-formatType option', $sRow).removeAttr("selected");
+        $('select.var-formatType option[value="'+obj.formatType+'"]', $sRow).attr("selected", "selected").closest("select").removeClass("empty");
+        $('select.var-formatName option', $sRow).removeAttr("selected");
+        $('select.var-formatName option[value="'+obj.formatName+'"]', $sRow).attr("selected", "selected").closest("select").removeClass("empty");
 		
 		// show location based on format type name
-		$(".var-location", $el).hide();
-		if (obj.dataDescriptor.formatType.toLowerCase() === "application/octet-stream") {
+		$(".var-location", $sRow).hide();
+		if (typeof obj.formatType !== "undefined" && obj.formatType !== null && obj.formatType.toLowerCase() === "application/octet-stream") {
 			// prettify location JSON
-			var jsonStr = obj.dataDescriptor.location;
+			var jsonStr = obj.location;
 			var jsonObj = JSON.parse(jsonStr);
 			var jsonPretty = JSON.stringify(jsonObj, null, '\t');
-			$("button.var-location", $el).show();
-			$("button.var-location", $el).data("dnaLocation", jsonPretty);
-			$("button.var-location span", $el).html(" " + obj.dataDescriptor.location.length + " bytes");
+			$("button.var-location", $sRow).show();
+			$("button.var-location", $sRow).data("dnaLocation", jsonPretty);
+			$("button.var-location span", $sRow).html(" " + obj.location.length + " bytes");
 		} else {
-			$("input.var-location", $el).show();
-			$("input.var-location", $el).val(obj.dataDescriptor.location);
+			$("input.var-location", $sRow).show();
+			$("input.var-location", $sRow).val(obj.location);
 		}
-        $('input.var-cardinality', $el).val(obj.cardinality);
+        $('input.var-cardinality', $sRow).val(obj.cardinality);
 
+		if (typeof obj.attributes !== "undefined") {
+			$sRow.data("attributes", obj.attributes);
+		} else {
+			$sRow.find("button[name='more']").remove();
+		}
+		
 		$tbl.append($el);
     }
 	
@@ -716,17 +800,41 @@
 			}
 			var port_cardinality = $(this).find(".var-cardinality").val();
 			if( ((typeof port_name !== "undefined") && (typeof port_name.valueOf() === "string") && (port_name.length > 0)) ) {
+				var newPortDesc = {
+					"formatType" : port_formatType === "" ? null : port_formatType,
+					"formatName" : port_formatName === "" ? null : port_formatName,
+					"location"   : port_location
+				};
 				var newPort = {
 					"parentId"       : parentId,
 					"name"           : port_name,
 					"cardinality"    : port_cardinality,
-					"id"             : port_id        === "" ? null : port_id,
-					"dataDescriptor" : {
-						"formatType" : port_formatType === "" ? null : port_formatType,
-						"formatName" : port_formatName === "" ? null : port_formatName,
-						"location"   : port_location
-					}
+					"id"             : port_id        === "" ? null : port_id
 				};
+				
+				if (isOldVersion) {
+					newPort["dataDescriptor"] = newPortDesc;
+				} else {
+					$.extend(newPort, newPortDesc);
+					var attributes = {};
+					$.each($(this).data("attributes"), function(key, value) {
+						if(((typeof key !== "undefined") && (typeof key.valueOf() === "string") && (key.length > 0)) &&
+								((typeof value !== "undefined") && (typeof value.valueOf() === "string" || typeof value.valueOf() === "object"))) {
+							if (typeof value.valueOf() === "object") {
+								$.each(value, function(idx, val) {
+									if (typeof val !== "undefined" && typeof val.valueOf() === "string" && val != "") {
+										attributes[key] = attributes.hasOwnProperty(key) ? [...attributes[key], val] : [val];
+									}
+								});
+							} else {
+								attributes[key] = value;
+							}
+						}
+					});
+					attributes = $.isEmptyObject(attributes) ? null : attributes;
+					newPort["attributes"] = $(this).data("attributes");
+				}
+				
 				newPorts.push(newPort);
 			}
 		});
@@ -738,17 +846,154 @@
 		if (_this.length > 0) { _this.dialog('destroy').parent().remove(); }
 	}
 	
+	function helper_addConstraintRows($tbl, payload) {
+		var obj = {"" : ""};
+		if (typeof payload !== "undefined" && payload !== null) {
+			obj = payload;
+		}
+		$.each(obj, function(key, value) {
+			if ($.isArray(value)) {
+				$.each(value, function(idx, val) {
+					addConstraintRow($tbl, key, val);
+				});
+			} else {
+				addConstraintRow($tbl, key, value);
+			}
+		});
+    }
+	
+	function addConstraintRow($tbl, key, value) {
+		var $el = $tbl.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
+		$('input.var-key', $el).val(key);
+		$('input.var-value', $el).val(value);
+		$tbl.append($el);
+    }
+	
+	function keepContraints() {
+		var constraintMap = {};
+		$.each($(".val-row", "#tbl-edt-ports-contraints"), function(idx, val) {
+			var key = $(".var-key",val).val();
+			var value = $(".var-value",val).val();
+			constraintMap[key] = constraintMap.hasOwnProperty(key) ? [...constraintMap[key], value] : value;
+		});
+		$(".val-row.edit-contraints", "#frmExecNodeEdit").data("attributes", constraintMap);
+	}
+	
 	$(document).ready( function() {
 		//populate data type select element from sample table
 		populateDataTypeSelect($("select.var-datatype", ".tpl-sample-body"));
+		initializeTagsInputAutocomplete("#formTags", "component"); 
+
+		$("#inputContainerSelect").on("change", function(){
+			if($(this).val() === "WPS"){
+				serviceUrl = "wps/list";
+				$("#inputContainerId").find(":not(.default-option)").remove();
+				$("#inputContainerId").find(".default-option").prop("selected", true);
+
+				$("#inputCapabilityId").find(":not(.default-option)").remove();
+				$("#inputCapabilityId").find(".default-option").prop("selected", true);
+				$("#inspectExec").prop("disabled", true);
+				getServices(serviceUrl);
+
+			}else if($(this).val() === "WMS"){
+				serviceUrl = "wms/list";
+				$("#inputContainerId").find(":not(.default-option)").remove();
+				$("#inputContainerId").find(".default-option").prop("selected", true);
+
+				$("#inputCapabilityId").find(":not(.default-option)").remove();
+				$("#inputCapabilityId").find(".default-option").prop("selected", true);
+				$("#inspectExec").prop("disabled", true);
+				getServices(serviceUrl);
+
+			}else{
+				$(this).val();
+			}
+
+			disableTabsAndSave();
+            if($(this).val() !== "") {
+				$("#inputContainerId").prop("disabled", false);
+				$("option", "#inputContainerId").show();
+				$("option[value='']", "#inputContainerId").prop('selected', true);
+				$("#inspectExec").prop("disabled", true);
+			}
+		});
+
+
+		var action = $("a[data-toggle='tab'][aria-expanded='true']", "#panel-remote-user-wrapper").data("action");
+		if (action === "wps_nodes" && userOpStack[0]) {
+			userOpStack[0].action = "wps_edit";
+		}
+		if (action === "wms_nodes" && userOpStack[0]) {
+			userOpStack[0].action = "wms_edit";
+		}else if(!userOpStack[0]){
+			if(action === "wps_nodes"){
+				$("#inputContainerSelect").find("option[value='WPS']").prop("selected",true);
+				$("#inputContainerSelect").prop("disabled",true);
+				$("#inputContainerSelect").change();
+
+			}else if(action === "wms_nodes"){
+				$("#inputContainerSelect").find("option[value='WMS']").prop("selected",true);
+				$("#inputContainerSelect").prop("disabled",true);
+				$("#inputContainerSelect").change();
+			}
+		}
+
+		//if(userOpStack[0] && (userOpStack[0].action ==="wps_edit" || userOpStack[0].action ==="wms_edit" ) && userOpStack[0] && userOpStack[0].dna.id){
+		if(userOpStack[0] && (userOpStack[0].action ==="wps_edit" || userOpStack[0].action ==="wms_edit" )  && userOpStack[0].dna.id){
+
+
+			$(".modal-title").html("Edit processing module");
+		 	$("#saveExecNode").html("Save processing module");
+
+			if (typeof userOpStack[0].dna.active !== "undefined") {
+		 		$("#inputActive").val(userOpStack[0].dna.active);
+		 	}
+
+			var tabServiceUrl;
+			if(userOpStack[0].action === "wps_edit"){
+				tabServiceUrl = "wps/" + userOpStack[0].dna.id;
+			}else if(userOpStack[0].action === "wms_edit"){
+				tabServiceUrl = "wms/" + userOpStack[0].dna.id;
+			}
+
+			$.ajax({
+				cache: false,
+				url: baseRestApiURL + tabServiceUrl,
+				type: 'GET',
+				headers: {
+							"Accept": "application/json",
+							"Content-Type": "application/json",
+							"X-Auth-Token": window.tokenKey
+						}
+			}).done(function (response) {
+					var data = response.data;
+					populateComponentData(data)
+					
+
+			}).fail(function (jqXHR, textStatus) {
+					chkXHR(jqXHR.status);
+			});
+		 	
+		}
 
 		// purge dialog used for format name
 		purgeUiDialog("jsonLocationDialog");
 		// inspect remote service
 		var describeProcess = function(inspectData) {
+			var url;
+			if ($("#inputContainerSelect").val() === "WPS") {
+				url = "wps/inspect";
+			}
+			if ($("#inputContainerSelect").val() === "WMS") {
+				url = "wms/inspect";
+			}
+			// add spinner
+			$(".loading").removeClass("hidden");
+			$("#comp-tab-conf").css("opacity","0.5");
+
 			return $.ajax({
 				cache: false,
-				url: baseRestApiURL + "wps/inspect",
+				url: baseRestApiURL + url,
 				data: inspectData,
 				type: 'POST',
 				headers: {
@@ -796,20 +1041,33 @@
 			$("#inspectExec").hide();
 		}
 		
+
+		var serviceUrl;
+
+		if( action === "wps_nodes" ){
+			serviceUrl = "wps/list";
+			getServices(serviceUrl);
+		}else if( action === "wps_nodes" ){
+			serviceUrl = "wms/list";
+			getServices(serviceUrl);
+		}
+
+
+		function getServices(serviceUrl){
         //get all available remote services
-        var getAllRemoteServices = $.ajax({
-            cache: false,
-            url: baseRestApiURL + "wps/list/",
-            dataType : 'json',
-            type: 'GET',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
-            }
-        });
-        $.when(getAllRemoteServices)
-            .done(function (getAllRemoteServicesResponse) {
+			var getAllRemoteServices = $.ajax({
+				cache: false,
+				url: baseRestApiURL + serviceUrl,
+				dataType : 'json',
+				type: 'GET',
+				headers: {
+					"Accept": "application/json",
+					"Content-Type": "application/json",
+					"X-Auth-Token": window.tokenKey
+				}
+			});
+			$.when(getAllRemoteServices)
+            	.done(function (getAllRemoteServicesResponse) {
                 var r = chkTSRF(getAllRemoteServicesResponse);
                 $.each(r, function(i, v) {
 					if (typeof v.applications !== "undefined" && v.applications !== null && v.applications.length > 0) {
@@ -827,35 +1085,40 @@
 													 );
 						
 						$.each(v.applications, function(idx, value) {
-							$('#inputCapabilityId').append($('<option>').text(value.name).attr({'value': value.path,"data-parent":v.id}));
+							$('#inputCapabilityId').append($('<option>').text(value.name).attr({'value': value.name,"data-parent":v.id}));
 						});
 					}
                 });
-                if(userOpStack[0] && userOpStack[0].action ==="wps_edit" && userOpStack[0] && userOpStack[0].dna.id){
-                    $(".modal-title").html("Edit processing module: <span>" + userOpStack[0].dna.label.toUpperCase() + "</span>");
-                    $("#saveExecNode").html("Save processing module");
-					if (taoUserProfile.userRole !== "ADMIN") {
-						$("#saveExecNode").hide();
-					}
-                    $("#inputCompID").attr('disabled','disabled');
-					// populate format type
-					sourceTargetSpecificFormats["formatName"] = r.find(obj => obj.id === userOpStack[0].dna.serviceId).format;
-					// populate hidden fields remote address and owner
-					$("#remoteAddress").val(r.find(obj => obj.id === userOpStack[0].dna.serviceId).applicationPath);//TODO: delete this line if remoteAddress will remain on Component response
-					$("#owner").val(userOpStack[0].dna.owner);
-					if (typeof userOpStack[0].dna.active !== "undefined") {
-						$("#inputActive").val(userOpStack[0].dna.active);
-					}
-					populateComponentData(userOpStack[0].dna);
-                }
+				// if(userOpStack[0] && (userOpStack[0].action ==="wps_edit" || userOpStack[0].action ==="wms_edit" ) && userOpStack[0] && userOpStack[0].dna.id){
+                //     $(".modal-title").html("Edit processing module: <span>" + userOpStack[0].dna.label.toUpperCase() + "</span>");
+                //     $("#saveExecNode").html("Save processing module");
+				// 	if (taoUserProfile.userRole !== "ADMIN") {
+				// 		$("#saveExecNode").hide();
+				// 	}
+                //     $("#inputCompID").attr('disabled','disabled');
+				// 	// populate format type
+				// 	sourceTargetSpecificFormats["formatName"] = r.find(obj => obj.id === userOpStack[0].dna.serviceId).format;
+				// 	// populate hidden fields remote address and owner
+				// 	$("#remoteAddress").val(r.find(obj => obj.id === userOpStack[0].dna.serviceId).applicationPath);//TODO: delete this line if remoteAddress will remain on Component response
+				// 	$("#owner").val(userOpStack[0].dna.owner);
+				// 	if (typeof userOpStack[0].dna.active !== "undefined") {
+				// 		$("#inputActive").val(userOpStack[0].dna.active);
+				// 	}
+				// 	populateComponentData(userOpStack[0].dna);
+                // }
             })
             .fail(function () {
                 showMsg("Could not retrive remote services list.", "ERROR");
             });
+		}
 
         $(".btn-comp-addnewvar").on("click", function(){
             var $tbl = $(this).closest(".tbl-edt");
             helper_addSysVarRow($tbl);
+        });
+		$(".btn-ports-addnewconstraint").on("click", function(){
+            var $tbl = $(this).closest(".tbl-edt");
+            helper_addConstraintRows($tbl);
         });
         $(".btn-comp-addnewparam").on("click", function(){
             var $tbl = $(this).closest(".tbl-edt");
@@ -889,7 +1152,19 @@
             .on("click", ".tbl-port-delete-action", function(e){
                 e.preventDefault();
                 $(this).closest(".val-row").remove();
-            });
+            })
+			.on("click", "button[name='more']", function () {
+				var rowData = $(this).closest(".val-row").data("attributes");
+				$(".val-row.edit-contraints", "#frmExecNodeEdit").removeClass("edit-contraints");
+				$(this).closest(".val-row").addClass("edit-contraints");
+				$(".val-row", "#tbl-edt-ports-contraints").remove();
+				if (typeof rowData !== "undefined" && rowData !== null && !$.isEmptyObject(rowData)) {
+					helper_addConstraintRows($("#tbl-edt-ports-contraints"), rowData);
+				}
+				var rowName = $(this).closest(".val-row").find(".var-name").val();
+				$("#moreDialogModalLabel", "#moreDialog").html("More attributes " + (rowName !== "" ? (": " + rowName) : ""));
+				$("#moreDialog").modal('show');
+			});
 
         //remove error for some input elements
         $("input, textarea","form#frmExecNodeEdit")
@@ -919,7 +1194,7 @@
 				$(this).removeClass("empty");
 			}
 		});
-		
+
         $("#inputContainerId").on("change", function() {
 			disableTabsAndSave();
             if($(this).val() !== "") {
@@ -951,26 +1226,33 @@
 			return false;
 		  };
 		});
-
-		function guid() {
-		  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-		}
-		function s4() {
-		  return Math.floor((1 + Math.random()) * 0x10000)
-			.toString(16)
-			.substring(1);
-		}
 		
 		$("button#inspectExec").on("click", function() {
-			var inspectData = {
-				"request": "DescribeProcess",
-				"remoteAddress": $("option:selected","#inputContainerId").data("remoteAddress"),
-				"capability": $("#inputCapabilityId").val(),
-				"authentication": $("option:selected","#inputContainerId").data("authentication")
-			};
+
+			if(action === "wms_nodes"){
+				var inspectData = {
+					"capability": $("#inputCapabilityId").find(":selected").text(),
+					"authentication": $("option:selected","#inputContainerId").data("authentication"),
+					"remoteAddress": $("option:selected","#inputContainerId").data("remoteAddress")
+				};
+			}else if(action === "wps_nodes"){
+				var inspectData = {
+					"capability": $("#inputCapabilityId").find(":selected").val(),
+					"authentication": $("option:selected","#inputContainerId").data("authentication"),
+					"remoteAddress": $("option:selected","#inputContainerId").data("remoteAddress")
+				};
+			}
+			
+			if ($("#inputContainerSelect").val() === "WPS") {
+				$.extend(inspectData, {"request": "DescribeProcess"});
+			}
+			if ($("#inputContainerSelect").val() === "WMS") {
+				$.extend(inspectData, {"request": "GetMap"});
+			}
 			sourceTargetSpecificFormats["formatName"] = $("option:selected","#inputContainerId").data("formatName");
 			$.when(describeProcess(inspectData)).done(function(response) {
 				if (response.status !== responseStatus.success) {
+					$(".loading").addClass("hidden");$("#comp-tab-conf").css("opacity","");
 					showMsg ("No information available. Please select another service!", "WARNING");
 				} else {
 					var data = chkTSRF(response);
@@ -983,6 +1265,7 @@
 					$('.nav-tabs a[href="#comp-tab-ports"]').closest("li").removeClass("disabled");
 					
 					//show save button, this will be available only after inspect
+					ui_showExecNotification();
 					$("#saveExecNode").show();
 				}
 			});
@@ -994,6 +1277,14 @@
                 showMsg(SHARED_EDIT_RESTRICTED, "ERROR");
                 return -1;
             }
+
+			var tags = [];
+            if( $(".tagsinput .tag .tag-text").length >=1){
+		        $(".tagsinput .tag .tag-text").each(function(i){tags.push($(this).text())});
+            }else{
+                tags = null;
+            }
+
             var formData = {
 				"id": $('input[name=inputCompID]', this).val(),
 				"label" : $('input[name=inputCompLabel]', this).val(),
@@ -1008,7 +1299,8 @@
 				"visibility": $('select[name=inputVisibility]', this).val(),
 				//"active": $('select[name=inputActive]', this).val(),
 				"active": $('#inputActive').val(),
-				"owner": $("#owner").val(),
+				"owner": taoUserProfile.id,
+				"tags": tags,
 				"serviceId": $('select[name=inputContainerId]', this).val()
 			};
 				
@@ -1059,10 +1351,17 @@
            // var tags = $('input[name=formTags]', this).val();
            // formData.tags = tags.split(",");
 			
-			var callType = (userOpStack[0] && userOpStack[0].action ==="wps_edit") ? "PUT" : "POST";
+			var callType = (userOpStack[0] && (userOpStack[0].action ==="wps_edit" || userOpStack[0].action === "wms_edit")) ? "PUT" : "POST";
+			var endpoint;
+			if ($("#inputContainerSelect").val() === "WPS") {
+				endpoint = "wpscomponent/";
+			}
+			if ($("#inputContainerSelect").val() === "WMS") {
+				endpoint = "wmscomponent/";
+			}
             $.ajax({
                 cache: false,
-                url: baseRestApiURL + "wpscomponent/",
+                url: baseRestApiURL + endpoint,
                 type: callType,
                 data: JSON.stringify(formData),
                 headers: {
@@ -1109,6 +1408,26 @@
             });
             return false;
         });
+		
+		$("#moreDialog").on("click", "button.close-modal", function(e) {
+			e.preventDefault();
+			$(".modal-backdrop:last").remove();
+			$("#moreDialog").modal("hide");
+		})
+		.on('hidden.bs.modal', function (event) {
+			keepContraints();
+			$(".val-row.edit-contraints", "#frmExecNodeEdit").removeClass("edit-contraints");
+		});
     });
+
+	var ui_showExecNotification = function(){
+		var $notification = $(".box-notification");
+        $notification.addClass("show");
+		$(".loading").addClass("hidden");
+		$("#comp-tab-conf").css("opacity","");
+        setTimeout(function(){
+            $notification.removeClass("show");
+        }, 3000);
+    };
     //# sourceURL=remoteServices-components-plus.js
 </script>

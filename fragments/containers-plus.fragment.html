@@ -49,6 +49,14 @@
                             </div>
                         </div>
                     </div>
+					<div class="col-md-12">
+                        <div class="form-group">
+                            <label for="visibility" class="col-sm-2 col-md-2 control-label">Visibility</label>
+                            <div class="col-sm-10 col-md-10">
+                                <select type="text" class="form-control" id="visibility" name="visibility" placeholder="visibility" autocomplete="off" value="" ></select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 				<div class="row">
                     <div class="col-md-12">
@@ -110,7 +118,7 @@
 							</div>
 							<div class="col-sm-4 col-md-4">
 								<button disabled id="btnAddComponentDescriptor" name="btnAddComponentDescriptor" class="btn btn-primary btn-submit btn-cont-addnewcomp">Add component descriptor</button>
-								<input type="hidden" id="componentsDescriptor" name="componentsDescriptor"  value="" />
+								<input type="hidden" id="componentDescriptors" name="componentDescriptors"  value="" />
 							</div>
                         </div>
 					</div>
@@ -255,6 +263,14 @@
 		}
 		return false;
 	};
+
+	var visibilityEnum = getTaoEnumsMap("ContainerVisibility");
+	$.each(visibilityEnum, function (idx, value) {
+		$option = "<option value='"+value.key+"'>"+value.key+"</option>"
+		$("#visibility").append($option);
+		
+	});
+
 	//////////////////////////////////////////////////////////////////////////////////////
     $(document).ready( function() {
 		// Add extra installation or auxiliary files
@@ -283,7 +299,7 @@
 				rm_contentUrl="./fragments/containers-addContainerDescriptor.fragment.html?" + Math.random();
 		
 			if (rm_contentUrl === '') {
-				alert("TAO - Operation mismatch");
+				alert("AVL - Operation mismatch");
 				return;
 			}
 			$.ajax({
@@ -323,7 +339,7 @@
 				rm_contentUrl="./fragments/containers-addComponentDescriptor.fragment.html?" + Math.random();
 		
 			if (rm_contentUrl === '') {
-				alert("TAO - Operation mismatch");
+				alert("AVL - Operation mismatch");
 				return;
 			}
 			$.ajax({
@@ -389,6 +405,9 @@
 				description: {
 					required: true
 				},
+				visibility:{
+					required: true
+				},
 				containerLogo: {
 					required: true,
 					isValidFileType: { fileType: "image" , typesList: [ "image/gif", "image/jpeg", "image/png" ] }
@@ -432,7 +451,7 @@
 		$("form#frmUploadContainer").submit(function (event) {
 			event.preventDefault();
 			
-			$('input[name=componentsDescriptor]', "#frmUploadContainer").val( JSON.stringify(componentlist));
+			$('input[name=componentDescriptors]', "#frmUploadContainer").val( JSON.stringify(componentlist));
 			$('input[name=containerDescriptor]', "#frmUploadContainer").val(JSON.stringify(container));
 
 			if ($(this).valid()) {
@@ -511,7 +530,7 @@
 
 						$('#btnAddComponentDescriptor').prop('disabled', true); 
 						$('#jsonComponentDescriptor').prop('disabled',false);
-						$("#componentsDescriptor").val(null);
+						$("#componentDescriptors").val(null);
 					//	$('#idsystem').val("true");
 					}
  		 });

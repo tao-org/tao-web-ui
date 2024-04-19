@@ -1,0 +1,375 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Edit user subscriptions</h4>
+    </div>
+
+    <form id="frmUserEdit" class="form-horizontal form-newpc" role="form">
+        <input type="hidden" id="op" name="op" class="op" value="node-edit" />
+        <input type="hidden" id="id_u" name="id_u" value="0" />
+        <input type="hidden" name="clickedon" value="">
+        <div class="modal-error collapse">
+            <h4 class="modal-title">Error!</h4>
+            <p id="modal-error-msg"></p>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <section class="openstackMsg" hidden>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-2 col-md-2 control-label">Message: </label>
+                            <p style="padding-top: 7px;">openstack service unavailable</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="openstackAvailable" hidden>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputObjsize" class="col-sm-2 col-md-2 control-label">Object storage size (GB) </label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="number" class="form-control flavor-edit" id="inputObjsize" name="inputObjsize" placeholder="memory size GB" min="0" autocomplete="off" value="0" data-errorspan="memorySize"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputSub" class="col-sm-2 col-md-2 control-label">Subscription type </label>
+                            <div class="col-sm-10 col-md-10">
+                                <select id="inputSub" name="inputSub" class="form-control">
+                                    <option class='default' selected disabled>Select subscription type</option>
+                                    <option value="FIXED_RESOURCES">FIXED_RESOURCES</option>
+                                    <option value="PAY_PER_USE">PAY_PER_USE</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="tbl-parameters" class="col-sm-2 col-md-2 control-label">Flavors </label>
+                            <div class="col-sm-10 col-md-10">
+                                <table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-parameters">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-sm-1 col-md-1"></th>
+                                            <th>Flavor</th>
+                                            <th>Quantity</th>
+                                            <th>SSD</th>
+                                            <th>HDD</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3">
+                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-addnewparam" data-action="add-new-var">
+                                                    <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new parameter</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody class="tpl-sample-body">
+                                        <tr class="tpl-sample-row">
+                                            <th scope="row">
+                                                <i class="fa fa-plus fa-fw hidden" aria-hidden="true"></i>
+                                                <a href="#" class="text tbl-param-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                                            </th>
+                                            <td>
+                                                <select type="text" class="var-key inputFlavor is-template" value=""></select>
+                                            </td>
+                                            <td>
+                                                <input type="number" class="var-value-qnt" min="1" autocomplete="off" placeholder="number of nodes">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="var-value-ssd" min="1" autocomplete="off" placeholder="size in GB">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="var-value-hdd" min="1" autocomplete="off" placeholder="size in GB">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputPaid" class="col-sm-2 col-md-2 control-label">Paid</label>
+                            <div class="col-sm-10 col-md-10"> 
+                                <label class="radio-inline">
+                                    <input type="checkbox" name="inputPaid" value="false">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
+                                <button id="saveExecNode" type="submit" class="btn btn-primary btn-submit" name="btnSave">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- /.modal-body -->
+    </form>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div><!-- /.modal-content -->
+
+<link rel="stylesheet" href="./assets/libs/jQuery-datepicker/jquery-ui.css" type="text/css" />
+<script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
+<script src="./assets/libs/np/jquery.npmultilineselect.js" type="text/javascript"></script>
+<script>
+    var copyInitial = [];
+    function getSubscriptions(userId) {
+		$.ajax({
+			cache: false,
+			url: baseRestApiURL + "admin/users/" + userId + "/subscriptions",
+			type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+		}).done(function (response) {
+            if (response.status === "SUCCEEDED") {
+                taoFlavors = response.data.flavors;  
+                $.each(taoFlavors, function(key, value) {
+                    copyInitial.push(value.flavor.id);
+                });
+
+                $('select[name^="inputSub"] option[value="'+response.data.type +'"]').attr("selected","selected");
+                $("#inputObjsize").val(response.data.objectStorageGB);
+                $("input[type='checkbox']").prop("checked", response.data.paid);
+                
+                // if user is subscribed, list subscription + list of flavors
+                if((typeof taoFlavors !== 'undefined')){
+                    if(taoFlavors.length >=1){
+                        renderSubscriptions();
+                    }
+                }
+                getFlavors();
+
+			} else {
+				console.log("fail to retrive flavors for getSubscriptions");
+			    taoFlavors = [];
+			}
+        }).fail(function (jqXHR, status, textStatus) {
+			taoFlavors = [];
+        });
+	}
+
+    function getFlavors() {
+		$.ajax({
+			cache: false,
+			url: baseRestApiURL + "topology/flavors",
+			type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+		}).done(function (response) {
+            if (response.status === "SUCCEEDED") {
+				taoFlavors = response.data;
+			} else {
+				console.log("fail to retrive flavors");
+			}
+        }).fail(function (jqXHR, status, textStatus) {
+            console.log("fail to retrive flavors for getFlavors");
+			taoFlavors = [];
+        });
+	}
+
+    function helper_addParameterRow($tbl, payload){
+        var obj = {"key":"","qnt":"","ssd":"","hdd":""};
+		$.extend( obj, payload );
+		
+		var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
+		$el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+
+        if(obj.key !== ""){
+            $(".is-template", $el).removeClass("is-template");
+            renderMultilineSelect($("select.var-key", $el), obj.key);
+        }
+		$('input.var-value-qnt', $el).val(obj.qnt);
+		$('input.var-value-ssd', $el).val(obj.ssd);
+		$('input.var-value-hdd', $el).val(obj.hdd);
+		$tbl.append($el);
+        return $el;
+	}
+
+    function renderSubscriptions(){
+        $.each(taoFlavors, function(key, value) {
+            var payload = {"key":value.flavor.id, "qnt":value.quantity, "ssd":value.ssd, "hdd":value.hdd};
+            helper_addParameterRow($("#tbl-parameters"), payload);
+        });
+    }
+
+    function renderMultilineSelect($flavorSelect, flavorID){
+        //var $flavorSelect = $("select.var-key:not(.is-template)");
+
+        if(!taoFlavors || (taoFlavors.length < 1)){
+            return;
+        }
+
+        var isDisabled = false;
+        if ($flavorSelect.length == 0) return;
+        $.each(taoFlavors, function(key, value) {
+            if(typeof value.flavor !== "undefined"){
+                var flavorID = value.flavor;
+                $flavorSelect.append($("<option />").val(flavorID.id).text(flavorID.id).data( "payload", value.flavor ));
+            }else{
+                $flavorSelect.append($("<option />").val(value.id).text(value.id).data( "payload", value ));
+            }
+        });
+        if(flavorID){
+			$flavorSelect.val(flavorID).change();
+            isDisabled = true;
+        }
+
+        var $ms = $flavorSelect.npMultilineSelect({disabled: isDisabled});
+        $ms.npMultilineSelect( "menuWidget" ).addClass( "overflow-npmultilineselect" ).parent().css({"z-index" : 9999});
+        $flavorSelect.npMultilineSelect("refresh");
+
+        $flavorSelect.on( "selectmenuchange",function( event, ui ) {
+            var payload = ui.item.element.data('payload');
+            // console.log(payload);
+            $(this).parents(".val-row").find(".var-value-qnt").val(payload.quantity);
+            $(this).parents(".val-row").find(".var-value-hdd").val(payload.hdd);
+            $(this).parents(".val-row").find(".var-value-ssd").val(payload.ssd);
+        });
+    }
+
+    $(document).ready( function(){
+
+        var userId = window.userOpStack[0].dna.id;
+        
+        if(window.openStackPresent === true){
+            getSubscriptions(userId);
+            $(".openstackAvailable").removeAttr('hidden');
+        }else{
+            $(".openstackMsg").removeAttr('hidden');
+        }
+
+        $(".tbl-edt")
+        .on("click", ".tbl-param-delete-action", function(e){
+            e.preventDefault();
+            $(this).closest(".val-row").remove();
+        });
+            
+        $(".btn-addnewparam").on("click", function(){
+            var $tbl = $(this).closest(".tbl-edt");
+            var $el = helper_addParameterRow($tbl);
+            $(".is-template", $el).removeClass("is-template");
+            renderMultilineSelect($("select.var-key", $el));
+        });
+
+        $("form#frmUserEdit").submit(function (event) {
+            event.preventDefault();
+            var haserror = 0;
+			var paramDuplicates = 0;
+
+            var paramKeysArr = {}, values = {};
+            var $tblParameters = $("#tbl-parameters");
+
+            // set request type; if new flavor appears use POST
+            var ajaxtype = 'PUT';
+
+            $(".val-row", $tblParameters).each(function() {
+
+				var key =  $($(this).find("option:selected")[0]).val();
+                // if the value selected is not the default option
+                if( !$($(this).find("option:selected")[0]).hasClass("default")){
+                    values = {
+                        "quantity": $(this).find("input.var-value-qnt").val(),
+                        "hdd": $(this).find("input.var-value-hdd").val(),
+                        "ssd": $(this).find("input.var-value-ssd").val()
+                    }
+                
+                    // if the quantity and size are not empty
+                    if((typeof key !== "undefined") && (values.quantity !== '')  && (values.hdd !== '')  && (values.ssd !== '') ) {
+                        if(key in paramKeysArr){
+                            paramDuplicates = 1;
+                        }
+                        if(!copyInitial.includes(key)){
+                            ajaxtype = "POST";
+                        }
+                        paramKeysArr[key] = values;
+                    } else {
+                        haserror = 1;
+                    }
+                }
+			});
+            var paid = $($("input[name='inputPaid']", this)[0]).prop("checked");
+            var formData = {
+                objectStorageGB		: $("input[name=inputObjsize]", this).val(),
+                type			    : $("#inputSub", this).val(),
+                paid			    : paid,
+                flavors             : paramKeysArr
+            }
+
+			if(haserror==1) {
+				showMsg("Invalid parameter(s). Please add a numeric value to continue.", "ERROR");
+			}
+			else if(paramDuplicates==1) {
+				showMsg("Invalid flavors identifier. Please choose unique flavors to continue.", "ERROR");
+			}else{
+				$(".modal-error ").fadeOut();
+
+                $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + "admin/users/" + userId + "/subscriptions",
+                    type: ajaxtype,
+                    data: JSON.stringify(formData),
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": window.tokenKey
+                },
+                    error : function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status === 500) {
+                            showMsg("Error updating resources. Please check your data and try again.", "ERROR");
+                            return;
+                        }
+                        showMsg("Unknown error. Unable to update resources. Please try again.", "ERROR");
+                    },
+                    success: function(response,textStatus, jqXHR) {
+                        var r = chkTSRF(response);
+                        if (response.status === "FAILED") {
+                            if (response.message) {
+                                showMsg(response.message, "ERROR");
+                                
+                                $('#myModalNodes').animate({scrollTop: 0}, 250);
+                                return;
+                            }
+                            showMsg("Error updating resources. Please check your data and try again.", "ERROR");
+                        }
+                        showMsg(response.message, "SUCCESS");
+                        $("#myModalNodes").modal('hide');
+                    }
+                });
+            }
+        });
+
+    });
+//# sourceURL=node_edit.js
+</script>

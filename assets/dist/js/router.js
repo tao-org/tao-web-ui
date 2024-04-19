@@ -41,8 +41,8 @@ function refreshToken() {
 	var refreshed = false;
 	
 	var tokenRefresh = _settings.readCookie("refreshToken");
-	var userName     = _settings.readCookie("TaoUserName");
-	if (tokenRefresh !== "" && tokenRefresh != null && userName !== "" && userName != null) {
+	var userId = _settings.readCookie("TaoUserId");
+	if (tokenRefresh !== "" && tokenRefresh != null && userId !== "" && userId != null) {
 		// Refresh token
 		$.ajax({
 			"async"  : false,	// !!! Important: this call MUST be synchronous otherwise some ajax call will fail
@@ -50,7 +50,7 @@ function refreshToken() {
 			"url"    : baseRestApiURL + "auth/refresh",
 			"method" : "POST",
 			"headers": { "Content-Type": "application/x-www-form-urlencoded" },
-			"data"   : { "user" : userName, "token": tokenRefresh },
+			"data"   : { "user" : userId, "token": tokenRefresh },
 			"success": function (r) {
 				var apiData = chkTSRF(r);
 				if (apiData.token && apiData.refreshToken) {
@@ -63,10 +63,25 @@ function refreshToken() {
 					refreshed = true;
 				} else {
 					console.log("Failed to retrieve new token. User should try and log back in.");
+                    _settings.createCookie("tokenKey",'');
+                    _settings.createCookie("userMatrix",'{}');
+                    _settings.createCookie("refreshToken","");
+                    _settings.createCookie("userRole","");
+                    _settings.createCookie("TaoUserId","");
+                    _settings.createCookie("TaoUserName","");
+					//window.location = "login.html";
 				}
 			},
 			"error": function (jqXHR, status, textStatus) {
 				console.log("Could not refresh the token. User should try and log back in.");
+                _settings.createCookie("tokenKey",'');
+                _settings.createCookie("userMatrix",'{}');
+                _settings.createCookie("refreshToken","");
+                _settings.createCookie("userRole","");
+                _settings.createCookie("TaoUserId","");
+                _settings.createCookie("TaoUserName","");
+				//window.location = "login.html";
+
 			}
 		});
 	} else {
@@ -101,6 +116,7 @@ $(function () {
 	
     // User section
     hashRoutesMap["my/queries"] = "./fragments/datasources-queries.fragment.html";
+    hashRoutesMap["my/sharedDatasets"] = "./fragments/shared-datasets.fragment.html";
 	hashRoutesMap["my/explorer"] = "./fragments/datasources-queries.fragment.html";
 	hashRoutesMap["my/workflows"] = "./fragments/workflows-admin2.fragment.html";
 //	hashRoutesMap["my/auxfiles"] = "./fragments/my-auxfiles.fragment.html";
@@ -110,7 +126,8 @@ $(function () {
     
 	// Remote Services components section
 	hashRoutesMap["my/remoteServices"] ="./fragments/remoteServices-components.fragment.html";
-	
+	hashRoutesMap["my/components"] ="./fragments/components-user.fragment.html";
+    hashRoutesMap["my/containers"] ="./fragments/containers-user.fragment.html";
     // Shared section
 //	hashRoutesMap["shared/components"] = "./fragments/component-admin2.fragment.html";
 //	hashRoutesMap["shared/workflows"] = "./fragments/workflows-admin2.fragment.html";
@@ -125,6 +142,7 @@ $(function () {
     hashRoutesMap["admin/remoteServices"] = "./fragments/remoteServices-admin2.fragment.html";
     hashRoutesMap["admin/users"] = "./fragments/users-admin2.fragment.html";
     hashRoutesMap["admin/systemDashboard"] = "./fragments/systemDashboard-admin2.fragment.html";
+    hashRoutesMap["admin/config"] = "./fragments/configuration.fragment.html";
 	
 	// Documentation
     hashRoutesMap["howto/intro"] = "./fragments/tao-howto.fragment.html";
@@ -142,6 +160,11 @@ $(function () {
 			}
         } else {
             window.tokenKey = tokenKey;
+
+            // check ws connection status
+            if(window.wsController){
+                window.wsController.checkConnection();
+            }
         }
         navRouter(decodeURI(window.location.hash));
     });
@@ -177,7 +200,7 @@ $(function () {
         unsolvedRoute = false;
 
         //set viewMode before loading fragment
-        var prefferences_viewMode = "grid";
+        var preferences_viewMode = "grid";
         var username = _settings.readCookie("TaoUserName");
         var pageName = routeTags[0] +'-'+ routeTags[1];
         var currentPref = [];
@@ -189,11 +212,11 @@ $(function () {
         $.each(currentPref, function(index,value){
             keyValue = value.key;
             if(keyValue.includes(pageName) === true){
-                prefferences_viewMode = value.value;
+                preferences_viewMode = value.value;
                 return false;
             }
         });
-        prefferences.viewMode = prefferences_viewMode;
+        preferences.viewMode = preferences_viewMode;
         
         $.ajax({
             cache: false,
@@ -209,8 +232,8 @@ $(function () {
                 alert("Could not load page content... Try later.")
         });
         // Sync active menu. Remove active from navigation, and generically mark branch as active.
-        $('.sidebar-menu .routed').removeClass('active');
-        $('.sidebar-menu .routed-'+routeTags[0]+'-'+routeTags[1]).addClass("active");
+        $('.sidebar-menu .routed').removeClass('active opened');
+        $('.sidebar-menu .routed-'+routeTags[0]+'-'+routeTags[1]).addClass("active opened");
 
         if(routeTags[0] === "account"){
             if(routeTags[1] === "profile"){

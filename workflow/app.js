@@ -5,6 +5,7 @@ var maxScale = 10;
 var incScale = 0.1;
 var keyboardShifted = false;
 var wfTools={};
+wfTools.taoReferenceVersion = 200;
 
 var tao_resetShadowData = function(){
     wfTools={
@@ -224,7 +225,7 @@ var toolboxModules = {
 		//highlight nodes to be deleted
         $(".w.selected").addClass("node-to-be-deleted");
         $('#confirm-dialog').modal('confirm',{
-            msg:"Are you sure you want to delete selected nodes?",
+            msg:"Are you sure you want to delete selected node(s)?",
             callbackConfirm: function() {
                 $.each(toolboxModules.selected, function(index, item) {
                     wf_removeNode(item);
@@ -309,6 +310,8 @@ jsPlumb.bind("jsPlumbLoaded", function(instance) {
     //show toolbox
 	$.when(getConfigEnums()).done(function (getConfigEnumsResponse) {
 		wfTools.taoEnums = getConfigEnumsResponse['data'];
+		getTaoVersion();
+		wfTools.isOldVersion = wfTools.taoVersion < wfTools.taoReferenceVersion;
 		toolboxSidebar.init();
 	});
 });
@@ -742,13 +745,13 @@ jsPlumb.ready(function () {
 	
 
     console.log("create connector style");
-	if (window.prefferences.workFlowConnectors === "S"){
+	if (window.preferences.workFlowConnectors === "S"){
 		instance.registerConnectionType("basic", { 	anchor:"Continuous",
 												connector:[ "StateMachine", { stub: [20, 20], gap: 5, cornerRadius: 5, midpoint: 0.5, alwaysRespectStubs: true } ],
 											}
 									);
 	}
-	if (window.prefferences.workFlowConnectors === "F"){
+	if (window.preferences.workFlowConnectors === "F"){
 		instance.registerConnectionType("basic", { 	anchor:"Continuous",
 												connector:[ "Flowchart", { stub: [20, 20], gap: 5, cornerRadius: 5, midpoint: 0.5, alwaysRespectStubs: true } ],
 											}
@@ -981,7 +984,7 @@ jsPlumb.ready(function () {
                         //register link
                         wfPlumbCanvasData.connectors[info.connection.id] = ({"from":info.sourceId, "to":info.targetId, "linkData":linkData});
                     } else {
-                        alert("Incompatiple source and target. Reverting");
+                        alert("Incompatiple source and target. Reverting changes.");
 						jsp.deleteConnection(info.connection);
                         //delete wfPlumbCanvasData.connectors[info.connection.id];
                     }
@@ -1212,9 +1215,26 @@ $( document ).uitooltip({
         var id = null;
         var renderPortTP = function(fd){
 			var nonNullValues = "";
-			$.each(fd.dataDescriptor, function (key, val) {
-				nonNullValues += (val ? "<label>" + key + ": <span>"+ val +"</span></label>" : "");
-			});
+			if (wfTools.isOldVersion) {
+				$.each(fd.dataDescriptor, function (key, val) {
+					nonNullValues += (val ? "<label>" + key + ": <span>"+ val +"</span></label>" : "");
+				});
+			} else {
+				$.each(fd, function (key, val) {
+					if (key !== "cardinality" && key !== "id" && key !== "name" && key !== "parentId" && key !== "constraints") {
+                        if(val){
+                            if(key === 'dataDescriptor'){
+                                Object.keys(val)
+                                    .forEach(function eachKey(k) {
+                                        nonNullValues += "<label>"+ k +": <span>"+ val[k] +"</span></label>";
+                                });
+                            }else{
+					            nonNullValues += (val ? "<label>" + key + ": <span>"+ val +"</span></label>" : "");
+                            }
+                        }
+					}
+				});
+			}
 			return "<p class='tooltip-paragraph'>" + nonNullValues + "</p>";
         };
         $(".ui-helper-hidden-accessible").html("");
@@ -1722,6 +1742,21 @@ function getConfigEnums(){
             "X-Auth-Token": window.parent.tokenKey
         }
     });
+}
+
+function getTaoVersion() {
+	$.each(wfTools.taoEnums.TAO, function (idx, obj) {
+		if (obj.key === "version") {
+			var snapshotStartIdx = obj.value.indexOf("-");
+			if (snapshotStartIdx > 0) {
+				wfTools.taoVersion = parseInt(obj.value.substr(0, snapshotStartIdx).replaceAll(".", ""));
+			} else {
+				wfTools.taoVersion = parseInt(obj.value.replaceAll(".", ""));
+			}
+			return false;
+		}
+	});
+	
 }
 
 function addExtraField(fieldType, elem, placeholderVal){

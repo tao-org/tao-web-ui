@@ -23,16 +23,6 @@
             <form id="frmEditDatasourceTags" class="form-horizontal" role="form">
                 <div class="modal-body">
                     <section>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="formTags" class="col-sm-2 col-md-2 control-label">Tags </label>
-                                    <div class="col-sm-10 col-md-10">
-                                        <input id="formTags" name="formTags" class="form-control" value="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 						<div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -54,7 +44,17 @@
                                 <div class="form-group">
                                     <label for="local_root" class="col-sm-2 col-md-2 control-label">Local root </label>
                                     <div class="col-sm-10 col-md-10">
-                                        <input type="text" id="local_root" name="local_root" class="form-control" value="">
+                                        <input type="text" id="local_root" name="local_root" class="form-control" placeholder="Datasource products not available locally" value="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="formTags" class="col-sm-2 col-md-2 control-label">Tags </label>
+                                    <div class="col-sm-10 col-md-10">
+                                        <input id="formTags" name="formTags" class="form-control" value="">
                                     </div>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group">
-									<label for="local_root" class="col-sm-2 col-md-2 control-label">Parameters </label>
+									<label for="tbl-parameters" class="col-sm-2 col-md-2 control-label">Parameters </label>
 									<div class="col-sm-10 col-md-10">
 										<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-parameters">
 											<thead>
@@ -103,8 +103,11 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
-                                        <button id="saveDatasourcesTags" type="submit" class="btn btn-primary btn-action" name="btnSave">Save tags</button>
+                                    <div class="col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11">
+                                        <div class="modal-footer">
+                                            <button id="saveDatasourcesTags" type="submit" class="btn btn-primary btn-action left-btn" name="btnSave">Save</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -112,9 +115,6 @@
                     </section>
                 </div>
             </form>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
         </div><!-- /.modal-content -->
     </div>
 </div>
@@ -124,7 +124,7 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-    <h1>Data Sources <small>Data sources are components that can query (and retrieve) products from remote repositories.</small></h1>
+    <h1>Data Sources <small>The list of components that can query and retrieve <strong>products</strong> from <strong>remote repositories</strong>.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Datasources</li>
@@ -285,7 +285,7 @@
         var html = "<div class=\"modal-content\">\n" +
             "    <div class=\"modal-header\">\n" +
             "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span></button>\n" +
-            "        <h4 class=\"modal-title\" id=\"myModalLabel\">Datasource</h4>\n" +
+            "        <h4 class=\"modal-title\" id=\"myModalLabel\">Datasource parameters</h4>\n" +
             "    </div>\n" +
             "        <div class=\"modal-body\">\n" +
             "            <section>\n" +
@@ -306,7 +306,7 @@
             "                <div class=\"row\">\n" +
             "                    <div class=\"col-md-12\">\n";
 
-        html +="<p>Parameter list:</p><div class=\"responsive\">\n" +
+        html +="<p>These parameters can be set when searching for EO products.</p><div class=\"responsive\">\n" +
             "    <table class=\"table table-bordered box-shadow--6dp\">\n" +
             "      <thead>\n" +
             "        <tr>\n" +
@@ -320,8 +320,8 @@
 
         for (var i = 0, j = parameters.length; i < j; i++) {
             var lType = parameters[i]['type'].split(".");
-            var lDefault = '';
-            if(parameters[i]['defaultValue']!== null){
+            var lDefault = '-';
+            if((typeof parameters[i]['defaultValue'] !== 'undefined')  && parameters[i]['defaultValue']!== null){
                 lDefault = parameters[i]['defaultValue'];
             }
             html += "        <tr>\n" +
@@ -334,8 +334,7 @@
         html += "      </tbody>\n" +
             "    </table>\n" +
             "  </div>";
-        html +=" <h4>Notice</h4>\n" +
-            "    <p>Parameters will be populated with specific values only in the workflow definition stage.</p>\n" +
+        html +=
             "    <div class=\"modal-footer\">\n" +
             "        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n" +
             "    </div>\n" +
@@ -360,7 +359,7 @@
             .done(function (getDatasourceParametersResponse) {
                 var parameters = chkTSRF(getDatasourceParametersResponse);
                 var $modal = $("#myModalNodes");
-                var rmContent = buildModalParamsList(args.dna, parameters);
+                var rmContent = buildModalParamsList(args.dna, parameters.parameter);
                 $modal.find('.modal-dialog').html(rmContent);
                 $modal.modal('show');
             })
@@ -400,18 +399,24 @@
 					}];
 					if(oDna.hasOwnProperty('tags') && oDna['tags']!= null){
 						$('#formTags').importTags( args.dna['tags'].join());
+					} else {
+						$('#formTags').importTags("");
 					}
 					if(oDna.hasOwnProperty('fetchMode') && oDna['fetchMode']!= null){
 						$("#fetch_mode").find("option[value='" + oDna.fetchMode + "']").prop("selected",true);
 					}
 					if(oDna.hasOwnProperty('localRepositoryPath') && oDna['localRepositoryPath']!= null){
 						$("#local_root").val(oDna.localRepositoryPath);
+					} else {
+						$("#local_root").val("");
 					}
 					if(oDna.hasOwnProperty('parameters') && oDna['parameters'] != null) {
 						$.each(oDna['parameters'], function (key, value) {
 							helper_addParameterRow($("#tbl-parameters"),{"key":key,"value":value});
 						});
 					}
+                    $("#myModalEditTags .modal-title").html("Edit "+ oDna.id);
+                    $("#myModalEditTags .modal-body").css("padding", "15px 5px 15px 30px");
 					$("#myModalEditTags").modal('show');
 				}
 			},
@@ -432,7 +437,7 @@
         window.panelComp = $('#panel-nodes').npPaginatedCells({
             headerUser: taoUserProfile.username,
             url: urls,
-            viewMode: prefferences.viewMode,
+            viewMode: preferences.viewMode,
             filterAttribute: "label",
             order:[
                 {
@@ -514,10 +519,10 @@
 					}
 				});
 				$.when(updateTags, updateConfig).done(function (r1, r2) {
-					var responseTags = chkTSRF(r1);
-					var responseConfig = chkTSRF(r2);
+					// var responseTags = chkTSRF(r1[0]);
+					// var responseConfig = chkTSRF(r2[0]);
 					
-					if(responseTags !== {} && responseConfig !== {}) {
+					if(r1[0].status === "SUCCEEDED" && r2[0].status === "SUCCEEDED") {
 						showMsg("Datasources successfully saved.", "SUCCESS");
 					} else {
 						showMsg("Datasources was not saved.", "FAILED");

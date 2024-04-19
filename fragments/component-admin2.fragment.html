@@ -6,10 +6,10 @@
 <!-- modal nodes op -->
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-    <h1>Processing Modules<small>Processing modules are executables that constitute the building block of workflows.</small></h1>
+    <h1>Processing Modules<small>The list of <strong>executables</strong> that constitute the building block of workflows.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Components</li>
+        <li class="active">Processing modules</li>
     </ol>
 </section>
 <!-- /Content Header (Page header) -->
@@ -162,6 +162,7 @@
         </div>
     </div>
 </section><!-- /.content -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     deleteProcessingComponentById = function(id){
         $.ajax({
@@ -175,15 +176,18 @@
                 "X-Auth-Token": window.tokenKey
             },
             error : function (jqXHR, textStatus, errorThrown) {
-                console.log("error");
                 if(jqXHR.status === 500 ){
-                    showMsg("Unable to delete node. Please try again.", "ERROR");
+                    showMsg("Unable to delete processing component. Please try again.", "ERROR");
                 } else {
                     alert('An error has occurred, please try again or contact app admin.');
                 }
             },
             success: function(data) {
-                showMsg("Processing component successfully deleted.", "SUCCESS");
+                if(data.status === "SUCCEEDED"){
+                    showMsg("Processing component successfully deleted.", "SUCCESS");
+                }else{
+                    showMsg("Processing component could not be deleted.", "ERROR");
+                }
                 panelComp.refreshData();
             }
         });
@@ -209,7 +213,7 @@
             rm_contentUrl="./fragments/component-plus.fragment.html?" + Math.random();
         }
         if(rm_contentUrl === ''){
-            alert("TAO - Operation mismatch");
+            alert("AVL - Operation mismatch");
             return;
         }
         $.ajax({
@@ -217,7 +221,7 @@
             success: function(result) {
                 rmContent = result;
                 if(rmContent !== ''){
-                    $modal.find('.modal-dialog').html(rmContent);
+                    $modal.find('.modal-dialog').first().html(rmContent);
                 }else{
                     alert("Could not retrive needed data from server.");
                     return e.preventDefault();
@@ -227,18 +231,15 @@
         });
     };
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     $( document ).ready(function() {
         var urls =  urls = [
-				baseRestApiURL + "component/",
-                baseRestApiURL + "component/user/?type=SCRIPT",
-                baseRestApiURL + "component/user/?type=EXECUTABLE"
+				baseRestApiURL + "component/"
             ];
 		
 		window.panelComp = $("#panel-nodes").npPaginatedCells({
 			headerUser: taoUserProfile.username,
 			url: urls,
-			viewMode: prefferences.viewMode,
+			viewMode: preferences.viewMode,
 			filterAttribute: "label",
 			order:[
 				{
@@ -255,7 +256,7 @@
 			doAction: function(action, args){
 				if(action === "op-plus"){
 					if( taoUserProfile.userRole !== "ADMIN"){
-						showMsg("Only admin roles can ad components to the shared workspace. You should try adding components to your own workspace", "ERROR");
+						showMsg("Only admin can add components to the shared workspace. You should try adding components to your own workspace", "ERROR");
 						return;
 					}
 					myModalNodesOpShow(action, args);
@@ -267,7 +268,7 @@
 						return;
 					}
 					$('#confirm-dialog').modal('confirm',{
-						msg:"Are you sure you want to delete the processing module: <strong>"+args.dna.label+"</strong>?",
+						msg:"Are you sure you want to delete the processing module: <strong style='word-break: break-word'>"+args.dna.label+"</strong>?",
 						callbackConfirm: function() {
 							deleteProcessingComponentById(args.dna.id);
 						},

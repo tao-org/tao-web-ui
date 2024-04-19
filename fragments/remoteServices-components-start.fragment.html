@@ -189,13 +189,13 @@ table.tbl-edt-sysvar input[type="number"]{border:none;width:100%}
 		var $tableEL = $(".tbl-edt-sysvar");
 		
 		$.each(data.parameters, function (idx, obj) {
-			if (processorRegex.test(obj.id) || obj.id.indexOf("footprint") > -1 || obj.id.indexOf("startDate") > -1 || obj.id.indexOf("endDate") > -1){
-				helper_addSTblEdtRow($tableEL, obj);
+			if (data.type == 'WMS' || processorRegex.test(obj.id) || obj.id.indexOf("footprint") > -1 || obj.id.indexOf("startDate") > -1 || obj.id.indexOf("endDate") > -1){
+				helper_addSTblEdtRow($tableEL, obj, data.type);
 			}
 		});
 	}
 	
-	function helper_addSTblEdtRow ($tblEdt, payload) {
+	function helper_addSTblEdtRow ($tblEdt, payload, type) {
 		var obj = {
 			"type": "REGULAR",
 			"dataType": "string",
@@ -206,7 +206,7 @@ table.tbl-edt-sysvar input[type="number"]{border:none;width:100%}
 		$.extend(obj, payload);
 		var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
 		// hide all site parameters
-		if (!processorRegex.test(obj.id)) {
+		if (type != 'WMS' && !processorRegex.test(obj.id)) {
 			$el.prop("hidden", true);
 			$el.attr("id",obj.id);
 		}
@@ -325,7 +325,7 @@ table.tbl-edt-sysvar input[type="number"]{border:none;width:100%}
             .submit(function (e) {
 				e.preventDefault();
 				var formData = {};
-                formData['wpsId'] = window.userOpStack[0].dna.id;
+                formData['webServiceId'] = window.userOpStack[0].dna.id;
 				var parametersObj = {}
 				var $tableValRows = $(".tbl-edt-sysvar", "#acc-panel-tpl-param").find(".val-row");
 				$.each($tableValRows, function(i, $tableValRow) {
@@ -333,10 +333,17 @@ table.tbl-edt-sysvar input[type="number"]{border:none;width:100%}
 					var v = $(".var-value",$tableValRow).val();
 					parametersObj[n] = v;
 				});
+				$site = $("#selected_site");
+				parametersObj["footprint"] = $site.find("option[value=" + $site.val() + "]").data("dna").footprint;
+				if( $("[data-action='wps_nodes']").parent().hasClass("active") ){
+					var url = "orchestrator/wps";
+				}else if( $("[data-action='wms_nodes']").parent().hasClass("active") ){
+					var url = "orchestrator/wms";
+				}
 				formData['parameters'] = parametersObj;
 				var settings = {
 					"async": true,
-					"url": baseRestApiURL + "orchestrator/wps",
+					"url": baseRestApiURL + url,
 					"method": "POST",
 					"headers": {
 						"Content-Type": "application/json",

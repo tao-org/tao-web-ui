@@ -7,7 +7,7 @@
 	<style data="test" type="text/css"></style>
 <head>
     <meta charset="UTF-8">
-    <title>TAO | Dashboard</title>
+    <title>Dashboard</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.4 -->
@@ -21,23 +21,11 @@
     <link href="./assets/dist/css/size-customization.css" rel="stylesheet" type="text/css" />
     <link href="./assets/dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css" id="style_css_file"/>
 
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js
-    " type="text/javascript"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js" type="text/javascript"></script>
+	
+    <link rel="shortcut icon" type="image/x-icon" href="/media/icons/dunia-favicon.ico" />
     
-    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="./apple-touch-icon-57x57.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./apple-touch-icon-114x114.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./apple-touch-icon-72x72.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./apple-touch-icon-144x144.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="./apple-touch-icon-60x60.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="./apple-touch-icon-120x120.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="./apple-touch-icon-76x76.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="./apple-touch-icon-152x152.png" />
-    <link rel="icon" type="image/png" href="./favicon-196x196.png" sizes="196x196" />
-    <link rel="icon" type="image/png" href="./favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
-    <link rel="icon" type="image/png" href="./favicon-128.png" sizes="128x128" />
     <meta name="application-name" content="&nbsp;"/>
     <meta name="msapplication-TileColor" content="#FFFFFF" />
     <meta name="msapplication-TileImage" content="./mstile-144x144.png" />
@@ -53,6 +41,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script src="./assets/dist/js/general-functions.js" type="text/javascript"></script>
+    <script src="./assets/dist/js/common-dashboard-functions.js" type="text/javascript"></script>
     <script src="./assets/dist/js/config.js" type="text/javascript"></script>
     <script>
         var root_path = '/_tao/';
@@ -103,9 +92,9 @@
         <!-- Logo -->
         <a href="./sap.html" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini">TAO</span>
+            <span class="logo-mini"><img id="logoSmall" src="./media/images/avl_logo_small_transparent.png" alt="logo_small" style="height:5rem"/></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><img src="./media/images/app_logo.png" /></span>
+            <span id = "logoText" class="logo-lg"></span>
         </a>
         <!-- Header Navbar -->
         <nav class="navbar navbar-static-top" role="navigation">
@@ -197,7 +186,7 @@
                 </div>
             </div>
 			
-            <!-- search form (Optional) -->
+            <!-- search form (Optional)
             <form action="#" method="get" class="sidebar-form">
                 <div class="input-group">
                     <input type="text" name="q" class="form-control" placeholder="Search..." />
@@ -206,7 +195,7 @@
               </span>
                 </div>
             </form>
-            <!-- /.search form -->
+            /.search form -->
 
             <!-- Sidebar Menu -->
             <ul class="sidebar-menu">
@@ -214,26 +203,29 @@
                 <li class="routed routed-admin-dashboard active">
                     <a href="#admin/dashboard"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
                 </li>
-                <li class="treeview routed routed-my-explorer routed-my-sites routed-my-repositories routed-my-queries">
+                <li class="treeview routed routed-my-explorer routed-my-sites routed-my-repositories routed-my-queries routed-my-sharedDatasets">
                     <a href="#default"><i class="fa fa-wpexplorer"></i><span>My Datasets</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                        <!--<li class="routed routed-auxfiles"><a href="#my/auxfiles">Repositories</a></li>-->
-                        <li class="routed routed-my-explorer active">
-                            <a href="#my/explorer">Search</a>
-                        </li>
-                        <li class="routed routed-my-sites"><a href="#my/sites">Sites</a></li>
-                        <li class="routed routed-my-repositories"><a href="#my/repositories">Repositories</a></li>
-                        <li class="routed routed-my-queries"><a href="#my/queries">Product sets</a></li>
+                        <li class="routed routed-my-explorer active"><a href="#my/explorer"><span>Search</span></a></li>
+                        <li class="routed routed-my-sites"><a href="#my/sites"><span>Sites</span></a></li>
+                        <li class="routed routed-my-repositories"><a href="#my/repositories"><span>Repositories</span></a></li>
+                        <li class="routed routed-my-queries"><a href="#my/queries"><span>Product Sets</span></a></li>
+                        <li class="routed routed-my-sharedDatasets"><a href="#my/sharedDatasets"><span>Shared Datasets</span></a></li>
                     </ul>
                 </li>
                 <li class="treeview routed routed-my-workflows routed-my-scheduling routed-my-remoteServices">
                     <a href="#default"><i class="fa fa-briefcase"></i><span>My Workflows</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-						<li class="routed routed-my-workflows active"><a href="#my/workflows">Workflows</a></li>
-                        <li class="routed routed-my-remoteServices">
-                            <a href="#my/remoteServices">Remote Services</a>
-                        </li>
-                        <li class="routed routed-my-scheduling"><a href="#my/scheduling">Scheduled Jobs</a></li>
+						<li class="routed routed-my-workflows active"><a href="#my/workflows"><span>Workflows</span></a></li>
+                        <li class="routed routed-my-remoteServices"><a href="#my/remoteServices"><span>Remote Services</span></a></li>
+                        <li class="routed routed-my-scheduling"><a href="#my/scheduling"><span>Scheduled Jobs</span></a></li>
+                    </ul>
+                </li>
+                <li class="treeview routed routed-my-components routed-my-containers">
+                    <a href="#default"><i class="fa fa-briefcase"></i><span>My Components</span> <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+						<li class="routed routed-my-components active"><a href="#my/components"><span>Components</span></a></li>
+                        <li class="routed routed-my-containers"><a href="#my/containers"><span>Containers</span></a></li>
                     </ul>
                 </li>
                <!--<li class="treeview routed routed-shared-datasources routed-shared-components routed-shared-workflows routed-shared-auxfiles">
@@ -245,17 +237,18 @@
                  <!--       <li class="routed routed-shared-auxfiles"><a href="#shared/auxfiles">Common Files</a></li>
                     </ul>
                 </li>-->
-                <li class="treeview routed routed-admin-components routed-admin-datasources routed-admin-topology routed-admin-containers routed-admin-repositoriesTemplate routed-admin-remoteServices routed-admin-users routed-admin-systemDashboard admin-mode-only">
+                <li class="treeview routed routed-admin-components routed-admin-datasources routed-admin-topology routed-admin-containers routed-admin-repositoriesTemplate routed-admin-remoteServices routed-admin-users routed-admin-systemDashboard routed-admin-config admin-mode-only">
                     <a href="#"><i class="fa fa-link"></i> <span>Admin area</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                        <li class="routed routed-admin-systemDashboard"><a href="#admin/systemDashboard">System Dashboard</a></li>
-                        <li class="routed routed-admin-containers"><a href="#admin/containers">Toolbox Containers</a></li>
-                        <li class="routed routed-admin-components"><a href="#admin/components">Components</a></li>
-                        <li class="routed routed-admin-remoteServices"><a href="#admin/remoteServices">Remote Web Services</a></li>
-						<li class="routed routed-admin-datasources"><a href="#admin/datasources">Data sources</a></li>
-                        <li class="routed routed-admin-repositoriesTemplate"><a href="#admin/repositoriesTemplate">Public Repositories</a></li>
-                        <li class="routed routed-admin-topology"><a href="#admin/topology">Topology</a></li>
-                        <li class="routed routed-admin-users"><a href="#admin/users">Users</a></li>
+                        <li class="routed routed-admin-systemDashboard"><a href="#admin/systemDashboard"><span>System Dashboard</span></a></li>
+                        <li class="routed routed-admin-containers"><a href="#admin/containers"><span>Toolbox Containers</span></a></li>
+                        <li class="routed routed-admin-components"><a href="#admin/components"><span>Processing Modules</span></a></li>
+                        <li class="routed routed-admin-config"><a href="#admin/config"><span>Configuration</span></a></li>
+                        <li class="routed routed-admin-remoteServices"><a href="#admin/remoteServices"><span>Remote Web Services</span></a></li>
+						<li class="routed routed-admin-datasources"><a href="#admin/datasources"><span>Data Sources</span></a></li>
+                        <li class="routed routed-admin-repositoriesTemplate"><a href="#admin/repositoriesTemplate"><span>Public Repositories</span></a></li>
+                        <li class="routed routed-admin-topology"><a href="#admin/topology"><span>Topology</span></a></li>
+                        <li class="routed routed-admin-users"><a href="#admin/users"><span>Users</span></a></li>
                     </ul>
                 </li>
                 <li class="header">DOCUMENTATION</li>
@@ -294,6 +287,14 @@
                     </svg>
                 </div>
             </div>
+
+            <div id="wrapper-quota-time" style="padding: 10px 15px;">
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a class="holder"></a>
+                    </li>
+                </ul><!-- /.control-sidebar-menu -->
+            </div>
         </section>
         <!-- /.sidebar -->
     </aside>
@@ -303,7 +304,7 @@
 
         <!-- Content Header (Page header) -->
         <section class="content-header tao-async-ph">
-            <h1>Dashboard <small>Overview of TAO activity.</small></h1>
+            <h1>Dashboard <small>Overview of your activity.</small></h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                 <li class="active">Dashboard</li>
@@ -324,7 +325,7 @@ Nothing to see!
     <!-- Main Footer -->
     <footer class="main-footer">
         <!-- Default to the left -->
-        Copyright &copy; 2023 <b><a href="./" class="text-black"> - CS GROUP ROMANIA</a></b>
+        Copyright &copy; 2024 <b><a href="./" class="text-black"> - CS GROUP Romania</a></b>
     </footer>
 
     <!-- Control Sidebar -->
@@ -439,7 +440,7 @@ Nothing to see!
         <!-- Master message to the right -->
         <div class="direct-chat-msg master hidden">
             <div class="direct-chat-info clearfix">
-                <span class="direct-chat-name pull-left">TAO Bot</span>
+                <span class="direct-chat-name pull-left">Msg Bot</span>
                 <span class="direct-chat-timestamp pull-right val-msg-ts">23 Jan 2:00 pm</span>
             </div>
             <!-- /.direct-chat-info -->
@@ -498,7 +499,7 @@ Nothing to see!
 <!-- AdminLTE App -->
 <script src="./assets/dist/js/app.js" type="text/javascript"></script>
 <script src="./assets/dist/js/notification.js" type="text/javascript"></script>
-<!-- TAO App -->
+<!-- AVL App -->
 <script src="./assets/libs/underscore-min.js" type="text/javascript"></script>
 <script src="./assets/dist/js/router.js" type="text/javascript"></script>
 <!-- NPs -->
@@ -522,8 +523,15 @@ Nothing to see!
 <script type="text/javascript" src="./assets/libs/splitjs/split.js"></script>
 <!-- gritter -->
 <script type="text/javascript" src="./assets/libs/gritter/js/jquery.gritter.js"></script>
-<!-- TAO UI functions  -->
+<!-- AVL UI functions  -->
 <script src="./assets/dist/js/ui.js" type="text/javascript"></script>
+<!-- Websockets -->
+<script src="./assets/dist/js/websockets.js" type="text/javascript"></script>
+
+ <!-- includes for bootstrap-toggle -->
+ <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+ <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
 
 <style>
 .content-header>h1>small{color:#ccc;}
@@ -549,43 +557,62 @@ Nothing to see!
     //			console.log('loaded datepicker');
     //    }
     //});
-    //check prefferences
+    //check preferences
     // (function(){
-    //     var prefferences_viewMode = _settings.readCookie("prefferences_viewMode");
-    //     if ((prefferences_viewMode !== "") && (prefferences_viewMode !== null)) {
-    //         prefferences.viewMode = prefferences_viewMode;
+    //     var preferences_viewMode = _settings.readCookie("preferences_viewMode");
+    //     if ((preferences_viewMode !== "") && (preferences_viewMode !== null)) {
+    //         preferences.viewMode = preferences_viewMode;
     //     }else{
-    //     	prefferences.viewMode = "grid";
+    //     	preferences.viewMode = "grid";
     //     }
     // })();
 	var selectedColor = defaultStyle.substr(defaultStyle.indexOf("-") + 1);
 	var notificationsList = [];
 	var topics = {'info':{'header':'You have new events'},'execution':{'header':'You have new events'},'error':{'header':'You have new events'}};
 	var menu = $(".messages-menu .dropdown-menu");
+    
 	function getNotificationBody(data, topic){
-            		var list ='';
-		$.each(data,function(index,value){
-					var payload = "";
-					try { 
-						payload = JSON.parse(value.data).Payload;
-						if (typeof payload === "undefined") {
-							payload = JSON.parse(value.data).Message;
-						}
-					} catch (e) {
-						payload = value.data.substring(0, 200);
-					}
-            		list = list+  '		<li class="notif-info">'+
-            					'				<div class="expand">  '+
-            					'					<div class="pull-left">'+
-    					'						<span class="glyphicon glyphicon-ok markasread"  title="mark as read" id="'+value.timestamp+'_'+value.user+'" data-topic="'+topic+'"></span>'+		                             			
-            					'					</div>'+
-            					'					<span class="text">'+
-            										payload +'</span>'+
-            					'				  <small style="float:right" class="label label-info"><i class="fa fa-clock-o "></i>'+value.timestamp+'</small>'+
-            					'				 </div>'+
-            					'		</li>';
-            		});
-		return list;
+        var list ='';
+
+        // save the objects in a list
+        var notifications = $.map(data, function (elem, idx) { return elem });
+
+        // sort the list
+        notifications.sort((a,b) => (Date.parse(b.timestamp) - Date.parse(a.timestamp)) );
+
+        // create the list
+		$.each(notifications, function(index,value){
+            var payload = "";
+            
+            switch(value.topic){
+                case "transfer":
+                case "product.progress":
+                    payload = JSON.parse(value.data).Payload;
+                    break;
+                case "info":
+                case "warn":
+                case "execution.status.changed":
+                case "authentication":
+                    payload = JSON.parse(value.data).Message;
+                    break;
+                default:
+                    payload = value.data.substring(12, 200);
+            }
+            
+            list = list+  '		<li class="notif-info">'+
+                        '				<div class="expand">  '+
+                        '					<div class="pull-left">'+
+                '						<span class="glyphicon glyphicon-ok markasread"  title="mark as read" id="'+value.timestamp+'_'+value.user+'" data-topic="'+topic+'"></span>'+		                             			
+                        '					</div>'+
+                        '					<span class="text">'+
+                                            payload +'</span>'+
+                        '				  <small style="float:right" class="label label-info"><i class="fa fa-clock-o "></i>'+value.timestamp+'</small>'+
+                        '				 </div>'+
+                        '		</li>';
+            });
+		
+        
+        return list;
 	}
         					
 	function markAsRead(data){
@@ -608,6 +635,7 @@ Nothing to see!
         		                	getUnreadNotifications();
     	});
 	}
+
 	function displayNotifications(data, topic, id){
 		if(data.length > 0){
 			$("."+id+"-notif-menu .dropdown-menu .header").html("<span class='notification-menu-header'>"+topics[id].header+"</span><span class='glyphicon glyphicon-check markallasread' id='"+topic+"_markall'></span>Mark all as read  ");
@@ -617,35 +645,7 @@ Nothing to see!
 		var list ='';
 		list = getNotificationBody(data, topic);
 		$("."+id+"-notif-menu .dropdown-menu .menu").append(list);
-		        			 
-		$("."+id+"-notif-menu .dropdown-menu .menu span.markasread").each(function(){
-			 $(this).click(function(event){
-				var el = event.target.id;
-				el = el.split('_');
-				var topic = event.target.getAttribute('data-topic');
-				el =_.findWhere(notificationsList[topic], {timestamp:el[0], user:el[1]});
-				if(el != undefined){
-					el.data = JSON.parse(el.data).Payload;
-					markAsRead([el]);
-        					}
-        				 });//click event end
-        			 });
-		
-		$("span.markallasread").each(function(){
-			 $(this).click(function(event){
-				var el = event.target.id;
-				el = el.split('_');
-				if(notificationsList.hasOwnProperty(el[0])){
-					var payload = notificationsList[el[0]];
-					$.each(payload,function(index,value){
-						payload[index].data = JSON.parse(payload[index].data).Payload;
-					})
-					markAsRead(payload);
-				}
-				
-			});
-		});
-
+        canDeleteNotification(id);
 	}
 	
     function getUnreadNotifications(){
@@ -698,16 +698,66 @@ Nothing to see!
             }
         }).fail(function (jqXHR, textStatus) {
 			chkXHR(jqXHR.status);
-        }).complete(function(){           
-                setTimeout(function(){
-                	getUnreadNotifications();
-                },10000);
-
         });
  	}
+
+    function canDeleteNotification(id){
+        
+        $("."+id+"-notif-menu .dropdown-menu .menu span.markasread").each(function(){
+			$(this).click(function(event){
+				var el = event.target.id;
+				el = el.split('_');
+				var topic = event.target.getAttribute('data-topic');
+				el =_.findWhere(notificationsList[topic], {timestamp:el[0], user:el[1]});
+				if(el != undefined){
+					markAsRead([el.id]);
+        		}
+        	});
+        });
+		
+		$("span.markallasread").each(function(){
+			$(this).off("click");
+            $(this).on("click", function(event){
+				var el = event.target.id;
+				el = el.split('_');
+				if(notificationsList.hasOwnProperty(el[0])){
+					var payload = $.map(notificationsList[el[0]], function (elem, idx) { return elem.id; });
+					markAsRead(payload);
+				}
+				
+			});
+		});
+    }
+
+    function getNotification(wsdna, topic){
+
+        formatDate = moment(wsdna.timestamp).format();
+        message = (wsdna.data.hasOwnProperty("Message"))? wsdna.data.Message: (wsdna.data.hasOwnProperty("Payload"))? wsdna.data.Payload: "N/A";
+
+        var li = $('		<li class="notif-info">'+
+                        '				<div class="expand">  '+
+                        '					<div class="pull-left">'+
+                        '				        <span class="glyphicon glyphicon-ok markasread"  title="mark as read" id="'+formatDate+'_'+wsdna.user+'" data-topic="'+topic+'"></span>'+		                             			
+                        '					</div>'+
+                        '					<span class="text">'+
+                                            message +'</span>'+
+                        '				  <small style="float:right" class="label label-info"><i class="fa fa-clock-o "></i>'+ formatDate +'</small>'+
+                        '				 </div>'+
+                        '		</li>');
+        return li;
+    }
 	
+    function updateNotificationNr(id, topic){
+
+        $oldNr = $("."+id+"-notif-menu a span").text();
+        if($oldNr == 0){
+            $("."+id+"-notif-menu .dropdown-menu .header").html("<span class='notification-menu-header'>"+topics.info.header+"</span><span class='glyphicon glyphicon-check markallasread' id='"+topic+"_markall'></span>Mark all as read  ");
+        }
+        $("."+id+"-notif-menu a span").text(parseInt($oldNr) + 1)
+    }
+
 	//add available styles
-	function populateAvailibleStyles(theme) {
+	function populateAvailableStyles(theme) {
 		if (typeof theme === "undefined") {
 			theme = $("#selectSettingsTheme").val();
 		}
@@ -738,22 +788,20 @@ Nothing to see!
 		if (style !== null) {
 			style.innerHTML = ".slider::-webkit-slider-thumb { background:"+inputRangeColor(selectedColor)+" !important; }";
 		}
-        /////////////////////////////////////////////////////////////////////////////////
         removeClassStartingWith($('#iframe-nodemonitor').contents().find('body'),"skin-");
         $('#iframe-nodemonitor').contents().find('body').addClass(styleClass);
-
-        /////////////////////////////
-        $(document).trigger("theme-change", [{theme: styleClass}]);
 	}
 
     function settingsApplyChange(attribute, value, save){
         if(attribute === "body_size"){
-            // $("body").removeClass(tpl.body_size).addClass(value);
             $("body").removeClass(function (index, className) {
             return (className.match (/\bsize-\S+/g) || []).join(' ');
             });
             $("body").addClass(value);
 
+			if ($("input[type='checkbox'].switch_elem", "#list-config-accordion").length > 0) {
+				$("input[type='checkbox'].switch_elem", "#list-config-accordion").bootstrapSwitch("size", bootstrapSwitchSize(value));
+			}
 
             $('#iframe-nodemonitor').contents().find('body').removeClass(function (index, className) {
             return (className.match (/\bsize-\S+/g) || []).join(' ');
@@ -765,7 +813,7 @@ Nothing to see!
         }
         return true;
     }
-    ///////////////////////////////////////
+    
     function refreshSettings(){
         //size
         settingsApplyChange("body_size", window.themeParameters.size,0);
@@ -778,12 +826,58 @@ Nothing to see!
 
 
     $(document).ready( function(){
+		// Load favicon
+		$("link[rel*='icon']").remove();
+		$('head').append('<link type="image/x-icon" rel="shortcut icon" href="' + (typeof window.favicon !== "undefined" ? window.favicon : "./favicon.ico") + '">');
 		
         window.themeParameters = {
             size: "normal",
-            color: "skin-blue"
+            color: "skin-navy"
         }
 
+        $("#logoSmall").attr('src',window.logoSmall);
+        $("#logoText").text(window.logoText);
+
+		// on receiving the notifications
+		$(".info-notif-menu").on("wsmessage", function (e, wsdna) {
+
+            // create notification html
+            var li = getNotification(wsdna, "info");
+            // add wsdna to main notif list
+            wsdna.timestamp = moment(wsdna.timestamp).format();
+            notificationsList.info.push(wsdna);
+
+            // add notif html to dropdown menu
+            $(".info-notif-menu .dropdown-menu .menu").prepend(li);
+            // set the notification the ability to delete it
+            canDeleteNotification("info");
+            updateNotificationNr("info", wsdna.topic);
+		});     
+
+        // execution status
+        $(".execution-notif-menu").on("wsmessage", function (e, wsdna) {
+
+            var li = getNotification(wsdna, "execution.status.changed");
+            wsdna.timestamp = moment(wsdna.timestamp).format();
+            notificationsList["execution.status.changed"].push(wsdna);
+
+            $(".execution-notif-menu .dropdown-menu .menu").prepend(li);
+            canDeleteNotification("execution");
+            updateNotificationNr("execution", wsdna.topic);
+		});     
+        
+        // on receiving an error
+        $(".error-notif-menu").on("wsmessage", function (e, wsdna) {
+           
+            var li = getNotification(wsdna, "error");
+            wsdna.timestamp = moment(wsdna.timestamp).format();
+            notificationsList.error.push(wsdna);
+
+            $(".error-notif-menu .dropdown-menu .menu").prepend(li);
+            canDeleteNotification("error");
+            updateNotificationNr("error", wsdna.topic);
+        }); 
+        
 		if(taoUserProfile.preferences.find( function(item) { return item.key == "refresh_rate" } )){
        // if(taoUserProfile.preferences.find( function(item) { return item.key == "refresh_rate" } ) ){
             $('#btnRestore').prop('disabled', false); 
@@ -806,12 +900,14 @@ Nothing to see!
             window.themeParameters.color = $.AdminLTE.options.styles[defaultStyle];
             refreshSettings();
 		}
-		populateAvailibleStyles();
+		populateAvailableStyles();
 		
     	if (taoUserProfile.userRole !== "ADMIN") {
     		$("li.routed-admin-topology.routed-admin-users").css("display","none");
+            $("li.routed-my-components.routed-my-containers").css("display","");
     	}else{
     		$("li.routed-admin-topology.routed-admin-users").css("display","");
+            $("li.routed-my-components.routed-my-containers").css("display","none");
     	}
     	
         $("#selectPane").on("change", function(event){
@@ -873,7 +969,7 @@ Nothing to see!
                 refreshSettings();
             }
 			if($(this).attr('id') === "selectSettingsTheme") {
-				populateAvailibleStyles(this.value);
+				populateAvailableStyles(this.value);
 				//applyStyle($("i.fa-check-circle","#selectThemeColor").closest("a").attr("data-skin"));
                 window.themeParameters.color = $("i.fa-check-circle","#selectThemeColor").closest("a").attr("data-skin");
                 refreshSettings();
@@ -952,23 +1048,11 @@ Nothing to see!
                             window.themeParameters.color = $.AdminLTE.options.styles[defaultStyle];
                             window.themeParameters.size = "size-normal";
                             refreshSettings();
-                            populateAvailibleStyles();
+                            populateAvailableStyles();
     	             });
           
             }
 
-        });
-
-        var ref_no = 0;
-        $(document).idle({
-            onIdle: function(){
-                //notifyMe();
-                ref_no ++;
-            },
-            startAtIdle: true,
-            recurIdleCall: true,
-//					onActive: function(){alert('Hey, I\'m back!');},
-            idle: 60000
         });
 
         //trigger some events
@@ -977,6 +1061,10 @@ Nothing to see!
         //get unreaded notification for toolbar
         getUnreadNotifications();
         
+        // sync deleting notif history with notification bar
+        $(document).on("refresh:toolbar", function( event ) {
+            getUnreadNotifications();
+        });
      
     });
 </script>

@@ -6,7 +6,7 @@
 <!-- modal nodes op -->
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-    <h1>Public Repositories<small>External public repositories of EO products</small></h1>
+    <h1>Public Repositories<small>The list of <strong>external</strong> public repositories with EO collections.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Public Repositories</li>
@@ -36,7 +36,7 @@
                         <div class="row">
                             <div class="col-md-12" id="list-master-controls">
                                 <div class="box-tools pull-left">
-                                    <button class="btn btn-master-tool text-black" data-action="rp-plus" data-toggle="tooltip" data-original-title="Add new public repository"><i class="fa fa-plus"></i></button>
+                                    <button class="btn btn-master-tool text-black" data-action="rp-plus" data-toggle="tooltip" data-original-title="Add public repository"><i class="fa fa-plus"></i></button>
                                 </div>
                                 <div class="box-tools pull-left">
                                     <button class="btn btn-master-tool text-black" data-action="op-filter" data-toggle="tooltip" data-original-title="Filter by tags"><i class="fa fa-filter"></i><span class="label label-warning val-count-filters" style="display:none;">0</span></button>
@@ -173,7 +173,6 @@
                 "X-Auth-Token": window.tokenKey
             },
             error : function (jqXHR, textStatus, errorThrown) {
-                console.log("error");
                 if(jqXHR.status === 500 ){
                     showMsg("Unable to delete node. Please try again.", "ERROR");
                 } else {
@@ -196,16 +195,14 @@
 
         if(operationid === "rp-plus"){
             window.userOpStack = [{ "action": operationid }];
-            $(".modal-dialog",$modal).addClass("modal-lg");
             rm_contentUrl="./fragments/repositoriesTemplate-plus.fragment.html?" + Math.random();
         }
         if(operationid === "rp-edit"){
             window.userOpStack = [{ "dna": args.dna, "action": operationid }];
-            $(".modal-dialog",$modal).addClass("modal-lg");
             rm_contentUrl="./fragments/repositoriesTemplate-plus.fragment.html?" + Math.random();
         }
         if(rm_contentUrl === ''){
-            alert("TAO - Operation mismatch");
+            alert("AVL - Operation mismatch");
             return;
         }
         $.ajax({
@@ -232,17 +229,17 @@
 		window.panelComp = $("#panel-nodes").npPaginatedCells({
 			headerUser: taoUserProfile.username,
 			url: urls,
-			viewMode: prefferences.viewMode,
-			filterAttribute: "label",
+			viewMode: preferences.viewMode,
+			filterAttribute: "name",
 			order:[
 				{
 					"label":"Name ascending",
-					"objAttributeName":"label",
+					"objAttributeName":"name",
 					"direction":"ASC"
 				},
 				{
 					"label":"Name descending",
-					"objAttributeName":"label",
+					"objAttributeName":"name",
 					"direction":"DSC"
 				}
 			],
@@ -261,9 +258,9 @@
 						return;
 					}
 					$('#confirm-dialog').modal('confirm',{
-						msg:"Are you sure you want to delete the public repository module: <strong>"+args.name+"</strong>?",
+						msg:"Are you sure you want to delete the public repository: <strong>"+args.dna.name+"</strong>?",
 						callbackConfirm: function() {
-							deletePublicRepositoryById(args.id);
+							deletePublicRepositoryById(args.dna.id);
 						},
 						callbackCancel:function(){}
 					});

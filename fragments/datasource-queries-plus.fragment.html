@@ -13,7 +13,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 #myModalNodes #myFlatMap .ol-zoom{top:100px}
 #myModalNodes #myFlatMap .poly-map-title{padding-left:30%;top:55px}
 #myModalNodes #myFlatMap .poly-shape-type{top:60px}
-#myModalNodes #myFlatMap .poly-actions-panel{width:45rem;height:13rem;right:0;max-width:100%}
+#myModalNodes #myFlatMap .poly-actions-panel{position:absolute;width:45rem;right:0;max-width:100%;}
 #myModalNodes #topInfo{position:fixed;background-color:#fff4d6;border:1px solid #ffd154;top:60px;padding:0 4px;font-weight:700;color:#a71f16;border-radius:5px;pointer-events:none;min-height:1.6em;z-index:800}
 /* ======== MODAL CONTROLS AND PANELS ======== */
 #myModalNodes .modal-body .form-control:not(select){height:2em;line-height:2em;padding:0 5px}
@@ -26,9 +26,9 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 #myModalNodes .modal-header.ui-draggable-handle::before{font:normal normal normal 20px/1 FontAwesome;content:"\f07e";background-color:#79bde4;position:absolute;left:15px;top:-10px;padding:0 10px;border-radius:10px;border:1px solid #56b0e4}
 #myModalNodes .modal-title{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
 #myModalNodes .modal-content .close{margin-left:10px;font-size:25px;outline:none;opacity:1;color:white}
-#myModalNodes .modal-content .close:hover{color:#c9e5f4}
 #myModalNodes .modal-content .close.custom{position:absolute;color:#286080;top:0px;right:14px;font-size:30px}
 #myModalNodes .modal-content .close.custom:hover{color:#e92f2f}
+#myModalNodes .modal-content .back .fa.fa-reply{font-size:1.5rem;top:-0.2rem;position:relative;}
 #myModalNodes .modal-body{overflow-x:hidden;overflow-y:auto}
 #myModalNodes .modal-body .row .last{width:100%;float:left;padding-top:15px}
 #myModalNodes .modal-note{background-color:#ffffd2;border-top:1px solid #eac9a5}
@@ -67,11 +67,11 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 #myModalNodes table td{word-break:break-all}
 #myModalNodes table>tbody+tbody{border-top:1px solid #93c2da}
 #myModalNodes table.ds-params{table-layout:auto}
-#myModalNodes table.ds-params::before{content:" ";position:absolute;width:15px;height:100%;top:0;left:0;background-color:#79bde4}
+#myModalNodes table.ds-params::before{content:" ";position:absolute;width:15px;height:100%;top:0;left:0;}
 #myModalNodes table.ds-params td{padding:2px 10px}
 #myModalNodes table.ds-params tbody tr:first-child td{padding-top:10px}
 #myModalNodes table.ds-params tbody tr:last-child td{padding-bottom:10px}
-#myModalNodes table.ds-params tbody td:first-child{font-weight:700;text-align:right;color:#455c80;line-height:1.2em}
+#myModalNodes table.ds-params tbody td:first-child{font-weight:700;text-align:right;line-height:1.2em}
 #myModalNodes table.ds-params tbody td span:not([class^="select2"], .selection){font-style:normal;font-size:0.8em;color:#c0c0c0;font-weight:400}
 #myModalNodes table.ds-params tbody td:last-child{width:66.666667%}
 #myModalNodes table.ds-params td{border:0}
@@ -216,7 +216,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 #queryExtent .modal-body{min-height:40vh;max-height:calc(100vh - 8em)!important;}
 #queryExtent .panel-title{font-weight:700;color:#286080;font-size:20px}
 #queryExtent .modal-header .panel-control{flex:0 0 auto;color:#000;text-shadow:0 1px 0 #fff;opacity:0.2;cursor:pointer;}
-#queryExtent .modal-header .panel-control:hover{color:#286080;text-decoration:none;opacity:1;}
+#queryExtent .modal-header .panel-control:hover{text-decoration:none;opacity:1;}
 #queryExtent .rspace,.filter-reset{margin-left:10px;float:right;top:3px;}
 #queryExtent .treeview .sub.mCustomScrollbar .mCSB_scrollTools.mCSB_scrollTools_vertical{right:auto;margin-left:-4px;}
 #queryExtent .treeview .sub.mCustomScrollbar .mCSB_scrollTools_horizontal{bottom:-5px;}
@@ -224,7 +224,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 #queryExtent .treeview .sub.mCustomScrollbar {max-height:20rem;overflow-y:auto;overflow-x:hidden;margin-left:0;}
 #queryExtent .info-text{padding:5px 15px;font-style:italic;font-size:1.3rem;}
 
-#queryExtentParameters .sensor-name{background-color:#cee9f9;text-align:center;color:#455c80;padding:4px}
+#queryExtentParameters .sensor-name{text-align:center;padding:4px}
 #queryExtentParameters .sensor-name>h3{font-weight:700;}
 #queryExtentParameters #parameterList .form-group{margin-bottom:5px;margin-right:0}
 #queryExtentParameters #parameterList .control-label{padding-right:0;}
@@ -233,23 +233,22 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 
 #filtersDialog #filters{padding-top:10px;}
 
-#filtersDialog .select2-container--default .select2-selection--multiple{border-color:#d2d6de;line-height:2rem;overflow:auto !important;height:auto !important;max-height:9rem}
-#filtersDialog .select2-container::after{content:"\25be";font-size:32px;color:#79bde4;position:absolute;display:block;right:0;top:0;line-height:3.2rem;pointer-events:none}
-#filtersDialog .select2-container--default.select2-container--open::after{content:"\25b4"}
-#filtersDialog .select2-container.overflow::after{right:1.5rem}
-#filtersDialog .select2-container--default.select2-container--open .select2-selection--multiple{border-color:#79bde4}
-#filtersDialog .select2-selection__choice{background-color:#79bde4;border-color:#79bde4;color:white;line-height:2rem}
-#filtersDialog .select2-container--default .select2-selection--multiple .select2-selection__choice__remove{color:white;border-right:1px solid rgba(255,255,255,0.3)}
-#filtersDialog .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover{background-color:#41a0d8}
-#filtersDialog .select2-container--default .select2-search--inline .select2-search__field::placeholder{font-family:"Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;color:#bbb}
-#filtersDialog .select2-selection__clear{display:none !important;}
+.select2-container--default .select2-selection--multiple{border-color:#d2d6de;line-height:2rem;overflow:auto !important;height:auto !important;max-height:9rem}
+.select2-container::after{content:"\25be";font-size:32px;color:#79bde4;position:absolute;display:block;right:0;top:0;line-height:3.2rem;pointer-events:none}
+.select2-container--default.select2-container--open::after{content:"\25b4"}
+.select2-container.overflow::after{right:1.5rem}
+.select2-container--default.select2-container--open .select2-selection--multiple{border-color:#79bde4}
+.select2-selection__choice{background-color:#79bde4;border-color:#79bde4;color:white;line-height:2rem}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove{color:white !important;border-right:1px solid rgba(255,255,255,0.3) !important}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover{background-color:#41a0d8}
+.select2-container--default .select2-search--inline .select2-search__field::placeholder{font-family:"Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;color:#bbb}
+.select2-selection__clear{display:none !important;}
 #filtersDialog.shifted .select2{display:none}
 #filtersDialog li.select2-search.select2-search--inline {display:none}
-#filtersDialog #search_button button {width:100%;background-color:#79bde4;color:#286080}
-#filtersDialog #search_button button:hover{background-color:#79bde461}
+#filtersDialog #search_button button{width:100%;}
 #filtersDialog #search_button button:focus{outline:0 !important;}
 
-#coverage{border:0;color:#3c8dbc;font-weight:bold;}
+#coverage{border:0;font-weight:bold;}
 .return-button{
 	position: absolute !important;
     padding: 10px;
@@ -271,6 +270,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 		<div class="modal-header" style="border:0">
 			<button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 			<button class="close minimize"><span aria-hidden="true">&minus;</span><span class="sr-only">Minimize</span></button>
+			<button class="close back"><span aria-hidden="true" class="fa fa-reply"></span><span class="sr-only">Back</span></button>
 			<h4 class="modal-title" id="myModalLabel">Edit query</h4>
 		</div>
 		<div class="modal-body" style="padding-top:0">
@@ -374,7 +374,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 		</div>
 		<div class="modal-body">
 			<!-- Parameters list -->
-			<div id="parameterList" class="row hidden">
+			<form id="parameterList" class="row hidden">
 				<div class="col-sm-12 col-md-12 form-horizontal">
 					<div class="form-group">
 						<label for="queryLabel" class="col-sm-4 col-md-4 control-label">Label</label>
@@ -396,6 +396,12 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 							<i class="glyphicon glyphicon-eye-open form-control-feedback" title="show password"></i>
 						</div>
 					</div>
+					<div class="form-group has-feedback">
+						<label for="user_secret" class="col-sm-4 col-md-4 control-label">Secret </label>
+						<div class="col-sm-5 col-md5">
+							<input type="text" id="user_secret" name="user_secret" value="" class="form-control" >
+						</div>
+					</div>
 					<div class="form-group">
 						<label for="use_site" class="col-sm-4 col-md-4 control-label">Choose AOI from </label>
 						<div class="col-sm-5 col-md5">
@@ -410,7 +416,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 				</div>
 				<div class="last">	
 					<div class="form-group" style="display: block;padding: 0 15px;padding-bottom: 5px;">
-						<div class="" style="">	<label for="coverage">Coverage: </label>
+						<div class="" style="">	<label>Coverage: </label>
 							<span id="coverage"></span>
 						</div>		
 						<div id="coverageSlider" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content" style="">
@@ -428,12 +434,12 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 							<input type="number" id="pageSize" value="100" class="form-control" min="1" />
 						</div>
 						<div class="col-sm-2 col-md-2 btnStartInterrogation">
-							<button id="startInterrogation" name="btnStartInterrogation" class="btn btn-primary">Start Interrogation</button>
+							<button type="submit" id="startInterrogation" name="btnStartInterrogation" class="btn btn-primary">Start Interrogation</button>
 						</div>
 					</div>
 					
 				</div>
-			</div>
+			</form>
 		</div>
 		<div class="modal-note hidden">
 			<p class="note"><strong>Note:</strong> Some query parameters were not found in the list of corresponding datasource parameteres:</p>
@@ -514,7 +520,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 					</div>
 				</div>
 				<div id="search_button" class="col-sm-12 col-md-12 form-horizontal" style="margin-bottom: 0px;">
-					<button name="search" class="btn search-btn">Search</button>
+					<button name="search" class="btn search-btn">Apply</button>
 				</div>
 			</div>
 		</div>
@@ -528,15 +534,15 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 	</div>
 	<!-- template for category level-->
 	<div class="category">
-		<input type="checkbox" id="">
-		<label for="">
+		<input type="checkbox">
+		<label>
 			<a href="#" title=""><span class="fa fa-folder"></span></a>
 		</label>
 	</div>
 	<!-- template for datasource level, including datasource_list-->
 	<div class="datasource hidden">
-		<input type="checkbox" id="">
-		<label for="">
+		<input type="checkbox">
+		<label>
 			<a href="#" title=""><span class="fa fa-cubes"></span></a>
 		</label>
 		<div class="sub datasource_list hidden">
@@ -584,6 +590,45 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 				"Content-Type": "application/json",
 				"X-Auth-Token": window.tokenKey
 			}
+		});
+	}
+
+	var getDefaultFilters = function(){
+		return $.ajax({
+			cache: false,
+			url: baseRestApiURL + "query/filter/",
+			dataType : 'json',
+			type: 'GET',
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"X-Auth-Token": window.tokenKey
+			}
+		 });
+	}
+
+	function setDefaultFilers(){
+		$.when(getDefaultFilters()).done(function(response){
+			var defaultFilters = chkTSRF(response);
+
+			if( typeof defaultFilters.provider !== "undefined"){
+				if( typeof $("#providers").find("[value='"+defaultFilters.provider+"']") !== "undefined"){
+					$("#providers").find("[value='"+defaultFilters.provider+"']").prop("selected", true);
+					$("#providers").trigger("change");
+				}
+			}
+			if( typeof defaultFilters.category !== "undefined"){
+				if( typeof $("#categoryNames").find("[value='"+defaultFilters.category+"']") !== "undefined"){
+					$("#categoryNames").find("[value='"+defaultFilters.category+"']").prop("selected", true);
+					$("#categoryNames").trigger("change");
+				}
+			}
+			if( typeof defaultFilters.collection !== "undefined"){
+				$("#colectionName").val(defaultFilters.collection);				
+			}
+
+			searchDataSource();
+			
 		});
 	}
 
@@ -919,9 +964,13 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 				if (typeof v.mission !== "undefined" && v.mission !== null) {
 					sensorId = categoryId + "_" + v.mission.replace(/[\/ \\]/g, "_");
 				}
-				var $dataSource = '<div class="dataset"><a href="#" title="' +  v.dataSourceLabel + '"id="' + k + '"><span class="fa fa-cube"></span>' +  v.dataSourceLabel + '</a></div>';
+				// var $dataSource = '<div class="dataset"><a href="#" title="' +  v.dataSourceLabel + '"id="' + k + '"><span class="fa fa-cube"></span>' +  v.dataSourceLabel + '</a></div>';
+				// if (typeof v.description !== "undefined" && v.description !== null && v.description.trim() !== "") {
+				// 	$dataSource = '<div class="dataset"><a href="#" title="' +  v.dataSourceLabel + '"id="' + k + '"><span class="fa fa-cube"></span>' +  v.dataSourceLabel + '</a><span class="info">&#x1F6C8;</span><div class="info-text" style="display:none">' + v.description + '</div></div>';
+				// }
+				var $dataSource = '<div class="dataset"><a href="#" title="' +  v.dataSourceName + '"id="' + k + '"><span class="fa fa-cube"></span>' +  v.dataSourceName + '</a></div>';
 				if (typeof v.description !== "undefined" && v.description !== null && v.description.trim() !== "") {
-					$dataSource = '<div class="dataset"><a href="#" title="' +  v.dataSourceLabel + '"id="' + k + '"><span class="fa fa-cube"></span>' +  v.dataSourceLabel + '</a><span class="info">&#x1F6C8;</span><div class="info-text" style="display:none">' + v.description + '</div></div>';
+					$dataSource = '<div class="dataset"><a href="#" title="' +  v.dataSourceName + '"id="' + k + '"><span class="fa fa-cube"></span>' +  v.dataSourceName + '</a><span class="info">&#x1F6C8;</span><div class="info-text" style="display:none">' + v.description + '</div></div>';
 				}
 				if ($("input#" + sensorId, $category).length > 0) {
 					$("input#" + sensorId, $category).parent().find("div.datasource_list").append($dataSource);
@@ -1027,10 +1076,15 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 					$.each(component.sources, function (idx, source) {
 						var parentQuery = _.findWhere(queryCollection, { componentId: source.parentId });
 						if (parentQuery) {
-							var productNames = typeof source.dataDescriptor.location === "undefined" ? "" : source.dataDescriptor.location;
+							var productNames = "";
+							if (isOldVersion) {
+								productNames = typeof source.dataDescriptor.location === "undefined" ? "" : source.dataDescriptor.location;
+							} else {
+								productNames = typeof source.location === "undefined" ? "" : source.location;
+							}
 							if (productNames != "") {
 								var productsRead = false;
-								$.when(ajaxCallFnc("product", { name: source.dataDescriptor.location }, "GET", false))
+								$.when(ajaxCallFnc("product", { name: productNames }, "GET", false))
 								.done(function (response) {
 									if (response.status === "SUCCEEDED") {
 										$.each(response.data, function (index, product) {
@@ -1397,6 +1451,49 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 	}
 	
     function showDatasourceParams(data, paramInfo, defaultLabel) {
+
+		if($("#parameterList").find(".has-error").length > 0){
+			$.each($("#parameterList").find(".has-error"), function(){
+				$(this).removeClass("has-error");
+			});
+		}
+		if($("#parameterList").find(".error").length > 0){
+			$.each($("#parameterList").find(".error"), function(){
+				$(this).remove();
+			});
+		}
+
+		if(data.requiresAuthentication){
+			$("#user_pass").show();
+			$("#user_pass").siblings().show();
+			$("#user_pass").parent().siblings("label").show();
+			$("#user_pass").prop("required", true);
+
+			$("#user_name").show();
+			$("#user_name").parent().siblings("label").show();
+			$("#user_name").prop("required", true);
+		}else{
+			$("#user_pass").hide();
+			$("#user_pass").siblings().hide();
+			$("#user_pass").parent().siblings("label").hide();
+			$("#user_pass").prop("required", false);
+
+			$("#user_name").parent().siblings("label").hide();
+			$("#user_name").hide();
+			$("#user_name").prop("required", false);
+		}
+
+		if(data.requires2FA){
+			$("#user_secret").show();
+			$("#user_secret").parent().siblings("label").show();
+			$("#user_secret").prop("required", true);
+
+		}else{
+			$("#user_secret").hide();
+			$("#user_secret").parent().siblings("label").hide();
+			$("#user_secret").prop("required", false);
+
+		}
 		
 		$("#parameterList").removeClass("hidden");
 		$("#choosedDatasource").html(data.sensor);
@@ -1458,9 +1555,15 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 				lDefault = property.defaultValue;
 			}
 			var label = property.label ? property.label : property.name;
-			var $tr = ($( "<tr" + (property.required ? " class='required'" : "") + ">" +
+			if(label === "Start Date" || label === "End Date"){
+				var $tr = ($( "<tr" + (property.required ? " class='required'" : "") + ">" +
 					"<td>" + label + "<br/><span>[" + paramType + "]</span></td>" +
 					"<td>"));
+			}else{
+				var $tr = ($( "<tr" + (property.required ? " class='required'" : "") + ">" +
+					"<td>" + label + "<br/><span>[" + paramType + "]</span></td>" +
+					"<td>"));
+			}
 			
 			if (paramName.toLowerCase().endsWith("password")) {
 				paramType = "Password";
@@ -1518,7 +1621,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 				break;
 				case "Password":
 					var value = typeof property.defaultValue !== "undefined" && property.defaultValue !== null && property.defaultValue.trim() !== "" ? property.defaultValue : "";
-					$("td",$tr).last().append($("<input type='password' id='" + paramName + "' name='" + paramName + "' value='" + value + "' class='var_" + paramName + "'> <i class='glyphicon glyphicon-eye-open form-control-feedback' title='show password'></i>"));
+					$("td",$tr).last().append($("<input type='password' id='" + paramName + "' name='" + paramName + "' value='" + value + "' class='var_" + paramName + "'> <i  class='glyphicon glyphicon-eye-open form-control-feedback' title='show password'></i>"));
 					break;
 				default:
 					if (typeof property.valueSet !== "undefined" && property.valueSet !== null) {
@@ -1544,6 +1647,29 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 				var allowedValues = [];
 				$.each(property.dependencies, function (idx, dependency) {
 					var referencedParameter = $("[name='"+dependency.referencedParameterId+"']", $html);
+					//verify if other dependencies
+					switch (dependency.dependencyType){
+						case "REQUIRED_IF":
+							if($("[name^='"+ paramName +"']", $tr).length > 1){
+								$($("[name^='"+ paramName +"']", $tr)[0]).data("dependencies", property.dependencies);
+								$($("[name^='"+ paramName +"']", $tr)[0]).addClass("requiredIf");
+							}else{
+								$("[name^='"+ paramName +"']", $tr).data("dependencies", property.dependencies);
+								$("[name^='"+ paramName +"']", $tr).addClass("requiredIf");
+							}
+							break;
+						default: 
+							break;
+						// case "EXCLUSIVE":
+						// 	if($("[name^='"+ paramName +"']", $tr).length > 1){
+						// 		$($("[name^='"+ paramName +"']", $tr)[0]).data("dependencies", property.dependencies);
+						// 		$($("[name^='"+ paramName +"']", $tr)[0]).addClass("exclusive");
+						// 	}else{
+						// 		$("[name^='"+ paramName +"']", $tr).data("dependencies", property.dependencies);
+						// 		$("[name^='"+ paramName +"']", $tr).addClass("exclusive");
+						// 	}
+					}
+
 					// add allowed values on referenced paramater, in order to used it on change
 					if (referencedParameter.is("select")) {
 						var foundAllowedValues = false;
@@ -1566,6 +1692,15 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 		});
 		$('table#tbDatasourceParams tbody').remove();
 		$('table#tbDatasourceParams').append($html);
+
+		// $("input.exclusive", "#tbDatasourceParams"). on("click", function(){
+		// 	$elem = $(this);
+		// 	$.each($(element).data("dependencies"), function(idx, dependency){
+		// 		if(dependency.dependencyType === "EXCLUSIVE"){
+		// 			$elem.valid();
+		// 		}
+		// 	});
+		// });
 		
 		var passwordInputs = $("input[type=password]", "table#tbDatasourceParams");
 		if (passwordInputs.length > 0) {
@@ -1985,7 +2120,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 			}
 		});
 		var query = {
-			userId    : taoUserProfile.username,
+			userId    : taoUserProfile.id,
 			siteId	  : $("option:selected", "#use_site").val() || null,
 			label     : $("#queryLabel").val(),
 			sensor    : datasourcesList[dsId]['sensor'],
@@ -2970,7 +3105,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 		}
 	});
 	
-	$("#collectionExtent").on("click", "button.close:not(.minimize)", function (e) {
+	$("#collectionExtent").on("click", "button.close:not(.minimize, .back)", function (e) {
 		e.stopPropagation();
 		if (window.location.hash.endsWith("/explorer")) {
 			modeEdit = false;
@@ -3011,7 +3146,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 		}
 	});
 	
-	$("#executionExtent").on("click", ".cancel", function (e) {
+	$("#executionExtent, #collectionExtent").on("click", ".cancel, .back", function (e) {
 		updateSelectedProductsTable("query parameters");
 		//resetFilters();
 		e.stopPropagation();
@@ -3107,33 +3242,38 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 		hideDetailsPanel();
 	});
 	
-    $("#startInterrogation").on("click", function (e) {
-		if (myPolygonMap.mapActive && myPolygonMap.getFootprint().length == 0) {
-			showMsg("Please select your area of interest on the map before continuing with your interrogation.", "WARNING");
-			return false;
-		}
-		var qry = getCurrentUserQuery();
-		if (!qry) {
-			showMsg("Please select a valid datasource.", "WARNING");
-			return;
-		}
-		var _self = $(this);
-		_self.prop("enabled", false);
-		$.when(ajaxCallFnc("query/exec", JSON.stringify(qry), "POST"))
-		.done(function (response) {
-			_self.prop("enabled", true);
-			if ($.type(response) === 'object' && response.status === "SUCCEEDED" && Object.keys(response.data).length > 0) {
-				listOfProducts = response.data;
-				showProductsTable();
-			} else if ($.type(response) === 'object' && response.status === "FAILED") {
-				showMsg(response.message, "WARNING");
-			} else {
-				showMsg("No products were found for selected datasource.", "INFO");
+    //$("#startInterrogation").on("click", function (e) {
+	$("#parameterList").on("submit", function (e) {
+		e.preventDefault();
+
+		if($(this).valid()){
+			if (myPolygonMap.mapActive && myPolygonMap.getFootprint().length == 0) {
+				showMsg("Please select your area of interest on the map before continuing with your interrogation.", "WARNING");
+				return false;
 			}
-		})
-		.fail(function (jqXHR, status, error) {
-			_self.prop("enabled", true);
-		});
+			var qry = getCurrentUserQuery();
+			if (!qry) {
+				showMsg("Please select a valid datasource.", "WARNING");
+				return;
+			}
+			var _self = $(this);
+			_self.prop("enabled", false);
+			$.when(ajaxCallFnc("query/exec", JSON.stringify(qry), "POST"))
+			.done(function (response) {
+				_self.prop("enabled", true);
+				if ($.type(response) === 'object' && response.status === "SUCCEEDED" && Object.keys(response.data).length > 0) {
+					listOfProducts = response.data;
+					showProductsTable();
+				} else if ($.type(response) === 'object' && response.status === "FAILED") {
+					showMsg(response.message, "WARNING");
+				} else {
+					showMsg("No products were found for selected datasource.", "INFO");
+				}
+			})
+			.fail(function (jqXHR, status, error) {
+				_self.prop("enabled", true);
+			});
+		}
 	});
 	
 	$("#collectProducts").on("click", function (e) {
@@ -3263,6 +3403,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 				$("#queryExtent").removeData("query");
 				initControls();
 				initDatasources();
+				setDefaultFilers();
 				initQuery();
 				
 				if (window.location.hash.endsWith("/explorer")) {
@@ -3328,6 +3469,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 					// Initialize query functionality after map is loaded
 					initControls();
 					initDatasources();
+					setDefaultFilers();
 					initQuery();
 					
 				} else if ($.type(response) === 'object' && response.status === "FAILED") {
@@ -3447,12 +3589,70 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
     $(document).ready(function() {
 		// when loading the page scroll to top because window is not scrollable
 		window.scrollTo(0, 0);
-		if($("li.routed-my-queries").hasClass("active")){
+		if($("li.routed-my-queries").hasClass("opened")){
 			$("#returnButton").removeClass("hidden");
 		} else{
 			$("#returnButton").addClass("hidden");
 		}
 
+		if($("#parameterList").find(".has-error").length > 0){
+			$.each($("#parameterList").find(".has-error"), function(){
+				$(this).removeClass("has-error");
+			});
+		}
+
+		$.validator.addMethod("verifyDependency", function(value, element){
+			var req = false;
+			$.each($(element).data("dependencies"), function(idx, dependency){
+				if(dependency.dependencyType === "REQUIRED_IF"){
+					if(dependency.condition === "NOTSET"){
+						if($("[name^='"+dependency.referencedParameterId+"']").val() === "" && $(element).val() === ""){
+							req = false;
+						}else{
+							req = true;
+						}
+					}else if (dependency.condition === "SET"){
+						if($("[name^='"+dependency.referencedParameterId+"']").val() !== "" || $("[name^='"+dependency.referencedParameterId+"']").val() === null ){
+							req = true;
+						}else{
+							req =  false;
+						}
+					}
+				}else{
+					req =  true;
+				}
+			});
+			return req;
+		},"This field is required.");
+
+		$.validator.addClassRules(
+				"requiredIf", {
+					verifyDependency: true
+				}
+            );
+		
+
+		$("#parameterList").validate({
+			rules : {
+				"user-pass" : { required: true },
+				"user-name" : { required: true },
+				"user-secret" : { required: true }
+			},
+			highlight: function(element, errorClass) {
+				$(element).parent().addClass("has-error");
+			},
+			unhighlight: function(element, errorClass) {
+				$(element).parent().removeClass("has-error");
+			},
+			messages: {
+			},
+			errorPlacement: function(error, element) {
+				error.appendTo(element.parent());
+			},
+			success: function(label) {
+				label.remove();
+			}
+		});
 
 		$("#coverageSlider").slider({
 			range: "min",
@@ -3500,7 +3700,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
     	});
 		
 		// Initialize map and query
-		var olPoly = $("#mapExtent").poly2D({ startLat: 47, startLon: 14, zoom: 5, maxFeaturesNo: 1, extraFeatureDescription: "preview" });
+		var olPoly = $("#mapExtent").poly2D({ startLat: 4, startLon: -15, zoom: 3, maxFeaturesNo: 1, extraFeatureDescription: "preview" });
 		$.when(olPoly)
 		.done(function (result) {
 			if (typeof result.readOnly === "boolean") {
@@ -3515,12 +3715,14 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 			// Initialize query functionality after map is loaded
 			initControls();
 			initDatasources();
+			setDefaultFilers();
 			initQuery();
 		})
 		// Initialize query functionality without map
 		.fail(function () {
 			initControls();
 			initDatasources();
+			setDefaultFilers();
 			
 		});
 			

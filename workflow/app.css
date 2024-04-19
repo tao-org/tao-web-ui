@@ -162,6 +162,7 @@ pre {
     font-size: 16px;
     position: relative;
     font-weight: bold;
+    word-wrap: break-word;
     max-width: 20em;
 }
 

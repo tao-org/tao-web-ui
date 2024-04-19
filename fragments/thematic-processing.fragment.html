@@ -140,14 +140,14 @@
 
 <script type="text/javascript">
 	var urls = [
-			baseRestApiURL + "datasource/user/group/",
+			//baseRestApiURL + "datasource/user/group/",
 			baseRestApiURL + "datasource/query/"
 		];
 		
 	var panelComp = $('#panel-nodes').npPaginatedCells({
 		headerUser : taoUserProfile.username,
 		url        : urls,
-		viewMode   : prefferences.viewMode,
+		viewMode   : preferences.viewMode,
 		itemsOnPage: 12,
 		order      :[
 						{ "label": "Name ascending" , "objAttributeName": "_dsOrderBy", "direction": "ASC", "default": true },

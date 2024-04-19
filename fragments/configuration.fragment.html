@@ -1,0 +1,354 @@
+<!-- Content Header (Page header) -->
+<section class="content-header tao-async-ph">
+    <h1>Configurations<small>The available configurations that can be modified.</small></h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Components</li>
+    </ol>
+</section>
+<!-- /Content Header (Page header) -->
+<!-- Main content -->
+<section class="content tao-async-mc">
+	<div id="panel-topo-wrapper" class="row collapseX">
+		<div class="col-md-12">
+			<!-- Custom Tabs -->
+			<div class="nav-tabs-custom">
+				<div class="tab-content">
+					<div class="tab-pane active" id="panel-nodes">
+						<div class="row">
+							<div class="col-md-12" id="list-master-controls">
+								<div class="box-tools pull-left">
+									<button class="btn btn-master-tool text-black" data-action="op-filter" data-toggle="tooltip" data-original-title="Filter by tags"><i class="fa fa-filter"></i><span class="label label-warning val-count-filters" style="display:none;">0</span></button>
+								</div>
+								<div class="box-tools pull-left">
+									<form class="search-container collapse" action="">
+										<input id="search-box" type="text" class="search-box" name="q" placeholder="Search by label" />
+										<label for="search-box"><i class="fa fa-search search-icon" aria-hidden="true"></i></label>
+										<input type="submit" id="search-submit" />
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 like collapse">
+								<span data-tag="tag">Label like: <strong class="val-q"></strong>&nbsp;<i class="fa fa-times fa-fw clear-search" aria-hidden="true"></i></span>
+							</div>
+							<div class="col-md-12 tags collapse">
+								<span class="collapse" data-tag="tag">tag<i class="fa fa-check fa-fw" aria-hidden="true"></i></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="box box-success">
+									<div class="box-header">
+									</div>
+									<div class="nppaginatedcells-empty callout callout-empty">
+										<p>List is empty. <span class="results-empty">You do not have any available configurations.</span><span class="filter-results-empty collapse" style="display: none;">Your current selection returned no results.</span></p>
+									</div>
+									<div class="box-body">
+										<div id="list-config-accordion"></div>
+									</div>
+									<div class="box-footer clearfix no-border">
+										<div class="box-tools pull-right">
+											<ul class="nppaginatedcells-panel-pagination pagination pagination-sm inline" style="display: none;"></ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div><!-- /.tab-pane -->
+				</div><!-- /.tab-content -->
+			</div><!-- nav-tabs-custom -->
+		</div>
+	</div>
+</section><!-- /.content -->
+
+<!-- template section -->
+<section>
+	<div style="display: none;">
+		<div id="template-panel" class="panel panel-info box">
+			<div class="panel-heading box-header">
+				<h3 class="panel-title"><a data-toggle="collapse" data-parent=""
+						class="" href="">Title</a></h3>
+			</div>
+			<div class="panel-body panel-collapse collapse" id="">
+				<form role="form">
+					<input type="hidden" name="categoryId" value="">
+					<div class="row submit-buttons col-md-offset-5 col-md-5 col-sm-offset-5 col-sm-5">
+                        <input class="btn btn-primary btn-submit" name="save" type="button" value="Save" />
+                    </div>
+				</form>
+			</div>
+		</div>
+		
+		<div id="template_row" style="display: none;">
+			<div class="form-group form-group-sm row">
+
+			</div>
+		</div>
+	
+		<div id="template_col" style="display: none;">
+			<div class="col col-md-4 col-sm-4" id="col_ID">
+				<div class="col-md-6 col-sm-6 inline_view">
+					<div class="info_popup">
+						<input type="button" class="info_popup_img icon"></input>
+						<span class="info_popup_text"></span>
+					</div>
+					<label for="frendlyName_KEY" class="control-label">
+
+					</label>
+
+				</div>
+				<div class="col-md-6 col-sm-6">
+					<div class="input_select inline_view"></div>
+					<div><span class="error-block error hidden"></span></div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="template_field" style="display: none;">
+			<input type="" name="field_input_value" id="input_frendlyName_KEY" value="" class="form-control">
+			<select name="field_select_value" id="select_frendlyName_KEY" value="" class="form-control">
+			</select>
+			<span class="help-block"></span>
+		</div>
+	</div>		
+</section>
+
+<!-- includes for bootstrap-switch -->
+<link href="assets/libs/bootstrap-switch/3.3.2/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+<script src="assets/libs/bootstrap-switch/3.3.2/bootstrap-switch.min.js"></script>
+
+<!-- includes for datepicker and other controls -->
+<link href="assets/libs/bootstrap-datetimepicker/4.17.37/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
+<script src="assets/libs/bootstrap-datetimepicker/4.17.37/bootstrap-datetimepicker.min.js"></script>
+
+<style>
+	/* Style for the info popup */
+	.col .inline_view{display:flex;}
+	.info_popup{display:inline-flex;}
+	div#list-config-accordion .info_popup_img.icon{cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:url("assets/dist/img/icon-info.png");background-position:center;background-repeat:no-repeat;background-size:cover;width:16px;height:16px;}
+	.info_popup .info_popup_text{position:absolute;visibility:hidden;text-align:center;margin-left:30px;}
+	.info_popup_text::after,.info_popup_text::before{content:'';position:absolute;left:0.75vw;top:97%;z-index:2;border:solid 0.5em transparent;overflow:hidden;border-bottom:0;}
+	.info_popup_text::after{top:100%;z-index:1;}
+	.info_popup_text.show{visibility:visible;-webkit-animation:fadeIn 1s;animation:fadeIn 1s;z-index:1;text-align:center;bottom:2em;margin-left:-1vw;border-radius:10px;-webkit-border-radius:10px;width:fit-content;border-style:groove;bottom:110%;padding:2px;}
+	
+	/* Style for add icons */
+	div#list-config-accordion .icon{border:1px solid transparent;border-radius:50%;width:22px;height:22px;padding:5px;background-position:50% 50%;background-repeat:no-repeat;background-color:transparent;}
+	div#list-config-accordion .icon:focus{outline:none;}
+</style>
+
+<script>	
+	var getGroupedConfigItems = function (categoryId) {
+		return $.ajax({
+			cache: false,
+			url: baseRestApiURL + "config/detail/items?grouped=true",
+			type: "GET",
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"X-Auth-Token": window.parent.tokenKey
+			}
+		});
+	};
+	
+	function createSelectField(data, $columnDiv) {
+		var selectField = $("select[id='select_frendlyName_KEY']", "#template_field").clone();
+		var errorField = $("span.error-block", $columnDiv);
+
+		$.each(data.values.allowed_values, function (index, value) {
+			selectField.append('<option name="' + value.display + '" value="' + value.value + '">' + value.display +'</option>');
+		});
+
+		$("option[value='" + data.value + "']", selectField).prop("selected", true);
+
+		$("div.input_select", $columnDiv).append(selectField.attr({ "id": data.id }));
+		if (errorField.html()) {
+			errorField.removeClass("hidden");
+		}
+
+	};
+
+	function createInputField(data, $columnDiv) {
+		var inputField = $("input[id='input_frendlyName_KEY']", "#template_field").clone();
+		var errorField = $("span.error-block", $columnDiv);
+		switch (data.type) {
+			case "int": case "float":
+				try {
+					inputField.attr({ "type": "number", "value": data.value });
+					if (data.values && data.values.bounds !== undefined && data.values.bounds !== null) {
+						$.each(data.values.bounds, function (prop, value) {
+							if (prop == "min" && value == "") {
+								inputField.attr(prop, Number.MIN_VALUE);
+							} else if (prop == "max" && value == "") {
+								inputField.attr(prop, Number.MAX_VALUE);
+							} else {
+								inputField.attr(prop, value);
+							}
+						});
+					}
+				} catch (err) {
+					inputField.attr({ "type": "text", "value": data.value }).addClass("error");
+					errorField.html("Type changed to text: " + data.value +" is not " + data.type + ".");
+				}
+				break;
+			case "date":
+				inputField.attr({ "type": "text", "value": data.value }).datetimepicker({ format: "YYYY-MM-DD", showClose: true }); break;
+			case "bool": case "boolean":
+				try {
+					inputField.prop("checked", JSON.parse(data.value));
+					inputField.attr({ "type": "checkbox", "value": inputField.prop("checked") });
+					inputField.addClass("switch_elem");
+				} catch (err) {
+					inputField.attr({ "type": "text", "value": data.value }).addClass("error");
+					errorField.html("Type changed to text:" + data.value + " is not " + data.type +".");
+				}
+				break;
+			default:
+				inputField.attr({ "type": "text", "value": data.value }); break;
+		}
+
+		$("div.input_select", $columnDiv).append(inputField.attr({ "id": data.id }));
+		if (errorField.html()) {
+			errorField.removeClass("hidden");
+		}
+	};
+		
+	function createCategoryFormContent($categoryElem, items) {
+		var $formElem = $("form", $categoryElem);
+		// hidden fields for category
+		$("input[name='categoryId']", $formElem).val(items[0].category.id);
+		$.each(items, function(idx, item) {
+			if (!$("div.row:not(.submit-buttons)", $formElem).length || $("div.col", $("div.row:not(.submit-buttons)", $formElem).last()).length == 3) {
+				$configEntryDiv = $("div.row", "#template_row").clone();
+			} else {
+				$configEntryDiv = $("div.row:not(.submit-buttons)", $formElem).last();
+			}
+			$columnDiv = $("div.col", "#template_col").clone().attr("id", ("col_" + item.id)).data("configItem", item);
+			
+			// config entry name and value
+			$("label[for='frendlyName_KEY']", $columnDiv).attr("for", item.id).html((item.label !== "not set" && item.label !== "") ? item.label : item.id + ":");
+			$("span.info_popup_text", $columnDiv).html(item.friendlyName);
+			
+			//select the input type
+			if (item.values && item.values.allowed_values !== undefined && item.values.allowed_values !== null && item.values.allowed_values.length > 0) {
+				createSelectField(item, $columnDiv);
+			} else {
+				createInputField(item, $columnDiv);
+			}
+			
+			// add field to form
+			$configEntryDiv.append($columnDiv);
+			$configEntryDiv.insertBefore($("div.row.submit-buttons", $formElem));
+		});
+		
+		//add bootstrapSwitch on all checkboxes
+		$("input[type='checkbox'].switch_elem", $categoryElem).bootstrapSwitch({
+			size: bootstrapSwitchSize(taoUserProfile.preferences["body_size"]),
+			onColor: "success",
+			offColor: "default",
+			onText: "TRUE",
+			offText: "FALSE"
+		});
+	};
+		
+	function refreshPage() {
+		$.when(getGroupedConfigItems()).done(function(groupedConfigItemsResponse) {
+			var categoryList = chkTSRF(groupedConfigItemsResponse);
+			var $accordion = $("#list-config-accordion");
+			//$accordion.html("");
+			if (categoryList !== null && !$.isEmptyObject(categoryList)) {
+				$.each(categoryList, function (categoryName, items) {
+					idCategoryName = (categoryName.toLowerCase()).replace(/ /g, "-");
+					if( $("#"+ idCategoryName + "-panel").length > 0 ){
+						$("#"+ idCategoryName + "-panel").remove();
+					}
+					var composedId = idCategoryName + "-category-list";
+					var $category = $("#template-panel").clone().attr("id", idCategoryName + "-panel");
+					$(".panel-title a", $category).html(categoryName).attr({"data-parent": "#list-config-accordion", "href": "#" + composedId});
+					$(".panel-body", $category).attr("id", composedId);
+					createCategoryFormContent($category, items);
+					$accordion.append($category);
+				});
+				$(".nppaginatedcells-empty").hide();
+			} else {
+				$(".nppaginatedcells-empty").show();
+			}
+		});
+	};
+	
+	$(document).ready(function() {
+		
+		refreshPage();
+		
+		$("#list-config-accordion").on("click", ".info_popup_img", function (e) {
+			e.preventDefault();
+			if ($(this).siblings(".info_popup_text").hasClass("show")) {
+				$(this).siblings(".info_popup_text").removeClass("show");
+			} else {
+				$(this).closest("#list-config-accordion").find(".info_popup_text.show").removeClass("show");
+				$(this).siblings(".info_popup_text").addClass("show");
+			}
+		});
+		
+		$("#list-config-accordion").on("click", "a[data-parent='#list-config-accordion']", function (e) {
+			$("#list-config-accordion").find(".info_popup_text.show").removeClass("show")
+		});
+		
+		$("#list-config-accordion").on("click", "input[name='save']", function (e) {
+			e.preventDefault();
+			var configItem;
+			var configItemList = [];
+			
+			$.each($(".form-control", this.closest("form")), function (index, field) {
+				if ($(field).val() !== $(field).attr("value") || ($(field).is(":checkbox") && JSON.parse($(field).val()) !== $(field).prop("checked"))) {
+					configItem = $(field.closest("div[id='col_" + $(field).attr("id") + "']")).data("configItem");
+					if ($(field).is(":checkbox")) {
+						configItem.value = $(field).prop("checked");
+					} else {
+						var values = $(field).val();
+						if ($.isArray(values)) {
+							values = values.join(";");
+						}
+						configItem.value = values;
+					}
+					configItemList.push(configItem);
+				}
+			});
+			
+			$.ajax({
+				cache: false,
+				url: baseRestApiURL + "config/detail/items",
+				data: JSON.stringify(configItemList),
+				type: "POST",
+				headers: {
+					"Accept": "application/json",
+					"Content-Type": "application/json",
+					"X-Auth-Token": window.tokenKey
+				},
+				error : function (jqXHR, textStatus, errorThrown) {
+					if (jqXHR.status === 500) {
+						showMsg("Error updating container. Please check your data and try again.", "ERROR");
+						return;
+					}
+					showMsg("Unable to update configuration. Please try again.", "ERROR");
+				},
+				success: function(response, textStatus, jqXHR) {
+					if (typeof response.message !== "undefined" && response.message !== null && response.message !== "") {
+						showMsg(response.message, "SUCCESS");
+					} else {
+						showMsg(configItemList.length + " configuration items saved", "SUCCESS");
+					}
+					refreshPage();
+				}
+			});
+		});
+		
+		$(".wrapper").on("click", function(e){
+			if($(".info_popup_text",".info_popup").hasClass("show") && !$(e.target).hasClass("info_popup_img icon")){
+				$(".info_popup_text",".info_popup").removeClass("show")
+			}
+		});
+	});
+	//# sourceURL=configuration.js
+</script>

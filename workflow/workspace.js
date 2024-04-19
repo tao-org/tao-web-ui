@@ -38,7 +38,7 @@ function describeArc(x, y, radius, startAngle, endAngle){
 
 
 
-    var prefferences = {};
+    var preferences = {};
 	var componentCategories;
 
     var toolboxHeader = {
@@ -100,7 +100,7 @@ function describeArc(x, y, radius, startAngle, endAngle){
             $( ".toolboxAccordion", a.elTBS).accordion({
                 heightStyle: "fill",
                 collapsible: true,
-                active: componentCategories.length + 1,
+                active: false,
                 animate: 500
             });
             //add resize handler
@@ -152,12 +152,12 @@ function describeArc(x, y, radius, startAngle, endAngle){
 
 
 	function setWFConnectorsToStateMachine(){
-		window.prefferences.workFlowConnectors = "S";
-		_settings.createCookie("prefferences_workFlowConnectors","S");
+		window.preferences.workFlowConnectors = "S";
+		_settings.createCookie("preferences_workFlowConnectors","S");
 	}
 	function setWFConnectorsToFlowchart(){
-		window.prefferences.workFlowConnectors = "F";
-		_settings.createCookie("prefferences_workFlowConnectors","F");
+		window.preferences.workFlowConnectors = "F";
+		_settings.createCookie("preferences_workFlowConnectors","F");
 	}
 
     function wf_renderComponentsToolBox(){
@@ -491,11 +491,11 @@ function describeArc(x, y, radius, startAngle, endAngle){
 
 $( function() {
 	console.log("pref");
-	if(_settings.readCookie("prefferences_workFlowConnectors")){
-		if(_settings.readCookie("prefferences_workFlowConnectors") === "F"){
+	if(_settings.readCookie("preferences_workFlowConnectors")){
+		if(_settings.readCookie("preferences_workFlowConnectors") === "F"){
 			setWFConnectorsToFlowchart();
 		}
-		if(_settings.readCookie("prefferences_workFlowConnectors") === "S"){
+		if(_settings.readCookie("preferences_workFlowConnectors") === "S"){
 			setWFConnectorsToStateMachine();
 		}
 	}else{

@@ -4,15 +4,14 @@
 	label.error{display:block;font-size:0.9em}
 	
 	.select-repository{list-style:none;font-size:1.2em;padding-left:0}
-	.select-repository li{padding:0 0.5em;color:#3c8dbc;cursor:pointer;margin:5px -0.5em}
+	.select-repository li{padding:0 0.5em;cursor:pointer;margin:5px -0.5em}
 	.select-repository li:hover{text-decoration:underline}
-	.select-repository li.selected{background-color:#3c8dbc;color:white}
+	.select-repository li.selected{color:white}
 	.select-repository li.selected::marker{color:#3c8dbc}
 	.select-repository li.disabled{pointer-events:none;color:gray}
 	
 	.repo-parameters{position:relative;padding:10px 0}
 	.repo-parameters::before{content:"";display:block;position:absolute;left:0;top:0;width:5px;background-color:rgba(0,0,0,0.1);height:100%}
-	.repo-parameters .fa-info-circle{color:#3c8dbc}
 	.repo-parameters input{margin-bottom:5px}
 	.repo-parameters label.error{margin-top:-5px;margin-bottom:5px}
 	
@@ -24,7 +23,7 @@
 <div id="manageRepository" class="modal-content">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-		<h4 class="modal-title" id="myModalLabel">Add new public repository</h4>
+		<h4 class="modal-title" id="myModalLabel">Add public repository</h4>
 	</div>
 	<form role="form">
 		<div class="modal-error collapse">
@@ -46,7 +45,7 @@
 				<div class="row">
 					<label for="inputDescription" class="col-md-4 control-label">Description</label>
 					<div class="col-md-8">
-						<input type="text" class="form-control" id="inputDescription" name="inputDescription" autocomplete="off" value="" placeholder="Describe your repository..." />
+						<textarea class="form-control" id="inputDescription" name="inputDescription" autocomplete="off" rows="2" value="" placeholder="Describe your repository..." style="resize:vertical; max-height:100px;"></textarea>
 					</div>
 				</div>
 			</div>
@@ -68,33 +67,35 @@
 			</div>
 			<div class="form-group">
 				<div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div>
+								<div class="modal-footer">
+									<button id="saveExecNode" type="submit" class="btn btn-primary btn-submit left-btn" name="btnSave">Add new public repository</button>
+									<button type="button" class="btn btn-default right-btn" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+                        </div>                        
+                    </div>
+                </div>
+				<!-- <div class="row">
 					<div class="col-md-offset-4 col-md-8">
 						<button id="saveExecNode" type="submit" class="btn btn-primary btn-submit" name="btnSave" disabled>Add new public repository</button>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
 	</form>
-	<div class="modal-note">
-		<div class="row">
-			<div class="form-group">
-				<div class="col-md-12">
-					<h4>Help filling in</h4>
-					<p>All parameters are required. Please fill in all the fields.</p>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="modal-footer">
+	<!-- <div class="modal-footer">
 	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	</div>
+	</div> -->
 
 </div><!-- /.modal-content -->
 
 <!-- Specific styles -->
 <style>
 #comp-tab-ports thead th{vertical-align:middle}
-#comp-tab-ports .table-title{background-color:#3c8dbc;color:white;font-size:1.2em;line-height:1.2em}
+#comp-tab-ports .table-title{color:white;font-size:1.2em;line-height:1.2em}
 #comp-tab-ports .tbl-edt input[type="number"]{
 	width: 100%;
 	padding-left: 0.3em;
@@ -289,7 +290,7 @@ form .taginput .tag{background-color:#f0f0f0; border:1px solid #dedede; color: b
 		}
 
 		if (rp_edit) {
-			$("#myModalLabel").text("Edit Repository")
+			$("#myModalLabel").text("Edit repository")
 			$("[name='inputName']"       , $form).val(repo.name);
 			$("[name='inputDescription']", $form).val(repo.description);
 			$(".repo-parameters", $form).html('');

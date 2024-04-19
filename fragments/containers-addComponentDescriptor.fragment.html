@@ -191,10 +191,9 @@
 								<div class="row">
 									<div class="col-md-12">
 										<div class="form-group">
-											<label for="inputFileLocation" class="col-sm-2 col-md-2 control-label">File location </label>
+											<label for="inputfilePathId" class="col-sm-2 col-md-2 control-label">File location </label>
 											<div class="col-sm-10 col-md-10">
-											<!--	<input type="text" class="form-control" id="inputFileLocation" name="inputFileLocation" placeholder="file location" data-errorspan="fileLocation" autocomplete="off" value=".\mypath1"/>
-											 --><select class="form-control" id="inputfilePathId"  name="inputfilePathId"></select>
+												<select class="form-control" id="inputfilePathId"  name="inputfilePathId"></select>
 											</div>
 										</div>
 									</div>
@@ -227,7 +226,6 @@
 							<div id="comp-tab-param" class="tab-pane fade padding-top--20 padding-bottom--20">
 								<div class="row">
 									<div class="col-md-12">
-										<p>Parameter list:</p>
 										<div class="responsive">
 											<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-paramdesc">
 												<thead>
@@ -339,7 +337,7 @@
 									</div>
 								</div>
 							</div>
-							<div id="comp-tab-sys" class="tab-pane fade">
+							<div id="comp-tab-sys" class="tab-pane fade padding-top--20">
 								<div class="row">
 									<div class="col-md-12">
 										<p>Variables:</p>
@@ -375,13 +373,13 @@
 									</div>
 								</div>
 							</div>
-							<div id="comp-tab-ports" class="tab-pane fade">
+							<div id="comp-tab-ports" class="tab-pane padding-top--20 fade">
 								<div class="row">
 									<div class="col-md-12">
 										<div class="responsive box-shadow--6dp" style="margin-bottom:20px;overflow:auto">
 											<table class="table table-bordered tbl-edt" id="tbl-edt-sources" style="margin:0">
 												<thead>
-												<tr><th colspan="8" class="table-title">Sources:</th></tr>
+												<tr><th colspan="8" class="table-title">Sources</th></tr>
 												<tr>
 													<th></th>
 													<th>Source Name</th>
@@ -424,7 +422,7 @@
 										<div class="responsive box-shadow--6dp" style="margin-bottom:20px;overflow:auto">
 											<table class="table table-bordered tbl-edt" id="tbl-edt-targets" style="margin:0">
 												<thead>
-												<tr><th colspan="9" class="table-title">Targets:</th></tr>
+												<tr><th colspan="9" class="table-title">Targets</th></tr>
 												<tr>
 													<th></th>
 													<th>Target Name</th>
@@ -496,7 +494,7 @@
 <!-- Specific styles -->
 <style>
 #comp-tab-ports thead th{vertical-align:middle}
-#comp-tab-ports .table-title{background-color:#3c8dbc;color:white;font-size:1.2em;line-height:1.2em}
+#comp-tab-ports .table-title{color:white;font-size:1.2em;line-height:1.2em}
 #comp-tab-ports .tbl-edt input[type="number"]{
 	width: 100%;
 	padding-left: 0.3em;
@@ -527,6 +525,7 @@
 
 <script>
     var action = 'op-plus';
+	
     function validateHostName(attrId){
         var $eL = $("#"+attrId);
         var $pEL = $eL.parent();
@@ -604,7 +603,6 @@
 		});
 	}	
 
-////////////
 	function getTaoEnumsArray(name) {
 		var retVal = [];
 		$.each(taoEnums.data, function (index, enm) {
@@ -624,22 +622,19 @@
 	sourceTargetSpecificFormats["formatName"] = [];
 	// get sensor type all possible values
 	sourceTargetSpecificFormats["sensorType"] = getTaoEnumsArray("SensorType");
-    
-////////////
+
     function helper_addSourceTargetDescriptorsRow($tbl, payload, specificFormats){
         var obj = {
 			"id": null,
 			"parentId": null,
 			"name": null,
-			"dataDescriptor": {
-				"formatType": null,
-				"formatName": null,
-				"geometry": null,
-				"crs": null,
-				"sensorType": null,
-				"dimension": null,
-				"location": null
-			},
+			"formatType": null,
+			"formatName": null,
+			"geometry": null,
+			"crs": null,
+			"sensorType": null,
+			"dimension": null,
+			"location": null,
 			"constraints": null
 		};
         $.extend( obj, payload );
@@ -672,14 +667,14 @@
 		$('input.var-id', $el).val(obj.id);
 		$('input.var-name', $el).val(obj.name);
         $('select.var-formatType option', $el).removeAttr("selected");
-        $('select.var-formatType option[value="'+obj.dataDescriptor.formatType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
+        $('select.var-formatType option[value="'+obj.formatType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
         $('select.var-formatName option', $el).removeAttr("selected");
-        $('select.var-formatName option[value="'+obj.dataDescriptor.formatName+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
-		$('textarea.var-geometry', $el).val(obj.dataDescriptor.geometry);
-        $('input.var-crs', $el).val(obj.dataDescriptor.crs);
+        $('select.var-formatName option[value="'+obj.formatName+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
+		$('textarea.var-geometry', $el).val(obj.geometry);
+        $('input.var-crs', $el).val(obj.crs);
         $('select.var-sensorType option', $el).removeAttr("selected");
-        $('select.var-sensorType option[value="'+obj.dataDescriptor.sensorType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
-        $('input.var-dimension', $el).val(obj.dataDescriptor.dimension);
+        $('select.var-sensorType option[value="'+obj.sensorType+'"]', $el).attr("selected", "selected").closest("select").removeClass("empty");
+        $('input.var-dimension', $el).val(obj.dimension);
         $('input.var-cardinality', $el).val(obj.cardinality);
 
 		$tbl.append($el);
@@ -779,21 +774,27 @@
 			var port_dimension   = $(this).find(".var-dimension").val();
 			var port_cardinality = $(this).find(".var-cardinality").val();
 			if( ((typeof port_name !== "undefined") && (typeof port_name.valueOf() === "string") && (port_name.length > 0)) ) {
+				var newPortDesc = {
+					"geometry"   : port_geometry  === "" ? null : port_geometry,
+					"crs"        : port_crs       === "" ? null : port_crs,
+					"dimension"  : port_dimension === "" ? null : port_dimension,
+					"formatType" : port_formatType === "" ? null : port_formatType,
+					"formatName" : port_formatName === "" ? null : port_formatName,
+					"sensorType" : port_sensorType === "" ? null : port_sensorType
+				};
 				var newPort = {
 					"parentId"       : parentId,
 					"name"           : port_name,
 					"cardinality"    : port_cardinality,
-					"id"             : port_id        === "" ? null : port_id,
-					"dataDescriptor" : {
-						"geometry"   : port_geometry  === "" ? null : port_geometry,
-						"crs"        : port_crs       === "" ? null : port_crs,
-						"dimension"  : port_dimension === "" ? null : port_dimension,
-						"formatType" : port_formatType === "" ? null : port_formatType,
-						"formatName" : port_formatName === "" ? null : port_formatName,
-						"sensorType" : port_sensorType === "" ? null : port_sensorType,
-						"location"   : null
-					}
+					"id"             : port_id        === "" ? null : port_id
 				};
+				
+				if (isOldVersion) {
+					newPort["dataDescriptor"] = newPortDesc;
+				} else {
+					$.extend(newPort, newPortDesc);
+				}
+				
 				newPorts.push(newPort);
 			}
 		});
@@ -808,50 +809,17 @@
 		
         initializeTagsInputAutocomplete("#formTags", "component"); 
         //no edit in shared workspace
-        //$("#frmExecNodeEdit").on("keypress change","*", function(e){
-            if((routeTags[0] === "shared") && (taoUserProfile.userRole !== "ADMIN")){
-                $("#frmExecNodeEdit :input").prop("disabled", true);
-                $("#frmExecNodeEdit input#formTags").css('display','');
-                $("#frmExecNodeEdit div#formTags_tagsinput").hide();              
-                $("#frmExecNodeEdit button[type=\"submit\"]").hide();
-                $("#myModalNodes .modal-note h4").html("Warrning");
-                $("#myModalNodes .modal-note p").html(SHARED_EDIT_RESTRICTED);
-            }
-        //});
-
-
-        //get all availlable dockers
-       /* var getAllDocker = $.ajax({
-            cache: false,
-            url: baseRestApiURL + "docker/",
-            dataType : 'json',
-            type: 'GET',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
-            }
-        });
-        $.when(getAllDocker)
-            .done(function (getAllDockerResponse) {
-                var r = chkTSRF(getAllDockerResponse);
-                var selectedid = 0;//$('#department').data("selectedid");
-                $('#inputContainerId').empty();
-                $.each(r, function(i, value) {
-                    if(value.id === selectedid){
-                        $('#inputContainerId').append($('<option>').text(value.name).attr('value', value.id).prop('selected', true));
-                    } else{
-                        $('#inputContainerId').append($('<option>').text(value.name).attr('value', value.id));
-                    }
-                });
-            })
-            .fail(function () {
-                showMsg("Could not retrive dockers list.", "ERROR");
-            });*/
-
+		if((routeTags[0] === "shared") && (taoUserProfile.userRole !== "ADMIN")){
+			$("#frmExecNodeEdit :input").prop("disabled", true);
+			$("#frmExecNodeEdit input#formTags").css('display','');
+			$("#frmExecNodeEdit div#formTags_tagsinput").hide();              
+			$("#frmExecNodeEdit button[type=\"submit\"]").hide();
+			$("#myModalNodes .modal-note h4").html("Warrning");
+			$("#myModalNodes .modal-note p").html(SHARED_EDIT_RESTRICTED);
+		}
+        
 
 		$('#inputfilePathId').html("<option class='ital' value><i>Select...</i></option>");
-			//$('#inputfilePathId').append('<option value=\'\' selected>Select</option>');
 			var applPath;
 			var applName;
 			var arrSplitApl = [];
@@ -953,15 +921,6 @@
                     }
                 }
             });
-            /*.on("focusout", function(){
-                if($(this).data("errorspan")){
-                    if (($(this).val() === "")||($(this).val() === 0)||($(this).val() === "0")){
-                        $(".error-"+$(this).data("errorspan"),".modal-error").css('display', 'inline-block');
-                        $(".modal-error").fadeIn("slow");
-                        $("#saveExecNode").attr('disabled','disabled');
-                    }
-                }
-            });*/
 		
 		$("table").on("change", "select[class^='var-']", function () {
 			if (this.value == "") {
@@ -988,7 +947,7 @@
 			.substring(1);
 		}
 		
-	$("form#frmExecNodeEdit").on("click", "#btnConfirmComponentDescriptor", function (e)  {
+		$("form#frmExecNodeEdit").on("click", "#btnConfirmComponentDescriptor", function (e)  {
 
             e.preventDefault();
             if((routeTags[0] === "shared") && (taoUserProfile.userRole !== "ADMIN")){
@@ -1008,8 +967,7 @@
                     "parallelism" : parseInt($('input[name=inputCompParallelism]', $el).val()),
 					"sources": [],
                     "targets": [],
-                   // "containerId": $('select[name=inputContainerId]', $el).val(),
-					"fileLocation" : $('select[name=inputfilePathId]', $el).val(), //$('input[name=inputFileLocation]', $el).val(),
+					"fileLocation" : $('select[name=inputfilePathId]', $el).val(),
                     "workingDirectory" : $('input[name=inputWorkingDirectory]', $el).val(),
                     "templateType" : $('select[name=inputTemplateType]', $el).val(),
                     "templateEngine": {
@@ -1059,15 +1017,6 @@
                     ]
                 };
             component.templatecontents = $('textarea[name=inputTemplateContents]', $el).val();
-            //add template to payload for template type VELOCITY
-//            if(component.templateType === "VELOCITY"){
-//                component.template={
-//                    "type": "ro.cs.tao.component.template.BasicTemplate",
-//                    "name" : $('input[name=inputTemplateName]', $el).val(),
-//                    "templateType": "VELOCITY",
-//                    "contents" : $('textarea[name=inputTemplateContents]', $el).val()
-//                };
-//            }
 
             // add system variable to payload parsing user defined system vars table
             component.variables = [];

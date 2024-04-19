@@ -4,15 +4,14 @@
 	label.error{display:block;font-size:0.9em}
 	
 	.select-repository{list-style:none;font-size:1.2em;padding-left:0}
-	.select-repository li{padding:0 0.5em;color:#3c8dbc;cursor:pointer;margin:5px -0.5em}
+	.select-repository li{padding:0 0.5em;cursor:pointer;margin:5px -0.5em}
 	.select-repository li:hover{text-decoration:underline}
-	.select-repository li.selected{background-color:#3c8dbc;color:white}
+	.select-repository li.selected{color:white}
 	.select-repository li.selected::marker{color:#3c8dbc}
 	.select-repository li.disabled{pointer-events:none;color:gray}
 	
 	.repo-parameters{position:relative;padding:10px 0}
 	.repo-parameters::before{content:"";display:block;position:absolute;left:0;top:0;width:5px;background-color:rgba(0,0,0,0.1);height:100%}
-	.repo-parameters .fa-info-circle{color:#3c8dbc}
 	.repo-parameters input{margin-bottom:5px}
 	.repo-parameters label.error{margin-top:-5px;margin-bottom:5px}
 	
@@ -36,21 +35,20 @@
 			<div class="form-group">
 				<div class="row" id="repoCategory">
 					<label for="category" class="col-md-4 control-label" >Repository category</label>
-
-					<label class="radio-inline">
-						<input type="radio" name="repOpt" id="newOpt" value="new" checked>New
-					</label>
-
-					<label class="radio-inline">
-						<input type="radio" name="repOpt" id="templateOpt" value="template" >Public Repository
-					</label>
-
+					<div class="col-md-8">
+						<label class="radio-inline">
+							<input type="radio" name="repOpt" id="newOpt" value="new" checked>New
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="repOpt" id="templateOpt" value="template" >Public Repository
+						</label>
+					</div>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="row" id="repoChooseTemplate">
-					<label for="inputName" class="col-md-4 control-label">Choose public repository</label>
+					<label for="inputName" class="col-md-4 control-label">Public repository</label>
 					<div class="col-md-8">
 						<select type="text" class="form-control" id="templateList" name="templateList" autocomplete="off" value="" placeholder="Template list..." disabled>
 								
@@ -73,7 +71,7 @@
 				<div class="row">
 					<label for="inputDescription" class="col-md-4 control-label">Description</label>
 					<div class="col-md-8">
-						<input type="text" class="form-control" id="inputDescription" name="inputDescription" autocomplete="off" value="" placeholder="Describe your repository..." />
+						<textarea class="form-control" id="inputDescription" name="inputDescription" autocomplete="off" value="" placeholder="Describe your repository..."  style="resize:vertical; max-height:100px"></textarea>
 					</div>
 				</div>
 			</div>
@@ -95,14 +93,24 @@
 			</div>
 			<div class="form-group">
 				<div class="row">
-					<div class="col-md-offset-4 col-md-8">
+					<div class="col-md-12">
+                        <div class="form-group">
+                            <div>
+								<div class="modal-footer">
+									<button id="saveExecNode" type="submit" class="btn btn-primary btn-submit left-btn" name="btnSave">Add new repository</button>
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+                        </div>                        
+                    </div>
+					<!-- <div class="col-md-offset-4 col-md-8">
 						<button id="saveExecNode" type="submit" class="btn btn-primary btn-submit" name="btnSave" disabled>Add new repository</button>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
 	</form>
-	<div class="modal-note">
+	<div class="modal-note collapse">
 		<div class="row">
 			<div class="form-group">
 				<div class="col-md-12">
@@ -112,9 +120,9 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal-footer">
+	<!-- <div class="modal-footer">
 	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	</div>
+	</div> -->
 </div>
 <script type="text/javascript">
 	$(document).ready( function(){
@@ -243,7 +251,7 @@
 						"description": $("[name='inputDescription']", e.delegateTarget).val(),
 						"urlPrefix"  : repoD.urlPrefix,
 						"type"       : rp_plus ? repoD.name : repo.type,
-						"userName"   : window.taoUserProfile.username,
+						"userId"   : window.taoUserProfile.id,
 						"parameters" : rp_plus ? {} : $.extend(true, {}, repo.parameters),
 						
 					}
@@ -336,7 +344,7 @@
 			$("#repoCategory").remove();
 			$("#repoChooseTemplate").remove();
 
-			$("#myModalLabel").text("Edit Repository")
+			$("#myModalLabel").text("Edit repository")
 			$("[name='inputName']"       , $form).val(repo.name);
 			$("[name='inputDescription']", $form).val(repo.description);
 			$(".repo-parameters", $form).html('');

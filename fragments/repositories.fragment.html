@@ -19,8 +19,6 @@
 .tree-content .treeview{overflow-y:auto;padding-left:1em;min-height:100px}
 .tree-content .treeview input[type="checkbox"]{display:none}
 .tree-content .treeview a{display:block;cursor:pointer;padding:0;line-height:1.8em;max-height:1.8em;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;border:1px solid transparent;margin-bottom:1px}
-.tree-content .treeview a:hover{background-color:#e0f1ff;border-color:#e0f1ff;color:#3c8dbc}
-.tree-content .treeview a.selected{background-color:#c2e2ff;color:#0f5075;border:1px solid #8ac6ff}
 .tree-content .treeview a span{float:right;padding:0 10px 0 7px;width:110px;text-align:right}
 .tree-content .treeview label>a{font-weight:600}
 .tree-content .treeview .fa{float:none;width:30px}
@@ -62,9 +60,7 @@
 .foldercontent-icon { float: left; font-size: 14px; padding: 5px 5px 0 0; background-repeat: no-repeat; background-position: center center; }
 .foldercontent .foldercontent-item a { display: block; cursor: pointer; padding: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; border: 1px solid transparent; margin-bottom: 1px }
 .foldercontent .foldercontent-item { border: 1px solid #FFF }
-.foldercontent .foldercontent-item:hover { background-color: #e0f1ff; border-color: #e0f1ff; color: #3c8dbc }
-.foldercontent .foldercontent-item.selected { position: relative; background-color: #c2e2ff; color: #0f5075; border: 1px solid #8ac6ff }
-.foldercontent .foldercontent-item.selected a {color: #0f5075;}
+.foldercontent .foldercontent-item.selected{position: relative;}
 .foldercontent-item { width: 100%; }
 .foldercontent-item { line-height: 1.8em; max-height: 1.8em; display: inline-block; vertical-align: top; font-size: 14px; font-weight: 600; padding: 0 10px 0 7px; }
 .foldercontent-label { white-space: nowrap; vertical-align: top; cursor: pointer; overflow: hidden; text-overflow: ellipsis;display:block; padding: 0 2px; }
@@ -73,6 +69,9 @@
 .foldercontent.loading::after { content: "Loading..."; color: #72afd2; width: 100%; display: block; padding: 0 10px; text-align: left; font-size: 1em; line-height: 16px }
 .gutter.gutter-horizontal { cursor: col-resize; }
 .foldercontent-item .rename-item { position: absolute; top: -2px; left: 25px; line-height: 1.5em; width: calc(100% - 25px);}
+
+.page-next {height:5%; cursor: pointer;}
+.page-next i.fa {margin-top:5px; margin-left: 3px}
 
 /* ===== PROPERTIES ===== */
 #properties.folder .for-files { display: none }
@@ -194,6 +193,7 @@
 
 .btn-red { background-color: #ff0000 !important }
 .btn-orange { background-color: #ffa500 !important }
+.btn-green { background-color: #00a65a !important }
 .btn-primary { position: relative; margin-top: 3px; border-color: rgba(0,0,0,0.1) !important }
 .btn-primary:hover::after,
 .btn-primary:active::after,
@@ -210,7 +210,23 @@
 .back-one-folder:hover>*{opacity:0.7;}
 .fa-folder.fa-back::after {position:absolute;content:"\21B5";font-size:10px;color:#333;top:25%;left:25%;}
 .search-submit { position: relative; left: -5000px; }
+
+/* ==== Style for share pop-up ==== */
+#share-content .content_area {resize: none;}
+#share-content {display: grid; grid-gap: 10px; padding-left: 25px; padding-right: 25px; padding-top: 25px;}
+.content_area::placeholder {font-family: 'Source Sans Pro';}
+.share-name{height: 20vh !important; width: 30vw !important; min-height: 170px !important;}
+
+.grid-show {display: flex; flex-direction: row; justify-content: center; gap : 3px;}
+.toggle-download-grid {padding-left: 20px;}
+.list-show{display: flex; flex-direction: row; justify-content: right; gap : 3px;}
+.toggle-download-list {padding-right: 20px;}
+
+
 </style>
+<!-- includes for bootstrap-toggle
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script> -->
 
 <div id="view_file_content" class="hidden">
     <div class="box-shadow--6dp file-content">
@@ -230,6 +246,8 @@
 		</div>
     </div>
 </div>
+
+
 
 <div id="view_on_map" class="map in-background">
 	<div class="box-shadow--6dp view_on_map-content">
@@ -288,7 +306,7 @@
 </div>
 
 <section class="content-header tao-async-ph">
-    <h1>Repositories <small>The list of system and user defined <strong>repositories</strong>.</small></h1>
+    <h1>Repositories <small>Your workspace comprising of <strong>user</strong> added repositories from public sources & <strong>system</strong> repositories that hold your EO products and workflow execution results, on which can be performed various operations.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Repositories</li>
@@ -298,7 +316,7 @@
 <div id="tab_pane_template" class="tab-pane tree-pane hidden">
     <div class="row">
         <div class="col-md-12"> <!--class="list-master-controls"-->
-            <div class="box-tools pull-left" data-toggle="tooltip" data-original-title="Upload">
+            <div class="box-tools pull-left" data-toggle="tooltip" data-original-title="New File">
                 <button class="btn btn-master-tool text-black" data-action="rp-upload" disabled><i class="fa fa-upload"></i></button>
             </div>
             <div class="box-tools pull-left" data-toggle="tooltip" data-original-title="New Folder">
@@ -316,6 +334,9 @@
                 <button class="btn btn-master-tool text-black" data-action="rp-delete-file" disabled><i class="fa fa-times"></i></button>
             </div>
             <div class="box-tools pull-left separator">|</div>
+            <div class="box-tools pull-left" data-toggle="tooltip" data-original-title="Share data">
+                <button class="btn btn-master-tool text-black" data-action="rp-share"  disabled><i class="fa fa-regular fa-share"></i></button>
+            </div>
             <div class="box-tools pull-left" data-toggle="tooltip" data-original-title="Create product set">
                 <button class="btn btn-master-tool text-black" data-action="rp-product-set"  disabled><i class="fa fa-cubes"></i></button>
             </div>
@@ -333,12 +354,12 @@
             </div>
             <div class="box-tools pull-left separator">|</div>
             <div class="box-tools pull-left" style="margin-top: 11px; font-size: 16px;">
-				<select id="actionsSelect" data-action="rp-actions" type="text" name="actionsList" autocomplete="off" value="" placeholder="Actions..." disabled></select>
+				<select class="actionsSelect" data-action="rp-actions" type="text" name="actionsList" autocomplete="off" value="" placeholder="Actions..." disabled></select>
             </div>
             <div class="box-tools pull-left separator">|</div>
             <div class="box-tools pull-left">
                 <form class="search-container collapse" action="" style="display: block;">
-                    <input id="search-foder-box" type="text" class="search-box search-folder" placeholder="Search by name" />
+                    <input id="search-folder-box" type="text" class="search-box search-folder" placeholder="Search by name" />
                     <label for="search-folder-box"><i class="fa fa-search search-icon" aria-hidden="true" data-toggle="tooltip" data-original-title="Search in folder"></i></label>
                     <input type="submit" class="search-submit" />
                 </form>
@@ -486,10 +507,12 @@
                                                         </div>
                                                         <div class="box-icon"><i class="fa fa-random"></i></div>
                                                     </div>
-                                                    <div class="box-bottom text-right" style="padding-top: 5px;">
+                                                    <div class="box-bottom text-right list-show" style="padding-top: 5px;">
+                                                        <div class="toggle-download-list"></div>
                                                         <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop btn-orange" data-action="rp-edit"><i class="fa fa-fw fa-pencil"></i><span class="span-muted">&nbsp;Edit repository</span></button>
                                                         <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop btn-red" data-action="rp-delete"><i class="fa fa-fw fa-trash-o"></i><span class="span-muted">&nbsp;Delete repository</span></button>
                                                         <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="rp-browse"><i class="fa fa-fw fa-eye"></i><span class="span-muted">&nbsp;View repository files</span></button>
+                                                        <!-- <button type="checkbox" checked data-toggle="toggle" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop btn-green" data-action="rp-select-storage"><i class="fa fa-fw fa-download"></i><span class="span-muted">&nbsp;Downloads repository</span></button> -->
                                                     </div>
                                                 </div>
                                             </core-cell-list>
@@ -509,10 +532,12 @@
                                                         <div class="box-icon"><i class="fa fa-random"></i></div>
                                                     </div>
                                                     <div class="box-bottom with-line">
-                                                        <div>
+                                                        <div class="grid-show">
                                                             <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop btn-orange" data-toggle="tooltip" data-action="rp-edit" data-original-title="Edit repository"><i class="fa fa-fw fa-pencil"></i><span class="span-muted collapse">&nbsp;Edit repository</span></button>
                                                             <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop btn-red" data-toggle="tooltip" data-action="rp-delete" data-original-title="Delete repository"><i class="fa fa-fw fa-trash-o"></i><span class="span-muted collapse">&nbsp;Delete repository</span></button>
                                                             <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-toggle="tooltip" data-action="rp-browse" data-original-title="View repository files"><i class="fa fa-fw fa-eye"></i><span class="span-muted collapse">&nbsp;View repository files</span></button>
+                                                            <div class="toggle-download-grid"></div>
+                                                            <!-- <input type="checkbox" data-toggle="toggle" data-onstyle="success" data-action="rp-select-storage" data-original-title="Downloads repository"><span class="span-muted collapse">&nbsp;Downloads repository</span></input> -->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -546,12 +571,35 @@
     <div class="modal-dialog"></div>
 </div>
 
+<div id="share-name-content" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Share data</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 col-md-2" style="padding-top: 7px; text-align: center;">Name</label>
+                        <div class="col-sm-10 col-md-10">
+                            <textarea class="content_area" placeholder="Name of the shared set" autocomplete="off" rows="1" style="resize:vertical; max-height:100px; width: 103%"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="share-btn" name="btnSave" class="btn btn-primary btn-submit" style="margin-top: 0%;">Create shared set</button>
+                    <button class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+</div>
+
 <div id="myModalUpload" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">Upload</h4>
+				<h4 class="modal-title">Add new file</h4>
 			</div>
 			<form id="frmUploadFile" class="form-horizontal" enctype="multipart/form-data" role="form">
 				<div class="modal-body">
@@ -562,20 +610,20 @@
 						<div class="row">
 							<div class="col-sm-12 col-md-12">
 								<div class="form-group">
-									<label class="col-sm-12 col-md-12">File:</label>
+									<label class="col-sm-12 col-md-12">File</label>
 									<div class="col-sm-12 col-md-12">
 										<input type="file" class="form-control" name="file" />
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-12 col-md-12">Upload path:</label>
+									<label class="col-sm-12 col-md-12">Upload path</label>
 									<div class="col-sm-12 col-md-12">
 										<p class="form-control path" title="">/</p>
                                         <input type="hidden" name="folder" />
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-12 col-md-12">Description:</label>
+									<label class="col-sm-12 col-md-12">Description</label>
 									<div class="col-sm-12 col-md-12">
 										<textarea class="form-control" name="desc" rows="3" placeholder="File description" style="resize:vertical;min-height:75px;max-height:215px"></textarea>
 									</div>
@@ -597,7 +645,7 @@
 	</div>
 </div>
 
-<div id="mdlCreateProductSet" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div id="mdlCreateProductSet" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <form id="frmCreateProductSet" class="form-horizontal" role="form">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -607,18 +655,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="queryLabel" class="col-sm-4 col-md-4 control-label">Label</label>
-                        <div class="col-sm-8 col-md-8">
+                        <label class="col-sm-2 col-md-2 control-label">Name</label>
+                        <div class="col-sm-10 col-md-10">
                             <input type="text" id="txtProductSet" name="label" class="form-control required" placeholder="Name of your product set" autocomplete="off">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-4 col-md-8 col-sm-offset-4 col-sm-8">
-                            <button type="submit" id="btnCreateProductSet" class="btn btn-primary btn-submit">Create product set</button>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="submit" id="btnCreateProductSet" class="btn btn-primary btn-submit" style="margin-top: 0%;">Create product set</button>
                     <button class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -653,6 +697,7 @@
     $(window).on("ready resize", function () { clearTimeout(resizeTimer); resizeTimer = setTimeout(function () { adjustPropertiesPosition(); }, 250); });
     $(window).on("scroll", function () { adjustPropertiesPosition(); });
 
+    var $sharedPathCopy;
     function detectIE() {
         var ua = window.navigator.userAgent;
 
@@ -793,7 +838,6 @@
                 '</label>' +
                 '<div class="sub loading"></div>' +
                 '</div>');
-
             parent.append(element);
             parent.removeClass("loading");
             
@@ -812,22 +856,38 @@
         var root = (typeof attributes === "undefined") || (typeof attributes.fileInfo === "undefined") || (typeof attributes.fileInfo.relativePath === "undefined") || (attributes.fileInfo.relativePath === "");
         var deferred = $.Deferred();
 
-        $(".foldercontent", $tree).html("");
+        
+
+        if(attributes !== "nextPage"){
+            $tree.removeData("url_complete");
+            $(".foldercontent", $tree).html("");
+        }else{
+            var nextPage = attributes;
+        }
         $(".foldercontent", $tree).addClass("loading");
 
-        var url_base = $tree.data("url_base");
-        var repo = $tree.data("repo");
-        var folder = (typeof attributes === "undefined") ? $tree.data("folder") : attributes.fileInfo.relativePath;
+        if(typeof $($tree).data("url_complete") !== "undefined"){
+            var url_ = $($tree).data("url_complete");
+            folder = $tree.data("folder");
+
+        } else if(typeof $($tree).data("url_base") !== "undefined"){
+            var url_base = $tree.data("url_base");
+            var repo = $tree.data("repo");
+            var folder = (typeof attributes.fileInfo === "undefined") ? $tree.data("folder") : attributes.fileInfo.relativePath;
+            //for the root parent the value is an empty string because that is the way the input element id is created
+		    var parent = folder.lastIndexOf("/") > -1 ? folder.substr(0, folder.lastIndexOf("/")) : "";
+		    $(".foldercontent", $tree).data("parent", parent);
+            var url_ = url_base + "folder=" + escape(folder);
+        }
+
 		
-		//for the root parent the value is an empty string because that is the way the input element id is created
-		var parent = folder.lastIndexOf("/") > -1 ? folder.substr(0, folder.lastIndexOf("/")) : "";
-		$(".foldercontent", $tree).data("parent", parent);
 		
         if (typeof url_base === "undefined") {
             var a = 1;
         }
         $.ajax({
-            url: url_base + "folder=" + escape(folder),
+            //url: url_base + "folder=" + escape(folder),
+            url: url_,
             type: "GET",
             dataType: 'json',
             beforeSend: function (xhr) {
@@ -844,7 +904,10 @@
                 $(".foldercontent", $tree).removeClass("loading");
                 $(".treeview.sub.foldertree").find(".selected").parent().siblings(".loading").removeClass("loading")
                 if (response.status == responseStatus.success) {
-                    renderFolderContent($tree, response.data, root ? void (0) : attributes.fileInfo.relativePath);
+                    renderFolderContent($tree, response.data, root ? void (0) : attributes.fileInfo.relativePath, nextPage);
+                    if(attributes === 'nextPage'){
+                        renderTree($tree, response.data, folder);
+                    }
                     if (!root) {
                         renderTree($tree, response.data, attributes.fileInfo.relativePath);
                     }
@@ -905,11 +968,15 @@
         $compsTree.append($element);
     }
 
-    function renderFolderContent($tree, response, relativePath) {
+    function renderFolderContent($tree, response, relativePath, nextPage) {
         var $compsTree = $(".foldercontent", $tree);
         var tree_data = $tree.data();
 
-        $compsTree.html("");
+        if (nextPage !== "nextPage"){
+            $compsTree.html("");
+        }
+        $(".foldercontent", $tree).removeClass("loading");
+        $(".page-next").remove();
 		
 		if (typeof relativePath !== "undefined" && relativePath != "/" && relativePath != "") {
 			$compsTree.append("<span class='back-one-folder'><i class='fa fa-folder fa-back'></i>...</span>");
@@ -981,7 +1048,47 @@
             }
         });
         $('input[id="tree_' + tree_data.id + "_" + relativePath + '"]~div.sub', $compsTree).removeClass("loading");
+        var pageLimit;
+        if(typeof tree_data.repo.parameters !== "undefined"){
+            $.each(tree_data.repo.parameters, function(index, param){
+                if(index === "page.limit" || index === "page.size"){
+                    pageLimit = param;
+                }
+            });
+        }
+
+        if (tree_data.repo.pageItem !== "none" && response.length !== 0 && typeof pageLimit !== "undefined" && response.length === parseInt(pageLimit) || response.length === parseInt(pageLimit)+1 ) {
+			$compsTree.append("<div class='page-next'><span style='font-weight: bold;'>Next items</span><i class='fa fa-solid fa-chevron-right'></i></div>");
+            $(".page-next").data("pageItem", tree_data.repo.pageItem);
+		}
+
     }
+   
+
+    $(".tab-content").on("click",".page-next", function(e){
+        var nextPage = "nextPage";
+        var pageItem = $(".page-next").data("pageItem");
+        var repoId = $("li.role.active").children().data("repo").id;
+        var lastItem;
+        var selectedFolder = $(e.target).closest(".tree-content").find(".selected").data("file").relativePath;
+        if(pageItem === "item"){
+            var index = $(this).siblings(".foldercontent-item").length-1;
+            var $lastFolder = $(this).siblings(".foldercontent-item")[index];
+            lastItem = $($lastFolder).data("file").relativePath;
+
+        }else if (pageItem === "position"){
+            lastItem = ($(this).siblings(".foldercontent-item").length).toString();
+        }
+        
+        var $tree = $(e.target).closest(".tree-content");
+        $tree.data({
+            "id": repoId,
+            "url_complete": baseRestApiURL + "files/browse?workspace=" + repoId + "&" + "folder="+ selectedFolder +"&" + "last=" + lastItem,
+            "folder": selectedFolder
+        });
+        loadFolderContent($tree, nextPage);
+        //getNextPage(repoId, selectedFolder,lastItem);
+    });
 
     function renderTree($tree, response, relativePath) {
         var $compsTree = $(".treeview", $tree);
@@ -1000,9 +1107,11 @@
         }
         $.each(response, function (index, file) {
             if (file.folder/* && file.relativePath != ""*/) {
-                if (file.relativePath === "") {
+                if (file.relativePath === "" || file.relativePath === "/") {
                     //root
-                    renderFolderInTree($tree, file.relativePath, file);
+                    if( !($(".treeview", $tree).find("[title='__root']").length > 0) ){
+                        renderFolderInTree($tree, file.relativePath, file);
+                    } 
                 }
                 else {
                     if (file.relativePath != parentFolder) {
@@ -1404,14 +1513,16 @@
 
     function restoreActionVisibility($tree) {
 
-        if (typeof $("div.tree-content", ".tab-pane.tree-pane.active").data() !== 'undefined') {
-            updateDownloadStatistics(true, $("div.tree-content", ".tab-pane.tree-pane.active").data().id);
-        } else {
-            updateDownloadStatistics();
-        }
+        // if (typeof $("div.tree-content", ".tab-pane.tree-pane.active").data() !== 'undefined') {
+        //     updateDownloadStatistics(true, $("div.tree-content", ".tab-pane.tree-pane.active").data().id);
+        // } else {
+        //     updateDownloadStatistics();
+        // }
+        updateTransferProgress($tree);
 
-        var $selected = $(".foldercontent-item.selected", $tree);
-        var attributes = ($selected.length === 1 ? $selected.data("attributes") : { fileInfo: { fileType: "" } });
+        var $rightSelected = $(".foldercontent-item.selected", $tree);
+        var $leftSelected = $(".treeview label>a.selected", $tree);
+        var attributes = ($rightSelected.length === 1 ? $rightSelected.data("attributes") : ($leftSelected.length === 1 ? $leftSelected.data("attributes") : { fileInfo: { fileType: "" } }));
 
         var $selectedInTree = $("a.selected", $tree);
         var $repo = $tree.data("repo");
@@ -1419,18 +1530,18 @@
         if (typeof $repo !== 'undefined') {
 
             //Actions select
-            $("#actionsSelect", $repoPanel).html("");
+            $(".actionsSelect", $repoPanel).html("");
 		    var $option = $('<option class="defaultTemplate" value="" disabled selected >Actions...</option>');
-		    $("#actionsSelect", $repoPanel).append($option);
+		    $(".actionsSelect", $repoPanel).append($option);
 
             //Populate select for repo
             var fileActions = $repo.actions;
             if (typeof fileActions !== "undefined") {
                 $.each(fileActions, function(index, action){
 				    var $option = $('<option value = "'+ action.name +'">' + action.name + '</option>');
-				    $("#actionsSelect", $repoPanel).append($option);
+				    $(".actionsSelect", $repoPanel).append($option);
                 });
-                $("#actionsSelect", $repoPanel).prop("disabled", false);
+                $(".actionsSelect", $repoPanel).prop("disabled", false);
 			}
 
             // Upload is enabled only when one folder is selected in the tree and repo is read/write
@@ -1448,13 +1559,13 @@
             }
 
             // Copy is enabled when at least one file or folder is selected
-            if ($selected.length > 0) {
+            if ($rightSelected.length > 0) {
                 $('button[data-action="rp-copy"]', $repoPanel).prop("disabled", false);
             } else {
                 $('button[data-action="rp-copy"]', $repoPanel).prop("disabled", true);
             }
 
-            // Paste is enabled oonly when one folder is selected in the tree, clipboard is not empty and repo is read/write
+            // Paste is enabled only when one folder is selected in the tree, clipboard is not empty and repo is read/write
             if ($selectedInTree.length == 1 && (typeof $repoPanel.data("copy") !== "undefined") && !$repo.readOnly) {
                 $('button[data-action="rp-paste"]', $repoPanel).prop("disabled", false);
             } else {
@@ -1462,23 +1573,23 @@
             }
 
             // Delete file/folder is enabled only when one file or folder is selected
-            if ($selected.length == 1) {
+            if ($rightSelected.length == 1) {
                 $('button[data-action="rp-delete-file"]', $repoPanel).prop("disabled", false);//false
             } else {
                 $('button[data-action="rp-delete-file"]', $repoPanel).prop("disabled", false);//true
             }
 
             // Properties is enabled only when one file or folder is selected
-            if ($selected.length == 1) {
+            if ($rightSelected.length == 1) {
                 $('button[data-action="rp-properties"]', $repoPanel).prop("disabled", false);
             } else {
                 $('button[data-action="rp-properties"]', $repoPanel).prop("disabled", true);
             }
 
             // Inspect is enabled only when one folder is selected
-            if ($selected.length == 1 && attributes.fileInfo.fileType === "folder") {
+            if ($rightSelected.length == 1 && attributes.fileInfo.fileType === "folder") {
                 $('button[data-action="rp-inspect-folder"]', $repoPanel).prop("disabled", false);
-            } else if ($repo.name === 'LOCAL') {
+            } else if ($leftSelected.length == 1 && attributes.fileInfo.fileType === "folder" && $repo.name === 'LOCAL') {
                 $('button[data-action="rp-inspect-folder"]', $repoPanel).prop("disabled", false);
             } else {
                 $('button[data-action="rp-inspect-folder"]', $repoPanel).prop("disabled", true);
@@ -1486,21 +1597,23 @@
 
             //Actions are enabled only when there are actions available
             if (typeof fileActions !== "undefined") {
-                $("#actionsSelect", $repoPanel).prop("disabled", false);
+                $(".actionsSelect", $repoPanel).prop("disabled", false);
             } else {
-                $("#actionsSelect", $repoPanel).prop("disabled", true);
+                $(".actionsSelect", $repoPanel).prop("disabled", true);
             }
 
             // View on map is enabled for products and allowed extension
             var allowedExention = typeof attributes.fileInfo.fileName !== "undefined" && $.inArray(attributes.fileInfo.fileName.substr(attributes.fileInfo.fileName.lastIndexOf(".")), productExtention) > -1;
 
-            if ($selected.length == 1 && (typeof attributes.productName !== 'undefined' || allowedExention)) {
+            if ($rightSelected.length == 1 && (typeof attributes.productName !== 'undefined' || allowedExention)) {
                 $('button[data-action="rp-view-on-map"]', $repoPanel).prop("disabled", false);
             } else {
                 $('button[data-action="rp-view-on-map"]', $repoPanel).prop("disabled", true);
             }
+            //active only on system repositories with at least one selected element
+            $('button[data-action="rp-share"]', $repoPanel).prop("disabled", ($rightSelected.length == 0 || $repo.system == false));
             //active only on LOCAL repo with at least one selected element
-            $('button[data-action="rp-product-set"]', $repoPanel).prop("disabled", ($selected.length == 0 || $repo.type != "LOCAL"));
+            $('button[data-action="rp-product-set"]', $repoPanel).prop("disabled", ($rightSelected.length == 0 || $repo.type != "LOCAL"));
             //active only for files that are not products or images
             var fileSizeGB = 0;
             var readAllowedExention = typeof attributes.fileInfo.type !== "folder" && $.inArray(attributes.fileInfo.fileType, productExtention) < 0;
@@ -1686,6 +1799,44 @@
 
         $modal.modal('show');
     }
+    function shareProductSet($selected, name) {
+        if(!name){
+            name =  $selected.data("file").displayName;
+        }
+        $.ajax({
+            cache: false,
+            url: baseRestApiURL + "files/share?workspace=" + $selected.data("workspaceId") + "&file=" + $selected.data("file").relativePath + "&name=" + name ,
+            type: 'POST',
+            headers: { 
+                "X-Auth-Token": window.tokenKey,
+                "Content-Type": "application/json" 
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                showMsg("Action error.", "ERROR");
+            },
+            success: function (response) {
+                if(response.status === "SUCCEEDED"){
+                    showMsg("File successfully shared.", "SUCCESS");
+                    $("#share-name-content").modal('hide');
+                }else{
+                    showMsg(response.message, response.status);
+                }
+            }
+        });
+    }
+
+    function viewSharePopUp($selected){
+        var $modal = $("#share-name-content");
+        $modal.find(".content_area").val($selected.data("file").displayName);
+        $modal.modal('show');
+	}
+
+    $("#share-btn").on("click", function(e){
+        var $modal = $("#share-name-content");
+        var name = $modal.find(".content_area").val();
+        shareProductSet($sharedPathCopy, name);
+    });
+
 
     $(".tab-content").on("click", ".treeview a", function (e) {
         e.preventDefault();
@@ -1792,8 +1943,7 @@
                         var $elementChk = $('input[id="' + elementId + '"]');
                         $elementChk.siblings("label").find("a").click();
                     });
-            }
-            else {
+            } else {
                 var elementId = "tree_" + tree_data.id + "_" + attributes.fileInfo.relativePath;
                 var $elementChk = $('input[id="' + elementId + '"]');
                 $elementChk.siblings("label").find("a").click();
@@ -2081,29 +2231,90 @@
 				$bar.css({ width: "100%" });
 			}
 			$(".statistics .progress").prepend($bar);
-			$(".statistics #estimated_downloads").html(cnt);
+			// $(".statistics #estimated_downloads").html(cnt);
 		}).fail(function (jqXHR, textStatus) {
 		}).complete(function () {
-			if (!once) {
-				if(typeof $("div.tree-content", ".tab-pane.tree-pane.active").data() !== 'undefined'){
-                    var crtId = $("div.tree-content", ".tab-pane.tree-pane.active").data().id;
-                    setTimeout(function () { updateDownloadStatistics(once, crtId); }, 5000);
-                }else{
-                    setTimeout(function () { updateDownloadStatistics(once, repoId); }, 5000);
-                }
-			}
+			// if (!once) {
+			// 	if(typeof $("div.tree-content", ".tab-pane.tree-pane.active").data() !== 'undefined'){
+            //         var crtId = $("div.tree-content", ".tab-pane.tree-pane.active").data().id;
+            //         setTimeout(function () { updateDownloadStatistics(once, crtId); }, 5000);
+            //     }else{
+            //         setTimeout(function () { updateDownloadStatistics(once, repoId); }, 5000);
+            //     }
+			// }
         });
 	} 
+
+    function updateTransferProgress($el){
+
+        // put the dafault bar
+        $(".statistics .progress").html("");
+        $bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom">No operation in progress</div>');
+        $bar.css({ width: "100%" });
+        $(".statistics .progress").prepend($bar);
+
+        // on receiving a message and being in a pane
+        $el.on("wsmessage", function (e, wsdna) {
+            
+            if (typeof $("div.tree-content", ".tab-pane.tree-pane.active").data() !== 'undefined' && $("div.tree-content", ".tab-pane.tree-pane.active").data().id == wsdna.data.Repository){
+                
+                var downloadValue = 0;
+                var $bar = "";  
+
+                // clear pane
+                $(".statistics .progress").html("");
+
+                if( wsdna.data.Payload.search("Start transfer") >= 0){
+                    $bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="In progress" data-placement="bottom">Overall operation progress ( ' + parseInt(downloadValue*100) + "%" + ')</div>');
+                    $bar.css({ width: parseInt(downloadValue*100) + "%" });
+                }else{
+                    if((wsdna.data.Payload.search("Completed transfer") >=0 )){
+                        $bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom">No operation in progress</div>');
+                        $bar.css({ width: "100%" });
+                    }else{
+                        // if it is not a simple message (ex name:procentage)
+                        if(wsdna.data.Payload.split(" ").length != 1){
+                            var arrayWords = wsdna.data.Payload.split(" ");
+
+                            // take the procentage of the file
+                            downloadValue = parseFloat(arrayWords.at(-1));
+                        }else{
+                            // take the procentage of the file
+                            var resourceName = wsdna.data.Payload.split(":")[0]
+                            downloadValue = parseFloat(wsdna.data.Payload.split(":").at(-1));
+                        }
+                    
+                        // display percentage
+                        // overall progress (modified to instead show percentage)
+                        $bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="In progress" data-placement="bottom">Overall operation progress ( ' + parseInt(downloadValue*100) + "%" + ')</div>');
+                        $bar.css({ width: parseInt(downloadValue*100) + "%" });
+                    }
+                }
+                // append the bar
+                $(".statistics .progress").prepend($bar);
+            }
+            // update progress
+            $(document).trigger("quota:update");
+        });
+    }
+
+    function bindPaneTransfer($el, repoId){
+        $el.attr("ws-id", "transfer|" +  repoId);
+        updateTransferProgress($el);
+    }
 
     function createRepositoryTab(repo) {
         var $tabPane = $("#tab_pane_template").clone().removeClass("hidden").attr({ "id": "repository_" + repo.id });
 
         //set search container IDs
         var searchId = "search-foder-box-" + repo.id;
-        $("#search-foder-box", $tabPane).attr("id", searchId);
+        $(".search-box", $tabPane).attr("id", searchId);
 		$(".search-container label", $tabPane).attr("for", searchId);
 
-        updateDownloadStatistics(true,repo.id);
+        // updateDownloadStatistics(true,repo.id);
+        // bind pane
+        bindPaneTransfer($tabPane, repo.id)
+
 		// Remove button
 		if (repo.urlPrefix !== "file") {
 			$("[data-action='rp-view-on-map']", $tabPane).parent().remove();
@@ -2132,6 +2343,8 @@
                 $("a.selected", $tree).removeClass("selected");
                 var $root = $(".treeview a", $tree).first();
                 $root.addClass("selected");
+				$(".treeview.sub.foldertree").find(".selected").parent().siblings(".loading").removeClass("loading");
+				restoreActionVisibility($tree);
             });          
     }
 
@@ -2234,7 +2447,7 @@
             success: function (response) {
                 if (response.status == responseStatus.success) {
                     ///////////////////////////////
-                    updateDownloadStatistics(true, dest.repo.id);
+                    // updateDownloadStatistics(true, dest.repo.id);
 
                     if (dest.relativePath.endsWith("/")) {
                         dest.relativePath = dest.relativePath.substring(0, dest.relativePath.length - 1);
@@ -2365,6 +2578,7 @@
                             //click parent to reload
                             $('input[id="tree_' + dest.repo.id + "_" + parentRelPath + '"]', $tree).siblings("label").find("a").click();
                         });
+        $(document).trigger( "quota:update" );
     }
 
     // === UPLOAD SECTION =============================================================================
@@ -2494,7 +2708,7 @@
 				xhr.upload.onprogress = function (e) {
 					if (e.lengthComputable) {
 						var percentComplete = (e.loaded / e.total) * 100;
-						console.log(percentComplete + '% uploaded');
+						// console.log(percentComplete + '% uploaded');
 					}
 				};
 				xhr.onload = function (e) {
@@ -2512,10 +2726,15 @@
 							// Inconclusive response from server
 							showUploadMessage("Operation failed. Please try again or contact app admin.", true);
 						} else if (data.status == responseStatus.success) {
-                            showUploadMessage("File successfully uploaded.");
+                            showMsg("File successfully uploaded.", "SUCCESS");
                             $folder.click();//refresh current folder
+                            $("#myModalUpload").modal('hide');
 						} else {
-							showUploadMessage(data.message, true);
+                            if(data.message === "Invalid parameters provided for adding new entity of type AuxiliaryData!"){
+                                showUploadMessage("A file with this name already exists.", data.status);
+                            }else{
+							    showUploadMessage(data.message, true);
+                            }
 						}
 					} else {
 						// Failed to connect to server
@@ -2540,9 +2759,9 @@
         $("#selection-row").hide();
         var urls = [baseRestApiURL + "workspace/"];
         window.panelComp = $('#panel-nodes').npPaginatedCells({
-            headerUser: taoUserProfile.username,
+            headerUser: taoUserProfile.id,
             url: urls,
-            viewMode: prefferences.viewMode,
+            viewMode: preferences.viewMode,
             filterAttribute: "name",
             //order: [{ "label": "ID ascending", "objAttributeName": "strId", "direction": "ASC" },
             //{ "label": "ID descending", "objAttributeName": "strId", "direction": "DSC" },
@@ -2552,7 +2771,7 @@
                 $.each(data, function (idx, workspace) {
                     workspace.tags = [workspace.type];
                     workspace.strId = workspace.id.toString().padStart(10, "0");
-                    workspace.userName = window.taoUserProfile.username;
+                    workspace.userId = window.taoUserProfile.id;
                     workspace.visibility = workspace.readOnly ? "read only" : "writable";
                     if( typeof $('[data-action="browse_repository_' + workspace.id + '"]')[0] === "undefined"){
                         createTab(workspace);
@@ -2591,6 +2810,89 @@
                     $("[data-action='rp-edit']", $el).prop("disabled", true);
                     $("[data-action='rp-delete']", $el).prop("disabled", true);
                 }
+                if(data.visibility === "writable" && data.persistent){
+
+                    var $toggle = $('<input type="checkbox" checked class="toggle-btn" />');
+
+                    $(".toggle-download-list", $el).append($toggle);
+                    $(".toggle-download-grid", $el).append($toggle);
+
+                    if( typeof $.fn.bootstrapToggle === "function"){
+                        $toggle.bootstrapToggle({
+                            on: "<i class='fa fa-fw fa-download'></i>",
+                            off: 'Off',
+                            onstyle: 'success'
+                        });
+                    }
+                    $toggle.prop("disabled", true);
+                    $(".toggle.btn-success", ".toggle-download-grid").prop("title", "This repository will hold the results of workflows executions");
+
+                    // if(data.persistent){
+                    //     $toggle.bootstrapToggle('on');
+                    //     $toggle.prop("disabled", true);
+                    // }
+                    
+                }else if(data.visibility === "writable" && !data.persistent){
+                    var $toggle = $('<input type="checkbox" class="toggle-btn" />');
+
+                    $(".toggle-download-list", $el).append($toggle);
+                    $(".toggle-download-grid", $el).append($toggle);
+
+                    if( typeof $.fn.bootstrapToggle === "function"){
+                        $toggle.bootstrapToggle({
+                            on: "<i class='fa fa-fw fa-download'></i>",
+                            off: 'Off',
+                            onstyle: 'success',
+                        });
+                    }
+                    $(".toggle.btn-success", ".toggle-download-grid").prop("title", "This repository will hold the results of workflows executions");
+                }
+                
+            }
+        });
+
+        $repoPanel.on( "change",".toggle-btn", function(){
+            
+            if($(this).prop("checked") == true){
+                var $selectedToggle = $(this);
+            
+                var selectedRepoId = $($selectedToggle.parents("[id^='node-']")[0]).data("dna").id;
+                $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + "files/persistent?workspaceId=" + selectedRepoId ,
+                    type: 'POST',
+                    headers: {
+                        "Accept": "application/json",
+						"Content-Type": "application/json",
+						"X-Auth-Token": window.tokenKey
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        showMsg("Error inspecting element.", "ERROR");
+                        $selectedToggle.prop("disabled", false);
+						$selectedToggle.bootstrapToggle("off");
+                        window.panelComp.refreshData();
+                    },
+                    success: function (response) {
+                        if (response.status == responseStatus.success) {
+                            showMsg(response.message, "SUCCESS");
+
+                            $repoPanel.find(".toggle-btn.selected").removeClass("selected");
+                            $selectedToggle.addClass("selected");
+                            $selectedToggle.prop("disabled", true);
+                            $selectedToggle.append("<span class='span-muted collapse'>&nbsp;View repository files</span>");
+                            var repoToggles = $repoPanel.find(".toggle-btn:not(.selected)");
+                            $.each(repoToggles, function(index, repoToggle){
+                                $(this).prop("disabled", false);
+                                $(this).find("span").remove();
+                                $(this).bootstrapToggle("off");
+                            }); 
+                            window.panelComp.refreshData();
+                        } else {
+                            showMsg("Failed to inspect element.", "ERROR");
+                        }
+                    }
+                });
+                
             }
         });
 
@@ -2605,14 +2907,20 @@
             closeProperties();
 			closeMap();
 			closeFile();
-            restoreActionVisibility($(e.currentTarget.hash).find(".tree-content"));
+			var $tree = $(e.currentTarget.hash).find(".tree-content");
+			if ($("div.gutter.gutter-horizontal", $tree).size() === 1) {
+				restoreActionVisibility($tree);
+			}
         });
 
         $repoPanel.on("click", ".tree-pane .btn-master-tool", function (e) {
             var $tree = $(this).closest(".tree-pane").find(".tree-content");
             var tree_data = $tree.data();
 
-            var $selected = $(".foldercontent .foldercontent-item.selected", $tree);
+			var $rightSelected = $(".foldercontent .foldercontent-item.selected", $tree);
+			var $leftSelected = $(".treeview label>a.selected", $tree);
+			
+            var $selected = $rightSelected.size() > 0 ? $rightSelected : $leftSelected;
             var $selectedParent = $(".treeview a.selected", $tree);
 
             var action = $(this).data("action");
@@ -2637,7 +2945,7 @@
                     }
                     if (dest != false) {
                         // Transfer
-                        var msg = '<h4>Copy file:</h4><br />Origin:<br />';
+                        var msg = '<h4>Copy file?</h4><br />Origin:<br />';
                         $.each(orig.files, function (idx, file) { msg += ' - <b class="' + (file.folder ? "folder" : "file") + '">' + orig.repo.name + ': ' + file.relativePath + '</b><br />'; });
                         msg += '<br />Destination:<br /><b class="folder">' + dest.repo.name + ": " + dest.relativePath + '</b>';
 
@@ -2667,7 +2975,7 @@
                         dest = { repo: tree_data.repo, relativePath: ($selectedParent.length == 0 ? tree_data.folder : $selectedParent.data("file").relativePath) }
                     }
                     if (dest != false) {
-                        var msg = '<h4>New folder: <input name="new-folder-name" value="" /></h4>'
+                        var msg = '<p class="body-message"><h4>Add new folder?</h4><b>Name&ensp;</b><input name="new-folder-name" value=""><br><br>'
                         msg += 'Destination:<br /><b class="folder">' + dest.repo.name + ": " + dest.relativePath + '</b>';
 
                         $('#confirm-dialog').off("shown.bs.modal");
@@ -2721,11 +3029,11 @@
                             $selected.each(function () {
                                 dest = { repo: tree_data.repo, relativePath: $(this).data("file").relativePath }
                                 errors += deleteItem($tree, dest);
-
+                                $(document).trigger( "quota:update" );
                             });
                             refreshFolderAfterDelete($tree, dest);
                             if (errors.length == 0) {
-                                showMsg("Item(s) successfully deleted.", "SUCCESS");
+                                showMsg("Item(s) marked for deletion.", "SUCCESS");
                             }
                             else {
                                 showMsg(errors, "ERROR");
@@ -2777,17 +3085,24 @@
                 case "rp-product-set":
                     createProductSet($selected);
                     break;
+                case "rp-share":
+                    $selected.data("workspaceId", tree_data.repo.id);
+                    $sharedPathCopy = $selected;
+                    viewSharePopUp($selected);
+                    break;
+                        
             }
         });
 
-        $repoPanel.on("change", "#actionsSelect", function(){
+        $repoPanel.on("change", ".actionsSelect[data-action='rp-actions']", function(){
 
             var selectedActionName = $(this).val();
             var $tree = $(this).closest(".tree-pane").find(".tree-content");
             var $selected = $(".foldercontent .foldercontent-item.selected", $tree);
             var $repo = $tree.data("repo");
             var isOk = false;
-            if ($selected.length == 1 && !$repo.readOnly) {
+            var multipleSelection = false;
+            if ($selected.length === 1 && !$repo.readOnly) {
                 $.each($repo.actions, function(index, action){
 				    if (!isOk && action.name == selectedActionName) {
 				        if (action.filters == null) {
@@ -2802,27 +3117,69 @@
                         }
 				    }
                 });
+            } else if($selected.length > 1 && !$repo.readOnly) {
+                var allSelected  = $selected;
+                multipleSelection = true;
+
+                $.each(allSelected, function(index, selection){
+                    $.each($repo.actions, function(index, action){
+                        if (!isOk && action.name == selectedActionName) {
+                            if (action.filters == null) {
+                                isOk = true;
+                            } else {
+                                $.each(action.filters,function(index, fileType){
+                                    if ($selection.data("file").displayName.toLowerCase().endsWith(fileType)) {
+                                        isOk = true;
+                                        return false;
+                                    } else{
+                                        isOk = false;
+                                    }
+                                });
+                            }
+                        }
+                    });
+                });
+
             }
+
             if (isOk) {
-                var selectedFile = $selected.data("file").relativePath;
-                var selectedFileName = $selected.data("file").displayName;
-                var selectedFileRepo = $(this).closest(".tree-pane").find(".tree-content").data("repo").name;
-                if(selectedActionName == "Move"){
-                    $("#selected-item").text(selectedFileName);
-                    $("#selected-item").data("selectedItem", $selected.data("file"));
-                    $("#selected-item").data("action", selectedActionName);
-                    $("#selected-item").data("repo", selectedFileRepo);
-                    $("#selection-row").show();
-                } else {
+                if(!multipleSelection){
+                    var selectedFile = $selected.data("file").relativePath;
+                    var selectedFileName = $selected.data("file").displayName;
+                    var selectedFileRepo = $(this).closest(".tree-pane").find(".tree-content").data("repo").name;
+                    if(selectedActionName == "Move"){
+                        $("#selected-item").text(selectedFileName);
+                        $("#selected-item").data("selectedItem", $selected.data("file"));
+                        $("#selected-item").data("action", selectedActionName);
+                        $("#selected-item").data("repo", selectedFileRepo);
+                        $("#selected-item").data("selectedItem").allPaths = selectedFile;
+                        $("#selection-row").show();
+                    } else {
                     doActionSelected($tree, selectedActionName, selectedFile);
+                    }
+                } else{
+                    var allPaths = "";
+                    var selectedFileRepo = $(this).closest(".tree-pane").find(".tree-content").data("repo").name;
+                    $.each($selected, function(index, selection){
+                        allPaths += $(selection).data("file").relativePath +';';
+                        if(index === 0 && selectedActionName === "Move" ){
+                            $("#selected-item").text(selectedFileName);
+                            $("#selected-item").data("selectedItem", $selected.data("file"));
+                            $("#selected-item").data("action", selectedActionName);
+                            $("#selected-item").data("repo", selectedFileRepo);
+                            $("#selection-row").show();
+                        }
+                    });
+                    $("#selected-item").data("selectedItem").allPaths = allPaths;
                 }
-            } else {
+            }else{
                 if(typeof selectedFile === "undefined"){
-                    var execError = "no selection";
+                    var execError = "wrong selection";
                 } else{
                     var execError = selectedFile;
                 }
                 alert("Selected action cannot be executed on " + execError + "!");
+                $("option.defaultTemplate").prop("selected", true);
             }
         });
         
@@ -2832,14 +3189,11 @@
             if(typeof $("#selected-item").data("selectedItem") !== "undefined"){
                 var selectedRepo = $(this).closest(".tree-pane").find(".tree-content").data("repo").name;
 
-                //if(selectedRepo === $("#selected-item").data("repo") && $(".foldercontent-item.selected").data("file").folder === true){
-                    if(selectedRepo === $("#selected-item").data("repo") && $(this).data("file").folder === true){
+                if(selectedRepo === $("#selected-item").data("repo") && $(this).data("file").folder === true){
                     var selectedItemPath = $("#selected-item").data("selectedItem").relativePath;
-                    //var selectedFolderPath = $(".foldercontent-item.selected").data("file").relativePath;
                     var selectedFolderPath = $(this).data("file").relativePath;
                     var selectedAction = $("#selected-item").data("action");
 
-                    //var splitFolder = ($(".foldercontent-item.selected").data("file").relativePath).split("/");
                     var splitFolder = ($(this).data("file").relativePath).split("/");
                     var desiredFolder = splitFolder[splitFolder.length-2];
 
@@ -2850,7 +3204,6 @@
                         var selectedItemFolder = splitFolder[splitFolder.length-2];
                     }
 
-                    //if( desiredFolder !== selectedItemFolder && $("#selected-item").data("selectedItem").displayName !== $(".foldercontent-item.selected").data("file").displayName ){
                     if( desiredFolder !== selectedItemFolder && $("#selected-item").data("selectedItem").displayName !== $(this).data("file").displayName ){
                         $("button[data-action=rp-move]").attr("disabled", false);
                         $("#selected-item").data("destinationPath",selectedFolderPath);
@@ -2871,7 +3224,7 @@
 
                     var $tree = $(this).closest(".tree-pane").find(".tree-content");
                     $selectedItem = $(".foldercontent-item.selected");
-                    var oldText = $selectedItem.text();
+                    var oldText = $selectedItem.find(".foldercontent-label").text();
                     var $input;
                     $input = $('<input type="text" class="rename-item" />').val(oldText).appendTo($selectedItem).focus().select();
 
@@ -2914,7 +3267,7 @@
 
         //Move action - move button
         $("button[data-action=rp-move]").on("click", function(){
-            var selectedItemPath = $("#selected-item").data("selectedItem").relativePath;
+            var selectedItemPath = $("#selected-item").data("selectedItem").allPaths;
             //var selectedFolderPath = $(".foldercontent-item.selected").data("file").relativePath;
             var selectedFolderPath = $("#selected-item").data("destinationPath");
             var selectedAction = $("#selected-item").data("action");

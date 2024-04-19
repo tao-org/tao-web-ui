@@ -128,6 +128,29 @@ jQuery.fn.npPaginatedCells = function(options){
 			} else {
 				dataFull = retData;
 			}
+
+            if(settings.url[0] === baseRestApiURL + "orchestrator/queued/jobs"){
+                $.each(dataFull, function(index, job){
+                    job.tags = [];
+                    job.tags[0] = job.userId;
+                });
+            }
+
+            if(settings.url[0] ===  baseRestApiURL + "admin/users?status=ACTIVE"){
+                if(typeof dataFull[0].online !== 'undefined'){
+                    $.each(dataFull, function(index, user){
+                        user.tags = [];
+                        user.tags[0] = user.online? "ONLINE":"OFFLINE";
+                    });
+                }
+            }
+
+            if(settings.url[0] === baseRestApiURL + "repository/"){
+                $.each(dataFull, function(index, job){
+                    job.tags = [];
+                    job.tags[0] = job.type;
+                });
+            }
 			
 			
             if( (orderIndex === -1) && (settings.order.length>0) ){
@@ -232,7 +255,9 @@ jQuery.fn.npPaginatedCells = function(options){
         }
         if(elX.tags != null){
             for (var j = 0; j < elX.tags.length; j++){
-                tags+="<span>"+elX.tags[j]+"</span>";
+                if(elX.tags[j] !== ""){
+                    tags+="<span>"+elX.tags[j]+"</span>";
+                }
             }
         }
         $(".box-top-tags", $elClone).html(tags);
@@ -408,6 +433,16 @@ jQuery.fn.npPaginatedCells = function(options){
 		   repaint();
         });
 
+    $selectedEl.on("click", '#search-box-nodes', function(event){
+        var action = $($(this).parents(".nav-tabs-custom").find(".role-admin.active").children()[0]).data("action");
+        if(action === "all_vms"){
+            settings.filterAttribute ="id";
+        }
+        if(action === "queued_jobs"){
+            settings.filterAttribute ="jobName";
+        }
+    });
+
     $selectedEl
         .on("click", '.btn-master-tool', function(event){
             event.preventDefault();
@@ -422,8 +457,9 @@ jQuery.fn.npPaginatedCells = function(options){
             if(action === "view-list"){
         
                 var username = _settings.readCookie("TaoUserName");
+                var id = taoUserProfile.id;
                 var pageName = routeTags[0] +'-'+ routeTags[1];
-                $.when(_userPref.getUserPreferences(username))
+                $.when(_userPref.getUserPreferences(id))
                 .done(function(responseProfile){
                     var r = responseProfile.data;
                     currentPref = r.preferences;
@@ -449,15 +485,16 @@ jQuery.fn.npPaginatedCells = function(options){
                 var updatePref = JSON.stringify(currentPref);
                 _userPref.updateUserPreferences(updatePref);
             
-                prefferences.viewMode = "list";
+                preferences.viewMode = "list";
                 settings.viewMode = "list";
                 repaint();
             }
             if(action === "view-table"){
                 
                 var username = _settings.readCookie("TaoUserName");
+                var id = taoUserProfile.id;
                 var pageName = routeTags[0] +'-'+ routeTags[1];
-                $.when(_userPref.getUserPreferences(username))
+                $.when(_userPref.getUserPreferences(id))
                 .done(function(responseProfile){
                     var r = responseProfile.data;
                     currentPref = r.preferences;
@@ -483,7 +520,7 @@ jQuery.fn.npPaginatedCells = function(options){
                 var updatePref = JSON.stringify(currentPref);
                 _userPref.updateUserPreferences(updatePref);
                 
-                prefferences.viewMode = "grid";
+                preferences.viewMode = "grid";
                 settings.viewMode = "grid";
                 repaint();
             }
@@ -498,6 +535,15 @@ jQuery.fn.npPaginatedCells = function(options){
             var $root = $(this).closest(".node-root");
             var dna = $root.data("dna");
             var args = {"dna":dna};
+            settings.doAction(action,args);
+        })
+        .on("click", ".move-button", function(event){
+            event.preventDefault();
+            var action = $(this).data("action");
+            var $root = $(this).closest(".node-root");
+            var dna = $root.data("dna");
+            var jobID = parseInt($(this).parents(".nodes-item-core-box").children(".queued-jobs-row").find(".val-id").text());
+            var args = {"dna":dna, "jobId":jobID};
             settings.doAction(action,args);
         });
     $pagination

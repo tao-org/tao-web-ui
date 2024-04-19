@@ -17,7 +17,7 @@ var tao_resetCanvasData = function() {
         nodeTemplates:{
             pc:{},
             ds:{},
-            dsg:{}
+            //dsg:{}
         },
         nodes: {},
         ports: {},
@@ -208,7 +208,7 @@ var tao_setWF2CanvasData = function(currentWfData){
                 alert("Workflow contains more then a datasource group. Only the first datasource group will be used, ignoring all other.");
             }
             //get datasource group template descriptor for first node
-            var dsgroupQueryString = wfPlumbCanvasData.usedDSGroups[0];
+            /*var dsgroupQueryString = wfPlumbCanvasData.usedDSGroups[0];
             var getDSGroup = $.ajax({
                 cache: false,
                 url: baseRestApiURL + "datasource/user/group?id="+dsgroupQueryString,
@@ -219,20 +219,20 @@ var tao_setWF2CanvasData = function(currentWfData){
                     "Content-Type": "application/json",
                     "X-Auth-Token": window.parent.tokenKey
                 }
-            });
+            });*/
 
 
 
-            $.when(getComponentsList, getDatasourcesList, getGroupsList, getDSGroup)
-                .done(function (getComponentsListResponse, getDatasourcesListResponse, getGroupsListResponse, getDSGroupResponse) {
+            $.when(getComponentsList, getDatasourcesList, getGroupsList/*, getDSGroup*/)
+                .done(function (getComponentsListResponse, getDatasourcesListResponse, getGroupsListResponse/*, getDSGroupResponse*/) {
                     var currentWfComponentsList = chkTSRF(getComponentsListResponse[0]);
                     var currentWfDatasourcesList = chkTSRF(getDatasourcesListResponse[0]);
                     var currentWfGroupsList = chkTSRF(getGroupsListResponse[0]);
-                    var currentWfDSGroups = chkTSRF(getDSGroupResponse[0]);
+                    //var currentWfDSGroups = chkTSRF(getDSGroupResponse[0]);
                     console.log("workflow components:"); console.log(currentWfComponentsList);
                     console.log("workflow datasopurces:"); console.log(currentWfDatasourcesList);
                     console.log("workflow groups:"); console.log(currentWfGroupsList);
-                    console.log("workflow datasources groups:"); console.log(currentWfDSGroups);
+                    /*console.log("workflow datasources groups:"); console.log(currentWfDSGroups);
                     if(currentWfDSGroups && currentWfDSGroups.id){
                         var hash = "tboid" + jsHashCode(currentWfDSGroups.id);
                         if(wfPlumbCanvasData.nodeTemplates.dsg[hash]){
@@ -245,7 +245,7 @@ var tao_setWF2CanvasData = function(currentWfData){
                                 "type": "datasourcegroup"
                             };
                         }
-                    }
+                    }*/
 
                     $.each(currentWfComponentsList, function(i, item) {
                         var hash = "tboid"+jsHashCode(item.id);
@@ -293,9 +293,9 @@ var tao_setWF2CanvasData = function(currentWfData){
                         }
                         console.log("addNewNode call");console.log(wfOneNode);
                         var ntype = "unknown";
-                        if(wfOneNode.componentType === "DATASOURCE_GROUP"){
+                        /*if(wfOneNode.componentType === "DATASOURCE_GROUP"){
                             ntype = "dsg";
-                        }
+                        }*/
                         if(wfOneNode.componentType === "DATASOURCE"){
                             ntype = "ds";
                         }
@@ -392,14 +392,14 @@ var tao_setWF2CanvasData = function(currentWfData){
             componentTemplate = wfPlumbCanvasData.nodeTemplates.ds[dna.ntemplateid].dna;
         }
         //datasources groups are stored in wfPlumbCanvasData.nodeTemplates.dsg
-        if( dna.ntype === "dsg" && wfPlumbCanvasData.nodeTemplates.dsg[dna.ntemplateid] ){
+        /*if( dna.ntype === "dsg" && wfPlumbCanvasData.nodeTemplates.dsg[dna.ntemplateid] ){
             componentTemplate = wfPlumbCanvasData.nodeTemplates.dsg[dna.ntemplateid].dna;
-        }
+        }*/
 
         if(componentTemplate === null){
             console.log("comp template not found!!! from addNewNode function.");
 
-            if(dna.ntype === "dsg"){
+            /*if(dna.ntype === "dsg"){
                 console.log("get "+ dna.mtype);
 
                 var getDatasourceGroupById = $.ajax({
@@ -435,7 +435,7 @@ var tao_setWF2CanvasData = function(currentWfData){
                         alert("Could not retrive pc data.", "ERROR");
                         canvasRenderer.createNode(componentTemplate, dna);
                     });
-            }
+            }*/
 
 
             //try to get component template from server,  usedComponents
@@ -620,9 +620,9 @@ var canvasRenderer = {
             case "ds":
                 nodeIcon = "./media/module-ds.png";
                 break;
-            case "dsg":
+            /*case "dsg":
                 nodeIcon = "./media/module-ds.png";
-                break;
+                break;*/
             case "pc":
                 nodeIcon = "./media/"+componentTemplate.containerId+".png";
                 break;
@@ -658,9 +658,9 @@ var canvasRenderer = {
         if(dna.ntype === "pc") {
             innerHTML += "<svg class=\"development_icon\" x=\"0px\" y=\"0px\" width=\"32px\" height=\"32px\"><path class=\"icon-cog\" d=\"m13.331,1c-1.152,0.296 -2.248,0.712 -3.285,1.126c0.865,4.027 -2.535,5.329 -4.955,3.612c-0.922,0.652 -1.614,1.541 -1.902,2.785c2.535,1.716 1.268,6.275 -2.189,5.861c0,1.303 0,2.604 0,3.91c3.688,-0.357 4.494,4.204 2.189,6.157c0.635,0.947 0.922,2.252 2.189,2.547c2.189,-1.835 5.531,-0.178 4.667,3.613c1.038,0.414 2.132,0.83 3.284,1.124c0.463,-3.198 5.244,-3.198 5.763,0c1.153,-0.294 2.247,-0.71 3.286,-1.124c-0.864,-4.027 2.533,-5.332 4.955,-3.613c0.922,-0.65 1.61,-1.541 1.9,-2.784c-2.535,-1.716 -1.267,-6.275 2.19,-5.862c0,-1.302 0,-2.605 0,-3.908c-3.687,0.298 -4.495,-4.203 -2.19,-6.159c-0.635,-0.948 -0.865,-2.251 -2.189,-2.487c-2.191,1.836 -5.53,0.178 -4.666,-3.614c-1.039,-0.413 -2.133,-0.829 -3.286,-1.124c-0.806,3.256 -4.954,3.256 -5.761,-0.06zm8.586,15.398c0,3.196 -2.536,5.804 -5.705,5.804c-3.17,0 -5.705,-2.607 -5.705,-5.804c0,-3.197 2.535,-5.805 5.705,-5.805c3.17,-0.057 5.705,2.548 5.705,5.805z\" fill=\"#5c96bc\"/></svg>";
         }
-        if(dna.ntype === "dsg") {
+        /*if(dna.ntype === "dsg") {
             innerHTML += "<svg width=\"32\" height=\"32\" xmlns=\"http://www.w3.org/2000/svg\"><g><path d=\"m22.77847,13.57615c0.13433,-0.12039 8.74582,-0.46759 8.62624,-2.21189c-0.11962,-1.7443 -8.68779,-2.45271 -8.78302,-2.37242c0.07432,3.80363 0.02323,4.7047 0.15678,4.58431z\" stroke-width=\"0.26458\" fill=\"#5c96bc\" stroke=\"null\"/><path d=\"m22.74313,18.92019c5.98726,0.00043 8.41984,-0.68499 8.90717,-1.42738l0,-4.79304c-1.94927,0.95484 -4.57146,1.44921 -8.90717,1.44921l0,4.7712l0,0.00001z\" stroke-width=\"0.26458\" fill=\"#5c96bc\" stroke=\"null\"/><path d=\"m22.66068,24.48435c5.9873,0.00046 8.41984,-0.68495 8.90721,-1.42738l0,-4.793c-1.94931,0.9548 -4.57146,1.44917 -8.90721,1.44917l0,4.7712l0,0.00001z\" stroke-width=\"0.26458\" fill=\"#5c96bc\" stroke=\"null\"/><path d=\"m31.57245,23.80629c-1.90356,1.33037 -4.62666,1.22186 -8.96028,1.35828c-2.47481,2.61065 -9.01838,2.38492 -12.42457,2.3737c0.00387,0.21213 0.00259,0.13394 0.00387,0.34607c3.81811,2.06355 7.54653,2.26051 10.92105,2.27874c5.7831,0 9.98181,-0.73755 10.42915,-2.19954c0.0271,-1.38592 -0.00054,-2.92142 0.01161,-4.15721l0.01916,-0.00004l0.00001,0z\" stroke-width=\"0.26458\" fill=\"#5c96bc\" stroke=\"null\"/><path d=\"m11.32848,8.75358c6.07548,0 10.51405,-1.09063 10.51405,-2.43614c0,-1.345 -4.43806,-2.43614 -10.51405,-2.43614c-6.07645,0 -10.51451,1.09063 -10.51451,2.43614c0,1.34601 4.43806,2.43614 10.51451,2.43614z\" stroke-width=\"0.26458\" fill=\"#5c96bc\" stroke=\"null\"/><path d=\"m0.35734,14.22479l0,5.30065c0.97466,0.82163 4.73389,1.82648 10.72165,1.82648c5.98726,0.0005 10.23335,-1.00485 10.72068,-1.82602l0,-5.30111c-1.94931,1.05603 -6.38494,1.60281 -10.72068,1.60281c-4.33621,0 -8.28505,-0.54679 -10.72165,-1.60281z\" stroke-width=\"0.26458\" fill=\"#5c96bc\" stroke=\"null\"/><path d=\"m21.81969,20.63887c-1.94931,1.05603 -6.40495,1.58636 -10.7407,1.58636c-4.33621,0 -8.28505,-0.54632 -10.72165,-1.60235l0,4.17394c-0.00217,0.02323 0,0.04529 0,0.06813c3.81803,2.06355 7.54649,2.26051 10.92097,2.27874c5.7831,0 10.1168,-0.78474 10.56414,-2.24673c-0.03871,-1.38638 -0.01548,-2.95006 -0.02323,-4.25809l0.00046,0l0.00001,0z\" stroke-width=\"0.26458\" fill=\"#5c96bc\" stroke=\"null\"/><path d=\"m21.79967,7.81256c-1.46199,1.15787 -6.25239,1.75777 -10.72068,1.75777c-4.4688,0 -8.77238,-0.5999 -10.72165,-1.75828l0,5.31625c0.97462,0.82113 4.73389,1.82598 10.72165,1.82598c5.98726,0 10.23335,-1.00485 10.72068,-1.82598l0,-5.31575l0,0.00001z\" stroke-width=\"0.26458\" fill=\"#5c96bc\" stroke=\"null\"/></g></svg>";
-        }
+        }*/
         innerHTML += "</div>";
 
        // innerHTML += "<div class=\"module-new\"></div>";

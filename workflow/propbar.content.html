@@ -55,6 +55,7 @@
 							<tr class="tpl-sample-row">
 								<td style="border:0">
 									<span class="var-id hidden"></span><span class="var-name hidden"></span>
+									<span class="var-parent-id hidden"></span><span class="var-parent-name hidden"></span>
 									<span class="var-label" style="font-weight:700;"></span>&nbsp;(<span class="var-dataType" style="font-size:0.9em"></span>)<br/>
 									<div style="border-left:10px solid #f1f1f1;padding-left:15px;font-size:0.9em">
 										<span class="var-description" style="color:#aaa;font-size:0.9em;font-style:italic"></span>
@@ -62,7 +63,7 @@
 										<input type="hidden" class="var-value" value="" placeholder="input variable's value">
 										<input type="text" class="var-value-string form-control collapse" value="" placeholder="input variable's value">
 										<select class="var-value-list form-control collapse"></select>
-										<span style="font-size:0.9em;font-weight:700">Default value:</span>&nbsp;<span class="var-default" style="font-size:0.9em;color:#286080;cursor:pointer"></span>
+										<span id="show-var-def" style="font-size:0.9em;font-weight:700">Default value:</span>&nbsp;<span class="var-default" style="font-size:0.9em;color:#286080;cursor:pointer"></span>
 									</div>
 								</td>
 							</tr>
@@ -93,6 +94,7 @@
 <style>
 	table#tbl-edt-sysvar>tbody>tr>td{padding:0;}
 	table#tbl-edt-sysvar input{height:25px;font-size:12px;}
+	.tbl-extra-param{margin-left: 50px;}
 </style>
 <script>
     $( document ).ready(function() {

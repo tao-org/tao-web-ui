@@ -1,4 +1,4 @@
-var defaultStyle = "dark-blue";
+var defaultStyle = "dark-navy";
 //Array.from is not supported in IE11
 //The following lines will emulate an ES6's Array.from method.
 if (!Array.from) {
@@ -443,11 +443,11 @@ var _settings = {
 };
 
 var _userPref = {
-    getUserPreferences: function(username){
+    getUserPreferences: function(id){
         //var username = _settings.readCookie("TaoUserName");
         return $.ajax({
             cache: false,
-            url: baseRestApiURL + "user/"+username,
+            url: baseRestApiURL + "user/"+id,
             dataType : 'json',
             type: 'GET',
             async: false,
@@ -496,6 +496,12 @@ function chkXHR(status, redirect){
     }
     //alert(txtAlert);
     if(redirect){
+        _settings.createCookie("tokenKey",'');
+        _settings.createCookie("userMatrix",'{}');
+        _settings.createCookie("refreshToken","");
+        _settings.createCookie("userRole","");
+        _settings.createCookie("TaoUserId","");
+        _settings.createCookie("TaoUserName","");
         window.location = 'login.html';
     }
     var html = '<div class="login-box error-msg-box collapse">\n' +
@@ -572,27 +578,42 @@ function initializeTagsInputAutocomplete(id, url){
 }
 
 function openPolygonMap(mapContainer, footprintField) {
+	var newfootprint = "";
 	// Create simple window for map
 	var $poly2D = $("<div class='for-poly2D' style='position:fixed;top:10%;left:10%;width:80%;height:80%;background-color:white;border:3px solid #3c8dbc;border-radius:10px;overflow:hidden'>" +
 					"	<div class='content-header' style='height:45px;padding:10px 15px;position:absolute;top:0;left:0;width:100%'>" +
-					"		<button type='button' class='close use-footprint'><span>&times;</span></button>" +
+					"		<button type='button' class='close use-footprint' style='color:#cdcdcd'><span>&times;</span></button>" +
 					"		<h1 class='modal-title' style='line-height:1em;font-size:24px;margin:0'>Map<small style='padding-left:4px'>Select your <strong>Region of Interest</strong>.</small></h4>" +
 					"	</div>" +
 					"	<div id='mapExtent' style='height:94%;height:calc(100% - 45px);position:relative;margin-top:45px'></div>" +
 					"	<div style='height:55px;padding:10px 15px;position:absolute;bottom:0;left:0'>" +
-					"		<button class='btn btn-primary btn-submit use-footprint'>Use selected polygons</button>" +
+					"		<button class='btn btn-primary btn-submit use-footprint' disabled >Use selected polygons</button>" +
 					"	</div>" +
 					"</div>");
-	$(".use-footprint", $poly2D).on("click", function () { $(this).closest(".for-poly2D").remove(); });
+	$(".use-footprint", $poly2D).on("click", function () {
+		if ($(this).hasClass("btn-submit") && newfootprint !== footprintField.val()) {
+			if (footprintField.is("select") && typeof footprintField.data("select2") !== "undefined") {
+				var newOption = new Option(newfootprint, newfootprint, false, true);
+				footprintField.append(newOption).trigger("change");
+			} else {
+				footprintField.val(newfootprint).trigger("change");
+			}
+		}
+		$(this).closest(".for-poly2D").remove();
+	});
 	mapContainer.append($poly2D);
 	
-	var olPoly = $("#mapExtent", mapContainer).poly2D({ maxFeaturesNo: 1, defaultFootprint: footprintField.val() });
+	var olPoly = $("#mapExtent", mapContainer).poly2D({ maxFeaturesNo: 1, defaultFootprint: (footprintField.val() !== null ? footprintField.val() : "")});
 	$.when(olPoly).done(function (result) {
 		window.myPolygonMap = result;
 		window.myPolygonMap.fitAllFeatures();
 		window.myPolygonMap.el.on("newfootprint", function (evt, footprint) {
-			footprintField.val(footprint);
-			footprintField.trigger("change");
+			/*footprintField.val(footprint);
+			footprintField.trigger("change");*/
+			newfootprint = footprint;
+			if (footprint !== "") {
+				$(".btn-submit.use-footprint", $poly2D).prop("disabled", false);
+			}
 		});
 	});
 }
@@ -676,6 +697,7 @@ function removeClassStartingWith($element, filter) {
 
 function inputRangeColor (color) {
 	switch (color) {
+      case "navy": return "#00587a"; break;
       case "black": return "#25131b"; break;
       case "blue": return "#2e6da4"; break;
       case "green": return "#006d34"; break;
@@ -684,4 +706,8 @@ function inputRangeColor (color) {
       case "yellow": return "#e57c00"; break;
       default: return "#d3d3d3";
     }
+}
+
+function checkIfOldVersion() {
+	return taoVersion < taoReferenceVersion;
 }

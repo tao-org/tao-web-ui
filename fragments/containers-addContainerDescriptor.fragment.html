@@ -173,10 +173,13 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 
 				formatArr=[];
 				if (obj.format !==undefined){
-					formatArr=obj.format.split(",")
-				$.each(formatArr, function (index, format) {
-				$("#formats", $form).addTag(format);
-			});
+                   if (obj.format instanceof String)
+                   		formatArr=obj.format.split(",")
+                   else 
+                   		formatArr= obj.format
+					$.each(formatArr, function (index, format) {
+					$("#formats", $form).addTag(format);
+				});
 			}
 		
 			
@@ -201,7 +204,7 @@ form .tagsinput .tag{background-color:#f4f4f4;border:1px solid #dedede;color:#55
 				"name"               : 	$('input[name=name]', $el).val(),
 				"description"        : 	$('textarea[name=description]', $el).val(),
 				"applicationPath"    : 	$('input[name=applicationPath]', $el).val(),
-				"format"             : 	$('input[name=formats]', $el).val(),
+				"format"            : 	$('input[name=formats]', $el).val().split(','),
 				"formatNameParameter": 	$('input[name=formatNameParameter]', $el).val(),
 				"commonParameters"   : 	$('input[name=commonParameters]', $el).val(),
 				"tag"                : 	$('input[name=tag]', $el).val()

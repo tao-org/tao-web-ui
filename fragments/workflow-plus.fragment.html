@@ -15,6 +15,7 @@
             <p>
                 <span class="error-name collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Workflow name cannot be empty.</span>
                 <span class="error-fileLocation collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> File location has an invalid value.</span>
+                <span class="error-image collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i>The file is not an image or does not have one of the extensions(.png, .jpg, .gif).</span>
             </p>
             <p id="modal-error-msg-server"></p>
         </div>
@@ -23,7 +24,7 @@
             <section>
                 <div class="row">
                     <div class="col-md-12">
-                            <p>Please check all the tabs before saving a new component.</p>
+                            <p>Please check all the tabs before saving a new workflow. The image is optional.</p>
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#comp-tab-gd">Description.</a></li>
                                 <li class="hidden"><a data-toggle="tab" href="#comp-tab-sys">Custom values</a></li>
@@ -41,11 +42,25 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-2 floating-img">
+                                            <input type="file" id="containerLogo" class="form-control for-validation hidden" name="containerLogo" data-errorspan="image"/>
+                                            <img id="previewLogo" src="" class="base64image" onerror="devalidateLogoFile(event)" />
+                                            <div class="imageButtons">
+                                                <button type="button" class="btn btn-primary" id="wf-edit-image" data-toggle="tooltip" data-original-title="Upload new image"><i class="fa fa-upload" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Upload image</span></button>
+                                                <button type="button" class="btn btn-primary" id="wf-delete-image" data-toggle="tooltip" data-original-title="Delete image" disabled><i class="fa fa-trash" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete image</span></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-10 col-name">
                                             <div class="form-group">
                                                 <label for="inputWorkflowName" class="col-sm-2 col-md-2 control-label">Name</label>
                                                 <div class="col-sm-10 col-md-10">
-                                                    <input type="text" class="form-control" id="inputWorkflowName" name="inputWorkflowName" placeholder="workflow name" autocomplete="off" value="" data-errorspan="name"/>
+                                                    <input type="text" class="form-control" id="inputWorkflowName" name="inputWorkflowName" placeholder="Workflow name" value="" autocomplete="off" data-errorspan="name"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputDescription" class="col-sm-2 col-md-2 control-label">Description</label>
+                                                <div class="col-sm-10 col-md-10">
+                                                    <textarea class="form-control" rows="4" id="inputDescription" name="inputDescription" placeholder="Add workflow description" autocomplete="off" value="" style="resize:none" data-errorspan="description"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -54,12 +69,9 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="inputStatus" class="col-sm-2 col-md-2 control-label">Status </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <select disabled="disabled" id="inputStatus" name="inputStatus" class="form-control">
-                                                        <option value="DRAFT" selected="">DRAFT</option>
-                                                        <option value="READY">READY</option>
-                                                        <option value="PUBLISHED">PUBLISHED</option>
-                                                    </select>
+                                                <div class="col-sm-10 col-md-10" style="display: flex; grid-gap: 15px;">
+                                                    <input type="text" class="form-control" id="inputStatus" name="inputStatus" autocomplete="off" value="DRAFT" data-errorspan="status" readonly/>
+                                                    <button class="btn btn-primary hidden" id="dualAction" style="padding-left: 15px;">Lock</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -68,11 +80,9 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="inputVisibility" class="col-sm-2 col-md-2 control-label">Visibility </label>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <select disabled="disabled" id="inputVisibility" name="inputVisibility" class="form-control">
-                                                        <option value="PRIVATE">PRIVATE</option>
-                                                        <option value="PUBLIC">PUBLIC</option>
-                                                    </select>
+                                                <div class="col-sm-10 col-md-10" style="display: flex; grid-gap: 15px;">
+                                                    <input type="text" class="form-control" id="inputVisibility" name="inputVisibility" autocomplete="off" value="PRIVATE" data-errorspan="visibility" readonly/>
+                                                    <button class="btn btn-primary hidden" id="publishNode">Publish</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -153,31 +163,35 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
-                                <button id="saveExecNode" type="submit" class="btn btn-primary btn-submit" name="btnSave">Add new workflow</button>
-                            </div>
-                        </div>
+                            <div class="col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11">
+								<div class="modal-footer">
+									<button id="saveExecNode" type="submit" class="btn btn-primary btn-submit left-btn" name="btnSave">Add new workflow</button>
+									<button type="button" class="btn btn-default right-btn" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+                        </div>                        
                     </div>
                 </div>
             </section>
         </div><!-- /.modal-body -->
     </form>
-    <div class="modal-note">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
-                        <h4>Help filling in</h4>
-                        <p>Please fill in all needed information. Component ID must be unique. Component ID can contain letters (a-z), numbers (0-9) and periods (.).</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    </div>
 </div><!-- /.modal-content -->
+<style>
+	img.base64image{position:relative;display:block;width:100px;height:100px;margin:5px 0 0 0;border-radius:15px;background-color:white;padding:5px;box-shadow:3px 3px 5px 0 rgba(51, 51, 51, 0.12);border-bottom:2px solid #3c8dbc}
+	img.base64image.empty::before{content:" ";position:absolute;display:block;width:94px;height:94px;background-repeat:no-repeat;background-color:white;background-image:url(../media/images/preview-not-available.png);background-position:center;box-shadow:3px 3px 5px 0 rgba(51, 51, 51, 0.12);border-bottom:2px solid #3c8dbc} 
+    .col-md-2.floating-img {float: right; display: flex; flex-direction: column; align-items: center; margin-top: -10px;}   
+    @media (max-width: 991px) {
+	.floating-img{width:100%;margin-bottom:10px}
+	.floating-img>img{width:100px;float:right}
+    }
+    @media (min-width: 992px) {
+        .col-name .col-md-2{width:20%}
+        .col-name .col-md-10{width:80%}
+    }
+
+    .imageButtons{display: flex; justify-content: center; gap: 10px; margin-top: 13px;}
+
+</style>
    <link rel="stylesheet" href="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.css" type="text/css" />
    <script src="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.js" type="text/javascript"></script>
    <!-- 1.12.1/jquery-ui.min.js for autocomplete -->
@@ -185,6 +199,7 @@
    <script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
 
 <script>
+    var wfHasImage = false;
     function helper_addSysVarRow($tbl, payload){
         var obj = {"key":"","value":""};
         $.extend( obj, payload );
@@ -222,7 +237,7 @@
                 }
             })
             .on("focusout", function(){
-                if($(this).data("errorspan")){
+                if($(this).data("errorspan") && !$(this).attr("readonly")){
                     if (($(this).val() === "")||($(this).val() === 0)||($(this).val() === "0")){
                         $(".error-"+$(this).data("errorspan"),".modal-error").css('display', 'inline-block');
                         $(".modal-error").fadeIn("slow");
@@ -230,39 +245,60 @@
                     }
                 }
             });
+
+        $("form#frmExecNodeEdit").validate({
+            rules: {
+                containerLogo: {
+                    required: true,
+                    isValidFileType: { fileType: "image" , typesList: [ "image/gif", "image/jpeg", "image/png" ] }
+                }
+            },function (params) {
+				if (params.fileType === "image") {
+                    return "Invalid image file.";
+				}
+			}
+        });
+
         $("form#frmExecNodeEdit").submit(function (e) {
             e.preventDefault();
             var $tblCompSysVar = $("table","#comp-tab-sys");
             var formData = {};
             var ajaxType = "";
             var ajaxURL = "";
+
+            var tags = [];
+            if( $(".tagsinput .tag .tag-text").length >=1){
+		        $(".tagsinput .tag .tag-text").each(function(i){tags.push($(this).text())});
+            }else{
+                tags = null;
+            }
+
             if($(this).data("payload")){
                 formData = $(this).data("payload");
                 ajaxType = 'PUT';
                 ajaxURL = formData.id + '/';
                 //overwrite with user input
                 formData.name = $('input[name=inputWorkflowName]', this).val();
-                formData.visibility = $('select[name=inputVisibility]', this).val();
-                formData.status = $('select[name=inputStatus]', this).val();
+                formData.description = $('textarea[name=inputDescription]', this).val();
                 formData.active = $('select[name=inputActive]', this).val();
-                var tags = null;
-				if ($('input[name=formTags]', this).val() !== "" ) {
-					tags = $('input[name=formTags]', this).val();
-					formData.tags = tags.split(",");
-				}
+                formData.visibility = $('input[name=inputVisibility]', this).val();
+                formData.status = $('input[name=inputStatus]', this).val();
+                formData.tags = tags;
             }else{
                 ajaxType = 'POST';
                 ajaxURL = '';
                 formData = {
                     "name" : $('input[name=inputWorkflowName]', this).val(),
+                    "description" : $('textarea[name=inputDescription]', this).val(),
                     "created":arrayFromDatetime(),
-                    "userName": taoUserProfile.username,
+                    "userId": taoUserProfile.id,
                     "path" : $('input[name=inputPath]', this).val(),
-                    "visibility": $('select[name=inputVisibility]', this).val(),
-                    "status": $('select[name=inputStatus]', this).val(),
+                    "visibility": $('input[name=inputVisibility]', this).val(),
+                    "status": $('input[name=inputStatus]', this).val(),
                     "active": $('select[name=inputActive]', this).val(),
                     "xCoord":0,
                     "yCoord":0,
+                    "tags": tags,
                     "zoom":1
                 };
             }
@@ -295,11 +331,11 @@
                 },
                 error : function (jqXHR, textStatus, errorThrown) {
                     if(jqXHR.status === 500){
-                        showMsg("Error adding execution node. Please check you data and try again.", "ERROR");
+                        showMsg("Error adding workflow. Please check you data and try again.", "ERROR");
                         return;
                     }
                     if(jqXHR.status === 406){
-                        showMsg("Error adding execution node. Please check you data, one or more values for the attributes was not in the acceptable range.", "ERROR");
+                        showMsg("Error adding workflow. Please check you data, one or more values for the attributes was not in the acceptable range.", "ERROR");
                         //handle error messages
                         var objResponse = JSON.parse(jqXHR.responseText);
                         if(objResponse[0] !== "Entity has validation errors"){
@@ -316,19 +352,62 @@
                         $('#myModalNodes').animate({scrollTop: 0}, 250);
                         return;
                     }
-                    showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
+                    showMsg("Unknown error. Unable to update workflow. Please try again.", "ERROR");
                 },
                 success: function(response) {
-                    showMsg("Workflow successfully saved.", "SUCCESS");
-                    $("#myModalNodes").modal('hide');
-                    panelComp.refreshData();
-                    tao_showWorkflow(response.data.id);
+                    if(response.status === "SUCCEEDED"){
+                        showMsg("Workflow successfully saved.", "SUCCESS");
+                        $("#myModalNodes").modal('hide');
+
+                        // upload the image
+                        if(!($("img#previewLogo").hasClass("empty")) ){
+                            var image = $('#containerLogo').prop('files')[0];
+                            if(typeof image !== "undefined"){
+                                uploadImage(response.data.id, image);
+                            }
+                        }
+                    }else{
+                        showMsg(response.message, response.status);
+                        return;
+                    }
+                    if ($(this).data("payload")) {
+                        panelComp.refreshData();
+                    } else {
+                        panelComp.refreshData();
+                        
+                        if(ajaxType === "POST"){
+                            tao_showWorkflow(response.data.id);
+                        }
+                    }
                 }
             });
             return false;
         });
         
         initializeTagsInputAutocomplete("#formTags", "workflow");
+
+        // select image
+        var $form = $("form#frmExecNodeEdit");
+        $("form#frmExecNodeEdit")
+		.on("click", "#wf-edit-image", function (e) {
+			$("#containerLogo", $form).trigger("click");
+		}).on("change", "#containerLogo", function (e) {
+			validateLogoFile(this, [ "image/gif", "image/jpeg", "image/png" ]);
+		});
+
+        $.validator.addMethod('isValidFileType',
+            function (value, element, params) {
+                var validFileType = false;
+                if(params.fileType === "image"){
+                    validFileType = validateLogoFile(element, params.typesList);
+                }
+                return validFileType;
+            }
+        );
+
+        $("form#frmExecNodeEdit").on("change", "input[type='file'].for-validation", function (e) {
+			$(this).trigger("blur");
+		});
         
     });
 
@@ -360,23 +439,54 @@
 
                     $('input[name=inputCompID]', $el).val(response.id);
                     $('input[name=inputWorkflowName]', $el).val(response.name);
+                    $('textarea[name=inputDescription]', $el).val(response.description);
+                    $('input[name=inputVisibility]', $el).val(response.visibility);
+                    $('input[name=inputStatus]', $el).val(response.status);
 
                     $('select[name=inputActive] option', $el).removeAttr("selected");
                     $('select[name=inputActive] option[value="'+response.active+'"]', $el).attr("selected", "selected");
 
-                    $('select[name=inputVisibility] option', $el).removeAttr("selected");
-                    $('select[name=inputVisibility] option[value="'+response.visibility+'"]', $el).attr("selected", "selected");
-
-                    $('select[name=inputStatus] option', $el).removeAttr("selected");
-                    $('select[name=inputStatus] option[value="'+response.status+'"]', $el).attr("selected", "selected");
-
-					if(response.tags != null && response.tags !=""){
+                    if(response.tags != null && response.tags !=""){
 						$('#formTags').importTags( response.tags.join());
 					}
 
                     $.each(response.customValues, function(i, value) {
                         helper_addSysVarRow($("#tbl-edt-sysvar"),value);
                     });
+
+                    getWfImage(response.id);
+
+                    // if inactive or ready wf
+                    if(!response.active || response.status !== "DRAFT"){
+                        // disable other fields
+                        $('#inputWorkflowName', $el).prop("readonly", true);
+                        $('#inputDescription', $el).prop("readonly", true);
+                        $('#formTags_tag', $el).prop("readonly", true);
+
+                        if(!response.active){
+                            $('#inputActive', $el).prop("disabled", false);
+                            $('#wf-edit-image, #wf-delete-image', $el).prop("disabled", true);
+                        }
+                    }
+
+                    if($(".modal-title").html() === "Edit workflow" && response.active){
+
+                        // if draft
+                        if(response.status === "DRAFT"){
+                            $("#dualAction").removeClass("hidden");
+                        }else{
+                            if(response.status === "READY"){
+                                // it hidden from prev operation, show it
+                                $("#dualAction").removeClass("hidden");
+
+                                $("#dualAction").html("Unlock");
+                                if (response.visibility == "PRIVATE") {
+                                    $("#publishNode").removeClass("hidden");
+                                }
+                            }
+                        }
+                        $('#formTags_tag', $el).prop("readonly", false);
+                    }   
                 }
                 catch(e) {
                     alert('E001, An error has occurred, please try again or contact app admin.');
@@ -385,5 +495,215 @@
         });
         return true;
     }
+
+    function updateWfStatus(formData){
+        $.ajax({
+            cache: false,
+            url: baseRestApiURL + "workflow/"+ formData.id + '/',
+            dataType: 'json',
+            type: "PUT",
+            data: JSON.stringify(formData),
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            },
+            error : function (jqXHR, textStatus, errorThrown) {
+                showMsg("Unknown error. Unable to update workflow. Please try again.", "ERROR");
+            },
+            success: function(r) {
+                showMsg("Workflow successfully saved.", "SUCCESS");
+
+                var response = chkTSRF(r);
+                try {
+                    //populate form with current values
+                    var $el = $('#frmExecNodeEdit');
+                    $el.data("payload", response);
+                    $('input[name=inputVisibility]', $el).val(response.visibility);
+                    $('input[name=inputStatus]', $el).val(response.status);
+
+                    var isDraft = response.status === "DRAFT";
+                    if(isDraft){
+                        $("#dualAction").html("Lock");
+                        $("#publishNode").addClass("hidden");
+                    }else{
+                        $("#dualAction").html("Unlock");
+
+                        if(response.status === "READY" || response.status === "PUBLISHED"){
+                            if (response.visibility == "PRIVATE") {
+                                $("#publishNode").removeClass("hidden");
+                            } else {
+                                $("#publishNode").addClass("hidden");
+                            }
+                            $("#myModalNodes").modal('hide');
+                        }
+                    }
+
+                    $('#inputWorkflowName', $el).prop("readonly", !isDraft);
+                    $('#inputDescription', $el).prop("readonly", !isDraft);
+
+                }catch(e) {
+                    alert('E001, An error has occurred, please try again or contact app admin.');
+                }
+                
+                panelComp.refreshData();
+            }
+        });
+    }
+
+    $("#dualAction").click(function(e) { 
+        e.preventDefault();
+        var formData = $("form#frmExecNodeEdit").data("payload");
+        
+        formData.status = $("#dualAction").text() === "Lock"? "READY" : "DRAFT";
+        formData.visibility = "PRIVATE";
+        updateWfStatus(formData);
+        
+    });
+
+    $("#publishNode").click(function(e) { 
+        e.preventDefault();
+        var formData = $("form#frmExecNodeEdit").data("payload");
+
+        formData.status = "READY";
+        formData.visibility = "PUBLIC";
+        updateWfStatus(formData);
+    });
+
+    $("#wf-delete-image").click(function(e) { 
+        e.preventDefault();
+        $('#confirm-dialog').modal('confirm',{
+				msg:"Are you sure you want to delete the image?",
+				callbackConfirm: function() {
+                    deleteWfImage(window.userOpStack[0].dna.id);
+				},
+				callbackCancel:function(){}
+		});
+    });
+
+    function uploadImage(wfID, image){
+
+        var ajaxType = (wfHasImage)? "PUT" : "POST";
+        var formData = new FormData();
+        formData.append("image", image);
+
+        $.ajax({
+            type: ajaxType,
+            url: baseRestApiURL + "workflow/"+ wfID +"/image",
+            contentType: false,
+            processData: false,
+            data: formData,
+            headers: {
+                "Accept": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }, success: function(response) {
+                if(response.status === "SUCCEEDED"){
+                    showMsg("Image successfully saved.", "SUCCESS");
+                }else{
+                    showMsg("Could not upload image." + response.message, response.status);
+                }
+            }
+        });
+    }
+
+    function deleteWfImage(wfID){
+        $.ajax({
+            type: "DELETE",
+            url: baseRestApiURL + "workflow/"+ wfID +"/image",
+            headers: {
+                "Accept": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }, success: function(response) {
+                if(response.status === "SUCCEEDED" && typeof response.data !== "undefined"){
+                    showMsg("Image successfully deleted.", "SUCCESS");
+                    // update the preview, disable the delete button, and refresh wf list 
+                    var $previewLogo = $("#previewLogo");
+                    $previewLogo.attr("src", "");
+                    $previewLogo.addClass("empty");
+                    $("#wf-delete-image").prop("disabled", true);
+                    panelComp.refreshData();
+
+                    // set for case: user deletes the image, then adds one 
+                    wfHasImage = false;
+                }else{
+                    var message = (response.message != "")? response.message : "The image could not be deleted";
+                    showMsg(message, response.status);
+                }
+            }
+        });
+    }
+
+    function getWfImage(wfID){
+        $.ajax({
+            type: "GET",
+            url: baseRestApiURL + "workflow/"+ wfID +"/image",
+            headers: {
+                "Accept": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }, success: function(response) {
+                if (response.status === "SUCCEEDED" && typeof response.data !== "undefined") {
+                    wfHasImage = true;
+                    $("img#previewLogo").removeClass("empty");
+                    $("img#previewLogo").attr("src", "data:image/png;base64, " + response.data);
+                    $("#wf-delete-image").removeAttr("disabled");
+                } else {
+                    var message = (response.message != "")? response.message : "The image could not be fetched";
+                    showMsg(message, response.status);
+                }
+            }
+        });
+    }
+
+    function resizeBase64Img(base64, width, height) {
+		var canvas = document.createElement("canvas");
+		canvas.width = width;
+		canvas.height = height;
+		var context = canvas.getContext("2d");
+		var deferred = $.Deferred();
+		$("<img/>").attr("src", base64).load(function() {
+			context.scale(width/this.width,  height/this.height);
+			context.drawImage(this, 0, 0); 
+			deferred.resolve($("<img/>").attr("src", canvas.toDataURL()));               
+		});
+		return deferred.promise();    
+	}
+	// Signal error when logo image file is broken
+	var devalidateLogoFile = function(event) {
+		if (event.type == "error") {
+			var $previewLogo = $("#previewLogo");
+			$previewLogo.attr("src", "");
+			$previewLogo.addClass("empty");
+		}
+	}
+
+	// Validate Logo file
+	var validateLogoFile = function(element, validTypes) {
+		var $previewLogo = $("#previewLogo");
+		
+		var reader = new FileReader();
+		reader.onload = function() {
+			$.when(resizeBase64Img(reader.result, 128, 128)).done(function (response) {
+				$previewLogo.attr("src", response.get(0).src);
+				$previewLogo.removeClass("empty");
+			});
+		}
+		
+		if (element.files.length > 0) {
+			var file = element.files[0];
+			if ($.inArray(file["type"], validTypes) >= 0) {
+				reader.readAsDataURL(file);
+				return true;
+			} else {
+				$previewLogo.attr("src", "");
+				$previewLogo.addClass("empty");
+				return false;
+			}
+		} else {
+			$previewLogo.attr("src", "");
+			$previewLogo.addClass("empty")
+			return true;
+		}
+		return false;
+	};
     //# sourceURL=workflow-plus.js
 </script>

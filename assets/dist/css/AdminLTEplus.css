@@ -353,7 +353,16 @@ body.sidebar-collapse #wrapper-quota{
     margin-bottom: 10px;
 }
 
-
+body.sidebar-collapse #wrapper-quota-time{
+    display:none;
+}
+#wrapper-quota-time .control-sidebar-subheading{
+    margin-bottom: 5px;
+}
+#wrapper-quota-time .progress {
+    margin-bottom: 10px;
+    background-color: #8197a6;
+}
 
 #wrapper-quota-small{
     display:none;
@@ -744,7 +753,7 @@ ul.timeline.current_route:before{
     overflow:auto;
 }
 .nodes-item-core-box .box-description p {
-    font-size: 0.8em;
+    /* font-size: 0.8em; */
     color: #555;
 }
 .nodes-item-core-box .box-stats {

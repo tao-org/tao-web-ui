@@ -42,7 +42,7 @@
 	<div class="modal-dialog"></div>
 </div>
 <section class="content-header tao-async-ph">
-	<h1>Scheduled Jobs<small>Here you can manage scheduled workflow executions.</small></h1>
+	<h1>Scheduled Jobs<small>Here you can schedule <strong>workflow executions</strong> and manage them.</small></h1>
 	<ol class="breadcrumb">
 		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 		<li class="active">Scheduled Jobs</li>
@@ -129,7 +129,7 @@
 															</div>
 														</div>
 														<div class="box-description row">
-															<strong style="margin-left:-15px">Workflow information:</strong><br/>
+															<strong style="margin-left:-10px">Workflow information:</strong><br/>
 															<span class="val-workflowName"></span><br/>
 															Last execution time: <strong><span class="val-lastExecutionTime"></span></strong><br/>
 															Last execution status: <strong><span class="val-lastExecutionStatus"></span></strong>
@@ -166,7 +166,7 @@
 															</div>
 														</div>
 														<div class="box-description">
-															<strong style="margin-left:-15px">Workflow information:</strong><br/>
+															<strong style="margin-left:-10px">Workflow information:</strong><br/>
 															<span class="val-workflowName"></span><br/>
 															Last execution time: <strong><span class="val-lastExecutionTime"></span></strong><br/>
 															Last execution status: <strong><span class="val-lastExecutionStatus"></span></strong>
@@ -222,7 +222,7 @@
 				"X-Auth-Token": window.tokenKey
 			},
 			error : function (jqXHR, textStatus, errorThrown) {
-				console.log("error");
+				// console.log("error");
 				if(jqXHR.status === 500 ){
 					showMsg("Unable to delete scheduled task. Please try again.", "ERROR");
 				} else {
@@ -296,7 +296,7 @@
 				}
 			});
 		} else {
-			alert("TAO - Operation mismatch");
+			alert("AVL - Operation mismatch");
 		}
 	};
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -305,7 +305,7 @@
 		window.panelComp = $('#panel-nodes').npPaginatedCells({
 			headerUser: taoUserProfile.username,
 			url: urls,
-			viewMode: prefferences.viewMode,
+			viewMode: preferences.viewMode,
 			filterAttribute: "friendlyName",
 			order:[
 				{

@@ -152,7 +152,7 @@ function renderExecutions(workflowId) {
 		var timelineItemCurrent = $('<li class="timeline-item"></li>');
 		var timelineItemPending = $('<li class="timeline-item"></li>');
 		var htmlContent = 	'<i class="fa ' + (pendingItem ? 'bg-gray' : 'bg-red') + '"></i>' +
-							'<span class="item-user"><i class="fa fa-user"></i>' + exec.userName + '</span>' +
+							'<span class="item-user"><i class="fa fa-user"></i>' + exec.userId + '</span>' +
 							'<span class="item-timestamp"><i class="fa fa-clock-o"></i><small>' + startTime + '</small></span>' +
 							'<div class="item-body">' +
 								'Job name: <strong>' + exec.name + '</strong><br>' +
@@ -254,7 +254,7 @@ $(document).ready( function() {
 	// Get project details
 	var currentWf = window.userOpStack[0].dna;
 	var wfDetails = '<div class="row"><label class="col-sm-3 col-md-3">Workflow name:</label><div class="col-sm-9 col-md-9">' + currentWf.name       + '</div></div>' +
-					'<div class="row"><label class="col-sm-3 col-md-3">Initiator:</label>    <div class="col-sm-9 col-md-9">' + currentWf.userName   + '</div></div>' +
+					'<div class="row"><label class="col-sm-3 col-md-3">Initiator:</label>    <div class="col-sm-9 col-md-9">' + currentWf.userId   + '</div></div>' +
 					'<div class="row"><label class="col-sm-3 col-md-3">Status:</label>       <div class="col-sm-9 col-md-9">' + currentWf.status     + '</div></div>' +
 					'<div class="row"><label class="col-sm-3 col-md-3">Visibility:</label>   <div class="col-sm-9 col-md-9">' + currentWf.visibility + '</div></div>' +
 					'<div class="row"><label class="col-sm-3 col-md-3">Active:</label>       <div class="col-sm-9 col-md-9">' +  (currentWf.active ? "yes" : "no")  + '</div></div>';

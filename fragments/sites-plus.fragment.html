@@ -81,6 +81,15 @@
 							</div>
 						</div>
 
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="polygon" class="col-sm-4 col-md-4 ">Polygon title</label>
+								<div class="col-sm-12 col-md-12">
+									<input class="form-control tag-format" type="text" id="polygon" name="polygon" placeholder="polygon" autocomplete="off" />
+								</div>
+							</div>
+						</div>
+
 						<!--
 
 						<div class="col-md-12">
@@ -157,6 +166,9 @@
 -->
 
 </div><!-- /.modal-content -->
+
+<link rel="stylesheet" href="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.css" type="text/css" />
+<script src="./assets/libs/jQuery-tags-input-autocomplete/jquery.tagsinput-revisited.js" type="text/javascript"></script>
 
 <script>
 
@@ -249,10 +261,77 @@
 		return false;
 	}
 
+	function fieldFormat(){
+
+		$("#polygon").tagsInput({
+			minChars	: 0,
+			maxChars	: null,
+			limit		: null,
+			interactive	: true,
+			autocomplete: null,
+			unique		: true,
+			placeholder	: 'Add an element',
+			delimiter	: ',',
+			confirmKeys	: [188, 32]
+		});
+
+	}
+	
+	function getTileFootprint(tileId) {
+		var deferred = $.Deferred();
+		
+		$.ajax({
+			url: baseRestApiURL + "query/footprint",
+			type: "GET",
+			data: { satellite: "sentinel2",
+					tile: tileId	
+				},
+			beforeSend: function(xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
+			success: function(response) {
+				if (response.status === "SUCCEEDED") {
+					deferred.resolve(response.data);
+				} else {
+					deferred.reject(response.data, response.status, response.message);
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				deferred.reject(jqXHR, textStatus, errorThrown);
+			}
+		});
+		return deferred.promise();
+	}
+
+	$("#polygon").on("change", function (e) {
+		if (this.value != "") {
+			$.when(getTileFootprint(this.value))
+			.done(function (response) {
+				defaultFootprint = response;
+				if (myPolygonMap.mapActive) {
+					var features = null;
+					defaultFootprint = response;
+					if (features = myPolygonMap.createShapeFromGeometry(defaultFootprint, null, true)) {
+						// Prevent footprint match errors due to precision
+						defaultFootprint = myPolygonMap.getFootprint();
+						features[0].setId("tile_footprint");
+						myPolygonMap.fitFeatureById("tile_footprint");
+						showMsg("New default footprint set", "INFO");
+					} else {
+						showMsg("Inconsistent footprint information for the selected tile", "WARNING");
+					}
+				}								
+			})
+			.fail(function (jqXHR, status, error) {
+				showMsg(error, "WARNING");
+			});
+		}
+	});
+
 	//////////////////////////////////////////////////////////////////////////////////////
     $(document).ready( function() {
 		//Remove old datepickers
 		$("#" + $.datepicker.dpDiv.attr("id")).remove();
+
+		fieldFormat();
 
 		$("#startDate").datepicker({
 			dateFormat: "yy-mm-dd",
@@ -279,6 +358,13 @@
             }
         });
 
+		$('#polygon_tag').on('keypress', function(e){
+			if (e.keyCode == 32){
+				e.keyCode = 188;
+				e.preventDefault();
+			};
+			$("#polygon").trigger("change");
+  		});
  	 
 		// Custom validation for container name
 		$.validator.addMethod('sitesName', function (value, element, params) {
@@ -295,7 +381,7 @@
 		}, "Site's name must be unique.");
 
 		// Initialize map and query
-		var olPoly = $("#mapExtent").poly2D({ startLat: 47, startLon: 14, zoom: 5, maxFeaturesNo: 1, extraFeatureDescription: "preview" });
+		var olPoly = $("#mapExtent").poly2D({ startLat: 4, startLon: 15, zoom: 5, maxFeaturesNo: 1, extraFeatureDescription: "preview" });
 		$.when(olPoly).done(function (result) {
 				//*
 			if (typeof result.readOnly === "boolean") {
@@ -346,7 +432,7 @@
 			}
 		});
 		// Trigger validation when selected file changed
-		$("form#frmUploadContainer").on("change", "input[type='file'].for-validation", function (e) {
+		$("form#frmUploadContainer").on("change", "input[type='file'].for-validation:not(#polygon)", function (e) {
 			$(this).trigger("blur");
 		});
 		

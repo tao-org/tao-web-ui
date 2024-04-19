@@ -46,7 +46,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Node monitor: </h4>
+                <h4 class="modal-title" id="myModalLabel">Node monitor </h4>
             </div>
             <div class="modal-body">
                 <section>
@@ -85,7 +85,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel2">SSH terminal: </h4>
+                <h4 class="modal-title" id="myModalLabel2">SSH terminal </h4>
             </div>
             <div class="modal-body">
                 <!-- document timeline content -->
@@ -128,7 +128,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">Services status: </h4>
+                <h4 class="modal-title">Services status </h4>
             </div>
             <div class="modal-body">
                 <!-- document timeline content -->
@@ -368,13 +368,13 @@
                                                         </div>
                                                         <div class="box-bottom">
                                                             <div class="">
-                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
-                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-1" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Disable</span></button>
-                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-0" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Enable</span></button>
-                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete</span></button>
-                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="ssh"><i class="fa fa-terminal fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;SSH Terminal</span></button>
-                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="monitor"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Monitor</span></button>
-                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="status"><i class="fa fa-stethoscope fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Service status</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit" data-toggle="tooltip" data-original-title="Edit description"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-1" data-action="disable" data-toggle="tooltip" data-original-title="Disable node"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Disable</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse only-v-0" data-action="enable" data-toggle="tooltip" data-original-title="Enable node"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Enable</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete" data-toggle="tooltip" data-original-title="Delete node"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="ssh" data-toggle="tooltip" data-original-title="Access SSH terminal"><i class="fa fa-terminal fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;SSH Terminal</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="monitor" data-toggle="tooltip" data-original-title="View resource usage"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Monitor</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="status" data-toggle="tooltip" data-original-title="View service status"><i class="fa fa-stethoscope fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Service status</span></button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -437,7 +437,7 @@
     var sshNode = function (nodeDNA) {
             var $sshModal = $("#myModalSSH");
             $(".val-sshHost",$sshModal).text(nodeDNA.id);
-            var sshURL = 'http://'+nodeDNA.id+':4200/';
+            var sshURL = baseRestApiURL + 'docker/connect?host='+nodeDNA.id+'&port=4200';
             var parentIframe = document.getElementById("sshIframeWrapper");
             var iframe = document.createElement('iframe');
             iframe.id="randomid"+Math.floor(Math.random() * 10000000);
@@ -488,7 +488,6 @@
                 "X-Auth-Token": window.tokenKey
             },
             error : function (jqXHR, textStatus, errorThrown) {
-                console.log("error");
                 if(jqXHR.status === 500 ){
                     showMsg("Unable to delete node. Please try again.", "ERROR");
                 } else {
@@ -543,7 +542,7 @@
 					showMsg("Error adding execution node. Please check your data, one or more values for the attributes was not in the acceptable range.", "ERROR");
 					return;
 				}
-				showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
+				showMsg("Unknown error. Unable to update node. Please try again.", "ERROR");
 			},
 			success: function(response, textStatus, jqXHR) {
 				if (response.status == responseStatus.success) {
@@ -586,7 +585,7 @@
         window.userOpStack = [];
 		
         if(operationid === "op-plus"){
-            //$(".modal-dialog",$modal).addClass("modal-lg");
+            $(".modal-dialog",$modal).addClass("modal-lg");
             rm_contentUrl="./fragments/topology-plus.fragment.html?" + Math.random();
         }
         if(operationid === "edit"){
@@ -599,7 +598,7 @@
         }
 
         if(rm_contentUrl === ''){
-            alert("TAO - Operation mismatch");
+            alert("AVL - Operation mismatch");
             return;
         }
         $.ajax({
@@ -643,7 +642,7 @@
 		window.panelComp = $("#panel-nodes").npPaginatedCells({
 			headerUser: taoUserProfile.username,
 			url: urls,
-			viewMode: prefferences.viewMode,
+			viewMode: preferences.viewMode,
 			filterAttribute: "id",
 			order:[
 				{

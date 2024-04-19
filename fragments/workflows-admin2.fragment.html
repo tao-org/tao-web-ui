@@ -1,5 +1,8 @@
 <style>
     .btn-action { padding: 0; border-radius: 5px; }
+    img.previewLogo{width:60px;height:60px;border-radius:15px;background-color:white;padding:5px;box-shadow:3px 3px 5px 0 rgba(51, 51, 51, 0.12);border-bottom:2px solid #3c8dbc}
+    #details-wf{display:flex; flex-direction:row; justify-content:space-between;overflow: hidden;}
+    .image-wf{margin:0px 5px 5px 0px}
 </style>
 <!-- modal nodes op -->
 <div id="myModalNodes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -19,7 +22,7 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-    <h1>Workflows <small>The list of <strong>workflows</strong> created by you or published by other users.</small></h1>
+    <h1>Workflows <small>The list of user created <strong>graphs</strong> that consists in one or more connected <strong>processing modules</strong> that will produce a result.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Workflows</li>
@@ -106,11 +109,14 @@
                                                         <div class="project-box-body">
                                                             <div class="box-top">
                                                                 <div class="box-title"><span class="val-name"></span>   <i class="fa fa-random"></i></div>
-                                                                <div class="box-subtitle" >Owner:&nbsp;<strong><span class="val-userName"></strong></span></div>
+                                                                <div class="box-subtitle" style="cursor:pointer">Owner:&nbsp;<strong><span class="val-userId"></span></strong></span></div>
                                                                 <div class="box-text">
                                                                     Created: <strong><span class="val-created"></span></strong> | 
                                                                     Visibility: <strong><span class="val-visibility"></span></strong> | 
                                                                     Status: <strong><span class="val-status"></span></strong>
+                                                                </div>
+                                                                <div class="box-icon image-wf">
+                                                                    <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" width="60" height="60">
                                                                 </div>
                                                               
                                                             </div>
@@ -123,8 +129,8 @@
                                                         </div><!-- /.info-box-content -->
                                                     
                                                         <div class="row">
-                                                            <div class="col-xs-12 text-right">
-                                                        <button class="btn btn-primary btn-sm btn-action btn-nodeop wf-edit-description" data-action="wf-edit-description" data-toggle="tooltip" data-original-title="Edit description">
+                                                            <div class="col-xs-12 text-left">
+                                                        <button class="btn btn-primary btn-list-view btn-sm btn-action btn-nodeop wf-edit-description" data-action="wf-edit-description" data-toggle="tooltip" data-original-title="Edit description">
                                                             <span class="value-dependent value-1 collapse">
                                                                 <span class="fa-stack fa-lg">
                                                                     <i class="fa fa-circle fa-stack-2x text-green"></i>
@@ -143,7 +149,7 @@
                                                                 </span>
                                                             </span>
                                                         </button>
-                                                        <button class="btn btn-primary btn-sm btn-action btn-nodeop wf-edit-workflow" data-action="wf-edit-workflow" data-toggle="tooltip" data-original-title="Edit workflow">
+                                                        <button class="btn btn-primary  btn-list-view btn-sm btn-action btn-nodeop wf-edit-workflow" data-action="wf-edit-workflow" data-toggle="tooltip" data-original-title="Edit workflow">
                                                             <span class="value-dependent value-1 collapse">
                                                                 <span class="fa-stack fa-lg">
                                                                     <i class="fa fa-circle fa-stack-2x text-green"></i>
@@ -162,7 +168,7 @@
                                                                 </span>
                                                             </span>
                                                         </button>
-                                                        <button class="btn btn-primary btn-sm btn-action btn-nodeop op-5" data-action="wf-clone" data-toggle="tooltip" data-original-title="Clone workflow">
+                                                        <button class="btn btn-primary btn-list-view btn-sm btn-action btn-nodeop op-5" data-action="wf-clone" data-toggle="tooltip" data-original-title="Clone workflow">
                                                             <span class="value-dependent value-1 collapse">
                                                                 <span class="fa-stack fa-lg">
                                                                     <i class="fa fa-circle fa-stack-2x text-green"></i>
@@ -182,7 +188,7 @@
                                                             </span>
                                                             <span class="label value-copies collapse bg-black"></span>
                                                         </button>
-                                                        <button class="btn btn-primary btn-sm btn-action btn-nodeop op-20" data-action="wf-start" data-toggle="tooltip" data-original-title="Start execution">
+                                                        <button class="btn btn-primary  btn-list-view btn-sm btn-action btn-nodeop op-20" data-action="wf-start" data-toggle="tooltip" data-original-title="Start execution">
                                                             <span class="value-dependent value-1 collapse">
                                                                 <span class="fa-stack fa-lg">
                                                                     <i class="fa fa-circle fa-stack-2x text-green"></i>
@@ -201,38 +207,45 @@
                                                                 </span>
                                                             </span>
                                                         </button>
-                                                        <!--<button class="btn btn-box-tool op-6 text-black btn-action btn-nodeop disabled " data-action="op-6" data-toggle="tooltip" data-original-title="Publish current workflow">
-                                                            <span class="value-dependent value-default">
-                                                                <span class="fa-stack fa-lg value-dependent value-default">
-                                                                    <i class="fa fa-bullhorn"></i>
-                                                                </span>
-                                                            </span>
-                                                        </button>-->
-                                                        <button class="btn btn-primary btn-sm btn-action btn-nodeop op-6" data-action="wf-script" data-toggle="tooltip" data-original-title="Generate script">
+                                                        <button class="btn btn-primary  btn-list-view btn-sm btn-action btn-nodeop op-6" data-action="wf-script" data-toggle="tooltip" data-original-title="Generate script">
                                                             <span class="value-dependent value-default">
                                                                 <span class="fa-stack fa-lg value-dependent value-default">
                                                                     <i class="fa fa-code"></i>
                                                                 </span>
                                                             </span>
                                                         </button>
-                                                        <button class="btn btn-primary btn-sm btn-action btn-nodeop op-6" data-action="wf-delete" data-toggle="tooltip" data-original-title="Delete current workflow">
+                                                        <button class="btn btn-primary  btn-list-view btn-sm btn-action btn-nodeop op-6" data-action="wf-delete" data-toggle="tooltip" data-original-title="Delete current workflow">
                                                             <span class="value-dependent value-default">
                                                                 <span class="fa-stack fa-lg value-dependent value-default">
                                                                     <i class="fa fa-trash-o"></i>
                                                                 </span>
                                                             </span>
                                                         </button>
-                                                        <button class="btn btn-primary btn-sm btn-action btn-nodeop" data-action="view-results" data-toggle="tooltip" data-original-title="Show execution results">
+                                                        <button class="btn btn-primary btn-list-view btn-sm btn-action btn-nodeop" data-action="view-results" data-toggle="tooltip" data-original-title="Show execution results">
                                                             <span class="value-dependent value-default">
                                                                 <span class="fa-stack fa-lg value-dependent value-default">
                                                                     <i class="fa fa-picture-o"></i>
                                                                 </span>
                                                             </span>
                                                         </button>
-                                                        <button class="btn btn-primary btn-sm btn-action btn-nodeop" data-action="trace-execution" data-toggle="tooltip" data-original-title="Trace execution">
+                                                        <button class="btn btn-primary btn-list-view btn-sm btn-action btn-nodeop" data-action="trace-execution" data-toggle="tooltip" data-original-title="Trace execution">
                                                             <span class="value-dependent value-default">
                                                                 <span class="fa-stack fa-lg value-dependent value-default">
                                                                     <i class="fa fa-road"></i>
+                                                                </span>
+                                                            </span>
+                                                        </button>
+                                                        <button class="btn btn-primary btn-list-view btn-sm btn-action btn-nodeop hidden" data-action="wf-unsubscribe" data-toggle="tooltip" data-original-title="Unsubscribe from workflow">
+                                                            <span class="value-dependent value-default">
+                                                                <span class="fa-stack fa-lg value-dependent value-default">
+                                                                    <i class="fa fa-minus-circle"></i>
+                                                                </span>
+                                                            </span>
+                                                        </button>
+                                                        <button class="btn btn-primary btn-list-view btn-sm btn-action btn-nodeop hidden" data-action="wf-subscribe" data-toggle="tooltip" data-original-title="Subscribe to workflow">
+                                                            <span class="value-dependent value-default">
+                                                                <span class="fa-stack fa-lg value-dependent value-default">
+                                                                    <i class="fa fa-plus-circle"></i>
                                                                 </span>
                                                             </span>
                                                         </button>
@@ -251,13 +264,17 @@
                                                         </div>
                                                         <div class="box-top">
                                                             <div class="box-title"><span class="val-name" title></span></div>
-                                                            <div class="box-subtitle">Owner:&nbsp;<strong><span class="val-userName"></span></strong></div>
-                                                            <div class="box-text">Created:&nbsp;<strong><span class="val-created"></span></strong></div>
-                                                            <div class="box-text">Visibility:&nbsp;<strong><span class="val-visibility"></span></strong></div>
-                                                            <div class="box-text">Status:&nbsp;<strong><span class="val-status"></span></strong></div>
-                                                            <div class="box-text"><span class="val-lblActive"></span></div>
-                                                            <div class="box-icon">
-                                                                <i class="fa fa-random"></i>
+                                                            <div class="box-subtitle" style="cursor:pointer">Owner:&nbsp;<strong><span class="val-userId"></span></strong></div>
+                                                            <div id="details-wf">
+                                                                <div>
+                                                                    <div class="box-text">Created:&nbsp;<strong><span class="val-created"></span></strong></div>
+                                                                    <div class="box-text">Visibility:&nbsp;<strong><span class="val-visibility"></span></strong></div>
+                                                                    <div class="box-text">Status:&nbsp;<strong><span class="val-status"></span></strong></div>
+                                                                </div>
+                                                                <div class="box-icon"><i class="fa fa-random"></i></div>
+                                                                <div class="image-wf">
+                                                                    <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" width="60" height="60">
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="box-bottom with-line">
@@ -266,11 +283,13 @@
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="wf-edit-workflow" data-toggle="tooltip" data-original-title="Edit workflow"><i class="fa fa-paint-brush fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="wf-clone" data-toggle="tooltip" data-original-title="Clone workflow"><i class="fa fa-random fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Clone</span></button>
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="wf-start" data-toggle="tooltip" data-original-title="Start execution"><i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Start execution</span></button>
-                                                                <!--<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="op-publish" data-toggle="tooltip" data-original-title="Publish current workflow"><i class="fa fa-bullhorn fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Publish current workflow</span></button>-->
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop " data-action="wf-script" data-toggle="tooltip" data-original-title="Generate script"><i class="fa fa-code fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Generate script</span></button>
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop " data-action="wf-delete" data-toggle="tooltip" data-original-title="Delete current workflow"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete workflow</span></button>
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view-results" data-toggle="tooltip" data-original-title="Show execution results"><i class="fa fa-picture-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Show execution results</span></button>
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="trace-execution" data-toggle="tooltip" data-original-title="Trace execution"><i class="fa fa-road fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Trace execution</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop hidden" data-action="wf-unsubscribe" data-toggle="tooltip" data-original-title="Unsubscribe from workflow" disabled><i class="fa fa-minus-circle fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Unsubscribe from workflow</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop hidden" data-action="wf-subscribe" data-toggle="tooltip" data-original-title="Subscribe to workflow" disabled><i class="fa fa-plus-circle fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Subscribe to workflow</span></button>
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
@@ -301,6 +320,9 @@
     </div>
 </section><!-- /.content -->
 <script>
+    var username, timeoutId, userguid;
+    var clicking = false;
+
     tao_showWorkflow = function(currentWfID){
         $(".tao-async-ph, .tao-async-mc").fadeOut("slow").promise().done(function() {
             var iH = $(".content-wrapper").innerHeight() || 1080;
@@ -382,6 +404,56 @@
             });
         return 1;
     };
+    
+    unsubscribeWorkflow = function(userId, workflowId){
+        var unsubWf = $.ajax({
+            cache: false,
+            url: baseRestApiURL + "workflow/unsubscribe?userId=" + userId + "&workflowId=" + workflowId,
+            type: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+        $.when(unsubWf)
+            .done(function (unsubWorkflowResponse) {
+                if(unsubWorkflowResponse && (unsubWorkflowResponse.status === "SUCCEEDED")){
+                    showMsg("Workflow succesfully unsubscribed", "SUCCESS");
+                    panelComp.refreshData();
+                }else{
+                    showMsg("Workflow unsubscribe failed. " + (typeof unsubscribeWorkflow.message !== 'undefined' ? unsubscribeWorkflow.message : ''), "ERROR");
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                showMsg("Workflow unsubscribe failed. " + errorThrown, "ERROR");
+            });
+    };
+
+    subscribeWorkflow = function(userId, workflowId){
+        var subWf = $.ajax({
+            cache: false,
+            url: baseRestApiURL + "workflow/subscribe?userId=" + userId + "&workflowId=" + workflowId,
+            type: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+        $.when(subWf)
+            .done(function (subWorkflowResponse) {
+                if(subWorkflowResponse && (subWorkflowResponse.status === "SUCCEEDED")){
+                    showMsg("Workflow succesfully subscribed", "SUCCESS");
+                    panelComp.refreshData();
+                }else{
+                    showMsg("Workflow subscribe failed. " + (typeof subscribeWorkflow.message !== 'undefined' ? subscribeWorkflow.message : ''), "ERROR");
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                showMsg("Workflow subscribe failed. " + errorThrown, "ERROR");
+            });
+    };
 
     myModalNodesOpShow = function(operationid, args){
         var $modal = $("#myModalNodes");
@@ -439,7 +511,7 @@
         }
 
         if(rm_contentUrl === ''){
-            alert("TAO - Operation mismatch");
+            alert("AVL - Operation mismatch");
             return;
         }
         $.ajax({
@@ -456,6 +528,29 @@
             }
         });
     };
+
+    function getUsername(guid){
+        var getName = $.ajax({
+            cache: false,
+            url: baseRestApiURL + "user/name/" + guid,
+            type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+
+        $.when(getName).done(function (response) {
+            if(response.status === "SUCCEEDED" && typeof response.data !== "undefined"){
+                username = response.data;
+            }else{
+                username = guid;
+                showMsg("Could not retrieve username.", response.status);
+            }
+        }).fail(function () {
+        });
+    }
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     $( document ).ready(function(e) {
@@ -478,7 +573,7 @@
 		window.panelComp = $("#panel-nodes").npPaginatedCells({
 			headerUser: taoUserProfile.username,
 			url: urls,
-			viewMode: prefferences.viewMode,
+			viewMode: preferences.viewMode,
 			filterAttribute: "name",
 			order:[
 				{
@@ -523,6 +618,10 @@
 
 				if(action === 'wf-clone') cloneWorkflowById(args.dna.id);
 
+				if(action === 'wf-unsubscribe') unsubscribeWorkflow(taoUserProfile.id, args.dna.id);
+
+				if(action === 'wf-subscribe') subscribeWorkflow(taoUserProfile.id, args.dna.id);
+
 				if(action === "wf-delete"){
 					if( taoUserProfile.userRole !== "ADMIN" && taoUserProfile.username !== args.dna.userName ){
 						alert("not allowed");
@@ -538,24 +637,59 @@
 				}
 			},
             doCustomRender: function($elClone, elX){
-                if((elX.status ==='PUBLISHED'  && elX.visibility ==='PUBLIC') || !elX.active){
-                    $elClone.find("[data-action=wf-edit-description]").prop("disabled",true);
+                if((elX.status ==='PUBLISHED'  && (elX.visibility ==='PUBLIC' || elX.visibility ==='SUBSCRIPTION')) || !elX.active){
+                    var isAdmin = taoUserProfile.userRole === "ADMIN";
+                    $elClone.find("[data-action=wf-edit-description]").prop("disabled", !isAdmin);
                     $elClone.find("[data-action=wf-edit-workflow]").prop("disabled",true);
-                    //$elClone.find("[data-action=wf-start]").prop("disabled",true);
                     $elClone.find("[data-action=wf-script]").prop("disabled",true);
                     $elClone.find("[data-action=wf-delete]").prop("disabled",true);
                     $elClone.find("[data-action=view-results]").prop("disabled",true);
                     $elClone.find("[data-action=trace-execution]").prop("disabled",true);
-					// when element is not active disable all buttons
+
+                    if(elX.visibility ==='SUBSCRIPTION'){
+                        $elClone.find("[data-action=wf-edit-description]").prop("disabled", true);
+                        $elClone.find("[data-action=wf-unsubscribe]").removeClass("hidden");
+                        $elClone.find("[data-action=wf-unsubscribe]").prop("disabled",false);
+                    }
+
+                    // if(elX.status ==='PUBLISHED' && elX.active){
+                    //     $elClone.find("[data-action=wf-subscribe]").removeClass("hidden");
+                    //     $elClone.find("[data-action=wf-subscribe]").prop("disabled",false);
+                    // }
+
+                    // when element is not active disable all buttons
 					if (!elX.active) {
 						$elClone.find("[data-action=wf-clone]").prop("disabled",true);
 						$elClone.find("[data-action=wf-start]").prop("disabled",true);
 					}
                 }
-            }
-		});
-        
 
+                // if has image, it display it
+                if(typeof elX.image !== "undefined"){
+                    $elClone.find(".image-wf").empty();
+                    $elClone.find(".image-wf").append("<img class=\"previewLogo\" alt=\"\" />");
+                    $(".previewLogo", $elClone).attr("src", "data:image/jpeg;base64, " + elX.image);
+                    $(".box-icon .fa-random", $elClone).remove();
+                }
+
+                $(".box-subtitle", $elClone).on('mousedown', function() {
+                    clicking = true;
+                    userguid = $elClone.data('dna').userId;
+                    getUsername(userguid);
+
+                    timeoutId = setTimeout(function(){
+                        $elClone.find(".val-userId").text(username);
+                    }, 500);
+                }).on('mouseup mouseleave', function() {
+                    if(clicking === true){
+                        $elClone.find(".val-userId").text(userguid);
+                        clearTimeout(timeoutId);
+                        clicking = false;
+                    }
+                });
+            }
+        });
+        
 		$("#selectUserPanel").on("change", function () {
 			var current_pane = $(this).val() || 0;
             $("a[data-action='" + current_pane +"']",'.nav-tabs-custom').trigger( "click" );

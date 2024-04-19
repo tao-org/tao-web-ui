@@ -33,7 +33,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputUsername" class="col-sm-2 col-md-2 control-label">User name</label>
+                            <label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
                             <div class="col-sm-10 col-md-10">
                                 <input type="text" class="form-control" id="inputUsername" name="inputUsername" placeholder="user name" autocomplete="off" value="" data-errorspan="userName"/>
                             </div>
@@ -53,12 +53,33 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
+                            <label for="inputSSHKey" class="col-sm-2 col-md-2 control-label">SSH Key</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="password" autocomplete="off" class="form-control" id="inputSSHKey" name="inputSSHKey" placeholder="SSH key" autocomplete="off" value="" data-errorspan="SSHKey"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="associatedUser" class="col-sm-2 col-md-2 control-label">Owner</label>
+                            <div class="col-sm-10 col-md-10">
+                                <select type="password" autocomplete="off" class="form-control" id="associatedUser" name="associatedUser" placeholder="Owner" autocomplete="off" value="" data-errorspan="associatedUser">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
                             <label for="inputFlavor" class="col-sm-2 col-md-2 control-label">Node flavor </label>
                             <div class="col-sm-10 col-md-10">
                                 <div class="ui-front">
                                 <select id="inputFlavor" name="inputFlavor" class="form-control"></select>
                                 </div>
-                                <p id="inputFlovorMsg" class="collapse"></p>
+                                <p id="inputFlovorMsg" class="collapse" style="font-style: italic;"></p>
                             </div>
                         </div>
                     </div>
@@ -76,7 +97,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputMemorysize" class="col-sm-2 col-md-2 control-label">Memory size (MB) </label>
+                            <label for="inputMemorysize" class="col-sm-2 col-md-2 control-label">Memory size (GB) </label>
                             <div class="col-sm-10 col-md-10">
                                 <input type="number" class="form-control flavor-edit" id="inputMemorysize" name="inputMemorysize" placeholder="memory size GB" min="0" autocomplete="off" value="0" data-errorspan="memorySize"/>
                             </div>
@@ -108,7 +129,7 @@
                         <div class="form-group">
                             <label for="inputDescription" class="col-sm-2 col-md-2 control-label">Description </label>
                             <div class="col-sm-10 col-md-10">
-                                <textarea class="form-control" rows="3" id="inputDescription" name="inputDescription" placeholder="Description"></textarea>
+                                <textarea class="form-control" rows="3" id="inputDescription" name="inputDescription" placeholder="Node description" style="resize: none;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -148,18 +169,6 @@
             </section>
         </div><!-- /.modal-body -->
     </form>
-    <div class="modal-note">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
-                        <h4>Help filling in</h4>
-                        <p>Please fill in all needed information. Hostname must be unique. Hostname can contain letters (a-z), numbers (0-9) and periods (.).</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
@@ -208,75 +217,44 @@
 			$('#formTags').removeTag(element.id);
 		});
 	}
-    function validateHostName(attrId){
-        var $eL = $("#"+attrId);
-        var $pEL = $eL.parent();
-        var val = $eL.val().toLowerCase();
-        var regexp = /^[a-zA-Z0-9-_.]+$/;
-        if (val.search(regexp) === -1)
-        {
-            showMsg("The hostname contains invalid characters.", "ERROR");
-            $(".ckattr-ok", $pEL).fadeOut();
-            $(".ckattr-error", $pEL).fadeIn();
-            return;
-        }else{
-            $(".ckattr-error", $pEL).fadeOut();
-            $(".ckattr-ok", $pEL).fadeIn();
-        }
-
-        $.ajax({
-            cache: false,
-            type: "get",
-            url: baseRestApiURL + "topology/"+val+"/",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
-            },
-            error : function (jqXHR, textStatus, errorThrown) {
-                if( jqXHR.status === 404 ){
-                    //all ok, hostname is unknown to the system
-                    return 1;
-                }
-                if( jqXHR.status === 500 ){
-                    $(".ckattr-error", $pEL).fadeOut();
-                    $(".ckattr-ok", $pEL).fadeIn();
-                } else {
-                    alert('E001, An error has occurred, please try again or contact app admin. ');
-                }
-            },
-            success: function(response) {
-                try {
-                    if(response.data === null){
-                        $(".ckattr-error", $pEL).fadeOut();
-                        $(".ckattr-ok", $pEL).fadeIn();
-                        return 1;
-                    }else{
-                        if(response.data.active){
-                            showMsg("Hostname already exist. You will be editing an existing node.", "ERROR");
-                        }else{
-                            showMsg("Hostname already exist, but current state is disabled. Saving your data will activate this execution node.", "ERROR");
-                        }
-                        $(".ckattr-ok", $pEL).fadeOut();
-                        $(".ckattr-error", $pEL).fadeIn();
-                    }
-                }
-                catch(e) {
-                    $(".ckattr-ok", $pEL).fadeOut();
-                    $(".ckattr-error", $pEL).fadeIn();
-                }
-            }
-        });
-        return true;
+    
+    var getUsers = function(){
+        return $.ajax({
+			cache: false,
+			url: baseRestApiURL + "admin/users?status=ACTIVE",
+			dataType : 'json',
+			type: 'GET',
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"X-Auth-Token": window.tokenKey
+			}
+		 });
     }
+
+    function populateAssociatedUserSelect(){
+        $.when(getUsers()).done(function(response){
+            var $option= "<option class='default' selected disabled>Select node owner</option>"
+            $("#associatedUser").append($option);
+            var allUsers = response.data;
+            $.each(allUsers, function(idx, user){
+                if(user.username === "admin"){
+                    var $option= "<option class='administratorAccount' value='"+user.id+"'>"+user.lastName+" "+user.firstName+"</option>"
+                    $("#associatedUser").append($option);
+                }else{
+                    var $option= "<option value='"+user.id+"'>"+user.lastName+" "+user.firstName+"</option>"
+                    $("#associatedUser").append($option);
+                }
+            });
+        });
+    }
+
     function renderMultilineSelect(flavorID) {
         var $sO = $("#inputFlavor");
         var $sOMsg = $("#inputFlovorMsg");
         $sO.hide().empty();
         if(!taoFlavors || (taoFlavors.length<1) ){
-            $sOMsg.html('flavor service unaivable').removeClass('collapse');
+            $sOMsg.html("<input type='text' class='form-control' placeholder='Flavor service unavailable' disabled>").removeClass('collapse');
             return;
         }
         /*if(!flavorID){
@@ -294,7 +272,7 @@
         $sO.npMultilineSelect("refresh");
         if(flavorID === 'master'){
             $sO.npMultilineSelect("disable");
-            $sOMsg.html('you can not change flavor for node master').removeClass('collapse');
+            $sOMsg.html('Flavor cannot be changed for master node').removeClass('collapse');
         }
     }
 	function getHostNameData(){
@@ -319,17 +297,27 @@
             },
             success: function(r) {
                 var response = chkTSRF(r);
-                console.log(response);
+                // console.log(response);
 				try {
                     $('input[name=inputHostname]', $el).val(response.id).prop('disabled', true);
                     $('input[name=inputUsername]', $el).val(response.userName);
                     $('input[name=inputPassword]', $el).val(response.userPass);
+                    $('input[name=inputSSHKey]', $el).val(response.sshKey);
                     $('input[name=inputProcessorcount]', $el).val(response.flavor.cpu);
                     $('input[name=inputMemorysize]', $el).val(response.flavor.memory);
                     $('input[name=inputDiskspacesize]', $el).val(response.flavor.disk);
                     $('input[name=inputSwapspacesize]', $el).val(response.flavor.swap);
 					$('textarea[name=inputDescription]', $el).val(response.description);
                     $('select[name=inputActive] option', $el).removeAttr("selected").filter('[value="' + response.active   + '"]').attr("selected", true);
+                    if(typeof response.owner!== undefined && response.owner !== null){
+                        $('select[name=associatedUser] option[value="'+ response.owner +'"]', $el).attr("selected", true);
+                    }
+                    if(response.flavor.id === "master"){
+                        $("#associatedUser").prop("disabled", true);
+                        $("#associatedUser").addClass("master");
+                    } else{
+                        $("#associatedUser").removeClass("master");
+                    }
                     // render node flavor selector
                     renderMultilineSelect(response.flavor.id);
                     //tags
@@ -345,52 +333,10 @@
         return true;
     }
 
-    function saveNewNode(formData){
-        $.ajax({
-            cache: false,
-            url: baseRestApiURL + "topology/?rnd=" + Math.random(),
-            dataType : 'json',
-            type: 'POST',
-            data: JSON.stringify(formData),
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
-            },
-            error : function (jqXHR, textStatus, errorThrown) {
-                if(jqXHR.status === 500){
-                    showMsg("Error adding execution node. Please check your data and try again.", "ERROR");
-                    return;
-                }
-                if(jqXHR.status === 406){
-                    showMsg("Error adding execution node. Please check your data, one or more values for the attributes was not in the acceptable range.", "ERROR");
-                    //handle error messages
-                    modalShowErrors(jqXHR);
-                    return;
-                }
-                showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
-            },
-            success: function(response, textStatus, jqXHR) {
-                var r = chkTSRF(response);
-                if(response.status === "FAILED"){
-                    if(response.message){
-                        showMsg("Error adding execution node. Please check your data, one or more values for the attributes was not in the acceptable range.", "ERROR");
-                        //handle error messages
-                        modalShowErrors(jqXHR);
-                        return;
-                    }
-                    showMsg("Error adding execution node. Please check your data and try again.", "ERROR");
-                }
-
-                showMsg("Execution node successfully saved.", "SUCCESS");
-                modalHide();
-            }
-        });
-    }
     function saveNodeEdits(formData){
         $.ajax({
             cache: false,
-            url: baseRestApiURL + "topology/"+formData.id+"/",
+            url: baseRestApiURL + "topology/" + formData.id,
             dataType : 'json',
             type: 'PUT',
             data: JSON.stringify(formData),
@@ -400,7 +346,6 @@
                 "X-Auth-Token": window.tokenKey
             },
             error : function (jqXHR, textStatus, errorThrown) {
-                console.log("error");
                 if(jqXHR.status === 500 ){
                     showMsg("Unable to update execution name. Please try again.", "ERROR");
                     return;
@@ -411,7 +356,7 @@
                     modalShowErrors(jqXHR);
                     return;
                 }
-                showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
+                showMsg("Unknown error. Unable to update node information. Please try again.", "ERROR");
             },
             success: function(response, textStatus, jqXHR) {
                 var r = chkTSRF(response);
@@ -431,9 +376,10 @@
     }
 	
     $(document).ready( function(){
+        populateAssociatedUserSelect();
         initializeTagsInputAutocomplete("#formTags", "topology");
         if(op === 'op-edit'){
-            getHostNameData();
+            setTimeout(function(){getHostNameData()}, 100 );
         }else{
             renderMultilineSelect();
             var currentFlavourID = $('select[name=inputFlavor]').val();
@@ -456,14 +402,6 @@
             }
         });
 
-        $("#inputHostname", "form#frmExecNodeEdit").on("focusout",function(e) {
-            if($(this).val() === "")
-                return;
-            if($(this).attr("id")) {
-                validateHostName($(this).attr("id"));
-            }
-        });
-
         $("form#frmExecNodeEdit").submit(function (event) {
             event.preventDefault();
             var tags = $('input[name=formTags]', this).val();
@@ -471,10 +409,26 @@
             /*var matchingFlavour = _.filter(taoFlavors, function(item) {
                 return item.id === currentFlavourID;
             });*/
+            if($('input[name=inputPassword]', this).val() !== ""){
+                var userPass = $('input[name=inputPassword]', this).val();
+            }else{
+                var userPass = "";
+            }
+
+            if($('select[name=associatedUser]', this).val() !== "Select associated user"){
+                var associatedUser = $('select[name=associatedUser]', this).val() 
+            }else if($('select[name=associatedUser]', this).hasClass("master")){
+                var associatedUser = null;
+            }else{
+                var associatedUser ="";
+            }
+
             var formData = {
                 "id":$('input[name=inputHostname]', this).val(),
                 "userName":$('input[name=inputUsername]', this).val(),
-                "userPass":$('input[name=inputPassword]', this).val(),
+                "userPass":userPass,
+                "sshKey":$('input[name=inputSSHKey]', this).val(),
+                "owner": associatedUser,
                 "flavor":{
                     "id":currentFlavourID,
                     "cpu":$('input[name=inputProcessorcount]', this).val(),
@@ -492,14 +446,8 @@
 				formData.flavor = matchingFlavour[0];
 			}*/
             console.log(formData);
-            if(formData.id === ''){
-                showMsg("Hostname can not be empty. Please choose valid values to continue.", "ERROR");
-                return false;
-            }
             if(op === 'op-edit') {
                 saveNodeEdits(formData);
-            }else{
-                saveNewNode(formData);
             }
             return false;
         });

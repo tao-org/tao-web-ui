@@ -25,8 +25,8 @@
 				<div class="row node_type">
 					<div class="col-md-12">
 						<div class="radio_group">
-							<label class="radio-inline"><input type="radio" name="node_type" value="new" checked />New local</label>
-							<label class="radio-inline"><input type="radio" name="node_type" value="openstack" disabled />OpenStack</label>
+							<label class="radio-inline"><input type="radio" name="inputType" value="local" checked />New local</label>
+							<label class="radio-inline"><input type="radio" name="inputType" value="openstack" disabled />OpenStack</label>
 						</div>
 					</div>
 				</div>
@@ -35,11 +35,12 @@
                         <div class="form-group has-feedback">
                             <label for="inputHostname" class="col-sm-2 col-md-2 control-label">Hostname</label>
                             <div class="col-sm-10 col-md-10">
-                                <input type="text" class="form-control" id="inputHostname" name="inputHostname" placeholder="hostname" autocomplete="off" value="" data-errorspan="hostName"/>
+                                <input type="text" class="form-control" id="inputHostname" name="inputHostname" placeholder="Name of node" autocomplete="off" value="" data-errorspan="hostName"/>
                                 <span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
                                 <span class="ckattr-ok sr-only collapse">(success)</span>
                                 <span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
                                 <span class="ckattr-error sr-only collapse">(error)</span>
+                                <span style="font-style: italic;font-size: 1.3rem;">Hostname must be <b>unique </b>and can contain letters (a-z) (A-Z), numbers (0-9), periods (.), dashes (-), and underscores (_)</span><br>
                             </div>
                         </div>
                     </div>
@@ -47,7 +48,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputUsername" class="col-sm-2 col-md-2 control-label">User name</label>
+                            <label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
                             <div class="col-sm-10 col-md-10">
                                 <input type="text" class="form-control" id="inputUsername" name="inputUsername" placeholder="user name" autocomplete="off" value="" data-errorspan="userName"/>
                             </div>
@@ -60,6 +61,16 @@
                             <label for="inputPassword" class="col-sm-2 col-md-2 control-label">Password</label>
                             <div class="col-sm-10 col-md-10">
                                 <input type="password" autocomplete="new-password" class="form-control" id="inputPassword" name="inputPassword" placeholder="password" autocomplete="off" value="" data-errorspan="password"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputSSHKey" class="col-sm-2 col-md-2 control-label">SSH Key</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="password" autocomplete="off" class="form-control" id="inputSSHKey" name="inputSSHKey" placeholder="SSH key" autocomplete="off" value="" data-errorspan="SSHKey"/>
                             </div>
                         </div>
                     </div>
@@ -91,7 +102,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputMemorysize" class="col-sm-2 col-md-2 control-label">Memory size (MB) </label>
+                            <label for="inputMemorysize" class="col-sm-2 col-md-2 control-label">Memory size (GB) </label>
                             <div class="col-sm-10 col-md-10">
                                 <input type="number" class="form-control flavor-edit" id="inputMemorysize" name="inputMemorysize" placeholder="memory size GB" min="0" autocomplete="off" value="0" data-errorspan="memorySize"/>
                             </div>
@@ -123,7 +134,7 @@
                         <div class="form-group">
                             <label for="inputDescription" class="col-sm-2 col-md-2 control-label">Description </label>
                             <div class="col-sm-10 col-md-10">
-                                <textarea class="form-control" rows="3" id="inputDescription" name="inputDescription" placeholder="Description"></textarea>
+                                <textarea class="form-control" rows="3" id="inputDescription" name="inputDescription" placeholder="Add short description of node" style="resize: none;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -153,18 +164,6 @@
             </section>
         </div><!-- /.modal-body -->
     </form>
-    <div class="modal-note">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
-                        <h4>Help filling in</h4>
-                        <p>Please fill in all needed information. Hostname must be unique. Hostname can contain letters (a-z), numbers (0-9) and periods (.).</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
@@ -190,14 +189,14 @@
             },
 			success: function (response) {
 				if (response.status == responseStatus.success) {
-					$("input[name='node_type'][value='openstack']").prop("disabled", !response.data);
+					$("input[name='inputType'][value='openstack']").prop("disabled", !response.data);
 				} else {
-					$("input[name='node_type'][value='openstack']").prop("disabled", true);
+					$("input[name='inputType'][value='openstack']").prop("disabled", true);
 				}
 			},
 			error: function (jqXHR, textStatus) {
-				console.log("unable to retrive open stack status");
-				$("input[name='node_type'][value='openstack']").prop("disabled", true);
+				showMsg("Unable to retrive openstack status.", "WARNING");
+				$("input[name='inputType'][value='openstack']").prop("disabled", true);
 			}
 		});
 	};
@@ -206,18 +205,7 @@
         var $eL = $("#"+attrId);
         var $pEL = $eL.parent();
         var val = $eL.val().toLowerCase();
-        var regexp = /^[a-zA-Z0-9-_.]+$/;
-        if (val.search(regexp) == -1)
-        {
-            showMsg("The hostname contains invalid characters.", "ERROR");
-            $(".ckattr-ok", $pEL).fadeOut();
-            $(".ckattr-error", $pEL).fadeIn();
-            return;
-        }else{
-            $(".ckattr-error", $pEL).fadeOut();
-            $(".ckattr-ok", $pEL).fadeIn();
-        }
-
+       
         $.ajax({
             cache: false,
             type: "get",
@@ -243,7 +231,7 @@
             },
             success: function(response) {
                 try {
-                    if(response.data === null){
+                    if(typeof response.data === 'undefined'){
                         $(".ckattr-error", $pEL).fadeOut();
                         $(".ckattr-ok", $pEL).fadeIn();
                         return 1;
@@ -270,7 +258,7 @@
         var $sOMsg = $("#inputFlovorMsg");
         $sO.hide().empty();
         if(!taoFlavors || (taoFlavors.length < 1) || normalNode){
-            $sOMsg.html('flavor service unaivable').removeClass('collapse');
+            $sOMsg.html("<input type='text' class='form-control' placeholder='Flavor service unavailable' disabled>").removeClass('collapse');
 			if($("#inputFlavor-button").length > 0) {
 				$sO.npMultilineSelect("destroy");
 				$sO.hide();
@@ -297,7 +285,8 @@
         $sO.npMultilineSelect("refresh");
         if(flavorID === 'master'){
             $sO.npMultilineSelect("disable");
-            $sOMsg.html('you can not change flavor for node master').removeClass('collapse');
+            $sOMsg.html('Flavor cannot be changed for master node').removeClass('collapse');
+            $("#inputFlovorMsg").css({"font-style": "italic", "font-size": "1.3rem"})
         }
         $sO.on( "selectmenuchange", function( event, ui ) {
             var payload = ui.item.element.data('payload');
@@ -342,52 +331,107 @@
 		
         renderMultilineSelect(true);
 		
-		$("input:radio[name='node_type']").on("change", function(e) {
-			console.log();
+		$("input:radio[name='inputType']").on("change", function(e) {
 			if (this.value === "openstack") {
 				 renderMultilineSelect(false);
 			} else {
 				 renderMultilineSelect(true);
 			}
 		})
+
+        $frmEl.validate({
+			rules: {
+				inputHostname: {
+					required: true,
+					inputHostname: { regEx: /^([A-Za-z0-9]|\.|-|_)+$/ },
+				},
+				inputUsername: {
+					required: true
+				},
+				inputPassword: {
+					required: true
+				},
+                inputProcessorcount:{
+                    min: 1
+                },
+                inputMemorysize: {
+                    min: 1
+                },
+                inputDiskspacesize:{
+                    min: 1
+                },
+                inputSwapspacesize:{
+                    min: 1
+                }
+			},
+			highlight: function(element, errorClass) {
+				$(element).parent().addClass("has-error");
+			},
+			unhighlight: function(element, errorClass) {
+				$(element).parent().removeClass("has-error");
+			},
+			messages: {
+			},
+			errorPlacement: function(error, element) {
+				error.appendTo(element.parent());
+			},
+			success: function(label) {
+				label.remove();
+			}
+		});
+
+        $.validator.addMethod('inputHostname', function (value, element, params) {
+			var pattern = new RegExp(params.regEx, "g");
+			var match = value.match(pattern);
+            var ret = value.length !== 0 && match;
+            var $pEL = $("#inputHostname").parent();
+            if(ret){
+                $(".ckattr-error", $pEL).fadeOut();
+                $(".ckattr-ok", $pEL).fadeIn();
+            }else{
+                $(".ckattr-ok", $pEL).fadeOut();
+                $(".ckattr-error", $pEL).fadeIn();
+            }
+			return ret;
+		}, 'Remove invalid characters (only allowed small caps letters, numbers and periods).');
 		
         $frmEl
         .on("focusout","#inputHostname",function(e) {
-            if($(this).val() === "")
-                return;
-            if($(this).attr("id")) {
+            if($(this).val() !== "" && $(this).attr("id") && $("#inputHostname").parent().hasClass("has-error") === false) {
                 validateHostName($(this).attr("id"));
             }
         });
+
         $frmEl.submit(function (event) {
             event.preventDefault();
-            var formData = {
-                "id":$('input[name=inputHostname]', this).val().toLowerCase(),
-                "userName":$('input[name=inputUsername]', this).val(),
-                "userPass":$('input[name=inputPassword]', this).val(),
-				"flavor":{
-					"id":$('input[name=inputHostname]', this).val().toLowerCase(),
-					"cpu":$('input[name=inputProcessorcount]', this).val(),
-					"memory":$('input[name=inputMemorysize]', this).val(),
-					"disk":$('input[name=inputDiskspacesize]', this).val(),
-					"swap":$('input[name=inputSwapspacesize]', this).val(),
-					"rxtxFactor": 1.0
-				},
-				"nodeType":$('select[name=inputType]', this).val(),
-				"description":$('textarea[name=inputDescription]', this).val(),
-                "active":$('select[name=inputActive]', this).val(),
-                "volatile":false,
-				// "tags": [ $("select[name=inputType] option:selected", this).attr("data-value") ]
-				"tags": [ $("select[name=inputType] option:selected", this).attr("data-value") != null ? $("select[name=inputType] option:selected", this).attr("data-value") : $('input[name=inputHostname]', this).val().toLowerCase() ]
-            };
-            console.log(formData);
-            if(formData.id === ''){
-                showMsg("Hostname can not be empty. Please choose valid values to continue.", "ERROR");
-                return false;
-            }
+
+            if ($(this).valid()) {
+
+                var formData = {
+                    "id":$('input[name=inputHostname]', this).val().toLowerCase(),
+                    "userName":$('input[name=inputUsername]', this).val(),
+                    "userPass":$('input[name=inputPassword]', this).val(),
+                    "sshKey":$('input[name=inputSSHKey]', this).val(),
+                    "flavor":{
+                        "id":$('select[name=inputFlavor]>option:selected', this).length > 0
+                                ? $('select[name=inputFlavor]', this).val()
+                                : $('input[name=inputHostname]', this).val().toLowerCase(),
+                        "cpu":$('input[name=inputProcessorcount]', this).val(),
+                        "memory":$('input[name=inputMemorysize]', this).val(),
+                        "disk":$('input[name=inputDiskspacesize]', this).val(),
+                        "swap":$('input[name=inputSwapspacesize]', this).val(),
+                        "rxtxFactor": 1.0
+                    },
+                    "description":$('textarea[name=inputDescription]', this).val(),
+                    "active":$('select[name=inputActive]', this).val(),
+                    "volatile":false,
+                    "tags": [ $("[name=inputType]", this).val() ]
+                };
+                console.log(formData);
+
             $.ajax({
                 cache: false,
-                url: baseRestApiURL + "topology/?rnd=" + Math.random(),
+                url: baseRestApiURL + "topology/" + formData.id,
                 dataType : 'json',
                 type: 'POST',
                 data: JSON.stringify(formData),
@@ -418,7 +462,7 @@
                         $('#myModalNodes').animate({scrollTop: 0}, 250);
                         return;
                     }
-                    showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
+                    showMsg("Unknown error. Unable to add node. Please try again.", "ERROR");
                 },
                 success: function(response, textStatus, jqXHR) {
                 	 var r = chkTSRF(response);
@@ -451,7 +495,10 @@
                 }
             });
             return false;
-        });
+            }
+        return false;
+
+        }); //submit form
     });
     //# sourceURL=topology-plus.fragment.js
 </script>

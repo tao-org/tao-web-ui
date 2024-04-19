@@ -1,0 +1,43 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button id ="closeJupyterLab" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">JupyterLab</h4>
+    </div>
+	<div class="modal-body">
+        <!-- http://hostname:getPortNumber()/lab?=token=apiData.authToken -->
+		<iframe id="jupyterFrame" style="width:100%;height:80vh"/>
+	</div>
+</div>
+
+<script>
+	$('#jupyterFrame').ready(function() {
+	$("#closeJupyterLab").on("click", function(e) {
+        $.ajax({
+				"async": false,
+				"crossDomain": true,
+				"url": baseRestApiURL + "docker/stop?id=" + jupyterContainerId,
+				"method": "POST",
+				headers: {
+					"X-Auth-Token": window.tokenKey
+            	}
+			});
+    });
+
+	$("#closeJupyterLab").on("click", function(e) {
+        $.ajax({
+				"async": false,
+				"crossDomain": true,
+				"url": baseRestApiURL + "ReadNotebook",
+				type: "GET",
+				headers: {
+					"X-Auth-Token": window.tokenKey
+            	},
+				success: function(data)
+				{
+					$("#inputTemplateContents").val(data.data);
+				}
+			});
+    });
+	});
+	//# sourceURL=iframetest.js
+</script>

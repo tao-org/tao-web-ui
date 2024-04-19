@@ -390,7 +390,8 @@
 		},
 		createShapeFromUserText: function () {
 			var _self = this;
-			var features = _self.createShapeFromGeometry(_self.userText.val(), null, true);
+			var geometry = _self.userText.val().replace("MULTIPOLYGON (((", "POLYGON((").replace(")))", "))").replace(" ((", "((");
+			var features = _self.createShapeFromGeometry(geometry, null, true);
 			if (!features) {
 				_self.userText.addClass("error");
 			} else if (features.length > 0) {

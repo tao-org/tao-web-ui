@@ -36,6 +36,19 @@ body.size-normal .val-user-fullname{font-size:16px}
 body.size-large .val-user-fullname{font-size:18px}
 body.size-larger .val-user-fullname{font-size:20px}
 
+/*Notifications bar*/
+.dropdown-menu{font-size: 14px;}
+body.size-small .dropdown-menu{font-size: 10px;}
+body.size-normal .dropdown-menu{font-size: 12px;}
+body.size-large .dropdown-menu{font-size: 14px;}
+body.size-larger .dropdown-menu{font-size: 16px;}
+
+.navbar-nav>.messages-menu>.dropdown-menu>li.header{font-size: 14px;}
+body.size-small  .navbar-nav>.messages-menu>.dropdown-menu>li.header{font-size: 10px;}
+body.size-normal .navbar-nav>.messages-menu>.dropdown-menu>li.header{font-size: 12px;}
+body.size-large .navbar-nav>.messages-menu>.dropdown-menu>li.header{font-size: 14px;}
+body.size-larger .navbar-nav>.messages-menu>.dropdown-menu>li.header{font-size: 16px;}
+
 /*Sidebar submenu*/
 .sidebar-menu .treeview-menu>li>a{font-size:14px}
 body.size-small .sidebar-menu .treeview-menu>li>a{font-size:10px}
@@ -147,16 +160,22 @@ body.size-larger  .poly-actions-panel{font-size:18px}
 
 /*Buttons*/
 .btn-primary, .btn-submit{font-size:14px}
-body.size-small .btn-primary, .btn-submit{font-size:12px}
-body.size-normal .btn-primary, .btn-submit{font-size:14px}
-body.size-large .btn-primary, .btn-submit{font-size:16px}
-body.size-larger .btn-primary, .btn-submit{font-size:18px}
+body.size-small .btn-primary, body.size-small .btn-submit{font-size:12px}
+body.size-normal .btn-primary, body.size-normal .btn-submit{font-size:14px}
+body.size-large .btn-primary, body.size-large .btn-submit{font-size:16px}
+body.size-larger .btn-primary, body.size-larger .btn-submit{font-size:18px}
 /*Buttons*/
 .btn-default, .right-btn{font-size:14px}
-body.size-small .btn-default, .right-btn{font-size:12px}
-body.size-normal .btn-default, .right-btn{font-size:14px}
-body.size-large .btn-default, .right-btn{font-size:16px}
-body.size-larger .btn-default, .right-btn{font-size:18px}
+body.size-small .btn-default, body.size-small .right-btn{font-size:12px}
+body.size-normal .btn-default, body.size-normal .right-btn{font-size:14px}
+body.size-large .btn-default, body.size-large .right-btn{font-size:16px}
+body.size-larger .btn-default, body.size-larger .right-btn{font-size:18px}
+/* Buttons wf list view */
+.btn-list-view, .btn-submit .btn-list-view{font-size:12px}
+body.size-small .btn-list-view, body.size-small .btn-submit.btn-list-view{font-size:10px}
+body.size-normal  .btn-list-view, body.size-normal .btn-submit.btn-list-view{font-size:12px}
+body.size-large .btn-list-view, body.size-large .btn-submit.btn-list-view{font-size:14px}
+body.size-larger  .btn-list-view, body.size-larger .btn-submit.btn-list-view{font-size:16px}
 
 /*Form fields*/
 .form-control{font-size:14px}

@@ -23,6 +23,8 @@
 
 //user identity scripts
 //create user profile variable
+var taoVersion = 140; //set a small value as default
+var taoReferenceVersion = 200;
 var taoUserProfile = {};
 var taoUserGroups = {
     data: {},
@@ -67,15 +69,26 @@ var enums = {
     }
 };
 
+var bootstrapSwitchSize = function (bodySize) {
+	switch(bodySize) {
+		case "size-small": return "mini"; break;
+		case "size-normal": return "small"; break;
+		case "size-large": return "normal"; break;
+		case "size-larger": return "large"; break;
+		default: return"small";
+	}
+};
+var isOldVersion = false;
 
 
 $(function () {
     var username = _settings.readCookie("TaoUserName");
-
-    function getUserProfile(username){
+    var userId = _settings.readCookie("TaoUserId");
+	
+    function getUserProfile(userId){
         return $.ajax({
             cache: false,
-            url: baseRestApiURL + "user/"+username,
+            url: baseRestApiURL + "user/"+ userId,
             dataType : 'json',
             type: 'GET',
             async: false,
@@ -120,8 +133,24 @@ $(function () {
 			return [{"data":{},"message":null,"status":"SUCCEEDED"}];
 		}
     }
+	
+	function getTaoVersion() {
+		$.each(taoEnums.data.TAO, function (idx, obj) {
+			if (obj.key === "version") {
+				var snapshotStartIdx = obj.value.indexOf("-");
+				if (snapshotStartIdx > 0) {
+					taoVersion = parseInt(obj.value.substr(0, snapshotStartIdx).replaceAll(".", ""));
+				} else {
+					taoVersion = parseInt(obj.value.replaceAll(".", ""));
+				}
+				return false;
+			}
+		});
+		isOldVersion = checkIfOldVersion()
+	}
 
-    $.when(getUserProfile(username), getConfigEnums(),getUserGroups())
+    $.when(getUserProfile(userId), getConfigEnums(),getUserGroups())
+
         .done(function (responseProfile, responseEnums, responseUserGroups) {
             var r = chkTSRF(responseProfile[0]);
             taoEnums.data = chkTSRF(responseEnums[0]);
@@ -135,9 +164,16 @@ $(function () {
                     taoUserProfile.userRole = r.groups[0]["name"];
                 }else{
                     alert("Your account membership has been revoked.\nYou are not a member of any user groups therefore you are denied access and you will be redirected to the login page.\nContact your TAO administrator to fix the account permissions.");
+                    _settings.createCookie("tokenKey",'');
+                    _settings.createCookie("userMatrix",'{}');
+                    _settings.createCookie("refreshToken","");
+                    _settings.createCookie("userRole","");
+                    _settings.createCookie("TaoUserId","");
+                    _settings.createCookie("TaoUserName","");
                     window.location = 'login.html';
                 }
             }
+			getTaoVersion();
             $(".val-user-fullname").html(taoUserProfile.lastName+" "+taoUserProfile.firstName);
             $(".val-user-role").html(taoUserProfile.userRole);
             $(".val-user-email").html(taoUserProfile.email);
@@ -151,6 +187,12 @@ $(function () {
             $(".wrapper").fadeTo( "slow", 1, function() {});
         })
         .fail(function (jqXHR, status, textStatus) {
+            _settings.createCookie("tokenKey",'');
+            _settings.createCookie("userMatrix",'{}');
+            _settings.createCookie("refreshToken","");
+            _settings.createCookie("userRole","");
+            _settings.createCookie("TaoUserId","");
+            _settings.createCookie("TaoUserName","");
             window.location = 'login.html';
         });
 });
@@ -172,7 +214,7 @@ $(function () {
 
     	$.ajax({
     		 cache: false,
-             url: baseRestApiURL + "user/"+userData.username,
+             url: baseRestApiURL + "user/"+userData.id,
              dataType : 'json',
              type: 'PUT',
              data: JSON.stringify(userData),
@@ -196,6 +238,12 @@ $(function () {
                       taoUserProfile.userRole = r.groups[0]["name"];
                   }else{
                       alert("Your account membership has been revoked.\nYou are not a member of any user groups therefore you are denied access and you will be redirected to the login page.\nContact your TAO administrator to fix the account permissions.");
+                      _settings.createCookie("tokenKey",'');
+                      _settings.createCookie("userMatrix",'{}');
+                      _settings.createCookie("refreshToken","");
+                      _settings.createCookie("userRole","");
+                      _settings.createCookie("TaoUserId","");
+                      _settings.createCookie("TaoUserName","");
                       window.location = 'login.html';
                   }
               }
@@ -278,7 +326,8 @@ $(function () {
         });
         $.when(postLogout)
             .done(function (postLogoutResponse) {
-				location.reload(true);
+				//location.reload(true);
+				window.location = 'login.html';
             })
             .fail(function(jqXHR, textStatus){
                 console.log(jqXHR);
@@ -288,6 +337,11 @@ $(function () {
         taoUserProfile = {};
         _settings.createCookie("tokenKey",'');
         _settings.createCookie("userMatrix",'{}');
+        _settings.createCookie("refreshToken","");
+        _settings.createCookie("userRole","");
+        _settings.createCookie("TaoUserId","");
+        _settings.createCookie("TaoUserName","");
+
     });
 }());
 
@@ -299,13 +353,16 @@ $(function () {
         "inputActual":-1,
         "processing":-1,
         "processingActual":-1,
-        "used":0,
-        "um":" GB",
-        "files":0,
-        "folders":0
+        "applicationTime": -1,
+        "processingTime": -1
+        //"used":0,
+        //"um":" GB",
+        //"files":0,
+        //"folders":0
     };
     function ui_update(v){
         $.extend(q, v);
+        // storage
         var lblInputQ = humanFileSizeFromMB(q.inputActual);
         var pctI = Math.ceil(q.inputActual/q.input*100);
         if(pctI>100){pctI = 100;}
@@ -315,15 +372,57 @@ $(function () {
             lblInputPercent = "n/a";
             pctI = 0;
         }
-        var lblProcessingQ = humanFileSizeFromMB(q.processing);
-        var pctP = Math.ceil(q.processingActual/q.processing*100);
+        // cpu
+        var lblProcessingQ = q.processingActual+" CPUs"; //humanFileSizeFromMB(q.processing);
+        var pctP = Math.ceil(q.processingActual/q.cpuQuota*100);
         if(pctP>100){pctP = 100;}
         var lblProcessingPercent = pctP+"%";
-        if(q.processing === -1){
-            lblProcessingQ = "unmeterred";
+        if(q.cpuQuota === -1 || isNaN(pctP)){
+            //lblProcessingQ = "unmeterred";
             lblProcessingPercent = "n/a";
             pctP = 0;
         }
+
+        // on receiving a message
+        $("#wrapper-quota").on("wsmessage", function (e, wsdna){
+            
+            var pctinputQ = pctI, pctprocessQ = pctP;
+
+            switch(wsdna.topic){
+                case "user.storage.resources":
+                    var payload = wsdna.data.Payload;
+                    lblInputQ = humanFileSizeFromMB(payload);
+                    pctinputQ = Math.ceil(payload/q.input*100);
+                    lblInputPercent = (q.input === -1)? "n/a" : pctinputQ +"%";
+                    break;
+                case "user.cpu.resources":
+                    lblProcessingQ = wsdna.data.Payload + " CPUs";
+                    pctprocessQ = Math.ceil(lblProcessingQ/q.cpuQuota*100);
+                    if (isNaN(pctprocessQ)){
+                        lblProcessingPercent = "n/a";
+                        pctprocessQ = 0;
+                    }else{
+                        pctprocessQ +="%";
+                    }
+                    break;
+            }
+
+            var inputQ = 
+            '        <h4 class="control-sidebar-subheading"><i class="fa fa-arrow-right fa-fw" aria-hidden="true"></i>storage:&nbsp;<span>'+lblInputQ+'</span><span class="label label-danger pull-right">'+lblInputPercent+'</span></h4>' +
+            '        <div class="progress progress-xxs"><div class="progress-bar progress-bar-danger progress-bar-graph" style="width: '+pctinputQ+'%;"></div></div>';
+
+            var processQ = 
+            '        <h4 class="control-sidebar-subheading"><i class="fa fa-bolt fa-fw" aria-hidden="true"></i>processing:&nbsp;<span>'+lblProcessingQ+'</span><span class="label label-danger pull-right">'+lblProcessingPercent+'</span></h4>' +
+            '        <div class="progress progress-xxs"><div class="progress-bar progress-bar-danger progress-bar-graph" style="width: '+pctprocessQ+'%;"></div></div>';
+            
+            var usageHTML =
+            '        <h4 class="control-sidebar-subheading">Resource usage:</h4>' + inputQ + processQ;
+           
+            $elQuota.find("a.holder").empty().html(usageHTML);
+            $elQuotaSmall.find(".arc1").attr("d",describeArc(20, 20, 16, 0, (pctinputQ>=100?99.99:pctinputQ)/100*360));
+            $elQuotaSmall.find(".arc2").attr("d",describeArc(20, 20, 9, 0, (pctprocessQ>=100?99.99:pctprocessQ)/100*360));
+            $elQuotaSmall.find(".quota-icon").attr("data-original-title", '<div class="quota-tool-tip">'+usageHTML+'</div>');
+        });
 
 //      var quota_usage_details = "using: "+q.used+"GB<br>"+q.files+" Files, "+q.folders+" Folders";
 
@@ -338,6 +437,20 @@ $(function () {
         $elQuotaSmall.find(".arc1").attr("d",describeArc(20, 20, 16, 0, (pctI>=100?99.99:pctI)/100*360));
         $elQuotaSmall.find(".arc2").attr("d",describeArc(20, 20, 9, 0, (pctP>=100?99.99:pctP)/100*360));
         $elQuotaSmall.find(".quota-icon").attr("data-original-title", '<div class="quota-tool-tip">'+usageHTML+'</div>');
+
+        //applicationTime & processingTime
+        timer = (q.applicationTime <= 0 || isNaN(q.applicationTime))? '0d 0h 0m': getTime(q.applicationTime);
+        processed =  (q.processingTime <= 0 || isNaN(q.processingTime))? '0d 0h 0m': getTime(q.processingTime);
+
+        var $elQuotaTime = $("#wrapper-quota-time");
+        usageHTML =
+            '        <h4 class="control-sidebar-subheading">Time usage:</h4>' +
+            '        <h4 class="control-sidebar-subheading"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>spent:&nbsp;<span>'+timer+'</h4>' +
+            '        <div class="progress progress-xxs"><div class="progress-bar progress-bar-info progress-bar-graph" style="width: 0%;"></div></div>' +
+            '        <h4 class="control-sidebar-subheading"><i class="fa fa-bolt fa-fw" aria-hidden="true"></i>processing:&nbsp;<span>'+processed+'</h4>' +
+            '        <div class="progress progress-xxs"><div class="progress-bar progress-bar-info progress-bar-graph" style="width: 0%;"></div></div>';
+            
+        $elQuotaTime.find("a.holder").empty().html(usageHTML);
         return true;
     }
 
@@ -347,18 +460,18 @@ $(function () {
             "Content-Type": "application/json",
             "X-Auth-Token": window.tokenKey
         };
-        function getUserFiles(){
+        /*function getUserFiles(){
             return $.ajax({ cache: false,
                 url: baseRestApiURL + "files/user/",
                 dataType : 'json',
                 type: 'GET',
                 headers: headers
             });
-        }
+        }*/
         function getProfileSettings(){
             return $.ajax({
                 cache: false,
-                url: baseRestApiURL + "user/"+taoUserProfile.username,
+                url: baseRestApiURL + "user/"+taoUserProfile.id,
                 dataType : 'json',
                 type: 'GET',
                 async: false,
@@ -366,36 +479,24 @@ $(function () {
             });
         }
 
-        $.when(getProfileSettings(), getUserFiles())
-            .done(function (getProfileSettingsResponse, getUserFilesResponse) {
+        $.when(getProfileSettings())
+            .done(function (getProfileSettingsResponse) {
                 //update user profile
-                taoUserProfile.inputQuota = getProfileSettingsResponse[0].data.inputQuota;
-                taoUserProfile.actualInputQuota = getProfileSettingsResponse[0].data.actualInputQuota;
-                taoUserProfile.processingQuota = getProfileSettingsResponse[0].data.processingQuota;
-                taoUserProfile.actualProcessingQuota = getProfileSettingsResponse[0].data.actualProcessingQuota;
-
-                var sumFiles = 0;
-                var countFolders = 0;
-                var countFiles = 0;
-                $.each( getUserFilesResponse[0].data, function( key, value ) {
-                    if(value.relativePath !== ""){
-                        if(value.folder){
-                            countFolders ++;
-                        }else{
-                            countFiles ++;
-                            sumFiles += value.size;
-                        }
-                    }
-                });
+				taoUserProfile.inputQuota = getProfileSettingsResponse.data.inputQuota;
+                taoUserProfile.actualInputQuota = getProfileSettingsResponse.data.actualInputQuota;
+                taoUserProfile.processingQuota = getProfileSettingsResponse.data.processingQuota;
+                taoUserProfile.actualProcessingQuota = getProfileSettingsResponse.data.actualProcessingQuota;
+                taoUserProfile.cpuQuota = getProfileSettingsResponse.data.cpuQuota;
+                taoUserProfile.applicationTime = getProfileSettingsResponse.data.applicationTime;
+                taoUserProfile.processingTime = getProfileSettingsResponse.data.processingTime;
                 ui_update({
                     "input":parseFloat(taoUserProfile.inputQuota),
                     "inputActual":parseFloat(taoUserProfile.actualInputQuota),
                     "processing":parseFloat(taoUserProfile.processingQuota),
                     "processingActual":parseFloat(taoUserProfile.actualProcessingQuota),
-                    "used":getFileSizeAsGB(sumFiles),
-                    "um":"GB",
-                    "files":countFiles,
-                    "folders":countFolders
+                    "cpuQuota":parseInt(taoUserProfile.cpuQuota),
+                    "applicationTime": parseInt(taoUserProfile.applicationTime),
+                    "processingTime": parseInt(taoUserProfile.processingTime)
                 });
             })
             .fail(function (jqXHR, textStatus) {
@@ -493,14 +594,16 @@ $(function () {
         });
     }  
     function showGritter(message, status) {
-        switch (status.toUpperCase()) {
-            case 'SUCCESS': showGritterMessage(message, status); break;
-            case 'INFO': showGritterInfo(message, status);collor_class = " msg-blue"; break;
-            case 'WARN': showGritterWarning(message, status);collor_class = " msg-yellow"; break;
-            case 'WARNING': showGritterWarning(message, status);collor_class = " msg-yellow"; break;
-            case 'FAIL': showGritterError(message, status);collor_class = " msg-red locked"; break;
-            case 'FAILED': showGritterError(message, status);collor_class = " msg-red locked"; break;
-            case 'ERROR': showGritterError(message, status);collor_class = " msg-red locked"; break;
+        if(typeof status !== 'undefined'){
+            switch (status.toUpperCase()) {
+                case 'SUCCESS': showGritterMessage(message, status); break;
+                case 'INFO': showGritterInfo(message, status);collor_class = " msg-blue"; break;
+                case 'WARN': showGritterWarning(message, status);collor_class = " msg-yellow"; break;
+                case 'WARNING': showGritterWarning(message, status);collor_class = " msg-yellow"; break;
+                case 'FAIL': showGritterError(message, status);collor_class = " msg-red locked"; break;
+                case 'FAILED': showGritterError(message, status);collor_class = " msg-red locked"; break;
+                case 'ERROR': showGritterError(message, status);collor_class = " msg-red locked"; break;
+            }
         }
     }
     window.showMsg = showGritter;
@@ -559,8 +662,8 @@ $(function () {
         })
         .done(function (r, statusText, xhr) {
             var getMonitorNotificationResponse = chkTSRF(r);
-            //console.log(getMonitorNotificationResponse);
-            var flagExecRefresh = false;
+            // console.log(getMonitorNotificationResponse);
+            // var flagExecRefresh = false;
             for(k=0;k<getMonitorNotificationResponse.length; k++){
                     if(!$elChatBox.is(':visible')){
                         $elChatBox.slideDown();
@@ -569,23 +672,26 @@ $(function () {
                     $el.removeClass("master").removeClass("hidden");
                     $el.find(".val-msg-ts").html(niceIsoTime(getMonitorNotificationResponse[k]['timestamp']));
                     try {
-                        var n = getMonitorNotificationResponse[k]['data'].indexOf("Job");
-                        if(n !== -1){
-                            flagExecRefresh = true;
-                        }
+                        // var n = getMonitorNotificationResponse[k]['data'].indexOf("Job");
+                        // if(n !== -1){
+                        //     flagExecRefresh = true;
+                        // }
                         var obj = JSON.parse(getMonitorNotificationResponse[k]['data']);
                         if (obj.Message) {
                             $el.find(".val-msg-txt").html(obj.Message);
-                        } else {
-                            $el.find(".val-msg-txt").html(obj.Payload);
+                            $($el).prependTo(".direct-chat-messages", "#bot-notice-chat");
+                        }else{
+                            if(obj.Payload){
+                                $el.find(".val-msg-txt").html(obj.Payload);
+                                $($el).prependTo(".direct-chat-messages", "#bot-notice-chat");
+                            }
                         }
                     }
                     catch(err) {
-                        $el.find(".val-msg-txt").html("unparsable message");
-                        console.log("message unparsable");
+                        // $el.find(".val-msg-txt").html("unparsable message");
+                        // console.log("message unparsable");
                         console.log(getMonitorNotificationResponse);
                     }
-                    $($el).prependTo(".direct-chat-messages", "#bot-notice-chat");
                     var count = $(".direct-chat-messages > .direct-chat-msg").length;
                     if(count>notificationsMaxNumber){
                         $('.direct-chat-messages > .direct-chat-msg:last').remove();
@@ -599,14 +705,43 @@ $(function () {
                $("#exec-list-panel, #exec-history-panel, #notification-history-panel, #download-statistics-panel, #exec-user-list-panel, #exec-user-history-panel").trigger("panel:refresh");
            //}
            
-            setTimeout(function(){
-			   //  alert(notificationsCheckInterval);
-			   if(taoUserProfile.preferences.find( function(item) { return item.key == "refresh_rate"} )){
-				 notificationsCheckInterval = taoUserProfile.preferences.find( function(item) { return item.key == "refresh_rate" } ).value
-				}
-				//alert(notificationsCheckInterval);
-				 retriveNotifications();
-            }, notificationsCheckInterval);
+           $("#bot-notice-chat").on("wsmessage", function (e, wsdna) {
+                
+                // make the pop up appear if it is not visible 
+                if(!$elChatBox.is(':visible')){
+                    $elChatBox.slideDown();
+                }  
+
+                // format date
+                formatDate = moment(wsdna.timestamp).format("YYYY-MM-DD HH:mm:ss");
+
+                // create html box for each notification 
+                var $el = $elClonable.clone();
+                $el.removeClass("master").removeClass("hidden");
+                $el.find(".val-msg-ts").html(formatDate);
+
+                // check type of notification message, then set data
+                if(wsdna.data.Message){
+                    $el.find(".val-msg-txt").html(wsdna.data.Message);
+                } else if(wsdna.data.Payload){
+                    $el.find(".val-msg-txt").html(wsdna.data.Payload);
+                }else{
+                    $el.find(".val-msg-txt").html("N/A");
+                }
+
+                // append the html to box
+                $($el).prependTo(".direct-chat-messages", "#bot-notice-chat");
+
+                // update the notification number
+                var count = $(".direct-chat-messages > .direct-chat-msg").length;
+                if(count>notificationsMaxNumber){
+                    $('.direct-chat-messages > .direct-chat-msg:last').remove();
+                    $(".val-msgcount", "#bot-notice-chat").html(notificationsMaxNumber+"+");
+                    $(".max-msg-note").removeClass("hidden");
+                } else{
+                    $elMsgCount.html(count);
+                }
+           });
         })
         .fail(function (jqXHR) {
             chkXHR(jqXHR.status);

@@ -40,6 +40,39 @@
 						</div>
 					</div>
 				</div>
+				<div id="exec-user-queued-panel" class="panel panel-info box">
+					<div class="panel-heading box-header">
+						<h3 class="panel-title"><a data-toggle="collapse" data-parent="#user_info_accordion"
+								class="collapsed" href="#queued_jobs">Queued Jobs</a></h3>
+					</div>
+					<div class="panel-body panel-collapse collapse" id="queued_jobs">
+						<div class="panel-filter">
+						</div>
+						<div class="col-md-12 like collapse">
+						</div>
+						<div class="box-body">
+							<div class="panel-list">
+							</div>
+							<div class="panel-list-empty callout callout-empty collapse">
+								<p>Results list is empty.</p>
+							</div>
+						</div>
+						<div class="box-footer clearfix no-border">
+							<div class="box-tools pull-right">
+								<ul class="pagination pagination-sm inline">
+									<li class="prev"><a href="#" data-page="prev" title="See newer notifications">«</a></li>
+									<li class="active"><a href="#" data-page="0">1</a></li>
+									<li class="next"><a href="#" data-page="next" title="See older notifications">»</a></li>
+								</ul>
+								<ul class="pagination pagination-sm actions inline">
+									<li class="refresh"><a href="#refresh" data-action="go-refresh" title="Refresh list"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+									<li class="clear"><a href="#clear" data-action="go-clear" title="Clear list"><i class="fa fa-eraser" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="box-notification"><p><span>Updated</span></p></div>
+					</div>
+				</div>
 				<div id="exec-user-history-panel" class="panel panel-info box">
 					<div class="panel-heading box-header">
 						<h3 class="panel-title"><a data-toggle="collapse" data-parent="#user_info_accordion"
@@ -113,6 +146,21 @@
 			</div><!-- /.modal-body -->
 		</div>
 	</div>
+
+	<!-- message-content -->
+	<div id="message-content" style="display:none">
+		<div class="modal-content user-message-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="myModalLabel"> Send Message </h4>
+			</div>
+			<div class="modal-body" id="user_message_content">
+				<textarea class="content_area" placeholder="Enter text here" cols="50" rows="10"></textarea>
+				<button id="sendMsg" type="submit" class="btn btn-primary btn-submit" name="btnSave" style="width: min-content;">Send</button>
+			</div>
+		</div>
+	</div>
+	
 	<!-- vm-content-->
 	<div id="vm-content" style="display:none">
 		<div class="modal-content vm-info-content">
@@ -166,7 +214,7 @@
         <div class="row">
             <div class="col-md-12">
         -->
-        <h1>Dashboard <small>Overview of TAO activity.</small></h1>
+        <h1>Dashboard <small>Overview of system activity.</small></h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
             <li class="active">Dashboard</li>
@@ -313,13 +361,13 @@
 					.progress.history .progress-bar{margin:0;line-height:1em;}
 
 					/* Task log info */
-					.log-info{color: #00c0ef;background: 0 0; border: 0; font-size: 18px;}
-					.log-modal{display: none; position: fixed; overflow: auto; z-index: 3; padding-top: 10em; width: 100%; height: 100%;background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4);left: 0; top: 0;}
-					.log-modal-content{ background-color:#fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 65%;}
-					.log-close {color: #aaaaaa; float: right; font-size: 28px; font-weight: bold; padding: 0; background: 0 0; border: 0;}
-					.log-close:hover,.log-close:focus{color: #000;text-decoration: none;cursor: pointer;}
-					.log-title-button{background-color: white;display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between;}
-					.log-title{background-color: white;}
+					.log-info{color: #00c0ef;background: 0 0; border: 0; font-size: 14px;}
+					.log-modal, .command-modal{display: none; position: fixed; overflow: auto; z-index: 3; padding-top: 10em; width: 100%; height: 100%;background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4);left: 0; top: 0;}
+					.log-modal-content, .command-modal-content{ background-color:#fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 65%;}
+					.log-close, .command-close {color: #aaaaaa; float: right; font-size: 28px; font-weight: bold; padding: 0; background: 0 0; border: 0;}
+					.log-close  .command-close:hover, .log-close .command-close:focus{color: #000;text-decoration: none;cursor: pointer;}
+					.log-title-button, .command-title-button{background-color: white;display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between;}
+					.log-title, .command-title{background-color: white;}
 				</style>
                 <!-- /.box -->
                 <!-- TO DO List -->
@@ -383,12 +431,18 @@
 				#resource_usage .box-header{display:inline-flex;}
 				#resource_usage .box-header>h3{width:fit-content;padding-right:5px;}
 				#vm_running_tasks .box-body{height:calc(100vh - 20em)!important;overflow:auto;}
+
+				#user_message_content .content_area {resize: none;}
+				#user_message_content {display: grid; grid-gap: 10px; padding-left: 25px; padding-right: 25px; padding-top: 25px;}
+				.content_area::placeholder {font-family: 'Source Sans Pro';}
+				.message-box{height: 38vh !important; width: 30vw !important; display: table; resize: vertical; overflow: auto;}
 			</style>
             <div class="col-md-12">
 				<div class="nav-tabs-custom">
 					<ul class="nav nav-tabs hidden-xs">
 						<li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_users" aria-expanded="true">Available Users</a></li>
 						<li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="all_vms" aria-expanded="false">Available VM's</a></li>
+						<li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="queued_jobs" aria-expanded="false">Queued Jobs</a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-nodes">
@@ -441,13 +495,27 @@
 															<div class="box-top">
 																<div class="user-info-row">
 																	<div class="box-title"><i class="fa fa-circle"></i><span class="val-fullName"> ##### </span></div>
-																	<div class="box-subtitle"><span class="val-username">  #####  </span></div>
+																	<div class="box-subtitle"><span class="val-username tags">  #####  </span></div>
 																</div>
 																<div class="vm-info-row" style="display:none">
 																	<div class="box-title"><span class="val-id"> ##### </span></div>
 																	<div class="box-icon">
 																		<i class="fa fa-server"></i>
 																	</div>
+																</div>
+																<div class="queued-jobs-row" style="display:none">
+																	<div style="display: inline-flex;" class="col-md-12 col-sm-12">
+																		<div class="col-md-7">
+																			<div class="box-title"><span class="val-jobName"> ##### </span></div>
+																			<div class="box-subtitle row"><span class="val-workflowName">  #####  </span></div>
+																		</div>
+																		<div class="col-md-5" style="padding-top: 5px;">
+																			<button class="move-button btn btn-primary" data-action="move_job_up">Move Up</button>
+																			<button class="move-button btn btn-primary" data-action="move_job_down">Move Down</button>
+																			<button class="move-button btn btn-primary" data-action="remove_job">Remove</button>
+																		</div>
+																	</div>
+																	
 																</div>
 															</div>
 															<div class="user-info-row">
@@ -458,6 +526,7 @@
 																			<span class="u-i-span">Email address: <strong><span class="val-email">###</span></strong></span>
 																			<span class="u-i-span">Last log-in: <strong><span class="val-ago">never</span></strong></span>
 																			<span class="u-i-span">Storage: <strong><span class="actualInputQuota">###</span></strong></span>
+																			<span class="u-i-span">Processing time: <strong><span class="processingTime">###</span></strong></span>
 																		</p>
 																	</div>
 																</div>
@@ -469,7 +538,9 @@
 																<div class="row">
 																	<div class="col-md-12 col-sm-12 col-xs-12">
 																		<div class="text-right">
-																			<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view_user_info"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i></button>
+																			<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-toggle="tooltip" data-original-title="View activity" data-action="view_user_info"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i></button>
+																			<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-toggle="tooltip" data-original-title="Message user" data-action="view_user_msg"><i class="fa fa-comment fa-fw" aria-hidden="true"></i></button>
+																			<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-toggle="tooltip" data-original-title="Impersonate user" data-action="impersonate_user"><i class="fa fa-id-card fa-fw" aria-hidden="true"></i></button>
 																		</div>
 																	</div>
 																</div>
@@ -482,7 +553,6 @@
 																			<div class="cpu-progress-bar">
 																				<div class="progress-bar" role="progressbar"></div>
 																			</div>
-																			<span>of <strong><span class="totalCpu">###</span></strong></span>
 																		</div>
 																		<div class="vm-row">
 																			<span class=""><strong>Disk: </strong></span>
@@ -503,10 +573,24 @@
 																<div class="row">
 																	<div class="col-md-12 col-sm-12 col-xs-12">
 																		<div class="text-right">
-																			<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view_vm_info"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i></button>
+																			<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-toggle="tooltip" data-original-title="View activity" data-action="view_vm_info"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i></button>
 																		</div>
 																	</div>
 																</div>
+															</div>
+															<div class=" row queued-jobs-row" style="display: none;" >
+																<div class="row">
+																	<div class="col-md-12 col-sm-12 col-xs-12">
+																		<div class="job-row">
+																			<p class="message" style="margin-left: 20px;">
+																				<span class="u-i-span">Id: <strong><span class="val-id">###</span></strong></span>
+																				<span class="u-i-span" id="user-name">User: <strong><span class="val-userId" style="cursor: pointer;">###</span></strong></span>
+																				<span class="u-i-span">Job status: <strong><span class="val-jobStatus">never</span></strong></span>
+																			</p>
+																		</div>
+																	</div>
+																</div>
+
 															</div>
 														</div>
 													</div>
@@ -535,16 +619,21 @@
 			<style>
 				core-cell-list .fa.fa-circle.online,core-cell-list .fa.fa-circle.offline{padding:0 0.5em;}
 				core-cell-list .user-info-row .box-subtitle{padding:0 2.5em;}
+				core-cell-list .move-button {display: inline-flex; float: right; margin-right: 10px;}
 				core-cell-list .fa.fa-circle.online{color:green}
 				core-cell-list .fa.fa-circle.offline{color:grey}
 				core-cell-list img.user-info-row{position:absolute;}
+				core-cell-list img.queued-jobs-row{position:absolute;}
 				core-cell-list .box-top .user-info-row{width:100%;}
+				core-cell-list .box-top .queued-jobs-row{width:100%;}
 				core-cell-list .user-info-row .message,core-cell-list .user-info-row .user_download_info{padding-left:0;}
+				core-cell-list .queued-jobs-row .message,core-cell-list .queued-jobs-row .user_download_info{padding-left:0;}
 				core-cell-list .message,core-cell-list .user_download_info,#vm_running_tasks .message,#vm_running_tasks .box-top .box-text{display:inline-flex!important;flex-wrap:wrap;width:100%}
 				core-cell-list .message>*,core-cell-list .user_download_info>*,#vm_running_tasks .message>*,#vm_running_tasks .box-top .box-text>*{padding-left:10px;min-width:25%}
+				core-cell-list .queued-jobs-row>*{padding-left:10px;min-width:25%}
 				core-cell-list .vm-row,#vm_running_tasks .vm-row{display:inline-flex;}
 				core-cell-list .vm-row>span,#vm_running_tasks .vm-row>span{min-width:fit-content;max-width:30%;padding:0 2%}
-				core-cell-list .vm-row>div,#vm_running_tasks .vm-row>div{width:60%;}
+				core-cell-list .vm-row>div,#vm_running_tasks .vm-row>div{width:60%;} .vm-row>div#user-name{width: fit-content !important; cursor: pointer;}
 				core-cell-list .user_download_info label{margin:0;}
 				
 				#panel-admin-wrapper .nodes-item-core-box .box-top .box-icon{top:-3px;}
@@ -552,8 +641,8 @@
         </div>
     </section><!-- /.content -->
 	<style>
-		#exec-user-history-panel .box-body,#exec-user-list-panel .box-body,#user_download_list .box-body{height:calc(100vh - 37em)!important;overflow:auto;}
-		#exec-user-history-panel .box-footer .pagination,#exec-user-list-panel .box-footer .pagination{margin:0}
+		#exec-user-history-panel .box-body,#exec-user-list-panel .box-body,#user_download_list .box-body,#exec-user-queued-panel .box-body{height:calc(100vh - 37em)!important;overflow:auto;}
+		#exec-user-history-panel .box-footer .pagination,#exec-user-list-panel .box-footer .pagination,#exec-user-queued-panel .box-footer .pagination{margin:0}
 		#exec-history-panel .box-body,#exec-list-panel .box-body{height:240px;overflow:auto}
 		#exec-user-list-panel .tasks .one-task{display:inline-flex;flex-wrap:wrap;width:100%;}
 		#exec-user-list-panel .progress.history{max-width:none;width:20%;margin:0 15px;min-width:fit-content;}
@@ -565,9 +654,9 @@
 		.user_download_info .progress{height:2rem;padding:0;margin:0;}
 		
 		.memory-progress-bar.unavailable,.cpu-progress-bar.unavailable,.disk-progress-bar.unavailable{background-color:grey}
-		.memory-progress-bar,.cpu-progress-bar,.disk-progress-bar,.used-ram-progress-bar,.used-cpu-progress-bar{background-color:#cadce7;height:20px;padding:0;}
+		.memory-progress-bar,.cpu-progress-bar,.disk-progress-bar,.used-ram-progress-bar, .percent-complete-progress-bar,.used-cpu-progress-bar{background-color:#cadce7;height:20px;padding:0;}
 		
-		.vm-info-row .row,#vm_running_tasks .row{margin:5px 0}
+		.vm-info-row .row, #vm_running_tasks .row{margin:5px 0; margin-left: -20px !important;}
 		
 		#panel-admin-wrapper .box-bottom{padding-top:0;}
 		#panel-admin-wrapper .box-header{padding:5px}
@@ -579,9 +668,9 @@
 		#vm_running_tasks .nodes-item-core-box .box-top .box-title .btn-nodeop{padding:0;border-radius:1em;text-align:center;display:inline-flex;top:0;position:absolute;}
 		#vm_running_tasks .fa.fa-terminal.fa-fw{font-size:1rem;}
 		
-		#vmCommandModalNode .modal-content{height:30vh;width:100%;}
+		#vmCommandModalNode .modal-content{height:40vh;width:100%;}
 		#vmCommandModalNode .modal-dialog{top:10%}
-		#vmCommandModalNode .modal-body{margin-left:15px;height:80%;max-height:80%;line-height:1em}
+		#vmCommandModalNode .modal-body{margin-left:15px;height:70%;max-height:70%;line-height:1em}
 		#vmCommandModalNode .modal-body h5{text-align:center;color:#3c8dbc;text-transform:uppercase;margin-top:0}
 		#vmCommandModalNode .modal-body .content_area{width:100%;height:90%;border:none;font-family:"Courier New";white-space:pre;}
 		#vmCommandModalNode .modal-body .content_area:disabled{background-color:white;resize:none}
@@ -601,18 +690,19 @@
 		
 	</style>
 <script>
-	var downloadStatisticsTimeout;
-	function updateDownloadStatistics(username, options, once) {
+	var downloadStatisticsTimeout, username;
+	function updateDownloadStatistics(id, options, once) {
 		var parentTree = $.extend({"id": "#panel-user-wrapper",
 						  "estimatedID": "#estimated_downloads",
 						  "accordionID": ""
 						 }, options);
-		if (typeof username === "undefined") {
-			username = taoUserProfile.username;
+		if (typeof id === "undefined") {
+			id = taoUserProfile.id;
 		}
 		$.ajax({
             cache    : false,
-			url      : baseRestApiURL + "progress?category=product.progress&userName=" + username,
+			//url      : baseRestApiURL + "progress?category=product.progress&userName=" + username,
+			url      : baseRestApiURL + "progress?category=product.progress&userId=" + id,
             dataType : 'json',
             type     : 'GET',
             headers  : {
@@ -636,20 +726,20 @@
 				
 				var parentID = parentTree.accordionID !== "" ? parentTree.accordionID : parentTree.id;
 				$.each(res, function (index, resource) {
-					$bar = $('<div class="progress-bar progress-bar-success" role="progressbar" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">' + resource.name + '</div>');
+					$bar = $('<div class="progress-bar progress-bar-success" role="progressbar" data-toggle="tooltip" title="In progress" data-placement="bottom">' + resource.name + '</div>');
 					$bar.attr("title", parseInt(resource.progress*100) + "%" + (typeof resource.info.speed === "undefined" ? "" : " [" + resource.info.speed + "]"));
 					$bar.css({ width: parseInt(resource.progress*100) + "%" });
 					$(".statistics .progress", parentID).append($bar);
 					
 					totPrc += resource.progress;
-					cnt ++;
+					cnt += ((typeof resource.info.remaining === "undefined" && parseInt(resource.info.remaining) <= 0) ? 1 : parseInt(resource.info.remaining));
 				});
 				
-				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">Overall progress (' + Math.ceil(totPrc) + ' of ' + cnt + ')</div>');
+				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="In progress" data-placement="bottom">Overall progress (' + Math.ceil(totPrc) + ' of ' + cnt + ')</div>');
 				$bar.attr("title", parseInt(totPrc*100/cnt) + "%");
 				$bar.css({ width: parseInt(totPrc*100/cnt) + "%" });
 			} else {
-				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">No downloads in progress</div>');
+				$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom">No downloads in progress</div>');
 				$bar.attr("title", "");
 				$bar.css({ width: "100%" });
 			}
@@ -657,9 +747,9 @@
 			$(".statistics " + parentTree.estimatedID, parentTree.id).html(cnt);
 		}).fail(function (jqXHR, textStatus) {
 		}).complete(function () {
-			if (!once) {
-				downloadStatisticsTimeout = setTimeout(function () { updateDownloadStatistics(username, options); $(document).trigger("quota:update")}, 20000);
-			}
+			// if (!once) {
+			// 	downloadStatisticsTimeout = setTimeout(function () { updateDownloadStatistics(id, options); $(document).trigger("quota:update")}, 20000);
+			// }
         });
 	}
     
@@ -679,6 +769,7 @@
 			$.each($("core-cell-list[id]", "#panel-admin-wrapper"), function(idx, elem) {
 				var totPrc = 0
 				var cnt = 0;
+				$(".statistics .progress", elem).html("");
 				var userName = $("input[name='username']", elem).val();
 				var inProgress = res.filter(i => i.info.Principal === userName);
 				if (inProgress.length > 0) {
@@ -691,29 +782,28 @@
 						totPrc += resource.progress;
 						cnt ++;
 					});
-					$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">Overall progress (' + Math.ceil(totPrc) + ' of ' + cnt + ')</div>');
+					$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="In progress" data-placement="bottom">Overall progress (' + Math.ceil(totPrc) + ' of ' + cnt + ')</div>');
 					$bar.attr("title", parseInt(totPrc*100/cnt) + "%");
 					$bar.css({ width: parseInt(totPrc*100/cnt) + "%" });
 				} else {
-					$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom" onmouseover="$(this).tooltip({content:\'In progress\',show:true});">No downloads in progress</div>');
+					$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="In progress" data-placement="bottom">No downloads in progress</div>');
 					$bar.attr("title", "");
 					$bar.css({ width: "100%" });
 				}
 				$(".statistics .progress", elem).prepend($bar);
 			});
-			
 		}).fail(function (jqXHR, textStatus) {
 		}).complete(function () {
-			if (!once) {
-				setTimeout(function () { availableUsersDownloadStatistics(); $(document).trigger("quota:update")}, 20000);
-			}
+			// if (!once) {
+			// 	setTimeout(function () { availableUsersDownloadStatistics(); $(document).trigger("quota:update")}, 20000);
+			// }
         });
 	}
 	
-	function getUserQuotaInfo(username) {
+	function getUserQuotaInfo(userId) {
 		return $.ajax({
 			cache: false,
-			url: baseRestApiURL + "user/"+username,
+			url: baseRestApiURL + "user/"+userId,
 			dataType : 'json',
 			type: 'GET',
 			async: false,
@@ -727,10 +817,14 @@
 	
 	myModalOpShow = function(operationid, args) {
         var $modal = $("#myModalNodes");
+		$("#myModalNodes .modal-dialog").removeAttr("style");
         var rmContent = '';
         window.userOpStack = [];
 		if (operationid === "view_user_info") {
 			rmContent = viewUserInfo(args.dna);
+		}
+		if (operationid === "view_user_msg") {
+			rmContent = viewDialogPane(args.dna);
 		}
 		if (operationid === "view_vm_info") {
 			rmContent = viewVMInfo(args.dna);
@@ -754,7 +848,7 @@
             msgEmpty: "No job is currently running.",
             theme: '',
 			itemsOnPage: 8,
-            url: baseRestApiURL + "orchestrator/running/jobs/" + usrData.username,
+            url: baseRestApiURL + "orchestrator/running/jobs/" + usrData.id,
 			cancelURL:  baseRestApiURL + "orchestrator/stop"
         });
 		$("#exec-user-history-panel", $userInfo).npExecPanels({
@@ -762,16 +856,36 @@
             msgEmpty: "Results history is empty. It looks you did not run any workflows yet.",
             theme: '',
 			itemsOnPage: 8,
-            url: baseRestApiURL + "orchestrator/history/" + usrData.username
+            url: baseRestApiURL + "orchestrator/history/" + usrData.id
+        });
+		$("#exec-user-queued-panel", $userInfo).npExecPanels({
+            msgEnd: "You reached the end of queued jobs list. Nothing more to show.",
+            msgEmpty: "Queued jobs are empty. It looks you did not run any workflows yet.",
+            theme: '',
+			itemsOnPage: 8,
+            url: baseRestApiURL + "orchestrator/queued/jobs/"+usrData.id
         });
 		var options = { "id": "#user_download_list",
 						"estimatedID": "#user_estimated_downloads_accordion",
 						"accordionID": "#user_download_list"
 					  }
-		updateDownloadStatistics(usrData.username, options);
+		updateDownloadStatistics(usrData.id, options);
+
+		// create a custom id for current user
+		$userInfo.attr("ws-id", "available_users|" +  usrData.id); 
+		$userInfo.on("wsmessage", function (e, wsdna) {
+			// update the fields
+			if(wsdna.topic === "product.progress"){
+				updateDownloadProgress($userInfo, wsdna);
+			}else{
+				updateRunningTasks(wsdna);
+			}
+		});
+
 		return $userInfo;
 	}
 	
+	var userguid, clicking = false;
 	function viewVMInfo(data) {
 		var $vmInfo = $("#vm-content").clone().removeAttr("style id");
 		$(".modal-title", $vmInfo).html(data.id.toUpperCase());
@@ -791,16 +905,389 @@
 			if (action === "view_command") {
 				$modal = $("#vmCommandModalNode");
 				var task = $(this).closest(".task").data("taskData");
-				$(".title", $modal).html(task.componentName + " (" + task.jobName + ")");
-				$(".content_area", $modal).html(task.command);
+				var componentName = typeof task.componentName === 'undefined'? task.data.componentName: task.componentName;
+				var jobName = typeof task.jobName === 'undefined'? task.data.jobName: task.jobName;
+				taskid = (typeof task.taskId == 'undefined'? task.data.taskId: task.taskId);
+				ui_getTaskCommand(taskid);
+
+				$(".title", $modal).html(componentName + " (" + jobName + ")");
 				$modal.modal('show');
 			} else {
 				showMsg("This action is not supported.", "WARNING");	
 			}
 		});
+
+		$vmInfo.attr("ws-id", "execution.status.changed|" + data.id);
+		$vmInfo.on("wsmessage", function (e, wsdna) {
+
+			var msg = wsdna.data.Message;
+			if(wsdna.source != null){
+				if(msg.startsWith("Task")){
+					// if status is other than running find task, and remove it
+					if(wsdna.data.Payload != "RUNNING" && wsdna.data.Payload != "PENDING_FINALISATION" ){
+						$("#"+ wsdna.source +".task").remove();
+					}
+				}
+			}else{
+				
+				if($(".panel-list-empty.callout.callout-empty.collapse").css('display') == 'block'){
+					$(".panel-list-empty.callout.callout-empty.collapse").attr("style", "display: none");
+				}
+				// if the task exists, find the pane and overwrite it
+				// else just create a pane and put it in list
+				htmlContent = createPane(wsdna, data.flavor.memory);
+				
+				if(typeof $("#"+ wsdna.data.taskId +".task")[0] != 'undefined'){
+					$("#"+ wsdna.data.taskId +".task").html(htmlContent);
+				}else{
+					var $newEl = $("<div>",{
+						"html" : htmlContent
+					});
+					$newEl.addClass("task").prop("id", wsdna.data.taskId); 
+					$newEl.data("taskData",wsdna);
+					$newEl.appendTo($(".panel-list", $(this)[0])).fadeIn("slow");
+
+					$newEl
+					.on("mousedown", "#user-name", function(e) {
+						clicking = true;
+
+						userguid = $(this).text();
+						getUsername(userguid);
+						$newEl.find("#user-name span").text(username);
+					})
+					.on('mouseup mouseleave', ".vm-row", function() {
+						if(clicking === true){
+							$newEl.find("#user-name span").text(userguid);
+							clicking = false;
+						}
+					});
+				}
+			}
+
+			// if there is no task running display messge
+			if($(".task").length == 0){
+				$(".panel-list-empty.callout.callout-empty.collapse").attr("style", "display: block");
+				$(".panel-filter").empty();
+			}
+			$(document).trigger("quota:update");
+		});
+
 		return $vmInfo;
 	}
+
+	function viewDialogPane(data){
+		var $messageInfo = $("#message-content").clone().removeAttr("style id");
+		$messageInfo.find(".modal-content").addClass("message-box");
+		$(".modal-title", $messageInfo).html("Send a message to " + data.fullName);
+		$("#myModalNodes .modal-dialog").css({"display":"flex", "justify-content":"center", "width":"38vw", "padding":"25px"});
+
+		$("#sendMsg", $messageInfo).on("click", function(e){
+			var message = $(".content_area", $messageInfo).val();
+
+			if(message.length >= 2){
+				sendMessage(data.id, message);
+				$('#myModalNodes').modal('hide');
+			}
+		});
+		return $messageInfo;
+	}
+
+	function createPane(wsdna, memory){
+		htmlContent = "<div class='col-md-12 col-sm-12'>" +
+							"<div class='nodes-item-core-box'>";
+
+		var cpuPercentage = parseInt(wsdna.data.usedCPU*100/100);
+		var ramPercentage = parseInt(wsdna.data.usedRAM/unitTransform("GB","MB", memory)*100);
+		var completePercentage = Math.floor(wsdna.data.percentComplete);
+		var completeProgressClass = "progress-bar-info";
+
+		var cpuProgressClass = cpuPercentage < 50 ? "progress-bar-success" : (cpuPercentage > 80 ? "progress-bar-danger" : "progress-bar-warning");
+		var ramProgressClass = ramPercentage < 50 ? "progress-bar-success" : (ramPercentage > 80 ? "progress-bar-danger" : "progress-bar-warning");
+
+		htmlContent += "<div class='box-top'>" +
+						"<div class='box-title'>" +
+						"<span>" + wsdna.data.componentName + " (" + wsdna.data.jobName + ")" + "</span>";
+
+		htmlContent += "<button type='button' class='btn btn-primary btn-sm btn-flat btn-action btn-nodeop' data-action='view_command'>" +
+							"<i class='fa fa-terminal fa-fw' aria-hidden='true'></i>" +
+							"<span class='span-muted collapse'>&nbsp;View command line</span>" +
+						"</button>";
+
+		htmlContent += "</div>" + // close .box-title
+					"<div class='box-text'>" +
+						"<div> Start date: <strong>" + niceIsoTime(wsdna.data.taskStart) + "</strong></div>" +
+						"<div> Last update: <strong>" + niceIsoTime(wsdna.data.lastUpdated) + "</strong></div>" +
+					"</div>" + //close .box-text div
+					"</div>";//close .box-top div
+
+		htmlContent +=  "<div class='row'>" +
+						"<div class='col-md-12 col-sm-12 col-xs-12 message'>" +
+							"<div class='vm-row'>" +
+								"<span> <strong>User:</strong> </span>" +
+								"<div id='user-name'><strong><span>" + wsdna.data.userId + "</span></strong></div>" +
+							"</div>";
+
+		if (wsdna.data.componentType === "exec") {
+			htmlContent += "<div class='vm-row'>" + 
+				"<span> <strong>CPU:</strong> </span>" +
+				"<div class='used-cpu-progress-bar'>" +
+					"<div class='progress-bar " + cpuProgressClass + "' role='progressbar' style='width:" + cpuPercentage + "%'>" + cpuPercentage + "%</div>" +
+				"</div>" +
+			"</div>" +
+			"<div class='vm-row'>" +
+				"<span> <strong>RAM:</strong></span>" +
+				"<div class='used-ram-progress-bar'>" +
+					"<div class='progress-bar " + ramProgressClass + "' role='progressbar' style='width:" + ramPercentage + "%'>" + ramPercentage + "%</div>" +
+				"</div>" +
+			"</div>" +
+			"<div class='vm-row'>" +
+				"<span> <strong>Progress:</strong></span>" +
+				"<div class='percent-complete-progress-bar'>" +
+					"<div class='progress-bar " + completeProgressClass + "' role='progressbar' style='width:" + completePercentage + "%'>" + completePercentage + "%</div>" +
+				"</div>" +
+			"</div>";
+		}
+
+		htmlContent += "</div>" + //div .message
+						"</div>"; // div .row
+		htmlContent += "<div class='box-bottom'></div>";
+		htmlContent += "</div>"; //div .nodes-item-core-box
+		htmlContent += "</div>";
+		return htmlContent;
+	}
 	
+	function updateRunningTasks(wsdna){
+
+		var htmlContent, task = wsdna.data;
+		var $jobs =  $("#exec-user-list-panel_accordion.panel-list .job-history-one");
+		if(wsdna.source != null){
+
+			// if the job is done or failed remove it from pane; if one running, clear pane
+			var msg = wsdna.data.Message;
+			if(msg.startsWith("Job") && (msg.includes("Done after") || msg.includes("Failed after"))){
+				
+				var jobName = msg.match(/\[(.*?)\]/).at(-1);
+				var $found = $jobs.filter(function(i, elem){
+					return elem.getElementsByTagName("strong")[0].innerHTML === jobId;
+				});
+				$found.remove();
+				$("#exec-user-list-panel").trigger("panel:refresh");
+			}else{
+				if(msg.startsWith("Query")){
+					if($jobs.length === 0){
+						$("#exec-user-list-panel").trigger("panel:refresh");
+					}
+					var $jobs = $("#exec-user-list-panel_accordion.panel-list .job-history-one");
+					var stusIcon = ui_getTaskStatusIcon(task.Payload); 
+					$jobs.find("#"+ wsdna.source +".one-task .icon").replaceWith(stusIcon);
+				}
+				// if the task has a different status set it
+				if(msg.startsWith("Task")){
+					
+					var values =  msg.match(/\((.*)\)/)[1];
+					var taskName = values.split(",")[0];
+					var jobId = values.split(",")[1].split(" ").at(-1);
+
+					var $found = $jobs.filter(function(i, elem){
+						return elem.getElementsByTagName("div")[1].getAttribute('id').split("_")[0] === jobId;
+					});
+
+					old = $found.find("#"+ wsdna.source +".one-task").html();
+					htmlContent = updateStatus(wsdna.data.Payload, taskName, wsdna.data.host, wsdna.source);
+
+					if(wsdna.data.Payload === "RUNNING" && $found.find("#jobStatus" +jobId).text() === "QUEUED_ACTIVE"){
+						$found.find("#jobStatus" +jobId).text(wsdna.data.Payload);
+						$found.removeClass("queued-active").addClass("running");
+					}
+
+					if(wsdna.data.Payload === "RUNNING" || wsdna.data.Payload === "DONE"){
+						// for started running add progress bar & tasklog
+						$found.find("#"+ wsdna.source +".one-task").html(old + htmlContent);
+					}else{
+						// remove progress bar
+						if(wsdna.data.Payload === "PENDING_FINALISATION"){
+							$found.find("#"+ wsdna.source +".one-task .progress").remove();
+						}
+					}
+
+					// clear class icon 
+					var stusIcon = ui_getTaskStatusIcon(wsdna.data.Payload); 
+					$found.find("#"+ wsdna.source +".one-task .icon").replaceWith(stusIcon);
+				}
+			}
+		}else{
+				// task with progrress bar
+				var $found = $jobs.filter(function(i, elem){
+					return elem.getElementsByTagName("strong")[0].innerHTML === task.jobName;
+				});
+
+				htmlContent = updateTask(task);
+				$found.find("#"+ wsdna.data.taskId +".one-task").html(htmlContent);
+				$(document).trigger("quota:update");
+			}
+		}
+
+	// Added from doCustomRender: function($el, data) (the data parameter is not needed anymore)
+	function updateVMRuntimeInfo($el) {
+
+		// get the data from dna
+		var data = $el.data("dna");
+
+		// sets the values
+		$(".totalDisk", $el).text(data.flavor.disk);
+		$(".totalMemory", $el).text(data.flavor.memory);
+		if (data.runtimeInfo.cpu > -1) {
+			$(".cpu-progress-bar .progress-bar", $el).text(data.runtimeInfo.cpu + "%");
+		} else {
+			$(".cpu-progress-bar .progress-bar", $el).text("unavailable");
+			$(".cpu-progress-bar .progress-bar", $el).parent().addClass("unavailable");
+		}
+		if (data.runtimeInfo.disk > -1) {
+			$(".disk-progress-bar .progress-bar", $el).text(data.runtimeInfo.disk + "%");
+		} else {
+			$(".disk-progress-bar .progress-bar", $el).text("unavailable");
+			$(".disk-progress-bar .progress-bar", $el).parent().addClass("unavailable");
+		}
+		if (data.runtimeInfo.memory > -1) {
+			$(".memory-progress-bar .progress-bar", $el).text(data.runtimeInfo.memory + "%");
+		} else {
+			$(".memory-progress-bar .progress-bar", $el).text("unavailable");
+			$(".memory-progress-bar .progress-bar", $el).parent().addClass("unavailable");
+		}
+		if (data.runtimeInfo.cpu < 50) {
+			$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.cpu + "%");
+		}else if (data.runtimeInfo.cpu > 80) {
+			$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.cpu + "%");
+		} else {
+			$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.cpu + "%");
+		}
+
+		if (data.runtimeInfo.disk < 50) {
+			$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.disk + "%");
+		}else if (data.runtimeInfo.disk > 80) {
+			$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.disk + "%");
+		} else {
+			$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.disk + "%");
+		}
+
+		if (data.runtimeInfo.memory < 50) {
+			$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.memory + "%");
+		}else if (data.runtimeInfo.memory > 80) {
+			$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.memory + "%");
+		} else {
+			$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.memory + "%");
+		}
+	}
+
+	/* when entering this function an attribute (for source duna, this case) is created and the runtime values are calculated */ 
+	function bindVMRuntimeInfoUpdate($el) {
+
+		// create attribute 						   get the name of source 
+		$el.attr("ws-id", "resources|SystemAccount|" + $el.data("dna").id);
+
+		// on receiving the message
+		$el.on("wsmessage", function (e, wsdna) {
+			var data = $(e.target).data("dna");
+
+			// edit the info in the runtimeInfo json
+			data.runtimeInfo.cpu    = parseInt(wsdna.cpuTotal * 100)/100;
+			data.runtimeInfo.disk   = wsdna.diskUsed        >  -1 ? parseInt(wsdna.diskUsed/wsdna.diskTotal*100)                                : wsdna.diskUsed;
+			data.runtimeInfo.memory = wsdna.availableMemory >  -1 ? parseInt((wsdna.totalMemory - wsdna.availableMemory)/wsdna.totalMemory*100) : wsdna.availableMemory;
+			
+			//console.log("Update runtime info [ CPU: " + data.runtimeInfo.cpu + ", DISK: " + data.runtimeInfo.disk + ", MEMORY: " + data.runtimeInfo.memory + " ]");
+			// set them on the page
+			updateVMRuntimeInfo($el);
+		});
+	}
+
+	function bindDownloadUpdateAllUsers($el){ 
+		
+		// create ws-id attribute for each user
+		$el.attr("ws-id", "available_users|" + $el.data("dna").id);
+
+		// on receiving the message
+		$el.on("wsmessage", function (e, wsdna) {
+			if(wsdna.topic === "product.progress"){
+				updateAllUsersDownloadStatistics($el,wsdna); 
+			}
+		});
+	}
+
+	function updateDownloadProgress($el, wsdna){
+		
+		var resourceName, downloadValue = 0, cnt = 0;
+		var $bar = "";
+
+		// clear pane
+		$(".statistics .progress", $el).html("");
+
+		if( wsdna.data.Payload.startsWith("Completed")){
+			$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom">No downloads in progress</div>');
+			$bar.attr("title", "");
+			$bar.css({ width: "100%" });
+		}else{
+			if(wsdna.data.Payload.startsWith("Start")){
+				resourceName = wsdna.data.Payload;
+			}else{
+				// get name and procentage from message
+				resourceName = wsdna.data.Payload.split(":")[0];
+				downloadValue = parseFloat(wsdna.data.Payload.split(":")[1]);
+			}
+
+			// progress percentage
+			$bar = $('<div class="progress-bar progress-bar-success" role="progressbar" data-toggle="tooltip" title="In progress" data-placement="bottom">' + resourceName + '</div>');
+			$bar.attr("title", parseInt(downloadValue*100) + "%" + (typeof wsdna.data.speed === "undefined" ? "" : " [" + wsdna.data.speed + "]"));
+			$bar.css({ width: parseInt(downloadValue*100) + "%" });
+			$(".statistics .progress", $el).append($bar);
+
+			totPrc = downloadValue;
+			cnt = ((typeof wsdna.data.remaining === "undefined" && parseInt(wsdna.data.remaining) <= 0)? 1 : parseInt(wsdna.data.remaining) + 1); 
+
+			// overall progress (first progress bar)
+			$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="In progress" data-placement="bottom">Overall progress (' + Math.ceil(totPrc) + ' of ' + cnt + ')</div>');
+			$bar.attr("title", parseInt(totPrc*100/cnt) + "%");
+			$bar.css({ width: parseInt(totPrc*100/cnt) + "%" });
+		}
+		// append the progress bars to html 
+		$(".statistics .progress", $el).prepend($bar);
+		$(".statistics #user_estimated_downloads_accordion", $el).html(cnt);
+	}
+
+	function updateAllUsersDownloadStatistics($el, wsdna){
+
+		var resourceName, downloadValue = 0, cnt = 0;
+		var $bar = "";
+		
+		// clear pane
+		$(".statistics .progress", $el).html("");
+
+		if(wsdna.data.Payload.startsWith("Completed")){
+			$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom">No downloads in progress</div>');
+			$bar.attr("title", "");
+			$bar.css({ width: "100%" });
+		}else{
+			if(!wsdna.data.Payload.startsWith("Start")){
+				downloadValue = parseFloat(wsdna.data.Payload.split(":")[1]);
+			}
+
+			// calc the percentage remaining to be downloaded until next dataset (if more than 1 are in the downloads queue)
+			totPrc = downloadValue;
+			// get number of remaining downloads 
+			cnt = ((typeof wsdna.data.remaining === "undefined" && parseInt(wsdna.data.remaining) <= 0)? 1 : parseInt(wsdna.data.remaining) + 1); 
+
+			// overall progress (first progress bar)
+			$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="In progress" data-placement="bottom">Overall progress (' + Math.ceil(totPrc) + ' of ' + cnt + ')</div>');
+			$bar.attr("title", parseInt(totPrc*100/cnt) + "%");
+			$bar.css({ width: parseInt(totPrc*100/cnt) + "%" });
+		}
+		// append the progress bars to html 
+		$(".statistics .progress", $el).prepend($bar);
+		$(".statistics #user_estimated_downloads", $el).html(cnt);
+
+		$(document).trigger( "quota:update" );
+		$(".actualInputQuota", $el).trigger( "quota:update" );
+	}
+
 	function createAdminDashboard() {
 		$("#panel-admin-wrapper").show();
 		urls = [
@@ -816,7 +1303,7 @@
 		
 		$("#myModalNodes").on('hide.bs.modal', function() {
 			//clear datepicker if exist
-			if (typeof $.datepicker.dpDiv !== "undefined") {
+			if ( typeof $.datepicker !== "undefined" && typeof $.datepicker.dpDiv !== "undefined") {
 				$("#" + $.datepicker.dpDiv.attr("id")).remove();
 			}
 			if (typeof downloadStatisticsTimeout !== "undefined") {
@@ -831,6 +1318,7 @@
 				title = "Users - ";
 				$(".vm-info-row", "#panel-admin-wrapper").hide();
 				$(".user-info-row", "#panel-admin-wrapper").show();
+				$(".queued-jobs-row", "#panel-admin-wrapper").hide();
 				urls = [
 					baseRestApiURL + "admin/users?status=ACTIVE"
 				];
@@ -839,21 +1327,31 @@
 				title = "VM's - ";
 				$(".vm-info-row", "#panel-admin-wrapper").show();
 				$(".user-info-row", "#panel-admin-wrapper").hide();
+				$(".queued-jobs-row", "#panel-admin-wrapper").hide();
 				urls = [
 					baseRestApiURL + "topology/active"
+				];
+			}
+			if(tabAction === "queued_jobs"){
+				title = "Queued Jobs -";
+				$(".vm-info-row", "#panel-admin-wrapper").hide();
+				$(".user-info-row", "#panel-admin-wrapper").hide();
+				$(".queued-jobs-row", "#panel-admin-wrapper").show()
+				urls = [
+					baseRestApiURL + "orchestrator/queued/jobs"
 				];
 			}
 			// add new tab title
 			$(".box-success .box-header .box-title", "#panel-admin-wrapper").get(0).childNodes[0].nodeValue = title;
 			window.panelComp.refreshData(urls);
 		});
-		
+		var allUsers;
 		window.panelComp = $("#panel-nodes").npPaginatedCells({
 			headerUser: taoUserProfile.username,
 			url: urls,
-			viewMode: prefferences.adminViewMode,
+			viewMode: preferences.adminViewMode,
 			filterAttribute: tabAction === "all_users" ? "fullName" : "id",
-			itemsOnPage: 4,
+			itemsOnPage: 10,
 			order:[
 				{
 					"label":"Name ascending",
@@ -869,6 +1367,10 @@
 			doDataPreprocessing: function(data) {
 				if (tabAction === "all_users") {
 					var onlineUsers = [];
+					allUsers=[];
+					data.forEach(function(user){
+						allUsers.push(user.username);
+					});
 					$.ajax({
 						cache: false,
 						url: baseRestApiURL + "admin/users/logged",
@@ -911,15 +1413,41 @@
 						}
 					});
 					data.forEach(function(vm) {
-						var runtimeInfo = {
-							"runtimeInfo": {
-								"cpu":    vmsRuntimeInfo[vm.id].cpuTotal > 100 ? parseInt(vmsRuntimeInfo[vm.id].cpuTotal/vm.flavor.cpu) : vmsRuntimeInfo[vm.id].cpuTotal,
-								"disk":   vmsRuntimeInfo[vm.id].diskUsed > -1 ? parseInt(vmsRuntimeInfo[vm.id].diskUsed/vmsRuntimeInfo[vm.id].diskTotal*100) : vmsRuntimeInfo[vm.id].diskUsed,
-								"memory": vmsRuntimeInfo[vm.id].availableMemory > -1 ? parseInt((vmsRuntimeInfo[vm.id].totalMemory-vmsRuntimeInfo[vm.id].availableMemory)/vmsRuntimeInfo[vm.id].totalMemory*100) : vmsRuntimeInfo[vm.id].availableMemory
-							}
-						};
+						try{
+							var runtimeInfo = {
+								"runtimeInfo": {
+									"cpu":    parseInt(vmsRuntimeInfo[vm.id].cpuTotal * 100)/100,
+									"disk":   vmsRuntimeInfo[vm.id].diskUsed > -1 ? parseInt(vmsRuntimeInfo[vm.id].diskUsed/vmsRuntimeInfo[vm.id].diskTotal*100) : vmsRuntimeInfo[vm.id].diskUsed,
+									"memory": vmsRuntimeInfo[vm.id].availableMemory > -1 ? parseInt((vmsRuntimeInfo[vm.id].totalMemory-vmsRuntimeInfo[vm.id].availableMemory)/vmsRuntimeInfo[vm.id].totalMemory*100) : vmsRuntimeInfo[vm.id].availableMemory
+								}
+							};
+						}catch(error){
+							runtimeInfo = -1;
+						}
 						$.extend(vm,runtimeInfo);
 					});
+				}
+				if (tabAction === "queued_jobs"){
+					var queuedJobs = [];
+					$.ajax({
+						cache: false,
+						url: baseRestApiURL + "orchestrator/queued/jobs",
+						dataType : 'json',
+						type: 'GET',
+						async: false,
+						headers: {
+							"Accept": "application/json",
+							"Content-Type": "application/json",
+							"X-Auth-Token": window.tokenKey
+						},
+						error : function (jqXHR, textStatus, errorThrown) { 
+							console.log(textStatus);
+						},
+						success: function (result) {
+							queuedJobs = result.data;
+						}
+					});
+								
 				}
 				return data;
 			},
@@ -927,52 +1455,37 @@
 				if (tabAction === "all_users") {
 					$(".actualInputQuota", $el).html(humanFileSizeFromMB(data.actualInputQuota));
 					$("input[name='username']", $el).val(data.username);
+
+					var processingTime = (data.processingTime <= 0 || isNaN(data.processingTime))? '0d 0h 0m': getTime(data.processingTime);
+					$(".processingTime", $el).html(processingTime);
+					
+					//if online show button for sending message 
+					$el.find("[data-action=view_user_msg]").prop("disabled", !data.online);
+
+					// Update each user's downloads pane
+					bindDownloadUpdateAllUsers($el);
 				}
 				if (tabAction === "all_vms") {
-					$(".totalCpu", $el).text(data.flavor.cpu);
-					$(".totalDisk", $el).text(data.flavor.disk);
-					$(".totalMemory", $el).text(data.flavor.memory);
-					if (data.runtimeInfo.cpu > -1) {
-						$(".cpu-progress-bar .progress-bar", $el).text(data.runtimeInfo.cpu + "%");
-					} else {
-						$(".cpu-progress-bar .progress-bar", $el).text("unavailable");
-						$(".cpu-progress-bar .progress-bar", $el).parent().addClass("unavailable");
-					}
-					if (data.runtimeInfo.disk > -1) {
-						$(".disk-progress-bar .progress-bar", $el).text(data.runtimeInfo.disk + "%");
-					} else {
-						$(".disk-progress-bar .progress-bar", $el).text("unavailable");
-						$(".disk-progress-bar .progress-bar", $el).parent().addClass("unavailable");
-					}
-					if (data.runtimeInfo.memory > -1) {
-						$(".memory-progress-bar .progress-bar", $el).text(data.runtimeInfo.memory + "%");
-					} else {
-						$(".memory-progress-bar .progress-bar", $el).text("unavailable");
-						$(".memory-progress-bar .progress-bar", $el).parent().addClass("unavailable");
-					}
-					if (data.runtimeInfo.cpu < 50) {
-						$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.cpu + "%");
-					}else if (data.runtimeInfo.cpu > 80) {
-						$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.cpu + "%");
-					} else {
-						$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.cpu + "%");
-					}
-					
-					if (data.runtimeInfo.disk < 50) {
-						$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.disk + "%");
-					}else if (data.runtimeInfo.disk > 80) {
-						$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.disk + "%");
-					} else {
-						$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.disk + "%");
-					}
-					
-					if (data.runtimeInfo.memory < 50) {
-						$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.memory + "%");
-					}else if (data.runtimeInfo.memory > 80) {
-						$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.memory + "%");
-					} else {
-						$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.memory + "%");
-					}
+					// Populate node with initial values (/monitor/)
+					updateVMRuntimeInfo($el);
+					// Bind node to WebSocket message updates
+					bindVMRuntimeInfoUpdate($el);
+				}
+
+				if (tabAction === "queued_jobs") {
+					$el.on("mousedown", "#user-name", function(e) {
+						clicking = true;
+
+						userguid = $(this).find(".val-userId").text();
+						getUsername(userguid);
+						$el.find("#user-name span").text(username);
+					})
+					.on('mouseup mouseleave', $(this), function() {
+						if(clicking === true){
+							$el.find("#user-name span").text(userguid);
+							clicking = false;
+						}
+					});
 				}
 			},
 			doDataPostprocessing: function() {
@@ -983,17 +1496,196 @@
 					showMsg("This action is available only for admin roles.", "ERROR");
 					return;		
 				}
-				if (action === "view_user_info" || action === "view_vm_info" ) {
+				if (action === "view_user_info" || action === "view_vm_info" || action === "view_user_msg") {
 					myModalOpShow(action, args);
+				}
+				if (action === "move_job_up"){
+					url=[baseRestApiURL + "orchestrator/queued/jobs"];
+					if ($("[data-tag='tag']").parent().siblings(".tags").children(".selected").length === 1){
+						var moveUrl = [
+							baseRestApiURL + "orchestrator/queued/jobs/?user="+args.dna.id+"&jobId="+args.jobId+"&operation="+"MOVE_UP"
+						];
+
+					}else{
+						var moveUrl = [
+							baseRestApiURL + "orchestrator/queued/jobs/?jobId="+args.jobId+"&operation="+"MOVE_UP"
+						];
+					}
+					
+					$.ajax({
+						cache: false,
+						url: moveUrl,
+						type: 'POST',
+						async: false,
+						headers: {
+							"Accept": "application/json",
+							"Content-Type": "application/json",
+							"X-Auth-Token": window.tokenKey
+						},
+						error : function (jqXHR, textStatus, errorThrown) { 
+							console.log(textStatus, errorThrown)
+						}
+					});
+					window.panelComp.refreshData(url);
+
+				}
+				if (action === "move_job_down"){
+					url=[baseRestApiURL + "orchestrator/queued/jobs"];
+					if ($("[data-tag='tag']").parent().siblings(".tags").children(".selected").length === 1){
+						var moveUrl = [
+							baseRestApiURL + "orchestrator/queued/jobs/?user="+args.dna.id+"&jobId="+args.jobId+"&operation="+"MOVE_DOWN"
+						];
+
+					}else{
+						var moveUrl = [
+							baseRestApiURL + "orchestrator/queued/jobs/?jobId="+args.jobId+"&operation="+"MOVE_DOWN"
+						];
+					}
+					$.ajax({
+						cache: false,
+						url: moveUrl,
+						type: 'POST',
+						async: false,
+						headers: {
+							"Accept": "application/json",
+							"Content-Type": "application/json",
+							"X-Auth-Token": window.tokenKey
+						},
+						error : function (jqXHR, textStatus, errorThrown) { 
+							console.log(textStatus, errorThrown);
+						}
+					});
+					window.panelComp.refreshData(urls);
+				}
+
+				if (action === "remove_job"){
+					url=[baseRestApiURL + "orchestrator/queued/jobs"];
+					if ($("[data-tag='tag']").parent().siblings(".tags").children(".selected").length === 1){
+						var moveUrl = [
+							baseRestApiURL + "orchestrator/queued/jobs/?user="+args.dna.id+"&jobId="+args.jobId+"&operation="+"REMOVE"
+						];
+
+					}else{
+						var moveUrl = [
+							baseRestApiURL + "orchestrator/queued/jobs/?jobId="+args.jobId+"&operation="+"REMOVE"
+						];
+					}
+					$.ajax({
+						cache: false,
+						url: moveUrl,
+						type: 'POST',
+						async: false,
+						headers: {
+							"Accept": "application/json",
+							"Content-Type": "application/json",
+							"X-Auth-Token": window.tokenKey
+						},
+						error : function (jqXHR, textStatus, errorThrown) { 
+							console.log(textStatus, errorThrown);
+						}
+					});
+					window.panelComp.refreshData(urls);
+				}
+
+				if (action === "impersonate_user") {
+					var url = [ baseRestApiURL + "admin/impersonate?userId=" + args.dna.id ];
+					$.ajax({
+						cache: false,
+						url: url,
+						type: 'POST',
+						async: false,
+						headers: {
+							"Accept": "application/json",
+							"Content-Type": "application/json",
+							"X-Auth-Token": window.tokenKey
+						},
+						success: function(result) {
+							_settings.eraseCookie("tokenKey");
+							_settings.eraseCookie("userMatrix");
+							_settings.eraseCookie("refreshToken");
+							_settings.eraseCookie("userRole");
+							_settings.eraseCookie("TaoUserId");
+							_settings.eraseCookie("TaoUserName");
+							window.location = result.data;
+						},
+						error : function (jqXHR, textStatus, errorThrown) {
+							console.log(textStatus, errorThrown);
+						}
+					});
 				}
 			}
 		});
 	}
+
+	var sendMessage = function(userId, message){
+		var sentMsg = $.ajax({
+            cache: false,
+            url: baseRestApiURL + 'admin/message/'+'?userId=' + userId + '&message=' + message,
+            type: 'POST',
+            headers: {
+				"Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+		$.when(sentMsg)
+            .done(function (recvResponse) {
+                if(recvResponse && (recvResponse.status ==="SUCCEEDED")){
+                    showMsg("The message was sent.", "SUCCESS");
+                }else{
+                    showMsg("The message could not be sent. "  + (typeof recvResponse.message !== 'undefined' ? recvResponse.message : ''), "ERROR");
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                showMsg("Message sending failed. " + errorThrown, "ERROR");
+            });
+	}
 	
+	var ui_getTaskCommand = function(taskId){
+		$.ajax({
+            cache: false,
+            url: baseRestApiURL + 'orchestrator/tasks/' + taskId,
+            type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-Auth-Token": window.tokenKey
+            }
+        }).done(function (response) {
+			command = ((typeof response.data.command === 'undefined' || response.data.command === '') ? 'There is no command for the selected task': response.data.command);
+			$(".content_area", $modal).html(command);
+		}).fail(function (jqXHR, status, textStatus) {
+            console.log("fail to command");
+        });
+	}
+
+	function getUsername(guid){
+        var getName = $.ajax({
+            cache: false,
+            url: baseRestApiURL + "user/name/" + guid,
+            type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+
+        $.when(getName).done(function (response) {
+            if(response.status === "SUCCEEDED" && typeof response.data !== "undefined"){
+                username = response.data;
+            }else{
+				username = guid;
+                showMsg("Could not retrieve username.", response.status);
+            }
+        }).fail(function () {
+        });
+    }
+
 	$( document ).ready(function() {
 		createAdminDashboard();
 		$.AdminLTE.layout.fix();
     });
 	
-//# sourceURL=dashboard-admin.js
+//# sourceURL=systemDashboard-admin.js
 </script>

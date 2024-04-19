@@ -69,7 +69,8 @@ jQuery.fn.npNotificationsPanels = function(options){
                     var lclData = JSON.parse(notification["data"]);
                     var lclMsg = typeof lclData.Message === 'undefined' ? lclData.Payload : lclData.Message;
                 } catch(e) {
-                    console.log(e); // error in the above string (in this case, yes)!
+                    // console.log(e); // error in the above string (in this case, yes)!
+                    lclMsg = notification.data.substring(12, 200);
                 }
                 var li = document.createElement("li");
                 var htmlContent = "<span class=\"text\">"+lclMsg+"</span><small class=\"label label-info\"><i class=\"fa fa-clock-o fa-fw\"></i>"+ts+"</small>";
@@ -120,6 +121,7 @@ jQuery.fn.npNotificationsPanels = function(options){
             console.log("notification history cleared");
 			ui_showExecNotification();
 			getData(currentPage);
+            $(document).trigger("refresh:toolbar");
         }).fail(function (jqXHR, status, textStatus) {
             console.log("fail to clear the notification history");
         });

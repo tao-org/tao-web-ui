@@ -126,7 +126,7 @@
 </div>
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph" style="display:none">
-    <h1>Saved product sets / queries<small>Here you can find the list of saved product sets and parameterized queries that can be used as workflow inputs.</small></h1>
+    <h1>Product sets & queries<small>The list of user defined <strong>collection of products </strong> and parameterized <strong>queries</strong> that will serve as workflow inputs.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Queries</li>
@@ -400,7 +400,7 @@
 			title = "Queries - ";
 				$("button[data-action='op-plus']").show();
 				urls = [
-					baseRestApiURL + "datasource/user/group/",
+					//baseRestApiURL + "datasource/user/group/",
 					baseRestApiURL + "datasource/query/"
 				]
 			}
@@ -416,7 +416,7 @@
 		window.panelComp = $('#panel-nodes').npPaginatedCells({
 			headerUser : taoUserProfile.username,
 			url        : urls,
-			viewMode   : prefferences.viewMode,
+			viewMode   : preferences.viewMode,
 			itemsOnPage: 12,
 			order      :[
 							{ "label": "Name ascending" , "objAttributeName": "_dsOrderBy", "direction": "ASC", "default": true },

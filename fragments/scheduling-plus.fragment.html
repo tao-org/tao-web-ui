@@ -8,7 +8,7 @@
 	</div>
 	<form id="frmExecNodeEdit" class="form-horizontal form-newpc" role="form">
 		<div class="modal-error collapse">
-			<h4 class="modal-title">Error schedulig execution workflow!</h4>
+			<h4 class="modal-title">Error schedulig job!</h4>
 			<p id="modal-error-msg">Please check your data, one or more values for the attributes is not in the acceptable range.</p>
 			<p>
 				<span class="error-workflow collapse"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> Could not retrieve the list of workflows.</span>
@@ -210,11 +210,15 @@
 			success: function (response, textStatus, jqXHR) {
 				var r = chkTSRF(response);
 				if (response.status === responseStatus.success) {
+					var activeWf = r.filter(v => v.active === true);
+
 					if (currentAction == "op-edit") {
+						$("#myModalLabel.modal-title").text("Edit scheduled job");
+						$("#scheduleWorkflowExecution").text("Save changes");
 						// Edit workflow
 						$("#workflowId").html("");
 						$("#workflowId").prop({ "disabled": true });
-						$.each(r, function (index, workflow) {
+						$.each(activeWf, function (index, workflow) {
 							if (editedWorkflow.workflowId == workflow.id) {
 								$option = $('<option value="' + workflow.id + '" selected>' + workflow.name + '</option>');
 								$option.data("dna", workflow);
@@ -225,9 +229,9 @@
 						$("#workflowId").trigger("change");
 					} else {
 						// Add new workflow
-						$("#workflowId").html('<option value="default" selected="selected">Select</option>');
+						$("#workflowId").html('<option value="default" selected="selected" disabled>Select</option>');
 						$("#workflowId").prop({ "disabled": false });
-						$.each(r, function (index, workflow) {
+						$.each(activeWf, function (index, workflow) {
 							$option = $('<option value="' + workflow.id + '">' + workflow.name + '</option>');
 							$option.data("dna", workflow);
 							$("#workflowId").append($option);
@@ -271,7 +275,7 @@
 					});
 				}
 			});
-			console.log(formData);
+			// console.log(formData);
 			$.ajax({
 				cache   : false,
 				url     : baseRestApiURL + "scheduling/" + (currentAction == "op-edit" ? "update" : "add"),
@@ -284,7 +288,7 @@
 						showMsg("Error scheduling workflow execution. Please check your data and try again.", "ERROR");
 						return;
 					}
-					showMsg("Unknown error. Unable to update execution name. Please try again.", "ERROR");
+					showMsg("Unknown error. Unable to update workflow schedule. Please try again.", "ERROR");
 				},
 				success: function (response, textStatus, jqXHR) {
 					if (response.status === "FAILED") {

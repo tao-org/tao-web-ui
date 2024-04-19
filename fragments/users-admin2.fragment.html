@@ -6,7 +6,7 @@
 <!-- modal nodes op -->
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-    <h1>Users management<small>The <strong>users</strong> of the TAO platform.</small></h1>
+    <h1>Users management<small>The <strong>users</strong> of the AVL platform.</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Users</li>
@@ -111,6 +111,7 @@
                                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Disable</span></button>
                                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Enable</span></button>
                                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="node-edit"><i class="fa fa-cogs fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Resources</span></button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -143,6 +144,7 @@
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Disable</span></button>
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Enable</span></button>
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="node-edit"><i class="fa fa-cogs fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Resources</span></button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -177,10 +179,10 @@
 </section><!-- /.content -->
 <script>
 
-    disableUser = function(username){
+    disableUser = function(id){
         var settings = {
             "async": true,
-            "url": baseRestApiURL + "admin/users/"+ username +"/disable",
+            "url": baseRestApiURL + "admin/users/"+ id +"/disable",
             "method": "POST",
             "headers": {
                 "Content-Type": "application/json",
@@ -191,7 +193,7 @@
         };
         $.ajax(settings)
             .done(function (response) {
-                showMsg("User "+ username +" successfully disabled.", "SUCCESS");
+                showMsg("User "+ id +" successfully disabled.", "SUCCESS");
                 panelComp.refreshData();
             });
     };
@@ -199,6 +201,7 @@
     myModalNodesOpShow = function(operationid, args){
         var $modal = $("#myModalNodes");
         $(".modal-dialog",$modal).removeClass("modal-lg");
+		$("#myModalNodes .modal-dialog").removeAttr("style");
         var rm_contentUrl = '';
         var rmContent = '';
         window.userOpStack = [];
@@ -206,6 +209,14 @@
         if(operationid === "op-plus"){
             //$(".modal-dialog",$modal).addClass("modal-lg");
             rm_contentUrl="./fragments/users-plus.fragment.html?" + Math.random();
+        }
+        if(operationid === "node-edit"){
+            window.userOpStack = [{
+                "dna": args.dna,
+                "action": "resource_edit"
+            }];
+            $("#myModalNodes .modal-dialog").css({"width":"1200px", "padding":"25px"});
+            rm_contentUrl="./fragments/user-node_edit.fragment.html?" + Math.random();
         }
         if(operationid === "edit"){
             window.userOpStack = [{
@@ -216,7 +227,7 @@
         }
 
         if(rm_contentUrl === ''){
-            alert("TAO - Operation mismatch");
+            alert("AVL - Operation mismatch");
             return;
         }
         $.ajax({
@@ -263,7 +274,7 @@
         window.panelComp = $('#panel-nodes').npPaginatedCells({
             headerUser: taoUserProfile.username,
             url: urls,
-            viewMode: prefferences.viewMode,
+            viewMode: preferences.viewMode,
             filterAttribute: "fullName",
             order:[
                 {
@@ -325,6 +336,8 @@
                     myModalNodesOpShow(action, args);
                 }
                 if(action === "edit") myModalNodesOpShow(action, args);
+                if(action === "node-edit") myModalNodesOpShow(action, args);
+
                 if(action === "disable"){
                     if( taoUserProfile.userRole !== "ADMIN"){
                         alert("not allowed");
@@ -334,7 +347,7 @@
                         msg:"Are you sure you want to disable user: <strong>"+args.dna.fullName+"</strong>?",
 
                         callbackConfirm: function() {
-                            disableUser(args.dna.username);
+                            disableUser(args.dna.id);
                         },
                         callbackCancel:function(){}
                     });

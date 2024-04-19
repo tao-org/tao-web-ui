@@ -44,7 +44,7 @@
 #showResults{background-color:#ecf0f5;border:0}
 #showResults .modal-header{border:0}
 #showResults .modal-header>h4.modal-title{font-size:24px}
-#showResults .modal-header>h4.modal-title>small{font-size:15px;display:inline-block;padding-left:4px;font-weight:300}
+#showResults .modal-header>h4.modal-title>small{font-size:15px;display:inline-block;padding-left:4px;font-weight:300;color:white}
 #showResults .modal-footer{border:0;padding:0 15px 15px 15px}
 
 /* ===== Full screen image preview ===== */
@@ -233,7 +233,7 @@ function renderResults(response) {
 			exesTable.parent().find("thead").append(element);
 		}
 	} else {
-		var element = $('<tr><th colspan="5" class="warning">An error ocuured while retrieving workflow executions results</th></tr>');
+		var element = $('<tr><th colspan="5" class="warning">An error occured while retrieving workflow executions results</th></tr>');
 		exesTable.parent().find("thead").append(element);
 	}
 }
@@ -241,7 +241,7 @@ function renderResults(response) {
 function getWorkflowResults(workflowId) {
 	var deferred = $.Deferred();
 	$.ajax({
-		url: baseRestApiURL + "files/user/output?workflowId=" + workflowId,
+		url: baseRestApiURL + "orchestration/output?workflowId=" + workflowId,
 		type: "GET",
 		dataType: 'json',
 		beforeSend: function(xhr) {

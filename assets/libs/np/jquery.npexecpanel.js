@@ -43,6 +43,8 @@ jQuery.fn.npExecPanels = function(options){
     var dataFull = [];
 	var filterAttributes = {};
 	var createFilters = true;
+
+	var username, userguid, clicking = false;
 	
 	var $mainElem = $(".content-wrapper",document.body).length > 0 ? $(".content-wrapper",document.body) : document.body;
 	if ($('script[src*="'+datepickerScriptPath+'"]',$mainElem).length <= 0) {
@@ -290,12 +292,14 @@ jQuery.fn.npExecPanels = function(options){
 				if (typeof job.workflowName !== "undefined") {
 					htmlContent += '<p>Workflow: <b>'+job.workflowName+'</b></p>';
 				}
-				htmlContent += 'user: '+job.user+', status: '+job.jobStatus+' <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+niceIsoTime(job.jobStart)+'</small> - <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+niceIsoTime(job.jobEnd)+'</small>';
-				htmlContent += '<div class="tasks">Tasks:';
+				htmlContent += 'Status: '+ '<span id="jobStatus' + job.id +'">'+job.jobStatus+'</span> <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+niceIsoTime(job.jobStart)+'</small> - <small class="label label-info"><i class="fa fa-clock-o fa-fw"></i>'+niceIsoTime(job.jobEnd)+'</small>';
+				//htmlContent += '<div class="tasks">Tasks:';
+				if(job.taskSummaries !== undefined){
+					htmlContent += '<div class="tasks">Tasks:';
 					for(ii = 0; ii<job.taskSummaries.length; ii++) {
 						var task = job.taskSummaries[ii];
 						var statusIcon = ui_getTaskStatusIcon(task.taskStatus);
-						htmlContent += '<div class="one-task">';
+						htmlContent += '<div class="one-task" id='+ task.taskId + '>';
 						
 						if (task.taskStatus === "RUNNING") {
 							htmlContent += statusIcon + '<strong>' +task.componentName + '</strong>' +' ['+ (typeof task.taskEnd === "undefined" ? 'updated ' + niceIsoTime(task.lastUpdated) : niceIsoTime(task.taskStart)+ '-'+ niceIsoTime(task.taskEnd)) +']' + ui_getTaskHost(task.host);
@@ -307,20 +311,21 @@ jQuery.fn.npExecPanels = function(options){
 							htmlContent += statusIcon + '<strong>' +task.componentName + '</strong>' +' ['+ niceIsoTime(task.taskStart) + (typeof task.taskEnd === "undefined" ? ', updated ' + niceIsoTime(task.lastUpdated) : '-'+ niceIsoTime(task.taskEnd)) +']' + ui_getTaskHost(task.host);
 						}
 
-						if(task.taskStatus === "DONE"){
-							var logMessage = task.output;
-							if(task.output === undefined || task.output === ''){
-								logMessage = 'There is no log message for the selected task'
+						if(task.taskStatus === "DONE" || task.taskStatus === "FAILED"){
+							htmlContent += '<button id="task_log_info_'+task.taskId+'" class="icon fa fa-info-circle log-info" value="'+task.taskId+'"></button>';
+							htmlContent +='<div id="task_log_modal'+task.taskId+'" class="log-modal"><div class="log-modal-content"><div class="log-title-button"><div class="log-title"><h4 class="title">Task Log</h4></div><button type="button" class="log-close">&times;</button></div><p class="log_text">'+'</p></div></div>';
+
+							if (typeof task.command !== "undefined" && task.command !== "") {
+								htmlContent += '<button id="task_command_info_'+task.taskId+'" class="icon fa fa-terminal log-info" value="'+task.taskId+'"></button>';
+								htmlContent += '<div id="command_info_modal'+task.taskId+'" class="command-modal"><div class="command-modal-content"><div class="command-title-button"><div class="command-title"><h4 class="title">Command Line</h4></div><button type="button" class="command-close">&times;</button></div><p class="command_text">'+'</p></div></div>';
 							}
-							htmlContent += '<button id="task_log_info_'+task.taskId+'" class="fa fa-info-circle log-info" value="'+task.taskId+'"></button>';
-							htmlContent +='<div id="task_log_modal'+task.taskId+'" class="log-modal"><div class="log-modal-content"><div class="log-title-button"><div class="log-title"><h4 class="title">Task Log</h4></div><button type="button" class="log-close">&times;</button></div><p class="log_text">'+logMessage+'</p></div></div>';
-							//$("#task_log_info"+task.taskId).data("log-info",task.output);
-							//$("#task_log_info"+task.taskId).data("task-id",task.taskId);
 						}
 						
 						htmlContent += "</div>";
 					}
-				htmlContent += '</div>';
+					htmlContent += '</div>';
+				}
+				//htmlContent += '</div>';
 				// check if buttons mus be displayed, in order to create element for them
 				if ((typeof settings.cancelURL !== "undefined" && settings.cancelURL !== '') || 
 					(typeof settings.pauseURL !== "undefined" && settings.pauseURL !== '' && job.jobStatus === "RUNNING") || 
@@ -366,7 +371,7 @@ jQuery.fn.npExecPanels = function(options){
 		.on("click", ".cancel-job", function(e) {
 			var job = $(e.target.closest("[id]").parentElement).data("jobData");
 			$('#confirm-dialog').modal('confirm',{
-				msg:"Are you sure you want to cancel the job :<strong>"+job.jobName+"</strong>?",
+				msg:"Are you sure you want to cancel the job <strong>"+job.jobName+"</strong> ?",
 				callbackConfirm: function() {
 					ui_cancelJob({"jobId":job.id});
 				},
@@ -376,7 +381,7 @@ jQuery.fn.npExecPanels = function(options){
 		.on("click", ".pause-job", function(e) {
 			var job = $(e.target.closest("[id]").parentElement).data("jobData");
 			$('#confirm-dialog').modal('confirm',{
-				msg:"Are you sure you want to pause the job :<strong>"+job.jobName+"</strong>?",
+				msg:"Are you sure you want to pause the job <strong>"+job.jobName+"</strong>?",
 				callbackConfirm: function() {
 					ui_pauseJob({"jobId":job.id});
 				},
@@ -386,7 +391,7 @@ jQuery.fn.npExecPanels = function(options){
 		.on("click", ".resume-job", function(e) {
 			var job = $(e.target.closest("[id]").parentElement).data("jobData");
 			$('#confirm-dialog').modal('confirm',{
-				msg:"Are you sure you want to resume the job :<strong>"+job.jobName+"</strong>?",
+				msg:"Are you sure you want to resume the job <strong>"+job.jobName+"</strong>?",
 				callbackConfirm: function() {
 					ui_resumeJob({"jobId":job.id});
 				},
@@ -395,16 +400,27 @@ jQuery.fn.npExecPanels = function(options){
 		})
 		.on("click","[id^='task_log_info']", function(e) {
 			var taskId = $(this).val();
-			$("#task_log_modal"+taskId).show();
+			ui_getTaskLog(taskId);
 		})
 		.on("click",".log-close", function(e) {
 			var taskId = $(this).parents().siblings("[id^='task_log_info']").val();
 			$("#task_log_modal"+taskId).hide();
+		})
+		.on("click","[id^='task_command_info']", function(e) {
+			var taskId = $(this).val();
+			ui_getTaskCommand(taskId);
+		})
+		.on("click",".command-close", function(e) {
+			var taskId = $(this).parents().siblings("[id^='task_command_info']").val();
+			$("#command_info_modal"+taskId).hide();
 		});
 
 		window.onclick = function(e){
 			if(e.target == $("[id^='task_log_modal']")){
 				$("[id^='task_log_modal']").hide();
+			}
+			if(e.target == $("[id^='command_info_modal']")){
+				$("[id^='command_info_modal']").hide();
 			}
 		}
 	};
@@ -416,19 +432,22 @@ jQuery.fn.npExecPanels = function(options){
 		
 		var cpuPercentage = parseInt(task.usedCPU/settings.availableResources.cpu*100);
 		var ramPercentage = parseInt(task.usedRAM/settings.availableResources.memory*100);
+		var completePercentage = Math.floor(task.percentComplete);
+
 		
 		var cpuProgressClass = cpuPercentage < 50 ? "progress-bar-success" : (cpuPercentage > 80 ? "progress-bar-danger" : "progress-bar-warning");
 		var ramProgressClass = ramPercentage < 50 ? "progress-bar-success" : (ramPercentage > 80 ? "progress-bar-danger" : "progress-bar-warning");
+		var completeProgressClass = "progress-bar-info";
 		
 		htmlContent += "<div class='box-top'>" +
 							"<div class='box-title'>" +
 								"<span>" + task.componentName + " (" + task.jobName + ")" + "</span>";
-		if (typeof task.command !== "undefined" && task.command !== "") {
-			htmlContent += "<button type='button' class='btn btn-primary btn-sm btn-flat btn-action btn-nodeop' data-action='view_command'>" +
+
+		htmlContent += "<button type='button' class='btn btn-primary btn-sm btn-flat btn-action btn-nodeop' data-action='view_command'>" +
 								"<i class='fa fa-terminal fa-fw' aria-hidden='true'></i>" +
 								"<span class='span-muted collapse'>&nbsp;View command line</span>" +
 							"</button>";
-		}
+		
 		htmlContent += "</div>" + // close .box-title
 						"<div class='box-text'>" +
 							"<div> Start date: <strong>" + niceIsoTime(task.taskStart) + "</strong></div>" +
@@ -439,7 +458,7 @@ jQuery.fn.npExecPanels = function(options){
 							"<div class='col-md-12 col-sm-12 col-xs-12 message'>" +
 								"<div class='vm-row'>" +
 									"<span> <strong>User:</strong> </span>" +
-									"<div><strong><span>" + task.userName + "</span></strong></div>" +
+									"<div id='user-name'><strong><span>" + task.userId + "</span></strong></div>" +
 								"</div>";
 		if (task.componentType === "exec") {
 			htmlContent += "<div class='vm-row'>" + 
@@ -453,6 +472,12 @@ jQuery.fn.npExecPanels = function(options){
 				"<div class='used-ram-progress-bar'>" +
 					"<div class='progress-bar " + ramProgressClass + "' role='progressbar' style='width:" + ramPercentage + "%'>" + ramPercentage + "%</div>" +
 				"</div>" +
+			"</div>" +
+			"<div class='vm-row'>" +
+				"<span> <strong>Progress:</strong></span>" +
+				"<div class='percent-complete-progress-bar'>" +
+					"<div class='progress-bar " + completeProgressClass + "' role='progressbar' style='width:" + completePercentage + "%'>" + completePercentage + "%</div>" +
+				"</div>" +
 			"</div>";
 		}
 		htmlContent += "</div>" + //div .message
@@ -464,9 +489,24 @@ jQuery.fn.npExecPanels = function(options){
 		var $newEl = $("<div>",{
 			"html" : htmlContent
 		});
-		$newEl.addClass("task");
+		$newEl.addClass("task").prop("id", task.taskId);
 		$newEl.data("taskData",task);
 		$newEl.appendTo($panel).fadeIn("slow");
+
+		$newEl
+		.on("mousedown", "#user-name", function(e) {
+			clicking = true;
+
+			userguid = $(this).text();
+			getUsername(userguid);
+			$newEl.find("#user-name span").text(username);
+		})
+		.on('mouseup mouseleave', ".vm-row", function() {
+			if(clicking === true){
+				$newEl.find("#user-name span").text(userguid);
+				clicking = false;
+			}
+		});
 	};
 
 	var ui_cancelJob = function(cancelData){
@@ -484,6 +524,8 @@ jQuery.fn.npExecPanels = function(options){
             console.log("job canceled");
 			ui_showExecNotification();
 			getData();
+			$("#exec-history-panel").trigger("panel:refresh");
+			$(document).trigger( "quota:update" );
         }).fail(function (jqXHR, status, textStatus) {
             console.log("fail to cancel the job");
         });
@@ -570,15 +612,80 @@ jQuery.fn.npExecPanels = function(options){
         var html = '<i class="icon fa fa-ban fa-fw" aria-hidden="true"></i>';
         if (taskStatus === "DONE") html = '<i class="icon fa fa-check fa-fw" aria-hidden="true" style="color: green;"></i>';
         if (taskStatus === "PENDING_FINALIZATION") html = '<i class="icon fa fa-spinner fa-fw fa-spin" aria-hidden="true" style="color: orange;"></i>';
-        if (taskStatus === "RUNNING") html = '<i class="fa fa-cog fa-fw fa-spin" aria-hidden="true" style="color: orange;"></i>';
-        if (taskStatus === "UNDETERMINED") html = '<i class="fa fa-question fa-fw" aria-hidden="true" style="color: lightgrey;"></i>';
-        if (taskStatus === "QUEUED_ACTIVE") html = '<i class="fa fa-forward fa-fw fa-fade" aria-hidden="true" style="color: grey;"></i>';
+        if (taskStatus === "RUNNING") html = '<i class="icon fa fa-cog fa-fw fa-spin" aria-hidden="true" style="color: orange;"></i>';
+        if (taskStatus === "UNDETERMINED") html = '<i class="icon fa fa-question fa-fw" aria-hidden="true" style="color: lightgrey;"></i>';
+        if (taskStatus === "QUEUED_ACTIVE") html = '<i class="icon fa fa-forward fa-fw fa-fade" aria-hidden="true" style="color: grey;"></i>';
         return html;
     };
 
-	var ui_getTaskLogIcon = function(){
-		console.log("task log");
+	var ui_getTaskLog = function(taskId){
+		$.ajax({
+            cache: false,
+            url: baseRestApiURL + 'orchestrator/tasks/' + taskId,
+            type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-Auth-Token": window.tokenKey
+            }
+        }).done(function (response) {
+			var output = ((typeof response.data.output === 'undefined' || response.data.output === '') ? 'There is no log message for the selected task': response.data.output);
+
+			$modal = $("#task_log_modal"+taskId);
+			$(".log_text", $modal).html(output);
+
+			$modal.show();
+        }).fail(function (jqXHR, status, textStatus) {
+            console.log("fail to get task log");
+        });
 	}
+
+	var ui_getTaskCommand = function(taskId){
+		$.ajax({
+            cache: false,
+            url: baseRestApiURL + 'orchestrator/tasks/' + taskId,
+            type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-Auth-Token": window.tokenKey
+            }
+        }).done(function (response) {
+			var command = ((typeof response.data.command === 'undefined' || response.data.command === '') ? 'There is no command for the selected task': response.data.command);
+
+			$modal = $("#command_info_modal"+taskId);
+
+			var commandArea = "<textarea class='command-line' disabled>"+ command+"</textarea>";
+			$(".command_text", $modal).html(commandArea);
+			$('<style>.command-line { width:100%;height:90%;font-family:"Courier New";white-space:pre; resize: vertical; height: 40vh}</style>').appendTo($modal);
+			$modal.show();
+        }).fail(function (jqXHR, status, textStatus) {
+            console.log("fail to command");
+        });
+	}
+
+	function getUsername(guid){
+        var getName = $.ajax({
+            cache: false,
+            url: baseRestApiURL + "user/name/" + guid,
+            type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+
+        $.when(getName).done(function (response) {
+            if(response.status === "SUCCEEDED" && typeof response.data !== "undefined"){
+                username = response.data;
+            }else{
+                showMsg("Could not retrieve username.", response.status);
+				getUsername = guid;
+            }
+        }).fail(function () {
+        });
+    }
 
     var ui_showExecNotification = function(){
         $notification.addClass("show");

@@ -41,7 +41,17 @@
                         </div>
                     </div>
                 </div>
-
+                <div id="chooseExecType" class="row">
+					<div class="col-md-12">
+						<div class="row form-group">
+							<label for="execType" class="col-md-2 control-label" style="padding-top: 0px !important;">Execution environment</label>
+							<div class="col-md-10">
+								<select type="text" class="form-control" id="execType" name="execType" autocomplete="off">
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -67,7 +77,7 @@
 				<div id="chooseScriptType" class="row hidden">
 					<div class="col-md-12">
 						<div class="row form-group">
-							<label for="jobType" class="col-md-2 control-label">Choose script type</label>
+							<label for="jobType" class="col-md-2 control-label">Script type</label>
 							<div class="col-md-10">
 								<select type="text" class="form-control hidden" id="jobType" name="jobType" autocomplete="off">
 									<option value="" selected disabled>-- Please select a type --</option>
@@ -79,9 +89,25 @@
 				
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="col-md-12">
-                            <p>You can customize workflow parameters before run. Values will only affect current workflow processing call.</p>
+                       
+
+                        <div id="selectAll">
+                            <div class="form-group main-row row">
+                                <label class="col-md-12" style="margin-left: 15px;">Use the same value for all missing inputs?</label>
+                                <br>
+                                <div class="row form-group col-md-12 " style="display: flex; margin-left: 30px;">
+                                    <div class="col-md-3">
+                                        <input type="radio" class="selection-type" value="Select for all" name="selection" checked></input><label>Yes</label>
+                                        <input type="radio" class="selection-type" value="Select for one" name="selection" ></input><label>No</label>
+                                    </div>  
+                                    <div class="col-md-8">
+                                        <select id="selectionAll" class="form-control col-md-8" style="border-color: #d2d6de!important;" ></select>
+                                    </div>
+                                                                 
+                                </div>
+                            </div>
                         </div>
+
                         <div  id="chooseInput">
                             <!--<div class="row form-group">
                                 <label for="inputName" class="col-md-2 control-label">Choose input</label>
@@ -92,6 +118,9 @@
 					            </div>
                             </div>-->
 
+                        </div>
+                        <div class="col-md-12">
+                            <p>You can customize workflow parameters before run. Values will only affect current workflow processing call.</p>
                         </div>
                         <div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
                             <div class="row">
@@ -114,7 +143,7 @@
                                                             <thead>
                                                             <tr>
                                                                 <th>Key</th>
-                                                                <th>Value</th>
+                                                                <th style="width: 70%;">Value</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -146,68 +175,164 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
+                            <div class="col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11">
+								<div class="modal-footer">
+									<button id="saveExecNode" type="submit" class="btn btn-primary btn-submit left-btn" name="btnSave">Process workflow</button>
+									<button type="button" class="btn btn-default right-btn" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+                        </div>                        
+                    </div>
+                    <!-- <div class="col-md-12">
+                        <div class="form-group">
                             <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
                                 <button id="saveExecNode" type="submit" class="btn btn-primary btn-submit">Process workflow</button>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </section>
         </div><!-- /.modal-body -->
     </form>
-    <div class="modal-footer">
+    <!-- <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    </div>
+    </div> -->
 </div><!-- /.modal-content -->
 <script type="text/javascript" src="./assets/libs/openlayers/ol-poly.js"></script>
+<!-- include select2 -->
+<link rel="stylesheet" type="text/css" href="assets/libs/select2/4.1.0/select2.min.css" />
+<script type="text/javascript" src="assets/libs/select2/4.1.0/select2.min.js"></script>
+
 <style>
 .chosen-input{margin-left: 10px;font-weight: bold;}
+.select2-container--default .select2-selection--single .select2-selection__rendered{line-height:inherit;}
+.select2-container--default .select2-selection--single{padding:6px 0}
+
+input[type=radio]{margin: 0px 5px 0px 15px;}
+#frmStartWF *[geotype="Polygon2D"]{width:95%}
+#frmStartWF table{table-layout: fixed;width: 100%;}
+
+.has-error select{border-color: #a94442;}
 </style>
 <script>
-function createProductSetList(selectId){
-    $.ajax({
-        cache: false,
-        url: baseRestApiURL + "datasource/productset/",
-        type: 'GET',
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "X-Auth-Token": window.tokenKey
-        },
-        success: function(response) {
-					if (response.status === responseStatus.success) {
-			
-                        $(selectId).html("");
-						var $option = $('<option class="defaultDataset" disabled selected>Select a product set...</option>');
-                        $(selectId).append($option);
-                        $option = $('<option class="defaultDataset">Input example</option>');
-                        $(selectId).append($option);
-						$.each(response.data, function (idx, productSet ) {
-							if (!productSet.singleton) {
-                                if( productSet.type !== "n/a"){
-                                    var $option = $('<option title="'+productSet.description+'">' + productSet.label+"-"+ productSet.type + '</option>');
-                                }else{
-								    var $option = $('<option title="'+productSet.description+'">' + productSet.label + '</option>');
-                                }
-                                
-								$option.data({ "definition": productSet });
-                                $(selectId).append($option);
-								
-							}
-						});
+	function createProductSetList(selectId, node, source, indexOfSource){
+		$.ajax({
+			cache: false,
+			url: baseRestApiURL + "datasource/productset/",
+			type: 'GET',
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"X-Auth-Token": window.tokenKey
+			},
+			success: function(response) {
+						if (response.status === responseStatus.success) {
+				
+							$(selectId).html("");
+							var $option = $('<option class="defaultDataset" disabled selected>Select a product set...</option>');
+							$(selectId).append($option);
+							//$option = $('<option class="defaultDataset">Input example</option>');
+							//$(selectId).append($option);
+
+							$.each(response.data, function (idx, productSet ) {
+
+								if (!productSet.singleton) {
+
+                                    if(typeof node === "undefined"){
+                                        if( productSet.type !== "n/a"){
+                                            var $option = $('<option title="'+productSet.description+'">' + productSet.label+"-"+ productSet.type + '</option>');
+                                        }else{
+                                            var $option = $('<option title="'+productSet.description+'">' + productSet.label + '</option>');
+                                            
+                                        }
+                                        $option.data({ "definition": productSet });
+                                            $(selectId).append($option);
+
+                                    } else if(node.sources.length === 1 ){ 
+                                        if(node.sources[0].cardinality === 0){
+                                            if( productSet.type !== "n/a"){
+                                                var $option = $('<option title="'+productSet.description+'">' + productSet.label+"-"+ productSet.type + '</option>');
+                                            }else{
+                                                var $option = $('<option title="'+productSet.description+'">' + productSet.label + '</option>');
+                                            }
+
+                                            $option.data({ "definition": productSet });
+                                            $(selectId).append($option);
+                                        }else if(productSet.products.length % node.sources[0].cardinality === 0){
+                                            if( productSet.type !== "n/a"){
+                                                var $option = $('<option title="'+productSet.description+'">' + productSet.label+"-"+ productSet.type + '</option>');
+                                            }else{
+                                                var $option = $('<option title="'+productSet.description+'">' + productSet.label + '</option>');
+                                            }
+
+                                            $option.data({ "definition": productSet });
+                                            $(selectId).append($option);
+
+                                        }
+                                    }else if( node.sources.length > 1 ){
+                                        if(node.sameCardinality){
+                                            if(node.sources[0].cardinality !== 0 && productSet.products.length % node.sources[0].cardinality === 0){///////////////////////////////////
+                                                if( productSet.type !== "n/a"){
+                                                    var $option = $('<option title="'+productSet.description+'">' + productSet.label+"-"+ productSet.type + '</option>');
+                                                }else{
+                                                    var $option = $('<option title="'+productSet.description+'">' + productSet.label + '</option>');
+                                                }
+
+                                                $option.data({ "definition": productSet });
+                                                $(selectId).append($option);
+                                            } else if( node.sources[0].cardinality === 0 ){///////////////////////////
+                                                if( productSet.type !== "n/a"){
+                                                    var $option = $('<option title="'+productSet.description+'">' + productSet.label+"-"+ productSet.type + '</option>');
+                                                }else{
+                                                    var $option = $('<option title="'+productSet.description+'">' + productSet.label + '</option>');
+                                                }
+
+                                                $option.data({ "definition": productSet });
+                                                $(selectId).append($option);
+                                            }
+                                        }else if(!node.sameCardinality){
+                                            console.log(selectId);
+                                            if(productSet.products.length === node.sources[indexOfSource].cardinality && node.sources[indexOfSource].cardinality !==0 ){
+                                                if( productSet.type !== "n/a"){
+                                                    var $option = $('<option title="'+productSet.description+'">' + productSet.label+"-"+ productSet.type + '</option>');
+                                                }else{
+                                                    var $option = $('<option title="'+productSet.description+'">' + productSet.label + '</option>');
+                                                }
+
+                                                $option.data({ "definition": productSet });
+                                                $(selectId).append($option);
+
+                                            } else if(node.sources[indexOfSource].cardinality === 0){
+                                                if( productSet.type !== "n/a"){
+                                                    var $option = $('<option title="'+productSet.description+'">' + productSet.label+"-"+ productSet.type + '</option>');
+                                                }else{
+                                                    var $option = $('<option title="'+productSet.description+'">' + productSet.label + '</option>');
+                                                }
+
+                                                $option.data({ "definition": productSet });
+                                                $(selectId).append($option);
+                                            }
+                                           
+
+                                        }
+                                    }
+									
+								}
+							});
+						}
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						console.log("error");
 					}
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-					console.log("error");
-				}
-    }).fail(function (jqXHR, textStatus) {
-        chkXHR(jqXHR.status);
-    });
-}
+		}).fail(function (jqXHR, textStatus) {
+			chkXHR(jqXHR.status);
+		});
+	}
 
 
     $(document).ready( function(){
 		var wfSubmitUrl = baseRestApiURL + "orchestrator/start";
+		var availableSites = [];
 		
 		closePolygonMap();
 		if (window.userOpStack[0].action && window.userOpStack[0].action === "wf_script") {
@@ -223,39 +348,224 @@ function createProductSetList(selectId){
             alert("Error determining workflow ID.");
         }
 		
+		$.validator.addMethod("jobTypeIsRequired", function (value, element) {
+			if ($(element).hasClass("hidden")) {
+				return true;
+			} else {
+				return element.value !== "" || element.value === null;
+			}
+		},"This field is required.");
+
+        // var selectMessage = "";
+        // $.validator.addMethod("selectCardinalityRules", function(value, element){
+        //     var selectSiblings = $(element).parents("[id^='row-"+$(element).data("processingUnit").id+"-']").siblings("[id^='row-']");
+        //     var elementCard = $(element).data("cardinality");
+        //     var selectionOk = false;
+        //     $.each(selectSiblings, function(inx, sibling){
+        //         if(true){//no option selected
+        //             console.log("no option selected");
+        //         } 
+
+        //     })
+
+        // }, selectMessage);
+
+        //$.validator.addMethod("inputProductNr", function ())
+		
 		$("#frmStartWF").validate({
-			ignore: ":hidden",
+			ignore: "",
 			rules : {
-				"jobType" : { required: true }
+				"jobType" : { jobTypeIsRequired: true }
 			},
 			messages      : { },
-			success       : function(label) { label.remove(); },
-			highlight     : function(element, errorClass) { $(element).closest(".row").addClass("has-error"); },
-			unhighlight   : function(element, errorClass) { $(element).closest(".row").removeClass("has-error"); },
-			errorPlacement: function(error, element) { error.insertAfter($(element)); }
+			success       : function(label) {
+				label.remove(); 
+			},
+			highlight     : function(element, errorClass) {
+                if( element.id.includes("inputList")){
+                    //var $parentAccordion = $(element);
+                    //$parentAccordion.addClass("has-error");
+                    if ($(element).hasClass("isRequired")) {
+                        $(element).addClass("has-error");
+                    } 
+                }else{
+                    var $parentAccordion = $(element).closest("div[id^=acc-panel-node-]");
+                    if ($parentAccordion.length > 0) {
+					$parentAccordion.addClass("has-error");
+                    }
+                    if ($(element).hasClass("isRequired")) {
+                        $(element).closest(".val-row").addClass("has-error");
+                    } else {
+                        $(element).closest(".row").addClass("has-error");
+                    }
+                }
+
+				
+			},
+			unhighlight   : function(element, errorClass) {selectAll
+				var $parentAccordion = $(element).closest("div[id^='acc-panel-node-']");
+				if($parentAccordion.length > 0 && $parentAccordion.find("label.error").length === 0) {
+					$parentAccordion.removeClass("has-error");
+				}
+				if ($(element).hasClass("isRequired")) {
+					$(element).closest(".val-row").removeClass("has-error");
+				} else {
+					$(element).closest(".row").removeClass("has-error");
+				}
+			},
+			errorPlacement: function(error, element) { 
+				if ($(element).hasClass("isRequired")) {
+					if ($(element).is("select") && typeof $(element).data("select2") !== "undefined") {
+						$(element).parent().append(error);
+					} else {
+						error.insertAfter($(element));
+					}
+				} else {
+					error.insertAfter($(element));
+				}
+			}
 		});
 
-        $(".var-value-string").on("focusout", function(){
-            if($(this).val() !== ''){
-                $(this).css("border-color","#CCC");
-                $(this).removeClass("isRequired");
+		// used to make select2 plugin work with validation plugin
+		//$("#frmStartWF").on("change.select2", "select", function (e) {  
+		//	$(this).valid(); 
+		//});
+	
+		//when a selection is made
+        var allSelected;
+        var selectAll = false;
+        createProductSetList("#selectionAll");
+        
+        $.when(getWFDataById).done(function(){
+            $.each( $("[id^='inputList']"), function (idx, item){
+                $(item).prop("disabled", true);
+            });
+        });
+
+
+        $(".selection-type").on("change", function(){
+            if($(".selection-type:checked").val() === "Select for all"){
+                $("#selectionAll").show();
+                
+            } else {
+                $("#selectionAll").hide();
+                $("#chooseInput").find("[id^='inputList']").trigger("change");
             }
         });
 
-        $('#accordion>div.panel').on("focusout", function(){
-            var allFields =$(this).find(".isRequired").length;
-            if(allFields === 0){
-                $(this).css("border-color","#3c8dbc");
-            }
+        $("#selectionAll").on("change", function(){
+            $("#chooseInput").find("[id^='inputList']").trigger("change");
         });
-	
+
+        $(".selection-type").on("change", function(){
+            $("#chooseInput").find("[id^='inputList']").trigger("change");
+        });
+
+        $("#chooseInput").on("change", "[id^='inputList']", function(){
+
+            var selectSiblings = $(this).parents("[id^='row-"+$(this).data("processingUnit").id+"-']").siblings("[id^='row-']");
+            var inputCard = $(this).data("cardinality");
+            var hasSameCard = $(this).data("processingUnit").sameCardinality;
+            if($($(this).find("option:selected")).hasClass("defaultDataset")){
+                var selectedProductSetCard = null;
+            }else{
+                var selectedProductSetCard = $($(this).find("option:selected")).data("definition").products.length;
+            }
+            //var selectedOption = $(this).find("option:selected").text();
+            var selectedOption = $("#selectionAll").find("option:selected").text();
+            var selectionType = $(this).parents().find('input[name^="selection"]:checked').val();
+            //var siblingNodes = $(this).parents('.main-row[id^="row-"]').siblings(".main-row");
+            var siblingNodes = $(".main-row");
+
+            //selection for all
+            if(typeof selectionType !== "undefined" && selectionType === "Select for all" && !selectAll){
+                
+                $.each(siblingNodes, function(index,node){
+                    var select = $(node).find("[id^='inputList']");
+                    if( typeof select[0] !== "undefined"){
+
+                        $.each( $(select[0]).find("option"), function(index, option){
+                            if($(this).text() === selectedOption){
+                                 $(this).prop("selected",true);
+                                 selectAll = true;
+                                 $(select[0]).trigger("change");
+                             }
+                        });
+                        $(select[0]).prop("disabled", true);
+                    }
+                });
+            } else if(selectionType !== "Select for all"){
+                $.each(siblingNodes, function(index,node){
+                    var select = $(node).find("[id^='inputList']");
+                    if( typeof select[0] !== "undefined"){
+                        $(select[0]).prop("disabled", false);
+                    }
+                });
+            }
+
+
+            if(allSelected){
+                $.each(selectSiblings, function(idx,sibling){
+                    $(sibling).find("option.defaultDataset").prop("selected", true);
+                });
+                allSelected = false;
+            }
+
+            $.each(selectSiblings, function(idx,sibling){
+                var siblingCard = $($(sibling).find("select")).data("cardinality");
+                var siblingSelection = $(sibling).find("option:selected");
+                //var hasSameCard = $($(sibling).find("select")).data("processingUnit").sameCardinality;
+
+                if(hasSameCard){
+                    var siblingOptions = $(sibling).find("option");
+                    $.each(siblingOptions, function(index, option){
+                        if(!$(option).hasClass("defaultDataset")){
+                            if( $(option).data("definition").products.length !== selectedProductSetCard && selectedProductSetCard !== 0 && siblingCard !== 0 && selectedProductSetCard !== null){
+                                $(option).attr("disabled", true);
+                            } else{
+                                $(option).attr("disabled", false);
+                            }
+                        }
+                    });
+                }else{
+                    var siblingOptions = $(sibling).find("option");
+                    $.each(siblingOptions, function(index, option){
+                        if(!$(option).hasClass("defaultDataset")){
+                            if( $(option).data("definition").products.length !== siblingCard && siblingCard !== 0){
+                                $(option).attr("disabled", true);
+                            } else{
+                                $(option).attr("disabled", false);
+                            }
+                        }
+                    });
+                }
+
+                if($(this).find('option[disabled]:selected').text() !== $(this).find("option.defaultDataset").text() && $(this).find('option[disabled]:selected').text() !== "" ){
+                    $(this).find(".defaultDataset").prop("selected", true);
+                }
+
+                if($(this).parent().find('option[disabled]:selected').length === 0){
+                    allSelected = true;
+                    var siblingOptions = $(sibling).find("option");
+                    $.each(siblingOptions, function(index, option){
+                        if(!$(option).hasClass("defaultDataset")){
+                            $(option).attr("disabled", false);
+                        }
+                    });
+                }
+
+                selectAll = false;
+            });
+
+        });
+
         //remove error for some input elements
 		$("#frmStartWF").off("click", ".ol");
 		$("#frmStartWF").off("change",".var-value-string, .var-value-string2, .var-value-list");
         $("#frmStartWF")
             .on("click", ".ol", function (e) {
                 // Load map poly
-                openPolygonMap($("#myModalNodes"), $(this).parent().find("input"));
+                openPolygonMap($("#myModalNodes"), $(this).parent().find(".siteOrWkt"));
             })
             .on("change",".var-value-string, .var-value-string2, .var-value-list",function(e){
 				if ($(".var-value-string2:visible", $(this).parent()).length > 0) {
@@ -274,40 +584,32 @@ function createProductSetList(selectId){
 						$("#inputWorkflowLabel",$(this)).val($("#inputWorkflowLabel",$(this)).attr("placeholder"));
 					}
 					var formData = {};
+					var siteOrWkt = $(".siteOrWkt",$(this)).val();
 					formData['name'] = $("#inputWorkflowInstanceName",$(this)).val();
 					formData['label'] = $("#inputWorkflowLabel",$(this)).val();
 					formData['workflowId'] = window.userOpStack[0].dna.id;
 					formData['parameters'] = {};
 					formData['inputs'] = {};
-					
+
+                    formData['environment'] = $("#chooseExecType")[0].hasAttribute("hidden")? "DEFAULT" : $("#execType").val();
+                    formData['jobType'] = "EXECUTION";
 					if (!$("select", "#chooseScriptType").hasClass("hidden")) {
 						formData['jobType'] = $("select", "#chooseScriptType").val();
 					}
-                    var isValid =  true;
+                    /*var isValid =  true;*/
 					$('#accordion>div.panel').each(function(){
 						var dna = $(this).data("dna");
-                        var accordion = $(this);
+                        /*var accordion = $(this);*/
 						if (dna){
 							if(dna.name !== undefined){
 								formData['parameters'][dna.name] = {};
 								var $tableValRows = $(".tbl-edt-sysvar",$(this)).find(".val-row");
-                                var allFields = true;
+                                /*var allFields = true;*/
 								$.each($tableValRows, function(i, $tableValRow) {
 									var n = $(".var-id",$tableValRow).text();
 									var v = $(".var-value",$tableValRow).val();
 									if(v !== ''){
 										formData['parameters'][dna.name][n] = v;
-                                        $(".var-value-string",$tableValRow).css("border-color","#CCC");
-                                        $(".var-value-string",$tableValRow).removeClass("isRequired");
-									}else{
-                                        isValid = false;
-                                        allFields = false;
-                                        $(".var-value-string",$tableValRow).css("border-color","#ff0000");
-                                        $(".var-value-string",$tableValRow).addClass("isRequired");
-                                        accordion.css("border-color","#ff0000");
-                                    }
-                                    if(allFields){
-                                        accordion.css("border-color","#3c8dbc");
                                     }
 								});
 							}else if(dna.label !== undefined){
@@ -323,11 +625,6 @@ function createProductSetList(selectId){
 							}
 						}
 					});
-
-                    if(!isValid){
-                        alert("Please fill in all the required fields (highlighted in red).");
-                        return isValid;
-                    }
 
 					$('select[id^=inputList]').each(function(){
 						data = $(this).data();
@@ -352,8 +649,8 @@ function createProductSetList(selectId){
 					};
 					$.ajax(settings)
 						.done(function (response) {
-							console.log("START POST");
-							console.log(response);
+							// console.log("START POST");
+							// console.log(response);
 							if(response.status === "SUCCEEDED"){
 								showMsg("Workflow submitted for execution [job ID " + response.data + "]", "SUCCESS");
 								$("#myModalNodes").modal('hide');
@@ -362,12 +659,13 @@ function createProductSetList(selectId){
 							}
 						})
 						.fail(function (response) {
-						alert("could not start execution. endpoint failure.");
+						    alert("Workflow execution could not be started due to inaccessible endpoint.");
 						});
 				}
                 //SUBMIT TO SERVER
                 return false;
-            });
+        });
+
     });
 
     function getWFParametersById(wfID){
@@ -377,20 +675,23 @@ function createProductSetList(selectId){
             "url": baseRestApiURL + "orchestrator/parameters/"+wfID,
             "method": "GET",
             "headers": {
-                "x-auth-token": "84656a7f-827a-429c-a21a-fcf9500e3bce",
                 "Cache-Control": "no-cache",
                 "X-Auth-Token": window.tokenKey
             }
         };
 
+		// used to generate id for dynamically  added fields
+		var accordionId = Math.floor(Math.random() * 100);
         $.ajax(settings).done(function (r) {
             var response = chkTSRF(r);
             console.log("response parameters for WF: "+wfID);
             console.log(response);
-            var helper_EdtRowPutValue = function($el, name, type, value, valueset){
-                if(valueset === null){
+            var helper_EdtRowPutValue = function($el, name, type, value, valueset, required){
+				// field id used to generate error labels on form validate
+				var id = accordionId + "_" + name;
+                if ((valueset == null) || ((valueset.length === 1) && (( valueset[0] === "") || ( valueset[0] === "null")))) {
                     $('input.var-value', $el).val(value);
-                    if (type === "Date") {
+                    if (type === "date") {
                         $('input.var-value-string, input.var-value-string2', $el).attr("type", "date");
                         if (name.toLowerCase() === "startdate" || name.toLowerCase() === "enddate") {
                             var date1 = "";
@@ -405,23 +706,48 @@ function createProductSetList(selectId){
                             return;
                         }
                     }
-                    if((type === "Double") || (type === "Float") || (type === "Number")){
+                    if ((type === "double") || (type === "float") || (type === "number")) {
                         $('input.var-value-string', $el).attr("type", "number").attr("step", "any");
                     }
-                    if((type === "Integer") || (type === "Short")){
+                    if ((type === "int") || (type === "long") || (type === "short")) {
                         $('input.var-value-string', $el).attr("type", "number");
                     }
-                    if(type === "polygon"){
-                        $('input.var-value-string', $el).attr("geotype", "Polygon2D");
-                    }
-                    $('input.var-value-string', $el).val(value).show();
+                    if (type === "polygon") {
+                        //$('input.var-value-string', $el).attr("geotype", "Polygon2D");
+						var foundValue = false;
+						var html = "";
+						$.each(availableSites, function(i, v) {
+							html +="<option "+(v.footprint === value ?"selected " : "") + "value=\""+v.footprint+"\">"+v.name+"</option>";
+							if (v.footprint === value) {
+								foundValue = true;
+							}
+						});
+						html = "<option value='' disabled " + (foundValue ? + "" : "selected " )+ "> -- Please select a site or add a geometry -- </option>" + html;
+						if(required){
+                            $('select.var-value-list', $el).html(html).attr({"geotype": "Polygon2D", "id": id}).addClass("siteOrWkt isRequired").show();
+                        }else{
+                            $('select.var-value-list', $el).html(html).attr({"geotype": "Polygon2D", "id": id}).addClass("siteOrWkt").show();
+                        }
+						
+                    } else {
+                        if(required){
+                            $('input.var-value-string', $el).val(value).attr("id", id).addClass("isRequired").show();
+                        }else{
+                            $('input.var-value-string', $el).val(value).attr("id", id).show();
+                        }
+						
+					}
                 }else{
                     $('input.var-value', $el).val(value);
                     var html = "";
                     $.each(valueset, function(i, v) {
-                        html +="<option "+(v === value && 'selected ')+"value=\""+v+"\">"+v+"</option>";
+                        html +="<option " + (v === value ? "selected " : "") + "value=\""+v+"\">"+v+"</option>";
                     });
-                    $('select.var-value-list', $el).html(html).show();
+                    if(required){
+                        $('select.var-value-list', $el).html(html).attr("id", id).addClass("isRequired").show();
+                    }else{
+                        $('select.var-value-list', $el).html(html).attr("id", id).show();
+                    }
                 }
             };
             var helper_addSTblEdtRow = function($tblEdt, payload){
@@ -430,7 +756,8 @@ function createProductSetList(selectId){
                     "type": "string",
                     "name": "",
                     "valueSet": null,
-                    "value": null
+                    "value": null,
+                    "required": false
                 };
                 $.extend( obj, payload );
                 var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
@@ -443,35 +770,90 @@ function createProductSetList(selectId){
 //                    obj.value = obj.defaultValue;
                 }
                 if(obj.type === "bool"){
-                    helper_EdtRowPutValue($el, obj.name, obj.type, obj.value, ["true","false"]);
+                    helper_EdtRowPutValue($el, obj.name, obj.type, obj.value, ["true","false"], obj.required);
                 }else{
-                    helper_EdtRowPutValue($el, obj.name, obj.type, obj.value, obj.valueSet);
+                    helper_EdtRowPutValue($el, obj.name, obj.type, obj.value, obj.valueSet, obj.required);
                 }
                 $tblEdt.append($el);
             };
             $('#accordion>div.panel').each(function(){
                 var dna = $(this).data("dna");
                 if (dna){
-                    console.log("ho:"); console.log(response[dna.name]);
+                    // console.log("ho:"); console.log(response[dna.name]);
                     var $tableEL = $(".tbl-edt-sysvar",$(this));
                     //check for empty paremeter set or undefined???
                     if( (response[dna.name] === undefined) || ($.isArray(response[dna.name]) !== true) || (response[dna.name].length === 0) ){
                         $tableEL.hide();
                         $("<p>No configurable parameters for this node.</p>").insertAfter($tableEL);
                     }else{
+						if (typeof $($tableEL[0]).closest("[id^=acc-panel-node-]").data("dna") !== "undefined") {
+							accordionId = $($tableEL[0]).closest("[id*=acc-panel-node-]").data("dna").id;
+						}
                         $.each(response[dna.name], function(i, value) {
                             helper_addSTblEdtRow($($tableEL[0]), value);
                         });
                     }
                 }
             });
+			 $.validator.addClassRules({
+				isRequired: {
+					required: true
+				}
+             });
+			 $("#frmStartWF").validate();
             //append globe after Polygon2D
-            $( "<i class=\"fa fa-fw fa-globe ol\" style=\"font-size:1.5em;vertical-align:bottom;color:#2677a7;cursor:pointer;margin-left: -27px;\"></i>" ).insertAfter( "input.var-value-string[geotype='Polygon2D']");
+            $( "<i class=\"fa fa-fw fa-globe ol\" style=\"font-size:1.5em;vertical-align:middle;color:#2677a7;cursor:pointer;\"></i>" ).insertAfter( "*[geotype='Polygon2D']");
         }).fail(function () {
             console.log("error retriving workflow parameters");
         });
     }
 
+    var wfData = {};
+
+    function resetWfData(){
+        wfData = {
+            _remote: {
+                response: null
+            },
+            nodeTemplates:{
+                pc:{},
+                ds:{},
+                dsg:{}
+            },
+            nodes: {},
+            groups: [],
+            connectors: {},
+        };
+    }
+    
+    function setComponentsDatasources(currentWfData){
+        resetWfData();
+        wfData._remote = currentWfData;
+        //clone wf data only, no nodes info
+        wfData.wf = $.extend({}, currentWfData); wfData.wf.nodes = [];
+        wfData.usedComponents = [];
+        wfData.usedGroups = [];
+        wfData.usedDSGroups = [];
+
+        for (var i = 0, nodesNo = wfData._remote.nodes.length; i < nodesNo; i++) {
+            switch (wfData._remote.nodes[i].componentType) {
+                case "GROUP":
+                    wfData.usedGroups.push(wfData._remote.nodes[i].componentId);
+                    break;
+                case "DATASOURCE_GROUP":
+                    wfData.usedDSGroups.push(wfData._remote.nodes[i].componentId);
+                    break;
+                case "PROCESSING":
+                    wfData.usedComponents.push(wfData._remote.nodes[i].componentId);
+                    break;
+                case "DATASOURCE":
+                    wfData.usedComponents.push(wfData._remote.nodes[i].componentId);
+                    break;
+                default:
+                    alert("Unknown component type "+wfData._remote.nodes[i].componentType+" found. Node will be ignored!");
+            }
+        }
+    };
     function getWFDataById (wfID){
         $.ajax({
             async: false,
@@ -487,7 +869,7 @@ function createProductSetList(selectId){
             },
             error : function (jqXHR, textStatus, errorThrown) {
                 if( jqXHR.status === 500 ){
-                    alert('E001, Exec node nolonger found.');
+                    alert('E001, Exec node no longer found.');
                 } else {
                     alert('E001, An error has occurred, please try again or contact app admin.');
                 }
@@ -495,34 +877,220 @@ function createProductSetList(selectId){
             success: function(r) {
 				
                 var response = chkTSRF(r);
-                console.log(response);
-                $("#chooseInput").html("");
-                //create select for every processing component without an input
-                $.each(response.nodes, function(index, value){
+                setComponentsDatasources(response);
 
-                    if(value.incomingLinks[0] === undefined && value.componentType === "PROCESSING"){
-
-                        var $row = $('<div id="row-'+value.id+'"class="row form-group"></div>');
-                        $("#chooseInput").append($row);
-
-                        var $label = $('<label class="col-md-3 control-label"> Node ' + value.name + ' needs input: </label>');
-                        $("#row-"+value.id).append($label);
-
-                        var $select = $('<div class="col-md-9"><select type="text" class="form-control" id="inputList-'+value.id+'" value="" autocomplete="off" ></select></div>');
-                        $("#row-"+value.id).append($select);
-
-                        $("#inputList-"+value.id).data("processingUnit", value);
-                        //$("#chooseInput").append('');
-                        var selectId = "#inputList-"+value.id;
-                        createProductSetList(selectId);
-
+                //get component templates for all components in workflow
+                var componentsListQueryString = wfData.usedComponents.join(',');
+                var getComponentsList = $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + "component/list?id="+componentsListQueryString,
+                    dataType : 'json',
+                    type: 'GET',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "X-Auth-Token": window.parent.tokenKey
                     }
                 });
+                var getDatasourcesList = $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + "datasource/list?id="+componentsListQueryString,
+                    dataType : 'json',
+                    type: 'GET',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "X-Auth-Token": window.parent.tokenKey
+                    }
+                });
+                //get component templates for all groups in workflow
+                var groupListQueryString = wfData.usedGroups.join(',');
+                var getGroupsList = $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + "component/group?id="+groupListQueryString,
+                    dataType : 'json',
+                    type: 'GET',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "X-Auth-Token": window.parent.tokenKey
+                    }
+                });
+                if(wfData.usedDSGroups.length > 1){
+                    alert("Workflow contains more then a datasource group. Only the first datasource group will be used, ignoring all other.");
+                }
+                var getEnvs = $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + "orchestrator/environment/",
+                    dataType : 'json',
+                    type: 'GET',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "X-Auth-Token": window.parent.tokenKey
+                    }
+                });
+
+                // console.log("workflow response:");console.log(response);
+                $.when(getComponentsList, getDatasourcesList, getGroupsList/*, getDSGroup*/)
+                .done(function addSources(getComponentsListResponse, getDatasourcesListResponse, getGroupsListResponse,/* getDSGroupResponse*/) {
+                    var currentWfComponentsList = chkTSRF(getComponentsListResponse[0]);
+                    var currentWfDatasourcesList = chkTSRF(getDatasourcesListResponse[0]);
+                    var currentWfGroupsList = chkTSRF(getGroupsListResponse[0]);
+                    //var currentWfDSGroups = chkTSRF(getDSGroupResponse[0]);
+                    // console.log("workflow components:"); console.log(currentWfComponentsList);
+                    // console.log("workflow datasopurces:"); console.log(currentWfDatasourcesList);
+                    // console.log("workflow groups:"); console.log(currentWfGroupsList);
+                    //console.log("workflow datasources groups:"); console.log(currentWfDSGroups);
+
+                    $.each(response.nodes, function(index, node){
+
+                        switch (node.componentType) {
+                            case "GROUP":
+                                $.each(currentWfGroupsList, function(i, cgroup){
+                                    if( node.componentId === cgroup.id){
+                                        node.sources = cgroup.sources;
+                                    }
+                                });
+                                break;
+                            /*case "DATASOURCE_GROUP":
+                                $.each(currentWfDSGroups, function(i, dgroup){
+                                    if( node.componentId === dgroup.id){
+                                        node.sources = dgroup.sources;
+                                    }
+                                });
+                                break;*/
+                            case "PROCESSING":
+                                $.each(currentWfComponentsList, function(i, component){
+                                    if( node.componentId === component.id){
+                                        node.sources = component.sources;
+                                    }
+                                });
+                                break;
+                            case "DATASOURCE":
+                                $.each(currentWfDatasourcesList, function(i, datasource){
+                                    if( node.componentId === datasource.id){
+                                        node.sources = datasource.sources;
+                                    }
+                                });
+                                break;
+                            default:
+                                alert("Unknown component type "+wfData._remote.nodes[i].componentType+" found. Node will be ignored!");
+                        }
+                        
+                    });
+
+                    $.when(getEnvs)
+                    .done(function(getEnvsResponse){
+                        var listEnvs = chkTSRF(getEnvsResponse);
+
+                        if(getEnvsResponse.status === "SUCCEEDED"){
+                            if(listEnvs.length === 1){
+                                $("#execType").append('<option value="'+listEnvs+'" selected>'+listEnvs+'</option>');
+                                $("#execType").attr("disabled", true);
+                            }else{
+                                if(listEnvs.length !== 0 ){
+                                    $.each(listEnvs, function(i, env){
+                                        $("#execType").append('<option value="'+env+'">'+env+'</option>');
+                                    });
+                                }else{
+                                    $("#chooseExecType").attr("hidden", true);
+                                }
+                            }
+                        }
+                    })
+                    .fail(function (getEnvsResponse) {
+						alert("Could not fetch environment list. Please try again or contact app admin.");
+					});
+
+                    $("#chooseInput").html("");
+
+                    var nrOfNodes = 0;
+                    $.each(response.nodes, function(index, node){
+                        //create select for every processing component without an input
+                        if(node.componentType === "PROCESSING" && node.incomingLinks.length < node.sources.length && node.sources[0] !== undefined){
+                            nrOfNodes++;
+                            var existingInputs = [];
+                            var precedentCardinality;
+                            var sameCardinality = true;
+                            $.each(node.sources, function(i, source){
+                                //var existingInputs = {};
+                                if( i == 0){
+                                    precedentCardinality = source.cardinality;
+                                } else if( source.cardinality !== precedentCardinality){
+                                    sameCardinality = false;
+                                }
+
+                                if(typeof node.incomingLinks[0] !== undefined){ 
+                                    $.each(node.incomingLinks, function(j, incomingLink){
+                                        if(source.id === incomingLink.output.id){
+                                            existingInputs.push(incomingLink.output.id);
+                                        }
+                                    });
+                                } 
+                            });
+
+                            node.sameCardinality = sameCardinality;
+
+                            var $div = $('<div id="row-'+ node.id +'"class="row form-group main-row"></div>');
+                            $("#chooseInput").append($div);
+                            
+                            var $node = $('<label class="col-md-12 control-label" style="text-align: left; margin-left: 15px;"> Node ' + node.name + ' needs input for : </label>');
+                            $("#row-"+ node.id).append($node);
+                            
+                            $.each(node.sources, function(i, source){
+                                if(!(source.cardinality === -1)){
+                                    if($.inArray(source.id, existingInputs) === -1){
+                                        
+                                        var $row = $('<div id="row-'+ node.id +'-'+ source.id +'"class="row form-group col-md-12" style="margin-left: 30px;"></div>');
+                                        //$("#chooseInput").append($row);
+                                        $("#row-"+ node.id).append($row);
+
+                                        var $label = $('<label class="col-md-3 control-label" style="text-align: left;">'+ source.name+' (expects '+source.cardinality +' item): </label>');
+                                        $("#row-"+ node.id +'-'+ source.id).append($label);
+
+                                        //var $select = $('<div class="col-md-9"><select type="text" class="form-control" id="inputList-'+ node.id +'-'+ source.id+'" value="" autocomplete="off" ></select></div>');
+                                        //$("#row-"+ node.id +'-'+ source.id).append($select);
+                                        var $select = $('<div class="col-md-8"><select type="text" name="selectInput" class="form-control" id="inputList-'+ node.id +'-'+ source.id+'" value="" autocomplete="off" ></select></div>');
+                                        $("#row-"+ node.id +'-'+ source.id).append($select);
+
+                                        $("#inputList-"+node.id +'-'+ source.id).data("processingUnit", node);
+                                        $("#inputList-"+node.id +'-'+ source.id).data("cardinality", source.cardinality );
+                                        $("#inputList-"+node.id +'-'+ source.id).addClass("isRequired");
+
+                                        var selectId = "#inputList-"+node.id +"-"+ source.id;
+                                        createProductSetList(selectId, node, source, i);
+                                        if(i == 0 && response.nodes.length > 1){
+                                            $(selectId).prop("disabled", true); 
+                                        }
+                                    }
+                                } else {
+                                    if(node.sources.length === 1){
+                                        $("#row-"+ node.id).remove();
+                                        nrOfNodes--;
+                                    }
+                                }
+
+                            });
+
+                        }
+                    });
+
+                    if( nrOfNodes > 1){
+                        $("#selectAll").show();
+                    } else {
+                        $("#selectAll").hide();
+                        $("[id^='inputList']").prop("disabled", false);
+                        $('[value="Select for one"]').prop("checked", true);
+                    }
+                    
+                });
+
                 //populate wf header
                 var $el = $('#wf-header');
                 $el.data("payload", response);
                 $('.val-start-wf-name', $el).html(response.name);
-                $('.val-start-wf-username', $el).html(response.userName);
+                $('.val-start-wf-username', $el).html(response.userId);
                 $('.val-start-wf-visibility', $el).html(response.visibility);
                 //init exec name with name + timestamp
                 $('#inputWorkflowInstanceName').val(response.name+", "+moment().format('DD/MM/YYYY HH:mm:ss'));
@@ -543,7 +1111,17 @@ function createProductSetList(selectId){
                     $elClone.find(".panel-collapse").prop("id", "collapse-one-body-"+node.id);
                     $elClone.appendTo( "#accordion" ).data("dna", node).removeClass("hidden");
                 });
-                getWFParametersById(wfID);
+				$.when(getAvailableSites()).done(function (getAvailableSitesResponse) {
+					if (getAvailableSitesResponse.status && getAvailableSitesResponse.status === "SUCCEEDED"){
+						availableSites = getAvailableSitesResponse.data;
+					}
+					getWFParametersById(wfID);
+					$(".siteOrWkt").select2({
+						dropdownParent: $(".modal-body", "#frmStartWF"),
+						width: "95%",
+						tags: true
+					});
+				});
             }
         });
         return true;
@@ -553,8 +1131,8 @@ function createProductSetList(selectId){
         var createElClone;
         createElClone = $( "#acc-panel-tpl" ).clone();
         createElClone.prop("id", "acc-panel-productSet-"+selectedInput.id+ processingUnit.id );
-        createElClone.find(".box-title a").html('<span class="fa-stack fa-lg start-component-logo"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-database fa-stack-1x fa-inverse"></i></span>&nbsp;'+selectedInput.label+" <i>(component ID: "+selectedInput.id+")</i>" ).attr("href", "#collapse-one-body-"+selectedInput.id);
-        createElClone.find(".panel-collapse").prop("id", "collapse-one-body-"+selectedInput.id);
+        createElClone.find(".box-title a").html('<span class="fa-stack fa-lg start-component-logo"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-database fa-stack-1x fa-inverse"></i></span>&nbsp;'+selectedInput.label+" <i>(component ID: "+selectedInput.id+")</i>" ).attr("href", "#collapse-one-body-"+selectedInput.id+"-"+processingUnit.id);
+        createElClone.find(".panel-collapse").prop("id", "collapse-one-body-"+selectedInput.id+'-'+processingUnit.id);
         createElClone.appendTo("#accordion").data("dna", selectedInput).removeClass("hidden");
 
         $("#acc-panel-productSet-"+selectedInput.id+processingUnit.id).data("data", selectedInput);
@@ -597,20 +1175,22 @@ function createProductSetList(selectId){
         });
     }
 
-    $("select[id^=inputList]").change( function(){
+    $("#chooseInput").on("change","select[id^=inputList]", function(){
         var selectedInput = $("option:selected",this).data("definition");
         var processingUnit = $("#"+this.id).data("processingUnit");
         var lastInput = $("#"+this.id).data("lastInput");
+        //if(typeof selectedInput !== "undefined" && typeof $("#"+this.id).data("lastInput") === "undefined"){
+        if(typeof selectedInput !== "undefined"){
+            if( lastInput !== selectedInput.id && lastInput !== undefined){
+                $("#acc-panel-productSet-"+lastInput+processingUnit.id).remove();
+                $("#"+this.id).data("lastInput", selectedInput.id);
+                addEntryForInput(selectedInput, processingUnit);
 
-        if( lastInput !== selectedInput.id && lastInput !== undefined){
-            $("#acc-panel-productSet-"+lastInput+processingUnit.id).remove();
-            $("#"+this.id).data("lastInput", selectedInput.id);
-            addEntryForInput(selectedInput, processingUnit);
-
-        }else{
-            $("#"+this.id).data("lastInput", selectedInput.id);
-            addEntryForInput(selectedInput, processingUnit);
-            
+            }else if(lastInput !== selectedInput.id){
+                $("#"+this.id).data("lastInput", selectedInput.id);
+                addEntryForInput(selectedInput, processingUnit);
+                
+            }
         }
         //$("#acc-panel-productSet-"+selectedInput.id).remove();
     });

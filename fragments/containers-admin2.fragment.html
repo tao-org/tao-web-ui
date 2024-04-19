@@ -36,7 +36,7 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header tao-async-ph">
-	<h1>Toolbox Containers <small>The available <strong>toolbox containers</strong> that can be used for processing.</small></h1>
+	<h1>Toolbox Containers <small>The available docker<strong> containers</strong> that can be used for processing.</small></h1>
 	<ol class="breadcrumb">
 		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 		<li class="active">Toolbox Containers</li>
@@ -50,14 +50,15 @@
 			<!-- Custom Tabs -->
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
-					<!--li class="role-dropdown active">
+					<li class="role-dropdown active">
 						<select id="selectNodePanel" name="selectNodePanel" class="form-control form-changepane" title="Select desired node view.">
 							<option class="role role-admin" value="active_nodes">Online nodes</option>
 						</select>
-					</li-->
+					</li>
 				</ul>
 				<ul class="nav nav-tabs hidden-xs">
-					<!--li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="active_nodes" aria-expanded="true">Toolbox container</a></li-->
+					<li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="active_nodes" aria-expanded="true">Toolbox container</a></li>
+					<li class="role role-admin "><a href="#panel-nodes" data-toggle="tab" data-action="pending_containers" aria-expanded="true">Pending containers</a></li>
 				</ul>
 				
 				<div class="tab-content">
@@ -155,6 +156,7 @@
 														<div class="box-bottom">
 															<div class="text-left">
 																<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
+																<button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop invisible" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete</span></button>
 															</div>
 														</div>
 													</div>
@@ -206,7 +208,7 @@
 			rm_contentUrl="./fragments/containers-edit.fragment.html?" + Math.random();
 		}
 		if (rm_contentUrl === '') {
-			alert("TAO - Operation mismatch");
+			alert("AVL - Operation mismatch");
 			return;
 		}
 		$.ajax({
@@ -223,14 +225,57 @@
 			}
 		});
 	};
+
+	deleteContainerbyId = function(id){
+		var deleteContainer = $.ajax({
+            cache: false,
+            url: baseRestApiURL + "docker/" + id,
+            type: 'DELETE',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        });
+        $.when(deleteContainer)
+            .done(function (deleteContResponse) {
+                if(deleteContResponse && (deleteContResponse.status ==="SUCCEEDED")){
+                    showMsg("Container deleted", "SUCCESS");
+                    panelComp.refreshData();
+                }else{
+                    showMsg("Container deletion failed. "  + (typeof deleteContResponse.message !== 'undefined' ? deleteContResponse.message : ''), "ERROR");
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                showMsg("Container delete failed. " + errorThrown, "ERROR");
+            });
+        return 1;
+	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	$(document).ready(function () {
+
 		var urls = [ baseRestApiURL + "docker/" ];
+		
+		$("a[data-toggle='tab']", "#panel-topo-wrapper").on("shown.bs.tab", function (e) {
+			var action = $(this).data("action");
+			if (action === "active_nodes") {
+                nodeType = "";
+				$("[data-action='op-plus']").prop("disabled", false);
+				$("[data-action='delete']").addClass("invisible");
+
+            }else if(action === "pending_containers"){
+				nodeType = "type?type=1&visibility=1";
+				$("[data-action='op-plus']").prop("disabled", true);
+				$("[data-action='delete']").removeClass("invisible");
+			}
+			window.panelComp.refreshData([ baseRestApiURL + "docker/" + nodeType]);
+		});
+
 		window.panelComp = $('#panel-nodes').npPaginatedCells({
 			headerUser: taoUserProfile.username,
 			url: urls,
-			viewMode: prefferences.viewMode,
+			viewMode: preferences.viewMode,
 			filterAttribute: "name",
 			order:[
 				{
@@ -263,6 +308,20 @@
 				}
 				if (action === "edit") {
 					myModalNodesOpShow(action, args);
+				}
+				if(action === "delete"){
+					if( taoUserProfile.userRole !== "ADMIN" && taoUserProfile.username !== args.dna.userName ){
+						alert("not allowed");
+						return;
+					}
+					$('#confirm-dialog').modal('confirm',{
+						msg:"Are you sure you want to delete container <strong>"+args.dna.name+"</strong>?",
+						callbackConfirm: function() {
+							deleteContainerbyId(args.dna.id);
+						},
+						callbackCancel:function(){}
+					});
+					//myModalNodesOpShow(action, args);
 				}
 			},
 			doCustomRender: function($elClone, elX) {

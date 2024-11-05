@@ -276,11 +276,11 @@
 .skin-red-light #myFlatMap .drawer-content .btn-poly {
 	color: #911102;
 }
-.skin-red-light #filtersDialog #search_button button {
+.skin-red #filtersDialog #search_button button {
 	background-color: #dd4b39;
 	color: #911102;
 }
-.skin-red-light #filtersDialog #search_button button:hover {
+.skin-red #filtersDialog #search_button button:hover {
 	background-color: #c43421;
 }
 /*** Bot chat ***/

@@ -748,11 +748,25 @@ form .taginput .tag{background-color:#f0f0f0; border:1px solid #dedede; color: b
 	var editor = ace.edit("ace-editor");
 	editor.setValue("");
 	editor.setOptions({
+		fontFamily: "monospace",
+		fontSize:"12px",
     	maxLines: 30,
 		minLines: 15
 	});
 	editor.$blockScrolling = Infinity;
-
+	editor.setShowPrintMargin(false);
+	
+	switch(window.themeParameters.size){
+		case 'size-normal':
+			editor.setFontSize(14);
+			break;
+		case 'size-large':
+			editor.setFontSize(16);
+			break;
+		case 'size-larger':
+			editor.setFontSize(18);
+			break;
+	}
 
     var action = 'op-plus';
 	var jupyterContainerId = null;
@@ -877,6 +891,7 @@ form .taginput .tag{background-color:#f0f0f0; border:1px solid #dedede; color: b
 				if( response.componentType === "SCRIPT" && ($("#inputContainerId").find("option:selected").text()).startsWith("python")){
 					$("#openJupyterLab").removeClass("hidden");
 					editor.getSession().setMode("ace/mode/python");
+					editor.setTheme("ace/theme/crimson_editor");
 				}else{
 					if(response.templateType === "XSLT"){
 						editor.getSession().setMode("ace/mode/xml");

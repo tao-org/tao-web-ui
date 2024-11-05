@@ -23,24 +23,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="selectUserType" class="col-sm-2 col-md-2 control-label">User Type</label>
+                            <label for="selectUserType" class="col-sm-2 col-md-2 control-label">User type</label>
                             <div class="col-sm-10 col-md-10">
                                 <select id="selectUserType" name="selectUserType" class="form-control">
                                 </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group has-feedback">
-                            <label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
-                            <div class="col-sm-10 col-md-10">
-                                <input type="text" class="form-control" id="inputUsername" name="inputUsername" placeholder="Username" autocomplete="off" value=""/>
-                                <span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
-                                <span class="ckattr-ok sr-only collapse">(success)</span>
-                                <span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
-                                <span class="ckattr-error sr-only collapse">(error)</span>
                             </div>
                         </div>
                     </div>
@@ -49,10 +35,25 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="selectUserGroup" class="col-sm-2 col-md-2 control-label">Group membership</label>
+                            <label for="selectUserGroup" class="col-sm-2 col-md-2 control-label">User group</label>
                             <div class="col-sm-10 col-md-10">
                                 <select id="selectUserGroup" name="selectUserType" class="form-control">
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="inputUsername" class="col-sm-2 col-md-2 control-label">User name</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputUsername" name="inputUsername" placeholder="User name" autocomplete="off" value=""/>
+                                <span class="ckattr-ok glyphicon glyphicon-ok form-control-feedback collapse" aria-hidden="true"></span>
+                                <span class="ckattr-ok sr-only collapse">(success)</span>
+                                <span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
+                                <span class="ckattr-error sr-only collapse">(error)</span>
                             </div>
                         </div>
                     </div>
@@ -106,16 +107,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="inputOrg" class="col-sm-2 col-md-2 control-label">Organization</label>
-                            <div class="col-sm-10 col-md-10">
-                                <input type="text" class="form-control" id="inputOrg" name="inputOrg" placeholder="Organization" autocomplete="off" value=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -126,32 +118,36 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputCpuQuota" class="col-sm-2 col-md-2 control-label">CPU quota</label>
+                            <label for="inputOrg" class="col-sm-2 col-md-2 control-label">Organization</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputOrg" name="inputOrg" placeholder="Organization" autocomplete="off" value=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="col-md-12">
+                    <div class="form-group has-feedback">
+                        <label class="col-sm-3 col-md-3 control-label">CPU &amp; Resource quota</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputCpuQuota" class="col-sm-2 col-md-2 control-label">CPU</label>
                             <div class="col-sm-10 col-md-10">
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <input class="val-toggle-unmetered" type="checkbox" checked="checked"> Unmetered
                                 </div>
-                                <input type="number" class="form-control val-togglable" id="inputCpuQuota" name="inputCpuQuota" placeholder="CPU quota" min="0" autocomplete="off" value="" disabled="disabled"/>
+                                <input type="number" class="form-control val-togglable" id="inputCpuQuota" name="inputCpuQuota" min="0" autocomplete="off" value="" disabled="disabled"/>
                             </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="inputMemoryQuota" class="col-sm-2 col-md-2 control-label">Memory Quota</label>
-                            <div class="col-sm-10 col-md-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <input class="val-toggle-unmetered" type="checkbox" checked="checked"> Unmetered
-                                    </div>
-                                    <input type="number" class="form-control val-togglable" id="inputMemoryQuota" name="inputMemoryQuota" placeholder="Memory Quota" min="0" autocomplete="off" value="" disabled="disabled"/>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -160,13 +156,29 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputQuota" class="col-sm-2 col-md-2 control-label">Input Quota</label>
+                            <label for="inputMemoryQuota" class="col-sm-2 col-md-2 control-label">Memory (GB)</label>
                             <div class="col-sm-10 col-md-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <input class="val-toggle-unmetered" type="checkbox" checked="checked"> Unmetered
                                     </div>
-                                    <input type="number" class="form-control val-togglable" id="inputQuota" name="inputQuota" placeholder="Input Quota" min="0" autocomplete="off" value="" disabled="disabled"/>
+                                    <input type="number" class="form-control val-togglable" id="inputMemoryQuota" name="inputMemoryQuota" min="0" autocomplete="off" value="" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputQuota" class="col-sm-2 col-md-2 control-label">Input (GB)</label>
+                            <div class="col-sm-10 col-md-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <input class="val-toggle-unmetered" type="checkbox" checked="checked"> Unmetered
+                                    </div>
+                                    <input type="number" class="form-control val-togglable" id="inputQuota" name="inputQuota" min="0" autocomplete="off" value="" disabled="disabled"/>
                                 </div>
                             </div>
                         </div>
@@ -175,13 +187,13 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="inputProcessingQuota" class="col-sm-2 col-md-2 control-label">Processing Quota</label>
+                            <label for="inputProcessingQuota" class="col-sm-2 col-md-2 control-label">Processing (GB)</label>
                             <div class="col-sm-10 col-md-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <input class="val-toggle-unmetered" type="checkbox" checked="checked"> Unmetered
                                     </div>
-                                    <input type="number" class="form-control val-togglable" id="inputProcessingQuota" name="inputProcessingQuota" placeholder="Processing Quota" min="0" autocomplete="off" value="" disabled="disabled"/>
+                                    <input type="number" class="form-control val-togglable" id="inputProcessingQuota" name="inputProcessingQuota" min="0" autocomplete="off" value="" disabled="disabled"/>
                                 </div>
                             </div>
                         </div>
@@ -205,7 +217,7 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
                         <h4>Help filling in</h4>
-                        <p>Please fill in all needed information. All data needed to identify a user must be unique, username and email address will be validated on the server against all existing users.</p>
+                        <p>All data needed to identify a user must be unique, username and email address will be validated on the server against all existing users.</p>
                     </div>
                 </div>
             </div>
@@ -217,30 +229,35 @@
 </div><!-- /.modal-content -->
 
 <script>
-    var action = 'op-plus';
-
     function validateUserUnique(attrId){
+        var $pEL = $("#"+attrId).parent();
         var val = $("#"+attrId).val();
         var s = {};
         var msg = "";
         if(attrId === "inputUsername"){
             if(val===""){
-                showMsg("Username can not be empty!", "ERROR");
+                $(".ckattr-ok", $pEL).fadeOut();
+                $(".ckattr-error", $pEL).fadeIn();
                 return 0;
             }
             s = {username:val};
             msg = "Username already in use.";
-
         }
         if(attrId === "inputEmail"){
             if(val===""){
-                showMsg("Primary email address can not be empty!", "ERROR");
+                $(".ckattr-ok", $pEL).fadeOut();
+                $(".ckattr-error", $pEL).fadeIn();
                 return 0;
             }
             s = {email:val};
             msg = "Email address already in use.";
         }
         if(attrId === "inputEmail2"){
+            if(val===""){
+                $(".ckattr-ok", $pEL).fadeOut();
+                $(".ckattr-error", $pEL).fadeIn();
+                return 0;
+            }
             s = {alternativeEmail:val};
             msg = "Alternate email address already in use.";
         }
@@ -263,7 +280,6 @@
                 var response = chkTSRF(r);
                 var $pEL = $("#"+attrId).parent();
                 try {
-//                    showMsg(response.msgdetails.global, response.msgcode);
                     if(response && Array.isArray(response)){
                         var matched = _.where(response, s);
                         if(matched.length === 0){
@@ -280,7 +296,7 @@
                     }
                 }
                 catch(e) {
-                    alert("Malformed server answer. Try again or notify the site admin! Thank you.");
+                    alert("Malformed server answer. Try again or notify the site admin!");
                 }
             }
         });
@@ -335,8 +351,41 @@
             $('#frmUserEdit input[name=inputProcessingQuota]').val(selectedUserGroup.processingQuota).trigger("check:togglebyval");
         });
 
+        $("form#frmUserEdit").validate({
+			rules: {
+				inputUsername: {
+					required: true,
+				},
+				inputFirstName: {
+					required: true
+				},
+				inputLastName: {
+					required: true
+				},
+				inputEmail: {
+					required: true
+				}
+			},
+			highlight: function(element, errorClass) {
+				$(element).parent().addClass("has-error");
+			},
+			unhighlight: function(element, errorClass) {
+				$(element).parent().removeClass("has-error");
+			},
+			messages: {
+			},
+			errorPlacement: function(error, element) {
+				error.appendTo(element.parent());
+			},
+			success: function(label) {
+				label.remove();
+			}
+		});
+
         $("form#frmUserEdit").submit(function (event) {
             event.preventDefault();
+            
+            if (!($(this).valid())) {return;}
 
             var formData = {
                 "id" : null,
@@ -369,12 +418,7 @@
                 formData.memoryQuota = $('input[name=inputMemoryQuota]', this).val();
             formData.groups.push(taoUserGroups.getById($("#selectUserGroup").val()));
 
-console.log(formData);
-
-            if((formData.username === '')||(formData.email === '')){
-                showMsg("Username and email can not be empty. Please check your entries and try again.", "ERROR");
-                return false;
-            }
+            // console.log(formData);
 
             $.ajax({
                 cache: false,
@@ -412,9 +456,11 @@ console.log(formData);
                     showMsg("Unknown error. Unable to update user. Please try again.", "ERROR");
                 },
                 success: function(data) {
-                    showMsg("New user successfully added.", "SUCCESS");
+                    if(data.status === "SUCCEEDED"){
+                        showMsg("New user successfully added.", "SUCCESS");
+                        panelComp.refreshData();
+                    }
                     $("#myModalNodes").modal('hide');
-                    panelComp.refreshData();
                 }
             });
             return false;

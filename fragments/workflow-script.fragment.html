@@ -279,7 +279,7 @@ function createProductSetList(selectId){
 								$.each($tableValRows, function(i, $tableValRow) {
 									var n = $(".var-id",$tableValRow).text();
 									var v = $(".var-value",$tableValRow).val();
-									if(v !== ''){
+									if(v !== '' && typeof v !== "undefined"  && $(".var-dataType",$tableValRow).html() !== "Template"){
 										formData['parameters'][dna.name][n] = v;
 									}
 								});
@@ -289,7 +289,7 @@ function createProductSetList(selectId){
 								$.each($tableValRows, function(i, $tableValRow) {
 									var n = $(".var-id",$tableValRow).text();
 									var v = $(".var-value",$tableValRow).val();
-									if(v !== ''){
+									if(v !== '' && typeof v !== "undefined"  && $(".var-dataType",$tableValRow).html() !== "Template"){
 										formData['parameters'][dna.label][n] = v;
 									}
 								});
@@ -390,6 +390,12 @@ function createProductSetList(selectId){
                     });
                     $('select.var-value-list', $el).html(html).show();
                 }
+
+                if(type === "Template"){
+                    $('input.var-value', $el).remove();
+                    $('input.var-value-string', $el).remove();
+                    $('input.var-value-list', $el).remove();
+                }
             };
             var helper_addSTblEdtRow = function($tblEdt, payload){
                 // Default valueSet value must be null (required for helper_EdtRowPutValue function)
@@ -402,7 +408,14 @@ function createProductSetList(selectId){
                 $.extend( obj, payload );
                 var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
                 $('span.var-id', $el).html(obj.name);
-                $('span.var-label', $el).html(obj.name);
+                var label = obj.name;
+                if(label.indexOf("~") !== -1){
+                    label = label.split("~")
+                    $('span.var-label', $el).html(label[1]);
+                    $('span.var-label', $el).css("margin-left", "30px");  
+                }else{
+                    $('span.var-label', $el).html(obj.name);
+                }
 //                $('span.var-description', $el).html(obj.description);
                 $('span.var-dataType', $el).html(obj.type);
 //                $('span.var-default', $el).html(obj.defaultValue);

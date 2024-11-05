@@ -263,6 +263,14 @@
 				});
 			}
 		},
+		removeFeaturesByTrId: function (trId) {
+			var _self = this;
+			$.each(_self.source.getFeatures(), function (index, feature) {
+				if (feature.id_ === trId) {
+					_self.source.removeFeature(feature);
+				}
+			});
+		},
 		removeFeaturesByProperty: function (property) {
 			var _self = this;
 			var key   = Object.keys(property)[0];

@@ -96,7 +96,7 @@
                             <!-- small box -->
                             <div class="small-box bg-yellow">
                                 <div class="inner">
-                                    <h3>SSH Termial</h3>
+                                    <h3>SSH Terminal</h3>
                                     <p style="line-height: 1em;">
                                         Hostname: <span class="val-sshHost"></span>
                                     </p>
@@ -411,9 +411,14 @@
 <script src="./assets/libs/jQuery-datepicker/jquery-ui.js" type="text/javascript"></script>
 <script src="./assets/libs/np/jquery.npmultilineselect.js" type="text/javascript"></script>
 <script>
+    var sock = null;
+	var sessionId = null;
+	var closed = { STDOUT:false, STDERR:false };
+	var term = null;
+
     var monitorNode = function (id) {
             var $sshModal = $("#myModalMonitor");
-            $(".val-sshHost",$sshModal).text(id);
+            $(".val-sshHost", $sshModal).text(id);
             var sshURL = './nodemonitor.html?node='+id;
             var parentIframe = document.getElementById("monitorIframeWrapper");
             //$("#monitorIframeWrapper").hide();
@@ -428,6 +433,7 @@
             $sshModal
                 .off("click", ".small-box-footer")
                 .on("click", ".small-box-footer", function(e){
+
                     e.preventDefault();
                     var newwindow = window.open(sshURL, "_blank", "resizable=yes, scrollbars=yes, titlebar=yes, width=800, height=405, top=10, left=10");
                     $sshModal.modal('hide');
@@ -435,28 +441,53 @@
     };
 	
     var sshNode = function (nodeDNA) {
-            var $sshModal = $("#myModalSSH");
-            $(".val-sshHost",$sshModal).text(nodeDNA.id);
-            var sshURL = baseRestApiURL + 'docker/connect?host='+nodeDNA.id+'&port=4200';
-            var parentIframe = document.getElementById("sshIframeWrapper");
-            var iframe = document.createElement('iframe');
-            iframe.id="randomid"+Math.floor(Math.random() * 10000000);
-            iframe.src = sshURL;
-            iframe.style.width = "100%";
-            iframe.style.height = "500px";
-            parentIframe.appendChild(iframe);
-            $sshModal.modal('show');
-            $sshModal
-                .off("click", ".small-box-footer")
-                .on("click", ".small-box-footer", function(e){
-                    e.preventDefault();
-                    var windowObjectReference;
-                    var strWindowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
-                    windowObjectReference = window.open(sshURL, "SSH terminal to "+nodeDNA.id, strWindowFeatures);
-                    $sshModal.modal('hide');
-                });
-            return 1;
+        var $sshModal = $("#myModalSSH");
+        $(".val-sshHost", $sshModal).text(nodeDNA.id);
+        $(".val-sshHost", $sshModal).data("id", nodeDNA.appId);
+        var target = nodeDNA.id;
+        var parentIframe = document.getElementById("sshIframeWrapper");
+        /*var iframe = document.createElement('iframe');
+        iframe.id="randomid"+Math.floor(Math.random() * 10000000);
+        iframe.src = sshURL;
+        iframe.style.width = "100%";
+        iframe.style.height = "500px";
+        parentIframe.appendChild(iframe);*/
+        $sshModal.modal('show');
+        if($("#myModalSSH").find("#sshIframeWrapper").find(".xterm").length === 0){
+            connect(nodeDNA);
+        }else{
+            $("#myModalSSH").find("#sshIframeWrapper").find(".xterm").remove();
+            connect(nodeDNA);
+        }
+        $sshModal
+            .off("click", ".small-box-footer")
+            .on("click", ".small-box-footer", function(e){
+                e.preventDefault();
+                var windowObjectReference;
+                var strWindowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+                windowObjectReference = window.open(sshURL, "SSH terminal to "+nodeDNA.id, strWindowFeatures);
+                $sshModal.modal('hide');
+            });
+        return 1;
     };
+
+    $("#myModalSSH").on('hide.bs.modal', function(){
+        var nodeId = $(".val-sshHost", "#myModalSSH").data("id");
+        $.ajax({
+            cache: false,
+            url: baseRestApiURL + "session/"+nodeId+"/close",
+            type: 'POST',
+            headers: {
+                "X-Auth-Token": window.tokenKey
+            }
+        }).done(function (response) {
+            console.log(response);
+        }).fail(function (jqXHR, textStatus) {
+                chkXHR(jqXHR.status);
+        });
+    });
+
+
 	
     var statusNode = function (nodeDNA) {
         var $sshModal = $("#myModalSatus");
@@ -615,6 +646,99 @@
             }
         });
     };
+    // WS functions
+    async function sendMessage(to, d) {
+			return sock.send(JSON.stringify({to, d}));
+    }
+
+    function connect(sshNode) {
+        term = new Terminal({cols: 80, rows:30, scrollback:0, windowsMode:false});
+        const fitAddon = new FitAddon.FitAddon();
+        term.loadAddon(fitAddon);
+        term.open(document.getElementById("sshIframeWrapper"));
+        sock = new SockJS('/ws-terminal', undefined, {transports: null});
+        sock.onopen = function (){
+            sendMessage('tm', 'new-session');
+        };
+        sock.onmessage = async function (e) {
+            if (e.data) {
+                let data = JSON.parse(e.data);
+                if (data.cause == "new-session") {
+                    sessionId = data.sessionId;
+                    await connected(sshNode);
+                } else if (data.cause == "update") {
+                    const binary = atob(data.b64);
+                    const bytes = new Uint8Array(binary.length);
+                    for (let i = 0; i < bytes.length; i++) {
+                        bytes[i] = binary.charCodeAt(i);
+                    }
+                    await new Promise((a, r) => term.write(bytes, a)); // block onmessage until written
+                } else if (data.cause == "ask-for-password") {
+                    term.write("Password needed.");
+                    setTimeout(() => {
+                        let password = window.prompt("Enter your password");
+                        sendMessage('tm', {event:"password", password});
+                    }, 100);
+                } else if (data.cause == "EOF") {
+                    closed[data.stream] = true;
+                    if (Object.keys(closed).filter(x=>!closed[x]).length == 0) {
+                        term.write("\r\n\r\n-- END -- Reload the page to restart --", ()=>{
+                            sock.close();
+                        });
+                    }
+                } else {
+                    console.log('unknown message', e);
+                }
+            }
+        };
+        sock.onclose = function () {
+            console.log('close');
+            sessionId = null;
+            term.disableStdin = true;
+            term.onKey(e => {
+                term.blur();
+            });
+            term.blur();
+        };
+    }
+
+    async function write(s) {
+        // console.debug("debug output", s);
+        sendMessage('tm', {event:"type", text:s});
+    }
+    async function connected(node) {
+        term.write('Connected to backend! \r\n');
+        sendMessage('tm', {event: "connect", target: node.id});
+        term.onData((s) => {
+            write(s);
+        });
+        term.onResize(evt => resized(evt));
+        const xterm_resize_ob = new ResizeObserver(function (entries) {
+            // since we are observing only a single element, so we access the first element in entries array
+            try {
+                fitAddon && fitAddon.fit();
+            } catch (err) {
+                console.log(err);
+            }
+        });
+        xterm_resize_ob.observe(document.querySelector("#myModalSSH"));
+        term.focus();
+    }
+    async function resized(evt) {
+        console.log("resize", evt)
+        return fetch('/session/' + sessionId + '/resized', {
+            method: 'POST',
+            body: JSON.stringify(evt),
+            headers: {
+                "Accept": "application/json"
+            }
+        }).then(response => response.json())
+        .then((data) => {
+            console.log("resize response", data);
+        })
+        .catch(e => console.error("resize error", e));
+    }
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     $(document).ready(function () {
@@ -630,13 +754,14 @@
             var action = $(this).data("action");
             if (action === "active_nodes") {
                 nodeType = "active";
+                $("[data-action='op-plus']").removeClass("hidden")
             } else if (action === "inactive_nodes") {
                 nodeType = "inactive";
+                $("[data-action='op-plus']").addClass("hidden");
             }
 			
             window.panelComp.refreshData([ baseRestApiURL + "topology/" + nodeType ]);
-			
-			$("#selectNodePanel option").removeAttr('selected').filter("option[value='" + action + "']").attr("selected", true);
+			// $("#selectNodePanel option").removeAttr('selected').filter("option[value='" + action + "']").attr("selected", true);
         });		
 		
 		window.panelComp = $("#panel-nodes").npPaginatedCells({

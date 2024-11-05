@@ -51,7 +51,7 @@
         <div class="modal-content modal-edit-tags">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Edit</h4>
+                <h4 class="modal-title" id="myModalLabel">Edit product set</h4>
             </div>
             <form id="frmEditProductSet" class="form-horizontal" role="form">
                 <div class="modal-body">
@@ -109,8 +109,11 @@
 						<div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
-                                        <button id="saveProductSet" type="submit" class="btn btn-primary btn-action" name="btnSave">Save</button>
+                                    <div class="col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11">
+										<div class="modal-footer">
+											<button id="saveProductSet" type="submit" class="btn btn-primary btn-action left-btn" name="btnSave">Save</button>
+											<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										</div>
                                     </div>
                                 </div>
                             </div>
@@ -118,9 +121,6 @@
                     </section>
                 </div>
             </form>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
         </div><!-- /.modal-content -->
     </div>
 </div>
@@ -138,10 +138,17 @@
 		<div class="col-md-12">
 			<!-- Custom Tabs -->
 			<div class="nav-tabs-custom">
-				<ul class="nav nav-tabs hidden-xs">
-					<li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_productSets" aria-expanded="true">Product Sets</a></li>
-					<li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="all_queries" aria-expanded="false">Queries</a></li>
+				<ul class="nav nav-tabs visible-xs-block">
+                    <li class="role-dropdown active">
+                        <select id="selectNodePanel" name="selectNodePanel" class="form-control form-changepane" title="Select desired node view.">
+                            <option class="role role-admin" value="all_productSets">Product Sets</option>
+                            <option class="role role-admin" value="all_queries">Queries</option>
+                        </select>
 				</ul>
+				<ul class="nav nav-tabs hidden-xs">
+                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_productSets" aria-expanded="true">Product Sets</a></li>
+                    <li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="all_queries" aria-expanded="true">Queries</a></li>
+                </ul>
 				<div class="tab-content">
 					<div class="tab-pane active" id="panel-nodes">
 						<div class="row">
@@ -295,7 +302,7 @@
 					}
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
-					alert("Could not open the add/edit page. An error occurred while retrieving data from server.");
+					alert("An error occurred while retrieving data from server.");
 				}
 			});
 		// Remove query/collection
@@ -335,7 +342,7 @@
 					}
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
-					alert("Could not open the add/edit page. An error occurred while retrieving data from server.");
+					alert("An error occurred while retrieving data from server.");
 				}
 			});
 		} else if (action === "delete") {
@@ -344,7 +351,7 @@
 			} else {
 				var deleteUrl = isCollection ? (baseRestApiURL+"datasource/user/group/remove?groupId="+dna.id) : (isProducSet ? (baseRestApiURL+"datasource/productset/"+dna.id) : (baseRestApiURL+"datasource/query/"+dna.id+"/"));
 				$('#confirm-dialog').modal("confirm", {
-					msg: "Are you sure you want to delete this element: " + dna.label + "?",
+					msg: "Are you sure you want to delete: <strong>" + dna.label + "</strong> ?",
 					callbackConfirm: function () {
 						$.ajax({
 							cache   : false,
@@ -365,9 +372,9 @@
 							},
 							success: function (data) {
 								if(data.status === "FAILED") { 
-									showMsg("Failed to delete the product set.", "FAILED");
+									showMsg("Failed to delete the item.", "FAILED");
 								} else {
-									showMsg("Object successfully deleted.", "SUCCESS");
+									showMsg("Item successfully deleted.", "SUCCESS");
 									panelComp.refreshData();
 								}
 							}
@@ -381,6 +388,11 @@
 	
 	$(document).ready(function() {
 		var urls = [];
+
+		$("#selectNodePanel").on("change", function (event) {
+            var current_pane = $(this).val() || 0;
+            $("a[data-action='" + current_pane +"']", '#panel-topo-wrapper').trigger("click");
+        });
 		
 		$('a[data-toggle="tab"]', '#panel-topo-wrapper').on('shown.bs.tab', function (e) {
 			//clear previous added classes and kill all datepicker controls when parent window is closed

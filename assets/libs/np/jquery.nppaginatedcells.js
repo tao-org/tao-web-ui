@@ -151,6 +151,22 @@ jQuery.fn.npPaginatedCells = function(options){
                     job.tags[0] = job.type;
                 });
             }
+
+            if(settings.url[0] === baseRestApiURL + "component/naming/"){
+               settings.filterAttribute = "sensor";
+               settings.order  =  [
+                    {
+                        "label":"Name ascending",
+                        "objAttributeName": "sensor",
+                        "direction":"ASC"
+                    },
+                    {
+                        "label":"Name descending",
+                        "objAttributeName": "sensor",
+                        "direction":"DSC"
+                    }
+                ]
+            }
 			
 			
             if( (orderIndex === -1) && (settings.order.length>0) ){
@@ -440,6 +456,25 @@ jQuery.fn.npPaginatedCells = function(options){
         }
         if(action === "queued_jobs"){
             settings.filterAttribute ="jobName";
+        }
+    });
+
+    $selectedEl.on("click", '#npOrderIndex', function(event){
+        var action = $($(this).parents(".nav-tabs-custom").find(".role-admin.active").children()[0]).data("action");
+        if(action === "all_nodes"){
+            settings.filterAttribute ="label";
+            settings.order  =  [
+                {
+                    "label":"Name ascending",
+                    "objAttributeName": "label",
+                    "direction":"ASC"
+                },
+                {
+                    "label":"Name descending",
+                    "objAttributeName": "label",
+                    "direction":"DSC"
+                }
+            ]
         }
     });
 

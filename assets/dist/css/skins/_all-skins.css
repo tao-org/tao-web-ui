@@ -4157,7 +4157,7 @@
 }
 .skin-purple #filtersDialog #search_button button {
 	background-color: #605ca8;
-	color: #605ca8;
+	color: #c9c6ff;
 }
 .skin-purple #filtersDialog #search_button button:hover {
 	background-color: #4a4785;
@@ -5180,11 +5180,11 @@
 .skin-red-light #myFlatMap .drawer-content .btn-poly {
 	color: #911102;
 }
-.skin-red-light #filtersDialog #search_button button {
+.skin-red #filtersDialog #search_button button {
 	background-color: #dd4b39;
 	color: #911102;
 }
-.skin-red-light #filtersDialog #search_button button:hover {
+.skin-red #filtersDialog #search_button button:hover {
 	background-color: #c43421;
 }
 /*** Bot chat ***/
@@ -6214,7 +6214,7 @@
 }
 .skin-yellow #filtersDialog #search_button button {
 	background-color: #f39c12;
-	color: #f39c12;
+	color: #714704;
 }
 .skin-yellow #filtersDialog #search_button button:hover {
 	background-color: #c27b0a;

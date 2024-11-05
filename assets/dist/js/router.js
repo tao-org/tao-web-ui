@@ -62,30 +62,41 @@ function refreshToken() {
 					window.tokenKey = apiData.token;
 					refreshed = true;
 				} else {
-					console.log("Failed to retrieve new token. User should try and log back in.");
+					// console.log("Failed to retrieve new token. User should try and log back in.");
+                    // showMsg("Failed to retrieve new token. User should try and log back in.", "ERROR");
                     _settings.createCookie("tokenKey",'');
                     _settings.createCookie("userMatrix",'{}');
                     _settings.createCookie("refreshToken","");
                     _settings.createCookie("userRole","");
                     _settings.createCookie("TaoUserId","");
                     _settings.createCookie("TaoUserName","");
-					//window.location = "login.html";
+                    _settings.createCookie("JSESSIONID","");
+					window.location = "login.html";
 				}
 			},
 			"error": function (jqXHR, status, textStatus) {
-				console.log("Could not refresh the token. User should try and log back in.");
+				// console.log("Could not refresh the token. User should try and log back in.");
+                // showMsg("Could not refresh the token. User should try and log back in.", "ERROR");
                 _settings.createCookie("tokenKey",'');
                 _settings.createCookie("userMatrix",'{}');
                 _settings.createCookie("refreshToken","");
                 _settings.createCookie("userRole","");
                 _settings.createCookie("TaoUserId","");
                 _settings.createCookie("TaoUserName","");
-				//window.location = "login.html";
+                _settings.createCookie("JSESSIONID","");
+				window.location = "login.html";
 
 			}
 		});
 	} else {
-		console.log("Missing refresh token information");
+        _settings.createCookie("tokenKey",'');
+        _settings.createCookie("userMatrix",'{}');
+        _settings.createCookie("refreshToken","");
+        _settings.createCookie("userRole","");
+        _settings.createCookie("TaoUserId","");
+        _settings.createCookie("TaoUserName","");
+        _settings.createCookie("JSESSIONID","");
+        window.location = "login.html"
 	}
 	return refreshed;
 }
@@ -152,6 +163,7 @@ $(function () {
     // Event handlers for frontend navigation
     $(window).on('hashchange', function(){
         //check authtoken
+        clearTimeout(tokenTimer);
 		var tokenKey = _settings.readCookie("tokenKey");
 		if (tokenKey === "" || tokenKey == null) {
 			if (!refreshToken()) {
@@ -166,6 +178,14 @@ $(function () {
                 window.wsController.checkConnection();
             }
         }
+        // timer set as token expiration
+        tokenTimer = setTimeout(function verifyTokenExpired(){
+            var tokenKey = _settings.readCookie("tokenKey");
+                if (tokenKey === "" || tokenKey == null) {
+                    $("body").empty();
+                    window.location = 'login.html';
+                }
+        }, 1800*1000);
         navRouter(decodeURI(window.location.hash));
     });
 

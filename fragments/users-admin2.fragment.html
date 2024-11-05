@@ -23,16 +23,16 @@
                 <ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
                     <li class="role-dropdown active">
                         <select id="selectUserPanel" name="selectUserPanel" class="form-control form-changepane" title="Select desired node view.">
-                            <option class="role role-admin" value="all_users">Active users </option>
-                            <option class="role role-admin" value="pending_users">Pending users</option>
-                            <option class="role role-admin" value="disabled_users">Disabled users</option>
+                            <option class="role role-admin" value="all_users">Active</option>
+                            <option class="role role-admin" value="pending_users">Pending</option>
+                            <option class="role role-admin" value="disabled_users">Disabled</option>
                         </select>
                     </li>
                 </ul>
                 <ul class="nav nav-tabs hidden-xs">
-                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_users" aria-expanded="true">Active users</a></li>
-                    <li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="pending_users" aria-expanded="false">Pending users</a></li>
-                    <li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="disabled_users" aria-expanded="false">Disabled users</a></li>
+                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_users" aria-expanded="true">Active</a></li>
+                    <li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="pending_users" aria-expanded="false">Pending</a></li>
+                    <li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="disabled_users" aria-expanded="false">Disabled</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -97,7 +97,7 @@
                                                                 <img src="https://www.gravatar.com/avatar/87876294a3cb8e341dfb6b4f675c52fe?d=mm" alt="user image" class="online val-gravatar">
                                                                 <p class="message">
                                                                     <span class="u-i-span">Groups: <strong><span class="val-labelGroups">###</span></strong></span>
-                                                                    <span class="u-i-span">Email address: <strong><span class="val-email">###</span></strong></span>
+                                                                    <span class="u-i-span">Email: <strong><span class="val-email">###</span></strong></span>
                                                                     <span class="u-i-span">User type: <strong><span class="val-labelUserType">###</span></strong></span>
                                                                     <span class="u-i-span">Status: <strong><span class="val-status">###</span></strong></span>
                                                                     <span class="u-i-span">Last log-in: <strong><span class="val-ago">never</span></strong></span>
@@ -109,8 +109,8 @@
                                                                 <div class="text-right" style="padding-top: 30px;">
                                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
                                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Disable</span></button>
-                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Enable</span></button>
-                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
+                                                                    <!-- <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Enable</span></button> -->
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
                                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="node-edit"><i class="fa fa-cogs fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Resources</span></button>
                                                                 </div>
                                                             </div>
@@ -131,8 +131,8 @@
                                                         <img src="https://www.gravatar.com/avatar/87876294a3cb8e341dfb6b4f675c52fe?d=mm" alt="user image" class="online val-gravatar">
                                                         <br>
                                                         <p class="message">
-                                                            <span class="u-i-span">Groups: <strong><span class="val-labelGroups">###</span></strong></span>
-                                                            <span class="u-i-span">Email address: <strong><span class="val-email">###</span></strong></span>
+                                                            <span class="u-i-span">Group: <strong><span class="val-labelGroups">###</span></strong></span>
+                                                            <span class="u-i-span">Email: <strong><span class="val-email">###</span></strong></span>
                                                             <span class="u-i-span">User type: <strong><span class="val-labelUserType">###</span></strong></span>
                                                             <span class="u-i-span">Status: <strong><span class="val-status">###</span></strong></span>
                                                             <span class="u-i-span">Last log-in: <strong><span class="val-ago">never</span></strong></span>
@@ -142,8 +142,8 @@
                                                             <div class="">
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="disable"><i class="fa fa-pause fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Disable</span></button>
-                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Enable</span></button>
-                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop disabled" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete</span></button>
+                                                                <!-- <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop collapse" data-action="enable"><i class="fa fa-play fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Enable</span></button> -->
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete</span></button>
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="node-edit"><i class="fa fa-cogs fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Resources</span></button>
                                                             </div>
                                                         </div>
@@ -198,6 +198,46 @@
             });
     };
 
+    enableUser = function(id){
+        var settings = {
+            "async": true,
+            "url": baseRestApiURL + "admin/users/"+ id +"/enable",
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache",
+                "X-Auth-Token": window.tokenKey
+            }
+        };
+        $.ajax(settings)
+            .done(function (response) {
+                showMsg("User "+ id +" successfully enabled.", "SUCCESS");
+                panelComp.refreshData();
+            });
+    };
+
+    deleteUser = function(id){
+        var settings = {
+            "async": true,
+            "url": baseRestApiURL + "admin/users/"+ id,
+            "method": "DELETE",
+            "headers": {
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache",
+                "X-Auth-Token": window.tokenKey
+            }
+        };
+        $.ajax(settings)
+            .done(function (response) {
+                if(response.status === "SUCCEEDED"){
+                    showMsg("User "+ id +" successfully deleted.", "SUCCESS");
+                }else{
+                    showMsg(response.message, response.status);
+                }
+                panelComp.refreshData();
+            });
+    };
+
     myModalNodesOpShow = function(operationid, args){
         var $modal = $("#myModalNodes");
         $(".modal-dialog",$modal).removeClass("modal-lg");
@@ -207,7 +247,7 @@
         window.userOpStack = [];
 
         if(operationid === "op-plus"){
-            //$(".modal-dialog",$modal).addClass("modal-lg");
+            $(".modal-dialog",$modal).addClass("modal-lg");
             rm_contentUrl="./fragments/users-plus.fragment.html?" + Math.random();
         }
         if(operationid === "node-edit"){
@@ -219,6 +259,7 @@
             rm_contentUrl="./fragments/user-node_edit.fragment.html?" + Math.random();
         }
         if(operationid === "edit"){
+            $(".modal-dialog",$modal).addClass("modal-lg");
             window.userOpStack = [{
                 "dna": args.dna,
                 "action": "comp_edit"
@@ -259,12 +300,21 @@
             var action = $(this).data("action");
             if(action ==="all_users"){
                 userType = "ACTIVE";
+                $("[data-action='disable']").removeClass('collapse');
+                // $("[data-action='enable']").addClass('collapse');
+                $("[data-action='op-plus']").removeClass("hidden");
             }
             if(action ==="disabled_users"){
                 userType = "DISABLED";
+                // $("[data-action='enable']").removeClass('collapse');
+                $("[data-action='disable']").addClass('collapse');
+                $("[data-action='op-plus']").addClass("hidden");
             }
             if(action ==="pending_users"){
                 userType = "PENDING";
+                // $("[data-action='enable']").removeClass('collapse');
+                $("[data-action='disable']").addClass('collapse');
+                $("[data-action='op-plus']").addClass("hidden");
             }
             window.panelComp.refreshData([
                 baseRestApiURL + "admin/users?status="+userType,
@@ -330,7 +380,7 @@
             doAction: function(action, args){
                 if(action === "op-plus"){
                     if( taoUserProfile.userRole !== "ADMIN"){
-                        showMsg("Only admin roles can ad components to the shared workspace. You should try adding components to your own workspace", "ERROR");
+                        showMsg("Only admin can add users.", "ERROR");
                         return;
                     }
                     myModalNodesOpShow(action, args);
@@ -348,6 +398,28 @@
 
                         callbackConfirm: function() {
                             disableUser(args.dna.id);
+                        },
+                        callbackCancel:function(){}
+                    });
+                }
+
+                if(action === "enable"){
+                    $('#confirm-dialog').modal('confirm',{
+                        msg:"Are you sure you want to enable user: <strong>"+args.dna.fullName+"</strong>?",
+
+                        callbackConfirm: function() {
+                            enableUser(args.dna.id);
+                        },
+                        callbackCancel:function(){}
+                    });
+                }
+
+                if(action === "delete"){
+                    $('#confirm-dialog').modal('confirm',{
+                        msg:"Are you sure you want to delete user: <strong>"+args.dna.fullName+"</strong>?",
+
+                        callbackConfirm: function() {
+                            deleteUser(args.dna.id);
                         },
                         callbackCancel:function(){}
                     });

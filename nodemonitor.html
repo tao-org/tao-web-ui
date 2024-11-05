@@ -98,6 +98,7 @@
 <!-- chart.js -->
 <script type="text/javascript" src="./assets/libs/chartjs/chartjs.min.js"></script>
 <script src="./assets/dist/js/app.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
     (function ($, window) {
@@ -124,13 +125,14 @@
 		destroy: function (globalInstance) {
 			var _self = this;
 			_self.el.html("").attr("id", "").removeClass("wscontroller");
-			_self.ws.send([ 'UNSUBSCRIBE', 'id:1', 'destination:/queue/' + _self.options.user, '\n', null ].join('\n'));
+			// _self.ws.send([ 'UNSUBSCRIBE', 'id:1', 'destination:/queue/' + _self.options.user, '\n', null ].join('\n'));
 		},
 		connect: function () {
 			var _self = this;
 			
 			var deferred = $.Deferred();
-				_self.ws = new WebSocket(_self.options.url);
+				// _self.ws = new WebSocket(_self.options.url);
+                _self.ws = new SockJS(_self.options.url);
 
 				_self.ws.onopen = function (event) {
 					_self.ws.send([ 'SUBSCRIBE', 'id:1', 'destination:/queue/' + _self.options.user, '\n', null ].join('\n'));
@@ -314,7 +316,8 @@
         $("body").append($wsc);
         
         $wsc.wsController({
-            "url" : window.baseWssUrl + "queue?tokenKey=" + window.tokenKey,
+            // "url" : window.baseWssUrl + "queue?tokenKey=" + window.tokenKey,
+            "url" : window.baseRestApiURL + "queue?tokenKey=" + window.tokenKey,
             "user": _settings.readCookie("TaoUserId")
         })
         .then(function (result) {

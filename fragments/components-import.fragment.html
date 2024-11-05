@@ -1,0 +1,119 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Import processing module</h4>
+    </div>
+    <form id="frmUploadFile" class="form-horizontal" role="form">
+        <div class="modal-body">
+            <section class="upload-message collapse">
+                <h4>File successfully imported.</h4>
+            </section>
+            <section class="upload-content">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-2 col-md-2" style="padding-top: 7px;text-align: center;">File</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="file" class="form-control" name="file" id="file" formenctype="multipart/form-data"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary btn-submit">Upload file</button>
+                                    <button class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </form>
+   
+</div>
+
+<script>
+    $(document).ready( function(){
+
+        var endpoint = "component/import";
+        if(window.userOpStack[0].action === "wf_import"){
+            endpoint = "workflow/import";
+            $(".modal-title").html("Import workflow");
+        }
+
+        $.validator.addMethod('isValidFileType',
+			function (value, element, params) {
+				var validFileType = false;
+				switch (params.fileType) {
+					case "json"  : validFileType = (value.length == 0 || $.inArray(element.files[0]["type"], params.typesList) >= 0); break;
+				}
+				return validFileType;
+			},
+			function (params) {
+				switch (params.fileType) {
+					case "json"  : return "Invalid configuration Json file." ; break;
+					default      : return "Invalid file.";
+				}
+			}
+		);
+
+
+        $("#frmUploadFile").validate({
+            rules: {
+                file: { 
+                    required: true,
+                    isValidFileType: { fileType: "json"  , typesList: [ "application/json" ] }
+                 }
+            },
+            highlight: function(element, errorClass) {
+                $(element).parent().addClass("has-error");
+            },
+            unhighlight: function(element, errorClass) {
+                $(element).parent().removeClass("has-error");
+            },
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent());
+            },
+            success: function(label) {
+                label.remove();
+            }
+        });
+
+        $("form#frmUploadFile").submit(function (e) {
+            e.preventDefault();
+
+            if( $(this).valid()){
+
+                $.ajax({
+                    cache: false,
+                    url: baseRestApiURL + endpoint,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    data: new FormData(this),
+                    headers: {
+                        "X-Auth-Token": window.tokenKey
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        showMsg("Error importing file. Please check your data and try again.", "ERROR");
+                    },
+                    success: function (response,textStatus, jqXHR) {
+                        if (response.status == responseStatus.success) {
+                            showMsg("The file was successfully uploaded.", "SUCCESS");
+                            $("#myModalNodes").modal('hide');
+                            panelComp.refreshData();
+                        } else {
+                            showMsg("The file could not be imported. Please check your data and try again.", "ERROR");
+                        }
+                    }
+                });
+                return false;
+            }
+        });
+
+        
+
+    });
+    //# sourceURL=import-comp.js
+</script>

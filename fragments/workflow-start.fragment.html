@@ -57,7 +57,7 @@
                         <div class="form-group">
                             <label for="inputWorkflowLabel" class="col-sm-2 col-md-2 control-label">Label</label>
                             <div class="col-sm-10 col-md-10">
-                                <input type="text" class="form-control" id="inputWorkflowLabel" name="inputWorkflowLabel" placeholder="workflow execution label" autocomplete="off" value="" maxlength="24">
+                                <input type="text" class="form-control" id="inputWorkflowLabel" name="inputWorkflowLabel" placeholder="workflow execution label" autocomplete="off" value="" >
                             </div>
                         </div>
                     </div>
@@ -153,8 +153,13 @@
                                                                     <strong><span class="var-label"></span></strong>&nbsp;(<span class="var-dataType"></span>)
                                                                 </td>
                                                                 <td style="width: 70%;">
+                                                                    <div style="display: flex; flex-direction: row;">
+                                                                        <input type="hidden" class="var-value" value="" placeholder="input variable's value">
+                                                                        <input type="text" class="var-value-string2 collapse" value="" placeholder="input variable's value">
+                                                                        <input type="text" class="var-value-string collapse" value="" placeholder="input variable's value" style="width: 100%;">
+                                                                        <i class="glyphicon glyphicon-eye-open" title="show password" style="display: none; position: absolute; top: auto; line-height: unset; right: 25px;"></i>
+                                                                    </div>
                                                                     <input type="hidden" class="var-value" value="" placeholder="input variable's value">
-                                                                    <input type="text" class="var-value-string collapse" value="" placeholder="input variable's value">
                                                                     <input type="text" class="var-value-string2 collapse" value="" placeholder="input variable's value">
                                                                     <select class="var-value-list collapse"></select>
                                                                 </td>
@@ -371,6 +376,23 @@ input[type=radio]{margin: 0px 5px 0px 15px;}
         // }, selectMessage);
 
         //$.validator.addMethod("inputProductNr", function ())
+
+        // Hide/Show password by clicking on the eye glyphicon
+    	$('.glyphicon-eye-open').css({ 'cursor': 'pointer', 'pointer-events': 'all' });
+    	$("#comp-tab-gd").on('click', ".glyphicon", function () {
+			if ($(this).hasClass('glyphicon-eye-open')) {
+				$("#" + this.previousElementSibling.id ).attr('type','text');
+				$(this).removeClass('glyphicon-eye-open');
+				$(this).addClass('glyphicon-eye-close');
+				$(this).attr('title', 'hide password');
+                $(this).css({ 'cursor': 'pointer', 'pointer-events': 'all' });
+			} else if ($(this).hasClass('glyphicon-eye-close')) {
+				$("#" + this.previousElementSibling.id).attr('type', 'password');
+				$(this).removeClass('glyphicon-eye-close');
+				$(this).addClass('glyphicon-eye-open');
+				$(this).attr('title', 'show password');
+			}
+    	});
 		
 		$("#frmStartWF").validate({
 			ignore: "",
@@ -608,7 +630,7 @@ input[type=radio]{margin: 0px 5px 0px 15px;}
 								$.each($tableValRows, function(i, $tableValRow) {
 									var n = $(".var-id",$tableValRow).text();
 									var v = $(".var-value",$tableValRow).val();
-									if(v !== ''){
+									if(v !== '' && typeof v !== "undefined"  && $(".var-dataType",$tableValRow).html() !== "Template"){
 										formData['parameters'][dna.name][n] = v;
                                     }
 								});
@@ -618,7 +640,7 @@ input[type=radio]{margin: 0px 5px 0px 15px;}
 								$.each($tableValRows, function(i, $tableValRow) {
 									var n = $(".var-id",$tableValRow).text();
 									var v = $(".var-value",$tableValRow).val();
-									if(v !== ''){
+									if(v !== '' && typeof v !== "undefined"  && $(".var-dataType",$tableValRow).html() !== "Template"){
 										formData['parameters'][dna.label][n] = v;
 									}
 								});
@@ -691,6 +713,11 @@ input[type=radio]{margin: 0px 5px 0px 15px;}
 				var id = accordionId + "_" + name;
                 if ((valueset == null) || ((valueset.length === 1) && (( valueset[0] === "") || ( valueset[0] === "null")))) {
                     $('input.var-value', $el).val(value);
+                    if( name === "password" ){
+                        $('input.var-value-string, input.var-value-string2', $el).attr("type", "password");
+                        $('input.var-value-string, input.var-value-string2', $el).css("width","100%");
+                        $('i.glyphicon-eye-open', $el).css("display", "inline");
+                    }
                     if (type === "date") {
                         $('input.var-value-string, input.var-value-string2', $el).attr("type", "date");
                         if (name.toLowerCase() === "startdate" || name.toLowerCase() === "enddate") {
@@ -749,6 +776,11 @@ input[type=radio]{margin: 0px 5px 0px 15px;}
                         $('select.var-value-list', $el).html(html).attr("id", id).show();
                     }
                 }
+                if(type === "Template"){
+                    $('input.var-value', $el).remove();
+                    $('input.var-value-string', $el).remove();
+                    $('input.var-value-list', $el).remove();
+                }
             };
             var helper_addSTblEdtRow = function($tblEdt, payload){
                 // Default valueSet value must be null (required for helper_EdtRowPutValue function)
@@ -762,7 +794,14 @@ input[type=radio]{margin: 0px 5px 0px 15px;}
                 $.extend( obj, payload );
                 var $el = $tblEdt.find(".tpl-sample-row").clone().addClass("val-row").removeClass("tpl-sample-row");
                 $('span.var-id', $el).html(obj.name);
-                $('span.var-label', $el).html(obj.name);
+                var label = obj.name;
+                if(label.indexOf("~") !== -1){
+                    label = label.split("~")
+                    $('span.var-label', $el).html(label[1]);
+                    $('span.var-label', $el).css("margin-left", "30px");  
+                }else{
+                    $('span.var-label', $el).html(obj.name);
+                }
 //                $('span.var-description', $el).html(obj.description);
                 $('span.var-dataType', $el).html(obj.type);
 //                $('span.var-default', $el).html(obj.defaultValue);

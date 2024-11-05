@@ -627,8 +627,56 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 				$("#colectionName").val(defaultFilters.collection);				
 			}
 
+			setPreferedFilters();
 			searchDataSource();
 			
+		});
+	}
+
+	function setPreferedFilters(){
+		
+		$.when(_userPref.getUserPreferences(taoUserProfile.id))
+		.done(function(responseProfile){
+			var r = responseProfile.data;
+			var allPreferences = r.preferences;
+
+			$.each(allPreferences, function(index, pref){
+				
+				if (pref.key === "search_category"){
+					$("#categoryNames").val(null).trigger('change');
+					if(pref.value.indexOf(",") !== -1){
+						prefArray = pref.value.split(',');
+						$.each(prefArray, function(index, value){
+							$("#categoryNames").find("[value='"+value+"']").prop("selected", true);
+							$("#categoryNames").trigger("change");
+						});
+
+					} else {
+						$("#categoryNames").find("[value='"+pref.value+"']").prop("selected", true);
+						$("#categoryNames").trigger("change");
+					}
+					
+				} else if (pref.key === "search_collection" && pref.value !== ""){
+					$("#colectionName").val("");
+					$("#colectionName").val(pref.value);
+				} else if (pref.key === "search_provider"){
+					$("#providers").val(null).trigger('change');
+					if(pref.value.indexOf(",") !== -1){
+						prefArray = pref.value.split(',');
+						$.each(prefArray, function(index, value){
+							$("#providers").find("[value='"+value+"']").prop("selected", true);
+							$("#providers").trigger("change");
+						});
+
+					} else {
+						$("#providers").find("[value='"+pref.value+"']").prop("selected", true);
+						$("#providers").trigger("change");
+					}
+				}
+			
+				
+			});
+
 		});
 	}
 
@@ -778,6 +826,52 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 			}
 		}
 	}
+
+	function createShapeFromTrGeometry($tr){
+		
+		if ($tr.data("geometry")) {
+			var geometry = $tr.data("geometry")
+				.replace('MULTIPOLYGON (((', 'POLYGON((')
+				.replace(')))', '))')
+				.replace(' ((', '((');
+			geometry = geometry.replace('POLYGON ((', 'POLYGON((');
+			var highlighted = $tr.find("input[name='product']").is(":checked");
+			var properties = {
+				"description": "preview",
+				"id"         : $tr.data("id"),
+				"name"       : $tr.data("name"),
+				"highlighted": (highlighted ? "true" : "false")
+			}
+			myPolygonMap.createShapeFromGeometry(geometry, properties);
+		}
+	}
+
+	function polygonArrayFromText (geometry) {
+			var polysArray = [];
+			
+			var polys = geometry;
+			polys = polys.replace(/  +/g   , " "   );
+			polys = polys.replace(/, /g    , ","   );
+			polys = polys.replace(/ ,/g    , ","   );
+			polys = polys.replace(/\),\(/g , ")("  );
+			polys = polys.replace(/\(/g    , "["   );
+			polys = polys.replace(/\)/g    , "]"   );
+			polys = polys.replace(/\[\[/g  , "[[[" );
+			polys = polys.replace(/\]\]/g  , "]]]" );
+			polys = polys.replace(/\]\[/g  , "]][[");
+			polys = polys.replace(/,/g     , "]["  );
+			polys = polys.replace(/ /g     , ","   );
+			polys = polys.replace(/\]\[/g  , "],[" );
+			polys = polys.replace("POLYGON", ""    );
+			
+			try {
+				polysArray = $.parseJSON(polys);
+			} catch (err) {
+				polysArray = false;
+			}
+			
+			return polysArray;
+		}
 	
 	function previewProducts($table) {
 		if (myPolygonMap.mapActive) {
@@ -785,22 +879,24 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 			myPolygonMap.removeFeaturesByProperty({ "description": "preview" });
 			// add new preview fetures on map
 			$.each($("tbody tr", $table), function () {
+				
 				var $tr = $(this);
 				if ($tr.data("geometry")) {
 					var geometry = $tr.data("geometry")
 						.replace('MULTIPOLYGON (((', 'POLYGON((')
 						.replace(')))', '))')
 						.replace(' ((', '((');
-					
-					var highlighted = $tr.find("input[name='product']").is(":checked");
-					var properties = {
-						"description": "preview",
-						"id"         : $tr.data("id"),
-						"name"       : $tr.data("name"),
-						"highlighted": (highlighted ? "true" : "false")
+					geometry = geometry.replace('POLYGON ((', 'POLYGON((');
+					var geom = polygonArrayFromText(geometry);
+					var poly = new ol.geom.Polygon([geom[0]]);
+					poly.transform('EPSG:4326', 'EPSG:3857');
+					var area = ol.sphere.getArea(poly);
+					$tr.data("area", area);
+					if(area < 100000000000){
+						createShapeFromTrGeometry($tr);
 					}
-					myPolygonMap.createShapeFromGeometry(geometry, properties);
 				}
+				
 			});
 			// set style for all new preview features on map
 			resetPreviewProductsStyle();
@@ -1483,7 +1579,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 			$("#user_name").prop("required", false);
 		}
 
-		if(data.requires2FA){
+		if(data.requires2FA || data.requiresBearerToken){
 			$("#user_secret").show();
 			$("#user_secret").parent().siblings("label").show();
 			$("#user_secret").prop("required", true);
@@ -2119,6 +2215,12 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 				}
 			}
 		});
+		if(datasourcesList[dsId].requiresAuthentication === true || datasourcesList[dsId].requiresBearerToken === true){
+			var secret = $('#user_secret').val();
+		}else {
+			secret = null;
+		}
+
 		var query = {
 			userId    : taoUserProfile.id,
 			siteId	  : $("option:selected", "#use_site").val() || null,
@@ -2127,6 +2229,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 			dataSource: datasourcesList[dsId]['dataSourceName'],
 			user      : $('#user_name').val(),
 			password  : $('#user_pass').val(),
+			secret	  : secret,
 			coverage  : ($("#coverageSlider").slider("option", "value") || 50) / 100, // coverage is double between 0.0 and 1.0
 			limit     : parseInt($("#limit"     , "#queryExtentParameters").val()) || 10,
 			pageNumber: parseInt($("#pageNumber", "#queryExtentParameters").val()) || 1,
@@ -2882,6 +2985,12 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 					}
 					updateDetailsPanel($tr);
 					updateFloatingThumbnail($tr);
+					//$chk.trigger("click");
+					// $chk.prop("checked", false);
+					// $chk.trigger("click");
+					if($tr.data("area") > 100000000000){
+						createShapeFromTrGeometry($tr);
+					}
 					
 					if (myPolygonMap.mapActive && $tr.data("id")) {
 						myPolygonMap.fitFeatureById($tr.data("id"));
@@ -2895,6 +3004,11 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 					}
 					toggleDetailsPanel($tr);
 					updateFloatingThumbnail($tr);
+					// $chk.trigger("click");
+					// $chk.prop("checked", true);
+					if($tr.data("area") > 100000000000){
+						createShapeFromTrGeometry($tr);
+					}
 				break;
 				case "op-remove":
 					$('#confirm-dialog').modal('confirm', {
@@ -2949,10 +3063,12 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 		
 		var highlighted = false;
 		if ($(this).is(':checked')) {
-			$('#datasourceProducts input[name=product]').prop('checked', true);
+			$('#datasourceProducts input[name=product]').prop('checked', false);
+			$('#datasourceProducts input[name=product]').trigger('click');		
 			highlighted = true;
 		} else {
-			$('#datasourceProducts input[name=product]').prop('checked', false);
+			$('#datasourceProducts input[name=product]').prop('checked', true);
+			$('#datasourceProducts input[name=product]').trigger('click');
 		}
 		$.each($("table#tbDatasourceProducts tbody tr"), function () {
 			var $tr = $(this);
@@ -2976,6 +3092,20 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 		resetPreviewProductsStyle();
 		countSelectedProducts("tbDatasourceProducts");
 	});
+
+	$("#tbSelectedProducts, #tbDatasourceProducts").on("mouseenter", "tr", function(){
+		var $tr = $(this);
+		if($tr.data("area") > 100000000000){
+			createShapeFromTrGeometry($tr);
+		}
+	});
+
+	$("#tbSelectedProducts, #tbDatasourceProducts").on("mouseleave","tr", function(){
+		var $tr = $(this);
+		if(!$(this).find("input[name='product']").is(':checked') && $tr.data("area") > 100000000000){
+			myPolygonMap.removeFeaturesByTrId($tr.attr("id"));
+		}
+	});
 	
 	$("#tbSelectedProducts, #tbDatasourceProducts").on("click dblclick", "input[name='product']", function (e) {
 		e.stopPropagation();
@@ -2984,6 +3114,14 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 		
 		var $tr = $(this).closest("tr");
 		var $thumbnail = $(".thumbnails>div[id='" + $tr.attr("id") + "']", "#thumbsExtent");
+		if($(this).is(':checked')){
+			createShapeFromTrGeometry($tr);
+		}else{
+			//remove shape
+			if($tr.data("area") > 100000000000){
+				myPolygonMap.removeFeaturesByTrId($tr.attr("id"));
+			}
+		}
 		// Reset highlight for all other products when in "Selected Products" table
 		if (typeof $tr.data("dsIndex") !== "undefined") {
 			$("tr", $tr.closest("table")).removeClass("selected");
@@ -3025,7 +3163,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 	$("#tbSelectedProducts, #tbDatasourceProducts").on("click dblclick", "tbody tr:not(.datasource)", function (e) {
 		e.stopPropagation();
 		var $tr = $(this);
-		
+
 		var $chk = $(".checkbox input[name='product']", $tr);
 		var $loc = $("button.op-locate", $tr);
 		if (e.type == "click") {
@@ -3166,6 +3304,13 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 	$("#queryExtent").on("click",".filter-reset", function (e){
 		resetFilters();
 		e.stopPropagation();
+		var delData = ["search_category","search_collection","search_provider"];
+		var url = baseRestApiURL + "user/prefs";
+		$.when(ajaxGeneralCallFnc(url, JSON.stringify(delData), "DELETE", "json" )).done(function(response){
+            
+        }).fail(function (jqXHR, textStatus) {
+			chkXHR(jqXHR.status);
+		});
 	});
 	
 	$("#filtersDialog").on("click", function(e) {
@@ -3184,6 +3329,19 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 	$("#filtersDialog").on("click", ".search-btn", function(e){
 		searchDataSource();
 		e.stopPropagation();
+		var categoryFilters = ($("#categoryNames").select2("val") ?? '').toString();
+		var providerFilters = ($("#providers").select2("val") ?? '').toString();
+		var collectionFilters = ($("#colectionName").val() ?? '').trim().toLowerCase();
+		
+		$.when(_userPref.getUserPreferences(taoUserProfile.id))
+		.done(function(responseProfile){
+			var r = responseProfile.data;
+			currentPref = r.preferences;
+		});
+		currentPref.push({'key':'search_category', 'value': categoryFilters });
+		currentPref.push({'key':'search_collection', 'value': collectionFilters});
+		currentPref.push({'key':'search_provider', 'value': providerFilters});
+		_userPref.updateUserPreferences(JSON.stringify(currentPref));
 	});
 	
 	function closeFiltersDialogOnEscape(e) {

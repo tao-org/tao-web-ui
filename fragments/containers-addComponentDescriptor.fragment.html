@@ -1,7 +1,7 @@
 <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Add processing module</h4>
+        <h4 class="modal-title" id="myModalLabel">Add component descriptor</h4>
     </div>
 
     <form id="frmExecNodeEdit" class="form-horizontal form-newpc" role="form">
@@ -26,7 +26,6 @@
             <section>
                 <div class="row">
                     <div class="col-md-12">
-						<p>Please check all the tabs before saving a new module.</p>
 						<ul class="nav nav-tabs">
 							<li class="active"><a data-toggle="tab" href="#comp-tab-gd">General desc.</a></li>
 							<li><a data-toggle="tab" href="#comp-tab-conf">Configuration</a></li>
@@ -46,6 +45,7 @@
 												<span class="ckattr-ok sr-only collapse">(success)</span>
 												<span class="ckattr-error glyphicon glyphicon-remove form-control-feedback collapse" aria-hidden="true"></span>
 												<span class="ckattr-error sr-only collapse">(error)</span>
+												<span style="font-style: italic;font-size: 1.3rem;" id="helpId">ID must be <b>unique </b>and can contain letters (a-z) (A-Z), numbers (0-9), periods (.), dashes (-), and underscores (_)</span>
 											</div>
 										</div>
 									</div>
@@ -119,9 +119,9 @@
 											<label for="inputVisibility" class="col-sm-2 col-md-2 control-label">Visibility </label>
 											<div class="col-sm-10 col-md-10">
 												<select disabled="disabled" id="inputVisibility" name="inputVisibility" class="form-control">
-													<option value="SYSTEM">System build-in component</option>
-													<option value="USER">User defined component</option>
-													<option value="CONTRIBUTOR" selected="selected">Contributor defined component</option>
+													<option value="SYSTEM">System</option>
+													<option value="USER">User</option>
+													<option value="CONTRIBUTOR" selected="selected">Contributor</option>
 												</select>
 											</div>
 										</div>
@@ -133,9 +133,9 @@
 											<label for="inputTemplateType" class="col-sm-2 col-md-2 control-label">Template Type </label>
 											<div class="col-sm-10 col-md-10">
 												<select id="inputTemplateType" name="inputTemplateType" class="form-control">
-													<option value="VELOCITY" selected="selected">Apache Velocity template</option>
-													<option value="JAVASCRIPT" >Javascript template</option>
-													<option value="XSLT">XSLT template</option>
+													<option value="VELOCITY" selected="selected">Apache Velocity</option>
+													<option value="JAVASCRIPT" >Javascript</option>
+													<option value="XSLT">XSLT</option>
 												</select>
 											</div>
 										</div>
@@ -158,7 +158,7 @@
 										<div class="form-group">
 											<label for="inputCompParallelism" class="col-sm-2 col-md-2 control-label">Parallelism </label>
 											<div class="col-sm-10 col-md-10">
-												<input type="number" min="1" step="1" class="form-control" id="inputCompParallelism" name="inputCompParallelism" placeholder="component parallelism" autocomplete="off" value="" data-errorspan="parallelism" />
+												<input type="number" min="1" step="1" class="form-control" id="inputCompParallelism" name="inputCompParallelism" placeholder="component parallelism" autocomplete="off" value="1" data-errorspan="parallelism" />
 											</div>
 										</div>
 									</div>
@@ -209,11 +209,11 @@
 									</div>
 								</div>
 								<!-- velocity template form-->
-								<div class="template-block-frm template-block-frm-velocity collapse">
+								<div class="template-block-frm template-block-frm-velocity ">
 									<div class="row">
 										<div class="col-md-12">
 											<div class="form-group">
-												<label for="inputWorkingDirectory" class="col-sm-2 col-md-2 control-label">Template contents</label>
+												<label for="inputTemplateContents" class="col-sm-2 col-md-2 control-label">Template contents</label>
 												<div class="col-sm-10 col-md-10">
 													<textarea class="form-control" rows="6" id="inputTemplateContents" name="inputTemplateContents" placeholder="template contents" data-errorspan="template"></textarea>
 												</div>
@@ -337,10 +337,9 @@
 									</div>
 								</div>
 							</div>
-							<div id="comp-tab-sys" class="tab-pane fade padding-top--20">
+							<div id="comp-tab-sys" class="tab-pane fade padding-top--20 padding-bottom--20">
 								<div class="row">
 									<div class="col-md-12">
-										<p>Variables:</p>
 										<div class="responsive">
 											<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-sysvar">
 												<thead>
@@ -474,12 +473,11 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10 col-sm-offset-2 col-sm-10">
-								<button id="btnConfirmComponentDescriptor" class="btn btn-default" name="btnConfirmComponentDescriptor">Confirm</button>
 
-								<h4>Help filling in</h4>
-								<p>Please fill in all needed information. Component ID must be unique. Component ID can contain letters (a-z), numbers (0-9) and periods (.).</p>
+								<!-- <h4>Help filling in</h4> -->
+								<!-- <p>Please fill in all needed information. ID must be unique and can contain letters (a-z)(A-Z), numbers (0-9), periods (.) and underscores(_).</p> -->
 								<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									<button id="btnConfirmComponentDescriptor" class="btn btn-default left-btn" name="btnConfirmComponentDescriptor">Confirm</button>
 								</div>
 							</div>
                         </div>
@@ -494,7 +492,6 @@
 <!-- Specific styles -->
 <style>
 #comp-tab-ports thead th{vertical-align:middle}
-#comp-tab-ports .table-title{color:white;font-size:1.2em;line-height:1.2em}
 #comp-tab-ports .tbl-edt input[type="number"]{
 	width: 100%;
 	padding-left: 0.3em;
@@ -526,57 +523,6 @@
 <script>
     var action = 'op-plus';
 	
-    function validateHostName(attrId){
-        var $eL = $("#"+attrId);
-        var $pEL = $eL.parent();
-        var val = $eL.val();
-        //var rgx = /^[0-9A-Za-z.-_]*$/;
-        //if (val.match(rgx) === null){
-        var regexp = /^[a-zA-Z0-9-_.]+$/;
-        if (val.search(regexp) === -1)
-        {
-            showMsg("The hostname contains invalid characters.", "ERROR");
-            $(".ckattr-ok", $pEL).fadeOut();
-            $(".ckattr-error", $pEL).fadeIn();
-            return;
-        }else{
-            $(".ckattr-error", $pEL).fadeOut();
-            $(".ckattr-ok", $pEL).fadeIn();
-        }
-        $.ajax({
-            cache: false,
-            type: "get",
-            url: baseRestApiURL + "topology/"+val+"/",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "X-Auth-Token": window.tokenKey
-            },
-            error : function (jqXHR, textStatus, errorThrown) {
-                if( jqXHR.status === 500 ){
-                    $(".ckattr-error", $pEL).fadeOut();
-                    $(".ckattr-ok", $pEL).fadeIn();
-                } else {
-                    alert('E001 c+, An error has occurred, please try again or contact app admin.');
-                }
-            },
-            success: function(response) {
-                try {
-                    showMsg("Name already in use. Please try a different name.", "ERROR");
-                    $(".ckattr-ok", $pEL).fadeOut();
-                    $(".ckattr-error", $pEL).fadeIn();
-                }
-                catch(e) {
-                    $(".ckattr-ok", $pEL).fadeOut();
-                    $(".ckattr-error", $pEL).fadeIn();
-                }
-            }
-        });
-        return true;
-    }
-
 	function fieldFormat(){
 		$(".tag-format", "#tbl-edt-paramdesc").tagsInput({
 			minChars	: 0,
@@ -831,14 +777,6 @@
 			     $('#inputfilePathId').append($('<option>').text(pathPlusApplNamesList[i]).attr('value',applPath));
 			}
 
-
-        $("#inputTemplateType").on("change", function(){
-            var lclVal = $(this).val();
-            $(".template-block-frm").hide();
-            $(".template-block-frm-"+lclVal.toLowerCase()).show();
-		})
-		.trigger("change");
-
         $(".btn-comp-addnewvar").on("click", function(){
             var $tbl = $(this).closest(".tbl-edt");
             helper_addSysVarRow($tbl);
@@ -929,14 +867,6 @@
 				$(this).removeClass("empty");
 			}
 		});
-		
-        $("#inputCompname").focusout(function(e) {
-            if($(this).val() === "")
-                return;
-            if($(this).attr("id")) {
-                validateHostName($(this).attr("id"));
-            }
-        });
 		
 		function guid() {
 		  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();

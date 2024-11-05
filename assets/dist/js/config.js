@@ -1,15 +1,15 @@
 (function () {
 	// Localhost API
-//	window.baseRestApiURL = 'https://localhost:8443/';
-//	window.baseWssUrl     = 'wss://pcd3368.c-s.ro/';
+//	window.baseRestApiURL = 'http://pcd3368.c-s.ro/';
+//	window.baseWssUrl     = 'ws://pcd3368.c-s.ro/';
 	
 	// Live API
-	window.baseRestApiURL = 'https://pcd3368.c-s.ro/';
-	window.baseWssUrl     = 'wss://pcd3368.c-s.ro/';
+	window.baseRestApiURL = 'http://pcd3368.c-s.ro/';
+	window.baseWssUrl     = 'ws://pcd3368.c-s.ro/';
 	
 	// Custom API
-//	window.baseRestApiURL = 'https://yourhost:8443/';
-//	window.baseWssUrl     = 'wss://pcd3368.c-s.ro/';
+//	window.baseRestApiURL = 'http://pcd3368.c-s.ro/';
+//	window.baseWssUrl     = 'ws://pcd3368.c-s.ro/';
 	
 	// User preferences
 	window.preferences                = { "viewMode": "grid", "autorefresh": "on" };

@@ -121,9 +121,9 @@
 											<label for="inputVisibility" class="col-sm-2 col-md-2 control-label">Visibility </label>
 											<div class="col-sm-10 col-md-10">
 												<select disabled="disabled" id="inputVisibility" name="inputVisibility" class="form-control">
-													<option value="SYSTEM">System build-in component</option>
-													<option value="USER">User defined component</option>
-													<option value="CONTRIBUTOR" selected="selected">Contributor defined component</option>
+													<option value="SYSTEM">System</option>
+													<option value="USER">User</option>
+													<option value="CONTRIBUTOR" selected="selected">Contributor</option>
 												</select>
 											</div>
 										</div>
@@ -191,7 +191,7 @@
 							<div id="comp-tab-param" class="tab-pane fade padding-top--20 padding-bottom--20">
 								<div class="row">
 									<div class="col-md-12">
-										<div class="responsive">
+										<div class="responsive" style="overflow: auto;">
 											<table class="table table-bordered box-shadow--6dp tbl-edt" id="tbl-edt-paramdesc">
 												<thead>
 												<tr>
@@ -565,7 +565,7 @@
 		$("select[name=inputActive] option[value='"+data.active+"']", $el).attr("selected", "selected");*/
 	
 		$("select[name=inputVisibility] option", $el).removeAttr("selected");
-		$("select[name=inputVisibility] option[value='"+data.visibility+"']", $el).attr("selected", "selected");
+		$("select[name=inputVisibility] option[value='"+data.visibility+"']", $el).attr("selected", true);
 
 		if(data.tags != null && data.tags !== ""){
 			$('#formTags').importTags( data.tags.join());
@@ -942,8 +942,8 @@
 		if(userOpStack[0] && (userOpStack[0].action ==="wps_edit" || userOpStack[0].action ==="wms_edit" )  && userOpStack[0].dna.id){
 
 
-			$(".modal-title").html("Edit processing module");
-		 	$("#saveExecNode").html("Save processing module");
+			$(".modal-title").html("Edit remote service");
+		 	$("#saveExecNode").html("Save remote service");
 
 			if (typeof userOpStack[0].dna.active !== "undefined") {
 		 		$("#inputActive").val(userOpStack[0].dna.active);

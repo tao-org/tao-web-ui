@@ -439,6 +439,16 @@
 			</style>
             <div class="col-md-12">
 				<div class="nav-tabs-custom">
+					<ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
+						<li class="role-dropdown active">
+							<select id="selectNodePanel" name="selectNodePanel" class="form-control form-changepane">
+								<option class="role role-admin" value="all_users">Available Users</option>
+								<option class="role role-admin" value="all_vms">Available VM's</option>
+								<option class="role role-admin" value="queued_jobs">Queued Jobs</option>
+							</select>
+						</li>
+					</ul>
+
 					<ul class="nav nav-tabs hidden-xs">
 						<li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_users" aria-expanded="true">Available Users</a></li>
 						<li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="all_vms" aria-expanded="false">Available VM's</a></li>
@@ -487,7 +497,7 @@
 											</div>
 											<div class="cell-templates collapse">
 												<core-cell-list>
-													<div class="col-md-12 col-sm-12">
+													<div class="col-md-12 col-sm-12" style="margin-top: 10px;">
 														<div class="nodes-item-core-box">
 															<div class="box-top-tags">
 																<span>Tag1</span><span>Tag2</span><span>Tag3</span>
@@ -655,8 +665,8 @@
 		
 		.memory-progress-bar.unavailable,.cpu-progress-bar.unavailable,.disk-progress-bar.unavailable{background-color:grey}
 		.memory-progress-bar,.cpu-progress-bar,.disk-progress-bar,.used-ram-progress-bar, .percent-complete-progress-bar,.used-cpu-progress-bar{background-color:#cadce7;height:20px;padding:0;}
-		
-		.vm-info-row .row, #vm_running_tasks .row{margin:5px 0; margin-left: -20px !important;}
+
+		.vm-info-row .row, #vm_running_tasks .row{margin:5px 0; margin-left: -15px !important;}
 		
 		#panel-admin-wrapper .box-bottom{padding-top:0;}
 		#panel-admin-wrapper .box-header{padding:5px}
@@ -1084,6 +1094,13 @@
 				// if the task has a different status set it
 				if(msg.startsWith("Task")){
 					
+					if(msg.match(/\((.*)\)/) === null){
+						var $jobs = $("#exec-user-list-panel_accordion.panel-list .job-history-one");
+						var stusIcon = ui_getTaskStatusIcon(task.Payload); 
+						$jobs.find(".tasks #"+ wsdna.source +".one-task i.icon").replaceWith(stusIcon);
+						return;
+					}else{
+
 					var values =  msg.match(/\((.*)\)/)[1];
 					var taskName = values.split(",")[0];
 					var jobId = values.split(",")[1].split(" ").at(-1);
@@ -1113,6 +1130,8 @@
 					// clear class icon 
 					var stusIcon = ui_getTaskStatusIcon(wsdna.data.Payload); 
 					$found.find("#"+ wsdna.source +".one-task .icon").replaceWith(stusIcon);
+					}
+					
 				}
 			}
 		}else{
@@ -1136,47 +1155,80 @@
 		// sets the values
 		$(".totalDisk", $el).text(data.flavor.disk);
 		$(".totalMemory", $el).text(data.flavor.memory);
-		if (data.runtimeInfo.cpu > -1) {
-			$(".cpu-progress-bar .progress-bar", $el).text(data.runtimeInfo.cpu + "%");
-		} else {
-			$(".cpu-progress-bar .progress-bar", $el).text("unavailable");
+
+		if(typeof data.runtimeInfo ==="undefined"){
+			$(".cpu-progress-bar .progress-bar", $el).text("unavailable").css("margin-left", "5px");
+			$(".cpu-progress-bar .progress-bar", $el).parent().addClass("unavailable");
+
+			$(".disk-progress-bar .progress-bar", $el).text("unavailable").css("margin-left", "5px");
+			$(".disk-progress-bar .progress-bar", $el).parent().addClass("unavailable");
+
+			$(".memory-progress-bar .progress-bar", $el).text("unavailable").css("margin-left", "5px");
+			$(".memory-progress-bar .progress-bar", $el).parent().addClass("unavailable");
+			return false;
+		}
+
+		if( typeof data.runtimeInfo.cpu !== "undefined"){
+
+			if (data.runtimeInfo.cpu > -1) {
+				$(".cpu-progress-bar .progress-bar", $el).text(data.runtimeInfo.cpu + "%");
+			} else {
+				$(".cpu-progress-bar .progress-bar", $el).text("unavailable").css("margin-left", "5px");
+				$(".cpu-progress-bar .progress-bar", $el).parent().addClass("unavailable");
+			}
+			if (data.runtimeInfo.cpu < 50) {
+				$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.cpu + "%");
+			}else if (data.runtimeInfo.cpu > 80) {
+				$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.cpu + "%");
+			} else {
+				$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.cpu + "%");
+			}
+
+		} else{
+			$(".cpu-progress-bar .progress-bar", $el).text("unavailable").css("margin-left", "5px");
 			$(".cpu-progress-bar .progress-bar", $el).parent().addClass("unavailable");
 		}
-		if (data.runtimeInfo.disk > -1) {
-			$(".disk-progress-bar .progress-bar", $el).text(data.runtimeInfo.disk + "%");
+
+		if(typeof data.runtimeInfo.disk !== "undefined" ){
+			if (data.runtimeInfo.disk > -1) {
+				$(".disk-progress-bar .progress-bar", $el).text(data.runtimeInfo.disk + "%");
+			} else {
+				$(".disk-progress-bar .progress-bar", $el).text("unavailable").css("margin-left", "5px");
+				$(".disk-progress-bar .progress-bar", $el).parent().addClass("unavailable");
+			}
+
+			if (data.runtimeInfo.disk < 50) {
+				$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.disk + "%");
+			}else if (data.runtimeInfo.disk > 80) {
+				$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.disk + "%");
+			} else {
+				$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.disk + "%");
+			}
+
 		} else {
-			$(".disk-progress-bar .progress-bar", $el).text("unavailable");
+			$(".disk-progress-bar .progress-bar", $el).text("unavailable").css("margin-left", "5px");
 			$(".disk-progress-bar .progress-bar", $el).parent().addClass("unavailable");
 		}
-		if (data.runtimeInfo.memory > -1) {
-			$(".memory-progress-bar .progress-bar", $el).text(data.runtimeInfo.memory + "%");
-		} else {
-			$(".memory-progress-bar .progress-bar", $el).text("unavailable");
+
+		if(typeof data.runtimeInfo.memory !== "undefined"){
+			if (data.runtimeInfo.memory > -1) {
+				$(".memory-progress-bar .progress-bar", $el).text(data.runtimeInfo.memory + "%");
+			} else {
+				$(".memory-progress-bar .progress-bar", $el).text("unavailable").css("margin-left", "5px");
+				$(".memory-progress-bar .progress-bar", $el).parent().addClass("unavailable");
+			}
+			if (data.runtimeInfo.memory < 50) {
+				$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.memory + "%");
+			}else if (data.runtimeInfo.memory > 80) {
+				$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.memory + "%");
+			} else {
+				$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.memory + "%");
+			}
+		}else {
+			$(".memory-progress-bar .progress-bar", $el).text("unavailable").css("margin-left", "5px");
 			$(".memory-progress-bar .progress-bar", $el).parent().addClass("unavailable");
 		}
-		if (data.runtimeInfo.cpu < 50) {
-			$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.cpu + "%");
-		}else if (data.runtimeInfo.cpu > 80) {
-			$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.cpu + "%");
-		} else {
-			$(".cpu-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.cpu + "%");
-		}
 
-		if (data.runtimeInfo.disk < 50) {
-			$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.disk + "%");
-		}else if (data.runtimeInfo.disk > 80) {
-			$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.disk + "%");
-		} else {
-			$(".disk-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.disk + "%");
-		}
-
-		if (data.runtimeInfo.memory < 50) {
-			$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-success").width(data.runtimeInfo.memory + "%");
-		}else if (data.runtimeInfo.memory > 80) {
-			$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-danger").width(data.runtimeInfo.memory + "%");
-		} else {
-			$(".memory-progress-bar .progress-bar", $el).addClass("progress-bar-warning").width(data.runtimeInfo.memory + "%");
-		}
 	}
 
 	/* when entering this function an attribute (for source duna, this case) is created and the runtime values are calculated */ 
@@ -1221,13 +1273,14 @@
 		// clear pane
 		$(".statistics .progress", $el).html("");
 
-		if( wsdna.data.Payload.startsWith("Completed")){
+		if( wsdna.data.Payload.startsWith("Completed")  || wsdna.data.Payload.includes("Completed")){
 			$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom">No downloads in progress</div>');
 			$bar.attr("title", "");
 			$bar.css({ width: "100%" });
 		}else{
-			if(wsdna.data.Payload.startsWith("Start")){
+			if(wsdna.data.Payload.startsWith("Start") || wsdna.data.Payload.includes("Starting")){
 				resourceName = wsdna.data.Payload;
+				downloadValue = 0.01;
 			}else{
 				// get name and procentage from message
 				resourceName = wsdna.data.Payload.split(":")[0];
@@ -1241,7 +1294,7 @@
 			$(".statistics .progress", $el).append($bar);
 
 			totPrc = downloadValue;
-			cnt = ((typeof wsdna.data.remaining === "undefined" && parseInt(wsdna.data.remaining) <= 0)? 1 : parseInt(wsdna.data.remaining) + 1); 
+			cnt = ((typeof wsdna.data.remaining === "undefined" || parseInt(wsdna.data.remaining) <= 0)? 1 : parseInt(wsdna.data.remaining)); 
 
 			// overall progress (first progress bar)
 			$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="In progress" data-placement="bottom">Overall progress (' + Math.ceil(totPrc) + ' of ' + cnt + ')</div>');
@@ -1261,19 +1314,22 @@
 		// clear pane
 		$(".statistics .progress", $el).html("");
 
-		if(wsdna.data.Payload.startsWith("Completed")){
+		if(wsdna.data.Payload.startsWith("Completed")  || wsdna.data.Payload.includes("Completed")){
 			$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom">No downloads in progress</div>');
 			$bar.attr("title", "");
 			$bar.css({ width: "100%" });
+
+			$(".actualInputQuota", $el).trigger( "quota:update" );
+			$(document).trigger( "quota:update" );
 		}else{
-			if(!wsdna.data.Payload.startsWith("Start")){
+			if(!(wsdna.data.Payload.startsWith("Start") || wsdna.data.Payload.includes("Starting"))){
 				downloadValue = parseFloat(wsdna.data.Payload.split(":")[1]);
 			}
 
 			// calc the percentage remaining to be downloaded until next dataset (if more than 1 are in the downloads queue)
 			totPrc = downloadValue;
 			// get number of remaining downloads 
-			cnt = ((typeof wsdna.data.remaining === "undefined" && parseInt(wsdna.data.remaining) <= 0)? 1 : parseInt(wsdna.data.remaining) + 1); 
+			cnt = ((typeof wsdna.data.remaining === "undefined" || parseInt(wsdna.data.remaining) <= 0)? 1 : parseInt(wsdna.data.remaining)); 
 
 			// overall progress (first progress bar)
 			$bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="In progress" data-placement="bottom">Overall progress (' + Math.ceil(totPrc) + ' of ' + cnt + ')</div>');
@@ -1283,9 +1339,6 @@
 		// append the progress bars to html 
 		$(".statistics .progress", $el).prepend($bar);
 		$(".statistics #user_estimated_downloads", $el).html(cnt);
-
-		$(document).trigger( "quota:update" );
-		$(".actualInputQuota", $el).trigger( "quota:update" );
 	}
 
 	function createAdminDashboard() {
@@ -1310,6 +1363,11 @@
 				clearTimeout(downloadStatisticsTimeout);
 			}
 		});
+
+		$("#selectNodePanel").on("change", function (event) {
+            var current_pane = $(this).val() || 0;
+            $("a[data-action='" + current_pane +"']", '#panel-admin-wrapper').trigger("click");
+        });
 		
 		$('a[data-toggle="tab"]', '#panel-admin-wrapper').on('shown.bs.tab', function (e) {
 			tabAction = $(this).data("action");
@@ -1458,7 +1516,8 @@
 
 					var processingTime = (data.processingTime <= 0 || isNaN(data.processingTime))? '0d 0h 0m': getTime(data.processingTime);
 					$(".processingTime", $el).html(processingTime);
-					
+					$(".statistics #user_estimated_downloads", $el).html(0);
+
 					//if online show button for sending message 
 					$el.find("[data-action=view_user_msg]").prop("disabled", !data.online);
 
@@ -1600,13 +1659,17 @@
 							"X-Auth-Token": window.tokenKey
 						},
 						success: function(result) {
-							_settings.eraseCookie("tokenKey");
-							_settings.eraseCookie("userMatrix");
-							_settings.eraseCookie("refreshToken");
-							_settings.eraseCookie("userRole");
-							_settings.eraseCookie("TaoUserId");
-							_settings.eraseCookie("TaoUserName");
-							window.location = result.data;
+							if(result.status === "SUCCEEDED"){
+								_settings.eraseCookie("tokenKey");
+								_settings.eraseCookie("userMatrix");
+								_settings.eraseCookie("refreshToken");
+								_settings.eraseCookie("userRole");
+								_settings.eraseCookie("TaoUserId");
+								_settings.eraseCookie("TaoUserName");
+								window.location = result.data;
+							}else{
+								showMsg(result.message, result.status);
+							}
 						},
 						error : function (jqXHR, textStatus, errorThrown) {
 							console.log(textStatus, errorThrown);

@@ -60,6 +60,9 @@
                                     <button class="btn btn-master-tool text-black" data-action="op-plus" data-toggle="tooltip" data-original-title="Add new workflow"><i class="fa fa-plus"></i></button>
                                 </div>
                                 <div class="box-tools pull-left">
+                                    <button class="btn btn-master-tool text-black" data-action="op-plus-import" data-toggle="tooltip" data-original-title="Import workflow"><i class="fa fa-upload"></i></button>
+                                </div>
+                                <div class="box-tools pull-left">
                                     <button class="btn btn-master-tool text-black" data-action="op-filter" data-toggle="tooltip" data-original-title="Filter by tags"><i class="fa fa-filter"></i><span class="label label-warning val-count-filters" style="display:none;">0</span></button>
                                 </div>
                                 <div class="box-tools pull-left">
@@ -214,6 +217,13 @@
                                                                 </span>
                                                             </span>
                                                         </button>
+                                                        <button class="btn btn-primary  btn-list-view btn-sm btn-action btn-nodeop op-6" data-action="wf-export" data-toggle="tooltip" data-original-title="Export to file">
+                                                            <span class="value-dependent value-default">
+                                                                <span class="fa-stack fa-lg value-dependent value-default">
+                                                                    <i class="fa fa-download"></i>
+                                                                </span>
+                                                            </span>
+                                                        </button>
                                                         <button class="btn btn-primary  btn-list-view btn-sm btn-action btn-nodeop op-6" data-action="wf-delete" data-toggle="tooltip" data-original-title="Delete current workflow">
                                                             <span class="value-dependent value-default">
                                                                 <span class="fa-stack fa-lg value-dependent value-default">
@@ -284,6 +294,7 @@
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="wf-clone" data-toggle="tooltip" data-original-title="Clone workflow"><i class="fa fa-random fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Clone</span></button>
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="wf-start" data-toggle="tooltip" data-original-title="Start execution"><i class="fa fa-paper-plane fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Start execution</span></button>
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop " data-action="wf-script" data-toggle="tooltip" data-original-title="Generate script"><i class="fa fa-code fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Generate script</span></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop " data-action="save-json" data-toggle="tooltip" data-original-title="Export workflow"><i class="fa fa-download fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Export workflow</span></button>                                                                
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop " data-action="wf-delete" data-toggle="tooltip" data-original-title="Delete current workflow"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete workflow</span></button>
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view-results" data-toggle="tooltip" data-original-title="Show execution results"><i class="fa fa-picture-o fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Show execution results</span></button>
                                                                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="trace-execution" data-toggle="tooltip" data-original-title="Trace execution"><i class="fa fa-road fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Trace execution</span></button>
@@ -378,6 +389,40 @@
                 showMsg("Workflow clone failed. " + errorThrown, "ERROR");
             });
     };
+
+    exportAsJson = function(id){
+        $.ajax({
+            cache    : false,
+			url      : baseRestApiURL + "workflow/"+ id + "/export",
+            dataType : 'json',
+            type     : 'GET',
+            headers  : {
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            },
+            error : function (jqXHR, textStatus, errorThrown) {
+                if(jqXHR.status === 500 ){
+                    showMsg("Unable to export workflow. Please try again.", "ERROR");
+                } else {
+                    alert('An error has occurred, please try again or contact app admin.');
+                }
+            },
+            success: function(data) {
+                if(typeof data !== 'undefined'){
+                    showMsg("Workflow successfully exported to your downloads folder.", "SUCCESS");
+                    const link = document.createElement("a");
+                    var content = JSON.stringify(data);
+                    var file = new Blob([content], {type: "application/json"});
+                    link.href = URL.createObjectURL(file);
+                    link.download = data.id;
+                    link.click();
+                    URL.revokeObjectURL(link.href);
+                }else{
+                    showMsg("Workflow could not be exported.", "ERROR");
+                }
+            }
+        });
+    }
 
     deleteWorkflowById = function(id){
         var deleteWf = $.ajax({
@@ -501,6 +546,13 @@
             $(".modal-dialog",$modal).addClass("modal-lg");
             rm_contentUrl="./fragments/workflow-plus.fragment.html?" + Math.random();
         }
+        if(operationid === "op-plus-import"){
+            window.userOpStack = [{
+                "action": "wf_import"
+            }];
+            $(".modal-dialog",$modal).addClass("modal-md");
+            rm_contentUrl = "./fragments/components-import.fragment.html?" + Math.random();
+        }
         if(operationid === "wf-edit-description"){
             window.userOpStack = [{
                 "dna":args.dna,
@@ -569,6 +621,16 @@
             baseRestApiURL + "workflow/"
         ];
 		
+        $("a[data-toggle='tab']", "#panel-topo-wrapper").on("shown.bs.tab", function (e) {
+            var current_pane = $(this).data("action");
+            if(current_pane === "disabled_nodes"){
+              $("[data-action='op-plus']").addClass("hidden");
+              $("[data-action='op-plus-import']").addClass("hidden");
+            }else{
+                $("[data-action='op-plus']").removeClass("hidden");
+                $("[data-action='op-plus-import']").removeClass("hidden");
+            }
+        });
 		
 		window.panelComp = $("#panel-nodes").npPaginatedCells({
 			headerUser: taoUserProfile.username,
@@ -598,13 +660,17 @@
 				}
 			],
 			doAction: function(action, args){
-				if(action === "op-plus"){
+				if(action === "op-plus" || action == "op-plus-import"){
 					//if( taoUserProfile.userRole !== "ADMIN"){
 					//	showMsg("Only admin roles can ad components to the shared workspace. You should try adding components to your own workspace", "ERROR");
 					//	return;
 					//}
 					myModalNodesOpShow(action, args);
 				}
+
+                if(action === "save-json"){
+                    exportAsJson(args.dna.id);
+                }
 
 				if((action === "wf-edit-description") || (action === "trace-execution") || (action === "view-results") || (action === "wf-start") || (action === "wf-script"))
 					myModalNodesOpShow(action, args);
@@ -623,7 +689,7 @@
 				if(action === 'wf-subscribe') subscribeWorkflow(taoUserProfile.id, args.dna.id);
 
 				if(action === "wf-delete"){
-					if( taoUserProfile.userRole !== "ADMIN" && taoUserProfile.username !== args.dna.userName ){
+					if( taoUserProfile.userRole !== "ADMIN" && taoUserProfile.id !== args.dna.userId ){
 						alert("not allowed");
 						return;
 					}
@@ -693,6 +759,12 @@
 		$("#selectUserPanel").on("change", function () {
 			var current_pane = $(this).val() || 0;
             $("a[data-action='" + current_pane +"']",'.nav-tabs-custom').trigger( "click" );
+
+            if(current_pane === "disabled_nodes"){
+              $("[data-action='op-plus']").addClass("hidden");
+            }else{
+                $("[data-action='op-plus']").removeClass("hidden");
+            }
 		});
 		
 		$("a[data-toggle='tab']", ".nav-tabs-custom").on("click", function () {

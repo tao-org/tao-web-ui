@@ -237,6 +237,11 @@
             urls = [ url ];
 			window.panelComp.refreshData(urls);
 		});
+
+		$("#selectNodePanel").on("change", function (event) {
+            var current_pane = $(this).val() || 0;
+            $("a[data-action='" + current_pane +"']", '#panel-remote-wrapper').trigger("click");
+        });
 		
 		window.panelComp = $('#panel-nodes').npPaginatedCells({
 			headerUser: taoUserProfile.username,

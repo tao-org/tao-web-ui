@@ -3,10 +3,10 @@
 	.nodes-item-core-box .box-top .box-text{line-height:1.3em;white-space:nowrap;overflow:hidden}
 	.nodes-item-core-box .box-description{background:#e3f3fc;padding:5px 15px;margin:10px -15px 10px -15px;line-height:1.2em;color:#555}
 	.nodes-item-core-box .box-bottom{padding:0}
-	img.base64image{position:relative;display:block;width:100px;height:100px;margin:5px 0 0 0;border-radius:15px;background-color:white;padding:5px;box-shadow:3px 3px 5px 0 rgba(51, 51, 51, 0.12);border-bottom:2px solid #3c8dbc}
+	img.base64image{position:relative;display:block;width:60px;height:60px;margin:5px 0 0 0;border-radius:15px;background-color:white;padding:5px;box-shadow:3px 3px 5px 0 rgba(51, 51, 51, 0.12);border-bottom:2px solid #3c8dbc}
 	img.base64image.empty{box-shadow:none;border:0}
 	img.base64image.empty::before{content:" ";position:absolute;display:block;width:100%;height:100%;background-color:white}
-	img.base64image.empty::after{content:" ";position:absolute;display:block;width:94px;height:94px;border-radius:15px;background-repeat:no-repeat;background-color:white;background-image:url(../media/images/preview-not-available.png);background-position:center;box-shadow:3px 3px 5px 0 rgba(51, 51, 51, 0.12);border-bottom:2px solid #3c8dbc}
+	img.base64image.empty::after{content:" ";position:absolute;display:block;width:94px;height:94px;border-radius:15px;background-repeat:no-repeat;background-color:white;background-image:url(./media/images/preview-not-available.png);background-position:center;box-shadow:3px 3px 5px 0 rgba(51, 51, 51, 0.12);border-bottom:2px solid #3c8dbc}
 </style>
 
 <!-- modal nodes op -->
@@ -52,7 +52,7 @@
 				<ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
 					<li class="role-dropdown active">
 						<select id="selectNodePanel" name="selectNodePanel" class="form-control form-changepane" title="Select desired node view.">
-							<option class="role role-admin" value="active_nodes">Online nodes</option>
+							<option class="role role-admin" value="active_nodes">Toolbox container</option>
 						</select>
 					</li>
 				</ul>
@@ -118,7 +118,7 @@
 															<div class="box-text">
 																APPLICATIONS: <strong><span class="val-appsCount"> 0 </span></strong> | 
 																FORMATS: <strong><span class="val-formatCount"> 0 </span></strong> | 
-																Path: <strong><span class="val-applicationPath"> 0 </span></strong>
+																PATH: <strong><span class="val-applicationPath"> 0 </span></strong>
 															</div>
 															<div class="box-icon">
 																<img class="base64image" src="" />
@@ -145,7 +145,7 @@
 															<div class="box-text">
 																APPLICATIONS: <strong><span class="val-appsCount"> 0 </span></strong><br/>
 																FORMATS: <strong><span class="val-formatCount"> 0 </span></strong><br/>
-																Path: <strong><span class="val-applicationPath"> 0 </span></strong>
+																PATH: <strong><span class="val-applicationPath"> 0 </span></strong>
 															</div>
 															<div class="box-icon">
 																<img class="base64image" src="" />
@@ -295,7 +295,7 @@
 				}
 				if(action === "delete"){
 					$('#confirm-dialog').modal('confirm',{
-						msg:"Are you sure you want to delete container <strong>"+args.dna.name+"</strong>?",
+						msg:"Are you sure you want to delete container <strong style='word-break: break-word'>"+args.dna.name+"</strong>?",
 						callbackConfirm: function() {
 							deleteContainerbyId(args.dna.id);
 						},

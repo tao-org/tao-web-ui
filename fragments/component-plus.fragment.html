@@ -748,10 +748,25 @@ textarea {resize: none;}
 	var editor = ace.edit("ace-editor");
 	editor.setValue("");
 	editor.setOptions({
+		fontFamily: "monospace",
+		fontSize:"12px",
     	maxLines: 30,
 		minLines: 15
 	});
 	editor.$blockScrolling = Infinity;
+	editor.setShowPrintMargin(false);
+	
+	switch(window.themeParameters.size){
+		case 'size-normal':
+			editor.setFontSize(14);
+			break;
+		case 'size-large':
+			editor.setFontSize(16);
+			break;
+		case 'size-larger':
+			editor.setFontSize(18);
+			break;
+	}
 
     var action = 'op-plus';
 	var jupyterContainerId = null;
@@ -869,6 +884,7 @@ textarea {resize: none;}
 				if( response.componentType === "SCRIPT" && ($("#inputContainerId").find("option:selected").text()).startsWith("python")){
 					$("#openJupyterLab").removeClass("hidden");
 					editor.getSession().setMode("ace/mode/python");
+					editor.setTheme("ace/theme/crimson_editor");
 				}else{
 					if(response.templateType === "XSLT"){
 						editor.getSession().setMode("ace/mode/xml");
@@ -1694,21 +1710,11 @@ textarea {resize: none;}
 
         $("form#frmExecNodeEdit").submit(function (e) {
             e.preventDefault();
-			if (!$(this).valid()) {
-				return false;
+
+			if((routeTags[0] === "shared") && (taoUserProfile.userRole !== "ADMIN")){
+				showMsg(SHARED_EDIT_RESTRICTED, "ERROR");
+				return -1;
 			}
-			if($("#tbl-edt-sources tr.val-row").length <=0 || $("#tbl-edt-targets tr.val-row").length <= 0){
-				showMsg("At least one source and target must be defined.", "ERROR");
-				return false;
-			}
-			if(typeof ($('select[name=inputFileLocation]', this).find("option:selected:not(.default-file)").data("path")) === 'undefined'){
-				showMsg("File location is not set.", "ERROR");
-				return false;
-			}
-            if((routeTags[0] === "shared") && (taoUserProfile.userRole !== "ADMIN")){
-                showMsg(SHARED_EDIT_RESTRICTED, "ERROR");
-                return -1;
-            }
 			var tags = [];
             if( $(".tagsinput .tag .tag-text").length >=1){
 		        $(".tagsinput .tag .tag-text").each(function(i){tags.push($(this).text())});
@@ -1941,15 +1947,40 @@ textarea {resize: none;}
             //add sources and targets to payload parsing user defined port tables
             formData.sources = helper_getFormPorts($("#tbl-edt-sources"));
             formData.targets = helper_getFormPorts($("#tbl-edt-targets"));
-            			
-            if (formData.id === '') {
-                showMsg("Component ID can not be empty. Please choose valid values to continue.", "ERROR");
-                return false;
-            }
-			if(editor.getValue() === ''){
-                showMsg("Template contents can not be empty.", "ERROR");
-				return false;
-			}
+            if(1){
+				var isValid = true;
+				if (formData.id === '') {
+					showMsg("Component ID can not be empty. Please choose valid values to continue.", "ERROR");
+					isValid =  false;
+            	}
+				if (formData.label === '') {
+					showMsg("Label can not be empty. Please choose valid values to continue.", "ERROR");
+					isValid =  false;
+				}
+				if (formData.version === '') {
+					showMsg("Version can not be empty. Please choose valid values to continue.", "ERROR");
+					isValid =  false;
+				}
+				if (!$(this).valid()) {
+					isValid = false;
+				}
+				if(typeof ($('select[name=inputFileLocation]', this).find("option:selected:not(.default-file)").data("path")) === 'undefined'){
+					showMsg("File location is not set.", "ERROR");
+					isValid = false;
+				}
+				if(editor.getValue() === ''){
+                	showMsg("Template contents can not be empty.", "ERROR");
+					isValid = false;
+				}
+				if($("#tbl-edt-sources tr.val-row").length <=0 || $("#tbl-edt-targets tr.val-row").length <= 0){
+					showMsg("At least one source and target must be defined.", "ERROR");
+					isValid = false;
+				}
+				if(!isValid){
+					return isValid;
+				}
+			}			
+			
             var regexp = /^[a-zA-Z0-9-_.]+$/;
             if (formData.id.search(regexp) === -1)
             {

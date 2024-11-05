@@ -492,6 +492,7 @@
 .item-label {
 	font-size: 1.8em;
     padding: 5px;
+    word-break: break-all;
 }
 
 .vectr_img {

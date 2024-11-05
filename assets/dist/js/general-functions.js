@@ -62,6 +62,58 @@ if (!Array.from) {
   }());
 }
 
+
+
+// timer set as token expiration
+var tokenTimer = setTimeout(function verifyTokenExpired(){
+    var tokenKey = _settings.readCookie("tokenKey");
+		if (tokenKey === "" || tokenKey == null) {
+			$("body").empty();
+			window.location = 'login.html';
+        }
+}, 1800*1000);
+
+function ajaxGeneralCallFnc(url, data, type, dataType, contentType) {
+    if (typeof contentType === "undefined"){
+        contentType = "application/json";
+    }
+    var deferred = $.Deferred();
+    $.ajax({
+        cache  : false,
+        url    : url, //compllete url (including baseRestApiURL)
+        type   : type,
+        data   : data,
+        dataType: dataType,
+        headers: {
+            "Accept"      : "application/json",
+            "Content-Type": contentType,
+            "X-Auth-Token": window.tokenKey
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400) {
+                showMsg(typeof jqXHR.responseJSON === "undefined" ? textStatus : jqXHR.responseJSON.error, "FAILED");
+            }else if (jqXHR.status === 401) {
+                showMsg("Your session has expired or is invalid. Please log in again. Thank you.", "ERROR");
+                $("body").empty();
+				window.location = 'login.html';
+            }  else if (jqXHR.status === 500) {
+                showMsg("Please check your data and try again.", "ERROR");
+            } else if (jqXHR.status === 406) {
+                showMsg("Please check your data for inconsisntent attributes values.", "ERROR");
+            }else if (jqXHR.status === 404) {
+                showMsg("Page not found. Please try again.", "ERROR");
+            } else {
+                showMsg("Unknown error. Please try again.", "ERROR");
+            }
+            deferred.reject(jqXHR, textStatus, errorThrown);
+        },
+        success: function(response, textStatus, jqXHR) {
+            deferred.resolve(response, textStatus, jqXHR);
+        }
+    });
+    return deferred.promise();
+}
+
 //SHA256 password hash
 function  passwordSHA(plaintextPass){
     var ASCII = {};
@@ -494,6 +546,11 @@ function chkXHR(status, redirect){
         txtAlert = "403 - Forbidden: Server responded with access is denied message. You do not have permission to access the page using the credentials that you supplied!";
         txtMsg = "<strong>Forbidden: Server responded with access is denied message.</strong><br>You do not have permission to access the resource using the credentials that you supplied! Please log in again.<br><br>Thank you."
     }
+    if(status === 200){
+        txtMsg = "<strong>Your session has expired or is invalid.</strong><br> Please log in again.<br><br>Thank you."
+        txtAlert = "Your session has expired or is invalid. Please log in again!";
+        redirect = true;
+    }
     //alert(txtAlert);
     if(redirect){
         _settings.createCookie("tokenKey",'');
@@ -502,6 +559,7 @@ function chkXHR(status, redirect){
         _settings.createCookie("userRole","");
         _settings.createCookie("TaoUserId","");
         _settings.createCookie("TaoUserName","");
+        _settings.createCookie("JSESSIONID","");
         window.location = 'login.html';
     }
     var html = '<div class="login-box error-msg-box collapse">\n' +

@@ -1,0 +1,453 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add a naming rule</h4>
+    </div>
+
+    <form id="frmNamingProd" class="form-horizontal form-newpc" role="form">
+        <input type="hidden" id="op" name="op" class="op" value="op-plus" />
+        <input type="hidden" id="id_u" name="id_u" value="0" />
+        <input type="hidden" name="clickedon" value="">
+
+        <div class="modal-body">
+            <section>
+                <div class="row">
+                    <div class="col-md-12">
+						<div class="tab-content">
+							<div id="comp-tab-gd" class="tab-pane fade in active padding-top--20 padding-left--20 padding-bottom--20">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputSensor" class="col-sm-2 col-md-2 control-label">Sensor</label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputSensor" name="inputSensor" placeholder="Sensor name" autocomplete="off" value="" data-errorspan="label"/>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputCompDescription" class="col-sm-2 col-md-2 control-label">Description </label>
+											<div class="col-sm-10 col-md-10">
+												<textarea class="form-control" rows="3" id="inputCompDescription" name="inputCompDescription" placeholder="Short description about this product naming"></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+                                <div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputRegex" class="col-sm-2 col-md-2 control-label" >Regex</label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text"  class="form-control" id="inputRegex" name="inputRegex" placeholder="Regular expression" autocomplete="off" value="" style="font-family: monaco, courier;"  data-errorspan="label"/>
+											</div>
+										</div>
+									</div>
+								</div>
+                                <div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="inputSynonyms" class="col-sm-2 col-md-2 control-label">Synonyms</label>
+											<div class="col-sm-10 col-md-10">
+												<input type="text" class="form-control" id="inputSynonyms" name="inputSynonyms" placeholder="Optional synonyms" autocomplete="off" value="" data-errorspan="label"/>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+                            
+						</div>
+                    </div>
+                </div>
+
+                <!-- e pt table -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="tbl-parameters" class="col-sm-2 col-md-2 control-label">Tokens </label>
+                            <div class="col-sm-10 col-md-10">
+
+                                <table class="table table-bordered tbl-edt" id="tbl-parameters">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Matching group number</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th></th> <!--empty header row used for more icon -->
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-comp-addnewsrc" data-action="comp-add-new-var">
+                                            <i class="fa fa-plus fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Add new token</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                                <tbody class="tpl-sample-body">
+                                <tr class="tpl-sample-row">
+                                    <th scope="row">
+                                        <a href="#" class="text tbl-param-delete-action"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                                    </th>
+
+                                    <td>
+                                        <input class="var-position" type="number" min="1" autocomplete="off" placeholder="0">
+                                    </td>
+                                    <td>
+                                        <!-- <select class="var-tokenType empty"></select> -->
+                                        <input class="var-tokenType" autocomplete="off" placeholder="TOKEN NAME">
+                                    </td>
+                                    <td>
+                                        <textarea class="var-desc" rows="1" placeholder="Token description"></textarea>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                                </table>
+                            </div>
+                    </div>
+
+                    </div>
+                </div><!-- end table -->
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11">
+								<div class="modal-footer">
+									<button id="saveExecNode" type="submit" class="btn btn-primary btn-submit left-btn" name="btnSave">Save</button>
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div><!-- /.modal-body -->
+    </form>
+</div><!-- /.modal-content -->
+
+<style>
+    @media (min-width: 992px) {
+	    .modal-lg { width: 60%; }
+    }
+    textarea {resize: none;}
+
+    #richtext_inputRegex > pre {
+        position: relative;
+        overflow: hidden;
+        pointer-events: none;
+        top: 12px;
+        padding: 0px 13px;
+        position: absolute;
+        width: calc(100% - 26px);
+        color: transparent;
+    }
+
+    .richtext {
+        position: relative;
+        overflow: hidden;
+        border-color: #d2d6de !important;
+        border: 1px solid #BABABA;
+        padding: 5px;
+        background: #fff;
+    }
+
+    .richtext > pre {
+        font-family: monaco, courier;
+        font-size: 100%;
+        display: inline-block;
+        z-index: 1;
+        border: none;
+        background-color: transparent
+    }
+
+    .unmatched {
+        background: #ff00009e;
+    }  
+    /*   
+    .paren_0 { 
+        background: #00ff00;
+    }
+    .paren_1 {
+        background: #b6e4b6;
+    }
+    .paren_2 {
+        background: #c0c000;
+    }
+    .paren_3 {
+        background: #008000;
+    }
+    .paren_4 {
+        background: #808000;
+    } */
+    .selected_paren {
+        background: #00ffff80 !important;
+    }
+</style>
+
+<script>
+
+    function helper_addParameterRow($tbl, payload){
+        var obj = {"tokenType":"", "position":"", "desc":""};
+		$.extend( obj, payload );
+		
+		var $el = $tbl.find(".tpl-sample-body").clone().removeClass("tpl-sample-body");
+		$el.find(".tpl-sample-row").addClass("val-row").removeClass("tpl-sample-row");
+
+		// $('select.var-tokenType', $el).append($("<option />").val(obj.tokenType).text(obj.tokenType).data( "payload", obj));
+		$('input.var-tokenType', $el).val(obj.tokenType);
+		$('input.var-position', $el).val(obj.position);
+		$('textarea.var-desc', $el).val(obj.desc);
+		$tbl.append($el);
+        return $el;
+	}
+
+    function getProdData(id) {
+		$.ajax({
+			cache: false,
+			url: baseRestApiURL + "component/naming/" + id,
+			type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+		}).done(function (response) {
+
+            if (response.status === "SUCCEEDED") {
+                // populate the form
+                $("#inputSensor").val(response.data.sensor);
+                $("#inputCompDescription").val(response.data.description);
+                $("#inputRegex").val(response.data.regEx);
+                var syn = typeof response.data.synonyms === 'undefined'? '': response.data.synonyms;
+                $("#inputSynonyms").val(syn);
+
+                $.each(response.data.tokens, function(key, value) {
+                    var payload = {"tokenType": value.name, "position":value.matchingGroupNumber, "desc":value.description};
+                    helper_addParameterRow($("#tbl-parameters"), payload);
+                });
+
+                $("#inputRegex").trigger("input");
+            }else{
+				showMsg("Failed to retrive product data.", "ERROR");
+            }
+
+        }).fail(function (jqXHR, status, textStatus) {
+        });
+	}
+
+    function getTokenList(name) {
+		$.ajax({
+			cache: false,
+			url: baseRestApiURL + "component/naming/tokens?sensor=" + name,
+			type: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+		}).done(function (response) {
+            if (response.status === "SUCCEEDED") {
+                // fill select options field
+                return response.data;
+            }
+
+        }).fail(function (jqXHR, status, textStatus) {
+        });
+	}
+
+    function send(ajaxType, formData){
+
+        console.log(formData);
+        $.ajax({
+            cache: false,
+            url: baseRestApiURL + "component/naming/",
+            type: ajaxType,
+            data: JSON.stringify(formData),
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Auth-Token": window.tokenKey
+            }
+        }).done(function (response) {
+            if (response.status === "SUCCEEDED" && typeof response.data !== 'undefined') {
+                showMsg("The product naming rule was successfully created or edited.", "SUCCESS");
+                $("#myModalNodes").modal('hide');
+                window.panelComp.refreshData();
+            }else{
+				showMsg("Error adding or updating naming rules.", "ERROR");
+            }
+
+        }).fail(function (jqXHR, status, textStatus) {
+        });
+    }
+
+    function colorize(text, pos) {
+        var i = 0, current_times = 0;
+        var startc = '(', endc = ')';
+        var current = -1;
+        
+        var entities = {'>': '&gt;','<':'&lt;'}; 
+        var p2 = 0;
+        var regex = new RegExp(Object.keys(entities).join("|"),'g');   
+        var converted = text.replace(regex, function(x, j) {
+            if(pos > j) p2 += entities[x].length - 1; 
+            return entities[x];
+        });
+        
+        pos += p2;
+        var parens = [], indices = [], o = {};
+        var newText = converted.replace(/((?:\\)*)([()])/g, function(full, escape, x, idx) {
+            var len = escape.split(/\\/g).length - 1;
+            if (len % 2 == 0) {
+                indices.push(idx);
+                if (x == startc) ++i;
+                o[idx] = { selected: false, type: x, depth: i, idx: idx, pair: -1, extra: escape };
+                if (idx == pos) o[idx].selected = true;
+                if (x == startc) parens.push(idx);
+                else {
+                    if (parens.length > 0) {
+                        var p = parens.pop();
+                        o[idx].pair = p;
+                        if (o[p].selected) o[idx].selected = true;
+                        o[p].pair = idx;
+                        if (o[idx].selected) o[p].selected = true;
+                    }
+                    --i
+                }
+            }
+        });
+        newtext = converted;     
+        indices = indices.sort(function(x,y) { return Number(y) - Number(x); });
+        indices.forEach(function(i) {
+            newtext = newtext.substr(0,i) + o[i].extra +
+            "<span class='" + (o[i].pair == -1 ? "unmatched " : "paren_" + (o[i].depth % 5)) + 
+            (o[i].selected ? " selected_paren": "") + "'>" + o[i].type + "</span>" + 
+            newtext.substr(i + 1 + o[i].extra.length)
+        });
+        return newtext;
+    }
+    
+    function createRichInput(original) {
+        var newId = "richtext_" + $(original).attr('id');
+        var newElement = "<div class=\"richtext\" id=\"" + newId + "\"></div>";
+        
+        $(original).wrap(newElement);
+        $(original).after("<pre>&nbsp;</pre>");
+    }
+
+    (function($) {
+        $.fn.getCursorPosition = function() {
+            var input = this.get(0);
+            if (!input) return; // No (input) element found
+            if ('selectionStart' in input) {
+                // Standard-compliant browsers
+                return input.selectionStart;
+            } else if (document.selection) {
+                // IE
+                input.focus();
+                var sel = document.selection.createRange();
+                var selLen = document.selection.createRange().text.length;
+                sel.moveStart('character', -input.value.length);
+                return sel.text.length - selLen;
+            }
+        }
+    })(jQuery);
+
+    $(document).ready( function(){
+
+        var ajaxType = "POST";
+        createRichInput($("#inputRegex"));
+
+        if(userOpStack[0] && userOpStack[0].action ==="edit-product" && window.userOpStack[0] && window.userOpStack[0].dna.id){
+            $(".modal-title").html("Edit naming rules");
+            // $("#saveExecNode").html("Save naming rules");
+            getProdData(window.userOpStack[0].dna.id);
+            // getTokenList(window.userOpStack[0].dna.sensor);
+            ajaxType = "PUT";
+        }
+
+        $("form#frmNamingProd").validate({
+			rules: {
+				inputSensor: {
+					required: true,
+				},
+				inputCompDescription: {
+					required: true
+				},
+				inputRegex: {
+					required: true
+				}
+			},
+			highlight: function(element, errorClass) {
+				$(element).parent().addClass("has-error");
+			},
+			unhighlight: function(element, errorClass) {
+				$(element).parent().removeClass("has-error");
+			},
+			messages: {
+			},
+			errorPlacement: function(error, element) {
+				error.appendTo(element.parent());
+			},
+			success: function(label) {
+				label.remove();
+			}
+		});
+
+        $("form#frmNamingProd").submit(function (event) {
+            event.preventDefault();
+            var values, tokens = [];
+
+            if( $(this).valid() && $(".val-row", "#tbl-parameters").length >=1){
+
+                $(".val-row", "#tbl-parameters").each(function() {
+                    values = {
+                        "name": $(this).find("input.var-tokenType").val(),
+                        "description": $(this).find("textarea.var-desc").val(),
+                        "matchingGroupNumber":  $(this).find("input.var-position").val()
+                    }
+                    tokens.push(values);
+                });
+
+                var formData = {
+                    sensor		    :$("#inputSensor", this).val(),
+                    description	    :$("#inputCompDescription", this).val(),
+                    regEx           :$("#inputRegex", this).val(),
+                    synonyms        :$("#inputSynonyms", this).val() === ''? null : $("#inputSynonyms", this).val(),
+                    tokens
+                }
+                send(ajaxType, formData);
+            }
+        });
+
+        $(".tbl-edt")
+        .on("click", ".tbl-param-delete-action", function(e){
+            e.preventDefault();
+            $(this).closest(".val-row").remove();
+        });
+            
+        $(".btn-comp-addnewsrc").on("click", function(){
+            var $tbl = $(this).closest(".tbl-edt");
+            var $el = helper_addParameterRow($tbl);
+        });
+
+        $("#inputRegex").on('propertychange keyup input paste click', function() {
+            var text = $("#inputRegex").val();
+            $("#richtext_inputRegex" + "> pre").html(colorize(text, $("#inputRegex").getCursorPosition()));
+        });
+
+        $("#inputRegex").on('scroll', function(e){
+            var scrollLft =  $("#inputRegex").scrollLeft();
+            $("#richtext_inputRegex" + "> pre").scrollLeft(scrollLft);
+        })
+
+    });
+
+    //# sourceURL=datasource-admin2-naming.js
+</script>

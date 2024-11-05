@@ -192,7 +192,7 @@
 						showMsg("An error has occurred, please try again or contact app admin.", "ERROR");
 					}
 				} else {
-					showMsg("Processing component successfully deleted.", "SUCCESS");
+					showMsg("Processing module successfully deleted.", "SUCCESS");
 					panelRemoteServices.refreshData();
 				}
             }
@@ -259,7 +259,11 @@
             urls = [ url ];
 			window.panelRemoteServices.refreshData(urls);
 		});
-       
+
+        $("#selectNodePanel").on("change", function (event) {
+            var current_pane = $(this).val() || 0;
+            $("a[data-action='" + current_pane +"']", '#panel-remote-user-wrapper').trigger("click");
+        });
 		
 		window.panelRemoteServices = $("#panel-nodes").npPaginatedCells({
 			headerUser: taoUserProfile.username,

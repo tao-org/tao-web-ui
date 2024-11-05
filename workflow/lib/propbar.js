@@ -131,12 +131,48 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
         var cV = [];
         $tblEdt = $("#tbl-edt-sysvar");
         $tblEdt.find(".val-row").each(function() {
-            var onePair = {
-                "parameterName":$(".var-name",$(this)).html(),
-                "parameterValue":$(".var-value",$(this)).val()
-            };
+            var selDataType = $(".var-dataType",$(this)).html();
+            var hasValueset = $(".var-value-string",$(this)).parent().siblings("select").find("option").length;
+            if(selDataType.indexOf("[]") !== -1 && hasValueset > 0){
+                var value = $(".var-value-list",$(this)).val();
+                if(value === "_null" || value === null){
+                    value = null;
+                }else{
+                    value = "["+value+"]"; 
+                }
+
+                if(value !== null){
+                    if(value.indexOf("[]") !== -1){
+                        var move=value.indexOf("[]");
+                        value = value.substring(move,move+2);
+                    }
+                }
+               
+                var onePair = {
+                    "parameterName":$(".var-name",$(this)).html(),
+                    "parameterValue":value,
+                };
+            }else if(selDataType.indexOf("[]") !== -1 && hasValueset == 0){
+                var value = $(".var-value-string",$(this)).val();
+                value = "["+value+"]";
+
+                var onePair = {
+                    "parameterName":$(".var-name",$(this)).html(),
+                    "parameterValue":value,
+                };
+            }else{
+                var onePair = {
+                    "parameterName":$(".var-name",$(this)).html(),
+                    "parameterValue":$(".var-value",$(this)).val()
+                };
+            }
+            //Modification for template parameters
+            if($(".var-parent-name",$(this)).html() !== null && $(".var-parent-name",$(this)).html() !== '' && typeof onePair !== "undefined"){
+               onePair.parameterName = $(".var-parent-name",$(this)).html() +"~"+ onePair.parameterName;
+            }
 			var defaultVal = $(".var-default",$(this)).html();
-            if (onePair.parameterValue !== defaultVal && onePair.parameterValue !== "") {
+            //if (onePair.parameterValue !== defaultVal && onePair.parameterValue !== "") {
+            if (onePair.parameterValue !== defaultVal && (onePair.parameterValue !== "" || (onePair.parameterValue === "" && hasValueset > 0)) && $(".var-type",$(this)).html() !== "TEMPLATE") {
 				cV.push(onePair);
 			}
         });
@@ -164,10 +200,26 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                     alert(putOneComponentResponse.message);
                 }
             })
-            .fail(function(){
+            .fail(function(jqXHR, status, textStatus){
                 alert("Could not update custom values", "ERROR");
             });
     };
+
+    function fieldFormat(){
+
+		$(".tag-format").tagsInput({
+			minChars	: 0,
+			maxChars	: null,
+			limit		: null,
+			interactive	: true,
+			autocomplete: null,
+			unique		: true,
+			placeholder	: 'Add an element',
+			delimiter	: ','
+
+		});
+
+	}
 
 	window.$propbar.menu = function(action, params){
 						if ( action === "open") {
@@ -344,12 +396,27 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             }));
             //console.log("value:"+value+"current"+currentCustomValueSet.parameterValue);
             if(currentCustomValueSet && currentCustomValueSet.hasOwnProperty('parameterValue')){
-                value = currentCustomValueSet.parameterValue;
+                if((currentCustomValueSet.parameterValue ==="[]" || currentCustomValueSet.parameterValue ==="" ) && valueset!== null){
+                    value = null;
+                }else{
+                    value = currentCustomValueSet.parameterValue;
+                }
             }
 
             if ((valueset === null) || (valueset.length === 0) || ((valueset.length === 1) && ((valueset[0] === "") || (valueset[0] === "null")))) {
                 $('input.var-value', $el).val(value);
-                if (type === "date") {
+                if( name === "password" && type.indexOf("[]") == -1 ){
+                    $('input.var-value-string', $el).attr("type", "password");
+                    $('input.var-value-string', $el).css("width","100%");
+                    $('i.glyphicon-eye-open', $el).css("display", "inline");
+                }
+                if( type.indexOf("[]") > -1){ 
+                    $('input.var-value-string', $el).addClass("tag-format");
+                    if(value !== null && value!== "") {
+                        $('input.var-value', $el).val(value.substring(1, value.length-1));
+                        $('input.var-value-string', $el).val(value.substring(1, value.length-1)).show();
+                    }    
+                }else if (type === "date") {
                     $('input.var-value-string', $el).attr("type", "date");
                     if(value != null){
                         $('input.var-value-string', $el).val(value.split("T")[0]).show();
@@ -362,14 +429,44 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                     }
                     $('input.var-value-string', $el).val(value).show();
                 }
+                fieldFormat();
             } else {
                 $('input.var-value', $el).val(value);
                 var html = "";
+                html += "<option class='empty-option' value='"+(type.indexOf("[]") > -1 ? null : "")+"'>Empty value</option>";
                 $.each(valueset, function(i, v) {
                     html +="<option "+(v === value && 'selected ')+"value=\""+v+"\">"+v+"</option>";
                 });
+                $('select.var-value-list', $el).append(html);
                 $('select.var-value-list', $el).html(html).show();
-            }
+
+
+                if (type.indexOf("[]") > -1) {
+                    $('select.var-value-list', $el).attr("id",name);
+                    $('select.var-value-list', $el).removeClass("collapse");
+                    $('select.var-value-list', $el).removeClass("form-control");
+                    $('select.var-value-list', $el).prop("multiple","multiple")
+                    $select = $('select.var-value-list', $el);
+                    $parent = $select.parent();
+
+                    $select.select2({ placeholder: "Select item..."  , width: "100%", allowClear: true, dropdownParent: $parent});
+                    if(value === null || value === "" || value.length === 0){
+                        $('#keywordselect').val(null);
+                        $('.select2-selection__rendered').html('');
+                    }
+
+                    if(value === null){
+                        $('select.var-value-list', $el).val(value);
+                        $('select.var-value-list', $el).trigger("change");
+                    }else if( value !== null ){
+                        var valArray = value.substring(1, value.length-1);
+                        valArray = valArray.split(",");
+                        $('select.var-value-list', $el).val(valArray);
+                        $('select.var-value-list', $el).trigger("change");
+                    }     
+                }    
+            } 
+                  
         };
         var helper_addSTblEdtRow = function($tblEdt, payload, objParent){
             var obj = {
@@ -393,6 +490,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
             $('span.var-id', $el).html(obj.id);
             $('span.var-name', $el).html(obj.name);
             $('span.var-label', $el).html(obj.label);
+            $('span.var-type', $el).html(obj.type);
             $('span.var-description', $el).html(obj.description);
             $('span.var-dataType', $el).html(obj.dataType);
             
@@ -414,6 +512,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
 
             if(obj.type === "TEMPLATE"){
                 $el.find(".textviewWrapper ").removeClass(".textviewWrapper ");
+                $(".div-params", $el).css("display","none");
             }
 
             if(typeof objParent === "undefined"){
@@ -432,6 +531,7 @@ var $propbar = {notify:{e:10,f:-4},zindex:500,nid:null,ntype:null,nodeData:null,
                 });
             }
 
+            fieldFormat();
             return $el;
         };
         /////////////////////////////////

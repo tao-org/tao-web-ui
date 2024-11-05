@@ -170,6 +170,7 @@ $(function () {
                     _settings.createCookie("userRole","");
                     _settings.createCookie("TaoUserId","");
                     _settings.createCookie("TaoUserName","");
+                    _settings.createCookie("JSESSIONID","");
                     window.location = 'login.html';
                 }
             }
@@ -193,6 +194,7 @@ $(function () {
             _settings.createCookie("userRole","");
             _settings.createCookie("TaoUserId","");
             _settings.createCookie("TaoUserName","");
+            _settings.createCookie("JSESSIONID","");
             window.location = 'login.html';
         });
 });
@@ -244,6 +246,7 @@ $(function () {
                       _settings.createCookie("userRole","");
                       _settings.createCookie("TaoUserId","");
                       _settings.createCookie("TaoUserName","");
+                      _settings.createCookie("JSESSIONID","");
                       window.location = 'login.html';
                   }
               }
@@ -672,10 +675,6 @@ $(function () {
                     $el.removeClass("master").removeClass("hidden");
                     $el.find(".val-msg-ts").html(niceIsoTime(getMonitorNotificationResponse[k]['timestamp']));
                     try {
-                        // var n = getMonitorNotificationResponse[k]['data'].indexOf("Job");
-                        // if(n !== -1){
-                        //     flagExecRefresh = true;
-                        // }
                         var obj = JSON.parse(getMonitorNotificationResponse[k]['data']);
                         if (obj.Message) {
                             $el.find(".val-msg-txt").html(obj.Message);
@@ -688,9 +687,10 @@ $(function () {
                         }
                     }
                     catch(err) {
-                        // $el.find(".val-msg-txt").html("unparsable message");
+                        $el.find(".val-msg-txt").html("An error occured.");
+                        $($el).prependTo(".direct-chat-messages", "#bot-notice-chat");
                         // console.log("message unparsable");
-                        console.log(getMonitorNotificationResponse);
+                        console.log(getMonitorNotificationResponse[k]);
                     }
                     var count = $(".direct-chat-messages > .direct-chat-msg").length;
                     if(count>notificationsMaxNumber){

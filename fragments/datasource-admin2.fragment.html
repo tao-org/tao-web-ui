@@ -141,18 +141,23 @@
                 <ul class="nav nav-tabs visible-xs-block"> <!-- visible-xs-block -->
                     <li class="role-dropdown active">
                         <select id="selectUserPanel" name="selectUserPanel" class="form-control form-changepane" title="Select desired node view.">
-                            <option class="role role-admin" value="all_nodes">All data sources </option>
+                            <option class="role role-admin" value="all_nodes">Datasources </option>
+                            <option class="role role-admin" value="product_names">Product naming rules </option>
                         </select>
                     </li>
                 </ul>
                 <ul class="nav nav-tabs hidden-xs">
-                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_nodes" aria-expanded="true">All datasources</a></li>
+                    <li class="role role-admin active"><a href="#panel-nodes" data-toggle="tab" data-action="all_nodes" aria-expanded="true">Datasources</a></li>
+                    <li class="role role-admin"><a href="#panel-nodes" data-toggle="tab" data-action="product_names" aria-expanded="false">Product naming rules </a></li>
                 </ul>
 
                 <div class="tab-content">
                     <div class="tab-pane active" id="panel-nodes">
                         <div class="row">
                             <div class="col-md-12" id="list-master-controls">
+                                <div class="box-tools pull-left">
+									<button class="btn btn-master-tool text-black hidden" data-action="op-plus" data-toggle="tooltip" data-original-title="Add new naming rule"><i class="fa fa-plus"></i></button>
+								</div>
                                 <div class="box-tools pull-left">
                                     <button class="btn btn-master-tool text-black" data-action="op-filter" data-toggle="tooltip" data-original-title="Filter by tags"><i class="fa fa-filter"></i><span class="label label-warning val-count-filters" style="display:none;">0</span></button>
                                 </div>
@@ -187,7 +192,7 @@
                                         <div class="box-tools pull-right nppaginatedcells-order collapse" data-toggle="tooltip" title="Change order"></div>
                                     </div>
                                     <div class="nppaginatedcells-empty callout callout-empty">
-                                        <p>List is empty. <span class="results-empty">You do not have any data sources.</span><span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
+                                        <p>List is empty. <span class="filter-results-empty collapse">Your current selection returned no results.</span></p>
                                     </div>
                                     <div class="box-body chat users-box">
                                         <div class="nppaginatedcells-panel-body">
@@ -199,19 +204,28 @@
                                                         <div class="box-top-tags">
                                                         </div>
                                                         <div class="box-top">
-                                                            <div class="box-title"><span class="val-sensorName"></span></div>
-                                                            <div class="box-subtitle" style="font-size: 18px;"><span class="val-dataSourceName"></span></div>
-                                                            <div class="box-text">
-																Version: <strong><span class="val-version"></span></strong> | 
-																Authors: <strong><span class="val-authors"></span></strong> | 
-                                                                Copyright: <strong><span class="val-copyright"></span></strong> 
+
+                                                            <div class="product-naming">
+                                                                <div class="box-title"><span class="val-sensor"></span></div>
+                                                                <div class="box-description row"><span class="val-description"> Description </span></div>
                                                             </div>
-                                                            <div class="box-icon">
-                                                                <i class="fa fa-database"></i>
+
+                                                            <div class="data-sources">
+                                                                <div class="box-title"><span class="val-sensorName"></span></div>
+                                                                <div class="box-subtitle" style="font-size: 18px;"><span class="val-dataSourceName"></span></div>
+                                                                <div class="box-text">
+                                                                    Version: <strong><span class="val-version"></span></strong> | 
+                                                                    Authors: <strong><span class="val-authors"></span></strong> | 
+                                                                    Copyright: <strong><span class="val-copyright"></span></strong> 
+                                                                </div>
+                                                                <div class="box-icon">
+                                                                    <i class="fa fa-database"></i>
+                                                                </div>
                                                             </div>
+
                                                         </div>
                                                      
-                                                        <div class="row">
+                                                        <div class="data-sources row">
                                                             <div class="col-sm-12 col-xs-12">
                                                                 <div class="text-right" style="padding-top: 5px;">
                                                                     <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
@@ -219,6 +233,16 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                        <div class="product-naming row">
+                                                            <div class="col-sm-12 col-xs-12">
+                                                                <div class="text-right" style="padding-top: 5px;">
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit-product"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Edit</span></button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete-product"><i class="fa fa-trash fa-fw" aria-hidden="true"></i><span class="span-muted">&nbsp;Delete</span></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                 </div>
                                             </core-cell-list>
@@ -228,21 +252,32 @@
                                                         <div class="box-top-tags">
                                                         </div>
                                                         <div class="box-top">
-                                                            <div class="box-title"><span class="val-sensorName"></span></div>
-                                                            <div class="box-subtitle" style="font-size: 18px;"><span class="val-dataSourceName"></span></div>
-                                                            <div class="box-text">Version:<strong> <span class="val-version"></span></strong></div>
-                                                            <div class="box-text">Authors: <strong><span class="val-authors"></span></strong></div>
-                                                            <div class="box-text">Copyright: <strong><span class="val-copyright"></span></strong></div>
-                                                            <div class="box-icon">
-                                                                <i class="fa fa-database"></i>
+
+                                                            <div class="product-naming">
+                                                                <div class="box-title"><span class="val-sensor"></span></div>
+                                                                <div class="box-description row"><span class="val-description"> Description </span></div>
+                                                            </div>
+
+                                                            <div class="data-sources">
+                                                                <div class="box-title"><span class="val-sensorName"></span></div>
+                                                                <div class="box-subtitle" style="font-size: 18px;"><span class="val-dataSourceName"></span></div>
+                                                                <div class="box-text">Version:<strong> <span class="val-version"></span></strong></div>
+                                                                <div class="box-text">Authors: <strong><span class="val-authors"></span></strong></div>
+                                                                <div class="box-text">Copyright: <strong><span class="val-copyright"></span></strong></div>
+                                                                <div class="box-icon">
+                                                                    <i class="fa fa-database"></i>
+                                                                </div>
                                                             </div>
                                                         </div>
                                             
-                                                        <div class="box-bottom with-line">
-                                                            <div class="">
-                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
-                                                                <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view"><i class="fa fa-eye fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;View parameters</span></button>
-                                                            </div>
+                                                        <div class="data-sources box-bottom with-line">
+                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
+                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="view"><i class="fa fa-eye fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;View parameters</span></button>
+                                                        </div>
+
+                                                        <div class="product-naming box-bottom with-line">
+                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="edit-product"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Edit</span></button>
+                                                            <button type="button" class="btn btn-primary btn-sm btn-flat btn-action btn-nodeop" data-action="delete-product"><i class="fa fa-trash fa-fw" aria-hidden="true"></i><span class="span-muted collapse">&nbsp;Delete</span></button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -359,6 +394,7 @@
             .done(function (getDatasourceParametersResponse) {
                 var parameters = chkTSRF(getDatasourceParametersResponse);
                 var $modal = $("#myModalNodes");
+                $(".modal-dialog",$modal).removeClass("modal-lg");
                 var rmContent = buildModalParamsList(args.dna, parameters.parameter);
                 $modal.find('.modal-dialog').html(rmContent);
                 $modal.modal('show');
@@ -427,33 +463,116 @@
         
     };
 
+    var myModalNodesOpShow = function(action, args){
+        var $modal = $("#myModalNodes");
+        var rm_contentUrl = '';
+        var rmContent = '';
+        window.userOpStack = [];
+
+        if(action === "edit-product"){
+            window.userOpStack = [{
+                "action": "edit-product",
+                "dna": args.dna
+            }];
+        }
+
+        $(".modal-dialog",$modal).addClass("modal-lg");
+        rm_contentUrl="./fragments/datasource-admin-naming.fragment.html?" + Math.random();
+
+        $.ajax({
+            url: rm_contentUrl,
+            success: function(result) {
+                rmContent = result;
+                if(rmContent !== ''){
+                    $modal.find('.modal-dialog').html(rmContent);
+                }else{
+                    alert("Could not retrive needed data from server.");
+                    return e.preventDefault();
+                }
+                $modal.modal('show');
+            }
+        });
+    };
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     $( document ).ready(function() {
+        var tabAction = "all_nodes";
         var urls = [
                 baseRestApiURL + "datasource/"
             ];
+
+        $("#selectUserPanel").on("change", function(event){
+            var current_pane = $(this).val() || 0;
+            $("a[data-action='" + current_pane +"']",'#panel-topo-wrapper').trigger( "click" );
+        });
+
+        $("a[data-toggle='tab']", "#panel-topo-wrapper").on("shown.bs.tab", function (e) {
+			tabAction = $(this).data("action");
+            var title = "";
+			if (tabAction === "product_names") {
+                title = "Product naming rules -";
+                urls = "component/naming/";
+
+                $("[data-action='op-plus']").removeClass("hidden");
+                $(".data-sources", "#panel-topo-wrapper").hide();
+                $(".product-naming", "#panel-topo-wrapper").show();
+
+            }else{
+                title = "Data sources -";
+                urls = "datasource/";
+
+                $("[data-action='op-plus']").addClass("hidden");
+                $(".data-sources", "#panel-topo-wrapper").show();
+                $(".product-naming", "#panel-topo-wrapper").hide();
+            }
+
+			$(".box-success .box-header .box-title", "#panel-topo-wrapper").get(0).childNodes[0].nodeValue = title;
+            window.panelComp.refreshData([ baseRestApiURL + urls ]);
+		});
 
         window.panelComp = $('#panel-nodes').npPaginatedCells({
             headerUser: taoUserProfile.username,
             url: urls,
             viewMode: preferences.viewMode,
-            filterAttribute: "label",
+            filterAttribute: tabAction === "all_nodes"? "label" : "sensor",
             order:[
                 {
                     "label":"Name ascending",
-                    "objAttributeName":"label",
+                    "objAttributeName":  tabAction === "all_nodes"? "label" : "sensor",
                     "direction":"ASC"
                 },
                 {
                     "label":"Name descending",
-                    "objAttributeName":"label",
+                    "objAttributeName":  tabAction === "all_nodes"? "label" : "sensor",
                     "direction":"DSC"
                 }
             ],
+            doCustomRender: function($el, data) {
+				if (tabAction === "all_nodes") {
+                    $(".data-sources", "#panel-topo-wrapper").show();
+                    $(".product-naming", "#panel-topo-wrapper").hide();
+				}
+            },
             doAction: function(action, args){
+
+                // data sources pane
                 if(action === "edit") showModalTagsEdit(action, args);
                 if(action === "view") myModalViewDatasource(action, args);
+
+                // products pane
+                if(action === "op-plus" || action === "edit-product"){
+                    myModalNodesOpShow(action, args);
+                }
+                if(action === "delete-product"){
+                    $('#confirm-dialog').modal('confirm',{
+						msg:"Are you sure you want to delete <strong>"+args.dna.sensor+"</strong>?",
+						callbackConfirm: function() {
+							deleteProduct(args.dna.id);
+						},
+						callbackCancel:function(){}
+					});
+                }
             }
         });
 		
@@ -549,6 +668,29 @@
 			var $tbl = $(this).closest(".tbl-edt");
 			helper_addParameterRow($tbl);
 		});
+
+        function deleteProduct(id){
+            var deleteProd = $.ajax({
+                cache: false,
+                url: baseRestApiURL + "component/naming/" + id,
+                type: 'DELETE',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": window.tokenKey
+                }
+            });
+
+            $.when(deleteProd).done(function (response) {
+                if(response.status === "SUCCEEDED"){
+                    showMsg("The naming rule was deleted.", "SUCCESS");
+                    panelComp.refreshData();
+                }else{
+                    showMsg("Could not delete the naming rule.", response.status);
+                }
+            }).fail(function () {});
+        }
+
     });
     //# sourceURL=datasource-admin2.js
 </script>

@@ -30,7 +30,8 @@
 			var _self = this;
 			
 			var deferred = $.Deferred();
-				_self.ws = new WebSocket(_self.options.url);
+				//_self.ws = new WebSocket(_self.options.url);
+      			_self.ws = new SockJS(_self.options.url);
 
 				_self.ws.onopen = function (event) {
 					_self.ws.send([ 'SUBSCRIBE', 'id:1', 'destination:/queue/' + _self.options.user, '\n', null ].join('\n'));
@@ -52,10 +53,14 @@
 		checkConnection: function(){
 			var _self = this;
 
+			//if((_self.ws.readyState === WebSocket.CLOSED) || (_self.ws.readyState === WebSocket.CLOSING)){
 			if((_self.ws.readyState === WebSocket.CLOSED) || (_self.ws.readyState === WebSocket.CLOSING)){
+
 				try{
-					_self.options.url = window.baseWssUrl + "queue?tokenKey=" + window.tokenKey;
-					_self.ws = new WebSocket(_self.options.url);
+					//_self.options.url = window.baseWssUrl + "queue?tokenKey=" + window.tokenKey;
+					//_self.ws = new WebSocket(_self.options.url);
+					_self.options.url = window.baseRestApiURL + "queue?tokenKey=" + window.tokenKey;
+					_self.ws = new SockJS(_self.options.url);
 					_self.ws.send([ 'SUBSCRIBE', 'id:1', 'destination:/queue/' + _self.options.user, '\n', null ].join('\n'));
 				}catch(error){
 					window.location.reload();
@@ -85,7 +90,8 @@ $(document).ready( function () {
 	// connect to endpoint
 	// prepare the user id for subscribe message
 	$wsc.wsController({
-		"url" : window.baseWssUrl + "queue?tokenKey=" + window.tokenKey,
+		//"url" : window.baseWssURL + "queue?tokenKey=" + window.tokenKey,
+		"url" : window.baseRestApiURL + "queue?tokenKey=" + window.tokenKey,
 		"user": taoUserProfile.id
 	})
 	.then(function (result) {	// the promise response is in a susccessful outcome (1 parameter)

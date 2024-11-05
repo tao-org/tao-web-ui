@@ -7,8 +7,11 @@
 .docker-files    .info-text{font-style:italic;display:inline-block;color:#79bde4}
 .auxiliary-files .info-text{font-style:italic;display:inline-block;color:#8fcc97}
 
-.add-extra-file{position:absolute;top:0;right:14px;color:#146b9c;font:normal normal normal 20px/1 FontAwesome;padding:5px;margin:5px;cursor:pointer}
-.add-extra-file::after{content:"\f067"}
+.add-extra-file{position:absolute;top:0;right:14px;color:#146b9c;font:normal normal normal 25px/1 FontAwesome;padding:5px;margin:5px;cursor:pointer}
+.add-extra-file::after{content:"\f15b"}
+
+.add-extra-folder{position:absolute;top:0;right:40px;color:#146b9c;font:normal normal normal 29px/1 FontAwesome;padding:5px;margin:5px;cursor:pointer}
+.add-extra-folder::after{content:"\f07b"}
 
 .extra-files-container>input[type="file"]{width:92%;margin-bottom:2px}
 .extra-files-container>input[type="file"]::after{content:"\f014";font:normal normal normal 16px/1 FontAwesome;display:inline-block;cursor:pointer;padding:2px;position:absolute;left:91%;color:red}
@@ -33,11 +36,27 @@
         <div class="modal-body">
             <section>
                 <div class="row">
+					<div class="col-md-12">
+						<div class="form-group form-inline">
+							<label for="type" class="col-sm-2 col-md-2 control-label" >Type</label>
+							<div class="col-sm-10 col-md-10">
+								<label class="radio-inline">
+									<input type="radio"  name="dockerOpt" id="newDocker" value="NEW" checked>Create new docker image
+									<a data-toggle="collapse" href="#collapseNewDocker"></a>
+								</label>
+		
+								<label class="radio-inline">
+									<input type="radio" name="dockerOpt" id="existDocker" value="EXISTING" >Existing docker image
+									<a data-toggle="collapse"  href="#collapseExistDocker"></a>
+								</label>
+							</div>
+						</div>
+					</div>
                     <div class="col-md-12">
                         <div class="form-group has-feedback">
-                            <label for="name" class="col-sm-2 col-md-2 control-label">Name</label>
+                            <label for="name" class="col-sm-2 col-md-2 control-label">Docker image</label>
                             <div class="col-sm-10 col-md-10">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="name" autocomplete="off" value="" />
+                                <input type="text" class="form-control" id="name" name="name" placeholder="docker image name" autocomplete="off" value="" />
                             </div>
                         </div>
                     </div>
@@ -59,38 +78,60 @@
                     </div>
                 </div>
 				<div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group has-feedback">
-                            <label for="dockerFile" class="col-sm-2 col-md-2 control-label">Docker file</label>
-                            <div class="col-sm-10 col-md-10">
-								<input type="file" id="dockerFile" class="form-control for-validation" name="dockerFiles" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group docker-files">
-							<label class="col-sm-3 col-md-3 control-label">Docker files</label>
-                            <div class="col-sm-9 col-md-9 extra-files-container">
-								<span class="info-text">Select one or more extra installation files.<br/>Click [+] to add a new set of files.</span>
-                            </div>
-							<div class="add-extra-file"></div>
-                        </div>
-                        <div class="form-group auxiliary-files">
-							<label class="col-sm-3 col-md-3 control-label">Auxiliary files</label>
-                            <div class="col-sm-9 col-md-9 extra-files-container">
-								<span class="info-text">Select one or more auxiliary files.<br/>Click [+] to add a new set of files.</span>
-                            </div>
-							<div class="add-extra-file"></div>
-                        </div>
-                    </div>
+					<div class="accordion" id="accordionDocker">
+						<div class="option-One">
+							<div class="collapse in" id="collapseNewDocker" data-parent="#accordionDocker">
+								<div class="col-md-12">
+									<div class="form-group has-feedback">
+										<label for="dockerFile" class="col-sm-2 col-md-2 control-label">Docker file</label>
+										<div class="col-sm-10 col-md-10">
+											<input type="file" id="dockerFile" class="form-control for-validation" name="dockerFiles" />
+										</div>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group docker-files">
+										<label class="col-sm-3 col-md-3 control-label">Docker files</label>
+										<div class="col-sm-9 col-md-9 extra-files-container">
+											<span class="info-text">Select one or more extra installation files.<br/>Click [+] to add a new set of files.</span>
+										</div>
+										<div class="add-extra-file" data-toggle="tooltip" data-original-title="Add file" ></div>
+										<div class="add-extra-folder" data-toggle="tooltip" data-original-title="Add directory"></div>
+									</div>
+									<div class="form-group auxiliary-files">
+										<label class="col-sm-3 col-md-3 control-label">Auxiliary files</label>
+										<div class="col-sm-9 col-md-9 extra-files-container">
+											<span class="info-text">Select one or more auxiliary files.<br/>Click [+] to add a new set of files.</span>
+										</div>
+										<div class="add-extra-file" data-toggle="tooltip" data-original-title="Add file" ></div>
+										<div class="add-extra-folder" data-toggle="tooltip" data-original-title="Add directory"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="option-Two">
+							<div class="collapse" id="collapseExistDocker" data-parent="#accordionDocker">
+								<div class="col-md-12">
+									<!-- <div class="form-group has-feedback">
+										<label for="dockerImage" class="col-sm-2 col-md-2 control-label">Docker image </label>
+										<div class="col-sm-10 col-md-10">
+											<input type="text" id="dockerImage" class="form-control for-validation" name="dockerImage" />
+										</div>
+									</div> -->
+								</div>
+							</div>
+						</div>	
+					</div>
+
                     <div class="col-md-12">
                         <div class="form-group has-feedback">
 							<label for="jsonContainerDescriptor" class="col-sm-2 col-md-2 control-label">Add Descriptors</label>
-                            <div class="col-sm-6 col-md-6">
+                            <div>
 							
 							</div>
 							<div class="col-sm-4 col-md-4">
-								<input type="checkbox" class="js-switch" id="switchContainerDescriptors"  />
+								<input type="checkbox" class="js-switch" id="switchContainerDescriptors" checked />
 						
 							</div>
                         </div>
@@ -100,11 +141,11 @@
                         <div class="form-group has-feedback">
                             <label for="jsonContainerDescriptor" class="col-sm-2 col-md-2 control-label">Container descriptor</label>
                             <div class="col-sm-6 col-md-6">
-								<input type="file" id="jsonContainerDescriptor" class="form-control json-file for-validation" name="jsonContainerDescriptor"  />
+								<input type="file" id="jsonContainerDescriptor" class="form-control json-file for-validation" name="jsonContainerDescriptor" disabled />
 							</div>
 							<div class="col-sm-4 col-md-4">
 							
-								<button disabled  id="btnAddContainerDescriptor" name="btnAddContainerDescriptor" class="btn btn-primary btn-submit">Add container descriptor</button>
+								<button id="btnAddContainerDescriptor" name="btnAddContainerDescriptor" class="btn btn-primary btn-submit">Add container descriptor</button>
 								<input type="hidden" id="containerDescriptor" name="containerDescriptor"  value="" />
 							</div>
                         </div>
@@ -114,10 +155,10 @@
                         <div class="form-group has-feedback">
                             <label for="jsonComponentDescriptor" class="col-sm-2 col-md-2 control-label">Component descriptor</label>
                            <div class="col-sm-6 col-md-6">
-								<input type="file" id="jsonComponentDescriptor" class="form-control json-file for-validation" name="jsonComponentDescriptor" />
+								<input type="file" id="jsonComponentDescriptor" class="form-control json-file for-validation" name="jsonComponentDescriptor" disabled />
 							</div>
 							<div class="col-sm-4 col-md-4">
-								<button disabled id="btnAddComponentDescriptor" name="btnAddComponentDescriptor" class="btn btn-primary btn-submit btn-cont-addnewcomp">Add component descriptor</button>
+								<button id="btnAddComponentDescriptor" name="btnAddComponentDescriptor" class="btn btn-primary btn-submit btn-cont-addnewcomp">Add component descriptor</button>
 								<input type="hidden" id="componentDescriptors" name="componentDescriptors"  value="" />
 							</div>
                         </div>
@@ -151,7 +192,7 @@
                             <div class="col-sm-9 col-md-9">
 								<input type="file" id="containerLogo" class="form-control for-validation" name="containerLogo" />
                             </div>
-							<div class="col-sm-1 col-md-1" style="padding:0;margin-left:-15px">
+							<div class="col-sm-1 col-md-1" style="margin-left:-15px">
 								<img id="previewLogo" src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" width="64" height="64" onerror="devalidateLogoFile(event)" />
 							</div>
                         </div>
@@ -271,8 +312,36 @@
 		
 	});
 
+
+	function checkDockerImage( dockerImageName){
+		return $.ajax({
+			cache: false,
+			url: baseRestApiURL + "docker/check?image=" + dockerImageName,
+			type: 'POST',
+			headers: {
+				"X-Auth-Token": window.tokenKey
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+					chkXHR(jqXHR.status);
+			},
+			success: function (response) {
+					console.log(response);
+			}
+		});
+	}
 	//////////////////////////////////////////////////////////////////////////////////////
     $(document).ready( function() {
+		// Choose Docker type
+		$('#newDocker').on('click', function(){
+			$(this).parent().find('a').trigger('click');
+			$('#existDocker').parent().find('a').trigger('click');
+		})
+
+		$('#existDocker').on('click', function(){
+			$(this).parent().find('a').trigger('click');
+			$('#newDocker').parent().find('a').trigger('click');
+		})
+
 		// Add extra installation or auxiliary files
 		$("form#frmUploadContainer").on("click", ".add-extra-file", function (e) {
 			var $elX = $(this).closest(".form-group");
@@ -285,6 +354,14 @@
 				e.preventDefault();
 				$(this).remove();
 			}
+		});
+
+
+		// Add extra installation or auxiliary folder
+		$("form#frmUploadContainer").on("click", ".add-extra-folder", function (e) {
+			var $elX = $(this).closest(".form-group");
+			var fName = $elX.hasClass("docker-files") ? 'dockerFiles' : 'auxiliaryFiles';
+			$elX.find(".extra-files-container").append('<input type="file" name="' + fName + '" class="form-control" webkitdirectory mozdirectory msdirectory odirectory directory>');
 		});
 
 		$("form#frmUploadContainer").on("click", "#btnAddContainerDescriptor", function (e)  {
@@ -362,7 +439,12 @@
 		// Custom validation for container name
 		$.validator.addMethod('containerName', function (value, element, params) {
 			var pattern = new RegExp(params.regEx, "g");
-			var match = value.match(pattern);
+			if($("#existDocker").is(':checked')){
+				var match = true;
+			}else{
+				var match = value.match(pattern);
+			}
+			
 			return value.length == 0 || match;
 		}, 'Remove invalid characters (only allowed small caps letters, numbers and dashes).');
 		// Custom validation for various file types
@@ -458,51 +540,90 @@
 				$(".modal-error ").fadeOut();
 				
 				var formData = new FormData(this);
-				var xhr = new XMLHttpRequest();
 				
-				if($('#switchContainerDescriptors').is(':checked'))
-					{
+
+				if( $("#existDocker").is(':checked')){
+					var dockerImageName = $("#name").val();
+					//checkDockerImage(dockerImageName);
+					$.when(checkDockerImage(dockerImageName)).done(function(response){
+						if (response.status === "SUCCEEDED" && response.data){
+							console.log(response);
+							$.ajax({
+								cache: false,
+								url: baseRestApiURL + "docker/pull?image=" + dockerImageName,
+								type: 'POST',
+								headers: {
+									"X-Auth-Token": window.tokenKey
+								},
+								error: function (jqXHR, textStatus, errorThrown) {
+										chkXHR(jqXHR.status);
+								},
+								success: function (response) {
+									if (response.status === "SUCCEEDED" && response.data !== undefined){
+										console.log(response);
+										showMsg("Operation succeeded. Toolbox container added.", "SUCCESS");
+
+									} else {
+										// Docker image could not be pulled
+										showMsg("Operation failed. Docker image could not be retrieved.", "ERROR");
+									}
+								}
+							});
+						}else{
+							console.log(response);
+							// Docker image could not be found
+							showMsg("Operation failed. Docker image could not be found. Please verify if docker image name is correct.", "ERROR");
+						}
+					});
+				} else {
+
+					var xhr = new XMLHttpRequest();
+					if($('#switchContainerDescriptors').is(':checked')){
 						xhr.open("POST", baseRestApiURL + "docker/register", true);
 					}
 					else{
 						xhr.open("POST", baseRestApiURL + "docker/upload", true);
 					}
 
-				xhr.responseType = "json";
-				xhr.setRequestHeader("X-Auth-Token", tokenKey);
-				xhr.onload = function (e) {
-					if (this.status == 200) {
-						var data = this.response;
-						
-						// Fix for IE not honoring responseType 'json' when the requested data is not of 'json' type
-						if (detectIE()) {
-							if (data.status == undefined && typeof(data) === "string") {
-								// Force JSON parse in IE
-								data = JSON.parse(data);
+					xhr.responseType = "json";
+					xhr.setRequestHeader("X-Auth-Token", tokenKey);
+					xhr.onload = function (e) {
+						if (this.status == 200) {
+							var data = this.response;
+							
+							// Fix for IE not honoring responseType 'json' when the requested data is not of 'json' type
+							if (detectIE()) {
+								if (data.status == undefined && typeof(data) === "string") {
+									// Force JSON parse in IE
+									data = JSON.parse(data);
+								}
 							}
-						}
-						if (!data || typeof data.status === "undefined") {
-							// Inconclusive response from server
-							showMsg("Operation failed. Please try again or contact app admin.", "ERROR");
-						} else if (data.status == responseStatus.success) {
-							$("#myModalNodes").modal('hide');
-							showMsg(data.message, "SUCCESS");
+							if (!data || typeof data.status === "undefined") {
+								// Inconclusive response from server
+								showMsg("Operation failed. Please try again or contact app admin.", "ERROR");
+							} else if (data.status == responseStatus.success) {
+								$("#myModalNodes").modal('hide');
+								showMsg(data.message, "SUCCESS");
+							} else {
+								$(".error-container", ".modal-error").html('<i class="fa fa-exclamation-triangle fa-fw"></i>' + data.message);
+								$(".error-container", ".modal-error").css('display', 'inline-block');
+								$(".modal-error ").fadeIn("slow");
+								$('#myModalNodes').animate({scrollTop: 0}, 250);
+							}
 						} else {
-							$(".error-container", ".modal-error").html('<i class="fa fa-exclamation-triangle fa-fw"></i>' + data.message);
-							$(".error-container", ".modal-error").css('display', 'inline-block');
-							$(".modal-error ").fadeIn("slow");
-							$('#myModalNodes').animate({scrollTop: 0}, 250);
+							// Failed to connect to server
+							showMsg("Operation failed.<br/>" + this.response.error, "ERROR");
 						}
-					} else {
-						// Failed to connect to server
-						showMsg("Operation failed.<br/>" + this.response.error, "ERROR");
 					}
+					xhr.onerror = function (e, x, y) {
+						// Failed to connect to server
+						showMsg("Operation failed. Please try again or contact app admin.", "ERROR");
+					}
+					xhr.send(formData);
+
 				}
-				xhr.onerror = function (e, x, y) {
-					// Failed to connect to server
-					showMsg("Operation failed. Please try again or contact app admin.", "ERROR");
-				}
-				xhr.send(formData);
+				
+				
 			}
             return false; // To avoid actual submission of the form
 		});

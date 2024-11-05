@@ -34,10 +34,32 @@
 .tree-content .treeview:hover input:checked+label::before{color:#5c5d5e}
 .tree-content .treeview .sub{display:none;margin-left:22px}
 .tree-content .treeview input:checked~.sub{display:block}
-.tree-content .treeview input:checked~.sub.loading,
+.tree-content .treeview input:checked~.sub.loading{color:#72afd2;width:100%;display:block;padding:0 10px;text-align:left;font-size:1em;line-height:16px;height:auto}
 .tree-content .treeview input:checked~.sub.empty{height:auto}
-.tree-content .treeview input:checked~.sub.empty::after{content:"Empty...";color:#b1d3e6;width:100%;display:block;padding:0 10px;text-align:left;font-size:0.8em;line-height:16px}
-.tree-content .treeview input:checked~.sub.loading::after{content:"Loading...";color:#72afd2;width:100%;display:block;padding:0 10px;text-align:left;font-size:1em;line-height:16px}
+.tree-content .treeview input:checked~.sub.empty::after{content:"Empty...";color:#b1d3e6;width:100%;display:inline-block;padding:0 10px;text-align:left;font-size:0.8em;line-height:16px}
+/* .tree-content .treeview input:checked~.sub.loading::after{content:"Loading...";color:#72afd2;width:100%;display:block;padding:0 10px;text-align:left;font-size:1em;line-height:16px} */
+.tree-content .treeview input:checked~.sub.loading::after{content:" .";animation: dots 1s steps(5,end) infinite;color:#72afd2;display:inline-block;text-align:left;font-size:1em;line-height:16px}
+
+@keyframes dots {
+  0%, 20% {
+    color: rgba(0,0,0,0);
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);}
+    
+  40% {
+    color: #72afd2;
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);}
+  60% {
+    text-shadow:
+      .25em 0 0 #72afd2,
+      .5em 0 0 rgba(0,0,0,0);}
+  80%, 100% {
+    text-shadow:
+      .25em 0 0 #72afd2,
+      .5em 0 0 #72afd2;}}
 /* ===== PRODUCTS ===== */
 .tree-content .treeview label.select-for{position:absolute;margin:0;top:0;left:0;width:23px;height:25px;cursor:pointer}
 .tree-content .treeview label.select-for::before{position:absolute;left:7px;top:9px;content:"\002713";line-height:0;padding:0}
@@ -66,7 +88,8 @@
 .foldercontent-label { white-space: nowrap; vertical-align: top; cursor: pointer; overflow: hidden; text-overflow: ellipsis;display:block; padding: 0 2px; }
 .foldercontent-subitem-1 { vertical-align: top; width: 90px; padding-right: 5px; float: right; padding-left: 5px; border-left: #eee solid 1px; border-right: #eee solid 1px; overflow: hidden; text-align: right; text-overflow: ellipsis; }
 .foldercontent-subitem-0 { float: right; display: block; width: 90px; padding-right: 5px; overflow: hidden; text-overflow: ellipsis; text-align: right; }
-.foldercontent.loading::after { content: "Loading..."; color: #72afd2; width: 100%; display: block; padding: 0 10px; text-align: left; font-size: 1em; line-height: 16px }
+.foldercontent.loading {color: #72afd2; width: 100%; display: inline-block; padding: 0 10px; text-align: left; font-size: 1em; line-height: 16px }
+.foldercontent.loading::after { content:" .";animation: dots 1s steps(5,end) infinite; color: #72afd2; display: inline-block; text-align: left; font-size: 1em; line-height: 16px }
 .gutter.gutter-horizontal { cursor: col-resize; }
 .foldercontent-item .rename-item { position: absolute; top: -2px; left: 25px; line-height: 1.5em; width: calc(100% - 25px);}
 
@@ -160,6 +183,7 @@
 #view_file_content .content_prev i.fa,#view_file_content .content_next i.fa {margin-top:5px;cursor:pointer}
 #view_file_content .content_next span {margin-top:5px;cursor:pointer;font: normal normal normal 14px/1 FontAwesome;}
 
+#myFlatMap .map{height:600px;}
 /* ===== Grid/List element custom style ===== */
 .nppaginatedcells-panel-body { display: flex; flex-wrap: wrap }
 .nodes-item-core-box { position: relative; width: 100%; display: flex; flex-direction: column; height: 100%; margin: 0 }
@@ -409,7 +433,7 @@
                         </div>
                         <div class="fileexplorer-content split hidden">
                             <div class="treeview sub foldertree"></div>
-                            <div class="foldercontent list"></div>
+                            <div class="foldercontent list">Loading</div>
                         </div>
                         <div class="nothing"></div>
                     </div>
@@ -739,21 +763,9 @@
         var url_base = $tree.data("url_base");
         var repo = $tree.data("repo");
         var folder = (typeof attributes === "undefined") ? $tree.data("folder") : attributes.fileInfo.relativePath;
-        $.ajax({
-            url: url_base + "folder=" + escape(folder),
-            type: "GET",
-            dataType: 'json',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.setRequestHeader("X-Auth-Token", tokenKey);
-            },
-            error: function (jqXHR, textStatus) {
-                if (root) $(".loading", $tree).addClass("hidden");
-                if (root) $compsTree.closest(".box").addClass("box-warning");
-                deferred.reject(jqXHR, textStatus, "Error while loading files.");
-            },
-            success: function (response) {
+        var url = url_base + "folder=" + escape(folder);
+        $.when(ajaxGeneralCallFnc(url, {}, "GET", 'json')).done(function(response){
+            if(response.status === "SUCCEEDED"){
                 if (root) {
                     $(".loading", $tree).addClass("hidden");
                 }
@@ -766,9 +778,15 @@
                     }
                     deferred.resolve(response);
                 } else {
-                    showMsg(repo.name + ": <br/>" + response.message, response.status);
+                    showMsg("Could not access repository "+ repo.name, "ERROR");
+                    // showMsg(repo.name + ": <br/>" + response.message, response.status);
                     deferred.reject(null, response.status, response.message);
                 }
+            }else{
+                if (root) $(".loading", $tree).addClass("hidden");
+                if (root) $compsTree.closest(".box").addClass("box-warning");
+                showMsg(response.message, "FAIL");
+                deferred.reject(jqXHR, textStatus, "Error while loading files.");
             }
         });
         return deferred.promise();
@@ -836,10 +854,13 @@
                 attributes.fileInfo.fileName +
                 '</a>' +
                 '</label>' +
-                '<div class="sub loading"></div>' +
+                '<div class="sub loading">Loading</div>' +
                 '</div>');
             parent.append(element);
             parent.removeClass("loading");
+            if(isRoot){
+                parent.find(".sub").text("");
+            }
             
             chk = parent.find('input[id="tree_' + tree_data.id + "_" + relativePath + '"]');
         }
@@ -861,6 +882,7 @@
         if(attributes !== "nextPage"){
             $tree.removeData("url_complete");
             $(".foldercontent", $tree).html("");
+            $(".foldercontent", $tree).text("Loading");
         }else{
             var nextPage = attributes;
         }
@@ -885,37 +907,24 @@
         if (typeof url_base === "undefined") {
             var a = 1;
         }
-        $.ajax({
-            //url: url_base + "folder=" + escape(folder),
-            url: url_,
-            type: "GET",
-            dataType: 'json',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.setRequestHeader("X-Auth-Token", tokenKey);
-            },
-            error: function (jqXHR, textStatus) {
+        $.when(ajaxGeneralCallFnc(url_, {}, "GET", 'json')).done(function(response){
+            if(response.status === "SUCCEEDED"){
+                $(".foldercontent", $tree).removeClass("loading");
+                $(".treeview.sub.foldertree").find(".selected").parent().siblings(".loading").removeClass("loading")
+                renderFolderContent($tree, response.data, root ? void (0) : attributes.fileInfo.relativePath, nextPage);
+                if(attributes === 'nextPage'){
+                    renderTree($tree, response.data, folder);
+                }
+                if (!root) {
+                    renderTree($tree, response.data, attributes.fileInfo.relativePath);
+                }
+                deferred.resolve(response);
+                
+            }else{
                 if (root) $(".loading", $tree).addClass("hidden");
                 if (root) $compsTree.closest(".box").addClass("box-warning");
                 deferred.reject(jqXHR, textStatus, "Error while loading files.");
-            },
-            success: function (response) {
-                $(".foldercontent", $tree).removeClass("loading");
-                $(".treeview.sub.foldertree").find(".selected").parent().siblings(".loading").removeClass("loading")
-                if (response.status == responseStatus.success) {
-                    renderFolderContent($tree, response.data, root ? void (0) : attributes.fileInfo.relativePath, nextPage);
-                    if(attributes === 'nextPage'){
-                        renderTree($tree, response.data, folder);
-                    }
-                    if (!root) {
-                        renderTree($tree, response.data, attributes.fileInfo.relativePath);
-                    }
-                    deferred.resolve(response);
-                } else {
-                    showMsg(repo.name + ": <br/>" + response.message, response.status);
-                    deferred.reject(null, response.status, response.message);
-                }
+                showMsg(response.message, "FAIL");
             }
         });
         return deferred.promise();
@@ -1208,7 +1217,7 @@
         }
 
         var $treeview = $(".tree-pane.active .fileexplorer-content", $repoPanel);
-        if ($treeview.length > 0) {
+        if ($treeview.length > 0 && $("#repositories>.nothing").length > 0) {
             var dhh = $("#repositories>.nothing").offset().top - $("+.nothing", $treeview).offset().top;
             var hh = parseInt($(".content-wrapper").css("min-height")) - ($treeview.offset().top - $(".content-wrapper").offset().top) - dhh;
             $treeview.css({ "height": parseInt(hh) + "px" });
@@ -1217,17 +1226,15 @@
 
     function getDownloadLink(uri) {
         var deferred = $.Deferred();
-        $.ajax({
-            url: uri,
-            type: "GET",
-            beforeSend: function (xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
-            success: function (response) {
+        $.when(ajaxGeneralCallFnc(uri, {},"GET"  )).done(function(response){
+            if(response.status === "SUCCEEDED"){
                 deferred.resolve(response);
-            },
-            error: function (jqXHR, textStatus, error) {
+            }else{
                 deferred.reject(jqXHR, textStatus, error);
+                showMsg(response.message, "FAIL");
             }
         });
+
         return deferred.promise();
     }
 
@@ -1350,27 +1357,18 @@
 	}
 	
 	function productInfo(attributes) {
-		$.ajax({
-			async: false,
-			cache: false,
-			url: baseRestApiURL + "view/info?relativePath="+attributes.fileInfo.relativePath,
-			type: "GET",
-			headers: {
-				"Accept"      : "application/json",
-				"Content-Type": "application/json",
-				"X-Auth-Token": window.tokenKey
-			},
-			success: function (response) {
-				attributes.geometry = extentToGeometry(response.projection.extent);
+        var url = baseRestApiURL + "view/info?relativePath="+attributes.fileInfo.relativePath;
+        $.when(ajaxGeneralCallFnc(url, {}, "GET")).done(function(response){
+            if(response.status === "SUCCEEDED"){
+                attributes.geometry = extentToGeometry(response.projection.extent);
 				attributes.formatType = "raster";
 				$("#view_on_map").data("producAttr", attributes);
 				showProductOnMap();
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				console.log(textStatus);
-				showMsg("Unknown product format. Try another product.", "ERROR");
-			}
-		});
+            }else{
+                showMsg("Unknown product format. Try another product.", "ERROR");
+                showMsg(response.message, "FAIL");
+            }
+        });
 	}
 	
 	function showProductOnMap() {
@@ -1418,19 +1416,10 @@
 			$(".content_prev i", "#view_file_content").addClass("hidden");
 		}
 		
-		$.ajax({
-			async: false,
-			cache: false,
-			url: baseRestApiURL + "files/read?repositoryId="+readAttr.repoId+"&file="+readAttr.file+extraParams,
-			type:"GET",
-			headers:{
-				"Accept"      : "application/json",
-				"Content-Type": "application/json",
-				"X-Auth-Token": window.tokenKey
-			},
-			success: function (response){
-				if (response.status === "SUCCEEDED") {
-					console.log("file read successfully");
+        var url = baseRestApiURL + "files/read?repositoryId="+readAttr.repoId+"&file="+readAttr.file+extraParams;
+        $.when(ajaxGeneralCallFnc(url, {}, "GET")).done(function(response){
+            if(response.status === "SUCCEEDED"){
+                console.log("file read successfully");
 					if (response.data !== null && response.data !== "") {
 						$("#file_content .content_area", "#view_file_content").html(response.data);
 					} else {
@@ -1438,14 +1427,11 @@
 						$(".content_next span", "#view_file_content").removeClass("hidden");
 						$(".content_next i", "#view_file_content").addClass("hidden");
 					}
-				} else {
-					console.log("unable to read file");
-				}
-			},
-			error: function(jqXHR,textStatus, errorThrown){
-				console.log("unable to read file");
-			}
-		});
+            }else{
+                console.log("unable to read file");
+                showMsg(response.message, "FAIL");
+            }
+        });
 	}
 	
 	function showFileContent(repoId,attributes) {
@@ -1655,28 +1641,12 @@
 	}
 	
     function inspectFolder(attributes) {
-        $.ajax({
-            cache: false,
-            url: baseRestApiURL + "product/inspect/",
-            type: 'POST',
-            data: {
-                "sourceDir": attributes.fileInfo.relativePath + "/"
-            },
-            headers: {
-                "X-Auth-Token": window.tokenKey,
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                showMsg("Error inspecting element.", "ERROR");
-            },
-            success: function (response) {
-                if (response.status == responseStatus.success) {
-                    showMsg(response.message, "SUCCESS");
-
-                   
-                } else {
-                    showMsg("Failed to inspect element.", "ERROR");
-                }
+        var url = baseRestApiURL + "product/inspect/";
+        $.when(ajaxGeneralCallFnc(url,{"sourceDir": attributes.fileInfo.relativePath + "/"},"POST", undefined, "application/x-www-form-urlencoded" )).done(function(response){
+            if(response.status === "SUCCEEDED"){
+                showMsg(response.message, "SUCCESS");
+            }else{
+                showMsg("Failed to inspect element.", "ERROR");
             }
         });
     }
@@ -1754,27 +1724,14 @@
                 formData.productPaths.push(attr.fileInfo.relativePath)
             });
 
-            $.ajax({
-                cache: false,
-                url: baseRestApiURL + "datasource/productset",
-                type: 'POST',
-                data: JSON.stringify(formData),
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                    "X-Auth-Token": window.tokenKey
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    showMsg("Error creating product set. " + errorThrown, "ERROR");
-                },
-                success: function (response) {
-                    if (response.status == responseStatus.success) {
-                        showMsg("Product set successfully created", "SUCCESS");
-                    } else {
-                        showMsg("Failed to create product set. " + (typeof response.message !== 'undefined' ? response.message : ''), "ERROR");
-                    }
-                    $("#mdlCreateProductSet").modal('hide');
+            var url = baseRestApiURL + "datasource/productset";
+            $.when(ajaxGeneralCallFnc(url, JSON.stringify(formData), "POST" )).done(function(response){
+                if(response.status === "SUCCEEDED"){
+                    showMsg("Product set successfully created", "SUCCESS");
+                }else{
+                    showMsg("Failed to create product set. " + (typeof response.message !== 'undefined' ? response.message : ''), "ERROR");
                 }
+                $("#mdlCreateProductSet").modal('hide');
             });
         }
     });
@@ -1803,26 +1760,17 @@
         if(!name){
             name =  $selected.data("file").displayName;
         }
-        $.ajax({
-            cache: false,
-            url: baseRestApiURL + "files/share?workspace=" + $selected.data("workspaceId") + "&file=" + $selected.data("file").relativePath + "&name=" + name ,
-            type: 'POST',
-            headers: { 
-                "X-Auth-Token": window.tokenKey,
-                "Content-Type": "application/json" 
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                showMsg("Action error.", "ERROR");
-            },
-            success: function (response) {
-                if(response.status === "SUCCEEDED"){
-                    showMsg("File successfully shared.", "SUCCESS");
-                    $("#share-name-content").modal('hide');
-                }else{
-                    showMsg(response.message, response.status);
-                }
+
+        var url = baseRestApiURL + "files/share?workspace=" + $selected.data("workspaceId") + "&file=" + $selected.data("file").relativePath + "&name=" + name;
+        $.when(ajaxGeneralCallFnc(url, {}, "POST")).done(function(response){
+            if(response.status === "SUCCEEDED"){
+                showMsg("File successfully shared.", "SUCCESS");
+                $("#share-name-content").modal('hide');
+            }else{
+                showMsg(response.message, response.status);
             }
         });
+
     }
 
     function viewSharePopUp($selected){
@@ -1926,6 +1874,7 @@
         if (attributes && attributes.fileInfo.fileType === "folder") {
 
             $(".foldercontent", $tree).html("");
+            $(".foldercontent", $tree).text("Loading");
             $(".foldercontent", $tree).addClass("loading");
 
             //expand parent
@@ -2005,16 +1954,14 @@
             $("#properties .imagepreview-holder").addClass("hidden");
             $("#properties .imagepreview-holder img").attr("src", "");
             if (attributes.formatType == "RASTER") {
-                $.ajax({
-                    url: attributes.fileInfo.uri.replace(/files\/download\/[0-9a-f-]{36}/, "product/preview"),
-                    type: "GET",
-                    beforeSend: function (xhr) { xhr.setRequestHeader("X-Auth-Token", tokenKey); },
-                    success: function (response) {
-                        if (response.status == responseStatus.success) {
-                            $("#properties .imagepreview-holder img").attr("src", "data:image/jpeg;base64, " + response.data);
-                        }
+                var url = attributes.fileInfo.uri.replace(/files\/download\/[0-9a-f-]{36}/, "product/preview");
+                $.when(ajaxGeneralCallFnc(url, {},'GET' )).done(function(response){
+                    if(response.status === "SUCCEEDED"){
+                        $("#properties .imagepreview-holder img").attr("src", "data:image/jpeg;base64, " + response.data);
+                    }else{
+                        showMsg(response.message, "FAILED");
                     }
-                });
+                }); 
             }
         }
     });
@@ -2115,72 +2062,48 @@
 
     function doActionSelected($tree,actionName, itemPath1, itemPath2){
         if(typeof itemPath2 === "undefined" ){
-            $.ajax({
-                cache: false,
-                url: baseRestApiURL + "files/action?action=" + actionName + "&item=" + itemPath1 ,
-                type: 'POST',
-                headers: { 
-                    "X-Auth-Token": window.tokenKey,
-                    "Content-Type": "application/json" 
-            },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    showMsg("Action error.", "ERROR");
-                },
-                success: function (response) {
-                    showMsg("Action successfully started.", "SUCCESS");
 
-                    window.panelComp.refreshData();
-                    $.when(refreshTree($tree, $destAttributes))
-                        .done(function () {
-                            //click destination to reload
-                            $('input[id="tree_' + dest.repo.id + "_" + dest.relativePath + '"]', $tree).siblings("label").find("a").click();
-                        });
-                }
-            });
+            var url = baseRestApiURL + "files/action?action=" + actionName + "&item=" + itemPath1;
+            $.when(ajaxGeneralCallFnc(url, {}, 'POST')).done(function(response){
+            if(response.status === "SUCCEEDED"){
+                showMsg("Action successfully started.", "SUCCESS");
+                window.panelComp.refreshData();
+                refreshTree($tree);
+            }else{
+                showMsg("Action error.", "FAIL");
+            }
+        });
+
         } else {
-            $.ajax({
-                cache: false,
-                url: baseRestApiURL + "files/action?action=" + actionName + "&item=" + itemPath1 + "&destination=" + itemPath2 ,
-                type: 'POST',
-                headers: { 
-                    "X-Auth-Token": window.tokenKey,
-                    "Content-Type": "application/json" 
-            },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    showMsg("Action error.", "ERROR");
-                },
-                success: function (response) {
-                    showMsg("Action successfully started.", "SUCCESS");
-
-                    window.panelComp.refreshData();
-                    refreshTree($tree);
-                        
-                }
-            });
+          
+            var url = baseRestApiURL + "files/action?action=" + actionName + "&item=" + itemPath1 + "&destination=" + itemPath2;
+            $.when(ajaxGeneralCallFnc(url, {}, "POST")).done(function(response){
+            if(response.status === "SUCCEEDED"){
+                showMsg("Action successfully started.", "SUCCESS");
+                window.panelComp.refreshData();
+                refreshTree($tree);
+            }else{
+                showMsg(response.message, "FAIL");
+            }
+        });
 
         }
     }
 
     function renameItem($tree, newName, $item){
-        $.ajax({
-            cache: false,
-            url: baseRestApiURL + "files/rename?item="+ $item.data("file").relativePath + "&name=" + newName,
-            type: 'POST',
-            headers: { 
-                "X-Auth-Token": window.tokenKey,
-                "Content-Type": "application/json" 
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                showMsg("Rename error.", "ERROR");
-            },
-            success: function (response) {
+        var url = baseRestApiURL + "files/rename?item="+ $item.data("file").relativePath + "&name=" + newName;
+        $.when(ajaxGeneralCallFnc(url, {}, 'POST')).done(function(response){
+            if(response.status === "SUCCEEDED"){
                 showMsg("Renamed successfully.", "SUCCESS");
                 window.panelComp.refreshData();
-                refreshTree($tree)       
+                refreshTree($tree);
+            }else{
+                showMsg("Rename Error", "FAIL");
             }
         });
     }
 
+    //not used 
     function updateDownloadStatistics(once, repoId) {
 	    var filter,url;
 	    if (repoId === undefined) {
@@ -2268,7 +2191,7 @@
                     $bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="In progress" data-placement="bottom">Overall operation progress ( ' + parseInt(downloadValue*100) + "%" + ')</div>');
                     $bar.css({ width: parseInt(downloadValue*100) + "%" });
                 }else{
-                    if((wsdna.data.Payload.search("Completed transfer") >=0 )){
+                    if((wsdna.data.Payload.search("Completed transfer") >=0 ) || (wsdna.data.Payload === 'true' || wsdna.data.Payload === 'false')){
                         $bar = $('<div class="progress-bar progress-bar-info" data-toggle="tooltip" title="" data-placement="bottom">No operation in progress</div>');
                         $bar.css({ width: "100%" });
                     }else{
@@ -2372,21 +2295,14 @@
     }
 
     function deleteRepository(repo) {
-        $.ajax({
-            cache: false,
-            url: baseRestApiURL + "workspace/" + repo.id + "/",
-            dataType: 'json',
-            type: 'DELETE',
-            headers: { "X-Auth-Token": window.tokenKey },
-            error: function (jqXHR, textStatus, errorThrown) {
-                showMsg("Error deleting repository.", "ERROR");
-            },
-            success: function (data) {
-                deleteRepositoryTab(repo);
+        var url = baseRestApiURL + "workspace/" + repo.id + "/";
+        $.when(ajaxGeneralCallFnc(url, {}, 'DELETE', 'json')).done(function(response){
+            if(response.status === "SUCCEEDED"){
                 showMsg("Repository successfully deleted.", "SUCCESS");
-
-                window.panelComp.refreshData();
+            }else{
+                showMsg("Could not delete the repository.", "FAIL");
             }
+            window.panelComp.refreshData();
         });
     }
 
@@ -2432,131 +2348,92 @@
             "destinationPath": dest.relativePath
         }
 
-        $.ajax({
-            cache: false,
-            url: baseRestApiURL + "files/transfer/",
-            type: 'POST',
-            data: JSON.stringify(tData),
-            headers: {
-                "X-Auth-Token": window.tokenKey,
-                "Content-Type": "application/json"
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                showMsg("Error transferring files.", "ERROR");
-            },
-            success: function (response) {
-                if (response.status == responseStatus.success) {
-                    ///////////////////////////////
-                    // updateDownloadStatistics(true, dest.repo.id);
-
-                    if (dest.relativePath.endsWith("/")) {
-                        dest.relativePath = dest.relativePath.substring(0, dest.relativePath.length - 1);
-                    }
-                    var $destChk = $('input[id="tree_' + dest.repo.id + "_" + dest.relativePath + '"]', $tree);
-                    var $destAttributes = $destChk.siblings("label").find("a").data("attributes");
-
-                    $.when(refreshTree($tree, $destAttributes))
-                        .done(function () {
-                            //click destination to reload
-                            $('input[id="tree_' + dest.repo.id + "_" + dest.relativePath + '"]', $tree).siblings("label").find("a").click();
-                        });
-
-                } else {
-                    showMsg("Failed to transfer files.", "ERROR");
+        var url = baseRestApiURL + "files/transfer/";
+        $.when(ajaxGeneralCallFnc(url, JSON.stringify(tData), 'POST')).done(function(response){
+            if(response.status === "SUCCEEDED"){
+                if (dest.relativePath.endsWith("/")) {
+                     dest.relativePath = dest.relativePath.substring(0, dest.relativePath.length - 1);
                 }
+                var $destChk = $('input[id="tree_' + dest.repo.id + "_" + dest.relativePath + '"]', $tree);
+                var $destAttributes = $destChk.siblings("label").find("a").data("attributes");
+
+                $.when(refreshTree($tree, $destAttributes))
+                    .done(function () {
+                        //click destination to reload
+                        $('input[id="tree_' + dest.repo.id + "_" + dest.relativePath + '"]', $tree).siblings("label").find("a").click();
+                    })
+            }else{
+                showMsg('Failed to transfer files', "FAIL");
             }
         });
     }
 
     function makeNewFolder($tree, dest, filename) {
-        $.ajax({
-            cache: false,
-            url: baseRestApiURL + "files/folder/",
-            type: 'POST',
-            data: {
+        var data = {
                 "workspace": dest.repo.id,
                 "folder": (dest.relativePath + "/" + filename).replace("//", "/")
-            },
-            headers: {
-                "X-Auth-Token": window.tokenKey,
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                showMsg("Error creating new folder.", "ERROR");
-            },
-            success: function (response) {
-                if (response.status == responseStatus.success) {
-                    showMsg("New folder created.", "SUCCESS");
+            };
+        var url = baseRestApiURL + "files/folder/";
+        
+        $.when(ajaxGeneralCallFnc(url, data, "POST", undefined, "application/x-www-form-urlencoded")).done(function(response){
+            if(response.status === "SUCCEEDED"){
+                showMsg("New folder created.", "SUCCESS");
 
-                    if (dest.relativePath.endsWith("/")) {
-                        dest.relativePath = dest.relativePath.substring(0, dest.relativePath.length - 1);
-                    }
-                    var $destChk = $('input[id="tree_' + dest.repo.id + "_" + dest.relativePath + '"]', $tree);
-                    var $destAttributes = $destChk.siblings("label").find("a").data("attributes");
-
-                    $.when(refreshTree($tree, $destAttributes))
-                        .done(function () {
-                            //click destination to reload
-                            $('input[id="tree_' + dest.repo.id + "_" + dest.relativePath + '"]', $tree).siblings("label").find("a").click();
-                        });
-                } else {
-                    showMsg("Failed to create new folder.", "ERROR");
+                if (dest.relativePath.endsWith("/")) {
+                    dest.relativePath = dest.relativePath.substring(0, dest.relativePath.length - 1);
                 }
+                var $destChk = $('input[id="tree_' + dest.repo.id + "_" + dest.relativePath + '"]', $tree);
+                var $destAttributes = $destChk.siblings("label").find("a").data("attributes");
+
+                $.when(refreshTree($tree, $destAttributes))
+                    .done(function () {
+                        //click destination to reload
+                        $('input[id="tree_' + dest.repo.id + "_" + dest.relativePath + '"]', $tree).siblings("label").find("a").click();
+                    });
+            }else{
+                showMsg("Failed to create new folder.", "FAIL");
             }
         });
     }
 
     function deleteFile($tree, dest) {
-        $.ajax({
-            cache: false,
-            url: baseRestApiURL + "files/?workspace=" + dest.repo.id + "&file=" + escape(dest.relativePath),
-            type: 'DELETE',
-            headers: { "X-Auth-Token": window.tokenKey },
-            error: function (jqXHR, textStatus, errorThrown) {
-                showMsg("Error deleting file.", "ERROR");
-            },
-            success: function (response) {
-                if (response.status == responseStatus.success) {
-                    showMsg("File deleted.", "SUCCESS");
 
-                    var parentRelPath = dest.relativePath;
-                    if (parentRelPath.endsWith("/")) {
-                        parentRelPath = parentRelPath.substring(0, parentRelPath.length - 1);
-                    }
-                    parentRelPath = parentRelPath.substring(0, parentRelPath.lastIndexOf("/"));
+        var url = baseRestApiURL + "files/?workspace=" + dest.repo.id + "&file=" + escape(dest.relativePath);
+        $.when(ajaxGeneralCallFnc(url, {}, 'DELETE')).done(function(response){
+            if(response.status === "SUCCEEDED"){
+                showMsg("File deleted.", "SUCCESS");
 
-                    var parentId = "tree_" + dest.repo.id + "_" + parentRelPath;
-                    var $parentChk = $('input[id="' + parentId + '"]');
-                    var $parentAttributes = $parentChk.siblings("label").find("a").data("attributes");
-
-                    $.when(refreshTree($tree, $parentAttributes))
-                        .done(function () {
-                            //click parent to reload
-                            $('input[id="tree_' + dest.repo.id + "_" + parentRelPath + '"]', $tree).siblings("label").find("a").click();
-                        });
-
-                } else {
-                    showMsg("Failed to delete file.", "ERROR");
+                var parentRelPath = dest.relativePath;
+                if (parentRelPath.endsWith("/")) {
+                    parentRelPath = parentRelPath.substring(0, parentRelPath.length - 1);
                 }
+                parentRelPath = parentRelPath.substring(0, parentRelPath.lastIndexOf("/"));
+
+                var parentId = "tree_" + dest.repo.id + "_" + parentRelPath;
+                var $parentChk = $('input[id="' + parentId + '"]');
+                var $parentAttributes = $parentChk.siblings("label").find("a").data("attributes");
+
+                $.when(refreshTree($tree, $parentAttributes))
+                    .done(function () {
+                        //click parent to reload
+                        $('input[id="tree_' + dest.repo.id + "_" + parentRelPath + '"]', $tree).siblings("label").find("a").click();
+                    });
+
+            }else{
+                showMsg("Failed to delete file.", "FAIL");
             }
         });
     }
 
     function deleteItem($tree, dest) {
         var err = "";
-        $.ajax({
-            async: false,
-            cache: false,
-            url: baseRestApiURL + "files/?workspace=" + dest.repo.id + "&file=" + escape(dest.relativePath),
-            type: 'DELETE',
-            headers: { "X-Auth-Token": window.tokenKey },
-            error: function (jqXHR, textStatus, errorThrown) {
-                 err = "Failed to delete item: " + dest.relativePath + "</br>";
-            },
-            success: function (response) {          
-                if (response.status != responseStatus.success) {
-                    err = "Failed to delete item: " + dest.relativePath + "</br>";;
-                }
+        var url = baseRestApiURL + "files/?workspace=" + dest.repo.id + "&file=" + escape(dest.relativePath);
+        $.when(ajaxGeneralCallFnc(url,{}, 'DELETE' )).done(function(response){
+            if(response.status === "SUCCEEDED"){
+ 
+            }else{
+                err = "Failed to delete item: " + dest.relativePath + "</br>";
+                showMsg(response.message, "FAIL");
             }
         });
         return err;
@@ -2857,39 +2734,28 @@
                 var $selectedToggle = $(this);
             
                 var selectedRepoId = $($selectedToggle.parents("[id^='node-']")[0]).data("dna").id;
-                $.ajax({
-                    cache: false,
-                    url: baseRestApiURL + "files/persistent?workspaceId=" + selectedRepoId ,
-                    type: 'POST',
-                    headers: {
-                        "Accept": "application/json",
-						"Content-Type": "application/json",
-						"X-Auth-Token": window.tokenKey
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        showMsg("Error inspecting element.", "ERROR");
+                var url = baseRestApiURL + "files/persistent?workspaceId=" + selectedRepoId;
+
+                $.when(ajaxGeneralCallFnc(url, {}, 'POST')).done(function(response){
+                    if(response.status === "SUCCEEDED"){
+                        showMsg(response.message, "SUCCESS");
+
+                        $repoPanel.find(".toggle-btn.selected").removeClass("selected");
+                        $selectedToggle.addClass("selected");
+                        $selectedToggle.prop("disabled", true);
+                        $selectedToggle.append("<span class='span-muted collapse'>&nbsp;View repository files</span>");
+                        var repoToggles = $repoPanel.find(".toggle-btn:not(.selected)");
+                        $.each(repoToggles, function(index, repoToggle){
+                            $(this).prop("disabled", false);
+                            $(this).find("span").remove();
+                            $(this).bootstrapToggle("off");
+                        }); 
+                        window.panelComp.refreshData();
+                    }else{
+                        showMsg("Failed to inspect element.", "ERROR");
                         $selectedToggle.prop("disabled", false);
 						$selectedToggle.bootstrapToggle("off");
                         window.panelComp.refreshData();
-                    },
-                    success: function (response) {
-                        if (response.status == responseStatus.success) {
-                            showMsg(response.message, "SUCCESS");
-
-                            $repoPanel.find(".toggle-btn.selected").removeClass("selected");
-                            $selectedToggle.addClass("selected");
-                            $selectedToggle.prop("disabled", true);
-                            $selectedToggle.append("<span class='span-muted collapse'>&nbsp;View repository files</span>");
-                            var repoToggles = $repoPanel.find(".toggle-btn:not(.selected)");
-                            $.each(repoToggles, function(index, repoToggle){
-                                $(this).prop("disabled", false);
-                                $(this).find("span").remove();
-                                $(this).bootstrapToggle("off");
-                            }); 
-                            window.panelComp.refreshData();
-                        } else {
-                            showMsg("Failed to inspect element.", "ERROR");
-                        }
                     }
                 });
                 
@@ -3048,6 +2914,7 @@
                 case "rp-properties":
                     var attributes = $selected.data("attributes");
                     showProperties(attributes);
+                    adjustPropertiesPosition();
                     break;
 				case "rp-view-on-map":
                     var attributes = $selected.data("attributes");
